@@ -50,11 +50,7 @@
             'desc_item_set_corpus': 'Compiled in advance from the IWAC corpus for this collection.'
         });
         ns.addTranslations('fr', {
-            'Items': 'Éléments',
             'Items per year': 'Éléments par année',
-            'Top subjects': 'Principaux sujets',
-            'Spatial coverage': 'Couverture spatiale',
-            'Most frequent words': 'Mots les plus fréquents',
             'desc_item_set_corpus': 'Compil\u00e9 \u00e0 l\u2019avance \u00e0 partir du corpus IWAC pour cette collection.'
         });
     }

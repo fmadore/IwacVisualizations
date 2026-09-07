@@ -1,0 +1,74 @@
+# PHPStan over the module's PHP (Tier 8 / B2 (2)).
+#
+# WHY IT NEEDS AN OMEKA CHECKOUT
+# ------------------------------
+# This module has no composer.json on purpose: every class it extends -
+# `Omeka\Site\BlockLayout\AbstractBlockLayout`, `Laminas\Mvc\Controller\
+# AbstractActionController`, the `Omeka\Job\AbstractJob` the sync job
+# implements - lives in the HOST's vendor tree, and declaring `laminas/*` or
+# `psr/*` here would duplicate them into the module and fatal the whole site
+# on autoload. So static analysis has to be pointed at a real Omeka.
+#
+# `OMEKA_PATH` is the unpacked distribution. `omeka-integration.yml` already
+# downloads and checksums exactly that, so the phpstan job rides along on the
+# checkout it makes rather than fetching its own.
+#
+# WHY LEVEL 5
+# -----------
+# Levels 0-4 are the ones that pay here: undefined methods and properties,
+# wrong argument counts, unreachable branches, dead `instanceof`. Level 5
+# adds argument TYPE checks against the host's signatures, which is the one
+# that catches "you passed the entity where the representation was wanted" -
+# a mistake this codebase can actually make, because it crosses into Omeka's
+# API on nearly every page. Levels 6+ demand iterable value types and full
+# generics on a codebase that has no docblock array shapes; that is a
+# documentation project, not a bug hunt, so it stays off until someone wants
+# to do it deliberately.
+parameters:
+    level: 5
+    paths:
+        - Module.php
+        - src
+        - config
+    # Read, not analysed: the host's classes exist so signatures resolve,
+    # but its 1,900 files are not this module's to keep clean.
+    scanDirectories:
+        - %env.OMEKA_PATH%/application/src
+        - %env.OMEKA_PATH%/vendor
+    treatPhpDocTypesAsCertain: false
+
+    # ------------------------------------------------------------------
+    # The magic-dispatch surface, enumerated rather than blanketed.
+    #
+    # Laminas dispatches controller PLUGINS and view HELPERS through
+    # `__call`, so no static analyser can see them. The cheap fix is to
+    # silence `method.notFound` wholesale; that would also silence a real
+    # typo in one of this module's own methods, which is most of what
+    # levels 0-4 are for. So each magic name is listed. Adding a plugin or
+    # a helper means adding a line here - a deliberate act, the same shape
+    # as `COMPOSED_PREFIXES` in scripts/check-css-dead.js.
+    ignoreErrors:
+        # Controller plugins (Omeka + Laminas), via AbstractActionController::__call.
+        -
+            identifier: method.notFound
+            message: '#::(api|settings|messenger|jobDispatcher|currentSite|paginator|translate|status|logger)#'
+            path: src/Controller
+        # View helpers, via PhpRenderer::__call.
+        -
+            identifier: method.notFound
+            message: '#PhpRenderer::(translate|formRow|partial|escapeHtml|url|assetUrl|blockThumbnail)#'
+        # `MvcEvent::getRequest()` / `getResponse()` are typed to the Stdlib
+        # interfaces; under HTTP they are always the Http\Request / Http\Response
+        # that carry these. Omeka has no non-HTTP dispatch path.
+        -
+            identifier: method.notFound
+            message: '#(Request|Response)Interface::(isPost|getHeaders|setStatusCode|getPost|getQuery)#'
+        # `embeddable` is the embed WHITELIST, and today every block is on it -
+        # so PHPStan correctly reports the guard as constant. The flag stays:
+        # it is how a block would be taken off the list, and `embeddable()`
+        # doubles as the directory-traversal guard for
+        # `common/block-layout/<slug>`. A security control is not dead code
+        # because it currently admits everything.
+        -
+            identifier: empty.offset
+            path: src/Site/BlockRegistry.php

@@ -56,10 +56,10 @@ from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
     canonicalize_country_field,
     clean_int,
-    configure_logging,
     create_metadata_block,
     extract_year,
     load_dataset_safe,
@@ -109,6 +109,31 @@ def _entity_type_label(raw: Any) -> Optional[str]:
     if nfc in INDEX_TYPES:
         return nfc
     return None
+
+
+def _type_labels(
+    index_df: pd.DataFrame,
+    cached: "Optional[pd.Series]" = None,
+) -> "pd.Series":
+    """
+    The canonical INDEX_TYPES label for every row, computed once.
+
+    Five views filter the index by entity type, and three of them did it
+    INSIDE a loop over the five types - so a single build ran
+    ``index_df["Type"].apply(_entity_type_label)`` over the whole index
+    seventeen times to produce seventeen copies of the same answer
+    (Tier 8 / P9). ``build_index_overview`` now computes it once and hands
+    the Series down.
+
+    ``cached=None`` recomputes, so every ``compute_*`` still works called on
+    its own - from a test, or a REPL - which is why this is a parameter
+    rather than a column written onto the frame. A derived column would
+    also ride along into the ``.copy()`` subsets below and out into
+    whatever they serialise.
+    """
+    if cached is not None:
+        return cached
+    return index_df["Type"].apply(_entity_type_label)
 
 
 def compute_summary(
@@ -163,14 +188,16 @@ def compute_summary(
 def compute_top_entities(
     index_df: pd.DataFrame,
     top_n: int,
+    type_labels: "Optional[pd.Series]" = None,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """Top N entities per type, sorted by frequency desc."""
     result: Dict[str, List[Dict[str, Any]]] = {t: [] for t in INDEX_TYPES}
     if index_df.empty:
         return result
 
+    labels = _type_labels(index_df, type_labels)
     for entity_type in INDEX_TYPES:
-        subset = index_df[index_df["Type"].apply(_entity_type_label) == entity_type].copy()
+        subset = index_df[labels == entity_type].copy()
         if subset.empty:
             continue
         subset["_freq"] = pd.to_numeric(subset["frequency"], errors="coerce").fillna(0)
@@ -207,6 +234,7 @@ def compute_top_entities(
 def compute_lifespan(
     index_df: pd.DataFrame,
     top_n: int,
+    type_labels: "Optional[pd.Series]" = None,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """Per-type scatter rows for "frequency × temporal span" plot.
 
@@ -218,8 +246,9 @@ def compute_lifespan(
     if index_df.empty:
         return result
 
+    labels = _type_labels(index_df, type_labels)
     for entity_type in INDEX_TYPES:
-        subset = index_df[index_df["Type"].apply(_entity_type_label) == entity_type].copy()
+        subset = index_df[labels == entity_type].copy()
         if subset.empty:
             continue
 
@@ -249,13 +278,16 @@ def compute_lifespan(
     return result
 
 
-def compute_gender(index_df: pd.DataFrame) -> Dict[str, int]:
+def compute_gender(
+    index_df: pd.DataFrame,
+    type_labels: "Optional[pd.Series]" = None,
+) -> Dict[str, int]:
     """Gender breakdown over ``Personnes`` rows.
 
     The dataset uses ``Genre`` with values like "M", "F", "Masculin",
     "F\u00e9minin". Everything else goes into "Unknown".
     """
-    persons = index_df[index_df["Type"].apply(_entity_type_label) == "Personnes"]
+    persons = index_df[_type_labels(index_df, type_labels) == "Personnes"]
     if persons.empty or "Genre" not in persons.columns:
         return {}
     counts: Counter = Counter()
@@ -276,9 +308,10 @@ def compute_gender(index_df: pd.DataFrame) -> Dict[str, int]:
 
 def compute_places(
     index_df: pd.DataFrame,
+    type_labels: "Optional[pd.Series]" = None,
 ) -> List[Dict[str, Any]]:
     """Extract places (Lieux) with parseable coordinates from ``Coordonnées``."""
-    places = index_df[index_df["Type"].apply(_entity_type_label) == "Lieux"]
+    places = index_df[_type_labels(index_df, type_labels) == "Lieux"]
     if places.empty:
         return []
     rows: List[Dict[str, Any]] = []
@@ -365,6 +398,7 @@ def compute_place_mentions(
 def compute_activity(
     index_df: pd.DataFrame,
     top_n: int,
+    type_labels: "Optional[pd.Series]" = None,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """Gantt rows per type: one entry per entity with a first/last
     occurrence and frequency, top ``top_n`` by frequency.
@@ -373,8 +407,9 @@ def compute_activity(
     if index_df.empty:
         return result
 
+    labels = _type_labels(index_df, type_labels)
     for entity_type in INDEX_TYPES:
-        subset = index_df[index_df["Type"].apply(_entity_type_label) == entity_type].copy()
+        subset = index_df[labels == entity_type].copy()
         if subset.empty:
             continue
 
@@ -493,6 +528,9 @@ def build_index_overview(
 
     # Only need content subsets for the place-mentions layer
     dataframes: Dict[str, pd.DataFrame] = {"index": index_df}
+
+    # Once, for the five views that filter by entity type (Tier 8 / P9).
+    type_labels = index_df["Type"].apply(_entity_type_label)
     logger.info("Loading content subsets for dct:spatial mention counts")
     for subset in CONTENT_SUBSETS:
         df = load_dataset_safe(subset, repo_id=repo_id, token=token)
@@ -500,16 +538,16 @@ def build_index_overview(
             dataframes[subset] = df
 
     logger.info("Computing top entities (top %d per type)", top_n)
-    top_entities = compute_top_entities(index_df, top_n=top_n)
+    top_entities = compute_top_entities(index_df, top_n=top_n, type_labels=type_labels)
 
     logger.info("Computing lifespan scatter (top %d per type)", lifespan_n)
-    lifespan = compute_lifespan(index_df, top_n=lifespan_n)
+    lifespan = compute_lifespan(index_df, top_n=lifespan_n, type_labels=type_labels)
 
     logger.info("Computing gender breakdown")
-    gender = compute_gender(index_df)
+    gender = compute_gender(index_df, type_labels=type_labels)
 
     logger.info("Extracting place coordinates")
-    places = compute_places(index_df)
+    places = compute_places(index_df, type_labels=type_labels)
     logger.info("  %d places with coordinates", len(places))
 
     logger.info("Aggregating dct:spatial mentions against place authority")
@@ -517,7 +555,7 @@ def build_index_overview(
     logger.info("  %d places resolved to mentions", len(place_mentions))
 
     logger.info("Computing activity gantt (top %d per type)", gantt_n)
-    activity = compute_activity(index_df, top_n=gantt_n)
+    activity = compute_activity(index_df, top_n=gantt_n, type_labels=type_labels)
 
     logger.info("Computing recent additions (top %d)", recent_n)
     recent_additions = compute_recent_additions(index_df, limit=recent_n)
@@ -556,11 +594,7 @@ def build_index_overview(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=False)
     parser.add_argument(
         "--output",
         default="asset/data/index-overview.json",
@@ -582,18 +616,7 @@ def main() -> None:
         "--recent-n", type=int, default=20,
         help="Recent additions to include (default: 20)",
     )
-    parser.add_argument(
-        "--minify", action=argparse.BooleanOptionalAction, default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None

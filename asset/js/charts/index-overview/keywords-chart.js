@@ -109,8 +109,11 @@
         var subtitle = P.el('div', 'iwac-vis-keywords-chart__subtitle');
         panelEl.panel.insertBefore(subtitle, panelEl.chart);
 
-        var emptyEl = P.el('div', 'iwac-vis-empty iwac-vis-keywords-chart__empty');
-        emptyEl.style.display = 'none';
+        // The shared banner: `.iwac-vis-empty` alone carried no role=status,
+        // so a facet change that emptied the chart announced nothing.
+        var emptyEl = P.buildEmptyState();
+        emptyEl.classList.add('iwac-vis-keywords-chart__empty');
+        emptyEl.hidden = true;
         panelEl.panel.insertBefore(emptyEl, panelEl.chart);
 
         function applyFromState(instance) {
@@ -135,16 +138,16 @@
             subtitle.textContent = parts.join(' \u2014 ');
 
             if (keywords.length === 0) {
-                panelEl.chart.style.display = 'none';
-                emptyEl.style.display = '';
+                panelEl.chart.hidden = true;
+                emptyEl.hidden = false;
                 emptyEl.textContent = snap.view === 'compare'
                     ? P.t('Select keywords to compare')
                     : P.t('No data available');
                 return;
             }
 
-            panelEl.chart.style.display = '';
-            emptyEl.style.display = 'none';
+            panelEl.chart.hidden = false;
+            emptyEl.hidden = true;
 
             if (instance && !instance.isDisposed()) {
                 instance.setOption(buildOption(derived.years, keywords, derived.series), true);

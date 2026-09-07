@@ -60,72 +60,38 @@ $primary   = $embedPrimary !== '' ? $embedPrimary : $hex($this->themeSetting('pr
 $secondary = $hex($this->themeSetting('secondary_color', ''));
 ?>
 <!doctype html>
-<html lang="<?= $escapeAttr($locale) ?>"<?= $themeAttr ?>>
+<?php
+// The brand-accent VALUES, as a style attribute rather than an inline
+// `<style>` (H6). The rules that consume them — including the dark-mode
+// lightening, which cannot be an attribute because it is a different
+// selector — live in asset/css/iwac-embed.css.
+//
+// Both values are already strictly validated to `#` + 3/6/8 hex digits
+// (EmbedController and the $hex() closure above), so escapeHtmlAttr is safe
+// here in a way it is NOT inside a `<style>`: there it rewrote the leading
+// `#` to `&#x23;`, whose embedded `;` truncated the declaration and left
+// every series rendering black.
+$accent = '';
+if ($primary !== '')   $accent .= '--iwac-vis-embed-primary: ' . $primary . ';';
+if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . ';';
+?>
+<html lang="<?= $escapeAttr($locale) ?>"<?= $themeAttr ?><?php
+    if ($accent !== ''): ?> style="<?= $escapeAttr($accent) ?>"<?php endif; ?>>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escapeHtml($embedTitle) ?></title>
     <?= $this->headLink() ?>
     <?= $this->headStyle() ?>
-    <style>
-        html, body { margin: 0; padding: 0; background: transparent; }
-        /* The theme's compiled CSS (which normally sets the body font) isn't
-           loaded on this bare route, so an unstyled <body> falls back to the
-           UA default "Times New Roman". iwac-theme.js reads document.body's
-           font-family into every chart's textStyle, so without this the chart
-           labels render serif. Establish the theme body-font stack here — the
-           same one iwac-core.css puts on .iwac-vis-block. */
-        body.iwac-embed-body {
-            -webkit-text-size-adjust: 100%;
-            font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
-        }
-        /* A little breathing room so the block isn't crammed against the
-           iframe edges. box-sizing keeps the padding inside the width so it
-           can never trigger a horizontal scrollbar on the host page. */
-        .iwac-embed-body .iwac-vis-block {
-            margin: 0 auto;
-            padding: var(--space-md, 1rem);
-            box-sizing: border-box;
-        }
-        /* Source-attribution footer. Styled inline (with token fallbacks) so it
-           reads correctly even on this bare route before iwac-core.css lands. */
-        .iwac-embed-source {
-            margin: 0;
-            padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
-            text-align: right;
-            font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
-            font-size: var(--text-xs, 0.8125rem);
-            border-top: 1px solid var(--border-light, #e2e5e8);
-            background: var(--surface, #fdfcfb);
-        }
-        .iwac-embed-source a { color: var(--ink-light, #3f4349); text-decoration: none; }
-        .iwac-embed-source a:hover { color: var(--primary, #ce4115); text-decoration: underline; }
-    </style>
-    <?php if ($primary !== '' || $secondary !== ''): ?>
-    <style>
-        /* NOTE: $primary / $secondary are emitted RAW here — deliberately not
-           through escapeHtmlAttr(). This is a CSS context, not an HTML
-           attribute: escapeHtmlAttr() rewrites the leading `#` to the entity
-           `&#x23;`, whose embedded `;` truncates the declaration, leaving
-           `--primary: &#x23`. iwac-theme.js then reads that non-empty garbage
-           (so its `|| fallback` never fires) and the colour probe resolves it
-           to rgb(0,0,0) — every series renders black. Both values are already
-           strictly validated to `#` + 3/6/8 hex digits (EmbedController + the
-           $hex() closure above), so raw output carries no injection risk. */
-        :root {<?php if ($primary !== ''): ?> --primary: <?= $primary ?>;<?php endif;
-            if ($secondary !== ''): ?> --secondary: <?= $secondary ?>;<?php endif; ?> }
-        /* Match the theme's dark-mode habit of lightening the accent
-           (e.g. #e64a19 → #ec653f) rather than carrying the light value.
-           The mode is always pinned via data-theme on this route (embeds
-           default to light), so this is the only dark branch we need.
-           Mixing toward white is normally banned (guard rule 2b) because it
-           inverts when the surface flips; here the surface cannot flip —
-           the branch IS the dark one — so white is the correct direction
-           and both lines opt out. */
-        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $primary ?>, white 12%); /* allow-absolute-mix */<?php endif;
-            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $secondary ?>, white 14%); /* allow-absolute-mix */<?php endif; ?> }
-    </style>
-    <?php endif; ?>
+    <?php
+    // The embed page's own chrome, and the brand-accent RULES, live in
+    // asset/css/iwac-embed.css. Both were inline `<style>` blocks, which a
+    // host with a `style-src 'self'` Content-Security-Policy refuses (H6).
+    // Only the per-request VALUES stay inline, as a `style` attribute on
+    // <html> above — attributes are governed by `style-src-attr`, which a
+    // policy that blocks `<style>` elements commonly still allows.
+    ?>
+    <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl('css/iwac-embed.min.css', 'IwacVisualizations')) ?>">
     <?= $this->headScript() ?>
 </head>
 <body class="iwac-embed-body<?= $isGallery ? ' iwac-embed-gallery' : '' ?><?php
@@ -136,31 +102,11 @@ $secondary = $hex($this->themeSetting('secondary_color', ''));
 <footer class="iwac-embed-source">
     <a href="<?= $escapeAttr($sourceUrl) ?>" target="_blank" rel="noopener"><?= $escapeHtml($sourceLabel) ?></a>
 </footer>
-<script>
-/* iframe height reporter — posts the document height to the parent on load,
-   resize, and DOM mutations (charts populate asynchronously). The host page
-   pairs this with the listener emitted in the embed snippet. */
-(function () {
-    if (window.parent === window) return;
-    var last = 0;
-    function post() {
-        var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
-        if (h && h !== last) {
-            last = h;
-            window.parent.postMessage({ type: 'iwac-embed-height', height: h }, '*');
-        }
-    }
-    window.addEventListener('load', post);
-    window.addEventListener('resize', post);
-    if ('ResizeObserver' in window) {
-        new ResizeObserver(post).observe(document.body);
-    } else {
-        setInterval(post, 1000);
-    }
-    // Nudge a few times early, before charts finish their first paint.
-    var t = 0, iv = setInterval(function () { post(); if (++t > 20) clearInterval(iv); }, 300);
-})();
-</script>
+<?php
+// The iframe height reporter is a file for the same reason the on-view
+// loader is (H6): a host with `script-src 'self'` refuses inline script.
+?>
+<script src="<?= $escapeAttr($this->assetUrl('js/dist/shared-embed-height.min.js', 'IwacVisualizations')) ?>" defer></script>
 <?php endif; ?>
 </body>
 </html>

@@ -64,6 +64,8 @@ import numpy as np
 
 from iwac_embeddings import coerce_embedding
 from iwac_utils import (
+    add_standard_args,
+    canonicalize_country_field,
     DATASET_ID,
     clean_float,
     clean_str,
@@ -187,7 +189,8 @@ class PublicationDashboardGenerator:
             self.meta[pub_id] = {
                 "title":      clean_str(row.get(title_col)) if title_col else "",
                 "newspaper":  periodical,
-                "country":    clean_str(row.get(country_col)) if country_col else "",
+                "country":    canonicalize_country_field(
+                    clean_str(row.get(country_col))) if country_col else "",
                 "pub_date":   pub_date,
                 "year":       year,
                 "language":   ", ".join(languages),
@@ -413,11 +416,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=Path(__file__).resolve().parent.parent / "asset" / "data" / "publication-dashboards",
         help="Where to write per-issue JSON files (default: %(default)s)",
     )
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repo id (default: %(default)s)",
-    )
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--limit",
         type=int,
@@ -441,17 +440,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=DEFAULT_WORDCLOUD_MIN_FREQUENCY,
         help="Drop issue word-cloud terms below this count (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Minify the JSON output (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
     )
     return parser
 

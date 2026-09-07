@@ -43,6 +43,7 @@ import pandas as pd
 
 from iwac_embeddings import build_normalized_matrix, pairs_above_threshold
 from iwac_utils import (
+    canonicalize_country_field,
     add_standard_args,
     clean_str,
     generate_timestamp,
@@ -86,7 +87,9 @@ def generate(
             "o_id": clean_str(r.get("o:id")),
             "title": clean_str(r.get("title")),
             "newspaper": clean_str(r.get("newspaper")),
-            "country": clean_str(r.get("country")),
+            # Canonicalised so the dominant-country tiebreak below cannot
+            # split one paper's country across two spellings (P16).
+            "country": canonicalize_country_field(clean_str(r.get("country"))),
             "date": clean_str(r.get("pub_date")),
         }
 

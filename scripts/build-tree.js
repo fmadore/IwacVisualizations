@@ -11,7 +11,7 @@
  * following it would have looked for files the repo does not contain. A
  * hand-written picture of a directory listing is a copy, and copies go stale.
  *
- * The tree is now derived from `git ls-files`, so it describes what is
+ * The tree is derived from `git ls-files` over the working tree, so it describes what is
  * actually tracked, and `--check` fails the build when the file and the repo
  * disagree. Annotations (the `# …` comments that carry the reasoning a bare
  * listing cannot) live in ANNOTATIONS below, keyed by path: they are the part
@@ -27,7 +27,7 @@
 'use strict';
 
 const { execFileSync } = require('child_process');
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
 const ROOT = join(__dirname, '..');
@@ -106,11 +106,25 @@ const ANNOTATIONS = {
 const HIDE = new Set(['.gitattributes', '.gitignore', '.editorconfig']);
 
 function trackedFiles() {
-    return execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' })
+    // `--others --exclude-standard` as well as the index, and existing files
+    // only. Plain `git ls-files` reads the INDEX, so a new file counted only
+    // once it had been `git add`ed - which meant `npm run build:tree` before
+    // staging wrote a tree that `lint:tree` then rejected after staging, and
+    // the failure surfaced in CI rather than locally. Reading the working
+    // tree makes the two orders agree, and matches CI, where everything is
+    // committed anyway. A file deleted but not yet staged is still in the
+    // index, so `existsSync` drops it.
+    const listed = execFileSync(
+        'git',
+        ['ls-files', '--cached', '--others', '--exclude-standard', '--deduplicate'],
+        { cwd: ROOT, encoding: 'utf8' }
+    );
+    return listed
         .split('\n')
         .filter(Boolean)
         .filter((p) => !p.startsWith('.impeccable/'))
-        .filter((p) => !HIDE.has(p));
+        .filter((p) => !HIDE.has(p))
+        .filter((p) => existsSync(join(ROOT, p)));
 }
 
 /** Nested {name: node} tree; a file is null. */

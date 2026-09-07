@@ -80,7 +80,10 @@
  *                                 emitted even when $siteBase is false.
  */
 
-echo $this->partial('common/iwac-assets', isset($assets) ? (array) $assets : []);
+// The assets partial enqueues the head assets and hands back this block's
+// lazy-loader manifest, which is emitted below as inert JSON beside the
+// block (H6) — not as an inline script, which a host CSP would refuse.
+$lazyManifest = $this->partial('common/iwac-assets', isset($assets) ? (array) $assets : []);
 
 $escapeAttr   = $this->plugin('escapeHtmlAttr');
 $escapeHtml   = $this->plugin('escapeHtml');
@@ -148,6 +151,9 @@ if ($noscript !== '' && $prerendered === '') {
 }
 ?>
 
+<?php if (is_string($lazyManifest) && $lazyManifest !== ''): ?>
+<script type="application/json" class="iwac-vis-lazy-manifest"><?= $lazyManifest ?></script>
+<?php endif; ?>
 <div class="<?= $escapeAttr($wrapperClass) ?>"<?php foreach ($attrs as $name => $value): ?>
      data-<?= $escapeAttr($name) ?>="<?= $escapeAttr($value) ?>"<?php endforeach; ?>>
 <?php if ($heading !== ''): ?>

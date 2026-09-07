@@ -246,10 +246,9 @@
         }
 
         var createdMap = P.createIwacMap(mapContainer, {
-            center: [2, 10],
-            zoom: 3.2,
-            globe: true,
-            navigation: true,
+            center: P.WEST_AFRICA_VIEW.center,
+            zoom: P.WEST_AFRICA_VIEW.zoom,
+            title: P.t('Places in the index'),
             onStyleReady: onStyleReady
         });
 

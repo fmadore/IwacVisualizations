@@ -61,6 +61,7 @@ from iwac_utils import (
     add_standard_args,
     extract_year,
     generate_timestamp,
+    iter_records,
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
@@ -278,7 +279,7 @@ class ScaryTermsGenerator:
                 "'lemma_nostop' column missing — word cloud falls back to lemma_text")
 
         scans: List[ArticleScan] = []
-        for _, row in self.df.iterrows():
+        for row in iter_records(self.df):
             counts = self._count_row(row["lemma_text"])
             rec = ArticleScan(
                 year=int(row["year"]),

@@ -34,6 +34,7 @@ on:
       - "scripts/build-js.js"
       - "scripts/build-css.js"
       - "eslint.config.js"
+      - ".stylelintrc.json"
       - "scripts/build-mo.js"
       - "scripts/build-tree.js"
       - "scripts/check-*.js"
@@ -46,6 +47,8 @@ on:
       - "playwright.config.js"
       - "config/module.ini"
       - "tokens.json"
+      - "DESIGN.md"
+      - ".impeccable/**"
       - "package.json"
       - "package-lock.json"
   pull_request:
@@ -63,6 +66,7 @@ on:
       - "scripts/build-js.js"
       - "scripts/build-css.js"
       - "eslint.config.js"
+      - ".stylelintrc.json"
       - "scripts/build-mo.js"
       - "scripts/build-tree.js"
       - "scripts/check-*.js"
@@ -75,6 +79,8 @@ on:
       - "playwright.config.js"
       - "config/module.ini"
       - "tokens.json"
+      - "DESIGN.md"
+      - ".impeccable/**"
       - "package.json"
       - "package-lock.json"
 

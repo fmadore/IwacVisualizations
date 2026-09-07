@@ -206,11 +206,16 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       via `ns._applyAria` (merge-mode setOption after each render, so
       the notMerge render pattern and theme swaps can't drop it).
       Decal patterns deliberately left off → 7.2.
-- [ ] **4.6 `matrix` coordinate system** for the scary-terms
-      co-occurrence view (6.1 adds cell `triggerEvent`); foundation for
-      the Phase 6 sentiment model-agreement matrix. *Deferred: the
-      heatmap version works; converting is a visual rewrite that needs
-      a live render-test session, not a blind swap.*
+- [x] **4.6 `matrix` coordinate system** for the scary-terms
+      co-occurrence view — **closed as no benefit** (Tier 8 / E15,
+      2026-09-07). Re-examined against both matrices the module now draws:
+      the 12x12 co-occurrence grid and the 5x5 model-agreement matrix. The
+      `matrix` coordinate system buys nothing a category-axis heatmap does
+      not already do here; its one distinguishing feature is spanning
+      super-headers over column groups, and neither matrix wants one — the
+      agreement matrix's columns are five polarity labels, not groups. It
+      remains the right answer if a model-name super-header is ever
+      wanted, and nothing else.
 - [x] **4.7 MapLibre niceties.** `cooperativeGestures` now on for every
       IWAC map with fr/en hint strings via the map `locale` option
       (opt-out per map via `mapOptions`); popup `padding` turned out to

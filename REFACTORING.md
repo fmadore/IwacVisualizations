@@ -197,7 +197,11 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `P.buildGraphPanelToolbar(panelEl, chart, {downloadName})` (owns legend state,
   exposes `isLegendVisible()`) + `P.attachGraphClickThrough(chart, onNode)` to
   `shared/panels.js`; both network panels call them, dropping ~115 lines of
-  duplicated toolbar / zoom / download / fullscreen / drag-suppression each. The
+  duplicated toolbar / zoom / download / fullscreen / drag-suppression each.
+  **Correction (Tier 8 / D3):** the click-through half stopped being true in
+  v1.22, when the network views moved to `P.navigateOnClick`. It kept no
+  callers from then until v1.63.0 deleted it (E9); the toolbar half is still
+  accurate. The
   only per-panel differences (download filename, centre-node guard, `o_id` check)
   stay at the call site.
 - [ ] **Migrate hand-rolled person-dashboard panels** (`countries.js:26-46`,
@@ -569,6 +573,10 @@ local contributor following them would hit an unexplained 401.
   "deferred") and never calls `P.buildGraphPanelToolbar` /
   `P.attachGraphClickThrough`, so this is the only IWAC network view with no
   download / legend / fullscreen / zoom controls. **Effort M.**
+  **Correction (Tier 8 / D3):** naming `P.attachGraphClickThrough` here
+  implied the other network views were using it. None were, from v1.22 on;
+  v1.63.0 deleted it. The toolbar gap this entry describes was real and is
+  fixed.
 - [x] **Labelled-`<select>` builder ×4** — **DONE (v1.22.0)**: `P.buildSelectControl`; org-cooccurrence delegates, the three scary-terms copies collapsed into `scary-terms/controls.js`. — `org-cooccurrence.js:234-251`
   `buildSelect`, `scary-terms.js:794-813` `buildSelectGroup`, plus
   `scary-terms.js:829-849` and `:851-881` (two more copies inside the same
@@ -615,7 +623,7 @@ local contributor following them would hit an unexplained 401.
   `org_cooccurrence:283-333`, `reprints:193-240`, `corpus_health:146-173`,
   `scary_terms:813-864`, `world_map:116-127`). The planned
   `iwac_utils.add_standard_args(parser)` is now worth ~600 lines. **Effort M.**
-- [ ] **Tier 3 metadata/output-path drift grew** — **partially done (v1.22.0)**: `world_map` now emits `generate_timestamp()` (the `+00:00` outlier is gone). Full standardization is **deferred**: unifying the metadata key names changes output shapes the JS reads, so it needs a coordinated generator+JS pass verified against live data. — four coexisting metadata
+- [ ] **Tier 3 metadata/output-path drift grew** — **partially done (v1.22.0)**: `world_map` now emits `generate_timestamp()` (the `+00:00` outlier is gone). *(Tier 8 / D3: "gone" was true of `world_map` and not of the tree — three per-item fan-outs still emitted `+00:00` when Tier 8 audited it. P10 closed those, and `scripts/validate_data.py` now REJECTS the form, so the claim is finally true of everything and enforced rather than asserted.)* Full standardization is **deferred**: unifying the metadata key names changes output shapes the JS reads, so it needs a coordinated generator+JS pass verified against live data. — four coexisting metadata
   strategies after the wave: `{"metadata": create_metadata_block(…)}`
   (`press_bylines:171`), `{"_meta": …}` (`on_this_day:144`), inline
   `{"generated_at": …}` dicts with no helper (`term_trends:136`,
@@ -1481,6 +1489,115 @@ Found while implementing, not in the audit:
   dev tooling of exactly the kind `.gitattributes` export-ignores, and the
   release archive's own negative test did not list it.
 
+### Implemented in v1.65.0 (waves 7–14, the rest of the tier)
+
+Forty-six findings across eight waves. What follows is only the part that
+landed differently from its write-up, or that the write-up got wrong — the
+rest did what it said.
+
+**Three findings' premises did not survive measurement.** In each case the
+measurement is recorded next to the code, because the next reader deserves
+the number rather than the instruction:
+
+- **P9** asked for the 55 `iterrows()` sites to be replaced. On a 12k × 46
+  frame, `to_dict("records")` beats `iterrows` only once the loop body reads
+  enough columns to amortise the transpose — 1 read per row is *worse*
+  (0.30s vs 0.26s), 5 is a wash, 15 is 64% of the time, 46 is 35%. So
+  `iwac_utils.iter_records()` carries that table in its docstring and is
+  used at the eight wide readers only; four narrow loops were converted and
+  then converted **back**. The other half of P9 was real and unambiguous:
+  `index_overview` ran `Type.apply(_entity_type_label)` over the whole index
+  **seventeen** times per build, because three of the five type-filtered
+  views called it inside a loop over the five types.
+- **S15** asked for ~700 lines of panel boilerplate to move onto
+  `dashboardLayout`. Counting first: the nine named blocks hold **66**
+  `buildPanel` calls between them today — v1.63.0's E6–E10 consolidation had
+  already absorbed most of what the audit counted — and three of them
+  (press-bylines, lexical-metrics, item-set-dashboard) hold two or three
+  each, where any indirection costs more than it saves. A trial migration of
+  the largest (`references-overview`, 14 panels) came out **+3 lines** and
+  would have changed the embed panel permalinks from positional to named.
+  It was reverted. The finding's own capability list is the tell: six
+  additions (interstitial rows, `slot.empty`, `chartClass`, lazy slots,
+  `byKey`, a facet hook) are a render dispatcher being taught not to
+  dispatch, because what repeats in these blocks is panel *construction*
+  while the rendering is theirs. Left open, deliberately, with this note.
+- **B5**'s matrix parallelism is **superseded by P1**. It was proposed to
+  hide the per-process dataset load; the runner removed that load entirely
+  by running all 31 generators in one interpreter over one FrameStore.
+  Sharding would reintroduce it — N× the parquet→pandas conversion — and add
+  artifact round-trips for a ~120 MB tree. B5's other three parts (the cache
+  P2, the checksum H1, the failure notice P11) are done.
+
+**B2's named example turned out to be the smaller half.** Replacing
+`check-blocks.js`'s regex PHP parsing with `php -r 'echo json_encode(…)'`
+is what the finding asked for, and both readers now exist — CI runs node
+without PHP, so the fallback is not optional. The guard therefore *compares*
+them and fails if they disagree; without that, local and CI would be
+checking different things. ruff replaced pyflakes rule-for-rule (`F` + `E9`)
+and picked up `tests/python/`, which the old explicit `pyflakes scripts/`
+had silently never linted. stylelint's two rules found five hits, all real
+and none a bug — three sanctioned `!important`s and two token-only rules —
+each now annotated with its reason rather than the rule switched off; the
+entity-networks comment claiming to be "the ONE sanctioned `!important` in
+the module" was simply wrong. PHPStan level 5 rides on the Omeka checkout
+`omeka-integration.yml` already downloads and found 16, of which 15 are
+Laminas `__call` dispatch (ignored **by name**, so a real typo in one of
+this module's own methods is still caught — verified by planting one) and
+one is true: every block declares `embeddable => true`, so that whitelist
+filter is constant. The flag stays; `embeddable()` is also the
+directory-traversal guard for `common/block-layout/<slug>`, and a security
+control is not dead code because it currently admits everything.
+**php-cs-fixer (B2 (5)) is deliberately not done** — a formatter, on PHP
+that is already consistent, trading a large mechanical diff for no defect
+`php -l` and PHPStan do not already catch.
+
+**B3 found a real gap between what was tested and what was claimed.** The
+suite covered `SyncData`'s static predicates, which is not the same claim as
+"`perform()` calls them" — a refactor that dropped the zip-slip loop, or
+moved it after `extractTo()`, would have left every one of those assertions
+green. The job now runs against archives built at run time by `ZipArchive`
+with a filesystem underneath, and asserts on what ends up on disk. Five
+mutants of `SyncData` (the zip-slip guard, the symlink refusal, the marker
+check, the first rename, the orphan sweep) each turn it red. Two of B3's
+five were already covered and are recorded as such: the bundle-resolution
+check has been in `check-blocks.js` since v1.62.0, and the pot chain is
+`lint:i18n-pot`.
+
+**D3 was itself half stale.** The `attachGraphClickThrough` claim was right
+and is corrected in place, in the Tier 2 and Tier 5 entries a reader
+actually lands on rather than only in the v1.63.0 section a thousand lines
+below. The `+00:00` claim is the opposite: P10 closed the three fan-outs and
+`validate_data.py` now *rejects* the form, so Tier 5's sentence is finally
+true of everything, and enforced rather than asserted.
+
+**S17 needed a smaller orchestrator change than expected.** Six lines: a
+view whose builder exposes `update(state)` is repainted in place, one that
+does not falls through to the rebuild unchanged. That keeps it incremental —
+the nine other views behave exactly as before. Four builders gained one, and
+the interesting one is `references`: its year chart is the whole
+literature's growth curve and is not filtered at all, so the old rebuild
+disposed and re-created a chart the change does not touch.
+
+Found while implementing, not in the audit:
+
+- `_h5.txt`, a scratch file from the H5 wave, was tracked at the repo root
+  and shipped inside every release archive. The archive's negative test did
+  not list it because the test enumerates *known* dev files rather than
+  asserting the whole archive is runtime-only.
+- `build-tree.js` read `git ls-files`, which reads the **index**. So a new
+  file counted only once `git add`ed, and `npm run build:tree` before
+  staging wrote a tree `lint:tree` then rejected after staging. It turned CI
+  red twice in this session while passing locally each time. It reads the
+  working tree now, so both orders agree.
+- The embed 404 assertion added for B3 (4) was testing the framework, not
+  the module: once `blockAction()` sets a 404, Laminas' own dispatch
+  listeners replace the result with `error/404` before `dispatch()` returns.
+  Correct in production, and it means the returned template says nothing
+  about what the module chose. Those six cases call the action directly.
+- A repo-wide CRLF normalisation pass corrupted two PNGs before it was
+  caught: a PNG's magic number literally *is* CR LF.
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1587,7 +1704,7 @@ non-text content, and the thing a historian citing a figure actually needs
       partial merge re-inject the cached description); delete the explicit
       calls at `:306` and `:470`. The signature stays form-agnostic
       (`native.apply(instance, arguments)` — that part is right).
-- [ ] **E2 (Med, M) — The bar-chart race does not race.** ✓ `realtimeSort`
+- [x] **E2 (Med, M) — The bar-chart race does not race.** ✓ `realtimeSort`
       has 0 uses. `scary-terms.js:242-249` slices the top-N per frame and
       `C.scaryTerms` (`chart-options-hbar.js:330-336`) builds *unnamed*
       `{ value, itemStyle }` items on a re-supplied category axis, so
@@ -1665,7 +1782,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `C._percentAxisLabel()`; `buildSubjectivityOption`
       (`sentiment-atlas.js:352-421`) vs term-trends `draw()` (`:261-332`) →
       `C.multiLine`. ~155 lines.
-- [ ] **E11 (Low/Med, S) — Inline chrome colours re-declare (and contradict)
+- [x] **E11 (Low/Med, S) — Inline chrome colours re-declare (and contradict)
       the theme.** `axisLine … border` ×7 and `axisLabel.color: muted` ×7
       (`sentiment-atlas.js:469-470,478-479,576-577,585-586`;
       `chart-options-special.js:1349-1351,1362,1366`), `visualMap.textStyle`
@@ -1686,7 +1803,7 @@ non-text content, and the thing a historian citing a figure actually needs
       collaboration graph (`references-overview.js:911`) or it blocks the main
       thread on large inputs. Measure `useDirtyRect` on the landscape's hover
       repaint (E13).
-- [ ] **E13 (Low, S) — `echarts.init` receives no `opts`.** ✓
+- [x] **E13 (Low, S) — `echarts.init` receives no `opts`.** ✓
       `dashboard-core.js:271`. `locale` changes nothing visible today (no
       toolbox, aria overridden, zero `type: 'time'` axes ✓) — pass
       `ns.locale === 'fr' ? 'FR' : 'EN'` anyway. `renderer: 'svg'` candidates
@@ -1711,7 +1828,7 @@ non-text content, and the thing a historian citing a figure actually needs
       reader can isolate. `C._dataZoom` (`chart-options.js:71-82`) leaves the
       default `filterMode: 'filter'` — `'weakFilter'` if the y-axis jump on
       line charts is unwanted. `colorBy`, `toolbox`: no action.
-- [ ] **E16 (Low, S) — Tooltips: escaping is clean, no shared item helper.**
+- [x] **E16 (Low, S) — Tooltips: escaping is clean, no shared item helper.**
       42 tooltip formatters, 34 emit HTML, all 34 escape; the four unescaped
       `p.name` hits (`special.js:136,442,471`, `keywords-bump.js:138`) are
       rich-text *label* formatters, not HTML. `C.itemTooltip(title, lines)` is
@@ -1752,7 +1869,7 @@ non-text content, and the thing a historian citing a figure actually needs
       attaches once outside `onStyleReady` (the hazard is documented at
       `places-map.js:214-224`). Move compare's block after `createIwacMap`;
       call `attachInteractions()` once in the helper body.
-- [ ] **M3 (High, S–M) — The laïcité places view leaks one MapLibre instance
+- [x] **M3 (High, S–M) — The laïcité places view leaks one MapLibre instance
       per view switch.** *(The leak is closed in v1.59.0 — `disposeWithin`
       removes the outgoing view's map; caching the built view stays open.)* `laicite.js:334-335` clears `viewHost`; `:424-433`
       mounts the map via `mountLazy('places', …)`; `laicite/map.js:93-95`
@@ -1769,20 +1886,20 @@ non-text content, and the thing a historian citing a figure actually needs
       `countries` from `world_countries_simple.geojson` (205,295 B); no layer
       references it; the worker parses and tiles it on load and after every
       theme swap. Delete with the `geoUrl` plumbing (`:31, 45, 77`).
-- [ ] **M5 (Med, S–M) — The choropleth re-tiles its polygons on every count
+- [x] **M5 (Med, S–M) — The choropleth re-tiles its polygons on every count
       change.** `choropleth.js:507-521` does `setPaintProperty` *and*
       `setData(annotate(cache))` because the fill expression reads
       `['get', '_iwac_count']` (`:143, 167-172`);
       `keywords-attention.js:126-130` calls it per slider tick and per play
       step. Keep the GeoJSON static and put the counts in the expression
       (`['match', ['get', 'name'], 'Bénin', 245, …, 0]`).
-- [ ] **M6 (Med, S) — `preserveDrawingBuffer: true` on every map to serve a
+- [x] **M6 (Med, S) — `preserveDrawingBuffer: true` on every map to serve a
       rare PNG export.** `maplibre.js:237-242`; `panel-toolbar.js:67-90`
       already calls `redraw()` synchronously. Default it off and export via
       `map.once('render', …); map.triggerRepaint()`; keep
       `mapOptions.preserveDrawingBuffer` as the escape hatch; verify on
       Safari.
-- [ ] **M7 (Med, S) — Control set and camera defaults don't match the
+- [x] **M7 (Med, S) — Control set and camera defaults don't match the
       maps.** A globe toggle ships on 10 of 12 maps though ROADMAP 4 lists
       globe as "Won't do"; `visualizePitch` / `touchPitch` / `dragRotate` stay
       on for flat thematic maps; the references provenance panel has two
@@ -1794,7 +1911,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `NavigationControl({ showCompass: false })`, rotate/pitch off;
       `P.WEST_AFRICA_VIEW` + `P.FIT_OPTS`; `fullscreen: false` where the
       panel toolbar already has one.
-- [ ] **M8 (Med, S) — MapLibre's own UI strings stay English on the French
+- [x] **M8 (Med, S) — MapLibre's own UI strings stay English on the French
       site; map hosts carry no label.** `maplibre.js:216-227` localises only
       the three cooperative-gesture keys; `Map.Title`, `NavigationControl.*`,
       `FullscreenControl.*`, `GlobeControl.*`, `Popup.Close`,
@@ -1802,7 +1919,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `keywords-attention.js:83` sets an `aria-label` on its host (12 hosts).
       One `fr` table merged into `locale`; `config.title` → `Map.Title` + host
       `aria-label`.
-- [ ] **M9 (Med, S) — No reduced-motion handling in any camera move.**
+- [x] **M9 (Med, S) — No reduced-motion handling in any camera move.**
       `ns.prefersReducedMotion` exists (`iwac-theme.js:457`) and the canvas
       graphs honour it; zero map files do. Animated moves at
       `spatial-exploration/map.js:493-494, 704, 887, 916, 920, 937, 944`,
@@ -1880,7 +1997,7 @@ non-text content, and the thing a historian citing a figure actually needs
       collection, sources, places, person and spatial maps; laïcité, scary and
       keywords-attention already ship a `<details>` ranked list or slider —
       reuse it.
-- [ ] **M19 (Low, S–M)** — the popup monkey-patch (`maplibre.js:365-486`, six
+- [x] **M19 (Low, S–M)** — the popup monkey-patch (`maplibre.js:365-486`, six
       overridden methods, constants pinned to "MapLibre 6.3 CSS" while the pin
       is 6.6.0) can become CSS: the host has an explicit height, so
       `.iwac-vis-map { container-type: size }` +
@@ -1893,7 +2010,7 @@ non-text content, and the thing a historian citing a figure actually needs
       d3 canvas renderer would need a static-positions mode and a fixed
       46-label budget; and the same block's geo mode is a real map, so the
       library loads regardless. Fix the Carto glyph fetch via M14 instead.
-- [ ] **M21 (Low, S)** — docs drift: `ROADMAP.md:10, 177` and `README.md:537`
+- [x] **M21 (Low, S)** — docs drift: `ROADMAP.md:10, 177` and `README.md:537`
       say MapLibre 5.24 (historical entries — leave those) but nothing states
       the current 6.6.0 pin outside the partial; `maplibre.js:305-307` cites
       6.3.
@@ -1965,7 +2082,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       (`P.buildTable` under the chart, `aria-controls`/`aria-expanded`) wired
       in `autoAttachPanelToolbar`; filename from `filenameFromPanel`
       (`:339-347`).
-- [ ] **S4 (High, M) — Cross-panel linking is absent on every overview
+- [x] **S4 (High, M) — Cross-panel linking is absent on every overview
       block.** Collection overview: `types-over-time.js:36-50`,
       `gantt.js:58-70`, `languages.js:133-155`, `map.js:110`,
       `wordcloud.js:53` each build their own Country facet — selecting Bénin
@@ -2040,7 +2157,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       P.FETCH_TIMEOUT_MS` inside `fetchJSON` (opt out with `0`); migrate the
       three dashboards via a `beforeRender` hook (which `mountHeader` already
       is).
-- [ ] **S10 (Med, S) — The i18n parity lint covers the shared dictionary
+- [x] **S10 (Med, S) — The i18n parity lint covers the shared dictionary
       only.** `scripts/check-i18n.js:33` reads `asset/js/iwac-i18n.js` and
       nothing else. Unchecked: 7 per-block dictionaries (`charts/*/i18n.js`,
       1,164 lines) and 6 inline `ns.addTranslations` blocks
@@ -2067,7 +2184,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `onChange` handlers already encode by hand. Adopt: person facet →
       keywords-state → spatial → laïcité + scary with S1. Leave the per-panel
       closures (row 11) alone.
-- [ ] **S12 (Med, S) — `keywords-table` reverse-engineers `P.buildTable`'s
+- [x] **S12 (Med, S) — `keywords-table` reverse-engineers `P.buildTable`'s
       page by regex-parsing the pagination label.** ✓
       `index-overview/keywords-table.js:103-133` (`render: 'action'` is not a
       mode `table.js` knows; `/(\d+)\s*\/\s*\d+/` on the indicator text
@@ -2075,13 +2192,13 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       the pagination copy, page size or French label breaks Add/Remove
       silently. `table.js` accepts `render: function (row, td)` (~5 lines in
       `renderCell`) and its API exposes `page()`; delete `:103-143`.
-- [ ] **S13 (Med, S) — Embed panel slugs are positional.** `embed.js:137-150`
+- [x] **S13 (Med, S) — Embed panel slugs are positional.** `embed.js:137-150`
       assigns `'panel-' + index` in document order; sentiment-atlas
       conditionally inserts panels (`:730-749`), periodicals conditionally
       removes one (`:235-237`), and panels created after the 120 ms settle
       window (`:284-307`) are never enumerated. `P.buildPanel(…, { key })`
       stamps `data-iwac-panel`; enumeration prefers the key.
-- [ ] **S14 (Med, S) — `t()` has no plural support.** `iwac-i18n.js:1179-1188`
+- [x] **S14 (Med, S) — `t()` has no plural support.** `iwac-i18n.js:1179-1188`
       interpolates only: `articles_count` ("1 articles",
       `person-dashboard/sentiment.js:200`), `places_count`, `mentions_count`,
       `items_count`, `references_count`, `laicite.references_count`,
@@ -2110,14 +2227,22 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       audiovisual, lexical, press-bylines, item-set, collection-overview
       (~350–450 lines). Do **not** migrate scary-terms, laïcité,
       compare-newspapers or term-trends — ROADMAP 3.4 was right about those.
-- [ ] **S16 (Low/Med, S)** — the `compact` flag is sampled once per draw
+      *(v1.65.0: **measured and declined**, see the v1.65.0 wave note. The
+      nine blocks hold 66 `buildPanel` calls today, not ~700 lines'
+      worth — v1.63.0's E6–E10 wave had already absorbed most of it — and a
+      trial migration of the largest came out +3 lines while changing the
+      embed panel permalinks. The six capabilities listed above are a render
+      dispatcher being taught not to dispatch; what repeats here is panel
+      construction, not rendering. Reopen with a measurement, not a
+      count.)*
+- [x] **S16 (Low/Med, S)** — the `compact` flag is sampled once per draw
       (`laicite.js:325`, `scary-terms.js:342` read `clientWidth < 600` outside
       any `media` rule; `laicite/arenas.js:95` reads `window.innerWidth`
       instead of `R.containerWidth`, so a 400 px embed on a desktop viewport
       gets the desktop layout). Express as an ECharts `media` rule or re-run
       `draw()` from the panel's existing `ResizeObserver` (expose `onResize` on
       `registerChart`).
-- [ ] **S17 (Low/Med, S)** — facet changes that only need `setOption` rebuild
+- [x] **S17 (Low/Med, S)** — facet changes that only need `setOption` rebuild
       whole views: `laicite.js:334-464` clears `viewHost` for every state
       change, including the actor / arena / model / frame / reference selects
       whose views hold live charts (lost transitions, re-registration → S6,
@@ -2129,7 +2254,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       and are never removed ✓ (`panel-toolbar.js:444`, `panels-boot.js:379`,
       `graph-panel.js:114`); copy the self-removing pattern
       `panels-controls.js:218-225` already uses.
-- [ ] **S19 (Low, S)** — 17 ad-hoc `<select>` builders beside the 13
+- [x] **S19 (Low, S)** — 17 ad-hoc `<select>` builders beside the 13
       `P.buildSelectControl` calls (`keywords-filters.js:55, 70, 86, 122`,
       spatial `map.js:215, 229, 245, 250`, `entity-networks.js:262`, person
       `network.js:238, 335`, compare `picker.js:82, 98`,
@@ -2141,12 +2266,12 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       the mark; the sentiment atlas passes sub-keys from the URL now); the
       compare picker's two selects got the `.iwac-vis-control` skin. The
       other ad-hoc builders stay open.
-- [ ] **S20 (Low, S)** — empty/error states bypassing the shared banners:
+- [x] **S20 (Low, S)** — empty/error states bypassing the shared banners:
       `compare-newspapers.js:183-184` (no `role=status`),
       `keywords-chart.js:113-116, 138-145`, `scary-terms.js:488-508` (an
       ECharts `graphic` text where the same file uses `P.emptyChartOption`
       at `:383, 390`); `noopFacet` defined twice.
-- [ ] **S21 (Low, S)** — `setTimeout` sequencing a lifecycle hook would
+- [x] **S21 (Low, S)** — `setTimeout` sequencing a lifecycle hook would
       remove: `laicite.js:354-358`, `scary-terms.js:461-463`, spatial's popup
       720 ms after a 700 ms `easeTo` (→ `map.once('moveend')`),
       `embed.js:245-249` firing seven synthetic `resize` events, the 50 ms
@@ -2159,13 +2284,13 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       promises the year chip "moves the timeline" but `laicite.js:365-374`
       discards the year (`void year`); `keywords-state.js:173-176` is an `if`
       with an empty body.
-- [ ] **S23 (Low, S)** — no in-flight fetch memo: `item-set-dashboard.js:180`
+- [x] **S23 (Low, S)** — no in-flight fetch memo: `item-set-dashboard.js:180`
       and `compare-newspapers.js:209` both fetch
       `compare-newspapers/index.json`; each `.iwac-vis-minimal-item` container
       fetches `template-summary.json`; `choropleth.js:59` and spatial
       `state.js:99-108` keep private memos a ~10-line URL→promise map in
       `fetchJSON` would retire.
-- [ ] **S24 (Low, M)** — the shared dictionary is 66 KB on every page,
+- [x] **S24 (Low, M)** — the shared dictionary is 66 KB on every page,
       including article pages that use ~10 % of it; five block-only sections
       (references overview, collection overview, spatial, entity networks,
       keyword explorer) can move to the per-block mechanism that already
@@ -2260,13 +2385,13 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `article_dashboards:407` return `""` when the *first* segment is
       unknown; `keyness:189-196` skips to the first non-unknown segment — an
       `"Unknown|Togo"` cell is attributed differently. Pick one, document it.
-- [ ] **P8 (Med, S) — `extract_year` is pandas-first per scalar.**
+- [x] **P8 (Med, S) — `extract_year` is pandas-first per scalar.**
       `iwac_utils.py:362-372` calls `pd.to_datetime(errors="coerce")` before
       the regex, ~40 call sites × several passes over 12k rows. ISO fast
       path (`^\s*(\d{4})(?:-\d{2}(?:-\d{2})?)?\s*$`) first, `to_datetime` as
       the fallback — output-identical for the dataset's ISO dates. Narrow the
       two `except Exception: pass` at `:389` and `:501`.
-- [ ] **P9 (Med, S each) — 55 `iterrows()` sites; the hot ones run on 12k
+- [x] **P9 (Med, S each) — 55 `iterrows()` sites; the hot ones run on 12k
       rows.** `laicite:658` (`_scan_row`, 125 lines per row, four subsets),
       `:900, 1766, 2188`; `dashboard_aggregator:378, 494` (×3 generators);
       `article_dashboards:287, 356`; `scary_terms:281`;
@@ -2275,7 +2400,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `index_overview` recomputes `index_df["Type"].apply(_entity_type_label)`
       five times (`:181, 230, 266, 289, 385`). Use the `zip` / `itertuples`
       form v1.22 already applied to `on_this_day` / `press_bylines`.
-- [ ] **P10 (Med, S check / M versioning) — Output contract is convention,
+- [x] **P10 (Med, S check / M versioning) — Output contract is convention,
       not contract.** Four metadata idioms coexist: `create_metadata_block`
       under `"metadata"` (17 files) vs `"_meta"` (`entity_networks:297, 361`,
       `on_this_day:482`, `spatial_exploration:446`) vs inline `generated_at`
@@ -2290,7 +2415,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       JS consumers, plus `test -s` for every expected output in "Package
       archive" (today only `collection-overview.json`, `:106`). Longer:
       `schema_version` in `create_metadata_block` + `P.assertSchema()`.
-- [ ] **P11 (Med, S) — CI: no timings, no failure notice, a 3.12-only lock,
+- [x] **P11 (Med, S) — CI: no timings, no failure notice, a 3.12-only lock,
       test deps that drift from it.** ✓ `regenerate-data.yml:84-88` has
       `::group::` only and no `if: failure()` step; `python-lock.js` compiles
       for 3.12/linux only while `scripts/README.md` tells local users to
@@ -2318,29 +2443,29 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       ("duplicated here to avoid cross-script imports") is stale — the file
       already imports `iwac_utils`. `laicite:327` `TOKEN_RE` is deliberately
       different — rename it `ASCII_TOKEN_RE` so it isn't "fixed".
-- [ ] **P15 (Low, S)** — the argparse prologue is hand-rolled in 20 of 31
+- [x] **P15 (Low, S)** — the argparse prologue is hand-rolled in 20 of 31
       generators (~400 lines) although `add_standard_args` exists;
       `--minify` defaults to False in `collection_overview:1330`,
       `index_overview:594`, `keyword_explorer:369`,
       `audiovisual_overview:512`, `laicite:3081`, `scary_terms:850`,
       `world_map:119`, so those bundles ship pretty-printed — probably
       intentional for diffability; say so in the README table.
-- [ ] **P16 (Low, S)** — four generators count raw `country` without
+- [x] **P16 (Low, S)** — four generators count raw `country` without
       canonicalising (`world_map.py:83-90`, `wordcloud`, `reprints`,
       `publication_dashboards`); `FOCUS_COUNTRIES`
       (`spatial_exploration:71`) restates the six names → promote to
       `iwac_utils.IWAC_COUNTRIES`.
-- [ ] **P17 (Low, S)** — `collection_overview.compute_newspapers:695-789` and
+- [x] **P17 (Low, S)** — `collection_overview.compute_newspapers:695-789` and
       `compute_newspaper_coverage:544-616` run the same per-row loop over the
       same two subsets; one pass, two shapers (~60 lines).
-- [ ] **P18 (Low, S)** — provenance: `iwac_utils.copy_to_build:1385-1411` has
+- [x] **P18 (Low, S)** — provenance: `iwac_utils.copy_to_build:1385-1411` has
       0 callers and targets a `build/data` dir this repo doesn't have;
       `iwac-dashboard` references survive as design rationale in
       `collection_overview:20, 85, 108, 977`, `keyword_explorer:15, 20, 70,
       127, 145`, `scary_terms:29`, `wordcloud:10`, `entity_networks:67`,
       `spatial_exploration:77`; `check-python.js:36` hard-codes a personal
       Windows path ✓.
-- [ ] **P19 (Low/Med, M)** — 51 test cases, none for the three largest
+- [x] **P19 (Low/Med, M)** — 51 test cases, none for the three largest
       generators. Highest value, all synthetic-frame: (1)
       `collection_overview.compute_timeline` + `compute_newspapers` (pipe
       countries, `Unknown`, partial dates, ordering, `totals`); (2)
@@ -2361,7 +2486,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       structural corruption only. Publish `iwac-data.zip.sha256` alongside;
       download the sidecar first and `hash_file` the archive in `perform()`,
       degrading to a logged warning when an older release has no sidecar.
-- [ ] **H2 (Med, S–M) — The sync job has no retry, no disk check, and
+- [x] **H2 (Med, S–M) — The sync job has no retry, no disk check, and
       orphans its temp trees on a hard kill.** `SyncData.php:279-309` one
       curl attempt; no `disk_free_space()`; job-scoped temp names (`:72-74`)
       cleaned only in `finally` (`:220-227`), which does not run on SIGKILL /
@@ -2378,7 +2503,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       123, pot 125, po 128; four stale pot entries. `scripts/extract-pot.js`
       (the two patterns `xgettext` uses) + `lint:i18n-pot` failing on
       `source ⊄ pot` and `pot ⊄ po`; `lint:i18n-mo` stays as the second half.
-- [ ] **H4 (Med, M) — `Module.php` carries four concerns; the sentiment
+- [x] **H4 (Med, M) — `Module.php` carries four concerns; the sentiment
       vocabulary is the one enum win.** ACL `:154-166`, ~100 lines of CSP
       parsing `:198-296`, the vocabulary with hard-coded item IDs `:30-119` +
       five static helpers `:351-370`, the display-values listener `:298-349`.
@@ -2389,7 +2514,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `Module::getPolariteLabel()` as one-line shims because `article.phtml`
       calls them statically. Add `strict_types` to `src/` in one batch under
       the integration matrix.
-- [ ] **H5 (Med, M) — Assets live in 21 near-identical templates while
+- [x] **H5 (Med, M) — Assets live in 21 near-identical templates while
       `BlockRegistry` is the truth for everything else.** 19 of 21
       `block-layout/*.phtml` are a single `iwac-block-shell` call with a
       literal `assets` array (only `collection-overview` and `on-this-day`
@@ -2403,7 +2528,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `embed/block.phtml:2` dispatching to `_generic`, an optional
       `'template' =>` override for the two logic-bearing blocks) deletes ~19
       files and makes "which block loads d3?" a one-array question.
-- [ ] **H6 (Med, S–M) — The inline lazy loader should be a real script with
+- [x] **H6 (Med, S–M) — The inline lazy loader should be a real script with
       a JSON payload.** `iwac-assets.phtml:322-372` is a string-concatenated
       inline script — the only inline script per block page —
       `tests/js/assets.test.js:131-134` has to regex it out of PHP output, and
@@ -2412,7 +2537,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `<script type="application/json" class="iwac-vis-lazy-manifest">`
       (inert under CSP); the embed layout's dynamic `<style>`
       (`layout/embed.phtml:104-127`) → a `style` attribute on `<html>`.
-- [ ] **H7 (Low, S)** — embed responses carry no `Cache-Control`
+- [x] **H7 (Low, S)** — embed responses carry no `Cache-Control`
       (`EmbedController.php:66-118`; public, read-only, third-party fetched
       → `public, max-age=300`); `site_admin` may run the global filesystem
       job (`Module.php:162-165`); `embeddable` is `true` on 21/21 rows so
@@ -2436,7 +2561,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `.iwac-vis-toolbar`, `.iwac-vis-aside__label`, `.iwac-vis-list__name`,
       `.iwac-vis-chip-row`, `.iwac-vis-eyebrow`, `.iwac-vis-layout--sidebar`
       (~250–300 lines).
-- [ ] **C2 (Low/Med, S each) — Modern CSS: adopt / don't.** Counts:
+- [x] **C2 (Low/Med, S each) — Modern CSS: adopt / don't.** Counts:
       `@container` 6, `:has()` 0, `@layer` 0, `clamp()` 12, `text-wrap` 1,
       `overscroll-behavior` 0, `forced-colors` 0, logical properties 8 vs
       physical 22, `color-mix()` 112. Adopt: `overscroll-behavior: contain`
@@ -2449,7 +2574,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       specificity, so wrapping module CSS in a layer silently inverts every
       module override. Low value: logical properties (en/fr LTR only),
       `forced-colors` (canvas cannot honour it).
-- [ ] **C3 (Low, S)** — residue the linter cannot see: `z-index` literals
+- [x] **C3 (Low, S)** — residue the linter cannot see: `z-index` literals
       with no scale (1, 2, 5, 6, −1, `30` at `entity-networks.css:144` /
       `term-trends.css:48`, `1000` at `iwac-core.css:690`) →
       `--iwac-vis-z-{raised,overlay,popover}`; four raw `border-radius`
@@ -2457,7 +2582,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       unsanctioned `!important` (`person-dashboard.css:113`,
       `entity-networks.css:106`). Media widths are all on the theme scale
       (640px: 0 — the Tier 2 drift is gone); `font-size` px literals: 0.
-- [ ] **C4 (Low, S)** — dead CSS is ~4 rules (`.iwac-vis-scary-details-list`
+- [x] **C4 (Low, S)** — dead CSS is ~4 rules (`.iwac-vis-scary-details-list`
       `scary-terms.css:485`, `.iwac-vis-article__body`
       `article-dashboard.css:28`, `.iwac-vis-entity__body`
       `person-dashboard.css:27`, `.iwac-vis-sent-axis__verdict--differ`
@@ -2465,7 +2590,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       dynamically composed BEM (`table.js:126, 148-149, 213`,
       `clippings.js:47`). Keep the detector as `lint:css-dead` with a
       composed-prefix allowlist.
-- [ ] **C5 (Low, M)** — `laicite.css` is 1,471 lines, larger than
+- [x] **C5 (Low, M)** — `laicite.css` is 1,471 lines, larger than
       `iwac-maplibre.css` plus five block sheets; split by view since
       `blockCss` already takes a list.
 
@@ -2502,7 +2627,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       set ≈ 650–750 KB (~210–240 KB gz). The decisive argument is 5.4's
       GDPR / first-party point, `?v=` busting and SRI becoming moot, at the
       cost of jsDelivr's edge latency for the West-African audience.
-- [ ] **B2 (Med, S–M) — Lint gaps, ranked by value over noise.** *((1) eslint
+- [x] **B2 (Med, S–M) — Lint gaps, ranked by value over noise.** *((1) eslint
       shipped in v1.62.0; 2–5 open)* (1) eslint
       `recommended`, `sourceType: script`, globals `IWACVis, echarts,
       maplibregl, d3` — `no-undef` / `no-unused-vars` cover the class of bug
@@ -2516,7 +2641,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `check-blocks.js` (parses PHP arrays with regex — replace with
       `php -r 'echo json_encode(BlockRegistry::BLOCKS);'`),
       `check-maplibre-gates.js`, `check-i18n.js`.
-- [ ] **B3 (Med, M) — Tests: 89 JS + 31 browser + ~30 PHP checks; the block
+- [x] **B3 (Med, M) — Tests: 89 JS + 31 browser + ~30 PHP checks; the block
       option builders and several pure helpers are untested.** Not covered:
       the 55 files calling `setOption`, `dashboard-core.js` (theme rebuild /
       `registerChart`), `hijri.js` (pure, 14 consumers, 0 tests), `embed.js`,
@@ -2543,6 +2668,12 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 - [ ] **B5 (Low/Med, S)** — `regenerate-data.yml`: sequential, uncached (P2),
       unchecksummed (H1), no `if: failure()` notice (P11); matrix parallelism
       only after the cache lands (each matrix job would re-download).
+      *(v1.65.0: P2, H1 and P11 are done. The matrix is **superseded by P1**
+      and stays undone on purpose — it existed to hide the per-process
+      dataset load, and `run_all.py` removed that load by running all 31
+      generators in one interpreter over one FrameStore. Sharding would
+      reintroduce it, N× the parquet→pandas conversion, and add artifact
+      round-trips for a ~120 MB tree.)*
 - [x] **B6 (Low, S)** — `CITATION.cff` (1.54.0) and the README citation
       (1.37.0) sit outside `lint:versions` (`check-versions.js:16-22`) ✓; add
       both to the lockstep. (Not touched in this commit: whether v1.58.0 is
@@ -2567,12 +2698,12 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       into `CHANGELOG.md` (lines 7–651) and `ARCHITECTURE.md`; add
       `CHANGELOG.md` to `release.yml:113`'s required list; regenerate the tree
       from `find`.
-- [ ] **D2 (Low, S)** — `.impeccable/` + `DESIGN.md` + `PRODUCT.md` are
+- [x] **D2 (Low, S)** — `.impeccable/` + `DESIGN.md` + `PRODUCT.md` are
       correctly export-ignored and deny-listed, but the `--iwac-vis-model-*`
       colours now exist in CSS, `design.json` and `DESIGN.md` front-matter with
       no lint tying them together; either `lint:design-record` or drop the
       literals from the prose and reference the CSS.
-- [ ] **D3 (Low, S)** — this file (Tiers 2 and 5) describes
+- [x] **D3 (Low, S)** — this file (Tiers 2 and 5) describes
       `P.attachGraphClickThrough` as wired; it has no callers (E9). Tier 5's
       "the `+00:00` outlier is gone" is contradicted by three fan-outs (P10).
 
@@ -2602,6 +2733,17 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    What remains of the tier after this wave: S15 and H5's generic template
    (both wave 5's carry-overs), M19's popup monkey-patch, M20/M21, P8, D2
    and D3.
+
+7–14. **The rest (v1.65.0):** the i18n split and per-bundle reachability,
+   the linked country facet, the single block declaration, the embed assets
+   out of PHP, the output contract, the CSS split and the dead-rule guard,
+   the four lint gaps, the three missing test suites, the design record, the
+   sentiment enums, the loops that pay, and the laïcité repaint — 46
+   findings. **The tier is closed.** Six entries stay unticked and each says
+   why in place: B1 step 2 and the ECharts self-host wait on the owner's
+   ROADMAP 5.4 decision; M20 is an Info "keep it"; E12 and E15 were
+   considered and rejected in v1.64.0; S15 was measured and declined; B5's
+   matrix is superseded by P1.
 
 ### Verified clean this pass (don't re-audit)
 

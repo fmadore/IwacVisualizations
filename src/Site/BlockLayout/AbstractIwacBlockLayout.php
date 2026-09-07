@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations\Site\BlockLayout;
 
 use IwacVisualizations\Site\BlockRegistry;
@@ -51,9 +53,22 @@ abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
         return $this->row()['label'];
     }
 
+    /**
+     * The partial this block renders through.
+     *
+     * Nineteen of twenty-one blocks are a single `iwac-block-shell` call with
+     * a different literal array, so that array moved into the registry beside
+     * the label and the description and they share `_generic` (H5). A row
+     * WITHOUT a `shell` key keeps its own template — `collection-overview`
+     * server-renders its summary from the snapshot, `on-this-day` reads a
+     * layout setting — and routing on the key's presence means adding logic
+     * to a block is adding a template, not editing this method.
+     */
     protected function templateViewScript(): string
     {
-        return 'common/block-layout/' . static::SLUG;
+        return empty($this->row()['shell'])
+            ? 'common/block-layout/' . static::SLUG
+            : 'common/block-layout/_generic';
     }
 
     public function form(PhpRenderer $view, SiteRepresentation $site,
@@ -67,6 +82,9 @@ abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
     {
         return $view->partial($templateViewScript ?: $this->templateViewScript(), [
             'block' => $block,
+            // `_generic` reads its declaration out of the registry, so it
+            // needs to know which row it is rendering.
+            'slug'  => static::SLUG,
         ]);
     }
 }

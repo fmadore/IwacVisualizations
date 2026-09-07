@@ -199,6 +199,16 @@
         // frame clears the map country — live in the reducer, once.
         var trendsCountries = trends && trends.by_country
             ? Object.keys(trends.by_country).sort() : [];
+        // The four country keys are ONE choice (S4). Each view spells its
+        // empty value differently — the timeline uses null, the three select-
+        // driven views use '' — and they used to move independently, so a
+        // reader who picked Togo on the timeline had to pick it again on the
+        // map, the arenas and the concordance. The reducer keeps them in
+        // step, and only for a country the dossier actually holds: an unknown
+        // value would narrow a view to nothing.
+        var COUNTRY_KEYS = ['trendsCountry', 'kwicCountry', 'arenaCountry', 'mapCountry'];
+        var knownCountries = (metadata.countries || []).slice();
+
         var store = P.createStore(state, {
             reduce: function (st, changed) {
                 var extra = {};
@@ -209,6 +219,23 @@
                 if (has('kwicSubset')) extra.kwicCountry = '';
                 if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
                 if (has('mapCountry') && st.mapCountry) extra.mapFrame = '';
+
+                // Whichever country key the reader touched wins for all four.
+                var moved = null;
+                for (var i = 0; i < COUNTRY_KEYS.length; i++) {
+                    if (has(COUNTRY_KEYS[i])) { moved = COUNTRY_KEYS[i]; break; }
+                }
+                if (moved) {
+                    var value = st[moved] || '';
+                    var shareable = !value || knownCountries.indexOf(value) !== -1;
+                    if (shareable) {
+                        COUNTRY_KEYS.forEach(function (k) {
+                            if (k === moved) return;
+                            // null for the timeline, '' for the selects.
+                            extra[k] = k === 'trendsCountry' ? (value || null) : value;
+                        });
+                    }
+                }
                 return extra;
             }
         });
@@ -369,7 +396,7 @@
                 events: events,
                 state: state,
                 frameColors: frameColors,
-                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 600
+                compact: P.isCompact(chartEl)
             });
             currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
             if (events) {
@@ -378,7 +405,30 @@
             }
         }
 
+        /**
+         * The view currently in `viewHost`, and what built it — `null` while
+         * a loading or empty state is showing. Read by `draw()` for the
+         * in-place update path below (Tier 8 / S17).
+         */
+        var active = null;
+
         function draw() {
+            // A change WITHIN the current view, to a view that can absorb
+            // it: no teardown (Tier 8 / S17). Clearing `viewHost` for an
+            // actor-type or a reference-type change disposed live charts and
+            // built new ones, which cost the transition, churned the theme
+            // observer's registrations, collapsed the host to zero height
+            // and so jumped the scroll, and re-announced the whole region to
+            // a screen reader. A builder that exposes `update` says it can
+            // repaint itself from the new state; one that does not falls
+            // through to the rebuild below, unchanged.
+            if (active && active.key === state.view
+                && typeof active.built.update === 'function') {
+                active.built.update(state);
+                return;
+            }
+            active = null;
+
             // Release the outgoing view's charts and map before their nodes
             // are thrown away — every lazy view builds fresh ones, and until
             // v1.59.0 each visit to the sentiment view left four ECharts
@@ -390,6 +440,7 @@
                 for (var i = viewHost.children.length - 1; i >= 0; i--) {
                     var outgoing = viewHost.children[i];
                     if (outgoing === chartPanel || outgoing === concordance.host) continue;
+                    if (parked.places && outgoing === parked.places.root) continue;
                     ns.disposeWithin(outgoing);
                 }
             }
@@ -477,7 +528,12 @@
                     });
                 });
             } else if (state.view === 'map') {
-                mountLazy('places', function () {
+                // Parked, not rebuilt. Every other lazy view is cheap to
+                // build again; this one is a WebGL context, and browsers cap
+                // live contexts at about sixteen and silently lose the oldest
+                // — flipping between views often enough used to leave the map
+                // blank. v1.59.0 stopped it leaking; this stops it churning.
+                mountParked('places', 'map', function () {
                     return L.buildMap({
                         bundle: lazy.places,
                         metadata: metadata,
@@ -527,11 +583,40 @@
         function mountLazy(bundleName, build) {
             if (!ensure([bundleName])) {
                 viewHost.appendChild(P.buildLoadingState());
-                return;
-            }
+                return;                       // `active` stays null: the next
+            }                                 // draw must build for real.
             var built = build();
             viewHost.appendChild(built.root);
             built.mount();
+            active = { key: state.view, built: built };
+        }
+
+        /** Views whose built root is kept across switches, by key. */
+        var parked = {};
+
+        /**
+         * `mountLazy` for a view that is expensive to rebuild: the first
+         * visit builds and remembers it, later visits re-attach the same
+         * nodes and re-run its `update`. The same shape scary-terms uses for
+         * its map. `draw()` skips a parked root when disposing the outgoing
+         * view, and re-attaching is what makes MapLibre re-measure.
+         */
+        function mountParked(bundleName, key, build) {
+            if (!ensure([bundleName])) {
+                viewHost.appendChild(P.buildLoadingState());
+                return;
+            }
+            if (!parked[key]) {
+                parked[key] = build();
+                viewHost.appendChild(parked[key].root);
+                parked[key].mount();
+                active = { key: state.view, built: parked[key] };
+                return;
+            }
+            viewHost.appendChild(parked[key].root);
+            if (parked[key].update) parked[key].update(state);
+            if (parked[key].resize) parked[key].resize();
+            active = { key: state.view, built: parked[key] };
         }
 
         // What a change means. Within one flush the row is remounted (view)

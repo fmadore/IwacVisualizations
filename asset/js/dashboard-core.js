@@ -329,12 +329,23 @@
      * Returns the ECharts instance. Caller is responsible for setOption().
      * Not normally called directly — prefer `ns.registerChart()`.
      */
-    ns.initChart = function (el) {
+    ns.initChart = function (el, initOpts) {
         if (typeof echarts === 'undefined') {
             console.warn('IWACVis: ECharts not loaded');
             return null;
         }
-        return echarts.init(el, ns.getChartTheme ? ns.getChartTheme() : null);
+        // `locale` changes nothing visible today — there is no toolbox, the
+        // aria label is set by registerChart, and no axis is `type: 'time'`
+        // — but it is the setting that decides how ECharts words anything it
+        // generates itself, and getting it from the site's language rather
+        // than from ECharts' default costs one argument.
+        var opts = { locale: ns.locale === 'fr' ? 'FR' : 'EN' };
+        if (initOpts) {
+            for (var k in initOpts) {
+                if (Object.prototype.hasOwnProperty.call(initOpts, k)) opts[k] = initOpts[k];
+            }
+        }
+        return echarts.init(el, ns.getChartTheme ? ns.getChartTheme() : null, opts);
     };
 
     /**
@@ -344,22 +355,41 @@
      * @param {function(HTMLElement, echarts.ECharts): void} render
      *   Called with (el, instance) on first render and after every theme swap.
      *   Typically this calls `instance.setOption({...})`.
+     * @param {Object} [initOpts]  Passed to `echarts.init` — e.g.
+     *   `{ renderer: 'svg' }` for a small static chart that wants crisp
+     *   type at any zoom. Merged over the locale this module always sets.
      * @returns {echarts.ECharts|null}
      */
-    ns.registerChart = function (el, render) {
-        var instance = ns.initChart(el);
+    ns.registerChart = function (el, render, initOpts) {
+        var instance = ns.initChart(el, initOpts);
         if (!instance) return null;
         var entry = { el: el, render: render, instance: instance, kind: 'echarts' };
 
+        var compactNow = function () {
+            return !!(ns.panels && ns.panels.isCompact && ns.panels.isCompact(el));
+        };
+        entry._compact = compactNow();
+
         if (typeof ResizeObserver !== 'undefined') {
             var ro = new ResizeObserver(debounce(function () {
-                if (entry.instance && !entry.instance.isDisposed()) {
-                    entry.instance.resize(
-                        ns.prefersReducedMotion && ns.prefersReducedMotion()
-                            ? undefined
-                            : { animation: { duration: 200, easing: 'cubicOut' } }
-                    );
-                }
+                if (!entry.instance || entry.instance.isDisposed()) return;
+                entry.instance.resize(
+                    ns.prefersReducedMotion && ns.prefersReducedMotion()
+                        ? undefined
+                        : { animation: { duration: 200, easing: 'cubicOut' } }
+                );
+                // A `compact` flag sampled once per draw is wrong for the rest
+                // of the chart's life: rotating a phone, opening a panel to
+                // fullscreen or dragging a window past 600 px left the dense
+                // layout on a narrow chart and the sparse one on a wide chart
+                // until something else happened to redraw. `resize()` cannot
+                // fix that — the option itself differs — so the render runs
+                // again, and only when the answer actually changed.
+                var next = compactNow();
+                if (next === entry._compact) return;
+                entry._compact = next;
+                try { entry.render(el, entry.instance); }
+                catch (e) { console.error('IWACVis: compact re-render failed', e); }
             }, 150));
             ro.observe(el.parentElement || el);
             entry._resizeObserver = ro;
@@ -474,6 +504,35 @@
      *          notMerge?: boolean}} [opts]
      * @returns {boolean} true when the paint was a merge
      */
+    /**
+     * Re-measure every tracked chart and map.
+     *
+     * Each instance already has its own ResizeObserver, which covers a
+     * container that changes size. This is for the case where the container
+     * did not: the embed layer hides sibling panels and makes one full-bleed,
+     * and the surviving panel's own box may settle a frame later. It used to
+     * dispatch seven synthetic `window.resize` events over 1.5 seconds and
+     * hope, which also woke every unrelated listener on the page.
+     */
+    ns.resizeCharts = function () {
+        for (var i = 0; i < ns._charts.length; i++) {
+            var entry = ns._charts[i];
+            if (!entry || !entry.instance) continue;
+            try {
+                if (entry.kind === 'echarts' && !entry.instance.isDisposed()) {
+                    entry.instance.resize(
+                        ns.prefersReducedMotion && ns.prefersReducedMotion()
+                            ? undefined
+                            : { animation: { duration: 200 } }
+                    );
+                } else if (entry.kind === 'maplibre' && !entry.instance._removed
+                        && typeof entry.instance.resize === 'function') {
+                    entry.instance.resize();
+                }
+            } catch (e) { /* an instance torn down mid-loop */ }
+        }
+    };
+
     ns.repaint = function (instance, option, opts) {
         if (!instance || (instance.isDisposed && instance.isDisposed())) return false;
         opts = opts || {};

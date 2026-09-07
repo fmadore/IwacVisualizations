@@ -23,6 +23,15 @@
     border-radius: var(--radius-sm, 0.375rem);
     overflow: hidden;
     position: relative;
+    /* A SIZE container, because MapLibre appends every popup inside this
+     * element and the popup's bounds are a function of the MAP's box, not
+     * the viewport's. `size` (rather than `inline-size`) because the height
+     * guarantee below needs `cqh`; the height above is explicit, so nothing
+     * here depends on the contents. This replaces ~150 lines of JS that
+     * measured the container by hand and re-measured it on every `resize`
+     * event, per open popup. */
+    container-type: size;
+    container-name: iwac-map;
 }
 
 
@@ -42,11 +51,44 @@
     line-height: 1.45;
     font-family: inherit;
     box-sizing: border-box;
-    /* P.createIwacPopup replaces the fallback with a map-relative cap
-     * after the popup opens. Unlike vh, that remains correct in short
-     * panels, embeds, and fullscreen maps. */
-    max-height: min(var(--iwac-vis-popup-content-max-height, 75vh), 460px);
+    /* Half the MAP's height minus MapLibre's 10px tip wedge: the box that
+     * is guaranteed to fit at either the top or the bottom anchor,
+     * whatever the marker's y. `vh` would be wrong in a short panel, an
+     * embed or a fullscreen map — the three places it matters most.
+     * The 75vh fallback applies only where @container is unsupported. */
+    max-height: min(75vh, 460px);
     overflow: hidden;
+}
+
+/* The two geometric guarantees, once, in terms of the MAP's own box.
+ *
+ * `--iwac-vis-popup-edge` is the inset MapLibre keeps from the container
+ * edge when it picks an anchor — the factory's `padding` option, 16px on
+ * every side, which no caller overrides. The usable box is the map minus
+ * twice that.
+ *
+ * HEIGHT: half the usable height, less MapLibre's 10px tip wedge. Either
+ * the top or the bottom anchor then fits, whatever the marker's y.
+ *
+ * WIDTH: two thirds of the usable width. MapLibre's left anchor puts the
+ * whole popup to the right of the marker and switches at `W/2 + edge`, so
+ * the worst case is `1.5W + edge ≤ usable` — which is the same bound.
+ */
+/* stylelint-disable-next-line no-duplicate-selectors -- a token-only rule,
+   kept beside the arithmetic above that reads it rather than hoisted into
+   the layout rule at the top of this sheet. It declares no property the
+   first rule sets, so nothing is being silently overridden. */
+.iwac-vis-map {
+    --iwac-vis-popup-edge: 16px;
+}
+
+@container iwac-map (min-height: 0px) {
+    .iwac-vis-maplibre-popup .maplibregl-popup-content {
+        max-height: min(
+            460px,
+            calc((100cqh - 2 * var(--iwac-vis-popup-edge)) / 2 - 10px)
+        );
+    }
 }
 
 .iwac-vis-maplibre-popup .maplibregl-popup-content strong {
@@ -121,26 +163,45 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     /* Min-width drops on narrow screens so the popup breathes even on
-     * 320px-wide phones. Max-width shrinks to fit the viewport with a
-     * small gutter so the popup never clips off-screen when a marker
-     * near the map edge is tapped. */
-    min-width: min(
-        200px,
-        var(--iwac-vis-popup-inner-max-width, 320px),
-        calc(100vw - 3rem)
-    );
-    max-width: min(
-        320px,
-        var(--iwac-vis-popup-inner-max-width, 320px),
-        calc(100vw - 1.5rem)
-    );
-    /* The JS factory derives this from the map container, reserving
-     * room for MapLibre's tip and this content box's padding/border.
-     * The viewport fallback only applies during the first layout. */
-    max-height: min(var(--iwac-vis-popup-body-max-height, 70vh), 420px);
+     * 320px-wide phones. These two, and the max-height, are the fallbacks
+     * for a browser without @container; the rule below is the real cap and
+     * is map-relative rather than viewport-relative. */
+    min-width: min(200px, calc(100vw - 3rem));
+    max-width: min(320px, calc(100vw - 1.5rem));
+    max-height: min(70vh, 420px);
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     /* Touch momentum scrolling inside the article list on iOS Safari. */
     -webkit-overflow-scrolling: touch;
+}
+
+@container iwac-map (min-width: 0px) {
+    .iwac-vis-map-popup {
+        /* The content box's caps above, less that box's own padding and
+         * border: 2.5rem + 1.1rem + 2px across, 2 x 0.85rem + 2px down.
+         *
+         * MIN-width carries the same cap, because a min beats a max in CSS:
+         * without it a 200px floor on a narrow map produced a popup wider
+         * than the two-thirds guarantee, which is precisely the overflow the
+         * browser spec catches. */
+        min-width: min(
+            200px,
+            calc((100cqw - 2 * var(--iwac-vis-popup-edge)) * 2 / 3 - 3.6rem - 2px),
+            calc(100vw - 3rem)
+        );
+        max-width: min(
+            320px,
+            calc((100cqw - 2 * var(--iwac-vis-popup-edge)) * 2 / 3 - 3.6rem - 2px),
+            calc(100vw - 1.5rem)
+        );
+        max-height: min(
+            420px,
+            calc((100cqh - 2 * var(--iwac-vis-popup-edge)) / 2 - 10px - 1.7rem - 2px)
+        );
+    }
 }
 
 .iwac-vis-map-popup__header {
@@ -273,7 +334,7 @@ a.iwac-vis-map-popup__item-title:hover {
 .iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
-    z-index: 1;
+    z-index: var(--iwac-vis-z-raised, 5);
 }
 
 /* MapLibre ships its control icons as a monochrome sprite whose paths
@@ -489,7 +550,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 .iwac-compare-choropleth-ctrl__btn:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
-    z-index: 1;
+    z-index: var(--iwac-vis-z-raised, 5);
 }
 
 .iwac-compare-choropleth-ctrl__btn--active {

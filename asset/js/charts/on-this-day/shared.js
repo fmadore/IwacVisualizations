@@ -406,7 +406,8 @@
     function agoLabel(year) {
         var span = new Date().getFullYear() - year;
         if (!(span > 0)) return '';
-        return P.t(span === 1 ? 'otd.ago_one' : 'otd.ago', { count: span });
+        // t() picks otd.ago_one / otd.ago_other from `count` (S14).
+        return P.t('otd.ago', { count: span });
     }
 
     ns.onThisDay = ns.onThisDay || {};

@@ -50,12 +50,22 @@
 
     /**
      * @param {Object} cfg {bundle, state, siteBase}
-     * @returns {{root: HTMLElement, mount: function():void}}
+     * @returns {{root: HTMLElement, mount: function():void,
+     *            update: function(Object):void}}
+     *
+     * `update(state)` is what keeps the type filter from rebuilding this
+     * view (Tier 8 / S17). The panel's chrome — heading, description, the
+     * method note — and the heatmap's HOST element are built once and stay;
+     * only the option and the ranked list change. That is the whole point:
+     * a retained host means `registerChart`'s instance is still alive, so
+     * the heatmap ANIMATES between filters instead of being disposed and
+     * replaced, the theme observer keeps tracking one instance rather than
+     * a new one per keystroke, and the scroll position survives because the
+     * view host is never emptied.
      */
     L.buildActors = function (cfg) {
         var bundle = cfg.bundle;
         var root = P.el('div', 'iwac-vis-laicite-actors');
-        var mounts = [];
 
         var panel = P.el('div', 'iwac-vis-panel');
         panel.appendChild(P.el('h4', null, P.t('laicite.actors_title')));
@@ -65,22 +75,16 @@
         if (!bundle) {
             panel.appendChild(P.buildNoDataState());
             root.appendChild(panel);
-            return { root: root, mount: function () {} };
+            return { root: root, mount: function () {}, update: function () {} };
         }
 
-        var actors = filtered(bundle, cfg.state);
-        if (!actors.length) {
-            panel.appendChild(P.buildEmptyState('laicite.actors_empty'));
-            root.appendChild(panel);
-            return { root: root, mount: function () {} };
-        }
-
-        var heat = buildHeatmap(bundle, actors);
-        if (heat) {
-            panel.appendChild(heat.chart);
-            mounts.push(heat.mount);
-        }
-        panel.appendChild(buildActorList(actors, cfg));
+        // Both slots exist from the start, empty if this filter has nothing
+        // to put in them. Creating them on demand would mean a new chart
+        // host, which is exactly what `update` exists to avoid.
+        var chartEl = P.el('div', 'iwac-vis-chart iwac-vis-laicite-actors-chart');
+        var listHost = P.el('div', 'iwac-vis-laicite-actors-list-host');
+        panel.appendChild(chartEl);
+        panel.appendChild(listHost);
 
         // The join is a join: some subject strings match no authority record
         // at all, and a panel built on a lookup should say how lossy the
@@ -94,11 +98,50 @@
                 unresolved: P.formatNumber(bundle.unresolved_total || 0)
             })));
         panel.appendChild(method);
-
         root.appendChild(panel);
+
+        /** Fill both slots for one state. Returns the heatmap option, or null. */
+        function paint(state) {
+            var actors = filtered(bundle, state || {});
+            listHost.innerHTML = '';
+            if (!actors.length) {
+                chartEl.hidden = true;
+                listHost.appendChild(P.buildEmptyState('laicite.actors_empty'));
+                return null;
+            }
+            listHost.appendChild(buildActorList(actors, cfg));
+            var option = heatmapOption(bundle, actors);
+            chartEl.hidden = !option;
+            return option;
+        }
+
+        var pending = paint(cfg.state);
+
         return {
             root: root,
-            mount: function () { mounts.forEach(function (fn) { fn(); }); }
+            mount: function () {
+                if (!pending) return;
+                ns.registerChart(chartEl, function (el, instance) {
+                    instance.setOption(pending, { notMerge: true });
+                });
+            },
+            update: function (state) {
+                var option = paint(state);
+                var live = ns.getLiveChart && ns.getLiveChart(chartEl);
+                if (!option) return;
+                if (live) {
+                    // `notMerge: false` so the heatmap keeps its axes and
+                    // animates the cells rather than snapping.
+                    live.setOption(option, { notMerge: false, lazyUpdate: true });
+                    return;
+                }
+                // No live instance: the first paint had nothing to draw, so
+                // nothing was registered. Register now.
+                pending = option;
+                ns.registerChart(chartEl, function (el, instance) {
+                    instance.setOption(pending, { notMerge: true });
+                });
+            }
         };
     };
 
@@ -108,12 +151,17 @@
      * not how large it is — the ranked list below already answers size, and
      * on raw counts the three or four biggest records would be the only
      * cells with any colour at all.
+     *
+     * Returns the OPTION, not a host: the host is owned by `buildActors` so
+     * it can survive a filter change (S17).
      */
-    function buildHeatmap(bundle, actors) {
+    function heatmapOption(bundle, actors) {
         var decades = bundle.decades || [];
         if (decades.length < 2) return null;
         var rows = actors.slice(0, HEATMAP_ROWS);
         if (rows.length < 2) return null;
+        var C = ns.chartOptions;
+        if (!C || !C.heatmapMatrix) return P.emptyChartOption();
 
         var yLabels = rows.map(function (a) { return a.name; });
         var cells = [];
@@ -127,33 +175,20 @@
             });
         });
 
-        var chart = P.el('div', 'iwac-vis-chart iwac-vis-laicite-actors-chart');
-        return {
-            chart: chart,
-            mount: function () {
-                ns.registerChart(chart, function (el, instance) {
-                    var C = ns.chartOptions;
-                    if (!C || !C.heatmapMatrix) {
-                        instance.setOption(P.emptyChartOption(), { notMerge: true });
-                        return;
-                    }
-                    instance.setOption(C.heatmapMatrix(
-                        { xLabels: decades, yLabels: yLabels, cells: cells },
-                        {
-                            visualMax: 100,
-                            cellLabels: false,
-                            cellBorder: true,
-                            tooltipFormatter: function (p) {
-                                return P.escapeHtml(yLabels[p.value[1]]) + '<br>'
-                                    + P.escapeHtml(decades[p.value[0]]) + ': <strong>'
-                                    + P.formatNumber(p.value[3]) + '</strong> ('
-                                    + p.value[2] + '%)';
-                            }
-                        }
-                    ), { notMerge: true });
-                });
+        return C.heatmapMatrix(
+            { xLabels: decades, yLabels: yLabels, cells: cells },
+            {
+                visualMax: 100,
+                cellLabels: false,
+                cellBorder: true,
+                tooltipFormatter: function (p) {
+                    return P.escapeHtml(yLabels[p.value[1]]) + '<br>'
+                        + P.escapeHtml(decades[p.value[0]]) + ': <strong>'
+                        + P.formatNumber(p.value[3]) + '</strong> ('
+                        + p.value[2] + '%)';
+                }
             }
-        };
+        );
     }
 
     function buildActorList(actors, cfg) {

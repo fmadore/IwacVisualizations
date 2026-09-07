@@ -1,0 +1,48 @@
+<?php
+/**
+ * The block template every zero-configuration IWAC block renders through.
+ *
+ * **Why there is one file instead of nineteen.** Until v1.65.0 each block had
+ * its own `<slug>.phtml`, and nineteen of the twenty-one were the same single
+ * call to `common/iwac-block-shell` with a different literal array — the CSS
+ * sheet, the `needs` flags, the bundle name, the loading message. That put a
+ * block's asset declaration in a different place from every other fact about
+ * it: the label, the description, the embed slug and the embeddability all
+ * live in `BlockRegistry`, which `check-blocks.js`, the embed controller and
+ * the block layouts all read. "Which blocks load MapLibre?" was nineteen
+ * files to open; it is one array now.
+ *
+ * The two blocks that do more than declare — `collection-overview`, which
+ * server-renders its summary from the snapshot on disk, and `on-this-day`,
+ * which reads its layout setting — keep their own templates. A registry row
+ * without a `shell` key gets its own template; `AbstractIwacBlockLayout`
+ * routes on exactly that.
+ *
+ * The loading message is a plain string in the registry, marked
+ * `// @translate` and translated here, for the same reason `label` and
+ * `description` are: a `const` array cannot call `$this->translate()`, and
+ * `scripts/extract-pot.js` reads the marker.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation|null $block
+ * @var string $slug  The registry slug — also the embed route segment.
+ */
+
+use IwacVisualizations\Site\BlockRegistry;
+
+$row = BlockRegistry::get($slug);
+if ($row === null || empty($row['shell'])) {
+    // Unreachable through either caller: the block layout only routes here
+    // when the row has a shell, and the embed controller validates the slug
+    // against the same registry. Rendering nothing beats rendering a
+    // half-built block.
+    return;
+}
+
+$shell = $row['shell'];
+$shell['embedSlug'] = $slug;
+if (isset($shell['loading'])) {
+    $shell['loading'] = $this->translate($shell['loading']);
+}
+
+echo $this->partial('common/iwac-block-shell', $shell);

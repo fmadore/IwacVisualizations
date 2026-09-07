@@ -79,6 +79,45 @@
      * @param {string} [ink]     fallback when no slot qualifies
      * @returns {Array<string>} at least one colour
      */
+    /**
+     * The readable ink for text drawn ON a filled shape: whichever of the
+     * theme's two extremes — `--surface` (near-white in light, near-black in
+     * dark) and `--ink-strong` (its opposite in both) — wins on contrast
+     * against that shape's own colour.
+     *
+     * Picking between the two needs no light/dark branch and re-themes for
+     * free when the render callback re-runs. Memoised, because callers run it
+     * per label and shapes repeat hues.
+     *
+     * The treemap has done this per tile since v1.53; the segmented bar was
+     * still hardcoding `'#fff'`, which measures 3.15:1 on the palette's
+     * orange and worse on its light tints.
+     *
+     * @param {string} background  the fill the text sits on
+     * @returns {string} a colour, or '' when tokens cannot be resolved
+     */
+    var _inkOnCache = {};
+    C.inkOn = function (background) {
+        if (!background) return '';
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var knockout = tokens.surface || '#fdfcfb';
+        var deepInk = tokens.inkStrong || '#05070c';
+        // The two extremes are theme-dependent, so they are part of the key:
+        // a theme swap misses the cache instead of serving the old answer.
+        var key = background + '|' + knockout + '|' + deepInk;
+        var hit = _inkOnCache[key];
+        if (hit !== undefined) return hit;
+        var bg = _rgb(background);
+        var koRgb = _rgb(knockout);
+        var deepRgb = _rgb(deepInk);
+        var picked = '';
+        if (bg && koRgb && deepRgb) {
+            picked = _contrast(deepRgb, bg) > _contrast(koRgb, bg) ? deepInk : knockout;
+        }
+        _inkOnCache[key] = picked;
+        return picked;
+    };
+
     C.readableInks = function (backdrop, ink) {
         var bg = _rgb(backdrop);
         var palette = (ns.getPalette && ns.getPalette()) || [];
@@ -725,7 +764,7 @@
                 xAxis: {
                     interval: Math.max(1, Math.ceil((yearMax - yearMin) / 5)),
                     nameGap: 24,
-                    axisLabel: { fontSize: 10 }
+                    axisLabel: { fontSize: P.AXIS_FONT_SM }
                 }
             }
         }];
@@ -989,7 +1028,9 @@
                         var pct = total > 0 ? Math.round((p.value / total) * 100) : 0;
                         return pct + '%';
                     },
-                    color: '#fff',
+                    // Contrast-picked against this segment's own fill —
+                    // '#fff' measured 3.15:1 on the palette's orange.
+                    color: C.inkOn(colors[seg.name] || fallback) || undefined,
                     fontSize: 11,
                     fontWeight: 600
                 },
@@ -1167,14 +1208,14 @@
                 nameLocation: 'end',
                 nameGap: 8,
                 // Auto-skip labels when many years crowd the x axis
-                axisLabel: { interval: 'auto', fontSize: 10 },
+                axisLabel: { interval: 'auto', fontSize: P.AXIS_FONT_SM },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
             yAxis: {
                 type: 'category',
                 data: monthLabels,
-                axisLabel: { fontSize: 10 },
+                axisLabel: { fontSize: P.AXIS_FONT_SM },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
@@ -1187,7 +1228,7 @@
                 top: 'middle',
                 itemHeight: 120,
                 itemWidth: 12,
-                textStyle: { fontSize: 10 },
+                textStyle: { fontSize: P.AXIS_FONT_SM },
                 inRange: {
                     color: heatStops
                 }
@@ -1344,8 +1385,6 @@
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var resolve = ns.resolveCssVar || function () { return ''; };
-        var muted = resolve('--muted') || tokens.muted;
-        var border = resolve('--border') || tokens.border;
         var heatStops = [
             resolve('--iwac-vis-heatmap-0'),
             resolve('--iwac-vis-heatmap-1'),
@@ -1423,13 +1462,17 @@
                 }
             },
             grid: grid,
+            // No axis `color` and no `axisLine.lineStyle` here: the registered
+            // theme paints labels `inkLight` and the line `border`. Restating
+            // them was not a duplicate but a CONTRADICTION — `muted` is a step
+            // lighter, so the heatmaps were the only charts on the site whose
+            // axis text sat below every other chart's contrast.
             xAxis: {
                 type: 'category',
                 data: xLabels.map(String),
                 axisLabel: opts.xLabelRotate
-                    ? { interval: 0, rotate: opts.xLabelRotate, fontSize: 10, color: muted }
-                    : { interval: 'auto', fontSize: 10, color: muted },
-                axisLine: { lineStyle: { color: border } },
+                    ? { interval: 0, rotate: opts.xLabelRotate, fontSize: P.AXIS_FONT_SM }
+                    : { interval: 'auto', fontSize: P.AXIS_FONT_SM },
                 axisTick: { show: false },
                 splitArea: { show: false }
             },
@@ -1439,12 +1482,10 @@
                 inverse: true,
                 axisLabel: {
                     interval: 0,
-                    fontSize: 10,
-                    color: muted,
+                    fontSize: P.AXIS_FONT_SM,
                     width: opts.yLabelWidth || 140,
                     overflow: 'truncate'
                 },
-                axisLine: { lineStyle: { color: border } },
                 axisTick: { show: false },
                 splitArea: { show: false }
             },
@@ -1457,7 +1498,6 @@
                 bottom: 4,
                 itemWidth: 14,
                 itemHeight: 120,
-                textStyle: { color: muted },
                 inRange: { color: heatStops }
             },
             series: [series]

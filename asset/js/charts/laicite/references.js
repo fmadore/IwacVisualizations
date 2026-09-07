@@ -37,7 +37,14 @@
 
     /**
      * @param {Object} cfg {bundle, state, siteBase}
-     * @returns {{root: HTMLElement, mount: function():void}}
+     * @returns {{root: HTMLElement, mount: function():void,
+     *            update: function(Object):void}}
+     *
+     * `update(state)` swaps the work list when the type filter changes and
+     * leaves everything else standing (Tier 8 / S17). The year chart is not
+     * filtered - it is the whole literature's growth curve - so this is the
+     * clearest case of the old behaviour being pure waste: changing the type
+     * select disposed a chart the change did not touch, and rebuilt it.
      */
     L.buildReferences = function (cfg) {
         var bundle = cfg.bundle;
@@ -66,12 +73,19 @@
             P.t('laicite.references_note')));
 
         panel.appendChild(buildBreakdown(bundle));
-        panel.appendChild(buildWorkList(bundle, cfg));
+        var works = buildWorkList(bundle, cfg);
+        panel.appendChild(works);
 
         root.appendChild(panel);
         return {
             root: root,
-            mount: function () { mounts.forEach(function (fn) { fn(); }); }
+            mount: function () { mounts.forEach(function (fn) { fn(); }); },
+            update: function (state) {
+                if (state) cfg.state = state;
+                var next = buildWorkList(bundle, cfg);
+                panel.replaceChild(next, works);
+                works = next;
+            }
         };
     };
 

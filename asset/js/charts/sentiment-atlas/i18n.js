@@ -74,9 +74,6 @@
         });
         ns.addTranslations('fr', {
             'Loading sentiment atlas':          'Chargement de l’atlas des sentiments',
-            'Polarity':                         'Polarité',
-            'Centrality':                       'Centralité',
-            'Subjectivity':                     'Subjectivité',
             'sentiment.rated_by':               'Évalués par {model}',
             'sentiment.ai_note':                'Ces évaluations ont été produites par des modèles de langage ayant chacun annoté le corpus indépendamment. Il s’agit de sorties de modèle et non de métadonnées rédigées par un catalogueur.',
             'sentiment.sec_time':               'Évaluations au fil du temps',

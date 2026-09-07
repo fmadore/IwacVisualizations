@@ -131,21 +131,34 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Enumerate the top-level panels of a rendered block, in document order,
-     * stamping each with a stable `data-iwac-panel` slug. "Top-level" excludes
-     * panels nested inside another panel (e.g. a fullscreen clone). Returns
-     * [{ el, slug, title }]. Deterministic: identical orchestrator output →
-     * identical slugs, so the gallery and the embed route agree without a
-     * shared registry.
+     * Enumerate the top-level panels of a rendered block, stamping each with
+     * a `data-iwac-panel` slug. "Top-level" excludes panels nested inside
+     * another panel (e.g. a fullscreen clone). Returns [{ el, slug, title }].
+     *
+     * **A panel's own key wins over its position.** Positional slugs
+     * (`panel-0`, `panel-1`, …) are only stable while a block always renders
+     * the same panels in the same order, and three do not: sentiment-atlas
+     * inserts panels per model, periodicals drops one when a bundle is short,
+     * and a panel built after the settle window never gets counted. Each of
+     * those silently renumbers every panel after it, so an embed permalink
+     * starts showing a different chart. `P.buildPanel(…, { key })` sets the
+     * attribute up front and this reads it back; positions remain the
+     * fallback, and are numbered so an unkeyed panel cannot collide with a
+     * keyed one.
      */
     E.enumeratePanels = function (blockEl) {
         if (!blockEl) return [];
         var all = blockEl.querySelectorAll('.iwac-vis-panel');
         var out = [];
+        var used = {};
         for (var i = 0; i < all.length; i++) {
             var p = all[i];
             if (p.parentElement && p.parentElement.closest('.iwac-vis-panel')) continue;
-            var slug = 'panel-' + out.length;
+            var slug = p.getAttribute('data-iwac-panel') || ('panel-' + out.length);
+            // Two panels claiming one key would make the permalink ambiguous;
+            // suffix the later ones rather than silently shadowing.
+            if (used[slug]) slug = slug + '-' + used[slug];
+            used[slug] = (used[slug] || 0) + 1;
             p.setAttribute('data-iwac-panel', slug);
             var h4 = p.querySelector(':scope > h4') || p.querySelector('h4');
             out.push({ el: p, slug: slug, title: h4 ? (h4.textContent || '').trim() : '' });
@@ -246,10 +259,33 @@
     /*  Single-panel embed selection                                     */
     /* ----------------------------------------------------------------- */
 
-    function nudgeResize() {
-        var fire = function () { try { window.dispatchEvent(new Event('resize')); } catch (e) {} };
-        fire();
-        var n = 0, iv = setInterval(function () { fire(); if (++n > 6) clearInterval(iv); }, 250);
+    /**
+     * Re-measure after the single-panel layout settles.
+     *
+     * This used to fire seven synthetic `window.resize` events over 1.5
+     * seconds and hope one of them landed after the reflow — which also woke
+     * every other resize listener on the page six more times than necessary.
+     * A ResizeObserver on the block answers when the layout actually changes,
+     * and `IWACVis.resizeCharts()` re-measures the instances the module
+     * tracks rather than broadcasting to the window.
+     */
+    function nudgeResize(blockEl) {
+        var resize = function () {
+            if (ns.resizeCharts) ns.resizeCharts();
+            else { try { window.dispatchEvent(new Event('resize')); } catch (e) { /* ignore */ } }
+        };
+        resize();
+        if (!blockEl || typeof ResizeObserver === 'undefined') return;
+        // One observer, disconnected once the box has stopped changing —
+        // the panel is full-bleed from here on and its own per-chart
+        // observers take over.
+        var settle = null;
+        var ro = new ResizeObserver(function () {
+            resize();
+            if (settle) clearTimeout(settle);
+            settle = setTimeout(function () { ro.disconnect(); }, 500);
+        });
+        ro.observe(blockEl);
     }
 
     /**
@@ -272,7 +308,7 @@
                 info.el.style.display = 'none';
             }
         });
-        nudgeResize();
+        nudgeResize(blockEl);
     };
 
     /* ----------------------------------------------------------------- */

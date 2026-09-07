@@ -12,15 +12,6 @@ const MAPLIBRE_SOURCE = readFileSync(
     'utf8'
 );
 
-function fakeStyle() {
-    return {
-        values: {},
-        setProperty(name, value) {
-            this.values[name] = String(value);
-        },
-    };
-}
-
 class FakePopup {
     constructor(options) {
         this.options = { ...options };
@@ -61,7 +52,7 @@ class FakePopup {
 
     setDOMContent(value) {
         this.content = value;
-        if (this.map && !this.element) this.element = { style: fakeStyle() };
+        if (this.map && !this.element) this.element = { style: {} };
         return this;
     }
 
@@ -87,7 +78,7 @@ class FakePopup {
     addTo(map) {
         if (this.map) this.remove();
         this.map = map;
-        if (this.content) this.element = { style: fakeStyle() };
+        if (this.content) this.element = { style: {} };
         this.fire('open');
         return this;
     }
@@ -98,29 +89,6 @@ class FakePopup {
         this.fire('close');
         return this;
     }
-}
-
-function fakeMap(width, height) {
-    const handlers = {};
-    const container = { clientWidth: width, clientHeight: height };
-    return {
-        container,
-        handlers,
-        getContainer() {
-            return container;
-        },
-        on(type, handler) {
-            (handlers[type] ||= []).push(handler);
-            return this;
-        },
-        off(type, handler) {
-            handlers[type] = (handlers[type] || []).filter((fn) => fn !== handler);
-            return this;
-        },
-        fire(type) {
-            for (const handler of handlers[type] || []) handler();
-        },
-    };
 }
 
 function loadMaplibre() {
@@ -142,53 +110,60 @@ function loadMaplibre() {
     return context.window.IWACVis.panels;
 }
 
-test('shared popups derive bounds from the map container and refresh on resize', () => {
+test('the shared popup factory stacks the IWAC class and keeps caller options', () => {
     const P = loadMaplibre();
-    const map = fakeMap(375, 320);
-    const popup = P.createIwacPopup({ className: 'preview' })
-        .setDOMContent({})
-        .addTo(map);
-
-    assert.equal(popup.options.className, 'iwac-vis-maplibre-popup preview');
-    assert.equal(popup.maxWidthCalls.at(-1), '228px');
+    const plain = P.createIwacPopup();
+    assert.equal(plain.options.className, 'iwac-vis-maplibre-popup');
+    assert.equal(plain.options.maxWidth, '320px');
+    // JSON round-trip: maplibre.js runs in a vm context, so its object
+    // literals carry that realm's prototype and fail a strict deep compare.
     assert.deepEqual(
-        JSON.parse(JSON.stringify(popup.paddingCalls.at(-1))),
+        JSON.parse(JSON.stringify(plain.options.padding)),
         { top: 16, right: 16, bottom: 16, left: 16 }
     );
-    assert.deepEqual(popup.element.style.values, {
-        '--iwac-vis-popup-content-max-height': '134px',
-        '--iwac-vis-popup-body-max-height': '104px',
-        '--iwac-vis-popup-inner-max-width': '168px',
-    });
-    assert.equal(map.handlers.resize.length, 1);
 
-    map.container.clientWidth = 1000;
-    map.container.clientHeight = 1000;
-    map.fire('resize');
-    assert.equal(popup.maxWidthCalls.at(-1), '320px');
-    assert.deepEqual(popup.element.style.values, {
-        '--iwac-vis-popup-content-max-height': '460px',
-        '--iwac-vis-popup-body-max-height': '430px',
-        '--iwac-vis-popup-inner-max-width': '260px',
-    });
-
-    popup.remove();
-    assert.equal(map.handlers.resize.length, 0, 'closed popups must release their resize listener');
+    const custom = P.createIwacPopup({ className: 'preview', maxWidth: '240px', closeButton: false });
+    assert.equal(custom.options.className, 'iwac-vis-maplibre-popup preview');
+    assert.equal(custom.options.maxWidth, '240px', 'a caller may ask for a narrower popup');
+    assert.equal(custom.options.closeButton, false);
 });
 
-test('late popup content receives the same map-relative constraint', () => {
+test('the popup patches addTo, and only addTo', () => {
+    // The bounds are container queries in iwac-maplibre.css (M19); the one
+    // override left tells MapLibre the width the CSS produced, so its anchor
+    // arithmetic matches the box it draws. If the content setters or the two
+    // option setters come back, ~150 lines of hand-rolled measurement and a
+    // per-popup `resize` listener have come back with them.
     const P = loadMaplibre();
-    const map = fakeMap(600, 400);
-    const popup = P.createIwacPopup({ maxWidth: '340px' }).addTo(map);
+    const popup = P.createIwacPopup();
+    assert.equal(Object.prototype.hasOwnProperty.call(popup, 'addTo'), true);
+    for (const method of ['setDOMContent', 'setHTML', 'setText', 'setMaxWidth', 'setPadding']) {
+        assert.equal(
+            Object.prototype.hasOwnProperty.call(popup, method), false,
+            `${method} is overridden on the instance`
+        );
+    }
+});
 
-    assert.equal(popup.getElement(), null, 'the fake mirrors MapLibre: no content, no popup root');
-    popup.setDOMContent({});
-
-    assert.equal(popup.maxWidthCalls.at(-1), '340px');
-    assert.equal(
-        popup.element.style.values['--iwac-vis-popup-content-max-height'],
-        '174px'
-    );
+test('the map host is a size container and the popup bounds are map-relative', () => {
+    // The guarantees the deleted JS enforced, now expressed once in CSS:
+    // half the map's height minus MapLibre's 10px tip (so one of the
+    // top/bottom anchors always fits) and two thirds of its width (the same
+    // guarantee for left/centre/right).
+    const css = readFileSync(join(ROOT, 'asset', 'css', 'iwac-maplibre.css'), 'utf8');
+    assert.match(css, /\.iwac-vis-map\s*\{[^}]*container-type:\s*size/,
+        '.iwac-vis-map must be a size container for cqh/cqw to resolve');
+    assert.match(css, /container-name:\s*iwac-map/);
+    // Half the map's height minus the 10px tip; two thirds of its width.
+    // Both computed off the map's USABLE box — the container minus the
+    // anchor inset MapLibre keeps on each side.
+    assert.match(css, /100cqh - 2 \* var\(--iwac-vis-popup-edge\)\) \/ 2 - 10px/);
+    assert.match(css, /100cqw - 2 \* var\(--iwac-vis-popup-edge\)\) \* 2 \/ 3/);
+    // min-width carries the same cap: a min beats a max, so a 200px floor
+    // on a narrow map would otherwise reopen the overflow.
+    assert.match(css, /min-width: min\(\s*200px,\s*calc\(\(100cqw/);
+    // And nothing sets the retired per-popup custom properties any more.
+    assert.doesNotMatch(css, /--iwac-vis-popup-(content|body|inner)/);
 });
 
 test('every module popup goes through the shared factory', () => {

@@ -1,6 +1,6 @@
 {
   "name": "iwac-visualizations",
-  "version": "1.64.0",
+  "version": "1.65.0",
   "private": true,
   "description": "Build scripts for IWAC Visualizations module static assets.",
   "license": "MIT",
@@ -25,11 +25,14 @@
     "lint:i18n": "node scripts/check-i18n.js",
     "lint:i18n-mo": "node scripts/check-i18n-mo.js",
     "lint:i18n-pot": "node scripts/extract-pot.js --check",
+    "lint:design-record": "node scripts/check-design-record.js",
+    "lint:css": "stylelint \"asset/css/**/*.css\" \"view/**/*.css\"",
+    "lint:css-dead": "node scripts/check-css-dead.js",
     "lint:tree": "node scripts/build-tree.js --check",
     "lint:versions": "node scripts/check-versions.js",
     "lint:python-lock": "node scripts/python-lock.js --check",
     "lint:py": "node scripts/check-python.js",
-    "lint": "npm run lint:js && npm run lint:theme && npm run lint:blocks && npm run lint:maplibre && npm run lint:i18n && npm run lint:i18n-mo && npm run lint:i18n-pot && npm run lint:tree && npm run lint:versions && npm run lint:python-lock && npm run lint:py",
+    "lint": "npm run lint:js && npm run lint:theme && npm run lint:design-record && npm run lint:blocks && npm run lint:maplibre && npm run lint:i18n && npm run lint:i18n-mo && npm run lint:i18n-pot && npm run lint:css && npm run lint:css-dead && npm run lint:tree && npm run lint:versions && npm run lint:python-lock && npm run lint:py",
     "lock:python": "node scripts/python-lock.js --update",
     "check:cdn": "node scripts/check-cdn-versions.js"
   },
@@ -38,6 +41,7 @@
     "csso": "^5.0.5",
     "esbuild": "0.27.4",
     "eslint": "9.39.5",
-    "globals": "17.12.0"
+    "globals": "17.12.0",
+    "stylelint": "17.15.0"
   }
 }

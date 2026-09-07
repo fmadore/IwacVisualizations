@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 from iwac_utils import (
+    canonical_country,
     add_standard_args,
     generate_timestamp,
     load_dataset_safe,
@@ -85,7 +86,9 @@ def build_map(repo_id: str) -> Dict[str, Any]:
             continue
         for value in df["country"]:
             for country in parse_pipe_separated(value):
-                country = country.strip()
+                # Canonicalise: the raw cell carries "Benin", "Bénin" and
+                # "benin", which counted as three countries here (P16).
+                country = canonical_country(country.strip())
                 if country and country.lower() != "unknown":
                     country_totals[country][type_key] += 1
                     country_totals[country]["total"] += 1

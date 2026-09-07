@@ -26,6 +26,7 @@ Functions:
 - clean_str: Strip-and-cast a DataFrame cell, treating NaN/None as ""
 - clean_float: Cast a DataFrame cell to float, or None for garbage
 - load_dataset_safe: Load HuggingFace dataset with error handling
+- iter_records: Row-wise iteration as plain dicts (the iterrows replacement)
 - find_column: Find first matching column in DataFrame
 - sentiment_columns: Candidate HF column names for one model x field
 - resolve_sentiment_columns: Map canonical model ids onto the sentiment
@@ -71,6 +72,17 @@ projection without the full-text columns). Reading it requires a Hugging
 Face token: `datasets` picks up the ``HF_TOKEN`` environment variable
 automatically — set as a repo secret in CI, or locally via
 ``$env:HF_TOKEN`` / ``hf auth login``.
+"""
+
+IWAC_COUNTRIES = ["Bénin", "Burkina Faso", "Côte d'Ivoire", "Niger", "Nigeria", "Togo"]
+"""The six countries the collection covers, in the canonical spellings
+:func:`canonical_country` produces and ``asset/geo/iwac-countries.geojson``
+keys on.
+
+One list: the spatial generator restated it as ``FOCUS_COUNTRIES`` and four
+generators counted a raw ``country`` cell without canonicalising at all, so
+"Benin", "Bénin" and "benin" could land in three different buckets of the
+same chart.
 """
 
 SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]
@@ -315,6 +327,15 @@ def is_full_date(value: Any) -> bool:
     return bool(FULL_DATE_RE.match(clean_str(value)))
 
 
+# Nearly every date in this dataset is "YYYY", "YYYY-MM" or "YYYY-MM-DD".
+# `pd.to_datetime` on a single scalar is a full parser invocation, and
+# `extract_year` is called from ~40 sites, several passes deep over 12k
+# rows. Matching the ISO shape first answers the common case in
+# microseconds and hands everything else to pandas unchanged, so the
+# OUTPUT is identical and only the path taken differs.
+_ISO_YEAR_RE = re.compile(r"^(\d{4})(?:-\d{2}(?:-\d{2})?)?$")
+
+
 def extract_year(
     value: Any,
     min_year: int = 1800,
@@ -363,6 +384,12 @@ def extract_year(
             if not value:
                 return None
 
+            # ISO first — see _ISO_YEAR_RE.
+            iso = _ISO_YEAR_RE.match(value)
+            if iso:
+                year = int(iso.group(1))
+                return year if min_year <= year <= max_year else None
+
             # Try pandas datetime parsing
             dt = pd.to_datetime(value, errors='coerce')
             if pd.notna(dt):
@@ -390,7 +417,12 @@ def extract_year(
             if min_year <= year <= max_year:
                 return year
 
-    except Exception:
+    # Narrowed from a bare `except Exception`. What can actually be raised
+    # here is a bad value (ValueError), a type pandas will not take
+    # (TypeError), or an out-of-range timestamp (OverflowError) — a bare
+    # catch also swallowed a KeyboardInterrupt, or a bug in this function,
+    # and returned None as though the date were simply unparseable.
+    except (ValueError, TypeError, OverflowError):
         pass
 
     return None
@@ -502,7 +534,12 @@ def extract_month(value: Any) -> Optional[str]:
         if pd.notna(dt):
             return dt.strftime('%Y-%m')
 
-    except Exception:
+    # Narrowed from a bare `except Exception`. What can actually be raised
+    # here is a bad value (ValueError), a type pandas will not take
+    # (TypeError), or an out-of-range timestamp (OverflowError) — a bare
+    # catch also swallowed a KeyboardInterrupt, or a bug in this function,
+    # and returned None as though the date were simply unparseable.
+    except (ValueError, TypeError, OverflowError):
         pass
 
     return None
@@ -1588,38 +1625,53 @@ def save_json(
             logger.info(f"Wrote {path}")
 
 
-def copy_to_build(
-    src_path: Path,
-    build_dir: Path = Path("build/data")
-) -> bool:
+def iter_records(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
-    Copy a file to the build directory if it exists.
+    Iterate a DataFrame row-wise as plain dicts.
 
-    Args:
-        src_path: Source file path
-        build_dir: Build directory path
+    ``for row in iter_records(df)`` replaces ``for _, row in df.iterrows()``
+    with no other change at the call site: a dict answers ``row.get(col)``,
+    ``row[col]`` and ``col in row`` exactly as a Series does, and those three
+    are all this codebase ever asks of a row.
 
-    Returns:
-        True if file was copied, False otherwise
+    WHY, AND WHERE IT IS WORTH IT (Tier 8 / P9)
+    -------------------------------------------
+    ``iterrows`` builds a fresh ``pd.Series`` per row - an index, a dtype
+    negotiation and an object allocation for each of the 12k rows in
+    ``articles``. ``to_dict("records")`` does the transpose once in pandas'
+    own C loop and hands back ordinary dicts.
+
+    **It is not a free win, and the audit's blanket "replace the 55 sites"
+    would have been the wrong change.** Measured on a 12k x 46 frame, the
+    answer depends entirely on how many columns the loop body reads per row,
+    because ``to_dict`` pays its whole cost up front while ``iterrows``
+    amortises the Series across the reads:
+
+        1 column read per row   iterrows 0.26s   records 0.30s   (WORSE)
+        5                       iterrows 0.32s   records 0.31s   (a wash)
+        15                      iterrows 0.49s   records 0.31s   (64%)
+        46                      iterrows 1.89s   records 0.65s   (35%)
+
+    So this is for the wide readers - the dashboard aggregator (11 columns),
+    the article fan-out (14), the sentiment atlas (10), the laicite scan
+    (every text field, per row). The narrow ones - ``aggregate_prevalence``
+    reads two columns, the index-subset scans read two or three - were
+    converted and then converted BACK, because there they cost more than
+    they saved. Where a narrow loop is genuinely hot, the fix is the
+    column-list ``zip`` form (see ``_scan_newspapers`` in
+    generate_collection_overview.py, 3.4x on the same data), not this.
+
+    It also removes a correctness trap rather than only a cost. ``iterrows``
+    collapses each row to ONE dtype, so a frame with any float column
+    returns its int columns as floats too. ``to_dict("records")`` keeps each
+    column's own dtype.
+
+    The trade is memory: the whole frame becomes dicts at once instead of one
+    row at a time. For these frames - already resident, values shared by
+    reference - that is bounded. Do not reach for it on something streamed.
     """
-    logger = logging.getLogger(__name__)
+    return df.to_dict("records")
 
-    if not build_dir.exists():
-        return False
-
-    dst_path = build_dir / src_path.name
-    try:
-        dst_path.write_bytes(src_path.read_bytes())
-        logger.info(f"Copied {src_path.name} to {build_dir}")
-        return True
-    except Exception as e:
-        logger.warning(f"Failed to copy to build: {e}")
-        return False
-
-
-# =============================================================================
-# Metadata Generation
-# =============================================================================
 
 def generate_timestamp() -> str:
     """

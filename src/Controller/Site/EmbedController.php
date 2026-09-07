@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations\Controller\Site;
 
 use IwacVisualizations\Site\BlockRegistry;
@@ -60,12 +62,29 @@ class EmbedController extends AbstractActionController
             'siteSlug' => $this->currentSite()->slug(),
         ]);
         $view->setTemplate('iwac-visualizations/embed/index');
+        $this->cacheable();
         return $view;
     }
 
     /**
      * Render one page block on a bare page for iframe embedding.
      */
+    /**
+     * Let a response be cached for five minutes.
+     *
+     * Embeds are public, read-only, and fetched by third-party pages that
+     * this module does not control — a slide deck, a project site, a lecture
+     * page. Without a `Cache-Control` header every one of those hits Omeka's
+     * full bootstrap on every view. Five minutes is short enough that a data
+     * sync shows up promptly and long enough to absorb a page that embeds
+     * several panels of the same block.
+     */
+    private function cacheable(): void
+    {
+        $this->getResponse()->getHeaders()
+            ->addHeaderLine('Cache-Control', 'public, max-age=300');
+    }
+
     public function blockAction()
     {
         $slug = (string) $this->params()->fromRoute('block', '');
@@ -113,6 +132,7 @@ class EmbedController extends AbstractActionController
         $this->layout()->setVariable('embedTitle', $title);
         $this->layout()->setVariable('embedPanel', $panel);
 
+        $this->cacheable();
         $view = new ViewModel(['slug' => $slug]);
         $view->setTemplate('iwac-visualizations/embed/block');
         return $view;

@@ -83,11 +83,11 @@ import pandas as pd
 from iwac_embeddings import coerce_embedding
 from iwac_stats import build_timeline_series
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
     canonicalize_country_field,
     clean_known_str,
     clean_values,
-    configure_logging,
     create_metadata_block,
     extract_year,
     load_dataset_safe,
@@ -1001,9 +1001,22 @@ def compute_subject_cooccurrence(rows: pd.DataFrame, min_weight: int) -> Dict[st
 #  Author collaboration network
 # ---------------------------------------------------------------------------
 
+#: Hard ceiling on the collaboration graph's node count.
+#:
+#: ``min_degree`` bounds how *connected* a node must be, not how many nodes
+#: survive — a denser dataset raises every degree and keeps MORE of them. The
+#: front end draws this graph with ``layoutAnimation: false``, which runs the
+#: whole force simulation once, SYNCHRONOUSLY, on the main thread, so an
+#: unbounded node count is an unbounded freeze on the reader's browser.
+#: Nodes are already ordered by record count, so the cut keeps the most
+#: prolific authors and the payload says how many it dropped.
+MAX_COLLABORATION_NODES = 400
+
+
 def compute_author_collaborations(
     rows: pd.DataFrame,
     min_degree: int,
+    max_nodes: int = MAX_COLLABORATION_NODES,
 ) -> Dict[str, Any]:
     """Build a co-authorship + author-editor graph.
 
@@ -1073,6 +1086,18 @@ def compute_author_collaborations(
         degree[b] += 1
     keep = {n for n, d in degree.items() if d >= min_degree}
 
+    ranked = sorted(keep, key=lambda n: -node_records.get(n, 0))
+    dropped = 0
+    if max_nodes and len(ranked) > max_nodes:
+        dropped = len(ranked) - max_nodes
+        logging.getLogger(__name__).info(
+            "Collaboration network: %d nodes over the %d cap, keeping the most "
+            "prolific (the front end lays this graph out synchronously)",
+            dropped, max_nodes,
+        )
+        ranked = ranked[:max_nodes]
+    keep = set(ranked)
+
     nodes = [
         {
             "id":    name,
@@ -1080,7 +1105,7 @@ def compute_author_collaborations(
             "value": int(node_records.get(name, 0)),
             "kind":  "author",
         }
-        for name in sorted(keep, key=lambda n: -node_records.get(n, 0))
+        for name in ranked
     ]
     edges = []
     for (a, b), weight in edge_weights.items():
@@ -1102,7 +1127,7 @@ def compute_author_collaborations(
 
     edges.sort(key=lambda e: -e["weight"])
 
-    return {"nodes": nodes, "edges": edges}
+    return {"nodes": nodes, "edges": edges, "dropped_nodes": int(dropped)}
 
 
 # ---------------------------------------------------------------------------
@@ -1244,11 +1269,7 @@ def build_references_overview(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=False)
     parser.add_argument(
         "--output",
         default="asset/data/references-overview.json",
@@ -1287,13 +1308,7 @@ def main() -> None:
         help="Compute the semantic landscape projection (default: %(default)s). "
              "--no-landscape skips the UMAP pass, which dominates runtime.",
     )
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
-                        default=False,
-                        help="Produce compact JSON (no indentation) (default: %(default)s)")
-    parser.add_argument("-v", "--verbose", action="store_true")
-    args = parser.parse_args()
-
-    configure_logging(level=logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
 
     repo_id = args.repo
     token = os.getenv("HF_TOKEN")

@@ -26,9 +26,11 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                    # 40 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                    # 48 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css              # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
+│   │   ├── iwac-embed.css
+│   │   ├── iwac-embed.min.css
 │   │   ├── iwac-maplibre.css          # MapLibre chrome + shared popup body styles
 │   │   └── iwac-maplibre.min.css
 │   ├── data/
@@ -46,20 +48,21 @@ IwacVisualizations/
 │       ├── charts/
 │       │   ├── article-dashboard/     # 3 files — panel modules
 │       │   ├── audiovisual-overview/  # 3 files — panel modules
-│       │   ├── collection-overview/   # 9 files — panel modules
+│       │   ├── collection-overview/   # 10 files — panel modules
 │       │   ├── compare-newspapers/    # 10 files — panel modules
-│       │   ├── entity-networks/       # 2 files — panel modules
-│       │   ├── index-overview/        # 13 files — panel modules
+│       │   ├── entity-networks/       # 3 files — panel modules
+│       │   ├── index-overview/        # 14 files — panel modules
 │       │   ├── laicite/               # 17 files — panel modules
 │       │   ├── lexical-metrics/       # 1 file — panel module
 │       │   ├── on-this-day/           # 4 files — panel modules
 │       │   ├── periodicals-overview/  # 2 files — panel modules
 │       │   ├── person-dashboard/      # 11 files — panel modules
+│       │   ├── references-overview/   # 1 file — panel module
 │       │   ├── scary-terms/           # 6 files — panel modules
 │       │   ├── semantic-landscape/    # 1 file — panel module
 │       │   ├── sentiment-atlas/       # 1 file — panel module
 │       │   ├── shared/                # 41 files — the reusable primitives every block draws on
-│       │   ├── spatial-exploration/   # 3 files — panel modules
+│       │   ├── spatial-exploration/   # 4 files — panel modules
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
 │       │   ├── collection-overview.js
@@ -87,10 +90,12 @@ IwacVisualizations/
 │       │   ├── spatial-exploration.js
 │       │   ├── term-trends.js
 │       │   └── topic-explorer.js
-│       ├── dist/                      # 68 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                      # 72 files — built by scripts/build-js.js from bundles.json; committed
 │       ├── bundles.json               # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js          # IWACVis namespace, chart tracking, theme observer
+│       ├── iwac-embed-height.js
 │       ├── iwac-i18n.js               # Locale detection + en/fr dictionary + t()
+│       ├── iwac-lazy.js
 │       └── iwac-theme.js              # ECharts theme from live CSS vars; owns BASEMAP
 ├── config/
 │   ├── module.config.php              # Block + resource-page-block invokables
@@ -104,6 +109,8 @@ IwacVisualizations/
 │   ├── build-tree.js
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
+│   ├── check-css-dead.js
+│   ├── check-design-record.js
 │   ├── check-flakes.js
 │   ├── check-i18n-mo.js
 │   ├── check-i18n.js
@@ -154,7 +161,8 @@ IwacVisualizations/
 │   ├── README.md
 │   ├── requirements.lock              # Hash-pinned; `npm run lint:python-lock` checks it
 │   ├── requirements.txt
-│   └── run_all.py                     # Every generator in one process, sharing loaded subsets
+│   ├── run_all.py                     # Every generator in one process, sharing loaded subsets
+│   └── validate_data.py
 ├── src/
 │   ├── Controller/
 │   │   ├── Admin/
@@ -163,6 +171,12 @@ IwacVisualizations/
 │   │       └── EmbedController.php
 │   ├── Job/
 │   │   └── SyncData.php               # Pure-PHP "Pull latest data" job (issue #7)
+│   ├── Mvc/
+│   │   └── EmbedFramingListener.php
+│   ├── Sentiment/
+│   │   ├── Centralite.php
+│   │   ├── Polarite.php
+│   │   └── Subjectivite.php
 │   ├── Service/
 │   │   └── Controller/
 │   │       └── Admin/
@@ -175,15 +189,16 @@ IwacVisualizations/
 │   ├── browser/                       # 13 files — Playwright specs
 │   ├── integration/
 │   │   └── omeka_boot.php
-│   ├── js/                            # 20 files — node:test units
+│   ├── js/                            # 26 files — node:test units
 │   ├── php/
-│   │   └── run.php
+│   │   ├── run.php
+│   │   └── sync_data_archive.php
 │   └── python/
 │       ├── requirements.txt
 │       └── test_iwac_helpers.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/              # 22 files — one per registered block, filename === slug
+│   │   ├── block-layout/              # 4 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml
@@ -205,6 +220,7 @@ IwacVisualizations/
 │       │   └── not-found.phtml
 │       └── layout/
 │           └── embed.phtml
+├── .stylelintrc.json
 ├── ARCHITECTURE.md                    # This file
 ├── CHANGELOG.md                       # Version history
 ├── CITATION.cff
@@ -216,11 +232,13 @@ IwacVisualizations/
 ├── Module.php                         # Structural only — NO asset listeners (see docblock)
 ├── package-lock.json
 ├── package.json
+├── phpstan.neon.dist
 ├── playwright.config.js
 ├── PRODUCT.md
 ├── README.md
 ├── REFACTORING.md                     # Audit findings and what was done about them
 ├── ROADMAP.md                         # Living roadmap and implementation tracker
+├── ruff.toml
 └── tokens.json                        # Synced from the IWAC theme; `npm run lint:theme` enforces it
 ```
 
@@ -408,7 +426,7 @@ it against what is on disk:
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install --require-hashes -r scripts/requirements.lock
+pip install -r scripts/requirements.txt   # the lock is CI's Linux/3.12 env
 export HF_TOKEN=...            # the mirror is private
 
 python3 scripts/run_all.py                    # everything, CI's flags
@@ -513,7 +531,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 
-That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
+That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. `view/common/iwac-assets.phtml` is the only place those versions live — `npm run check:cdn` reads them from there and compares them against the registry, so this file deliberately names no version of its own. (Historical changelog and roadmap entries naming MapLibre 5.24 or ECharts 6.0 are records of when a decision was taken, not statements about the current pin.) Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
 
 `scripts/check-cdn-versions.js` closes that loop — it parses the pins out of the partial and compares them against the npm registry:
 

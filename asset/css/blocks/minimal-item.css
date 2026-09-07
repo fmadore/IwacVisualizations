@@ -14,12 +14,6 @@
  *  All colors and spacing read through theme tokens, no hex literals.
  * ========================================================================== */
 
-.iwac-vis-minimal-item__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4, 1rem);
-    margin-top: var(--space-3, 0.75rem);
-}
 
 /* The minimal block doesn't render a header card — Omeka already shows
  * the item's bibliographic metadata above the resource page block — so

@@ -24,8 +24,8 @@
  *     matters, which the description says plainly).
  *   - Tooltip: title · country · year · topic. Click → article page.
  *
- * Perf: one scatter point per article (~12k). Series use progressive
- * rendering; opacity blending keeps dense clusters readable. The
+ * Perf: one scatter point per article (~12k), split into per-facet
+ * series; opacity blending keeps dense clusters readable. The
  * bundle is the heaviest single JSON in the module (titles dominate),
  * but the block lazy-loads on-view like everything else.
  */
@@ -185,11 +185,19 @@
         var countries = data.countries || [];
 
         return C.landscape(pts, buildGroups(data, facet), {
-            // Ten thousand points: small, translucent, progressive.
+            // Ten thousand points: small and translucent. NOT progressive —
+            // ECharts compares `progressiveThreshold` against ONE SERIES'
+            // data length, and every facet here splits the points into
+            // buckets (~30 topics, six countries, seven decades), so the
+            // largest series is a few hundred points and a 3,000 threshold
+            // was never once reached. The flags read as tuning and were
+            // configuration that did nothing.
+            //
+            // `large: true` would engage, and is rejected: it drops
+            // per-point emphasis, which on a map whose entire purpose is
+            // inspecting individual points is the feature, not the cost.
             symbolSize: 4,
             opacity: 0.6,
-            progressive: 2500,
-            progressiveThreshold: 3000,
             tooltipBits: function (i) {
                 var bits = [];
                 var c = pts.country[i];

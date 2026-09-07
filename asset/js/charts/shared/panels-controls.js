@@ -102,10 +102,132 @@
      * @param {string} [cfg.idPrefix='iwac-vis-sel-']  select-id prefix
      * @returns {HTMLElement} the group element
      */
+    /**
+     * Keep one panel's country facet in step with the block's shared one.
+     *
+     * **The problem.** Five collection-overview panels each built their own
+     * Country facet, so picking Bénin on the timeline left the Gantt, the
+     * languages bar, the map and the word cloud on "All countries" — the
+     * reader had to make the same choice five times, and any two panels could
+     * silently disagree about what they were showing. The laïcité dossier
+     * holds four separate country keys for the same reason.
+     *
+     * **The contract.** A panel says how to READ its current country and how
+     * to APPLY one; it calls `publish` from its own facet's onChange. This
+     * does the rest, including the loop guard — a facet bar's `setActive`
+     * fires its own `onChange`, so applying a value from the store would
+     * otherwise publish it straight back.
+     *
+     * A panel that cannot honour a country (no per-country slice for it)
+     * simply does not link, and keeps whatever it shows.
+     *
+     * @param {Object} cfg
+     * @param {Object} cfg.store  block store holding `cfg.key`
+     * @param {string} [cfg.key='country']
+     * @param {function(): (string|null)} cfg.read   the panel's current value
+     * @param {function((string|null)): void} cfg.apply  move the panel to a value
+     * @returns {{ publish: function((string|null)): void }}
+     */
+    P.linkFacet = function (cfg) {
+        cfg = cfg || {};
+        var store = cfg.store;
+        var key = cfg.key || 'country';
+        if (!store || typeof cfg.read !== 'function' || typeof cfg.apply !== 'function') {
+            return { publish: function () {} };
+        }
+        var applying = false;
+
+        store.subscribe(function () {
+            var next = store.state[key] || null;
+            if (next === (cfg.read() || null)) return;
+            applying = true;
+            try { cfg.apply(next); }
+            finally { applying = false; }
+        }, { keys: [key] });
+
+        var api = {
+            publish: function (value) {
+                if (applying) return;
+                var patch = {};
+                patch[key] = value || null;
+                store.patch(patch);
+            }
+        };
+
+        // Adopt whatever the block already holds, so a panel that renders
+        // late — a lazy map, a deferred word cloud — opens on the current
+        // selection rather than on "all".
+        //
+        // DEFERRED by a microtask, because `apply` typically reaches back for
+        // the object this function is still returning: the caller writes
+        // `var link = P.linkFacet({ apply: … })` and its `apply` calls
+        // `link.publish`. Adopting synchronously would run that before the
+        // assignment, which is a ReferenceError in strict mode and a silent
+        // no-op behind an `if (link)` guard — neither being what the caller
+        // meant.
+        var initial = store.state[key] || null;
+        if (initial) {
+            Promise.resolve().then(function () {
+                if ((cfg.read() || null) === initial) return;
+                if ((store.state[key] || null) !== initial) return;   // moved on
+                applying = true;
+                try { cfg.apply(initial); }
+                finally { applying = false; }
+            });
+        }
+
+        return api;
+    };
+
+    /**
+     * The block-level chip that says a shared facet is active, and clears it.
+     *
+     * Without it a linked selection is invisible until you look at a panel:
+     * the reader picked Bénin somewhere, every panel narrowed, and nothing
+     * says so at the top of the block or offers a way back.
+     *
+     * @param {Object} cfg
+     * @param {Object} cfg.store
+     * @param {string} [cfg.key='country']
+     * @param {string} cfg.label  e.g. "Filtered to {value}", already translated
+     * @returns {HTMLElement} a host that hides itself when nothing is set
+     */
+    P.buildLinkedFilterBar = function (cfg) {
+        cfg = cfg || {};
+        var store = cfg.store;
+        var key = cfg.key || 'country';
+        var host = P.el('div', 'iwac-vis-linked-filter');
+        host.setAttribute('role', 'status');
+        host.setAttribute('aria-live', 'polite');
+        if (!store) { host.hidden = true; return host; }
+
+        function paint() {
+            var value = store.state[key];
+            host.innerHTML = '';
+            host.hidden = !value;
+            if (!value) return;
+            host.appendChild(P.el('span', 'iwac-vis-linked-filter__label',
+                P.t(cfg.labelKey || 'linked_filter', { value: value })));
+            var clear = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-linked-filter__clear',
+                P.t('Clear'));
+            clear.type = 'button';
+            clear.addEventListener('click', function () {
+                var patch = {};
+                patch[key] = null;
+                store.patch(patch);
+            });
+            host.appendChild(clear);
+        }
+
+        store.subscribe(paint, { keys: [key] });
+        paint();
+        return host;
+    };
+
     P.buildSelectControl = function (cfg) {
         var group = P.el('div', cfg.groupClass || 'iwac-vis-select-group');
         var label = P.el('label', cfg.labelClass || 'iwac-vis-select-label',
-            cfg.label + ':');
+            P.labelColon(cfg.label));
         // `.iwac-vis-control` carries the shared control skin (padding, surface,
         // radius, focus ring) from iwac-core.css; the block class that follows
         // is layout only. Core used to enumerate every block's private control

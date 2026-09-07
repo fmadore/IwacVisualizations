@@ -20,6 +20,7 @@ from iwac_utils import (
     clean_float,
     extract_month_num,
     extract_year,
+    iter_records,
     load_dataset_safe,
     normalize_country,
     parse_pipe_separated,
@@ -195,7 +196,7 @@ class ScanMixin:
 
             self.logger.info(f"Scanning '{subset}' ({len(df)} rows)…")
             members = 0
-            for _, row in df.iterrows():
+            for row in iter_records(df):
                 if subset == "articles":
                     self._tally_baseline_sentiment(row)
                 rec = self._scan_row(row, subset, fields, tag_folded)

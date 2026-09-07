@@ -31,7 +31,8 @@ class TrendsMixin:
         frames = list(self.lex.frames.keys())
         years_present = sorted({s.year for s in scans if s.year})
         if not years_present:
-            return {"years": [], "families": frames, "global": {}, "by_country": {}}
+            return {"generated_at": generate_timestamp(), "years": [],
+                    "families": frames, "global": {}, "by_country": {}}
         years = list(range(years_present[0], years_present[-1] + 1))
         year_idx = {y: i for i, y in enumerate(years)}
 
@@ -71,6 +72,9 @@ class TrendsMixin:
             f"Trends: {len(years)} years, {len(by_country)} countries, "
             f"{len(by_subset)} subsets")
         return {
+            # Every bundle says when it was made; this one and the scary
+            # temporal map were the two with no provenance at all (P10).
+            "generated_at": generate_timestamp(),
             "years": years,
             "families": frames,
             "global": global_series,

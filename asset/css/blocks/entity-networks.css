@@ -77,6 +77,15 @@
 }
 
 .iwac-vis-networks-typechip--off .iwac-vis-networks-typechip__dot {
+    /*  One of the module's three sanctioned `!important`s - the other two
+     *  are the reduced-motion override in iwac-core.css - and the only one
+     *  that is not about specificity: `entity-networks.js` writes the dot's colour as an INLINE
+     *  style (`dot.style.background = palette[…]`), because the palette is
+     *  read from the live theme at render time. An inline style beats every
+     *  selector, so this is the only way an off-state chip can grey its own
+     *  dot. Moving the palette into a custom property would remove the need;
+     *  until then, this is the tool. */
+    /* stylelint-disable-next-line declaration-no-important -- see above */
     background: var(--muted, #66696e) !important;
 }
 
@@ -115,9 +124,13 @@
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    z-index: 30;
+    z-index: var(--iwac-vis-z-overlay, 6);
     max-height: 16rem;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
@@ -199,6 +212,10 @@
     gap: 0.15rem;
     max-height: 22rem;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
 }
 
 .iwac-vis-networks-details__list li {

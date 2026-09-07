@@ -37,7 +37,8 @@
  * The pot is written in source order, one entry per distinct msgid, with
  * the header carried over from the existing file so the metadata is not
  * reset on every run. Dynamic lookups such as the sentiment vocabulary
- * (`Central`, `Marginal`, …) are declared once in Module.php with
+ * (`Central`, `Marginal`, …) are declared once in the three
+ * `src/Sentiment/` enums with
  * `@translate` markers, so they are extracted like any other literal.
  */
 'use strict';

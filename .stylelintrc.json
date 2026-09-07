@@ -1,0 +1,8 @@
+{
+  "//": "Two rules, on purpose (Tier 8 / B2 (4)). See the comment below.",
+  "ignoreFiles": ["**/*.min.css", "node_modules/**", ".venv/**"],
+  "rules": {
+    "no-duplicate-selectors": true,
+    "declaration-no-important": true
+  }
+}

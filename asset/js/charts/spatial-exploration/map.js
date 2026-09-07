@@ -482,7 +482,7 @@
             lastAdminFit = key;
             try {
                 mapInstance.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
-                    { padding: 40, maxZoom: 8, duration: 600 });
+                    { padding: P.FIT_OPTS.padding, maxZoom: 8, duration: P.mapMotion() });
             } catch (err) { /* ignore */ }
         }
 
@@ -679,7 +679,7 @@
         function openPinnedPopup(place, lngLat) {
             hideHover();
             try {
-                mapInstance.easeTo({ center: lngLat, offset: [0, 80], duration: 300 });
+                mapInstance.easeTo({ center: lngLat, offset: [0, 80], duration: P.mapMotion(300) });
             } catch (e) { /* map may not be ready yet */ }
 
             var popup = P.createIwacPopup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
@@ -721,10 +721,11 @@
 
         // --- Map ----------------------------------------------------------
         var map = P.createIwacMap(mapContainer, {
-            center: [2, 10],
+            center: P.WEST_AFRICA_VIEW.center,
+            // One step wider than the shared view: this map also draws
+            // administrative boundaries, which need their country in frame.
             zoom: 2.6,
-            globe: true,
-            navigation: true,
+            title: P.t('Places mentioned in the collection'),
             onStyleReady: onStyleReady
         });
         if (!map) {
@@ -855,7 +856,8 @@
             });
             // One place is fitted too: fitBounds on a point picks the max
             // zoom, so P.fitToPoints centres it at 8 instead.
-            P.fitToPoints(map, pts, { padding: 60, maxZoom: 8, duration: 600, singleZoom: 8 });
+            P.fitToPoints(map, pts, { padding: P.FIT_OPTS.padding, maxZoom: 8,
+                duration: P.mapMotion(), singleZoom: 8 });
         }
 
         function applyView() {
@@ -886,10 +888,11 @@
             if (bounds) {
                 try {
                     map.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
-                        { padding: 40, duration: 600 });
+                        { padding: P.FIT_OPTS.padding, duration: P.mapMotion() });
                 } catch (err) { /* ignore */ }
             } else if (!state.focusCountry) {
-                map.easeTo({ center: [2, 10], zoom: 2.6, duration: 600 });
+                map.easeTo({ center: P.WEST_AFRICA_VIEW.center, zoom: 2.6,
+                    duration: P.mapMotion() });
             }
             updateStatus();
         }
@@ -933,19 +936,25 @@
                 if (sel && sel.status === 'ready' && sel.locations.length) {
                     fitToPlaces(places);
                 } else if (!sel) {
-                    map.easeTo({ center: [2, 10], zoom: 2.6, duration: 600 });
+                    map.easeTo({ center: P.WEST_AFRICA_VIEW.center, zoom: 2.6,
+                        duration: P.mapMotion() });
                 }
             } else if (key === 'focus') {
                 focusSelect.value = state.focusCountry || '';
                 applyFocus();
             } else if (key === 'flyto' && state.lastFlyTo) {
                 var target = state.lastFlyTo;
-                map.easeTo({ center: [target.lng, target.lat], zoom: Math.max(map.getZoom(), 7), duration: 700 });
+                map.easeTo({ center: [target.lng, target.lat],
+                    zoom: Math.max(map.getZoom(), 7), duration: P.mapMotion(700) });
                 var place = placeById[target.id];
                 if (place) {
-                    setTimeout(function () {
+                    // `moveend`, not a 720 ms guess at a 700 ms easeTo: the
+                    // two had to be kept in step by hand, and under
+                    // prefers-reduced-motion the move is instant while the
+                    // popup still waited three quarters of a second.
+                    map.once('moveend', function () {
                         openPinnedPopup(place, [target.lng, target.lat]);
-                    }, 720);
+                    });
                 }
             }
         });

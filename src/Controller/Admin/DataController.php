@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations\Controller\Admin;
 
 use IwacVisualizations\Job\SyncData;

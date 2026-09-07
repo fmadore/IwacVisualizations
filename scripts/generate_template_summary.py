@@ -105,6 +105,7 @@ import pandas as pd
 
 from iwac_embeddings import build_normalized_matrix, top_k_cosine
 from iwac_utils import (
+    add_standard_args,
     DATASET_ID,
     canonical_country,
     clean_str,
@@ -500,15 +501,10 @@ def main() -> int:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--repo", default=DATASET_ID,
-                        help="Hugging Face dataset repo id")
+    add_standard_args(parser, minify_default=False)
     parser.add_argument("--output", type=Path,
                         default=Path("asset/data/template-summary.json"),
                         help="Output JSON path")
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
-                        default=False,
-                        help="Strip whitespace from output JSON (default: %(default)s)")
-    parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
     global logger

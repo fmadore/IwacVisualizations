@@ -84,7 +84,6 @@
     L.buildSentiment = function (cfg) {
         var bundle = cfg.bundle;
         var root = P.el('div', 'iwac-vis-laicite-sentiment');
-        var mounts = [];
 
         var panel = P.el('div', 'iwac-vis-panel');
         panel.appendChild(P.el('h4', null, P.t('laicite.sentiment_title')));
@@ -94,93 +93,167 @@
         if (!bundle || !(bundle.models || []).length) {
             panel.appendChild(P.buildNoDataState());
             root.appendChild(panel);
-            return { root: root, mount: function () {} };
+            return { root: root, mount: function () {}, update: function () {} };
         }
 
-        var model = cfg.state.sentModel;
-        if ((bundle.models || []).indexOf(model) === -1) model = bundle.models[0];
-        var data = (bundle.by_model || {})[model] || {};
+        /**
+         * Everything below depends on ONE state key, `sentModel`, and every
+         * panel is the same shape for every model. So all six are built
+         * once, and switching model repaints them (Tier 8 / S17) rather than
+         * disposing four to six ECharts instances and building as many new
+         * ones - which is what changing the select used to cost, along with
+         * the transition, the scroll position and a fresh `role=status`
+         * announcement of the whole region.
+         *
+         * The two conditional panels are the reason this needs care: a model
+         * may have no register breakdown and no per-newspaper rows. They are
+         * still BUILT, and hidden with `hidden` when the current model has
+         * nothing for them - creating them on demand would mean a new chart
+         * host, which is the thing being avoided.
+         */
+        function modelFor(state) {
+            var wanted = (state || cfg.state || {}).sentModel;
+            return (bundle.models || []).indexOf(wanted) === -1
+                ? bundle.models[0] : wanted;
+        }
+        function dataFor(state) {
+            return (bundle.by_model || {})[modelFor(state)] || {};
+        }
+
+        var model = modelFor(cfg.state);
+        var data = dataFor(cfg.state);
 
         // The AI marker, first thing in the panel. Everything below it is
         // model output; the reader is told once, prominently, rather than
         // through a footnote they may never reach.
-        panel.appendChild(buildAiNotice(bundle, data, model));
+        var notice = buildAiNotice(bundle, data, model);
+        panel.appendChild(notice);
 
-        panel.appendChild(buildPolarityComparison(data));
+        var comparison = buildPolarityComparison(data);
+        panel.appendChild(comparison);
         // The chart panels are SIBLINGS of the intro panel, never children:
         // `.iwac-vis-panel` carries its own border and padding, so nesting
         // would draw a box inside a box for every chart.
         root.appendChild(panel);
 
-        // `iwac-vis-panel` first — iwac-core.css hangs the chart host's
+        // `iwac-vis-panel` first - iwac-core.css hangs the chart host's
         // height floor off `.iwac-vis-panel > .iwac-vis-chart`.
         var subj = P.buildPanel('iwac-vis-panel iwac-vis-laicite-subj',
             P.t('laicite.subjectivity_title'), P.t('laicite.subjectivity_desc'));
         root.appendChild(subj.panel);
-        mounts.push(function () {
-            ns.registerChart(subj.chart, function (el, instance) {
-                instance.setOption(subjectivityOption(data), { notMerge: true });
-            });
-        });
 
-        // Register — the follow-up the subjectivity panel above provokes
+        // Register - the follow-up the subjectivity panel above provokes
         // and cannot answer. Sits directly after it because it is only
         // legible as a continuation of that finding.
-        if (hasRegister(data)) {
-            var register = P.buildPanel('iwac-vis-panel iwac-vis-laicite-register',
-                P.t('laicite.register_title'), P.t('laicite.register_desc'));
-            register.panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
-                P.t('laicite.register_note')));
-            root.appendChild(register.panel);
-            mounts.push(function () {
-                ns.registerChart(register.chart, function (el, instance) {
-                    instance.setOption(registerOption(data), { notMerge: true });
-                });
-            });
-        }
+        var register = P.buildPanel('iwac-vis-panel iwac-vis-laicite-register',
+            P.t('laicite.register_title'), P.t('laicite.register_desc'));
+        register.panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
+            P.t('laicite.register_note')));
+        root.appendChild(register.panel);
 
         var decades = P.buildPanel('iwac-vis-panel iwac-vis-laicite-pol-decade',
             P.t('laicite.polarity_decade_title'),
             P.t('laicite.polarity_decade_desc'));
         root.appendChild(decades.panel);
-        mounts.push(function () {
-            ns.registerChart(decades.chart, function (el, instance) {
-                instance.setOption(stackedOption(
-                    (function () {
-                        var byDecade = data.polarity_by_decade || {};
-                        var keys = Object.keys(byDecade).sort();
-                        return {
-                            categories: keys,
-                            rows: keys.map(function (k) { return byDecade[k]; })
-                        };
-                    })(),
-                    { horizontal: false }
-                ), { notMerge: true });
-            });
-        });
 
-        var papers = (data.by_newspaper || []);
-        if (papers.length) {
-            var byPaper = P.buildPanel('iwac-vis-panel iwac-vis-laicite-pol-paper',
-                P.t('laicite.polarity_paper_title'),
-                P.t('laicite.polarity_paper_desc', {
-                    min: bundle.min_newspaper_items
-                }));
-            root.appendChild(byPaper.panel);
-            mounts.push(function () {
-                ns.registerChart(byPaper.chart, function (el, instance) {
-                    var top = papers.slice(0, 20).slice().reverse();
-                    instance.setOption(stackedOption({
-                        categories: top.map(function (p) { return p.newspaper; }),
-                        rows: top.map(function (p) { return p.polarity; })
-                    }, { horizontal: true }), { notMerge: true });
-                });
+        var byPaper = P.buildPanel('iwac-vis-panel iwac-vis-laicite-pol-paper',
+            P.t('laicite.polarity_paper_title'),
+            P.t('laicite.polarity_paper_desc', {
+                min: bundle.min_newspaper_items
+            }));
+        root.appendChild(byPaper.panel);
+
+        function decadeRows(d) {
+            var byDecade = d.polarity_by_decade || {};
+            var keys = Object.keys(byDecade).sort();
+            return {
+                categories: keys,
+                rows: keys.map(function (k) { return byDecade[k]; })
+            };
+        }
+        function paperRows(d) {
+            var top = (d.by_newspaper || []).slice(0, 20).slice().reverse();
+            return {
+                categories: top.map(function (item) { return item.newspaper; }),
+                rows: top.map(function (item) { return item.polarity; })
+            };
+        }
+
+        /**
+         * Show or hide the two panels a model may have no data for, and
+         * resize whatever just came back. A chart inside `display: none`
+         * measures zero, so a panel that was hidden for the previous model
+         * would paint into a zero box until the next window resize.
+         */
+        function applyVisibility(d) {
+            [
+                { panel: register.panel, chart: register.chart, show: hasRegister(d) },
+                {
+                    panel: byPaper.panel,
+                    chart: byPaper.chart,
+                    show: !!(d.by_newspaper || []).length
+                }
+            ].forEach(function (slot) {
+                var reappearing = slot.show && slot.panel.hidden;
+                slot.panel.hidden = !slot.show;
+                if (!reappearing) return;
+                var live = ns.getLiveChart && ns.getLiveChart(slot.chart);
+                if (live) window.setTimeout(function () { live.resize(); }, 0);
             });
         }
+        applyVisibility(data);
+
+        /** Every chart host paired with the option builder that fills it. */
+        var CHARTS = [
+            { el: subj.chart, option: subjectivityOption },
+            { el: register.chart, option: registerOption },
+            {
+                el: decades.chart,
+                option: function (d) {
+                    return stackedOption(decadeRows(d), { horizontal: false });
+                }
+            },
+            {
+                el: byPaper.chart,
+                option: function (d) {
+                    return stackedOption(paperRows(d), { horizontal: true });
+                }
+            }
+        ];
 
         return {
             root: root,
-            mount: function () { mounts.forEach(function (fn) { fn(); }); }
+            mount: function () {
+                CHARTS.forEach(function (c) {
+                    ns.registerChart(c.el, function (el, instance) {
+                        instance.setOption(c.option(dataFor(cfg.state)),
+                            { notMerge: true });
+                    });
+                });
+            },
+            update: function (state) {
+                if (state) cfg.state = state;
+                var d = dataFor(state);
+                var m = modelFor(state);
+
+                var nextNotice = buildAiNotice(bundle, d, m);
+                panel.replaceChild(nextNotice, notice);
+                notice = nextNotice;
+                var nextComparison = buildPolarityComparison(d);
+                panel.replaceChild(nextComparison, comparison);
+                comparison = nextComparison;
+
+                applyVisibility(d);
+                CHARTS.forEach(function (c) {
+                    var live = ns.getLiveChart && ns.getLiveChart(c.el);
+                    if (!live) return;
+                    // `notMerge: true`: a different model can have a
+                    // different set of decades and a different newspaper
+                    // list, so merging would leave the previous model's
+                    // categories standing beside the new ones.
+                    live.setOption(c.option(d), { notMerge: true, lazyUpdate: true });
+                });
+            }
         };
     };
 

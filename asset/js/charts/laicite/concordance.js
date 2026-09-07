@@ -122,6 +122,7 @@
                 siteBase: cfg.siteBase,
                 pageSize: 25,
                 emptyKey: 'laicite.concordance_empty',
+                taggedHintKey: 'concordance.tagged_hint',
                 labelForFrame: function (row) {
                     return L.frameLabel(metadata, row.f);
                 }

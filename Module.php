@@ -1,6 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations;
 
+use IwacVisualizations\Mvc\EmbedFramingListener;
+use IwacVisualizations\Sentiment\Centralite;
+use IwacVisualizations\Sentiment\Polarite;
+use IwacVisualizations\Sentiment\Subjectivite;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
@@ -27,8 +33,10 @@ use Omeka\Module\AbstractModule;
  * sentiment property from the default metadata table. This mirrors
  * the pattern of the standalone `IwacSentiment` module whose logic is
  * now rolled into this module (v0.11.0+). See
- * `src/Site/ResourcePageBlockLayout/SentimentExtractor.php` for the
- * mapping from the controlled-vocabulary item IDs to display labels.
+ * `src/Site/ResourcePageBlockLayout/SentimentExtractor.php` for how an
+ * item's properties become the panel's rows, and `src/Sentiment/` for the
+ * three enums that map controlled-vocabulary item ids to labels and to
+ * their position on each scale.
  *
  * If you add a new block: register it in `IwacVisualizations\Site\BlockRegistry`
  * (slug, label, description), add a `BlockLayout` subclass declaring that
@@ -78,68 +86,6 @@ class Module extends AbstractModule
         'SubjectiviteJustification',
     ];
 
-    /**
-     * Controlled-vocabulary item IDs → English source labels for the
-     * three sentiment axes. Keys come from islam.zmo.de's `Sentiment`
-     * controlled vocabulary (item IDs 78031..78052). The English
-     * source labels are run through `$view->translate()` so the public
-     * display respects the Omeka locale.
-     *
-     * Ported verbatim from `IwacSentiment\Module` so existing
-     * translation catalogues (language/fr.po) keep working after the
-     * merge. When new enum values are added to the authority list,
-     * update these three maps together. The `@translate` markers are what
-     * `scripts/extract-pot.js` reads: these labels reach `translate()`
-     * only through a variable, so without the marker the template would
-     * never carry them.
-     */
-    const CENTRALITE_ITEMS = [
-        78048 => 'Very central', // @translate
-        78049 => 'Central', // @translate
-        78050 => 'Secondary', // @translate
-        78051 => 'Marginal', // @translate
-        78052 => 'Not addressed', // @translate
-    ];
-    const POLARITE_ITEMS = [
-        78031 => 'Very positive', // @translate
-        78038 => 'Positive', // @translate
-        78039 => 'Neutral', // @translate
-        78040 => 'Negative', // @translate
-        78041 => 'Very negative', // @translate
-        78042 => 'Not applicable', // @translate
-    ];
-    const SUBJECTIVITE_ITEMS = [
-        78043 => ['score' => 1, 'label' => 'Very objective'], // @translate
-        78044 => ['score' => 2, 'label' => 'Rather objective'], // @translate
-        78045 => ['score' => 3, 'label' => 'Mixed'], // @translate
-        78046 => ['score' => 4, 'label' => 'Rather subjective'], // @translate
-        78047 => ['score' => 5, 'label' => 'Very subjective'], // @translate
-    ];
-
-    /**
-     * Ordinal position on each 1-5 scale (higher = more intense
-     * positive / more central / more subjective). "Not applicable"
-     * polarity collapses to 0, which is deliberately OFF the scale: the
-     * article sentiment panel renders it as an empty track with the word
-     * shown in muted type, and excludes it from the agreement verdict,
-     * so an absent rating never reads as a rating at the negative end.
-     */
-    const CENTRALITE_VALUES = [
-        'Very central' => 5,
-        'Central'      => 4,
-        'Secondary'    => 3,
-        'Marginal'     => 2,
-        'Not addressed'=> 1,
-    ];
-    const POLARITE_VALUES = [
-        'Very positive' => 5,
-        'Positive'      => 4,
-        'Neutral'       => 3,
-        'Negative'      => 2,
-        'Very negative' => 1,
-        'Not applicable'=> 0,
-    ];
-
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
@@ -159,11 +105,18 @@ class Module extends AbstractModule
         // ACL resource), NOT the class FQCN — passing the FQCN throws
         // "Resource '...EmbedController' not found" and 500s the whole site.
         $acl->allow(null, ['IwacVisualizations\Controller\Site\Embed']);
-        // Admin data-sync page (issue #7): restricted to administrators. The
-        // resource name must match config `navigation.resource` and the
-        // controller service name, same service-name rule as above.
+        // Admin data-sync page (issue #7): GLOBAL admins only. The resource
+        // name must match config `navigation.resource` and the controller
+        // service name, same service-name rule as above.
+        //
+        // Not `site_admin`: the job this page dispatches replaces the whole
+        // `files/iwac-visualizations/` tree, which every site on the
+        // installation reads. A site admin's authority is over one site, and
+        // this is not a per-site operation — it is a filesystem swap on
+        // shared state, with a several-hundred-megabyte download in front of
+        // it.
         $acl->allow(
-            ['global_admin', 'site_admin'],
+            ['global_admin'],
             ['IwacVisualizations\Controller\Admin\Data']
         );
 
@@ -185,117 +138,24 @@ class Module extends AbstractModule
     }
 
     /**
-     * Replace X-Frame-Options with a permissive `Content-Security-Policy:
-     * frame-ancestors *` on the /iwac-embed routes, so the public,
-     * read-only embed can be framed on any origin.
-     *
-     * Scoped by matched route name prefix `site/iwac-embed`, so normal site
-     * pages keep whatever framing policy the site/reverse proxy sets.
-     *
-     * Effective only for the header set by Omeka/PHP. If the reverse proxy
-     * (nginx) adds `X-Frame-Options ... always`, that overrides PHP and must
-     * be relaxed for the /iwac-embed path at the proxy too — but this CSP is
-     * then already in place, so only the X-Frame-Options removal is left to
-     * do there.
+     * Kept as a method on the module because `onBootstrap` attaches it and
+     * `tests/integration/omeka_boot.php` calls it by name; the ~100 lines of
+     * header parsing it used to carry now live in `EmbedFramingListener`
+     * (Tier 8 / H4).
      */
     public function relaxEmbedFraming(MvcEvent $event): void
     {
-        $match = $event->getRouteMatch();
-        if (!$match || strpos((string) $match->getMatchedRouteName(), 'site/iwac-embed') !== 0) {
-            return;
-        }
-        $response = $event->getResponse();
-        if (!$response instanceof \Laminas\Http\Response) {
-            return;
-        }
-        $headers = $response->getHeaders();
-        foreach (self::responseHeadersNamed($headers, 'X-Frame-Options') as $header) {
-            $headers->removeHeader($header);
-        }
-        // Public read-only widget — any parent may frame it. Every enforced
-        // CSP policy must allow the parent: multiple CSP headers are applied
-        // as an intersection, so appending a permissive second header cannot
-        // relax an existing `frame-ancestors 'self'`. Rewrite the directive
-        // in each policy while preserving every unrelated directive.
-        $cspHeaders = self::responseHeadersNamed($headers, 'Content-Security-Policy');
-        $policies = [];
-        foreach ($cspHeaders as $header) {
-            $policies[] = $header->getFieldValue();
-            $headers->removeHeader($header);
-        }
-        foreach (self::relaxFrameAncestorsPolicies($policies) as $policy) {
-            $headers->addHeaderLine('Content-Security-Policy', $policy);
-        }
+        (new EmbedFramingListener())($event);
     }
 
     /**
-     * Return every response header with the requested field name.
-     *
-     * Laminas HTTP versions bundled with Omeka S 4.0 treat generic headers
-     * such as Content-Security-Policy as single-value in Headers::get(), even
-     * when the response contains the field more than once. Iterating the
-     * container is the version-neutral way to reach and rewrite every enforced
-     * policy (and every X-Frame-Options line).
-     */
-    private static function responseHeadersNamed($headers, string $fieldName): array
-    {
-        $matches = [];
-        foreach ($headers as $header) {
-            if (strcasecmp($header->getFieldName(), $fieldName) === 0) {
-                $matches[] = $header;
-            }
-        }
-        return $matches;
-    }
-
-    /**
-     * Return CSP header values with every enforced policy allowing framing.
-     * Kept pure so multiple-policy composition is covered without booting MVC.
+     * @deprecated Call `EmbedFramingListener::relaxFrameAncestorsPolicies()`.
+     *   Kept because `tests/php/run.php` covers the pure CSP composition
+     *   through this name.
      */
     public static function relaxFrameAncestorsPolicies(array $headerValues): array
     {
-        if (!$headerValues) {
-            return ['frame-ancestors *'];
-        }
-        return array_map([self::class, 'relaxFrameAncestorsPolicy'], $headerValues);
-    }
-
-    /** Rewrite frame-ancestors within one CSP header value. */
-    private static function relaxFrameAncestorsPolicy(string $headerValue): string
-    {
-        // A field value may contain a comma-separated CSP policy list. A comma
-        // followed by a directive name starts another policy; ordinary source
-        // expressions do not use that shape.
-        $policyValues = preg_split(
-            '/\s*,\s*(?=[A-Za-z][A-Za-z0-9-]*\s)/',
-            trim($headerValue)
-        );
-        $relaxed = [];
-        foreach ($policyValues ?: [''] as $policyValue) {
-            $directives = array_values(array_filter(
-                array_map('trim', explode(';', $policyValue)),
-                static function (string $directive): bool {
-                    return $directive !== '';
-                }
-            ));
-            $rewritten = [];
-            $inserted = false;
-            foreach ($directives as $directive) {
-                if (preg_match('/^frame-ancestors(?:\s|$)/i', $directive)) {
-                    if (!$inserted) {
-                        $rewritten[] = 'frame-ancestors *';
-                        $inserted = true;
-                    }
-                    continue;
-                }
-                $rewritten[] = $directive;
-            }
-            if (!$inserted) {
-                $rewritten[] = 'frame-ancestors *';
-            }
-            $relaxed[] = implode('; ', $rewritten);
-        }
-        return implode(', ', $relaxed);
+        return EmbedFramingListener::relaxFrameAncestorsPolicies($headerValues);
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
@@ -346,29 +206,41 @@ class Module extends AbstractModule
     }
 
     /**
-     * Lookup helpers used by the article dashboard partial to resolve
-     * controlled-vocabulary item IDs to English source labels. Kept
-     * static so the partial can call `Module::getPolariteLabel()`
-     * without having to thread the module instance through the view.
+     * The three sentiment axes are enums now.
+     *
+     * `CENTRALITE_ITEMS` / `POLARITE_ITEMS` / `SUBJECTIVITE_ITEMS` mapped
+     * item id → label, and `CENTRALITE_VALUES` / `POLARITE_VALUES` mapped
+     * label → ordinal, with nothing but convention keeping the two key sets
+     * aligned. `src/Sentiment/{Polarite,Centralite,Subjectivite}.php` now
+     * own both, as `match` expressions over a closed set of cases, so a new
+     * vocabulary value cannot be added with a label and no ordinal
+     * (Tier 8 / H4). The `@translate` markers moved with the labels;
+     * `extract-pot.js` scans `src/`, so every msgid is unchanged.
+     *
+     * The five lookups below stay because `SentimentExtractor` and
+     * `view/.../article.phtml` call them statically, and threading a module
+     * instance into a view partial to reach an enum would be a worse trade
+     * than five one-line shims.
      */
+
     public static function getCentraliteLabel(?int $itemId): ?string
     {
-        return $itemId ? (self::CENTRALITE_ITEMS[$itemId] ?? null) : null;
+        return Centralite::fromItemId($itemId)?->label();
     }
     public static function getPolariteLabel(?int $itemId): ?string
     {
-        return $itemId ? (self::POLARITE_ITEMS[$itemId] ?? null) : null;
+        return Polarite::fromItemId($itemId)?->label();
     }
     public static function getSubjectiviteInfo(?int $itemId): ?array
     {
-        return $itemId ? (self::SUBJECTIVITE_ITEMS[$itemId] ?? null) : null;
+        return Subjectivite::fromItemId($itemId)?->info();
     }
     public static function getCentraliteNumeric(?string $label): int
     {
-        return $label ? (self::CENTRALITE_VALUES[$label] ?? 0) : 0;
+        return Centralite::ordinalForLabel($label);
     }
     public static function getPolariteNumeric(?string $label): int
     {
-        return $label ? (self::POLARITE_VALUES[$label] ?? 0) : 0;
+        return Polarite::ordinalForLabel($label);
     }
 }

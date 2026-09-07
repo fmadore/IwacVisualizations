@@ -17,6 +17,55 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels = ns.panels || {};
 
+    /**
+     * The one step down from the theme's base chart type size, for axis
+     * labels that must fit a dense grid — heatmap rows, matrix columns,
+     * calendar month names.
+     *
+     * It lives HERE, in panels.js, rather than in chart-options.js: this
+     * file is in `shared.core` and loads first, so a block that skips the
+     * chart-options bundle still gets a number rather than `undefined` —
+     * which ECharts would silently replace with its own 12px default.
+     *
+     * A number, not a token: `readTokens()` reads colours and the body font
+     * family, and the theme's `--text-*` scale is expressed in `rem`, which
+     * ECharts cannot consume (a canvas has no cascade to resolve it against).
+     * What this replaces is the literal appearing at four different values —
+     * 15 in `special`, 7 in `hbar`, 3 in `bar`, 3 in `graph` — for what is
+     * one decision.
+     */
+    P.AXIS_FONT_SM = 10;
+
+    /**
+     * Below this width a chart is drawn in its compact form — fewer labels,
+     * tighter grid, stacked legend.
+     *
+     * The rule is the ELEMENT's width, never the viewport's: an embed 400 px
+     * wide on a desktop screen is narrow, and a panel in a wide layout on a
+     * tablet is not. `laicite/arenas.js` read `window.innerWidth` and so laid
+     * a 400 px embed out in three columns.
+     */
+    P.COMPACT_MAX = 600;
+
+    P.isCompact = function (el) {
+        if (!el) return false;
+        var w = el.clientWidth
+            || (el.getBoundingClientRect && el.getBoundingClientRect().width)
+            || 0;
+        // A width of zero means "not laid out yet", not "infinitely narrow".
+        return w > 0 && w < P.COMPACT_MAX;
+    };
+
+    /**
+     * A control's label with its colon: `Country:` in English, `Pays :` in
+     * French, where typography puts a space before a two-part punctuation
+     * mark. Two call sites concatenated `label + ':'` and got the English
+     * form on both sites.
+     */
+    P.labelColon = function (label) {
+        return String(label == null ? '' : label) + (ns.locale === 'fr' ? ' :' : ':');
+    };
+
     /* ----------------------------------------------------------------- */
     /*  DOM helpers                                                       */
     /* ----------------------------------------------------------------- */
@@ -92,6 +141,22 @@
      *   (default `P.FETCH_TIMEOUT_MS`; 0 disables the bound).
      * @returns {Promise<any>} parsed JSON body
      */
+    /**
+     * In-flight requests, by resolved URL.
+     *
+     * Two blocks can want the same bundle on one page — item-set-dashboard
+     * and compare-newspapers both fetch `compare-newspapers/index.json`, and
+     * every `.iwac-vis-minimal-item` container on an item page fetches
+     * `template-summary.json` — and each was issuing its own request. Two
+     * panels wrote private memos to work around it; this retires both.
+     *
+     * Only the IN-FLIGHT promise is shared: the entry is dropped when it
+     * settles, so this is request de-duplication and not a response cache.
+     * A caller that wants a fresh read after a data sync still gets one, and
+     * a failure is not remembered.
+     */
+    var inFlight = {};
+
     P.fetchJSON = function (url, opts) {
         var u = url;
         if (ns.assetVersion && !/[?&]v=/.test(u)) {
@@ -115,6 +180,20 @@
                 init[k] = opts[k];
             }
         }
+        // A caller with its own `signal` or custom init is asking for its own
+        // request; only the plain shape is shareable.
+        var shareable = !opts || (!opts.signal && !opts.method && !opts.body);
+        if (shareable && inFlight[u]) return inFlight[u];
+
+        var promise = runFetch(u, init, timeoutMs);
+        if (!shareable) return promise;
+        inFlight[u] = promise;
+        var forget = function () { delete inFlight[u]; };
+        promise.then(forget, forget);
+        return promise;
+    };
+
+    function runFetch(u, init, timeoutMs) {
         if (!timeoutMs || typeof setTimeout !== 'function') return doFetch(u, init);
 
         // Bounded. `fetch` carries no timeout, so a request that never answers
@@ -150,7 +229,7 @@
             }
             doFetch(u, init).then(finish(resolve), finish(reject));
         });
-    };
+    }
 
     function doFetch(u, init) {
         return fetch(u, init).then(function (r) {
@@ -445,6 +524,14 @@
      */
     P.buildPanel = function (className, titleText, descriptionText, opts) {
         var panel = P.el('div', className);
+        // `opts.key` names this panel for the embed route. Without one the
+        // slug falls back to the panel's position in document order, which
+        // is only stable while the block always renders the same panels in
+        // the same order — and three blocks do not: sentiment-atlas inserts
+        // panels per model, periodicals removes one when a bundle is short,
+        // and anything built after the embed layer's settle window is never
+        // enumerated at all. A named panel keeps its permalink regardless.
+        if (opts && opts.key) panel.setAttribute('data-iwac-panel', opts.key);
         panel.appendChild(P.el((opts && opts.heading) || 'h4', null, titleText));
         if (descriptionText) {
             panel.appendChild(P.el('p', 'iwac-vis-panel-desc', descriptionText));

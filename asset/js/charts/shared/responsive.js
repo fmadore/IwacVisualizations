@@ -11,6 +11,7 @@
     'use strict';
 
     var ns = window.IWACVis = window.IWACVis || {};
+    var P = ns.panels;
     var R = ns.responsive = ns.responsive || {};
 
     /* ----------------------------------------------------------------- */
@@ -105,8 +106,8 @@
             query: { maxWidth: R.BP.sm },
             option: {
                 grid: { left: 42, right: 14, top: 34, bottom: hasZoom ? 60 : 36, containLabel: true },
-                xAxis: { nameGap: hasZoom ? 28 : 22, axisLabel: { fontSize: 10 } },
-                yAxis: { nameGap: 28, nameTextStyle: { fontSize: 10 }, axisLabel: { fontSize: 10 } }
+                xAxis: { nameGap: hasZoom ? 28 : 22, axisLabel: { fontSize: P.AXIS_FONT_SM } },
+                yAxis: { nameGap: 28, nameTextStyle: { fontSize: P.AXIS_FONT_SM }, axisLabel: { fontSize: P.AXIS_FONT_SM } }
             }
         };
         if (hasZoom) {

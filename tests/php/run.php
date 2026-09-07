@@ -45,7 +45,48 @@ namespace Omeka\Module {
 }
 
 namespace Omeka\Job {
-    abstract class AbstractJob {}
+    /**
+     * Enough of Omeka's AbstractJob for SyncData::perform() to run: the
+     * service locator, the job entity it reads an id from, the argument bag
+     * and the stop flag. Real Omeka gives all four; stubbing them is what
+     * lets the archive handling be tested without a database (B3 (1)).
+     */
+    abstract class AbstractJob
+    {
+        protected $job;
+        private $services;
+        private $args;
+        public $stopAfter = null;
+        public $stopCalls = 0;
+
+        public function __construct($services = null, array $args = [], $job = null)
+        {
+            $this->services = $services;
+            $this->args = $args;
+            $this->job = $job;
+        }
+
+        public function getServiceLocator()
+        {
+            return $this->services;
+        }
+
+        public function getArg($name, $default = null)
+        {
+            return $this->args[$name] ?? $default;
+        }
+
+        /**
+         * False, unless a test asked to stop at the Nth call - which is how
+         * the "stop requested before swap" branch is reached deliberately
+         * rather than by timing.
+         */
+        public function shouldStop()
+        {
+            $this->stopCalls++;
+            return $this->stopAfter !== null && $this->stopCalls > $this->stopAfter;
+        }
+    }
 }
 
 namespace Omeka\Api\Representation {
@@ -82,6 +123,9 @@ namespace Omeka\Site\ResourcePageBlockLayout {
 namespace {
     use IwacVisualizations\Job\SyncData;
     use IwacVisualizations\Module;
+    use IwacVisualizations\Sentiment\Centralite;
+    use IwacVisualizations\Sentiment\Polarite;
+    use IwacVisualizations\Sentiment\Subjectivite;
     use IwacVisualizations\Site\BlockRegistry;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
@@ -90,6 +134,10 @@ namespace {
     use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 
     $root = dirname(__DIR__, 2);
+    require $root . '/src/Sentiment/Polarite.php';
+    require $root . '/src/Sentiment/Centralite.php';
+    require $root . '/src/Sentiment/Subjectivite.php';
+    require $root . '/src/Mvc/EmbedFramingListener.php';
     require $root . '/Module.php';
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
@@ -205,6 +253,65 @@ namespace {
 
     // Controlled-vocabulary lookup and default metadata filtering.
     check(Module::getPolariteLabel(78040) === 'Negative', 'polarity item mapping drifted');
+
+    // The three sentiment axes are enums (Tier 8 / H4). What matters is not
+    // that a `match` compiles but that the closed set still holds the same
+    // vocabulary: the item ids the dataset points at, one label and one
+    // ordinal per case, and NOTHING outside the set resolving to a rating.
+    check(count(Polarite::cases()) === 6, 'the polarity vocabulary changed size');
+    check(count(Centralite::cases()) === 5, 'the centrality vocabulary changed size');
+    check(count(Subjectivite::cases()) === 5, 'the subjectivity vocabulary changed size');
+    check(
+        array_map(static fn ($c) => $c->value, Polarite::cases())
+            === [78031, 78038, 78039, 78040, 78041, 78042],
+        'the polarity item ids drifted from the controlled vocabulary'
+    );
+    check(
+        array_map(static fn ($c) => $c->value, Centralite::cases())
+            === [78048, 78049, 78050, 78051, 78052],
+        'the centrality item ids drifted from the controlled vocabulary'
+    );
+    check(
+        array_map(static fn ($c) => $c->value, Subjectivite::cases())
+            === [78043, 78044, 78045, 78046, 78047],
+        'the subjectivity item ids drifted from the controlled vocabulary'
+    );
+    // Every label distinct, or `ordinalForLabel` would answer for the wrong
+    // case - it resolves by label because that is the key the extractor has.
+    foreach ([Polarite::class, Centralite::class, Subjectivite::class] as $enum) {
+        $labels = array_map(static fn ($c) => $c->label(), $enum::cases());
+        check(count(array_unique($labels)) === count($labels), "$enum has duplicate labels");
+        check(!in_array('', $labels, true), "$enum has an empty label");
+    }
+    // The two rated scales run 1..5 with no gaps; polarity adds the
+    // deliberate off-scale 0.
+    check(
+        array_values(array_diff(
+            array_map(static fn ($c) => $c->ordinal(), Polarite::cases()), [0]
+        )) === [5, 4, 3, 2, 1],
+        'the polarity scale is no longer a gapless 1-5 plus the off-scale 0'
+    );
+    check(
+        array_map(static fn ($c) => $c->ordinal(), Centralite::cases()) === [5, 4, 3, 2, 1],
+        'the centrality scale is no longer a gapless 1-5'
+    );
+    check(
+        Polarite::fromItemId(78042)?->ordinal() === 0,
+        '"Not applicable" stopped being off the scale'
+    );
+    // An id outside the vocabulary must resolve to nothing, not to a rating.
+    foreach ([null, 0, -1, 78030, 78053, 999999] as $stranger) {
+        check(Polarite::fromItemId($stranger) === null, "polarity accepted item id " . var_export($stranger, true));
+        check(Centralite::fromItemId($stranger) === null, "centrality accepted item id " . var_export($stranger, true));
+        check(Subjectivite::fromItemId($stranger) === null, "subjectivity accepted item id " . var_export($stranger, true));
+    }
+    check(Polarite::ordinalForLabel('nonsense') === 0, 'an unknown polarity label scored');
+    check(Polarite::ordinalForLabel(null) === 0, 'a null polarity label scored');
+    check(Centralite::ordinalForLabel('very central') === 0, 'centrality label lookup went case-insensitive');
+    check(
+        Subjectivite::fromItemId(78045)?->info() === ['score' => 3, 'label' => 'Mixed'],
+        'the subjectivity info shape the article partial reads changed'
+    );
     check(Module::getCentraliteNumeric('Very central') === 5, 'centrality scale drifted');
     check(Module::getPolariteNumeric('Not applicable') === 0, 'off-scale polarity drifted');
 
@@ -285,6 +392,32 @@ namespace {
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
+
+    // H5: nineteen blocks declare their whole shell in the registry and
+    // render through `_generic`; the two that do more than declare keep
+    // their own template. Both halves are asserted, because a block with
+    // NEITHER renders nothing and a block with BOTH renders the wrong one.
+    $shellRows = 0;
+    $ownTemplate = 0;
+    foreach (BlockRegistry::slugs() as $slug) {
+        $row = BlockRegistry::get($slug);
+        $tpl = $root . '/view/common/block-layout/' . $slug . '.phtml';
+        if (!empty($row['shell'])) {
+            $shellRows++;
+            check(!is_readable($tpl), "$slug: has a registry shell AND a $slug.phtml");
+            check(!isset($row['shell']['embedSlug']),
+                "$slug: shell declares embedSlug, which _generic already supplies");
+            check(isset($row['shell']['assets']['bundle']),
+                "$slug: shell names no bundle");
+        } else {
+            $ownTemplate++;
+            check(is_readable($tpl), "$slug: no registry shell and no $slug.phtml");
+        }
+    }
+    check($shellRows === 19, "expected 19 generic blocks, found $shellRows");
+    check($ownTemplate === 2, "expected 2 blocks with their own template, found $ownTemplate");
+    check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
+        '_generic.phtml is missing — nineteen blocks render through it');
 
     $visualizations = new Visualizations();
     $view = new PhpRenderer();
@@ -382,6 +515,11 @@ namespace {
         in_array('stopping', \IwacVisualizations\Controller\Admin\DataController::ACTIVE_STATUSES, true),
         'a stopping sync is not treated as active'
     );
+
+    // SyncData::perform() against real ZIP fixtures. Kept in its own file:
+    // it needs a dozen fakes and a temp-directory lifecycle, which would
+    // dwarf the pure contracts above.
+    require __DIR__ . '/sync_data_archive.php';
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");

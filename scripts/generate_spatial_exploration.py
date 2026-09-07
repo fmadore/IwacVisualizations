@@ -48,9 +48,10 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
+    IWAC_COUNTRIES,
     canonical_country,
-    configure_logging,
     create_metadata_block,
     find_column,
     load_dataset_safe,
@@ -66,9 +67,11 @@ logger = logging.getLogger(__name__)
 # is excluded (meta-records, not explorable entities).
 ENTITY_TYPES = ["Personnes", "Organisations", "Événements", "Sujets", "Lieux"]
 
-# The six countries covered by iwac-countries.geojson — same canonical
-# spellings the choropleth helper keys on.
-FOCUS_COUNTRIES = ["Bénin", "Burkina Faso", "Côte d'Ivoire", "Niger", "Nigeria", "Togo"]
+# The six countries covered by iwac-countries.geojson. Re-exported under the
+# local name the rest of this file reads; the list itself is
+# `iwac_utils.IWAC_COUNTRIES`, so the choropleth helper, the world map and
+# this generator cannot drift apart on a spelling.
+FOCUS_COUNTRIES = IWAC_COUNTRIES
 
 # All content subsets contribute to the per-country item counts —
 # photographs (``images``) included: all 30 carry a canonical ``country``.
@@ -418,16 +421,9 @@ def build_country_focus(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default=DATASET_ID, help="Hugging Face dataset repository ID")
+    add_standard_args(parser, minify_default=True)
     parser.add_argument("--output", default="asset/data/spatial-exploration.json")
-    parser.add_argument(
-        "--minify", action=argparse.BooleanOptionalAction, default=True,
-        help="Produce compact JSON (default: %(default)s)",
-    )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Set log level to DEBUG")
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     module_root = Path(__file__).resolve().parent.parent
 
     index_df = load_dataset_safe("index", repo_id=args.repo)

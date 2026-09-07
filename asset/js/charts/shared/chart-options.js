@@ -43,10 +43,40 @@
     var C = ns.chartOptions = ns.chartOptions || {};
 
     var esc = P.escapeHtml;
+    var t = P.t;
 
     /* ----------------------------------------------------------------- */
     /*  Shared private helpers                                            */
     /* ----------------------------------------------------------------- */
+
+    /**
+     * The tooltip shape 15 formatters build by hand: a bold title, then one
+     * line per fact.
+     *
+     * Escaping is the caller's job for the LINES — several pass markup on
+     * purpose (a colour swatch, a `<em>`) — but never for the title, which
+     * is escaped here because it is always a datum. That split is why this
+     * takes them as separate arguments rather than one string.
+     *
+     * @param {string} title  a datum; escaped here
+     * @param {Array<string>|string} [lines]  already-escaped HTML fragments
+     * @returns {string}
+     */
+    C.itemTooltip = function (title, lines) {
+        var body = Array.isArray(lines) ? lines.filter(Boolean) : (lines ? [lines] : []);
+        var head = '<strong>' + esc(String(title == null ? '' : title)) + '</strong>';
+        return body.length ? head + '<br>' + body.join('<br>') : head;
+    };
+
+    /**
+     * ECharts' own tooltip marker, for a row the formatter draws itself.
+     * `params.marker` is the same span, but a custom row has no params to
+     * read it from.
+     */
+    C.tooltipDot = function (color) {
+        return '<span style="display:inline-block;margin-right:6px;border-radius:10px;'
+            + 'width:10px;height:10px;background-color:' + (color || 'transparent') + '"></span>';
+    };
 
     C._grid = function (overrides) {
         var defaults = { left: 48, right: 24, top: 48, bottom: 32, containLabel: true };
@@ -90,6 +120,17 @@
             for (var k in overrides) {
                 if (Object.prototype.hasOwnProperty.call(overrides, k)) legend[k] = overrides[k];
             }
+        }
+        // `selector: true` adds ECharts' "all" / "inverse" buttons. Worth it
+        // once a legend has enough series that isolating one means clicking
+        // off eleven others — the term-trends line and the topic river. The
+        // labels are ECharts' own English otherwise, so they are translated
+        // here rather than left to the library.
+        if (legend.selector === true) {
+            legend.selector = [
+                { type: 'all', title: t('Show all') },
+                { type: 'inverse', title: t('Invert selection') }
+            ];
         }
         return legend;
     };

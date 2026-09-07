@@ -22,14 +22,15 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
 from iwac_utils import (
-    DATASET_ID,
-    configure_logging,
+    add_standard_args,
+    parse_standard_args,
+    generate_timestamp,
+    canonical_country,
     extract_year,
     load_dataset_safe,
     parse_pipe_separated,
@@ -95,7 +96,9 @@ def build_wordcloud(
         if "country" in df.columns:
             raw = df["country"].iat[idx]
             for c in parse_pipe_separated(raw):
-                c = c.strip()
+                # Canonicalise before bucketing (P16): "Benin" and "Bénin"
+                # are the same country and must share a word cloud.
+                c = canonical_country(c.strip())
                 if c and c.lower() != "unknown":
                     countries.append(c)
         for country in countries:
@@ -129,7 +132,7 @@ def build_wordcloud(
             for year, counter in sorted(by_year.items())
         },
         "metadata": {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": generate_timestamp(),
             "language_filter": "French",
             "min_word_length": 4,
             "min_frequency": min_frequency,
@@ -144,26 +147,13 @@ def build_wordcloud(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default=DATASET_ID)
+    add_standard_args(parser, minify_default=True)
     parser.add_argument("--output", default="asset/data/collection-wordcloud.json")
     parser.add_argument("--min-frequency", type=int, default=5)
     parser.add_argument("--max-words", type=int, default=150)
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
 
     result = build_wordcloud(
         repo_id=args.repo,

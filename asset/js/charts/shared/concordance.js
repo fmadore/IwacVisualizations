@@ -112,7 +112,12 @@
             // rather than only using the word.
             if (item.g) {
                 var tag = P.el('span', 'iwac-vis-kwic-tagged', P.t('tagged'));
-                tag.title = P.t('concordance.tagged_hint');
+                // The hint names the concept, so it belongs to the caller.
+                // It used to reach for `concordance.tagged_hint`, which lives
+                // in the LAÏCITÉ dictionary — this component is in shared.ui,
+                // so the second block to use it would have rendered the raw
+                // key as a tooltip.
+                if (cfg.taggedHintKey) tag.title = P.t(cfg.taggedHintKey);
                 meta.appendChild(tag);
             }
             li.appendChild(meta);

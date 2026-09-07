@@ -49,6 +49,8 @@
      */
     var DICTIONARY = {
         en: {
+            // The block-level linked facet chip (S4).
+            'linked_country': 'Filtered to {value}',
             // UI chrome. The source key keeps the American spelling the call
             // sites already pass; the English value is what readers see.
             'Visualization data is not available yet.': 'The data for this visualisation has not been published yet.',
@@ -107,19 +109,10 @@
             // Entity type tabs (must match INDEX_TYPES in the generator)
 
             // References overview
-            'references_provenance_desc': 'Places of publication recorded on the references, shown wherever the place could be matched to map coordinates.',
-            'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same reference.',
 
             // References overview — full text + topics (2026-07 pipeline)
-            'Full-text coverage': 'Full-text coverage',
-            'references_coverage_desc': 'How many references have their full text available as searchable text, by kind of publication.',
-            'references_coverage_desc_full': 'Full text has been extracted for {withOcr} of {total} references ({pct}%): {words} words in all, and {median} in a typical reference. The topic panels below describe that digitised part of the bibliography rather than the whole of it. Each bar shows the digitised count for one kind of publication against its total. Of these references, {published} also have their text published on islam.zmo.de; the others feed the aggregate figures here without being readable in full.',
-            'references_coverage_tooltip': '{withOcr} of {total} with full text ({pct}%)',
 
             // References overview — semantic landscape panel
-            'Semantic landscape of the literature': 'Semantic landscape of the literature',
-            'references_landscape_desc': 'Each point is one reference, placed according to how similar its full text is to the others. Works sitting close together are ones the AI model reads as being about the same thing. Drag to move around the map, scroll to zoom, and click a point to open the reference.',
-            'references_landscape_desc_full': 'Each point is one reference, placed according to how similar its full text is to the others: an AI model compares the texts, and a technique called UMAP flattens those comparisons onto two dimensions. Works sitting close together are ones the model reads as being about the same thing. The axes have no units, and the distance between two clusters means nothing; only which points sit near which. The map covers the {embedded} of {total} references ({pct}%) whose full text has been extracted, and that subset reflects what the collection was able to obtain and digitise rather than a representative sample. Drag to move around the map, scroll to zoom, and click a point to open the reference.',
             'references_landscape_empty': 'No semantic map is available for this bibliography',
             'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
             'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
@@ -127,13 +120,9 @@
             'Decade': 'Decade',
             'Type': 'Type',
 
-            'Scholarly topics': 'Scholarly topics',
             // Parenthetical rather than "{language}-language references":
             // the interpolated label comes from the shared `lang_*` keys and
             // arrives capitalised, which only reads correctly standalone.
-            'references_topics_title_lang': 'Scholarly topics ({language})',
-            'references_topics_desc': 'Themes found automatically in the full text of {count} references by a statistical model (LDA), which sorted them into {topics} topics. Each label lists the words most characteristic of its topic; the labels come from the model rather than from a cataloguer. Each language has its own model, so topic numbers cannot be compared between these panels. Hover over a bar for the references most typical of that topic.',
-            'references_topic_tooltip': '{count} references ({pct}% of this model’s corpus). Most representative:',
 
             'Languages studied': 'Languages',
             'Fetching references…': 'Fetching references\u2026',
@@ -171,17 +160,25 @@
 
             // Plural-ish
             'items_count': '{count} items',
+            'items_count_one': '{count} item',
+            'items_count_other': '{count} items',
             'articles_count': '{count} articles',
+            'articles_count_one': '{count} article',
+            'articles_count_other': '{count} articles',
             'publications_count': '{count} publications',
+            'publications_count_one': '{count} publication',
+            'publications_count_other': '{count} publications',
             'references_count': '{count} references',
+            'references_count_one': '{count} reference',
+            'references_count_other': '{count} references',
             'mentions_count': '{count} mentions',
+            'mentions_count_one': '{count} mention',
+            'mentions_count_other': '{count} mentions',
 
             // Collection overview v2 — summary cards
             'References count': 'References',
 
             // Collection overview v2 — new chart titles
-            'source_locations_desc': 'Archives, repositories, web platforms and publication sources linked to collection items.',
-            'source_map_summary': '{sources} sources · {mapped} mapped · {items} source-linked items',
 
             // Collection overview v2 — facet controls & misc UI
 
@@ -269,8 +266,9 @@
             // ('Show all labels', 'Freeze the layout', …) fall through the
             // identity default and are translated in the fr table below.
             'shared_items_count': '{count} shared items',
-            'connections_count':  '{count} connections',
-            'one_connection':     '1 connection',
+            'connections_count':        '{formatted} connections',
+            'connections_count_one':    '{formatted} connection',
+            'connections_count_other':  '{formatted} connections',
             'and_n_more':         'and {count} more',
 
             // Associated entities — three views, shared controls.
@@ -441,17 +439,10 @@
             'desc_treemap':             'A breakdown by level, drawn as nested rectangles. Click a rectangle to open it; the trail at the bottom leads back up.',
 
             // Index overview — block + section labels
-            'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
-                'How often the collection’s Subject and Spatial Coverage tags are used over time. The counts measure cataloguing rather than wording: an item tagged “Terrorism” adds one mention to its year, however many times the word appears in the text.',
 
             // Index overview — Section A panel titles
-            'Top entities':              'Most frequent entities in Dublin Core Subject and Spatial Coverage',
 
             // Index overview — Section A panel descriptions
-            'desc_top_entities':   'Authority records that appear most often in item-level Dublin Core Subject (dcterms:subject) and Spatial Coverage (dcterms:spatial) fields. Click a bar to open the entity\u2019s page.',
-            'desc_lifespan':       'Each point is one entity. The horizontal axis is the span in years between its first and last appearance, the vertical axis its total number of mentions, and the colour shows the entity type. Click a point to open the entity.',
-            'desc_temporal_extent': 'First and last year each top entity appears in the corpus (up to 30 per type, ranked by frequency). Each bar spans from earliest to latest mention.',
-            'desc_places_map':     'Two complementary layers on the same map. Authority pins: every place in the IWAC authority index that has geographic coordinates. Mention bubbles: how often each place is tagged in an item\u2019s Dublin Core Spatial Coverage field, joined back to the authority pin by name. Click a pin to open the place\u2019s page.',
 
             // Index overview — summary cards + scatter axes
 
@@ -459,33 +450,22 @@
 
             // Keyword Explorer — filters + tabs
             'Top frequent':              'Most frequent',
-            'top_n_keywords':            '{count} keywords',
-            'select_up_to_n':            'Select up to {count} keywords',
 
             // Keyword Explorer — chart + table
-            'top_n_over_time':           'Top {count} keywords over time',
 
             // Keyword Explorer — derived panels (ROADMAP 9.7 / 9.8)
-            'desc_subjects_bump':        'Rank of the leading subjects in each decade. A line that climbs is a subject gaining ground on those below it. A line breaks where the subject drops out of the decade’s top eight; hover over a decade for ranks and counts.',
-            'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage, whatever year you are viewing.',
             // Spatial Exploration block
-            'spatial_pick_hint':         'Pick an entity to map the places mentioned alongside it. Without a selection, the map shows every place in the collection.',
-            'places_count':              '{count} places',
-            'spatial_map_description':   'The larger the bubble, the more often the place is mentioned. Hover over a place for a preview, or click it for the full list of items.',
-            'admin_units_count':         '{count} units',
-            'more_items_click':          '{count} more \u2014 click for the full list',
+            'places_count_one':          '{count} place',
+            'places_count_other':        '{count} places',
             // Entity Networks block
-            'networks_description':      'Entities that appear in the same items, placed closer together the more often they are mentioned together. Click a node to see its connections.',
-            'network_select_hint':       'Click a node to see its strongest co-occurrences; click the background to clear.',
             'network_stats_entities':    '{nodes} entities \u00b7 {links} links',
             'network_stats_places':      '{nodes} places \u00b7 {links} links',
-            'network_links_note':        'A link joins two entities that appear in the same item at least {count} times.',
-            'cooccurrence_title':        'Co-occur in {count} items',
-            'more_links_count':          '+{count} more links',
-            'links_count':               '{count} links',
             'table_rows_capped':         'Showing the first {shown} of {total} rows; the CSV has all of them.',
         },
         fr: {
+            // The block-level linked facet chip (S4).
+            'linked_country': 'Filtré sur {value}',
+            'Clear': 'Effacer',
             'Loading dashboard': 'Chargement du tableau de bord',
             'Loading collection overview': 'Chargement de la vue d\u2019ensemble',
             'Loading project comparison': 'Chargement de la comparaison',
@@ -495,6 +475,11 @@
             'Knowledge Graph': 'Graphe de connaissances',
             'Save as image': 'Enregistrer comme image',
             'Download chart': 'T\u00e9l\u00e9charger le graphique',
+            // ECharts legend selector buttons (E15).
+            'Show all': 'Tout afficher',
+            'Invert selection': 'Inverser la sélection',
+            // Map titles — MapLibre's `Map.Title` and the host's
+            // aria-label, so a screen reader names the map (M8).
             'Copy embed code': 'Copier le code d\u2019int\u00e9gration',
             'Copied!': 'Copi\u00e9 !',
             'Copy link to this view': 'Copier le lien vers cette vue',
@@ -526,7 +511,6 @@
             'Documents': 'Documents',
             'Audiovisual': 'Audiovisuel',
             'References': 'R\u00e9f\u00e9rences',
-            'Entities': 'Entit\u00e9s',
             'Countries': 'Pays',
             'Languages': 'Langues',
             'Words': 'Mots',
@@ -548,11 +532,8 @@
             'desc_word_cloud': 'Les mots les plus fr\u00e9quents, dimensionn\u00e9s selon le nombre de leurs occurrences.',
 
             // Collection overview — chart titles
-            'Items per year, by country': '\u00c9l\u00e9ments par ann\u00e9e, par pays',
             'Content by country': 'Contenu par pays',
             'Languages represented': 'Langues repr\u00e9sent\u00e9es',
-            'Most-cited entities': 'Entit\u00e9s les plus cit\u00e9es',
-            'Newspaper coverage': 'Couverture des journaux',
             'Collection breakdown': 'R\u00e9partition de la collection',
             'period_covered': 'P\u00e9riode couverte : {min} \u2013 {max}',
             'coverage_range': '{min} \u2013 {max}',
@@ -592,37 +573,19 @@
             'Authors': 'Auteurs',
             'Publishers': 'Éditeurs',
             'Reference type': 'Type de r\u00e9f\u00e9rence',
-            'Reference types': 'Types de r\u00e9f\u00e9rence',
-            'References by type over time': 'R\u00e9f\u00e9rences par type dans le temps',
-            'Top authors': 'Auteurs les plus cit\u00e9s',
-            'Top publishers': '\u00c9diteurs les plus cit\u00e9s',
             'Top subjects': 'Sujets r\u00e9currents',
-            'Reference provenance': 'Provenance des r\u00e9f\u00e9rences',
-            'references_provenance_desc': 'Lieux de publication indiqu\u00e9s sur les r\u00e9f\u00e9rences, affich\u00e9s lorsque le lieu a pu \u00eatre associ\u00e9 \u00e0 des coordonn\u00e9es cartographiques.',
-            'references_subject_cooccurrence_desc': 'Paires de sujets apparaissant ensemble sur une m\u00eame r\u00e9f\u00e9rence.',
             'No provenance locations available': 'Aucun lieu de provenance disponible',
             'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
 
             // References overview — texte intégral + thèmes (pipeline 2026-07)
-            'Full-text coverage': 'Couverture en texte intégral',
-            'references_coverage_desc': 'Nombre de références dont le texte intégral est disponible sous forme de texte interrogeable, par type de publication.',
-            'references_coverage_desc_full': 'Le texte intégral a été extrait pour {withOcr} références sur {total} ({pct} %), soit {words} mots au total et {median} pour une référence typique. Les panneaux de thèmes ci-dessous décrivent cette partie numérisée de la bibliographie plutôt que son ensemble. Chaque barre indique le nombre de références numérisées pour un type de publication, rapporté à son total. Parmi ces références, {published} ont aussi leur texte publié sur islam.zmo.de ; les autres alimentent les chiffres agrégés présentés ici sans être consultables intégralement.',
-            'references_coverage_tooltip': '{withOcr} sur {total} avec texte intégral ({pct} %)',
 
             // References overview — paysage sémantique
-            'Semantic landscape of the literature': 'Paysage sémantique de la littérature scientifique',
-            'references_landscape_desc': 'Chaque point est une référence, positionnée selon la ressemblance de son texte intégral avec celui des autres. Les travaux qui se retrouvent voisins sont ceux que le modèle d’IA lit comme portant sur le même objet. Faites glisser pour vous déplacer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir la référence.',
-            'references_landscape_desc_full': 'Chaque point est une référence, positionnée selon la ressemblance de son texte intégral avec celui des autres. Un modèle d’IA compare les textes, puis une technique appelée UMAP ramène ces comparaisons à deux dimensions. Les travaux qui se retrouvent voisins sont ceux que le modèle lit comme portant sur le même objet. Les axes n’ont pas d’unité et la distance entre deux grappes ne signifie rien ; seul compte le voisinage. La carte couvre les {embedded} références sur {total} ({pct} %) dont le texte intégral a été extrait, un sous-ensemble qui reflète ce que la collection a pu obtenir et numériser plutôt qu’un échantillon représentatif. Faites glisser pour vous déplacer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir la référence.',
             'references_landscape_empty': 'Aucune carte sémantique disponible pour cette bibliographie',
             'references_landscape_empty_umap': 'La carte sémantique n’a pas été calculée, faute du paquet umap-learn lors de la construction de ces données',
             'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour tracer une carte significative',
             'Color by': 'Colorer par',
             'Decade': 'Décennie',
 
-            'Scholarly topics': 'Thèmes de la littérature scientifique',
-            'references_topics_title_lang': 'Thèmes de la littérature scientifique ({language})',
-            'references_topics_desc': 'Thèmes dégagés automatiquement dans le texte intégral de {count} références par un modèle statistique (LDA), qui les a réparties en {topics} thèmes. Chaque libellé reprend les mots les plus caractéristiques de son thème ; ces libellés viennent du modèle plutôt que d’un catalogueur. Chaque langue a son propre modèle, si bien que les numéros de thèmes ne sont pas comparables d’un panneau à l’autre. Survolez une barre pour voir les références les plus représentatives du thème.',
-            'references_topic_tooltip': '{count} références ({pct} % du corpus de ce modèle). Les plus représentatives :',
             'Languages studied': 'Langues',
             'Places studied': 'Lieux \u00e9tudi\u00e9s',
             'Fetching references…': 'R\u00e9cup\u00e9ration des r\u00e9f\u00e9rences\u2026',
@@ -657,16 +620,25 @@
             'lang_N\u00e9erlandais': 'N\u00e9erlandais',
 
             // Author collaboration network (References Overview)
-            'Author collaborations': 'Collaborations entre auteurs',
             'Co-author':             'Co-auteur',
             'Author / editor':       'Auteur / \u00e9diteur',
             'Shared references':     'R\u00e9f\u00e9rences communes',
 
             'items_count': '{count} \u00e9l\u00e9ments',
+            'items_count_one': '{count} élément',
+            'items_count_other': '{count} éléments',
             'articles_count': '{count} articles',
+            'articles_count_one': '{count} article',
+            'articles_count_other': '{count} articles',
             'publications_count': '{count} publications',
+            'publications_count_one': '{count} publication',
+            'publications_count_other': '{count} publications',
             'references_count': '{count} r\u00e9f\u00e9rences',
+            'references_count_one': '{count} référence',
+            'references_count_other': '{count} références',
             'mentions_count': '{count} mentions',
+            'mentions_count_one': '{count} mention',
+            'mentions_count_other': '{count} mentions',
 
             // Collection overview v2 — summary cards
             'Index': 'Index',
@@ -679,21 +651,10 @@
             'References count': 'R\u00e9f\u00e9rences',
 
             // Collection overview v2 — new chart titles
-            'Recent additions': 'Ajouts r\u00e9cents',
-            'Collection growth over time': 'Croissance de la collection dans le temps',
-            'Items by type, over time': '\u00c9l\u00e9ments par type, dans le temps',
-            'French word cloud': 'Nuage de mots fran\u00e7ais',
-            'World map': 'Carte du monde',
-            'Source locations': 'Localisation des sources',
-            'source_locations_desc': 'Archives, dépôts, plateformes web et sources de publication associés aux éléments de la collection.',
-            'source_map_summary': '{sources} sources · {mapped} localisées · {items} éléments liés à une source',
-            'No mapped sources': 'Aucune source localisée',
 
             // Collection overview v2 — facet controls & misc UI
             'Global': 'Global',
-            'By type': 'Par type',
             'By country': 'Par pays',
-            'By year': 'Par ann\u00e9e',
             'All countries': 'Tous les pays',
             'All types': 'Tous les types',
             'Country': 'Pays',
@@ -709,19 +670,15 @@
             // 'av.runtime' ("Total runtime"), which labels a SUM.
             'Duration': 'Durée',
             'Type': 'Type',
-            'Coordinates': 'Coordonnées',
-            'Added': 'Ajout\u00e9',
             'Month': 'Mois',
             'Monthly': 'Mensuel',
             'Cumulative': 'Cumul\u00e9',
             'Monthly additions': 'Ajouts mensuels',
             'Cumulative total': 'Total cumul\u00e9',
-            'No recent additions': 'Aucun ajout r\u00e9cent',
             'Loading': 'Chargement',
             // Retry control on a fetch-failure banner. No `en` entry: the key
             // IS the English string (see check-i18n.js on the parity rule).
             'Try again': 'Réessayer',
-            'unique words': 'mots uniques',
             'Map library unavailable': 'Biblioth\u00e8que de cartographie indisponible',
             'Loading map': 'Chargement de la carte',
 
@@ -827,8 +784,9 @@
             'Open the record':              'Ouvrir la fiche',
             'Close':                        'Fermer',
             'shared_items_count':           '{count} documents en commun',
-            'connections_count':            '{count} liens',
-            'one_connection':               '1 lien',
+            'connections_count':            '{formatted} liens',
+            'connections_count_one':        '{formatted} lien',
+            'connections_count_other':      '{formatted} liens',
             'and_n_more':                   'et {count} autres',
             'View':                         'Vue',
             'Network view':                 'R\u00e9seau',
@@ -1087,120 +1045,48 @@
             'desc_treemap':             'D\u00e9composition par niveaux, en rectangles imbriqu\u00e9s. Cliquez sur un rectangle pour l\u2019ouvrir ; le fil d\u2019Ariane en bas permet de remonter.',
 
             'Loading index overview':    'Chargement de la vue d\u2019ensemble de l\u2019index',
-            'Entity Index Explorer':     'Explorateur d\u2019entit\u00e9s',
-            'Keyword Explorer':          'Explorateur de mots-cl\u00e9s',
-            'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
-                '\u00c0 quelle fr\u00e9quence les mots-cl\u00e9s Sujet et Couverture spatiale de la collection sont employ\u00e9s au fil du temps. Ces comptes mesurent l\u2019indexation et non la formulation : une notice index\u00e9e \u00ab Terrorisme \u00bb ajoute une seule mention \u00e0 son ann\u00e9e, quel que soit le nombre d\u2019occurrences du mot dans le texte.',
 
             // Index overview — Section A panel titles
-            'Entities by type':          'Entit\u00e9s par type',
-            'Top entities':              'Entit\u00e9s les plus fr\u00e9quentes dans les champs Sujet et Couverture spatiale (Dublin Core)',
             'Lifespan \u00d7 frequency': 'Dur\u00e9e de vie \u00d7 fr\u00e9quence',
-            'Temporal extent':           '\u00c9tendue temporelle',
-            'Index table':               'Table de l\u2019index',
 
             // Index overview — Section A panel descriptions
-            'desc_top_entities':   'Notices d\u2019autorit\u00e9 apparaissant le plus souvent dans les champs Dublin Core Sujet (dcterms:subject) et Couverture spatiale (dcterms:spatial) des notices de la collection. Cliquez sur une barre pour ouvrir la fiche de l\u2019entit\u00e9.',
-            'desc_lifespan':       'Chaque point est une entit\u00e9. L\u2019axe horizontal donne l\u2019\u00e9tendue en ann\u00e9es entre sa premi\u00e8re et sa derni\u00e8re apparition, l\u2019axe vertical son nombre total de mentions, et la couleur son type. Cliquez sur un point pour ouvrir la fiche.',
-            'desc_temporal_extent': 'Premi\u00e8re et derni\u00e8re ann\u00e9e d\u2019apparition de chaque entit\u00e9 dans le corpus (jusqu\u2019\u00e0 30 par type, class\u00e9es par fr\u00e9quence). Chaque barre va de la mention la plus ancienne \u00e0 la plus r\u00e9cente.',
-            'desc_places_map':     'Deux couches compl\u00e9mentaires sur la m\u00eame carte. Points d\u2019autorit\u00e9 : chaque lieu de l\u2019index IWAC ayant des coordonn\u00e9es. Bulles de mentions : fr\u00e9quence avec laquelle chaque lieu est indiqu\u00e9 dans le champ Dublin Core Couverture spatiale des notices, joint \u00e0 son point d\u2019autorit\u00e9 par le nom. Cliquez sur un point pour ouvrir la fiche du lieu.',
 
             // Index overview — summary cards + scatter axes
             'Total entities':            'Entit\u00e9s au total',
             'With coordinates':          'Avec coordonn\u00e9es',
-            'Span (years)':              'Dur\u00e9e (ann\u00e9es)',
             'Frequency':                 'Fr\u00e9quence',
 
             // Index overview — map layer facets + index table search
-            'Both layers':               'Les deux couches',
-            'Authority pins':            'Points d\u2019autorit\u00e9',
-            'Layer':                     'Couche',
 
             // Keyword Explorer — filters + tabs
             'Spatial Coverage':          'Couverture spatiale',
-            'Field':                     'Champ',
-            'Facet by':                  'Filtrer par',
             'By newspaper':              'Par journal',
-            'Newspaper':                 'Journal',
-            'All newspapers':            'Tous les journaux',
-            'View mode':                 'Mode d\u2019affichage',
             'Top frequent':              'Plus fr\u00e9quents',
             'Compare':                   'Comparer',
-            'top_n_keywords':            '{count} mots-cl\u00e9s',
-            'Number to show':            'Nombre \u00e0 afficher',
-            'select_up_to_n':            'S\u00e9lectionnez jusqu\u2019\u00e0 {count} mots-cl\u00e9s',
-            'Search keywords':           'Rechercher des mots-cl\u00e9s',
-            'No keywords selected':      'Aucun mot-cl\u00e9 s\u00e9lectionn\u00e9',
             'Clear selection':           'Effacer la s\u00e9lection',
 
             // Keyword Explorer — chart + table
-            'Keywords over time':        'Mots-cl\u00e9s dans le temps',
-            'All keywords':              'Tous les mots-cl\u00e9s',
-            'Keyword':                   'Mot-cl\u00e9',
             'Occurrences':               'Occurrences',
-            'Add':                       'Ajouter',
-            'Remove':                    'Retirer',
-            'top_n_over_time':           'Top {count} mots-cl\u00e9s dans le temps',
-            'Keyword comparison':        'Comparaison de mots-cl\u00e9s',
-            'Filtered by country: {country}':     'Filtr\u00e9 par pays : {country}',
-            'Filtered by newspaper: {newspaper}': 'Filtr\u00e9 par journal : {newspaper}',
-            'All data (global)':         'Toutes les donn\u00e9es (global)',
-            'Select keywords to compare': 'S\u00e9lectionnez des mots-cl\u00e9s \u00e0 comparer',
 
             // Keyword Explorer \u2014 derived panels (ROADMAP 9.7 / 9.8)
-            'Rising and falling subjects': 'Sujets montants et descendants',
-            'desc_subjects_bump':        'Rang des principaux sujets dans chaque d\u00e9cennie. Une ligne qui monte est un sujet qui gagne du terrain sur ceux qui le suivent. Une ligne s\u2019interrompt quand le sujet sort des huit premiers de la d\u00e9cennie ; survolez une d\u00e9cennie pour les rangs et les comptes.',
-            'Geographic attention over time': 'Attention g\u00e9ographique au fil du temps',
-            'desc_geo_attention':        'L\u2019attention accord\u00e9e par la presse \u00e0 chaque pays au fil du temps, mesur\u00e9e par la fr\u00e9quence \u00e0 laquelle les articles ont \u00e9t\u00e9 catalogu\u00e9s comme le concernant. Faites glisser le curseur des ann\u00e9es ou lancez la lecture. L\u2019\u00e9chelle de couleurs est identique chaque ann\u00e9e, si bien qu\u2019un pays plus sombre signifie toujours une couverture plus forte, quelle que soit l\u2019ann\u00e9e affich\u00e9e.',
             'Play':                      'Lecture',
             'Pause':                     'Pause',
             // Spatial Exploration block
             'Entity type':               'Type d\u2019entit\u00e9',
-            'Pick an entity':            'Choisir une entit\u00e9',
             'Search entities':           'Rechercher des entit\u00e9s',
             'No matches':                'Aucun r\u00e9sultat',
-            'spatial_pick_hint':         'Choisissez une entit\u00e9 pour cartographier les lieux mentionn\u00e9s \u00e0 ses c\u00f4t\u00e9s. Sans s\u00e9lection, la carte montre tous les lieux de la collection.',
-            'places_count':              '{count} lieux',
-            'View item page':            'Voir la fiche de l\u2019\u00e9l\u00e9ment',
-            'Top places':                'Principaux lieux',
-            'Map mode':                  'Mode de carte',
-            'Place bubbles':             'Bulles de lieux',
-            'Country choropleth':        'Choropl\u00e8the par pays',
-            'Administrative choropleth': 'Choropl\u00e8the administrative',
-            'Country focus':             'Focus pays',
-            'Whole world':               'Monde entier',
-            'Admin level':               'Niveau administratif',
+            'places_count_one':          '{count} lieu',
+            'places_count_other':        '{count} lieux',
             'Regions':                   'R\u00e9gions',
             'Region':                    'R\u00e9gion',
             'Prefectures':               'Pr\u00e9fectures',
             'Prefecture':                'Pr\u00e9fecture',
-            'Scale':                     '\u00c9chelle',
-            'Quantile':                  'Quantile',
-            'Linear':                    'Lin\u00e9aire',
-            'Square root':               'Racine carr\u00e9e',
             'Places map':                'Carte des lieux',
-            'spatial_map_description':   'Plus la bulle est grande, plus le lieu est souvent mentionn\u00e9. Survolez un lieu pour un aper\u00e7u ou cliquez dessus pour la liste compl\u00e8te des \u00e9l\u00e9ments.',
-            'admin_units_count':         '{count} unit\u00e9s',
-            'No administrative data':    'Aucune donn\u00e9e administrative',
-            'No mapped places':          'Aucun lieu cartographi\u00e9',
             'Click for details':         'Cliquer pour les d\u00e9tails',
-            'more_items_click':          '{count} de plus \u2014 cliquer pour la liste compl\u00e8te',
             'items':                     '\u00e9l\u00e9ments',
             // Entity Networks block
-            'Co-occurrence network':     'R\u00e9seau de cooccurrences',
-            'networks_description':      'Les entit\u00e9s qui apparaissent dans les m\u00eames \u00e9l\u00e9ments, d\u2019autant plus proches qu\u2019elles sont souvent mentionn\u00e9es ensemble. Cliquez sur un n\u0153ud pour voir ses liens.',
-            'About this network':        '\u00c0 propos de ce r\u00e9seau',
-            'network_select_hint':       'Cliquez sur un n\u0153ud pour voir ses cooccurrences les plus fortes\u202f; cliquez sur le fond pour effacer.',
             'network_stats_entities':    '{nodes} entit\u00e9s \u00b7 {links} liens',
             'network_stats_places':      '{nodes} lieux \u00b7 {links} liens',
-            'network_links_note':        'Un lien relie deux entit\u00e9s qui apparaissent dans le m\u00eame \u00e9l\u00e9ment au moins {count} fois.',
-            'Strongest co-occurrences':  'Cooccurrences les plus fortes',
-            'cooccurrence_title':        'Cooccurrence dans {count} \u00e9l\u00e9ments',
-            'more_links_count':          '+{count} liens suppl\u00e9mentaires',
-            'links_count':               '{count} liens',
-            'Min. link strength':        'Force min. des liens',
-            'All links':                 'Tous les liens',
-            'Find in network':           'Chercher dans le r\u00e9seau',
         }
     };
 
@@ -1209,16 +1095,55 @@
     /* ----------------------------------------------------------------- */
 
     /**
+     * The plural category for `count` in the active locale, or '' when the
+     * platform cannot tell us.
+     *
+     * English and French disagree about zero — "0 articles" but
+     * "0 article" — which is why this is a lookup rather than an
+     * `n === 1` test written once and wrong on one of the two sites.
+     */
+    function pluralCategory(count) {
+        if (typeof count !== 'number' || !isFinite(count)) return '';
+        if (typeof Intl === 'undefined' || !Intl.PluralRules) return '';
+        try {
+            return new Intl.PluralRules(ns.locale === 'fr' ? 'fr-FR' : 'en-US').select(count);
+        } catch (e) {
+            return '';
+        }
+    }
+
+    /**
      * Translate a key. Falls back to the key itself (which is the English
      * source string) when no translation is registered.
      *
+     * **Plurals.** When `params.count` is a number, `key + '_' + category`
+     * is tried first — `articles_count_one`, `articles_count_other` — and
+     * the bare key is the fallback, so a string that does not vary needs no
+     * variants and nothing has to be migrated. Until this existed, a
+     * dashboard reporting a single article said "1 articles", and French
+     * "0 article" could not be expressed at all.
+     *
      * @param {string} key
-     * @param {Object} [params] Values for {placeholder} interpolation
+     * @param {Object} [params] Values for {placeholder} interpolation; a
+     *   numeric `count` also selects a plural variant of the key
      * @returns {string}
      */
     ns.t = function (key, params) {
         var table = DICTIONARY[ns.locale] || DICTIONARY.en;
-        var str = table[key] || (DICTIONARY.en[key] !== undefined ? DICTIONARY.en[key] : key);
+        var lookup = function (k) {
+            if (table[k] !== undefined) return table[k];
+            if (DICTIONARY.en[k] !== undefined) return DICTIONARY.en[k];
+            return undefined;
+        };
+
+        var str;
+        if (params && typeof params.count === 'number') {
+            var category = pluralCategory(params.count);
+            if (category) str = lookup(key + '_' + category);
+        }
+        if (str === undefined) str = lookup(key);
+        if (str === undefined) str = key;
+
         if (params) {
             str = str.replace(/\{(\w+)\}/g, function (_, name) {
                 return params[name] != null ? params[name] : '{' + name + '}';

@@ -99,5 +99,31 @@
     S.buildTermColorMap = buildTermColorMap;
     S.buildMetricCards = buildMetricCards;
     S.buildTermDefinitions = buildTermDefinitions;
+    /**
+     * The race's stable category order, and one value array per frame in it.
+     *
+     * `buildCumulativeSnapshots` sorts each frame by value, which is what a
+     * top-N table wants and exactly what a bar RACE must not have: ECharts'
+     * `realtimeSort` does the ranking itself, from a series whose data stays
+     * aligned to a fixed category axis. Re-sorting the axis per frame is why
+     * the race animated bar lengths in fixed slots while the labels swapped
+     * instantly — a bar chart that changes, not a race.
+     *
+     * Terms are ordered by their FINAL total, so the axis reads sensibly
+     * before the first frame and in the reduced-motion path, where ECharts
+     * snaps instead of animating.
+     */
+    function buildRaceFrames(snapshots) {
+        var last = snapshots[snapshots.length - 1] || [];
+        var terms = last.map(function (e) { return e[0]; });
+        var frames = snapshots.map(function (snapshot) {
+            var byTerm = {};
+            snapshot.forEach(function (e) { byTerm[e[0]] = e[1]; });
+            return terms.map(function (t) { return byTerm[t] || 0; });
+        });
+        return { terms: terms, frames: frames };
+    }
+
     S.buildCumulativeSnapshots = buildCumulativeSnapshots;
+    S.buildRaceFrames = buildRaceFrames;
 })();

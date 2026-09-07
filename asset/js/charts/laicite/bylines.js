@@ -62,12 +62,12 @@
                 formatter: function (params) {
                     if (!params || !params.length) return '';
                     var row = rows[params[0].dataIndex] || {};
-                    return '<strong>' + P.escapeHtml(params[0].axisValue) + '</strong><br>'
-                        + P.t('laicite.bylines_decade_tooltip', {
+                    return C.itemTooltip(params[0].axisValue,
+                        P.t('laicite.bylines_decade_tooltip', {
                             signed: P.formatNumber(row.signed || 0),
                             articles: P.formatNumber(row.articles || 0),
                             percent: pct(row.signed, row.articles).toFixed(0)
-                        });
+                        }));
                 }
             },
             xAxis: { type: 'category', data: decades },
@@ -135,8 +135,7 @@
                     // escaping the joined string and undoing the <br>
                     // afterwards would also undo a literal "<br>" that
                     // happened to sit inside a byline.
-                    return '<strong>' + P.escapeHtml(row.name || '') + '</strong><br>'
-                        + bits.map(P.escapeHtml).join('<br>');
+                    return C.itemTooltip(row.name || '', bits.map(P.escapeHtml));
                 }
             },
             xAxis: { type: 'value' },

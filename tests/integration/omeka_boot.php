@@ -145,6 +145,224 @@ if (count($seededBlocks) === 1) {
     );
 }
 
+// ---------------------------------------------------------------------------
+// EmbedController::blockAction across its parameter matrix (Tier 8 / B3 (4)).
+//
+// Every branch in that method reads a request the module does not control:
+// a route `:block` that may be anything a URL can carry, an optional
+// `:panel`, and two query parameters. Three of those four are validated,
+// and until now nothing exercised the validation - the suite proved the
+// controller service RESOLVED and that one route MATCHED, which is a
+// different claim.
+//
+// It runs here rather than in tests/php/run.php on purpose: `params()`,
+// `layout()` and `getResponse()` are real Laminas plugins reading a real
+// MvcEvent, and stubbing them would only test the stubs. The slug list
+// comes from BlockRegistry so it cannot drift from the whitelist.
+$embedController = $controllers->get('IwacVisualizations\Controller\Site\Embed');
+
+/**
+ * Dispatch blockAction the way Omeka does, and report what came back: the
+ * status code, the view template, and the layout variables the embed
+ * layout renders from.
+ *
+ * `dispatch()` and not a direct `blockAction()` call, because the request
+ * and the response the controller reads are its OWN properties - set only
+ * by dispatch - not the ones on the event. Calling the action directly
+ * would hand it a blank request, and every ?theme / ?primary assertion
+ * below would pass by reading nothing. A fresh Response per call keeps a
+ * 404 from one case leaking into the next.
+ */
+$dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedController) {
+    $request = new Request();
+    $request->setQuery(new \Laminas\Stdlib\Parameters($queryParams));
+    $response = new Response();
+
+    $event = new MvcEvent();
+    // `action` is what onDispatch() reads to pick the method.
+    $event->setRouteMatch(new RouteMatch($routeParams + ['action' => 'block']));
+    // The layout plugin refuses to work without one, which is also how the
+    // real dispatch supplies it.
+    $event->setViewModel(new \Laminas\View\Model\ViewModel());
+    $embedController->setEvent($event);
+
+    // A FRESH plugin manager per dispatch. `Layout` caches the first event
+    // it is asked for and never looks again (`Plugin\Layout::getEvent()`),
+    // and the application's ControllerPluginManager is shared - so reusing
+    // it would write every later dispatch's layout variables onto the FIRST
+    // dispatch's view model, and every ?theme / ?primary assertion here
+    // would read null and look like a controller bug. `blockAction` needs
+    // only `layout()` and `params()`, both of which a bare PluginManager
+    // registers itself.
+    $embedController->setPluginManager(
+        new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager())
+    );
+
+    $view = $embedController->dispatch($request, $response);
+    return [
+        'status'   => $response->getStatusCode(),
+        'template' => $view->getTemplate(),
+        'slug'     => $view->getVariable('slug'),
+        'layout'   => $event->getViewModel()->getVariables(),
+        'headers'  => $response->getHeaders(),
+    ];
+};
+
+$firstEmbeddable = array_key_first(BlockRegistry::embeddable());
+checkIntegration(is_string($firstEmbeddable) && $firstEmbeddable !== '', 'no embeddable block to dispatch');
+
+// 1. A whitelisted slug, no panel, no query: the plain case.
+$got = $dispatchEmbed(['block' => $firstEmbeddable], []);
+checkIntegration($got['status'] === 200, 'a whitelisted embed did not return 200');
+checkIntegration(
+    $got['template'] === 'iwac-visualizations/embed/block',
+    'a whitelisted embed rendered the wrong template: ' . $got['template']
+);
+checkIntegration($got['slug'] === $firstEmbeddable, 'the embed view did not receive its slug');
+checkIntegration(
+    ($got['layout']['embedPanel'] ?? null) === '',
+    'a whole-block embed was given a panel'
+);
+checkIntegration(
+    ($got['layout']['embedTheme'] ?? null) === '',
+    'no ?theme still set a colour mode'
+);
+checkIntegration(
+    ($got['layout']['embedPrimary'] ?? null) === '',
+    'no ?primary still set an accent'
+);
+checkIntegration(
+    strpos((string) $got['headers']->get('Cache-Control')->getFieldValue(), 'max-age=300') !== false,
+    'an embed response was not marked cacheable'
+);
+
+// 2. Every slug NOT on the whitelist must 404 and choose the not-found
+// template - including the traversal attempts, since this same map is the
+// directory guard for `common/block-layout/<slug>`.
+//
+// These go through blockAction() DIRECTLY rather than through dispatch().
+// Once the action sets a 404 status, Laminas' own dispatch listeners replace
+// the result with the framework's `error/404` model before dispatch()
+// returns - which is the right thing to happen in production, and means the
+// returned template says nothing about what the module decided. Calling the
+// action is what tests the module's decision; the status assertion below
+// still covers the outcome. A fresh controller per call because the response
+// is a controller property and a 404 would otherwise leak into the next one.
+$rejectedSlugs = [
+    '',
+    'not-a-block',
+    'collection-overview/../../../etc/passwd',
+    '../config/database.ini',
+    'COLLECTION-OVERVIEW',
+    'collection_overview',
+];
+foreach ($rejectedSlugs as $slug) {
+    $rejectController = $controllers->get('IwacVisualizations\Controller\Site\Embed');
+    $rejectEvent = new MvcEvent();
+    $rejectEvent->setRouteMatch(new RouteMatch(['block' => $slug, 'action' => 'block']));
+    $rejectEvent->setViewModel(new \Laminas\View\Model\ViewModel());
+    $rejectController->setEvent($rejectEvent);
+    $rejectView = $rejectController->blockAction();
+
+    checkIntegration(
+        $rejectController->getResponse()->getStatusCode() === 404,
+        "embed slug '{$slug}' did not 404"
+    );
+    checkIntegration(
+        $rejectView->getTemplate() === 'iwac-visualizations/embed/not-found',
+        "embed slug '{$slug}' chose '" . var_export($rejectView->getTemplate(), true)
+            . "', not the not-found template"
+    );
+    checkIntegration(
+        $rejectView->terminate(),
+        "embed slug '{$slug}' did not mark its not-found view terminal"
+    );
+}
+
+// 3. ?theme: only the two known modes survive; anything else falls back to
+// the empty string, which the layout renders as light.
+$themeCases = [
+    'dark' => 'dark',
+    'light' => 'light',
+    'DARK' => 'dark',      // lowercased before the comparison
+    'Light' => 'light',
+    'sepia' => '',
+    '1' => '',
+    'dark; --x: url(javascript:1)' => '',
+    '' => '',
+];
+foreach ($themeCases as $given => $expected) {
+    $got = $dispatchEmbed(['block' => $firstEmbeddable], ['theme' => $given]);
+    checkIntegration(
+        ($got['layout']['embedTheme'] ?? null) === $expected,
+        "?theme={$given} became '" . ($got['layout']['embedTheme'] ?? 'NULL') . "', expected '{$expected}'"
+    );
+}
+
+// 4. ?primary: a bare or #-prefixed 3/6/8-digit hex, normalised to one
+// leading `#`. Everything else is dropped - the value reaches a `style`
+// attribute, so a passthrough here would be an injection.
+$primaryCases = [
+    'ce4115'    => '#ce4115',
+    '#ce4115'   => '#ce4115',
+    'abc'       => '#abc',
+    '#abc'      => '#abc',
+    'ce4115ff'  => '#ce4115ff',
+    'CE4115'    => '#CE4115',
+    'ce41'      => '',           // 4 digits is not a CSS hex colour
+    'ce411'     => '',
+    'ce4115fff' => '',
+    'red'       => '',
+    ''          => '',
+    'ce4115; background: url(x)' => '',
+    '</style><script>alert(1)</script>' => '',
+];
+foreach ($primaryCases as $given => $expected) {
+    $got = $dispatchEmbed(['block' => $firstEmbeddable], ['primary' => $given]);
+    checkIntegration(
+        ($got['layout']['embedPrimary'] ?? null) === $expected,
+        "?primary={$given} became '" . ($got['layout']['embedPrimary'] ?? 'NULL') . "', expected '{$expected}'"
+    );
+}
+
+// 5. :panel is opaque - embed.js enumerates the names client-side and the
+// route constraint is the only validation - but it must reach the layout
+// and the title unchanged, and an absent one must stay empty.
+$got = $dispatchEmbed(['block' => $firstEmbeddable, 'panel' => 'panel-3'], []);
+checkIntegration(
+    ($got['layout']['embedPanel'] ?? null) === 'panel-3',
+    'the :panel segment did not reach the layout'
+);
+checkIntegration(
+    strpos((string) ($got['layout']['embedTitle'] ?? ''), 'panel-3') !== false,
+    'the panel name did not reach the embed title'
+);
+checkIntegration(
+    $got['slug'] === $firstEmbeddable,
+    'a single-panel embed changed the block slug'
+);
+
+// 6. The whitelist and the registry are the same list, in both directions -
+// this is the guard that stopped v1.21 from shipping a 500ing embed.
+foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+    $got = $dispatchEmbed(['block' => $slug], []);
+    checkIntegration($got['status'] === 200, "registry block '{$slug}' is not dispatchable as an embed");
+    // The partial the embed view will actually reach for. Since H5 that is
+    // `_generic` for the nineteen blocks whose registry row declares a
+    // shell, and a per-slug template for the two that do more than declare
+    // - the same rule as embed/block.phtml, asserted here because a block
+    // that resolves to nothing 500s every embed of it (v1.21).
+    $row = BlockRegistry::get($slug);
+    $partial = ($row !== null && !empty($row['shell']))
+        ? 'common/block-layout/_generic'
+        : 'common/block-layout/' . $slug;
+    $resolvedPartial = $renderer->resolver()->resolve($partial, $renderer);
+    checkIntegration(
+        is_string($resolvedPartial) && is_file($resolvedPartial),
+        "embeddable block '{$slug}' has no {$partial} template"
+    );
+}
+
 // Exercise the real Laminas response headers around the embed framing policy.
 $response = new Response();
 $response->getHeaders()->addHeaderLine('X-Frame-Options', 'SAMEORIGIN');

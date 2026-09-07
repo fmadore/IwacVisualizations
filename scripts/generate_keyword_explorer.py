@@ -42,17 +42,17 @@ import argparse
 import logging
 import os
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
 import pandas as pd
 
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
+    generate_timestamp,
     canonical_country,
     canonicalize_country_field,
-    configure_logging,
     extract_year,
     load_dataset_safe,
     parse_pipe_separated,
@@ -349,34 +349,19 @@ def build_metadata(
             "top_5": spatial["top_keywords"][:5],
         },
         "year_range": year_range,
-        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "generated_at": generate_timestamp(),
     }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=False)
     parser.add_argument(
         "--output-dir",
         default="asset/data",
         help="Directory to write the three JSON files, relative to the module root",
     )
-    parser.add_argument(
-        "--minify", action=argparse.BooleanOptionalAction, default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None

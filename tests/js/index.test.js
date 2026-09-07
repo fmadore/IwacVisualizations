@@ -5,6 +5,10 @@
 require('./i18n.test.js');
 require('./gettext.test.js');
 require('./panels.test.js');
+require('./tooltip.test.js');
+require('./bar-race.test.js');
+require('./plural.test.js');
+require('./linked-facet.test.js');
 require('./maplibre.test.js');
 require('./maplibre-gate.test.js');
 require('./assets.test.js');
@@ -21,3 +25,5 @@ require('./controls.test.js');
 require('./chart-rows.test.js');
 require('./landscape.test.js');
 require('./theme-animation.test.js');
+require('./hijri.test.js');
+require('./laicite-update.test.js');
