@@ -74,6 +74,7 @@ from iwac_utils import (
     extract_month_num,
     extract_year,
     find_column,
+    iter_records,
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
@@ -433,7 +434,7 @@ class DashboardAggregator:
             if subset == "articles":
                 self.sentiment_models = present_sentiment_models(sentiment_cols)
 
-            for _, row in df.iterrows():
+            for row in iter_records(df):
                 raw_id = row.get(id_col)
                 try:
                     item_o_id = int(raw_id)

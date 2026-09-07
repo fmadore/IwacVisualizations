@@ -107,6 +107,7 @@ from iwac_utils import (
     create_metadata_block,
     extract_year,
     find_column,
+    iter_records,
     load_dataset_safe,
     parse_top_words,
     read_hijri_month,
@@ -216,7 +217,7 @@ def aggregate_per_topic(
     corpus_year_max: Optional[int] = None
     all_newspapers = set()
 
-    for _, row in df.iterrows():
+    for row in iter_records(df):
         raw_topic = clean_float(row.get(topic_id_col))
         if raw_topic is None:
             continue

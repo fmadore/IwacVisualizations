@@ -65,6 +65,7 @@ from iwac_utils import (
     clean_str,
     configure_logging,
     find_column,
+    iter_records,
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
@@ -303,7 +304,10 @@ class ArticleDashboardGenerator:
         if not id_col:
             raise RuntimeError("articles subset has no o:id column")
 
-        for row_idx, row in df.iterrows():
+        # `df.index`, not `enumerate`: `article_row_index` is read back
+        # against the frame, so it must hold the LABEL iterrows used to
+        # yield, which is only the position while the index is a range.
+        for row_idx, row in zip(df.index, iter_records(df)):
             raw_id = row.get(id_col)
             try:
                 article_id = int(raw_id)

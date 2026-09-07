@@ -110,6 +110,7 @@ IwacVisualizations/
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
 │   ├── check-css-dead.js
+│   ├── check-design-record.js
 │   ├── check-flakes.js
 │   ├── check-i18n-mo.js
 │   ├── check-i18n.js
@@ -182,9 +183,10 @@ IwacVisualizations/
 │   ├── browser/                       # 13 files — Playwright specs
 │   ├── integration/
 │   │   └── omeka_boot.php
-│   ├── js/                            # 24 files — node:test units
+│   ├── js/                            # 25 files — node:test units
 │   ├── php/
-│   │   └── run.php
+│   │   ├── run.php
+│   │   └── sync_data_archive.php
 │   └── python/
 │       ├── requirements.txt
 │       └── test_iwac_helpers.py

@@ -503,6 +503,72 @@ def compute_types_over_time(
     }
 
 
+def _scan_newspapers(
+    dataframes: Dict[str, pd.DataFrame],
+    year_min: int,
+    year_max: int,
+) -> Dict[tuple, Dict[str, Any]]:
+    """
+    One pass over the newspaper-bearing subsets.
+
+    Returns ``(name, subset) -> {"total": int, "years": set, "countries":
+    Counter}``. That key is the finest grain either caller needs:
+    ``compute_newspaper_coverage`` keeps the subsets apart (one Gantt row per
+    newspaper *per type*), ``compute_newspapers`` folds them together and
+    also reports the per-subset split. Deriving the coarser shape from the
+    finer one is exact; the reverse would not be.
+
+    Why it exists (Tier 8 / P17): the two functions ran the same loop over
+    the same two subsets, ~60 duplicated lines including the pipe split, the
+    NaN guards, the "unknown" filter and the year extraction. They had
+    already drifted in one respect - the coverage loop hard-coded
+    ``("articles", "publications")`` while the other read
+    ``NEWSPAPER_SUBSETS``, so adding a third subset would have changed one
+    output and not the other with nothing to say so.
+    """
+    agg: Dict[tuple, Dict[str, Any]] = {}
+
+    for subset in NEWSPAPER_SUBSETS:
+        df = dataframes.get(subset)
+        if df is None or df.empty or "newspaper" not in df.columns:
+            continue
+        # Pull the three columns out once. `.iat` on a DataFrame goes
+        # through the block manager on every access; a list does not, and
+        # this is the loop the audit named as running on 12k rows.
+        names = df["newspaper"].tolist()
+        dates = df["pub_date"].tolist() if "pub_date" in df.columns else None
+        countries = df["country"].tolist() if "country" in df.columns else None
+
+        for idx, raw_name in enumerate(names):
+            if raw_name is None or (isinstance(raw_name, float) and pd.isna(raw_name)):
+                continue
+            # `newspaper` is usually single-valued but allow pipe-separated
+            for name in parse_pipe_separated(raw_name):
+                name = name.strip()
+                if not name or name.lower() == "unknown":
+                    continue
+                entry = agg.setdefault((name, subset), {
+                    "total": 0,
+                    "years": set(),
+                    "countries": Counter(),
+                })
+                entry["total"] += 1
+
+                if dates is not None:
+                    year = extract_year(dates[idx], min_year=year_min, max_year=year_max)
+                    if year is not None:
+                        entry["years"].add(year)
+
+                if countries is not None:
+                    raw_country = countries[idx]
+                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
+                        country_str = str(raw_country).strip()
+                        if country_str and country_str.lower() != "unknown":
+                            entry["countries"][country_str] += 1
+
+    return agg
+
+
 def compute_newspaper_coverage(
     dataframes: Dict[str, pd.DataFrame],
     year_min: int,
@@ -522,44 +588,14 @@ def compute_newspaper_coverage(
           ]
         }
     """
-    # (name, type) -> { years: set, total: int, countries: Counter }
-    agg: Dict[tuple, Dict[str, Any]] = {}
-
-    for subset, type_key in (("articles", "article"), ("publications", "publication")):
-        df = dataframes.get(subset)
-        if df is None or df.empty or "newspaper" not in df.columns:
-            continue
-        date_col = "pub_date" if "pub_date" in df.columns else None
-        country_col = "country" if "country" in df.columns else None
-
-        for idx in range(len(df)):
-            raw_name = df["newspaper"].iat[idx]
-            if raw_name is None or (isinstance(raw_name, float) and pd.isna(raw_name)):
-                continue
-            for name in parse_pipe_separated(raw_name):
-                name = name.strip()
-                if not name or name.lower() == "unknown":
-                    continue
-                key = (name, type_key)
-                entry = agg.setdefault(key, {
-                    "years": set(),
-                    "total": 0,
-                    "countries": Counter(),
-                })
-                entry["total"] += 1
-                if date_col is not None:
-                    year = extract_year(df[date_col].iat[idx], min_year=year_min, max_year=year_max)
-                    if year is not None:
-                        entry["years"].add(year)
-                if country_col is not None:
-                    raw_country = df[country_col].iat[idx]
-                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
-                        country = str(raw_country).strip()
-                        if country and country.lower() != "unknown":
-                            entry["countries"][country] += 1
+    # The Gantt keeps the subsets apart, so it reads the shared scan's key
+    # unchanged and only renames the subset to the singular type label the
+    # chart uses.
+    type_labels = {"articles": "article", "publications": "publication"}
 
     coverage: List[Dict[str, Any]] = []
-    for (name, type_key), entry in agg.items():
+    for (name, subset), entry in _scan_newspapers(dataframes, year_min, year_max).items():
+        type_key = type_labels.get(subset, subset)
         years = entry["years"]
         if not years:
             continue
@@ -685,47 +721,23 @@ def compute_newspapers(
     Empty newspaper values and "Unknown" are skipped.
     """
     # name -> { total, articles, publications, years: set, countries: Counter }
+    #
+    # Folded down from the shared scan's (name, subset) grain. Insertion
+    # order still follows first appearance per subset, which is what the
+    # sort below breaks ties on.
     agg: Dict[str, Dict[str, Any]] = {}
-
-    for subset in NEWSPAPER_SUBSETS:
-        df = dataframes.get(subset)
-        if df is None or df.empty:
-            continue
-        if "newspaper" not in df.columns:
-            continue
-        pub_date_col = "pub_date" if "pub_date" in df.columns else None
-        country_col = "country" if "country" in df.columns else None
-
-        for idx in range(len(df)):
-            raw_name = df["newspaper"].iat[idx]
-            if raw_name is None or (isinstance(raw_name, float) and pd.isna(raw_name)):
-                continue
-            # `newspaper` is usually single-valued but allow pipe-separated
-            for name in parse_pipe_separated(raw_name):
-                name = name.strip()
-                if not name or name.lower() == "unknown":
-                    continue
-                entry = agg.setdefault(name, {
-                    "total": 0,
-                    "articles": 0,
-                    "publications": 0,
-                    "years": set(),
-                    "countries": Counter(),
-                })
-                entry["total"] += 1
-                entry[subset] = entry.get(subset, 0) + 1
-
-                if pub_date_col is not None:
-                    year = extract_year(df[pub_date_col].iat[idx], min_year=year_min, max_year=year_max)
-                    if year is not None:
-                        entry["years"].add(year)
-
-                if country_col is not None:
-                    raw_country = df[country_col].iat[idx]
-                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
-                        country_str = str(raw_country).strip()
-                        if country_str and country_str.lower() != "unknown":
-                            entry["countries"][country_str] += 1
+    for (name, subset), scanned in _scan_newspapers(dataframes, year_min, year_max).items():
+        entry = agg.setdefault(name, {
+            "total": 0,
+            "articles": 0,
+            "publications": 0,
+            "years": set(),
+            "countries": Counter(),
+        })
+        entry["total"] += scanned["total"]
+        entry[subset] = entry.get(subset, 0) + scanned["total"]
+        entry["years"] |= scanned["years"]
+        entry["countries"] += scanned["countries"]
 
     # Flatten into sorted list
     sorted_names = sorted(

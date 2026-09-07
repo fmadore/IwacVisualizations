@@ -197,7 +197,11 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `P.buildGraphPanelToolbar(panelEl, chart, {downloadName})` (owns legend state,
   exposes `isLegendVisible()`) + `P.attachGraphClickThrough(chart, onNode)` to
   `shared/panels.js`; both network panels call them, dropping ~115 lines of
-  duplicated toolbar / zoom / download / fullscreen / drag-suppression each. The
+  duplicated toolbar / zoom / download / fullscreen / drag-suppression each.
+  **Correction (Tier 8 / D3):** the click-through half stopped being true in
+  v1.22, when the network views moved to `P.navigateOnClick`. It kept no
+  callers from then until v1.63.0 deleted it (E9); the toolbar half is still
+  accurate. The
   only per-panel differences (download filename, centre-node guard, `o_id` check)
   stay at the call site.
 - [ ] **Migrate hand-rolled person-dashboard panels** (`countries.js:26-46`,
@@ -569,6 +573,10 @@ local contributor following them would hit an unexplained 401.
   "deferred") and never calls `P.buildGraphPanelToolbar` /
   `P.attachGraphClickThrough`, so this is the only IWAC network view with no
   download / legend / fullscreen / zoom controls. **Effort M.**
+  **Correction (Tier 8 / D3):** naming `P.attachGraphClickThrough` here
+  implied the other network views were using it. None were, from v1.22 on;
+  v1.63.0 deleted it. The toolbar gap this entry describes was real and is
+  fixed.
 - [x] **Labelled-`<select>` builder ×4** — **DONE (v1.22.0)**: `P.buildSelectControl`; org-cooccurrence delegates, the three scary-terms copies collapsed into `scary-terms/controls.js`. — `org-cooccurrence.js:234-251`
   `buildSelect`, `scary-terms.js:794-813` `buildSelectGroup`, plus
   `scary-terms.js:829-849` and `:851-881` (two more copies inside the same
@@ -615,7 +623,7 @@ local contributor following them would hit an unexplained 401.
   `org_cooccurrence:283-333`, `reprints:193-240`, `corpus_health:146-173`,
   `scary_terms:813-864`, `world_map:116-127`). The planned
   `iwac_utils.add_standard_args(parser)` is now worth ~600 lines. **Effort M.**
-- [ ] **Tier 3 metadata/output-path drift grew** — **partially done (v1.22.0)**: `world_map` now emits `generate_timestamp()` (the `+00:00` outlier is gone). Full standardization is **deferred**: unifying the metadata key names changes output shapes the JS reads, so it needs a coordinated generator+JS pass verified against live data. — four coexisting metadata
+- [ ] **Tier 3 metadata/output-path drift grew** — **partially done (v1.22.0)**: `world_map` now emits `generate_timestamp()` (the `+00:00` outlier is gone). *(Tier 8 / D3: "gone" was true of `world_map` and not of the tree — three per-item fan-outs still emitted `+00:00` when Tier 8 audited it. P10 closed those, and `scripts/validate_data.py` now REJECTS the form, so the claim is finally true of everything and enforced rather than asserted.)* Full standardization is **deferred**: unifying the metadata key names changes output shapes the JS reads, so it needs a coordinated generator+JS pass verified against live data. — four coexisting metadata
   strategies after the wave: `{"metadata": create_metadata_block(…)}`
   (`press_bylines:171`), `{"_meta": …}` (`on_this_day:144`), inline
   `{"generated_at": …}` dicts with no helper (`term_trends:136`,

@@ -52,6 +52,7 @@ from iwac_utils import (
     create_metadata_block,
     extract_year,
     find_column,
+    iter_records,
     load_dataset_safe,
     save_json,
 )
@@ -117,7 +118,7 @@ def main() -> int:
     dim: Optional[int] = None
     dropped = 0
 
-    for _, row in df.iterrows():
+    for row in iter_records(df):
         vec = coerce_embedding(row.get(embed_col))
         if vec is None or (dim is not None and len(vec) != dim):
             dropped += 1

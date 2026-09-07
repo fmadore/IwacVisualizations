@@ -92,6 +92,7 @@ from iwac_utils import (
     create_metadata_block,
     extract_year,
     is_unknown,
+    iter_records,
     load_dataset_safe,
     parse_pipe_separated,
     present_sentiment_models,
@@ -317,7 +318,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         pair: [[0] * n_labels for _ in range(n_labels)] for pair in pairs
     }
 
-    for _, row in df.iterrows():
+    for row in iter_records(df):
         year = int(row["_year"])
         countries = _clean_countries(row.get("country"))
         subject_kw = _clean_keywords(row.get("subject"))

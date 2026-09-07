@@ -71,6 +71,7 @@ from iwac_utils import (
     create_metadata_block,
     extract_year,
     is_unknown,
+    iter_records,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
@@ -152,7 +153,7 @@ def build_lexical_metrics(
     by_country: Dict[str, _MeanAcc] = defaultdict(_MeanAcc)
     no_year = 0
 
-    for _, row in df.iterrows():
+    for row in iter_records(df):
         values = {
             key: clean_float(row.get(column))
             for key, (column, _decimals) in METRICS.items()

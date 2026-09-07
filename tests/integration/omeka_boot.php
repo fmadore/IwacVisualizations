@@ -186,6 +186,18 @@ $dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedCo
     $event->setViewModel(new \Laminas\View\Model\ViewModel());
     $embedController->setEvent($event);
 
+    // A FRESH plugin manager per dispatch. `Layout` caches the first event
+    // it is asked for and never looks again (`Plugin\Layout::getEvent()`),
+    // and the application's ControllerPluginManager is shared - so reusing
+    // it would write every later dispatch's layout variables onto the FIRST
+    // dispatch's view model, and every ?theme / ?primary assertion here
+    // would read null and look like a controller bug. `blockAction` needs
+    // only `layout()` and `params()`, both of which a bare PluginManager
+    // registers itself.
+    $embedController->setPluginManager(
+        new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager())
+    );
+
     $view = $embedController->dispatch($request, $response);
     return [
         'status'   => $response->getStatusCode(),
@@ -240,7 +252,8 @@ foreach ($rejectedSlugs as $slug) {
     checkIntegration($got['status'] === 404, "embed slug '{$slug}' did not 404");
     checkIntegration(
         $got['template'] === 'iwac-visualizations/embed/not-found',
-        "embed slug '{$slug}' did not render the not-found template"
+        "embed slug '{$slug}' rendered '" . var_export($got['template'], true)
+            . "', not the not-found template"
     );
 }
 
