@@ -30,6 +30,7 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     function pct(n, d) { return d ? (n / d) * 100 : 0; }
@@ -63,10 +64,10 @@
                 formatter: function (params) {
                     if (!params || !params.length) return '';
                     var p = params[0];
-                    return '<strong>' + P.escapeHtml(p.axisValue) + '</strong><br>'
-                        + P.t('laicite.circulation_decade_tooltip', {
+                    return C.itemTooltip(p.axisValue,
+                        P.t('laicite.circulation_decade_tooltip', {
                             count: P.formatNumber(byDecade[p.axisValue] || 0)
-                        });
+                        }));
                 }
             },
             xAxis: { type: 'category', data: decades },

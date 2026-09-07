@@ -262,15 +262,15 @@
                 name: hijri ? P.t('cal_hijri_era') : '',
                 nameLocation: 'end',
                 nameGap: 8,
-                nameTextStyle: { color: tokens.muted, fontSize: 10 },
-                axisLabel: { interval: 'auto', fontSize: 10, color: tokens.inkLight },
+                nameTextStyle: { color: tokens.muted, fontSize: P.AXIS_FONT_SM },
+                axisLabel: { interval: 'auto', fontSize: P.AXIS_FONT_SM, color: tokens.inkLight },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
             yAxis: {
                 type: 'category',
                 data: months,
-                axisLabel: { fontSize: 10, color: tokens.inkLight },
+                axisLabel: { fontSize: P.AXIS_FONT_SM, color: tokens.inkLight },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
@@ -283,7 +283,7 @@
                 top: 'middle',
                 itemHeight: 120,
                 itemWidth: 12,
-                textStyle: { color: tokens.inkLight, fontSize: 10 },
+                textStyle: { color: tokens.inkLight, fontSize: P.AXIS_FONT_SM },
                 inRange: { color: heatStops(tokens) }
             },
             series: [{
@@ -393,7 +393,7 @@
                 top: 8,
                 itemWidth: 12,
                 itemHeight: 80,
-                textStyle: { color: tokens.inkLight, fontSize: 10 },
+                textStyle: { color: tokens.inkLight, fontSize: P.AXIS_FONT_SM },
                 inRange: { color: stops }
             },
             calendar: calendars,

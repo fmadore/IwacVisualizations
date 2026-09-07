@@ -1001,9 +1001,22 @@ def compute_subject_cooccurrence(rows: pd.DataFrame, min_weight: int) -> Dict[st
 #  Author collaboration network
 # ---------------------------------------------------------------------------
 
+#: Hard ceiling on the collaboration graph's node count.
+#:
+#: ``min_degree`` bounds how *connected* a node must be, not how many nodes
+#: survive — a denser dataset raises every degree and keeps MORE of them. The
+#: front end draws this graph with ``layoutAnimation: false``, which runs the
+#: whole force simulation once, SYNCHRONOUSLY, on the main thread, so an
+#: unbounded node count is an unbounded freeze on the reader's browser.
+#: Nodes are already ordered by record count, so the cut keeps the most
+#: prolific authors and the payload says how many it dropped.
+MAX_COLLABORATION_NODES = 400
+
+
 def compute_author_collaborations(
     rows: pd.DataFrame,
     min_degree: int,
+    max_nodes: int = MAX_COLLABORATION_NODES,
 ) -> Dict[str, Any]:
     """Build a co-authorship + author-editor graph.
 
@@ -1073,6 +1086,18 @@ def compute_author_collaborations(
         degree[b] += 1
     keep = {n for n, d in degree.items() if d >= min_degree}
 
+    ranked = sorted(keep, key=lambda n: -node_records.get(n, 0))
+    dropped = 0
+    if max_nodes and len(ranked) > max_nodes:
+        dropped = len(ranked) - max_nodes
+        logging.getLogger(__name__).info(
+            "Collaboration network: %d nodes over the %d cap, keeping the most "
+            "prolific (the front end lays this graph out synchronously)",
+            dropped, max_nodes,
+        )
+        ranked = ranked[:max_nodes]
+    keep = set(ranked)
+
     nodes = [
         {
             "id":    name,
@@ -1080,7 +1105,7 @@ def compute_author_collaborations(
             "value": int(node_records.get(name, 0)),
             "kind":  "author",
         }
-        for name in sorted(keep, key=lambda n: -node_records.get(n, 0))
+        for name in ranked
     ]
     edges = []
     for (a, b), weight in edge_weights.items():
@@ -1102,7 +1127,7 @@ def compute_author_collaborations(
 
     edges.sort(key=lambda e: -e["weight"])
 
-    return {"nodes": nodes, "edges": edges}
+    return {"nodes": nodes, "edges": edges, "dropped_nodes": int(dropped)}
 
 
 # ---------------------------------------------------------------------------

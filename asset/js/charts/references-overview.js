@@ -271,12 +271,12 @@
                     var pct = entry.total
                         ? Math.round((entry.with_ocr / entry.total) * 100)
                         : 0;
-                    return '<strong>' + P.escapeHtml(translateType(entry.name || '')) + '</strong><br>'
-                        + P.t('references_coverage_tooltip', {
+                    return C.itemTooltip(translateType(entry.name || ''),
+                        P.t('references_coverage_tooltip', {
                             withOcr: P.formatNumber(entry.with_ocr || 0),
                             total:   P.formatNumber(entry.total || 0),
                             pct:     pct
-                        });
+                        }));
                 }
             },
             xAxis: { type: 'value' },

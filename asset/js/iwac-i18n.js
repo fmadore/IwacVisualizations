@@ -495,6 +495,9 @@
             'Knowledge Graph': 'Graphe de connaissances',
             'Save as image': 'Enregistrer comme image',
             'Download chart': 'T\u00e9l\u00e9charger le graphique',
+            // ECharts legend selector buttons (E15).
+            'Show all': 'Tout afficher',
+            'Invert selection': 'Inverser la sélection',
             // Map titles — MapLibre's `Map.Title` and the host's
             // aria-label, so a screen reader names the map (M8).
             'Where the collection was gathered': 'Où la collection a été constituée',

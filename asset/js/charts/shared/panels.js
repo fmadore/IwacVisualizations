@@ -17,6 +17,25 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels = ns.panels || {};
 
+    /**
+     * The one step down from the theme's base chart type size, for axis
+     * labels that must fit a dense grid — heatmap rows, matrix columns,
+     * calendar month names.
+     *
+     * It lives HERE, in panels.js, rather than in chart-options.js: this
+     * file is in `shared.core` and loads first, so a block that skips the
+     * chart-options bundle still gets a number rather than `undefined` —
+     * which ECharts would silently replace with its own 12px default.
+     *
+     * A number, not a token: `readTokens()` reads colours and the body font
+     * family, and the theme's `--text-*` scale is expressed in `rem`, which
+     * ECharts cannot consume (a canvas has no cascade to resolve it against).
+     * What this replaces is the literal appearing at four different values —
+     * 15 in `special`, 7 in `hbar`, 3 in `bar`, 3 in `graph` — for what is
+     * one decision.
+     */
+    P.AXIS_FONT_SM = 10;
+
     /* ----------------------------------------------------------------- */
     /*  DOM helpers                                                       */
     /* ----------------------------------------------------------------- */

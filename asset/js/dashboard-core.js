@@ -329,12 +329,23 @@
      * Returns the ECharts instance. Caller is responsible for setOption().
      * Not normally called directly — prefer `ns.registerChart()`.
      */
-    ns.initChart = function (el) {
+    ns.initChart = function (el, initOpts) {
         if (typeof echarts === 'undefined') {
             console.warn('IWACVis: ECharts not loaded');
             return null;
         }
-        return echarts.init(el, ns.getChartTheme ? ns.getChartTheme() : null);
+        // `locale` changes nothing visible today — there is no toolbox, the
+        // aria label is set by registerChart, and no axis is `type: 'time'`
+        // — but it is the setting that decides how ECharts words anything it
+        // generates itself, and getting it from the site's language rather
+        // than from ECharts' default costs one argument.
+        var opts = { locale: ns.locale === 'fr' ? 'FR' : 'EN' };
+        if (initOpts) {
+            for (var k in initOpts) {
+                if (Object.prototype.hasOwnProperty.call(initOpts, k)) opts[k] = initOpts[k];
+            }
+        }
+        return echarts.init(el, ns.getChartTheme ? ns.getChartTheme() : null, opts);
     };
 
     /**
@@ -344,10 +355,13 @@
      * @param {function(HTMLElement, echarts.ECharts): void} render
      *   Called with (el, instance) on first render and after every theme swap.
      *   Typically this calls `instance.setOption({...})`.
+     * @param {Object} [initOpts]  Passed to `echarts.init` — e.g.
+     *   `{ renderer: 'svg' }` for a small static chart that wants crisp
+     *   type at any zoom. Merged over the locale this module always sets.
      * @returns {echarts.ECharts|null}
      */
-    ns.registerChart = function (el, render) {
-        var instance = ns.initChart(el);
+    ns.registerChart = function (el, render, initOpts) {
+        var instance = ns.initChart(el, initOpts);
         if (!instance) return null;
         var entry = { el: el, render: render, instance: instance, kind: 'echarts' };
 

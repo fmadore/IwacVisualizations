@@ -165,7 +165,7 @@
                 type: 'category',
                 gridIndex: i,
                 data: decades,
-                axisLabel: { fontSize: 10, interval: 0, rotate: decades.length > 5 ? 40 : 0 },
+                axisLabel: { fontSize: P.AXIS_FONT_SM, interval: 0, rotate: decades.length > 5 ? 40 : 0 },
                 axisTick: { show: false }
             });
             yAxes.push({
@@ -173,7 +173,7 @@
                 gridIndex: i,
                 max: axisMax,
                 splitNumber: 2,
-                axisLabel: C._percentAxisLabel({ fontSize: 10 })
+                axisLabel: C._percentAxisLabel({ fontSize: P.AXIS_FONT_SM })
             });
             titles.push({
                 text: L.frameLabel(metadata, frame),

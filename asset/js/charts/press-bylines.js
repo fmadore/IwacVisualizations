@@ -86,12 +86,13 @@
                         var p = params && params[0];
                         if (!p) return '';
                         var i = p.dataIndex;
-                        return '<strong>' + P.escapeHtml(p.axisValue) + '</strong><br>'
-                            + (p.value == null ? '—' : p.value + ' %') + '<br>'
-                            + P.t('bylines.trend_tip', {
+                        return C.itemTooltip(p.axisValue, [
+                            (p.value == null ? '—' : p.value + ' %'),
+                            P.t('bylines.trend_tip', {
                                 signed: P.formatNumber(signed[i] || 0),
                                 total: P.formatNumber(total[i] || 0)
-                            });
+                            })
+                        ]);
                     }
                 },
                 xAxis: { type: 'category', data: years, name: P.t('Year') },

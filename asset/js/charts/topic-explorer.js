@@ -465,7 +465,8 @@
         function optionFor(view) {
             return {
                 grid: C._grid({ left: 48, top: 40, bottom: 56 }),
-                legend: { type: 'scroll', top: 0 },
+                // Thirty LDA topics — the legend the selector is for.
+                legend: C._legend({ top: 0, selector: true }),
                 tooltip: {
                     trigger: 'axis',
                     formatter: C.sortedAxisTooltip({

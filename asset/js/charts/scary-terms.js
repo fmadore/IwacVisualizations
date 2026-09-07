@@ -54,6 +54,7 @@
     var buildMetricCards = SH.buildMetricCards;
     var buildTermDefinitions = SH.buildTermDefinitions;
     var buildCumulativeSnapshots = SH.buildCumulativeSnapshots;
+    var buildRaceFrames = SH.buildRaceFrames;
 
     var DATA_FILES = {
         metadata:     'scary-terms-metadata.json',
@@ -190,6 +191,9 @@
         // total made every early year render as a sliver against a ~4500-
         // wide scale, which was the user's top complaint.
         var cumulativeByYearIdx = buildCumulativeSnapshots(temporal, years);
+        // The same snapshots, re-shaped for ECharts' realtimeSort: a stable
+        // term order and one value array per year in that order.
+        var race = buildRaceFrames(cumulativeByYearIdx);
 
         var matrixCountries = cooccurrence && cooccurrence.countries
             ? Object.keys(cooccurrence.countries).sort()
@@ -263,8 +267,14 @@
         // draw() keeps calling setOption on a disposed chart after the
         // first light/dark toggle and the chart goes blank.
         var currentInstance = null;
+        // Whether the live option is already a race, and can be merged into.
+        var racePainted = false;
         ns.registerChart(chartEl, function (el, instance) {
             currentInstance = instance;
+            // A theme swap re-runs this callback so the bars pick up the new
+            // palette — which means a full repaint, not a merge into an
+            // option built against the old one.
+            racePainted = false;
             draw();
         });
 
@@ -279,17 +289,36 @@
             detailsHost.innerHTML = '';
 
             var option = null;
+            // Leaving the race view (or a teardown) throws the option away,
+            // so the next race frame has to paint in full again.
+            if (state.view !== 'race') racePainted = false;
             if (state.view === 'race') {
                 var year = years[state.yearIdx];
-                var yearData = (cumulativeByYearIdx[state.yearIdx] || []).slice(0, TOP_N);
-                option = C.scaryTerms({
-                    entries: yearData,
-                    termColors: termColors
-                });
+                var frame = race.frames[state.yearIdx] || [];
+                var leader = (cumulativeByYearIdx[state.yearIdx] || [])[0];
                 chartTitle.textContent = P.t('scary.chart_title') + ' — ' + year;
-                topBadge.textContent = yearData[0]
-                    ? P.t('scary.top_term') + ': ' + yearData[0][0]
+                topBadge.textContent = leader
+                    ? P.t('scary.top_term') + ': ' + leader[0]
                     : '';
+                // Advancing a year is a MERGE of the series data, which is
+                // what lets realtimeSort animate each bar to its new row.
+                // notMerge would discard the previous frame and there would
+                // be nothing to animate from — which is what used to happen.
+                var raceEntries = race.terms.map(function (t, i) { return [t, frame[i]]; });
+                if (racePainted && !currentInstance.isDisposed()) {
+                    currentInstance.setOption({
+                        series: [{ data: C.scaryTermItems(raceEntries, termColors) }]
+                    });
+                    return;
+                }
+                racePainted = true;
+                option = C.scaryTerms({
+                    entries: raceEntries,
+                    termColors: termColors,
+                    race: true,
+                    visibleBars: TOP_N,
+                    tickMs: RACE_TICK_MS
+                });
             } else if (state.view === 'country') {
                 var c = state.country;
                 var cData = ((countries[c] || {}).data || []);

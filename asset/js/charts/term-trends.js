@@ -302,7 +302,9 @@
             var dataZoom = C._dataZoom(years.length, { threshold: 30 });
             var option = {
                 grid: C._grid({ left: 64, top: 56, bottom: 56 }),
-                legend: C._legend({ itemWidth: 14, itemHeight: 3 }),
+                // Up to twelve series: isolating one meant clicking off
+                // eleven others before the selector existed.
+                legend: C._legend({ itemWidth: 14, itemHeight: 3, selector: true }),
                 tooltip: {
                     trigger: 'axis',
                     confine: true,
