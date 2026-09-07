@@ -31,7 +31,7 @@
             P.fetchJSON(url)
                 .then(function (wc) {
                     panelEl.chart.innerHTML = '';
-                    build(panelEl, wc);
+                    build(panelEl, wc, ctx);
                 })
                 .catch(function (err) {
                     console.error('IWACVis wordcloud:', err);
@@ -41,7 +41,7 @@
         });
     }
 
-    function build(panelEl, wc) {
+    function build(panelEl, wc, ctx) {
         var state = { facet: 'global', subFacet: null };
 
         var countries = Object.keys(wc.by_country || {}).sort();
@@ -61,9 +61,30 @@
                 state.facet = evt.facet;
                 state.subFacet = evt.subFacet || null;
                 rerender();
+                if (link) {
+                    link.publish(state.facet === 'by_country' ? state.subFacet : null);
+                }
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
+
+        // One country for the whole block (S4). Clearing returns to Global
+        // rather than leaving an empty country picker; a country the word
+        // cloud has no slice for is ignored, so the panel keeps showing
+        // something rather than going blank.
+        var link = P.linkFacet({
+            store: ctx && ctx.linked,
+            read: function () {
+                return state.facet === 'by_country' ? (state.subFacet || null) : null;
+            },
+            apply: function (country) {
+                if (country && countrySub[country] !== undefined) {
+                    facetBar.setActive('by_country', country);
+                } else if (!country && state.facet === 'by_country') {
+                    facetBar.setActive('global');
+                }
+            }
+        });
 
         var meta = P.el('div', 'iwac-vis-wordcloud-meta');
         panelEl.panel.appendChild(meta);

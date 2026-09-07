@@ -28,7 +28,7 @@
     var ALL_KEY = '__all__';
     var WINDOW_SIZE = 20;
 
-    function render(panelEl, data) {
+    function render(panelEl, data, ctx) {
         var coverage = (data && data.newspapers && data.newspapers.coverage) || [];
         if (coverage.length === 0) {
             panelEl.chart.appendChild(P.buildEmptyState());
@@ -66,6 +66,16 @@
             onChange: function (evt) {
                 state.country = evt.subFacet || ALL_KEY;
                 rerender();
+                if (link) link.publish(state.country === ALL_KEY ? null : state.country);
+            }
+        });
+
+        // One country for the whole block (S4).
+        var link = P.linkFacet({
+            store: ctx && ctx.linked,
+            read: function () { return state.country === ALL_KEY ? null : state.country; },
+            apply: function (country) {
+                countryBar.setActive('country', country || ALL_KEY);
             }
         });
 

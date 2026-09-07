@@ -49,6 +49,8 @@
      */
     var DICTIONARY = {
         en: {
+            // The block-level linked facet chip (S4).
+            'linked_country': 'Filtered to {value}',
             // UI chrome. The source key keeps the American spelling the call
             // sites already pass; the English value is what readers see.
             'Visualization data is not available yet.': 'The data for this visualisation has not been published yet.',
@@ -461,6 +463,9 @@
             'table_rows_capped':         'Showing the first {shown} of {total} rows; the CSV has all of them.',
         },
         fr: {
+            // The block-level linked facet chip (S4).
+            'linked_country': 'Filtré sur {value}',
+            'Clear': 'Effacer',
             'Loading dashboard': 'Chargement du tableau de bord',
             'Loading collection overview': 'Chargement de la vue d\u2019ensemble',
             'Loading project comparison': 'Chargement de la comparaison',

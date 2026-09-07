@@ -8,6 +8,7 @@ require('./panels.test.js');
 require('./tooltip.test.js');
 require('./bar-race.test.js');
 require('./plural.test.js');
+require('./linked-facet.test.js');
 require('./maplibre.test.js');
 require('./maplibre-gate.test.js');
 require('./assets.test.js');

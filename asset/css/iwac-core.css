@@ -1956,6 +1956,29 @@ select.iwac-vis-control:hover {
     gap: var(--space-1, 0.25rem);
 }
 
+/*  The block-level linked-facet chip (S4).
+ *
+ *  One country now applies across a whole block, so something has to say
+ *  so: a reader who picked Benin in one panel would otherwise see four
+ *  other panels narrow with no visible cause and no way back. Sits under
+ *  the block heading, hides itself when nothing is selected. */
+.iwac-vis-linked-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    margin-block: var(--space-2, 0.5rem);
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--surface-raised, #faf8f6);
+    width: fit-content;
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+.iwac-vis-linked-filter__label {
+    color: var(--ink-light, #3f4349);
+}
+
 /*  The small-caps label over a group in a sidebar. */
 .iwac-vis-aside__label {
     font-size: var(--text-xs, 0.8125rem);

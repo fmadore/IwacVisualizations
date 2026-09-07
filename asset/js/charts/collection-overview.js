@@ -52,6 +52,19 @@
         var subtitle = P.buildPeriodSubtitle(summary.year_min, summary.year_max);
         if (subtitle) root.appendChild(subtitle);
 
+        // ONE country for the whole block (S4). Five panels used to build
+        // their own Country facet, so picking Bénin on the timeline left the
+        // Gantt, the languages bar, the map and the word cloud on "all" — the
+        // same choice made five times, and any two panels free to disagree
+        // about what they were showing. The chip says what is active and
+        // clears it; the country bar and the treemap set it on click.
+        ctx.linked = P.createStore({ country: null });
+        root.appendChild(P.buildLinkedFilterBar({
+            store: ctx.linked,
+            key: 'country',
+            labelKey: 'linked_country'
+        }));
+
         // 2–12. Charts grid (recent additions rendered last)
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
@@ -137,7 +150,7 @@
         };
     }
 
-    function wireInlinePanels(h, data) {
+    function wireInlinePanels(h, data, linked) {
         // Timeline (existing C.timeline, year × country)
         if (data.timeline && (data.timeline.years || []).length > 0) {
             ns.registerChart(h.timeline.chart, function (el, instance) {
@@ -157,6 +170,14 @@
                     valueKey: 'total',
                     useCountryColors: true
                 }));
+            }).on('click', function (p) {
+                // A country bar was the one chart on the page that named a
+                // country and did nothing when you clicked it. It filters the
+                // block now; clicking the active one clears the filter.
+                if (!p || !p.name || !linked) return;
+                linked.patch({
+                    country: linked.state.country === p.name ? null : p.name
+                });
             });
         } else {
             h.country.chart.appendChild(P.buildEmptyState());
@@ -169,6 +190,16 @@
             var tree = localizeTreemap(data.treemap);
             ns.registerChart(h.treemap.chart, function (el, instance) {
                 instance.setOption(C.treemap(tree, { colorFor: C._countryColor }));
+            }).on('click', function (p) {
+                // Its first level IS the countries, so a top-level tile is
+                // the same selector as a country bar.
+                if (!linked || !p || !p.data || !p.treePathInfo) return;
+                if (p.treePathInfo.length !== 2) return;   // root + country
+                // Only the TYPE level is localised (localizeTreemap), so a
+                // top-level tile's name is the country name the data uses.
+                var name = p.name;
+                if (!name) return;
+                linked.patch({ country: linked.state.country === name ? null : name });
             });
         } else {
             h.treemap.chart.appendChild(P.buildEmptyState());
@@ -178,10 +209,10 @@
     function wireDelegatedPanels(h, data, ctx) {
         var co = ns.collectionOverview || {};
 
-        if (co.typesOverTime)  co.typesOverTime.render(h.types, data);
+        if (co.typesOverTime)  co.typesOverTime.render(h.types, data, ctx);
         if (co.growth)         co.growth.render(h.growth.chart, data);
-        if (co.gantt)          co.gantt.render(h.gantt, data);
-        if (co.languages)      co.languages.render(h.language, data);
+        if (co.gantt)          co.gantt.render(h.gantt, data, ctx);
+        if (co.languages)      co.languages.render(h.language, data, ctx);
         if (co.entities)       co.entities.render(h.entities, data, ctx);
         if (co.wordcloud)      co.wordcloud.render(h.wordcloud, data, ctx);
         if (co.map)            co.map.render(h.map, data, ctx);
@@ -195,7 +226,7 @@
         dataFile:       'collection-overview.json',
         render:         function (container, data, ctx) {
             var h = buildLayout(container, data, ctx);
-            wireInlinePanels(h, data);
+            wireInlinePanels(h, data, ctx.linked);
             wireDelegatedPanels(h, data, ctx);
         }
     });

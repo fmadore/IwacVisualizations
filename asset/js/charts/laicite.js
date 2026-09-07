@@ -199,6 +199,16 @@
         // frame clears the map country — live in the reducer, once.
         var trendsCountries = trends && trends.by_country
             ? Object.keys(trends.by_country).sort() : [];
+        // The four country keys are ONE choice (S4). Each view spells its
+        // empty value differently — the timeline uses null, the three select-
+        // driven views use '' — and they used to move independently, so a
+        // reader who picked Togo on the timeline had to pick it again on the
+        // map, the arenas and the concordance. The reducer keeps them in
+        // step, and only for a country the dossier actually holds: an unknown
+        // value would narrow a view to nothing.
+        var COUNTRY_KEYS = ['trendsCountry', 'kwicCountry', 'arenaCountry', 'mapCountry'];
+        var knownCountries = (metadata.countries || []).slice();
+
         var store = P.createStore(state, {
             reduce: function (st, changed) {
                 var extra = {};
@@ -209,6 +219,23 @@
                 if (has('kwicSubset')) extra.kwicCountry = '';
                 if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
                 if (has('mapCountry') && st.mapCountry) extra.mapFrame = '';
+
+                // Whichever country key the reader touched wins for all four.
+                var moved = null;
+                for (var i = 0; i < COUNTRY_KEYS.length; i++) {
+                    if (has(COUNTRY_KEYS[i])) { moved = COUNTRY_KEYS[i]; break; }
+                }
+                if (moved) {
+                    var value = st[moved] || '';
+                    var shareable = !value || knownCountries.indexOf(value) !== -1;
+                    if (shareable) {
+                        COUNTRY_KEYS.forEach(function (k) {
+                            if (k === moved) return;
+                            // null for the timeline, '' for the selects.
+                            extra[k] = k === 'trendsCountry' ? (value || null) : value;
+                        });
+                    }
+                }
                 return extra;
             }
         });

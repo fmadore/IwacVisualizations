@@ -19,7 +19,7 @@
         return;
     }
 
-    function render(panelEl, data) {
+    function render(panelEl, data, ctx) {
         var langs = (data && data.languages) || {};
         var hasAnyData =
             (langs.global && langs.global.length) ||
@@ -67,9 +67,30 @@
                 state.facet = evt.facet;
                 state.subFacet = evt.subFacet || null;
                 if (ctrl) ctrl.rerender();
+                if (link) {
+                    link.publish(state.facet === 'by_country' ? state.subFacet : null);
+                }
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
+
+        // One country for the whole block (S4). This panel's country facet is
+        // one of three modes, so adopting a country means switching to it —
+        // and clearing means going back to Global rather than to a blank
+        // country picker.
+        var link = P.linkFacet({
+            store: ctx && ctx.linked,
+            read: function () {
+                return state.facet === 'by_country' ? (state.subFacet || null) : null;
+            },
+            apply: function (country) {
+                if (country && countrySubFacets[country] !== undefined) {
+                    facetBar.setActive('by_country', country);
+                } else if (!country && state.facet === 'by_country') {
+                    facetBar.setActive('global');
+                }
+            }
+        });
 
         function currentEntries() {
             if (state.facet === 'global')     return (langs.global || []).slice(0, 10);
