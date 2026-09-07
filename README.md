@@ -299,7 +299,7 @@ Not yet released. For local development:
 1. Place this directory (or a clone of the repo) under your Omeka S `modules/` folder.
 2. If you plan to regenerate the minified JS bundles or the precomputed data:
    - **Node 22** for the JS build/lint/browser tests: `npm install && npm run build`
-   - **Python 3.12** for the CI-equivalent precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install --require-hashes -r scripts/requirements.lock`
+   - **Python 3.12** for the precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install -r scripts/requirements.txt` (the hash-pinned `requirements.lock` is compiled for the Linux runner and will not install elsewhere — see `scripts/README.md`)
 3. Regenerate data as needed (see [Precompute pipeline](#precompute-pipeline)).
 4. Activate the module in **Admin → Modules**.
 5. On any site page, add one of the page blocks (for example **Collection Overview**, **References Overview**, or **Compare Newspapers**). For resource-page blocks (**Visualizations**, **Item Set Dashboard**), attach them to the appropriate resource templates from the admin.

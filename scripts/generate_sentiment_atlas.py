@@ -81,14 +81,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from iwac_utils import (
+    add_standard_args,
+    parse_standard_args,
     CENTRALITE_ORDER,
-    DATASET_ID,
     POLARITE_ORDER,
     SENTIMENT_MODELS,
     canonicalize_country_field,
     clean_float,
     clean_str,
-    configure_logging,
     create_metadata_block,
     extract_year,
     is_unknown,
@@ -524,26 +524,13 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--output",
         default="asset/data/sentiment-atlas.json",
         help="Output JSON path, relative to the module root",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Minify the JSON output (default: %(default)s)",
-    )
-    parser.add_argument("-v", "--verbose", action="store_true")
-    args = parser.parse_args()
-
-    configure_logging(level=logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
 
     payload = build_sentiment_atlas(
         repo_id=args.repo,

@@ -155,7 +155,8 @@ IwacVisualizations/
 │   ├── README.md
 │   ├── requirements.lock              # Hash-pinned; `npm run lint:python-lock` checks it
 │   ├── requirements.txt
-│   └── run_all.py                     # Every generator in one process, sharing loaded subsets
+│   ├── run_all.py                     # Every generator in one process, sharing loaded subsets
+│   └── validate_data.py
 ├── src/
 │   ├── Controller/
 │   │   ├── Admin/
@@ -409,7 +410,7 @@ it against what is on disk:
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install --require-hashes -r scripts/requirements.lock
+pip install -r scripts/requirements.txt   # the lock is CI's Linux/3.12 env
 export HF_TOKEN=...            # the mirror is private
 
 python3 scripts/run_all.py                    # everything, CI's flags

@@ -1,2 +1,12 @@
-numpy==2.5.1
+# The unit tests exercise the pure helpers, so they need only the numeric
+# stack — `datasets` is lazy-loaded at the network boundary and never
+# imported here (see test_pure_helpers_do_not_load_the_datasets_client).
+#
+# These MUST match scripts/requirements.lock. They drifted once: this file
+# pinned numpy 2.5.1 while the generators are held below 2.5 by numba and the
+# lock resolves 2.4.6 — so the tests ran on a numpy the generators cannot use,
+# which is the one configuration a test suite must never be in.
+# `npm run lint:python-lock` fails when they disagree.
+numpy==2.4.6
 pandas==3.0.5
+pyflakes==3.4.0

@@ -30,7 +30,6 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
@@ -42,6 +41,8 @@ from dashboard_aggregator import (
     DashboardAggregator,
 )
 from iwac_utils import (
+    add_standard_args,
+    generate_timestamp,
     DATASET_ID,
     configure_logging,
     find_column,
@@ -245,7 +246,7 @@ class PersonDashboardGenerator(DashboardAggregator):
 
         data: Dict[str, Any] = {
             "version": 4,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": generate_timestamp(),
             "person": self._build_person_header(person_info),
         }
         data.update(self.compute_sections(person_o_id))
@@ -279,11 +280,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=Path(__file__).resolve().parent.parent / "asset" / "data" / "person-dashboards",
         help="Where to write per-person JSON files (default: %(default)s)",
     )
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repo id (default: %(default)s)",
-    )
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--limit",
         type=int,
@@ -295,17 +292,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=DEFAULT_MIN_COOCCURRENCE,
         help="Minimum co-occurrence count for a neighbor to qualify for the network panel (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Minify the per-person JSON files (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
     )
     return parser
 

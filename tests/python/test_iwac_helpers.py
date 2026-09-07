@@ -18,6 +18,7 @@ sys.path.insert(0, str(SCRIPTS))
 import dashboard_aggregator  # noqa: E402
 import generate_collection_overview  # noqa: E402
 import generate_periodicals_overview  # noqa: E402
+import generate_references_overview  # noqa: E402
 import generate_template_summary  # noqa: E402
 import generate_topic_explorer  # noqa: E402
 import iwac_embeddings  # noqa: E402
@@ -849,6 +850,41 @@ class SharedHelperTests(unittest.TestCase):
             iwac_utils.build_entity_index(pd.DataFrame({"o:id": [1]}))
 
 
+class ExtractYearTests(unittest.TestCase):
+    """P8: the ISO fast path must be a shortcut, never a different answer."""
+
+    def test_iso_shapes_resolve_without_pandas(self) -> None:
+        with patch.object(iwac_utils.pd, "to_datetime",
+                          side_effect=AssertionError("pandas must not be reached")):
+            self.assertEqual(iwac_utils.extract_year("2023"), 2023)
+            self.assertEqual(iwac_utils.extract_year("2023-05"), 2023)
+            self.assertEqual(iwac_utils.extract_year("2023-05-15"), 2023)
+            self.assertEqual(iwac_utils.extract_year("  2023-05-15  "), 2023)
+            # Out of range is a decision, not a reason to try harder:
+            # the default window is 1800-2100.
+            self.assertIsNone(iwac_utils.extract_year("1799"))
+            self.assertIsNone(iwac_utils.extract_year("2101"))
+
+    def test_everything_else_still_goes_through_pandas(self) -> None:
+        # A shape the regex does not claim must reach the full parser.
+        self.assertEqual(iwac_utils.extract_year("2023-05-15T10:00:00"), 2023)
+        self.assertEqual(iwac_utils.extract_year("May 2023"), 2023)
+        self.assertEqual(iwac_utils.extract_year("[1990]"), 1990)
+        self.assertIsNone(iwac_utils.extract_year("invalid"))
+        self.assertIsNone(iwac_utils.extract_year("n.d."))
+        self.assertIsNone(iwac_utils.extract_year(""))
+        self.assertIsNone(iwac_utils.extract_year(None))
+
+    def test_non_string_inputs_are_unchanged(self) -> None:
+        self.assertEqual(iwac_utils.extract_year(2023), 2023)
+        self.assertEqual(iwac_utils.extract_year(pd.Timestamp("2011-03-04")), 2011)
+        self.assertIsNone(iwac_utils.extract_year(float("nan")))
+
+    def test_the_narrowed_catch_still_swallows_what_it_used_to(self) -> None:
+        # A value pandas refuses is a missing date, not a crash.
+        self.assertIsNone(iwac_utils.extract_year(object()))
+
+
 class FrameStoreTests(unittest.TestCase):
     """P1: one frame per subset, widened on demand, with today's semantics.
 
@@ -1033,3 +1069,106 @@ class LaicitePackageTests(unittest.TestCase):
         # no view to render.
         shared = js - {"map", "controls", "i18n", "helpers", "overview"}
         self.assertTrue(shared <= py, sorted(shared - py))
+
+
+class CollectionOverviewTests(unittest.TestCase):
+    """P19: the largest generator had no tests at all.
+
+    `compute_timeline` is the block's headline chart. Its edge cases are the
+    dataset's, not a spec's: countries arrive pipe-separated, "Unknown" is a
+    real value that must not become a country, and a partial date is a year.
+    """
+
+    def frame(self, rows):
+        return pd.DataFrame(rows)
+
+    def test_pipe_separated_countries_each_get_their_own_bar(self) -> None:
+        out = generate_collection_overview.compute_timeline(
+            {"articles": self.frame([
+                {"pub_date": "1990-01-01", "country": "Bénin|Togo"},
+                {"pub_date": "1990-06-01", "country": "Togo"},
+            ])}, 1990, 1991)
+        # The axis is the years PRESENT, not the whole window — an empty year
+        # is not drawn as a gap.
+        self.assertEqual(out["years"], [1990])
+        self.assertEqual(sorted(out["countries"]), ["Bénin", "Togo"])
+        self.assertEqual(out["series"]["Bénin"], [1])
+        self.assertEqual(out["series"]["Togo"], [2])
+
+    def test_unknown_is_not_a_country(self) -> None:
+        out = generate_collection_overview.compute_timeline(
+            {"articles": self.frame([
+                {"pub_date": "1990", "country": "Unknown"},
+                {"pub_date": "1990", "country": "Niger"},
+            ])}, 1990, 1990)
+        self.assertNotIn("Unknown", out["countries"])
+        self.assertEqual(out["series"]["Niger"], [1])
+
+    def test_a_year_only_date_counts_and_a_broken_one_does_not(self) -> None:
+        out = generate_collection_overview.compute_timeline(
+            {"articles": self.frame([
+                {"pub_date": "1991", "country": "Togo"},
+                {"pub_date": "n.d.", "country": "Togo"},
+                {"pub_date": "", "country": "Togo"},
+            ])}, 1990, 1991)
+        self.assertEqual(out["years"], [1991], "n.d. and '' contribute no year")
+        self.assertEqual(out["series"]["Togo"], [1])
+
+    def test_years_outside_the_window_are_dropped_not_clamped(self) -> None:
+        out = generate_collection_overview.compute_timeline(
+            {"articles": self.frame([
+                {"pub_date": "1985", "country": "Togo"},
+                {"pub_date": "1990", "country": "Togo"},
+            ])}, 1990, 1990)
+        self.assertEqual(out["years"], [1990])
+        self.assertEqual(out["series"]["Togo"], [1])
+
+    def test_an_empty_input_keeps_the_shape_the_chart_expects(self) -> None:
+        out = generate_collection_overview.compute_timeline({}, 1990, 1990)
+        self.assertIn("years", out)
+        self.assertIn("countries", out)
+        self.assertIn("series", out)
+
+
+class ReferencesNetworkTests(unittest.TestCase):
+    """P19: the collaboration graph's bounds, including the node cap (E12)."""
+
+    def rows(self, records):
+        return pd.DataFrame(records)
+
+    def test_the_node_cap_keeps_the_most_prolific_and_reports_the_rest(self) -> None:
+        # A ring of authors, every one connected, so min_degree drops nobody.
+        names = [f"Author {i:02d}" for i in range(10)]
+        records = []
+        for i in range(len(names)):
+            records.append({"author": f"{names[i]}|{names[(i + 1) % len(names)]}",
+                            "o:id": i, "title": f"T{i}"})
+        out = generate_references_overview.compute_author_collaborations(
+            self.rows(records), min_degree=1, max_nodes=4)
+        self.assertEqual(len(out["nodes"]), 4)
+        self.assertEqual(out["dropped_nodes"], 6)
+        # Every surviving edge joins two surviving nodes.
+        kept = {n["id"] for n in out["nodes"]}
+        for edge in out["edges"]:
+            self.assertIn(edge["source"], kept)
+            self.assertIn(edge["target"], kept)
+
+    def test_no_cap_means_no_drop(self) -> None:
+        out = generate_references_overview.compute_author_collaborations(
+            self.rows([{"author": "A|B", "o:id": 1, "title": "T"}]),
+            min_degree=1, max_nodes=0)
+        self.assertEqual(out["dropped_nodes"], 0)
+        self.assertEqual(sorted(n["id"] for n in out["nodes"]), ["A", "B"])
+
+    def test_min_degree_drops_a_node_and_its_edges_together(self) -> None:
+        records = [
+            {"author": "A|B", "o:id": 1, "title": "T1"},
+            {"author": "A|C", "o:id": 2, "title": "T2"},
+            {"author": "D|E", "o:id": 3, "title": "T3"},
+        ]
+        out = generate_references_overview.compute_author_collaborations(
+            self.rows(records), min_degree=2)
+        # Only A has two distinct collaborators; with everyone else dropped
+        # there is no edge left to draw.
+        self.assertEqual([n["id"] for n in out["nodes"]], ["A"])
+        self.assertEqual(out["edges"], [])

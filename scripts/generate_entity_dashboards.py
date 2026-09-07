@@ -38,7 +38,6 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
@@ -46,7 +45,7 @@ from dashboard_aggregator import (
     DEFAULT_MIN_COOCCURRENCE,
     DashboardAggregator,
 )
-from iwac_utils import DATASET_ID, configure_logging, save_json
+from iwac_utils import DATASET_ID, add_standard_args, configure_logging, generate_timestamp, save_json
 
 # Index Type values that we treat as "non-person entities" for this
 # generator. Keys are the Type values from the IWAC index; values are
@@ -168,7 +167,7 @@ class EntityDashboardGenerator(DashboardAggregator):
         info = self.targets[entity_o_id]
         data: Dict[str, Any] = {
             "version": 4,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": generate_timestamp(),
             "entity": {
                 "o_id": entity_o_id,
                 "title": info["title"],
@@ -217,11 +216,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=Path(__file__).resolve().parent.parent / "asset" / "data" / "entity-dashboards",
         help="Where to write per-entity JSON files (default: %(default)s)",
     )
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repo id (default: %(default)s)",
-    )
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--limit",
         type=int,
@@ -239,17 +234,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=DEFAULT_MIN_COOCCURRENCE,
         help="Minimum co-occurrence count for a neighbor to qualify for the network panel (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Minify the per-entity JSON files (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
     )
     return parser
 

@@ -57,14 +57,14 @@ from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 
 from iwac_utils import (
+    add_standard_args,
+    parse_standard_args,
     CENTRALITE_ORDER,
-    DATASET_ID,
     POLARITE_ORDER,
     SENTIMENT_MODELS,
     STOPWORDS,
     canonical_country,
     canonicalize_country_field,
-    configure_logging,
     create_metadata_block,
     extract_year,
     load_dataset_safe,
@@ -756,7 +756,7 @@ def build_all(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default=DATASET_ID)
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--output-dir",
         default="asset/data/compare-newspapers",
@@ -774,12 +774,7 @@ def main() -> None:
                         help="Drop wordcloud tokens below this frequency")
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction, default=True,
-                        help="Minify per-corpus JSON (default: %(default)s)")
-    parser.add_argument("-v", "--verbose", action="store_true")
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     if any(a == "--min-count" or a.startswith("--min-count=") for a in sys.argv[1:]):

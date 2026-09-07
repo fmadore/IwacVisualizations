@@ -96,6 +96,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 
 from iwac_utils import (
+    add_standard_args,
     DATASET_ID,
     HIJRI_COLUMNS,
     aggregate_prevalence,
@@ -408,16 +409,12 @@ def build_bundle(df: pd.DataFrame, top_articles: int) -> Dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--repo', default=DATASET_ID, help='Hugging Face dataset repo id')
+    add_standard_args(parser, minify_default=False)
     parser.add_argument('--output', type=Path,
                         default=Path('asset/data/topic-explorer.json'),
                         help='Output JSON path')
     parser.add_argument('--top-articles', type=int, default=DEFAULT_TOP_ARTICLES,
                         help='Most-representative articles per topic')
-    parser.add_argument('--minify', action=argparse.BooleanOptionalAction,
-                        default=False,
-                        help='Strip whitespace from output JSON (default: %(default)s)')
-    parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
 
     global logger

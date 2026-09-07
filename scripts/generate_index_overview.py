@@ -56,10 +56,10 @@ from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
     canonicalize_country_field,
     clean_int,
-    configure_logging,
     create_metadata_block,
     extract_year,
     load_dataset_safe,
@@ -556,11 +556,7 @@ def build_index_overview(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=False)
     parser.add_argument(
         "--output",
         default="asset/data/index-overview.json",
@@ -582,18 +578,7 @@ def main() -> None:
         "--recent-n", type=int, default=20,
         help="Recent additions to include (default: 20)",
     )
-    parser.add_argument(
-        "--minify", action=argparse.BooleanOptionalAction, default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None

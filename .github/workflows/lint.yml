@@ -104,5 +104,11 @@ jobs:
         # not the last subpackage this file will hold.
         run: pyflakes scripts/
 
+      # The data validator's own self-test: it proves the checks can fail, so
+      # a green "Validate the generated data" in the data workflow means
+      # something. No data is needed for this.
+      - name: Data validator self-test
+        run: python scripts/validate_data.py --self-test
+
       - name: Python behavioral contracts
         run: python -m unittest discover -s tests/python -v

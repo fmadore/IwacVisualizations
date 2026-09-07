@@ -49,7 +49,6 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -58,6 +57,8 @@ import pandas as pd
 
 from iwac_embeddings import build_normalized_matrix, coerce_embedding
 from iwac_utils import (
+    add_standard_args,
+    generate_timestamp,
     DATASET_ID,
     build_entity_index,
     clean_float,
@@ -850,7 +851,7 @@ class ArticleDashboardGenerator:
 
         payload = {
             "version":             2,
-            "generated_at":        datetime.now(timezone.utc).isoformat(),
+            "generated_at":        generate_timestamp(),
             "article":             article_block,
             "entities":            entities,
             "spatial":             spatial,
@@ -903,11 +904,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=Path(__file__).resolve().parent.parent / "asset" / "data" / "article-dashboards",
         help="Where to write per-article JSON files (default: %(default)s)",
     )
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repo id (default: %(default)s)",
-    )
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--limit",
         type=int,
@@ -950,17 +947,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
              "this multiple of its mean cosine over all articles, so works "
              "adjacent to the whole corpus stop winning everywhere. "
              "0 disables it (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Minify the per-article JSON files (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
     )
     return parser
 

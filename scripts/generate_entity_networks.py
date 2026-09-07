@@ -46,7 +46,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 
 from dashboard_aggregator import DashboardAggregator
-from iwac_utils import DATASET_ID, configure_logging, create_metadata_block, save_json
+from iwac_utils import DATASET_ID, add_standard_args, create_metadata_block, parse_standard_args, save_json
 
 logger = logging.getLogger(__name__)
 
@@ -376,7 +376,7 @@ def build_spatial_network(agg: NetworkAggregator, weight_min: int) -> Dict[str, 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default=DATASET_ID, help="Hugging Face dataset repository ID")
+    add_standard_args(parser, minify_default=True)
     parser.add_argument("--output-dir", default="asset/data")
     parser.add_argument(
         "--min-cooccurrence", type=int, default=DEFAULT_MIN_COOCCURRENCE,
@@ -390,14 +390,7 @@ def main() -> None:
         "--pairs", default=DEFAULT_PAIRS,
         help="Comma-separated cross-type pairs as ASCII slugs (default: %(default)s)",
     )
-    parser.add_argument(
-        "--minify", action=argparse.BooleanOptionalAction, default=True,
-        help="Produce compact JSON (default: %(default)s)",
-    )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Set log level to DEBUG")
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     pairs = parse_pairs(args.pairs)
     spatial_min = (
         args.spatial_min_cooccurrence

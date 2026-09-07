@@ -73,6 +73,17 @@ automatically — set as a repo secret in CI, or locally via
 ``$env:HF_TOKEN`` / ``hf auth login``.
 """
 
+IWAC_COUNTRIES = ["Bénin", "Burkina Faso", "Côte d'Ivoire", "Niger", "Nigeria", "Togo"]
+"""The six countries the collection covers, in the canonical spellings
+:func:`canonical_country` produces and ``asset/geo/iwac-countries.geojson``
+keys on.
+
+One list: the spatial generator restated it as ``FOCUS_COUNTRIES`` and four
+generators counted a raw ``country`` cell without canonicalising at all, so
+"Benin", "Bénin" and "benin" could land in three different buckets of the
+same chart.
+"""
+
 SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]
 """Available subsets in the IWAC dataset."""
 
@@ -315,6 +326,15 @@ def is_full_date(value: Any) -> bool:
     return bool(FULL_DATE_RE.match(clean_str(value)))
 
 
+# Nearly every date in this dataset is "YYYY", "YYYY-MM" or "YYYY-MM-DD".
+# `pd.to_datetime` on a single scalar is a full parser invocation, and
+# `extract_year` is called from ~40 sites, several passes deep over 12k
+# rows. Matching the ISO shape first answers the common case in
+# microseconds and hands everything else to pandas unchanged, so the
+# OUTPUT is identical and only the path taken differs.
+_ISO_YEAR_RE = re.compile(r"^(\d{4})(?:-\d{2}(?:-\d{2})?)?$")
+
+
 def extract_year(
     value: Any,
     min_year: int = 1800,
@@ -363,6 +383,12 @@ def extract_year(
             if not value:
                 return None
 
+            # ISO first — see _ISO_YEAR_RE.
+            iso = _ISO_YEAR_RE.match(value)
+            if iso:
+                year = int(iso.group(1))
+                return year if min_year <= year <= max_year else None
+
             # Try pandas datetime parsing
             dt = pd.to_datetime(value, errors='coerce')
             if pd.notna(dt):
@@ -390,7 +416,12 @@ def extract_year(
             if min_year <= year <= max_year:
                 return year
 
-    except Exception:
+    # Narrowed from a bare `except Exception`. What can actually be raised
+    # here is a bad value (ValueError), a type pandas will not take
+    # (TypeError), or an out-of-range timestamp (OverflowError) — a bare
+    # catch also swallowed a KeyboardInterrupt, or a bug in this function,
+    # and returned None as though the date were simply unparseable.
+    except (ValueError, TypeError, OverflowError):
         pass
 
     return None
@@ -502,7 +533,12 @@ def extract_month(value: Any) -> Optional[str]:
         if pd.notna(dt):
             return dt.strftime('%Y-%m')
 
-    except Exception:
+    # Narrowed from a bare `except Exception`. What can actually be raised
+    # here is a bad value (ValueError), a type pandas will not take
+    # (TypeError), or an out-of-range timestamp (OverflowError) — a bare
+    # catch also swallowed a KeyboardInterrupt, or a bug in this function,
+    # and returned None as though the date were simply unparseable.
+    except (ValueError, TypeError, OverflowError):
         pass
 
     return None
@@ -1587,39 +1623,6 @@ def save_json(
         except Exception:
             logger.info(f"Wrote {path}")
 
-
-def copy_to_build(
-    src_path: Path,
-    build_dir: Path = Path("build/data")
-) -> bool:
-    """
-    Copy a file to the build directory if it exists.
-
-    Args:
-        src_path: Source file path
-        build_dir: Build directory path
-
-    Returns:
-        True if file was copied, False otherwise
-    """
-    logger = logging.getLogger(__name__)
-
-    if not build_dir.exists():
-        return False
-
-    dst_path = build_dir / src_path.name
-    try:
-        dst_path.write_bytes(src_path.read_bytes())
-        logger.info(f"Copied {src_path.name} to {build_dir}")
-        return True
-    except Exception as e:
-        logger.warning(f"Failed to copy to build: {e}")
-        return False
-
-
-# =============================================================================
-# Metadata Generation
-# =============================================================================
 
 def generate_timestamp() -> str:
     """

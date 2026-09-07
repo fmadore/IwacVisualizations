@@ -44,11 +44,11 @@ import pandas as pd
 
 from iwac_stats import build_timeline_series
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
+    parse_standard_args,
     canonicalize_country_field,
     clean_int,
     clean_str,
-    configure_logging,
     create_metadata_block,
     extract_year,
     find_column,
@@ -231,10 +231,17 @@ def compute_timeline(
             year = extract_year(pub_date, min_year=year_min, max_year=year_max)
             if year is None:
                 continue
-            country_value = str(country).strip() if country is not None else ""
-            if not country_value or country_value.lower() == "unknown":
-                continue  # skip items without a resolvable country
-            pairs.append((year, country_value))
+            # SPLIT the pipe. An item catalogued for two countries is an item
+            # about both, and `compute_country_distribution` one screen down
+            # has always counted it that way. This read the cell whole, so a
+            # value like "Bénin|Togo" became its own stacked series in the
+            # timeline — the country bar and the timeline of the same block
+            # disagreeing about what a country is.
+            for country_value in parse_pipe_separated(country):
+                country_value = country_value.strip()
+                if not country_value or country_value.lower() == "unknown":
+                    continue  # skip items without a resolvable country
+                pairs.append((year, country_value))
 
     # Countries by total count desc, alphabetical tie-break.
     return build_timeline_series(pairs, order="count", totals=True)
@@ -1263,11 +1270,7 @@ def build_overview(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID",
-    )
+    add_standard_args(parser, minify_default=False)
     parser.add_argument(
         "--output",
         default="asset/data/collection-overview.json",
@@ -1281,20 +1284,7 @@ def main() -> None:
     )
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None

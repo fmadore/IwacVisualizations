@@ -39,16 +39,21 @@ python3 -m venv .venv
 source .venv/bin/activate           # Linux/macOS
 # .\.venv\Scripts\Activate.ps1       # Windows PowerShell
 
-# Install the exact, hash-verified CI environment
-pip install --require-hashes -r scripts/requirements.lock
+# Install the direct dependencies
+pip install -r scripts/requirements.txt
 
-# Run a generator
+# Run a generator, or all of them in one process
 python3 scripts/generate_collection_overview.py
+python3 scripts/run_all.py
 ```
 
-`scripts/requirements.txt` remains the short, human-maintained list of direct
-dependencies. `scripts/requirements.lock` is the reproducible Python 3.12/Linux
-environment used by the data workflow. After changing the input, regenerate it
+**Use `requirements.txt` locally, not the lock.** `scripts/requirements.lock`
+is compiled for Python 3.12 on x86-64 Linux — the GitHub runner — with a hash
+for every artifact, so `pip install --require-hashes` against it *fails* on
+3.11, on macOS, on Windows and on arm64: the hashes name wheels for a platform
+you are not on. It is CI's environment, and reproducing CI exactly is the only
+reason to install it. `scripts/requirements.txt` is the short, human-maintained
+list of direct dependencies and resolves anywhere. After changing the input, regenerate it
 with the currently verified uv release:
 
 ```bash
@@ -511,7 +516,7 @@ Every generator supports the same baseline flags (normalized in v1.3.x):
 | `--repo` | Hugging Face dataset repo id. Defaults to `DATASET_ID`. Override to point at a fork or a dev mirror. |
 | `-v`, `--verbose` | Set log level to `DEBUG` (normally `INFO`). Prints per-subset load sizes and aggregation details. |
 | `--output` / `--output-dir` | Override the default asset/data target path. Single-bundle generators use `--output`; fan-out / multi-file generators use `--output-dir`. |
-| `--minify` / `--no-minify` | Compact vs. pretty-printed JSON (`argparse.BooleanOptionalAction`). Defaults match what each script always did: minified for the per-item dashboards (`person`, `entity`, `article`), `wordcloud`, and `compare-newspapers` per-corpus bundles; pretty for everything else. Typically halves file size. |
+| `--minify` / `--no-minify` | Compact vs. pretty-printed JSON (`argparse.BooleanOptionalAction`). Typically halves file size. **The defaults are deliberate and differ**: minified for the per-item fan-outs (`person`, `entity`, `article`, `publication`, `reference`), `wordcloud` and the `compare-newspapers` per-corpus bundles — thousands of files nobody reads by hand — and **pretty for the seven single-file bundles that get diffed when a number looks wrong**: `collection_overview`, `index_overview`, `keyword_explorer`, `audiovisual_overview`, `laicite`, `scary_terms`, `world_map`. CI passes no flag, so these are what ships; a bundle that grows past a few hundred KB should move to `minify_default=True` and lose its diffability deliberately rather than by accident. |
 
 Block-specific extras (partial list):
 

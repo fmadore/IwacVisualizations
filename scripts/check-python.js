@@ -25,15 +25,24 @@ const fs = require('fs');
 const path = require('path');
 
 const SCRIPTS_DIR = path.join(__dirname);
+const ROOT = path.join(__dirname, '..');
 
 /** Candidate interpreters, most-specific first. */
 function candidates() {
     const list = [];
+    // `$PYTHON` first: on Windows a bare `python` can be the Store shim,
+    // which exits 9009 rather than running anything, and a machine with
+    // several interpreters may have the data stack in only one of them. This
+    // used to hard-code one contributor's absolute install path — harmless
+    // for them, meaningless for anyone else, and silently skipped rather
+    // than reported.
     if (process.env.PYTHON) list.push(process.env.PYTHON);
-    // The x64 install is the one carrying the data stack on the maintainer's
-    // machine; a bare `python` on Windows can be the Store shim, which exits
-    // 9009 rather than running anything.
-    list.push('C:/Users/frede/AppData/Local/Programs/Python/Python312/python.exe');
+    // A project virtualenv, if there is one — `scripts/README.md` tells
+    // contributors to create exactly this.
+    list.push(
+        path.join(ROOT, '.venv', 'Scripts', 'python.exe'),   // Windows
+        path.join(ROOT, '.venv', 'bin', 'python')            // POSIX
+    );
     list.push('python3', 'python', 'py');
     return list;
 }

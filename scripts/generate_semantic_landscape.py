@@ -45,7 +45,7 @@ import numpy as np
 
 from iwac_embeddings import coerce_embedding
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
     canonicalize_country_field,
     clean_str,
     configure_logging,
@@ -72,8 +72,7 @@ def main() -> int:
         default="asset/data/semantic-landscape.json",
         help="Output JSON path, relative to the module root",
     )
-    parser.add_argument("--repo", default=DATASET_ID,
-                        help="Hugging Face dataset repo id (default: %(default)s)")
+    add_standard_args(parser, minify_default=True)
     parser.add_argument("--n-neighbors", type=int, default=15,
                         help="UMAP n_neighbors (default: %(default)s)")
     parser.add_argument("--min-dist", type=float, default=0.1,
@@ -82,10 +81,6 @@ def main() -> int:
                         help="Topics with their own legend entry (default: %(default)s)")
     parser.add_argument("--max-title-len", type=int, default=DEFAULT_TITLE_LEN,
                         help="Tooltip title truncation (default: %(default)s)")
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction, default=True,
-                        help="Minify the JSON output (default: %(default)s)")
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Set log level to DEBUG")
     args = parser.parse_args()
 
     global logger
