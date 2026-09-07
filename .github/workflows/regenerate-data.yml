@@ -24,7 +24,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "scripts/*.py"
+      - "scripts/**/*.py"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/python-lock.js"
@@ -107,12 +107,20 @@ jobs:
             numba-${{ runner.os }}-
 
       - name: Run generators
-        # The 30 HF-driven generators, with default flags (defaults already match
-        # the committed output shapes/minify). Static geojson is read from
-        # asset/geo/ (present from checkout), as are the hand-curated
-        # scary-terms-events.json (issue #2) and laicite-events.json (issue #14),
-        # which ship in the archive from the checkout rather than being generated.
-        # Fail-fast so a partial build is never published.
+        # ONE interpreter for all 31 generators, via scripts/run_all.py. It
+        # installs a FrameStore, so the seven Hugging Face subsets are
+        # converted to pandas once each instead of ~90 times across 31 process
+        # starts (Tier 8 / P1). The generator ORDER lives in run_all.GENERATORS
+        # — it used to be a `gens=(…)` array here, where nothing could check it
+        # against what is on disk; a Python test now does.
+        #
+        # Defaults already match the committed output shapes/minify. Static
+        # geojson is read from asset/geo/ (present from checkout), as are the
+        # hand-curated scary-terms-events.json (issue #2) and
+        # laicite-events.json (issue #14), which ship in the archive from the
+        # checkout rather than being generated. No --continue-on-error: the
+        # runner stops on the first failure so a partial build is never
+        # published.
         env:
           # The IWAC dataset moved to a PRIVATE full mirror
           # (fmadore/islam-west-africa-collection-full); `datasets` reads this
@@ -122,21 +130,7 @@ jobs:
         run: |
           set -euo pipefail
           export NUMBA_CACHE_DIR="$HOME/.cache/numba"
-          gens=(
-            audiovisual_overview
-            collection_overview wordcloud world_map index_overview keyword_explorer
-            entity_networks lexical_metrics on_this_day periodicals_overview periodicals_landscape
-            press_bylines references_overview scary_terms semantic_landscape sentiment_atlas
-            spatial_exploration template_summary topic_explorer compare_newspapers
-            article_dashboards person_dashboards entity_dashboards publication_dashboards
-            org_cooccurrence term_trends reprints corpus_health keyness
-            reference_dashboards laicite
-          )
-          for g in "${gens[@]}"; do
-            echo "::group::generate_${g}"
-            python "scripts/generate_${g}.py"
-            echo "::endgroup::"
-          done
+          python scripts/run_all.py
 
       - name: Write data manifest
         # Build-stamp the archive so the client can cache-bust on each data sync

@@ -15,7 +15,7 @@ on:
     paths:
       - "**/*.php"
       - "**/*.phtml"
-      - "scripts/*.py"
+      - "scripts/**/*.py"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/python-lock.js"
@@ -26,7 +26,7 @@ on:
     paths:
       - "**/*.php"
       - "**/*.phtml"
-      - "scripts/*.py"
+      - "scripts/**/*.py"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/python-lock.js"
@@ -98,7 +98,11 @@ jobs:
         run: pip install -r tests/python/requirements.txt
 
       - name: pyflakes over the generators
-        run: pyflakes scripts/*.py
+        # The DIRECTORY, not `scripts/*.py`: since the laïcité generator
+        # became a package (Tier 8 / P4) a top-level-only glob would lint the
+        # CLI shim and skip the 2,400 lines behind it. `scripts/laicite/` is
+        # not the last subpackage this file will hold.
+        run: pyflakes scripts/
 
       - name: Python behavioral contracts
         run: python -m unittest discover -s tests/python -v

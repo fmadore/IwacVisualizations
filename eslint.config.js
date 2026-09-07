@@ -23,6 +23,12 @@ module.exports = [
     {
         ignores: [
             'node_modules/**',
+            // The Python virtualenv CLAUDE.md tells contributors to create
+            // ships vendored .js inside site-packages (sklearn, urllib3), and
+            // ESLint 9's flat config does not read .gitignore — so without
+            // this the documented local setup breaks the documented local
+            // gate with 26 errors in files nobody here wrote.
+            '.venv/**',
             'asset/js/dist/**',
             '**/*.min.js',
             'playwright-report/**',
