@@ -50,8 +50,10 @@ test('French puts zero with the singular, which is why this is a lookup', () => 
 
 test('a key with no variants still resolves, so nothing had to be migrated', () => {
     const ns = load('en');
-    // `admin_units_count` has no _one/_other siblings.
-    assert.equal(ns.t('admin_units_count', { count: 1 }), '1 units');
+    // Registered here rather than borrowed from the shipped dictionary, so
+    // the case survives a key moving into a per-block dictionary (S24).
+    ns.addTranslations('en', { 'widgets_count': '{count} widgets' });
+    assert.equal(ns.t('widgets_count', { count: 1 }), '1 widgets');
     assert.equal(ns.t('Year'), 'Year');
 });
 

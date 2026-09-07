@@ -14,8 +14,8 @@
 //     moves the pressed button along with the value (the S19 trap).
 
 const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
-const { join } = require('node:path');
+const { readFileSync, readdirSync, statSync } = require('node:fs');
+const { join, relative, sep } = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
@@ -457,4 +457,30 @@ test('the legend is built from the same scale as the fill', () => {
     assert.equal(classed.children.length, 3);
     assert.equal(classed.children[1].children[0].style.background, '#a');
     assert.equal(classed.children[2].children[1].textContent, '5–20');
+});
+
+test('every module <select> carries the shared control skin', () => {
+    // `.iwac-vis-control` is the padding / surface / radius / focus ring from
+    // iwac-core.css. A select built without it renders as the browser's
+    // default control in the middle of a themed toolbar, which is what two
+    // compare-newspapers pickers did (S19).
+    const files = [];
+    (function walk(dir) {
+        for (const name of readdirSync(dir)) {
+            const full = join(dir, name);
+            if (statSync(full).isDirectory()) walk(full);
+            else if (name.endsWith('.js') && !name.endsWith('.min.js')) files.push(full);
+        }
+    })(join(ROOT, 'asset', 'js'));
+
+    const bare = [];
+    for (const path of files) {
+        const source = readFileSync(path, 'utf8');
+        for (const m of source.matchAll(/P\.el\('select'([^)]*)\)/g)) {
+            if (!/iwac-vis-control/.test(m[1])) {
+                bare.push(relative(ROOT, path).split(sep).join('/'));
+            }
+        }
+    }
+    assert.deepEqual(bare, []);
 });

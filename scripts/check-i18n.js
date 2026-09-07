@@ -217,6 +217,89 @@ for (const block of blocks) {
     }
 }
 
+/**
+ * Reachability, per bundle.
+ *
+ * `addTranslations` merges at RUNTIME, so a per-block dictionary is only in
+ * memory on a page that loaded that block's bundle. A key that moved out of
+ * the shared file into the wrong block therefore renders as itself — silently,
+ * and only on the pages that do not load the block it landed in. This walks
+ * every `t('literal')` in every bundled source and asserts the key resolves
+ * from the shared dictionary plus the dictionaries that bundle actually
+ * carries. It is what makes moving a key out of the shared file a checkable
+ * operation rather than a hopeful one (S24).
+ *
+ * Only STRING LITERALS are checked. Dozens of call sites pass a variable — a
+ * local `TYPE_I18N[…]` map, a label off the data — and no static pass can
+ * follow those; a key already reachable is not made unreachable by this rule.
+ */
+const bundles = JSON.parse(readFileSync(join(JS_ROOT, 'bundles.json'), 'utf8'));
+
+function filesOf(spec) {
+    if (Array.isArray(spec)) return spec.slice();
+    const out = (spec.files || []).slice();
+    for (const use of spec.uses || []) out.push(...(bundles.panels[use] || []));
+    return out;
+}
+
+/** shared + every dictionary the given files declare. */
+function reachableIn(files) {
+    const keys = new Set(shared.seen.en.keys());
+    for (const key of shared.seen.fr.keys()) keys.add(key);
+    for (const block of blocks) {
+        const rel = block.label.replace(/^asset\/js\//, '');
+        if (!files.includes(rel)) continue;
+        for (const key of block.seen.en.keys()) keys.add(key);
+        for (const key of block.seen.fr.keys()) keys.add(key);
+    }
+    return keys;
+}
+
+const T_LITERAL = /\bt\(\s*'((?:\\.|[^'\\])*)'/g;
+const unreachable = [];
+for (const [group, entries] of Object.entries(bundles)) {
+    if (group.startsWith('$') || group === 'panels') continue;
+    for (const [name, spec] of Object.entries(entries)) {
+        const files = filesOf(spec);
+        // Every shared bundle is on every block page; a block bundle is not,
+        // which is the whole point of the rule. `shared.core` is assumed
+        // present because the partial always emits it.
+        const all = group === 'shared'
+            ? [...filesOf(bundles.shared.core), ...files]
+            : [...filesOf(bundles.shared.core), ...files];
+        const keys = reachableIn(all);
+        for (const rel of files) {
+            let source;
+            try { source = readFileSync(join(JS_ROOT, rel), 'utf8'); } catch (e) { continue; }
+            for (const m of source.matchAll(T_LITERAL)) {
+                const key = m[1];
+                // A key that IS its English source string resolves to itself,
+                // which is exactly what an English reader should see.
+                if (!IDENTIFIER.test(key)) continue;
+                if (keys.has(key)) continue;
+                unreachable.push({ bundle: `${group}.${name}`, file: rel, key });
+            }
+        }
+    }
+}
+
+if (unreachable.length) {
+    console.error('\n\u2717 i18n guard: key(s) a bundle uses but cannot reach\n');
+    const seenPair = new Set();
+    for (const row of unreachable) {
+        const id = row.bundle + ' ' + row.key;
+        if (seenPair.has(id)) continue;
+        seenPair.add(id);
+        console.error(`  ${row.bundle}: ${JSON.stringify(row.key)} (${row.file})`);
+    }
+    console.error(
+        '\n  addTranslations merges at runtime, so a per-block dictionary only'
+        + '\n  exists on a page that loaded that block. Move the key into a'
+        + '\n  dictionary this bundle carries, or back into iwac-i18n.js.\n'
+    );
+    process.exit(1);
+}
+
 if (problems.length) {
     console.error('\n✗ i18n guard: the dictionaries have drifted apart\n');
     const kinds = [...new Set(problems.map((p) => p.kind))];

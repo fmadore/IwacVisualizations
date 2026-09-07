@@ -58,7 +58,10 @@
         var toolbar = P.el('div', 'iwac-vis-compare-sentiment__toolbar');
         var axisLabel = P.el('label', null, P.t('Axis'));
         axisLabel.htmlFor = 'iwac-cmp-sent-axis-' + CN.nextUid();
-        var axisSelect = P.el('select');
+        // `.iwac-vis-control` is the shared control skin (padding, surface,
+        // radius, focus ring) from iwac-core.css. These two were the last
+        // selects in the module rendering as the browser's default (S19).
+        var axisSelect = P.el('select', 'iwac-vis-control');
         axisSelect.id = axisLabel.htmlFor;
         [
             { key: 'polarite',     label: P.t('Polarity') },
@@ -72,7 +75,7 @@
 
         var modelLabel = P.el('label', null, P.t('Model'));
         modelLabel.htmlFor = 'iwac-cmp-sent-model-' + CN.nextUid();
-        var modelSelect = P.el('select');
+        var modelSelect = P.el('select', 'iwac-vis-control');
         modelSelect.id = modelLabel.htmlFor;
         sentimentModels.forEach(function (key) {
             var opt = P.el('option', null, P.sentimentModelLabel(key));

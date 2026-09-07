@@ -46,20 +46,21 @@ IwacVisualizations/
 │       ├── charts/
 │       │   ├── article-dashboard/     # 3 files — panel modules
 │       │   ├── audiovisual-overview/  # 3 files — panel modules
-│       │   ├── collection-overview/   # 9 files — panel modules
+│       │   ├── collection-overview/   # 10 files — panel modules
 │       │   ├── compare-newspapers/    # 10 files — panel modules
-│       │   ├── entity-networks/       # 2 files — panel modules
-│       │   ├── index-overview/        # 13 files — panel modules
+│       │   ├── entity-networks/       # 3 files — panel modules
+│       │   ├── index-overview/        # 14 files — panel modules
 │       │   ├── laicite/               # 17 files — panel modules
 │       │   ├── lexical-metrics/       # 1 file — panel module
 │       │   ├── on-this-day/           # 4 files — panel modules
 │       │   ├── periodicals-overview/  # 2 files — panel modules
 │       │   ├── person-dashboard/      # 11 files — panel modules
+│       │   ├── references-overview/   # 1 file — panel module
 │       │   ├── scary-terms/           # 6 files — panel modules
 │       │   ├── semantic-landscape/    # 1 file — panel module
 │       │   ├── sentiment-atlas/       # 1 file — panel module
 │       │   ├── shared/                # 41 files — the reusable primitives every block draws on
-│       │   ├── spatial-exploration/   # 3 files — panel modules
+│       │   ├── spatial-exploration/   # 4 files — panel modules
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
 │       │   ├── collection-overview.js
