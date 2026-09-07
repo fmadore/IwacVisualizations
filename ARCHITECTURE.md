@@ -171,6 +171,12 @@ IwacVisualizations/
 │   │       └── EmbedController.php
 │   ├── Job/
 │   │   └── SyncData.php               # Pure-PHP "Pull latest data" job (issue #7)
+│   ├── Mvc/
+│   │   └── EmbedFramingListener.php
+│   ├── Sentiment/
+│   │   ├── Centralite.php
+│   │   ├── Polarite.php
+│   │   └── Subjectivite.php
 │   ├── Service/
 │   │   └── Controller/
 │   │       └── Admin/

@@ -123,6 +123,9 @@ namespace Omeka\Site\ResourcePageBlockLayout {
 namespace {
     use IwacVisualizations\Job\SyncData;
     use IwacVisualizations\Module;
+    use IwacVisualizations\Sentiment\Centralite;
+    use IwacVisualizations\Sentiment\Polarite;
+    use IwacVisualizations\Sentiment\Subjectivite;
     use IwacVisualizations\Site\BlockRegistry;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
@@ -131,6 +134,10 @@ namespace {
     use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 
     $root = dirname(__DIR__, 2);
+    require $root . '/src/Sentiment/Polarite.php';
+    require $root . '/src/Sentiment/Centralite.php';
+    require $root . '/src/Sentiment/Subjectivite.php';
+    require $root . '/src/Mvc/EmbedFramingListener.php';
     require $root . '/Module.php';
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
@@ -246,6 +253,65 @@ namespace {
 
     // Controlled-vocabulary lookup and default metadata filtering.
     check(Module::getPolariteLabel(78040) === 'Negative', 'polarity item mapping drifted');
+
+    // The three sentiment axes are enums (Tier 8 / H4). What matters is not
+    // that a `match` compiles but that the closed set still holds the same
+    // vocabulary: the item ids the dataset points at, one label and one
+    // ordinal per case, and NOTHING outside the set resolving to a rating.
+    check(count(Polarite::cases()) === 6, 'the polarity vocabulary changed size');
+    check(count(Centralite::cases()) === 5, 'the centrality vocabulary changed size');
+    check(count(Subjectivite::cases()) === 5, 'the subjectivity vocabulary changed size');
+    check(
+        array_map(static fn ($c) => $c->value, Polarite::cases())
+            === [78031, 78038, 78039, 78040, 78041, 78042],
+        'the polarity item ids drifted from the controlled vocabulary'
+    );
+    check(
+        array_map(static fn ($c) => $c->value, Centralite::cases())
+            === [78048, 78049, 78050, 78051, 78052],
+        'the centrality item ids drifted from the controlled vocabulary'
+    );
+    check(
+        array_map(static fn ($c) => $c->value, Subjectivite::cases())
+            === [78043, 78044, 78045, 78046, 78047],
+        'the subjectivity item ids drifted from the controlled vocabulary'
+    );
+    // Every label distinct, or `ordinalForLabel` would answer for the wrong
+    // case - it resolves by label because that is the key the extractor has.
+    foreach ([Polarite::class, Centralite::class, Subjectivite::class] as $enum) {
+        $labels = array_map(static fn ($c) => $c->label(), $enum::cases());
+        check(count(array_unique($labels)) === count($labels), "$enum has duplicate labels");
+        check(!in_array('', $labels, true), "$enum has an empty label");
+    }
+    // The two rated scales run 1..5 with no gaps; polarity adds the
+    // deliberate off-scale 0.
+    check(
+        array_values(array_diff(
+            array_map(static fn ($c) => $c->ordinal(), Polarite::cases()), [0]
+        )) === [5, 4, 3, 2, 1],
+        'the polarity scale is no longer a gapless 1-5 plus the off-scale 0'
+    );
+    check(
+        array_map(static fn ($c) => $c->ordinal(), Centralite::cases()) === [5, 4, 3, 2, 1],
+        'the centrality scale is no longer a gapless 1-5'
+    );
+    check(
+        Polarite::fromItemId(78042)?->ordinal() === 0,
+        '"Not applicable" stopped being off the scale'
+    );
+    // An id outside the vocabulary must resolve to nothing, not to a rating.
+    foreach ([null, 0, -1, 78030, 78053, 999999] as $stranger) {
+        check(Polarite::fromItemId($stranger) === null, "polarity accepted item id " . var_export($stranger, true));
+        check(Centralite::fromItemId($stranger) === null, "centrality accepted item id " . var_export($stranger, true));
+        check(Subjectivite::fromItemId($stranger) === null, "subjectivity accepted item id " . var_export($stranger, true));
+    }
+    check(Polarite::ordinalForLabel('nonsense') === 0, 'an unknown polarity label scored');
+    check(Polarite::ordinalForLabel(null) === 0, 'a null polarity label scored');
+    check(Centralite::ordinalForLabel('very central') === 0, 'centrality label lookup went case-insensitive');
+    check(
+        Subjectivite::fromItemId(78045)?->info() === ['score' => 3, 'label' => 'Mixed'],
+        'the subjectivity info shape the article partial reads changed'
+    );
     check(Module::getCentraliteNumeric('Very central') === 5, 'centrality scale drifted');
     check(Module::getPolariteNumeric('Not applicable') === 0, 'off-scale polarity drifted');
 

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations\Site\BlockLayout;
 
 use IwacVisualizations\Site\BlockRegistry;

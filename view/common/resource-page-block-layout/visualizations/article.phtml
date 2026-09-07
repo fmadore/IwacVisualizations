@@ -48,7 +48,7 @@ $modelInfo = SentimentExtractor::MODEL_INFO;
 // radar chart underneath to undo that.
 //
 // `low` / `high` are the two poles of each 1–5 vocabulary. They reuse the
-// controlled-vocabulary msgids (Module::POLARITE_ITEMS and friends), so no
+// controlled-vocabulary msgids (the src/Sentiment/ enums' labels), so no
 // new translation work is needed to label the scales. `diverging` marks
 // the one axis whose midpoint is meaningful — polarity pivots on Neutral,
 // whereas centrality and subjectivity just run low → high.

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace IwacVisualizations\Controller\Site;
 
 use IwacVisualizations\Site\BlockRegistry;
