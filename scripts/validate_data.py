@@ -45,17 +45,30 @@ from typing import Any, Dict, List, Optional, Tuple
 #: missing key (an optional sidecar, a section added after a bundle shipped),
 #: the key is NOT listed — this is what must be there for the block to render
 #: at all.
+#: WRITTEN BY HAND, AND CORRECTED BY ITS FIRST REAL RUN. Three of the 55
+#: keys below were wrong on contact with actual output - `index-overview`
+#: wanted `stats`/`entities` where the generator emits `summary`/
+#: `top_entities`, and `spatial-exploration` wanted `places` where it emits
+#: `locations`. The other 52 were right, and the run proved it: this
+#: validator reports EVERY problem rather than stopping at the first, so one
+#: red run is a complete audit of the table.
+#:
+#: That is the reason it reports everything, and the reason a new row here
+#: is not trustworthy until a regeneration has run against it. A wrong row
+#: fails safe - the archive is not published and the previous one stands -
+#: but it fails the whole build, so add rows from the generator's payload
+#: dict rather than from what the front end looks like it reads.
 REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "collection-overview.json":       ("summary", "timeline", "countries", "treemap"),
     "collection-wordcloud.json":      ("global",),
     "collection-map.json":            ("locations", "country_counts"),
-    "index-overview.json":            ("stats", "entities"),
+    "index-overview.json":            ("summary", "top_entities"),
     "keyword-explorer-metadata.json": ("countries", "newspapers", "year_range"),
     "references-overview.json":       ("summary",),
     "scary-terms-metadata.json":      ("term_families", "countries", "year_range"),
     "scary-terms-temporal.json":      (),          # a bare year -> counts map
     "topic-explorer.json":            ("topics", "metadata"),
-    "spatial-exploration.json":       ("places", "focus_countries"),
+    "spatial-exploration.json":       ("locations", "focus_countries"),
     "entity-networks-global.json":    ("nodes", "edges"),
     "entity-networks-spatial.json":   ("nodes", "edges"),
     "periodicals-overview.json":      ("summary", "runs", "holdings"),
