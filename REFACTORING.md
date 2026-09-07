@@ -1386,6 +1386,101 @@ What differs is listed here, because it is intended:
   three functions rather than merged. The L2-normalise and `argpartition`
   copies P3 also names are still there.
 
+### Implemented in v1.64.0 (wave 6, the structural items)
+
+P1, P4, M13, M14 and D1 are done, and M15 came with M13 because it lives
+in the handler M13 rewrites. Five things landed differently from how they
+were written up, and say so here:
+
+- **P1** — the runner exists (`scripts/run_all.py` + `iwac_frames.FrameStore`)
+  and the `columns=` interim the finding also offers does **not**, on
+  purpose: the finding presents it as the *cheaper alternative* to the
+  runner, and under the runner the ten generators it names would share one
+  wide `articles` frame anyway. The store is installed onto `iwac_utils`
+  rather than threaded through call sites, so none of the 43 changed and a
+  generator behaves identically run directly — which is also what keeps the
+  test suite honest, since nothing is memoized there. It is LRU-bounded to
+  four subsets: holding all seven wide while a UMAP fit runs is the one
+  shape that could cost more memory than it saves, and eviction is not
+  lossy — an evicted subset is simply reloaded. Contracts kept, with tests:
+  a missing column warns rather than raises, an empty subset stays fatal
+  for a `required` caller *after* it is cached, a failed subset is not
+  retried thirty times, and pandas 3's copy-on-write is what makes handing
+  out the cached data — instead of a defensive deep copy per caller —
+  correct rather than merely fast. The generator ORDER moved out of the
+  workflow's `gens=(…)` array, where nothing could check it, into
+  `run_all.GENERATORS`, where a test compares it with what is on disk.
+
+- **P4** — `scripts/laicite/`, 20 files, largest 506 lines (was one file of
+  3,104). The split is *verified*, not asserted: a harness compares
+  `inspect.getsource()` of all 41 methods and 9 module members against the
+  pre-split file, plus every constant's value; all identical. Each view is
+  a mixin rather than a collaborator object because every builder reads the
+  same run parameters and the same `self.scans` — fifteen constructors
+  would be more plumbing, not less. Three moves beyond the write-up's map,
+  each forced by a dependency it did not mention: the tokenizer constants
+  down to `lexicon` (the scan needs them, so the collocate builder cannot
+  own them), the register accumulators into their own module (filled during
+  the scan, read by the sentiment builder, so neither owns them), and
+  `laicite_lexicon.json` into the package beside the code that reads it —
+  `LEXICON_PATH` is `Path(__file__).with_name(...)`, which silently
+  followed the code. The three gates the finding warns would skip a
+  subpackage now recurse, `check-python.js` by walking rather than
+  `readdirSync`.
+
+- **M13** — sources are carried, **layers are not**, which is the opposite
+  of the write-up and the reason the write-up's own caveat ("paint colours
+  are baked at add time, so a re-colour pass is still needed") does not
+  apply. `onStyleReady`'s re-add *is* the recolour pass; carrying the
+  layers would have kept the old theme's colours and required inventing a
+  per-panel recolour contract for twelve files. Carrying only the sources
+  gets the benefit the finding actually names — the GeoJSON is not
+  re-parsed or re-tiled, and feature-state, which lives on the source,
+  survives — while every consumer's existing `getLayer` guard does the
+  right thing untouched.
+
+  The stated prerequisite, renaming fourteen unprefixed source ids so a
+  prefix filter could find them, is **not needed and not done**: positron
+  and dark-matter declare the same source ids as each other and the graph
+  canvas declares none, so a source in the outgoing style and absent from
+  the incoming one is by definition a panel's. `type === 'geojson'` is the
+  belt to that braces, and a test asserts the module has never added a
+  source of another type. Two consumers were not ready for a source that
+  survives, and both are the M17 class the finding half-anticipated:
+  `compare-newspapers/map.js` called `addSource` unguarded (it is the one
+  file that never needed a guard), and `choropleth.js` guarded its two
+  polygon LAYERS behind the SOURCE's existence, so a carried source would
+  have meant a choropleth that silently never came back.
+
+- **M14** — the literal collapse only; the hosting decision is the owner's
+  and stays open, confirmed 2026-09-07. `IWACVis.BASEMAP` owns the URLs and
+  `check-maplibre-gates.js` fails on a `cartocdn` literal anywhere else, or
+  when the partial's `preconnect` hosts stop equalling that object's
+  origins — both halves proved able to fail. A map block preconnects to the
+  two Carto origins now, only when it declares `maplibre`. Recorded for
+  whoever takes the hosting question: the **abstract** entity graph pulls
+  Noto glyphs from Carto, and it is not a map.
+
+- **D1** — three files, and nothing lost: all 103 headings survive and of
+  850 non-blank content lines exactly one changed, the data-strategy
+  table's "Run manually when the dataset updates", false since issue #7.
+  The tree is generated from `git ls-files` by `scripts/build-tree.js` with
+  a `--check` mode in `npm run lint`, because a hand-written picture of a
+  directory listing is a copy and copies go stale — this one had 6
+  `BlockLayout` classes out of 21. Annotations live in the script, and one
+  for a path that is no longer tracked fails the build rather than
+  vanishing. Two further hand-maintained restatements of the same tree (the
+  CSS listing in the build section, the block count) point at it now.
+
+Found while implementing, not in the audit:
+
+- ESLint linted `.venv/`, so the Python setup `CLAUDE.md` tells contributors
+  to create broke the local gate it tells them to run — ESLint 9 flat config
+  does not read `.gitignore`. One line in `eslint.config.js`.
+- `eslint.config.js` itself shipped inside every installed module: it is
+  dev tooling of exactly the kind `.gitattributes` export-ignores, and the
+  release archive's own negative test did not list it.
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1742,7 +1837,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `LngLatBounds.extend` → `P.boundsOf`, and string-built popups in
       `choropleth.js:409-410, 432-433`, spatial `:446-447, 461-463`, compare
       `:270-271` → `P.buildMapPopup`. `COUNTRY_ALIASES` is *not* duplicated.
-- [ ] **M13 (Low/Med, M) — Theme swap: carry the module's layers across with
+- [x] **M13 (Low/Med, M) — Theme swap: carry the module's layers across with
       `transformStyle`.** Per swap today every module source is re-parsed and
       re-tiled (spatial ~544 places, the entity network's ~10k edges, the
       choropleth polygons), feature-state hover resets, filters are re-applied
@@ -1758,7 +1853,7 @@ non-text content, and the thing a historian citing a figure actually needs
       Prerequisite: today's ids are unprefixed (`locations`, `net-nodes`,
       `places-authority`, `compare-a`, `spatial-places`, …). Do after M2 and
       M17, with a live test.
-- [ ] **M14 (Low/Med, owner) — Basemap privacy and three copies of the style
+- [x] **M14 (Low/Med, owner) — Basemap privacy and three copies of the style
       URLs.** Every map view fetches `basemaps.cartocdn.com` and
       `tiles.basemaps.cartocdn.com` — one request per tile per pan, so Carto
       sees far more of the visitor than jsDelivr does; ROADMAP 5.4 discusses
@@ -1772,7 +1867,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `maplibregl.addProtocol` + a Protomaps Africa extract (fully
       first-party, ~1–2 GB, self-hosted glyphs/sprites). Collapse the three
       literals now regardless.
-- [ ] **M15 (Low, S)** — spatial admin mode re-fits the camera on every
+- [x] **M15 (Low, S)** — spatial admin mode re-fits the camera on every
       `style.load` (`spatial-exploration/map.js:617-619 → 568`, 600 ms): a
       theme toggle moves the map.
 - [x] **M16 (Low, S)** — `attachFeatureStateHover`'s `clearHover`
@@ -2082,7 +2177,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### P — Python generators
 
-- [ ] **P1 (High, M) — ~92 subset loads per CI run, 26 of `articles`, no
+- [x] **P1 (High, M) — ~92 subset loads per CI run, 26 of `articles`, no
       process-level memo.** ✓ 43 `load_dataset_safe(` call sites (loops at
       `generate_collection_overview.py:1245`, `generate_index_overview.py:505`,
       `generate_spatial_exploration.py:195`, `generate_world_map.py:83`,
@@ -2121,7 +2216,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       copies do not. ~250 lines; verify with the `--limit 5` output diff.
       *v1.63.0: the four `coerce_embedding` copies are gone; the
       L2-normalise and `argpartition` copies remain.*
-- [ ] **P4 (High, L) — `generate_laicite.py` → a `scripts/laicite/` package
+- [x] **P4 (High, L) — `generate_laicite.py` → a `scripts/laicite/` package
       mirroring `asset/js/charts/laicite/`.** `LaiciteGenerator` (`:572-2993`,
       41 methods, 2,420 lines); `write_all` (`:2933-2989`) is already the
       module map (trends 1091-1150 + seasonality 1700-1743; collocates
@@ -2461,7 +2556,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### D — Docs
 
-- [ ] **D1 (Med, M) — README is 234 KB, 64 % changelog, and its reference
+- [x] **D1 (Med, M) — README is 234 KB, 64 % changelog, and its reference
       sections are stale.** ✓ `:9` "nineteen page blocks" (the registry has
       21 — corrected in this commit, as was PRODUCT.md's "twenty"); the
       Architecture tree (`:887-894`) lists 6 `BlockLayout` classes (there are
@@ -2500,8 +2595,13 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    clusters, each verified with output diffs or the fixture suite —
    *shipped as v1.63.0 minus S15, P4 (wave 6's) and H5's generic template;
    the partial items are annotated in the v1.63.0 section*.
-6. **Structural (P1 + P4, M13, M14, D1):** the generator runner and the
-   laïcité package, `transformStyle`, the basemap decision, the README split.
+6. **Structural (P1 + P4, M13, M14, D1) — shipped as v1.64.0:** the
+   generator runner and the laïcité package, `transformStyle` (sources
+   only), the basemap literals (the hosting decision stays the owner's),
+   the README split. M15 came along, being in the handler M13 rewrites.
+   What remains of the tier after this wave: S15 and H5's generic template
+   (both wave 5's carry-overs), M19's popup monkey-patch, M20/M21, P8, D2
+   and D3.
 
 ### Verified clean this pass (don't re-audit)
 
