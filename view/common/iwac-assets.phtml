@@ -297,49 +297,36 @@ if ($bundle !== null) {
 // for exactly as long as the import takes.
 
 // -- On-view loader -----------------------------------------------------
-// Emitted per block; multiple blocks on one page merge their script lists
-// into the same window.IWACVisLazy queue at runtime and only the first arms
-// the IntersectionObserver. json_encode keeps slashes escaped so the inline
-// payload can never break out of the <script> element.
-$payload = json_encode([
-    'scripts'  => $scripts,
-    'css'      => $lazyCss,
-    'mjs'      => $lazyMjs,
-]);
-$headScript->appendScript(
-    '(function(){'
-    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:[],mjs:null,mjsP:null,armed:false,done:false});'
-    . 'var p=' . $payload . ';'
-    . 'function push(u){if(S.q.indexOf(u)<0)S.q.push(u);}'
-    . 'p.scripts.forEach(push);'
-    . '(p.css||[]).forEach(function(u){if(S.css.indexOf(u)<0)S.css.push(u);});'
-    // One map-capable block on the page is enough to arm the import; blocks
-    // that merge in later share the single resolved namespace.
-    . 'if(p.mjs&&!S.mjs)S.mjs=p.mjs;'
-    . 'if(S.armed)return;S.armed=true;'
-    . 'function inject(list){list.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});}'
-    . 'function load(){if(S.done)return;S.done=true;'
-    . 'S.css.forEach(function(href){var l=document.createElement("link");l.rel="stylesheet";l.href=href;document.head.appendChild(l);});'
-    // The whole chain starts NOW — nothing is held back. `async=false` keeps
-    // it one global in-order list.
-    . 'inject(S.q);'
-    . 'if(!S.mjs)return;'
-    // The MapLibre module graph resolves alongside the chain, and the promise
-    // is PUBLISHED: P.whenMaplibre() in shared/panels-map.js awaits it, so the
-    // only thing that waits for MapLibre is a panel that draws a map. A
-    // rejection is re-thrown so those panels can show a real error state, and
-    // absorbed once here so a CDN outage on a page whose map is never scrolled
-    // into view doesn't log an unhandled rejection.
-    . 'S.mjsP=import(S.mjs).then(function(m){window.maplibregl=m;return m;},function(e){'
-    . 'if(window.console&&console.error)console.error("IWAC: MapLibre failed to load",e);'
-    . 'throw e;});'
-    . 'S.mjsP.catch(function(){});'
-    . '}'
-    . 'function arm(){var b=document.querySelectorAll(".iwac-vis-block");'
-    . 'if(!b.length||!("IntersectionObserver" in window)){load();return;}'
-    . 'var io=new IntersectionObserver(function(en){for(var i=0;i<en.length;i++){if(en[i].isIntersecting){io.disconnect();load();return;}}},{rootMargin:"400px 0px"});'
-    . 'for(var i=0;i<b.length;i++)io.observe(b[i]);'
-    . '}'
-    . 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",arm);}else{arm();}'
-    . '})();'
+// Emitted per block; several blocks on one page merge their lists into the
+// same window.IWACVisLazy queue at runtime and only the first arms the
+// IntersectionObserver.
+//
+// The loader itself is `asset/js/iwac-lazy.js` — a real file, loaded like any
+// other script. It used to be ~50 lines of string-concatenated JavaScript
+// emitted right here, which made it the only INLINE script on a block page: a
+// host with a `script-src 'self'` Content-Security-Policy broke every block
+// on the site, and Omeka's headScript has no nonce plumbing to fix that with.
+// It was also the one piece of JavaScript deciding when everything else
+// loads, with no lint and no tests (H6).
+//
+// The payload travels as `<script type="application/json">`, which is INERT
+// under any CSP because it is data, not code. The HEX flags keep `<`, `&`,
+// `'` and `"` escaped so it can never break out of the element.
+$lazyManifest = json_encode([
+    'scripts' => $scripts,
+    'css'     => $lazyCss,
+    'mjs'     => $lazyMjs,
+], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+// The manifest is emitted into the body by `iwac-block-shell`, one per block;
+// this script is enqueued once per page and reads all of them.
+$headScript->appendFile(
+    $this->assetUrl('js/dist/shared-lazy.min.js', $module),
+    'text/javascript',
+    ['defer' => true]
 );
+
+// The caller (iwac-block-shell) echoes this into the body next to the block.
+// Returned rather than echoed here because this partial runs inside a
+// `<head>`-building pass and its own output is discarded.
+return $lazyManifest;

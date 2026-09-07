@@ -37,42 +37,17 @@ const PARTIAL = readFileSync(
     'utf8'
 );
 
-/** The raw argument to `$headScript->appendScript(...)`, comments stripped. */
-function loaderTemplate() {
-    const call = '$headScript->appendScript(';
-    const start = PARTIAL.indexOf(call);
-    assert.notEqual(start, -1, 'the on-view loader call moved or was renamed');
-    const rest = PARTIAL.slice(start + call.length);
-    const end = rest.indexOf('\n);');
-    assert.notEqual(end, -1, 'could not find the end of appendScript(...)');
-    return rest
-        .slice(0, end)
-        .split('\n')
-        .filter((line) => !line.trim().startsWith('//'))
-        .join('\n');
-}
-
 /**
- * Reassemble the PHP string concatenation into the JS the browser receives,
- * substituting a caller-supplied payload for `$payload`.
+ * The loader, read as a file.
+ *
+ * These tests used to reassemble it out of PHP string concatenation — they
+ * literally parsed `$headScript->appendScript('…' . '…')` back into
+ * JavaScript, because the loader WAS that concatenation, which is also why a
+ * host CSP broke every block page. Since H6 it is `asset/js/iwac-lazy.js`, so
+ * this reads the file, and the payload arrives the way the browser delivers
+ * it: as a JSON manifest in the DOM.
  */
-function buildLoader(payload) {
-    const source = loaderTemplate();
-    const token = /'((?:[^'\\]|\\.)*)'|\$payload/g;
-    let out = '';
-    let sawPayload = false;
-    let match;
-    while ((match = token.exec(source)) !== null) {
-        if (match[0] === '$payload') {
-            out += JSON.stringify(payload);
-            sawPayload = true;
-            continue;
-        }
-        out += match[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\');
-    }
-    assert.ok(sawPayload, 'loader no longer interpolates $payload');
-    return out;
-}
+const LOADER = readFileSync(join(ROOT, 'asset', 'js', 'iwac-lazy.js'), 'utf8');
 
 /**
  * Execute the loader against fake DOM globals and report what it injected.
@@ -83,7 +58,7 @@ function buildLoader(payload) {
  * for something else fails here rather than passing against a stale stub.
  */
 function runLoader(payload, options = {}) {
-    const source = buildLoader(payload);
+    const source = LOADER;
     assert.match(
         source,
         /\bimport\(S\.mjs\)/,
@@ -92,6 +67,7 @@ function runLoader(payload, options = {}) {
 
     const injected = [];
     const readyListeners = [];
+    const manifests = [];
     let importCalls = 0;
 
     const sandbox = {
@@ -118,10 +94,14 @@ function runLoader(payload, options = {}) {
         createElement(tag) {
             return { tag, src: '', href: '', rel: '', async: true };
         },
-        // Empty -> the loader takes its documented "no block marker" fallback
-        // and calls load() immediately, which is what these tests exercise.
-        querySelectorAll() {
-            return [];
+        // The payload reaches the loader the way the browser delivers it:
+        // as `<script type="application/json" class="iwac-vis-lazy-manifest">`
+        // beside each block. `.iwac-vis-block` stays empty, so the loader
+        // takes its documented "no block marker" fallback and calls load()
+        // immediately, which is what these tests exercise.
+        querySelectorAll(selector) {
+            if (selector !== '.iwac-vis-lazy-manifest') return [];
+            return manifests.map((p) => ({ textContent: JSON.stringify(p), dataset: {} }));
         },
         addEventListener(name, fn) {
             if (name === 'DOMContentLoaded') readyListeners.push(fn);
@@ -130,11 +110,13 @@ function runLoader(payload, options = {}) {
 
     vm.createContext(sandbox);
     sandbox.window = sandbox;
-    const exec = (src) =>
-        vm.runInContext(src.replace('import(S.mjs)', '__dynamicImport(S.mjs)'), sandbox);
-    exec(source);
-    // Additional blocks on the same page merge into the same window.IWACVisLazy.
-    for (const extra of options.alsoBlocks || []) exec(buildLoader(extra));
+    // Additional blocks on the same page add their own manifest; the loader
+    // reads all of them, which is how their lists merge.
+    manifests.push(payload, ...(options.alsoBlocks || []));
+    vm.runInContext(
+        source.replace('import(S.mjs)', '__dynamicImport(S.mjs)'),
+        sandbox
+    );
 
     return {
         sandbox,
@@ -304,4 +286,39 @@ test('the orchestrator always rides the ordinary chain', () => {
         /\$scripts\[\] = \$this->assetUrl\(\$dist \. 'blocks\/' \. \$bundle \. '\.min\.js'/,
         'the block bundle (orchestrator last inside it) must be appended to the ungated chain'
     );
+});
+
+test('the block page carries no inline script, and its payload is inert data', () => {
+    // The point of H6. `headScript->appendScript(...)` emits an INLINE
+    // `<script>`, which a host with `script-src 'self'` refuses — and Omeka's
+    // headScript has no nonce plumbing, so there is no way to allow it. Both
+    // partials are checked because the manifest moved from one to the other.
+    for (const file of ['iwac-assets.phtml', 'iwac-block-shell.phtml']) {
+        const src = readFileSync(join(ROOT, 'view', 'common', file), 'utf8');
+        assert.doesNotMatch(
+            src, /appendScript\s*\(/,
+            `${file}: appendScript emits an inline <script>, which a host CSP refuses`
+        );
+    }
+
+    const shell = readFileSync(join(ROOT, 'view', 'common', 'iwac-block-shell.phtml'), 'utf8');
+    assert.match(
+        shell, /type="application\/json" class="iwac-vis-lazy-manifest"/,
+        'the lazy manifest must ship as inert JSON, not as executable script'
+    );
+
+    const assets = readFileSync(join(ROOT, 'view', 'common', 'iwac-assets.phtml'), 'utf8');
+    // json_encode with the HEX flags is what makes `</script>` in a filename
+    // — or any quote — unable to break out of the JSON element.
+    assert.match(assets, /JSON_HEX_TAG/);
+    assert.match(assets, /JSON_HEX_AMP/);
+    assert.match(assets, /JSON_HEX_APOS/);
+    assert.match(assets, /JSON_HEX_QUOT/);
+});
+
+test('the loader is a real bundle, loaded like every other script', () => {
+    const manifest = JSON.parse(readFileSync(join(ROOT, 'asset', 'js', 'bundles.json'), 'utf8'));
+    assert.deepEqual(manifest.shared.lazy, ['iwac-lazy.js']);
+    const assets = readFileSync(join(ROOT, 'view', 'common', 'iwac-assets.phtml'), 'utf8');
+    assert.match(assets, /js\/dist\/shared-lazy\.min\.js/);
 });

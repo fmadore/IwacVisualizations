@@ -57,6 +57,14 @@ module.exports = [
         },
     },
     {
+        // The on-view loader is the one browser source that uses a dynamic
+        // `import()`, because MapLibre 6 is ESM-only and cannot ride the
+        // classic script chain. Dynamic import is ES2020; everything else
+        // here is ES2017 script code and stays that way.
+        files: ['asset/js/iwac-lazy.js'],
+        languageOptions: { ecmaVersion: 2020, sourceType: 'script' },
+    },
+    {
         files: ['scripts/**/*.js', 'tests/**/*.js', 'playwright.config.js', 'eslint.config.js'],
         languageOptions: {
             ecmaVersion: 2022,

@@ -29,6 +29,8 @@ IwacVisualizations/
 │   │   ├── blocks/                    # 40 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css              # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
+│   │   ├── iwac-embed.css
+│   │   ├── iwac-embed.min.css
 │   │   ├── iwac-maplibre.css          # MapLibre chrome + shared popup body styles
 │   │   └── iwac-maplibre.min.css
 │   ├── data/
@@ -88,10 +90,12 @@ IwacVisualizations/
 │       │   ├── spatial-exploration.js
 │       │   ├── term-trends.js
 │       │   └── topic-explorer.js
-│       ├── dist/                      # 68 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                      # 72 files — built by scripts/build-js.js from bundles.json; committed
 │       ├── bundles.json               # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js          # IWACVis namespace, chart tracking, theme observer
+│       ├── iwac-embed-height.js
 │       ├── iwac-i18n.js               # Locale detection + en/fr dictionary + t()
+│       ├── iwac-lazy.js
 │       └── iwac-theme.js              # ECharts theme from live CSS vars; owns BASEMAP
 ├── config/
 │   ├── module.config.php              # Block + resource-page-block invokables

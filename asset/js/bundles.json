@@ -1,6 +1,9 @@
 {
-  "$comment": "The one place the JavaScript load order lives. `shared.<name>` bundles are loaded by view/common/iwac-assets.phtml behind a $needs flag (core: always; charts: chartOptions; ui: facetButtons|table|pagination|timeline|concordance; layout: layout; map: maplibre; d3: d3). `panels.<name>` are panel sets two blocks share. `blocks.<name>` is one block: either a list of sources with the orchestrator LAST, or {uses: [panel sets], files: [...]}. scripts/build-js.js writes dist/shared-<name>.min.js, dist/panels/<name>.min.js and dist/blocks/<name>.min.js and fails when a source is missing, listed twice, or in no bundle.",
+  "$comment": "The one place the JavaScript load order lives. `shared.<name>` bundles are loaded by view/common/iwac-assets.phtml behind a $needs flag (lazy: always, and it is the ON-VIEW LOADER itself, so it is the one bundle not fetched by the loader; core: always; charts: chartOptions; ui: facetButtons|table|pagination|timeline|concordance; layout: layout; map: maplibre; d3: d3). `panels.<name>` are panel sets two blocks share. `blocks.<name>` is one block: either a list of sources with the orchestrator LAST, or {uses: [panel sets], files: [...]}. scripts/build-js.js writes dist/shared-<name>.min.js, dist/panels/<name>.min.js and dist/blocks/<name>.min.js and fails when a source is missing, listed twice, or in no bundle.",
   "shared": {
+    "lazy": [
+      "iwac-lazy.js"
+    ],
     "core": [
       "iwac-i18n.js",
       "iwac-theme.js",
@@ -56,6 +59,9 @@
       "charts/shared/graph-force.js",
       "charts/shared/graph-panel.js",
       "charts/shared/entity-graph.js"
+    ],
+    "embed-height": [
+      "iwac-embed-height.js"
     ]
   },
   "panels": {
