@@ -180,7 +180,18 @@
                 var srcId = 'compare-' + sideKey;
                 var heatId = srcId + '-heat';
                 var circId = srcId + '-circles';
-                m.addSource(srcId, { type: 'geojson', data: sourceData });
+                // Guarded, like every other consumer: `P.carryOwnSources`
+                // keeps the module's GeoJSON sources across a theme swap, so
+                // an unguarded addSource would throw on the second style —
+                // the M17 failure, in the one file that had never needed a
+                // guard because setStyle used to wipe everything.
+                if (!m.getSource(srcId)) {
+                    m.addSource(srcId, { type: 'geojson', data: sourceData });
+                } else {
+                    m.getSource(srcId).setData(sourceData);
+                }
+                if (m.getLayer(heatId)) m.removeLayer(heatId);
+                if (m.getLayer(circId)) m.removeLayer(circId);
                 m.addLayer({
                     id: heatId,
                     type: 'heatmap',

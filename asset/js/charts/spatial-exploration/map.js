@@ -467,9 +467,19 @@
             adminLegend.style.display = '';
         }
 
+        // What the camera was last framed on, as country|level. The admin
+        // layer is re-rendered for reasons that are not a change of view —
+        // a theme swap runs onStyleReady, which called this — and a 600 ms
+        // fitBounds then threw away wherever the reader had panned to.
+        // Re-frame when the thing being framed changes, and not otherwise.
+        var lastAdminFit = null;
+
         function fitToAdminBounds() {
             var bounds = currentAdminBounds();
             if (!bounds || !mapInstance) return;
+            var key = currentAdminCountry() + '|' + adminLevel;
+            if (key === lastAdminFit) return;
+            lastAdminFit = key;
             try {
                 mapInstance.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
                     { padding: 40, maxZoom: 8, duration: 600 });
@@ -557,6 +567,9 @@
             setLayerVisibility(ADMIN_FILL, false);
             setLayerVisibility(ADMIN_STROKE, false);
             adminLegend.style.display = 'none';
+            // Leaving admin mode frees the camera; coming back should frame
+            // the boundaries again rather than inherit the bubble view.
+            lastAdminFit = null;
         }
 
         function onStyleReady(m) {

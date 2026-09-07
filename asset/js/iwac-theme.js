@@ -654,11 +654,35 @@
         return palette[((i % palette.length) + palette.length) % palette.length];
     };
 
-    /** CartoCDN basemap URL matching the current theme. */
-    ns.getBasemapStyle = function () {
-        return ns.getCurrentTheme() === 'dark'
-            ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-            : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+    /**
+     * The basemap endpoints — the ONE place these URLs live.
+     *
+     * They used to be three copies: here, in `P.setMapTheme` (which
+     * re-implemented `getBasemapStyle` rather than calling it) and in
+     * `P.createIwacMap`'s fallback for a `getBasemapStyle` that cannot be
+     * absent, since `iwac-theme.js` is in `shared.core` and `maplibre.js` is
+     * in `shared.map`.
+     *
+     * `glyphs` is the font endpoint symbol layers need. Note that the
+     * ABSTRACT graph style pulls it too: the entity network is not a map and
+     * still asks Carto for Noto, which is the cheapest thing to fix if this
+     * ever moves off a third party. `origins` is what the partial preconnects
+     * to; `check-maplibre-gates.js` fails the build on a cartocdn literal
+     * anywhere else.
+     */
+    ns.BASEMAP = {
+        light:  'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+        dark:   'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        glyphs: 'https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf'
+    };
+
+    /**
+     * Basemap URL for `mode` ('light' | 'dark'), or for the current theme
+     * when `mode` is omitted.
+     */
+    ns.getBasemapStyle = function (mode) {
+        var theme = mode || ns.getCurrentTheme();
+        return theme === 'dark' ? ns.BASEMAP.dark : ns.BASEMAP.light;
     };
 
     /* ----------------------------------------------------------------- */

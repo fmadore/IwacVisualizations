@@ -453,11 +453,62 @@
             return new Promise(function (resolve) { map.once('style.load', resolve); });
         }
 
+        /**
+         * The two polygon layers, added only if they are missing.
+         *
+         * Separate from the source on purpose. `P.carryOwnSources` keeps the
+         * module's GeoJSON sources across a theme swap (so this 200 KB of
+         * polygons is not re-parsed and the hover feature-state survives)
+         * while letting the LAYERS be dropped and re-added — which is what
+         * re-resolves `buildFillExpression` and `strokeColor()` against the
+         * new theme's tokens. When these two were behind the source's guard,
+         * a carried source meant a choropleth that silently never came back.
+         */
+        function addChoroplethLayers() {
+            if (!map.getSource(SOURCE)) return;
+            if (!map.getLayer(FILL)) {
+                map.addLayer({
+                    id: FILL,
+                    type: 'fill',
+                    source: SOURCE,
+                    layout: { visibility: 'none' },
+                    paint: {
+                        'fill-color': buildFillExpression(currentPaint, countryCounts),
+                        'fill-opacity': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            0.85,
+                            0.65
+                        ]
+                    }
+                });
+            }
+            if (!map.getLayer(STROKE)) {
+                map.addLayer({
+                    id: STROKE,
+                    type: 'line',
+                    source: SOURCE,
+                    layout: { visibility: 'none' },
+                    paint: {
+                        'line-color': strokeColor(),
+                        'line-width': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            2.5,
+                            1
+                        ]
+                    }
+                });
+            }
+        }
+
         function ensureLayers() {
-            // If the source already exists on the current style, just
-            // re-set the data (handles updateCounts() and post-style.load
-            // re-init paths).
+            // If the source already exists on the current style, re-assert
+            // the layers (a theme swap carried the source and dropped them)
+            // and re-set the data — which also handles updateCounts() and
+            // the post-style.load re-init paths.
             if (map.getSource(SOURCE)) {
+                addChoroplethLayers();
                 if (pendingFetch) return pendingFetch;
                 if (!_geojsonCache) return Promise.resolve();
                 map.getSource(SOURCE).setData(annotate(_geojsonCache));
@@ -474,36 +525,7 @@
                     data: annotate(geo),
                     generateId: true
                 });
-                map.addLayer({
-                    id: FILL,
-                    type: 'fill',
-                    source: SOURCE,
-                    layout: { visibility: 'none' },
-                    paint: {
-                        'fill-color': buildFillExpression(currentPaint, countryCounts),
-                        'fill-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            0.85,
-                            0.65
-                        ]
-                    }
-                });
-                map.addLayer({
-                    id: STROKE,
-                    type: 'line',
-                    source: SOURCE,
-                    layout: { visibility: 'none' },
-                    paint: {
-                        'line-color': strokeColor(),
-                        'line-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            2.5,
-                            1
-                        ]
-                    }
-                });
+                addChoroplethLayers();
                 attachInteractions();
                 pendingFetch = null;
             }).catch(function (err) {
