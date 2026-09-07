@@ -405,7 +405,30 @@
             }
         }
 
+        /**
+         * The view currently in `viewHost`, and what built it — `null` while
+         * a loading or empty state is showing. Read by `draw()` for the
+         * in-place update path below (Tier 8 / S17).
+         */
+        var active = null;
+
         function draw() {
+            // A change WITHIN the current view, to a view that can absorb
+            // it: no teardown (Tier 8 / S17). Clearing `viewHost` for an
+            // actor-type or a reference-type change disposed live charts and
+            // built new ones, which cost the transition, churned the theme
+            // observer's registrations, collapsed the host to zero height
+            // and so jumped the scroll, and re-announced the whole region to
+            // a screen reader. A builder that exposes `update` says it can
+            // repaint itself from the new state; one that does not falls
+            // through to the rebuild below, unchanged.
+            if (active && active.key === state.view
+                && typeof active.built.update === 'function') {
+                active.built.update(state);
+                return;
+            }
+            active = null;
+
             // Release the outgoing view's charts and map before their nodes
             // are thrown away — every lazy view builds fresh ones, and until
             // v1.59.0 each visit to the sentiment view left four ECharts
@@ -560,11 +583,12 @@
         function mountLazy(bundleName, build) {
             if (!ensure([bundleName])) {
                 viewHost.appendChild(P.buildLoadingState());
-                return;
-            }
+                return;                       // `active` stays null: the next
+            }                                 // draw must build for real.
             var built = build();
             viewHost.appendChild(built.root);
             built.mount();
+            active = { key: state.view, built: built };
         }
 
         /** Views whose built root is kept across switches, by key. */
@@ -586,11 +610,13 @@
                 parked[key] = build();
                 viewHost.appendChild(parked[key].root);
                 parked[key].mount();
+                active = { key: state.view, built: parked[key] };
                 return;
             }
             viewHost.appendChild(parked[key].root);
-            if (parked[key].update) parked[key].update();
+            if (parked[key].update) parked[key].update(state);
             if (parked[key].resize) parked[key].resize();
+            active = { key: state.view, built: parked[key] };
         }
 
         // What a change means. Within one flush the row is remounted (view)

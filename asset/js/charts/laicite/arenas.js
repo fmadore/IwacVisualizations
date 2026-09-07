@@ -38,7 +38,14 @@
 
     /**
      * @param {Object} cfg {bundle, metadata, state, frameColors}
-     * @returns {{root: HTMLElement, mount: function():void}}
+     * @returns {{root: HTMLElement, mount: function():void,
+     *            update: function(Object):void}}
+     *
+     * `update(state)` repaints the small multiples in place when the country
+     * filter changes, rather than letting the orchestrator throw the whole
+     * view away and build a new chart (Tier 8 / S17). Only the series data
+     * changes here - the grid count, the axes and the panel chrome are the
+     * same - so the ten panels animate between countries.
      */
     L.buildArenas = function (cfg) {
         var bundle = cfg.bundle;
@@ -79,22 +86,38 @@
                 // runs once at mount and again whenever the chart crosses the
                 // compact threshold — so the grid re-flows on a rotation or a
                 // fullscreen toggle instead of keeping whatever it measured
-                // the first time. Height scales with the row count: a fixed
-                // height would squeeze ten stacked panels into the space one
-                // needs, and the option builder lays its grids out against
-                // the same number.
+                // the first time. See layoutOption below.
                 ns.registerChart(chart, function (el, instance) {
-                    var cols = columnsFor(el);
-                    var rows = Math.ceil((bundle.frames || []).length / cols);
-                    var height = Math.max(340, 170 * rows + 20);
-                    el.style.height = height + 'px';
-                    instance.resize();
-                    instance.setOption(
-                        smallMultiples(bundle, cfg, cols, rows, height),
-                        { notMerge: true });
+                    instance.setOption(layoutOption(el), { notMerge: true });
                 });
+            },
+            update: function (state) {
+                var live = ns.getLiveChart && ns.getLiveChart(chart);
+                if (!live) return;
+                if (state) cfg.state = state;
+                // `notMerge: false`: the grid, the axes and the panel count
+                // are unchanged, so merging is what lets the bars move
+                // rather than snap.
+                live.setOption(layoutOption(chart),
+                    { notMerge: false, lazyUpdate: true });
             }
         };
+
+        /**
+         * Size the host for the current column count and return the option
+         * laid out against it. Height scales with the row count: a fixed
+         * height would squeeze ten stacked panels into the space one needs,
+         * and the option builder lays its grids out against the same number.
+         */
+        function layoutOption(el) {
+            var cols = columnsFor(el);
+            var rows = Math.ceil((bundle.frames || []).length / cols);
+            var height = Math.max(340, 170 * rows + 20);
+            el.style.height = height + 'px';
+            var live = ns.getLiveChart && ns.getLiveChart(el);
+            if (live) live.resize();
+            return smallMultiples(bundle, cfg, cols, rows, height);
+        }
     };
 
     /**

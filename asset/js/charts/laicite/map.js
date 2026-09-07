@@ -90,7 +90,12 @@
                 // MapLibre measured a zero-height container.
                 window.setTimeout(function () { controller.resize(); }, 0);
             },
-            update: function () {
+            update: function (state) {
+                // Prefer the state handed in. The store mutates one object
+                // in place so `cfg.state` happens to stay current, but the
+                // in-place repaint path (S17) passes it explicitly and this
+                // should not depend on that identity holding.
+                if (state) cfg.state = state;
                 if (controller) controller.update();
                 // The ranked list is the keyboard route to the same data
                 // (M18), and it is built from the filter state. The view is

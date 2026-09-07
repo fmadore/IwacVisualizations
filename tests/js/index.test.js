@@ -26,3 +26,4 @@ require('./chart-rows.test.js');
 require('./landscape.test.js');
 require('./theme-animation.test.js');
 require('./hijri.test.js');
+require('./laicite-update.test.js');
