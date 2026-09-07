@@ -171,10 +171,20 @@
 
             // Plural-ish
             'items_count': '{count} items',
+            'items_count_one': '{count} item',
+            'items_count_other': '{count} items',
             'articles_count': '{count} articles',
+            'articles_count_one': '{count} article',
+            'articles_count_other': '{count} articles',
             'publications_count': '{count} publications',
+            'publications_count_one': '{count} publication',
+            'publications_count_other': '{count} publications',
             'references_count': '{count} references',
+            'references_count_one': '{count} reference',
+            'references_count_other': '{count} references',
             'mentions_count': '{count} mentions',
+            'mentions_count_one': '{count} mention',
+            'mentions_count_other': '{count} mentions',
 
             // Collection overview v2 — summary cards
             'References count': 'References',
@@ -269,8 +279,9 @@
             // ('Show all labels', 'Freeze the layout', …) fall through the
             // identity default and are translated in the fr table below.
             'shared_items_count': '{count} shared items',
-            'connections_count':  '{count} connections',
-            'one_connection':     '1 connection',
+            'connections_count':        '{formatted} connections',
+            'connections_count_one':    '{formatted} connection',
+            'connections_count_other':  '{formatted} connections',
             'and_n_more':         'and {count} more',
 
             // Associated entities — three views, shared controls.
@@ -471,6 +482,8 @@
             // Spatial Exploration block
             'spatial_pick_hint':         'Pick an entity to map the places mentioned alongside it. Without a selection, the map shows every place in the collection.',
             'places_count':              '{count} places',
+            'places_count_one':          '{count} place',
+            'places_count_other':        '{count} places',
             'spatial_map_description':   'The larger the bubble, the more often the place is mentioned. Hover over a place for a preview, or click it for the full list of items.',
             'admin_units_count':         '{count} units',
             'more_items_click':          '{count} more \u2014 click for the full list',
@@ -673,10 +686,20 @@
             'Shared references':     'R\u00e9f\u00e9rences communes',
 
             'items_count': '{count} \u00e9l\u00e9ments',
+            'items_count_one': '{count} élément',
+            'items_count_other': '{count} éléments',
             'articles_count': '{count} articles',
+            'articles_count_one': '{count} article',
+            'articles_count_other': '{count} articles',
             'publications_count': '{count} publications',
+            'publications_count_one': '{count} publication',
+            'publications_count_other': '{count} publications',
             'references_count': '{count} r\u00e9f\u00e9rences',
+            'references_count_one': '{count} référence',
+            'references_count_other': '{count} références',
             'mentions_count': '{count} mentions',
+            'mentions_count_one': '{count} mention',
+            'mentions_count_other': '{count} mentions',
 
             // Collection overview v2 — summary cards
             'Index': 'Index',
@@ -837,8 +860,9 @@
             'Open the record':              'Ouvrir la fiche',
             'Close':                        'Fermer',
             'shared_items_count':           '{count} documents en commun',
-            'connections_count':            '{count} liens',
-            'one_connection':               '1 lien',
+            'connections_count':            '{formatted} liens',
+            'connections_count_one':        '{formatted} lien',
+            'connections_count_other':      '{formatted} liens',
             'and_n_more':                   'et {count} autres',
             'View':                         'Vue',
             'Network view':                 'R\u00e9seau',
@@ -1171,6 +1195,8 @@
             'No matches':                'Aucun r\u00e9sultat',
             'spatial_pick_hint':         'Choisissez une entit\u00e9 pour cartographier les lieux mentionn\u00e9s \u00e0 ses c\u00f4t\u00e9s. Sans s\u00e9lection, la carte montre tous les lieux de la collection.',
             'places_count':              '{count} lieux',
+            'places_count_one':          '{count} lieu',
+            'places_count_other':        '{count} lieux',
             'View item page':            'Voir la fiche de l\u2019\u00e9l\u00e9ment',
             'Top places':                'Principaux lieux',
             'Map mode':                  'Mode de carte',
@@ -1219,16 +1245,55 @@
     /* ----------------------------------------------------------------- */
 
     /**
+     * The plural category for `count` in the active locale, or '' when the
+     * platform cannot tell us.
+     *
+     * English and French disagree about zero — "0 articles" but
+     * "0 article" — which is why this is a lookup rather than an
+     * `n === 1` test written once and wrong on one of the two sites.
+     */
+    function pluralCategory(count) {
+        if (typeof count !== 'number' || !isFinite(count)) return '';
+        if (typeof Intl === 'undefined' || !Intl.PluralRules) return '';
+        try {
+            return new Intl.PluralRules(ns.locale === 'fr' ? 'fr-FR' : 'en-US').select(count);
+        } catch (e) {
+            return '';
+        }
+    }
+
+    /**
      * Translate a key. Falls back to the key itself (which is the English
      * source string) when no translation is registered.
      *
+     * **Plurals.** When `params.count` is a number, `key + '_' + category`
+     * is tried first — `articles_count_one`, `articles_count_other` — and
+     * the bare key is the fallback, so a string that does not vary needs no
+     * variants and nothing has to be migrated. Until this existed, a
+     * dashboard reporting a single article said "1 articles", and French
+     * "0 article" could not be expressed at all.
+     *
      * @param {string} key
-     * @param {Object} [params] Values for {placeholder} interpolation
+     * @param {Object} [params] Values for {placeholder} interpolation; a
+     *   numeric `count` also selects a plural variant of the key
      * @returns {string}
      */
     ns.t = function (key, params) {
         var table = DICTIONARY[ns.locale] || DICTIONARY.en;
-        var str = table[key] || (DICTIONARY.en[key] !== undefined ? DICTIONARY.en[key] : key);
+        var lookup = function (k) {
+            if (table[k] !== undefined) return table[k];
+            if (DICTIONARY.en[k] !== undefined) return DICTIONARY.en[k];
+            return undefined;
+        };
+
+        var str;
+        if (params && typeof params.count === 'number') {
+            var category = pluralCategory(params.count);
+            if (category) str = lookup(key + '_' + category);
+        }
+        if (str === undefined) str = lookup(key);
+        if (str === undefined) str = key;
+
         if (params) {
             str = str.replace(/\{(\w+)\}/g, function (_, name) {
                 return params[name] != null ? params[name] : '{' + name + '}';

@@ -41,7 +41,10 @@
      * here rather than being duplicated with a plural-s bug in each.
      */
     P.connectionsLabel = function (n) {
-        return n === 1 ? t('one_connection') : t('connections_count', { count: fmt(n) });
+        // The `count` is the NUMBER, so t() can pick a plural variant; the
+        // formatted string goes in as its own placeholder, because a
+        // thousands separator is not something Intl.PluralRules can read.
+        return t('connections_count', { count: n, formatted: fmt(n) });
     };
 
     /* ------------------------------------------------------------------ */

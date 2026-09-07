@@ -264,7 +264,7 @@
         function buildViewToggle() {
             return P.buildSegmented({
                 name: 'scary-view',
-                label: P.t('scary.view_mode') + ':',
+                label: P.labelColon(P.t('scary.view_mode')),
                 options: S.viewOptions({ hasCooccurrence: ctx.hasCooccurrence })
                     .map(function (v) { return { key: v.key, label: P.t(v.labelKey) }; }),
                 active: state.view,

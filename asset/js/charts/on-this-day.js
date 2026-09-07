@@ -50,7 +50,8 @@
             'otd.type_a':     'Article',
             'otd.type_p':     'Periodical',
             'otd.ago':        '{count} years ago',
-            'otd.ago_one':    '1 year ago',
+            'otd.ago_one':    '{count} year ago',
+            'otd.ago_other':  '{count} years ago',
             'otd.calendar':   'Calendar',
             'otd.cal_g':      'Gregorian',
             'otd.cal_h':      'Hijri',
@@ -58,8 +59,9 @@
             'otd.view_register':  'Register',
             'otd.view_decades':   'Decades',
             'otd.view_clippings': 'Clippings',
-            'otd.one_more':   'One more item in the collection carries this date.',
             'otd.more':       '{count} more items in the collection carry this date.',
+            'otd.more_one':   '{count} more item in the collection carries this date.',
+            'otd.more_other': '{count} more items in the collection carry this date.',
             'otd.show_all':   'See all {count}',
             'otd.collapse':   'Close the list',
             'otd.err':        'Couldn’t load today’s items.',
@@ -73,7 +75,8 @@
             'otd.type_a':     'Article',
             'otd.type_p':     'Périodique',
             'otd.ago':        'il y a {count} ans',
-            'otd.ago_one':    'il y a 1 an',
+            'otd.ago_one':    'il y a {count} an',
+            'otd.ago_other':  'il y a {count} ans',
             'otd.calendar':   'Calendrier',
             'otd.cal_g':      'Grégorien',
             'otd.cal_h':      'Hijri',
@@ -81,8 +84,9 @@
             'otd.view_register':  'Registre',
             'otd.view_decades':   'Décennies',
             'otd.view_clippings': 'Coupures',
-            'otd.one_more':   'Un autre document de la collection porte cette date.',
             'otd.more':       '{count} autres documents de la collection portent cette date.',
+            'otd.more_one':   '{count} autre document de la collection porte cette date.',
+            'otd.more_other': '{count} autres documents de la collection portent cette date.',
             'otd.show_all':   'Tout voir ({count})',
             'otd.collapse':   'Fermer la liste',
             'otd.err':        'Impossible de charger les documents du jour.',
@@ -196,9 +200,7 @@
         var foot = P.el('div', 'iwac-vis-otd-foot');
 
         foot.appendChild(P.el('span', 'iwac-vis-otd-foot__count',
-            rest === 1 ? P.t('otd.one_more')
-                : rest > 0 ? P.t('otd.more', { count: rest })
-                : ''));
+            rest > 0 ? P.t('otd.more', { count: rest }) : ''));
 
         var panel = null;
         var btn = P.el('button', 'iwac-vis-otd-foot__toggle',

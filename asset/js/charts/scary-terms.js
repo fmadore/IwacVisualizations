@@ -408,7 +408,7 @@
                 events: eventsData,
                 showEvents: state.showEvents,
                 country: state.trendsCountry,
-                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 600 /* sm */
+                compact: P.isCompact(chartEl)
             });
         }
 
@@ -558,24 +558,12 @@
 
         function buildMatrixOption(slice) {
             if (!cooccurrence || !slice) {
-                // Themed "no data" note — the matrix view can be offered
-                // while a per-country slice is missing.
-                var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-                var mutedResolved = (ns.resolveCssVar && ns.resolveCssVar('--muted'))
-                    || tokens.muted || '#767880';
-                return {
-                    graphic: [{
-                        type: 'text',
-                        left: 'center',
-                        top: 'middle',
-                        style: {
-                            text: P.t('scary.matrix_empty'),
-                            fill: mutedResolved,
-                            font: '14px ' + (tokens.fontFamily ||
-                                '"Public Sans", system-ui, -apple-system, sans-serif')
-                        }
-                    }]
-                };
+                // The matrix view can be offered while a per-country slice is
+                // missing. This was a hand-built ECharts `graphic` text that
+                // re-resolved --muted and the font family itself, two lines
+                // away from two calls to the shared option that does the same
+                // thing through the registered theme.
+                return P.emptyChartOption('scary.matrix_empty');
             }
             var terms = (cooccurrence.terms || []).slice();
             var matrix = slice.matrix || [];

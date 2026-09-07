@@ -948,9 +948,13 @@
                     zoom: Math.max(map.getZoom(), 7), duration: P.mapMotion(700) });
                 var place = placeById[target.id];
                 if (place) {
-                    setTimeout(function () {
+                    // `moveend`, not a 720 ms guess at a 700 ms easeTo: the
+                    // two had to be kept in step by hand, and under
+                    // prefers-reduced-motion the move is instant while the
+                    // popup still waited three quarters of a second.
+                    map.once('moveend', function () {
                         openPinnedPopup(place, [target.lng, target.lat]);
-                    }, 720);
+                    });
                 }
             }
         });

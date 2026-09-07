@@ -369,7 +369,7 @@
                 events: events,
                 state: state,
                 frameColors: frameColors,
-                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 600
+                compact: P.isCompact(chartEl)
             });
             currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
             if (events) {

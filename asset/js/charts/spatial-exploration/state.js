@@ -93,6 +93,10 @@
          * their own fan-out directory; every other type shares
          * entity-dashboards/.
          */
+        // A bounded RESULT cache, kept: re-selecting an entity answers with no
+        // round trip at all. `P.fetchJSON`'s in-flight memo (S23) covers a
+        // different case — two callers racing for the same URL — and does not
+        // replace this one.
         state.fetchDashboard = function (type, id) {
             var dir = type === 'Personnes' ? 'person-dashboards' : 'entity-dashboards';
             var key = dir + '/' + id;

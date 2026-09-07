@@ -56,13 +56,6 @@
         }
 
         var chart = P.el('div', 'iwac-vis-chart iwac-vis-laicite-arenas-chart');
-        // Height scales with the row count: a fixed height would squeeze ten
-        // stacked panels into the space one needs. The option builder lays
-        // its grids out against this same number, so it is computed once.
-        var cols = columnsFor();
-        var rows = Math.ceil((bundle.frames || []).length / cols);
-        var height = Math.max(340, 170 * rows + 20);
-        chart.style.height = height + 'px';
         panel.appendChild(chart);
 
         // The bundle carries an English prose copy of every method note for
@@ -82,7 +75,20 @@
         return {
             root: root,
             mount: function () {
+                // The layout is decided inside the render callback, which
+                // runs once at mount and again whenever the chart crosses the
+                // compact threshold — so the grid re-flows on a rotation or a
+                // fullscreen toggle instead of keeping whatever it measured
+                // the first time. Height scales with the row count: a fixed
+                // height would squeeze ten stacked panels into the space one
+                // needs, and the option builder lays its grids out against
+                // the same number.
                 ns.registerChart(chart, function (el, instance) {
+                    var cols = columnsFor(el);
+                    var rows = Math.ceil((bundle.frames || []).length / cols);
+                    var height = Math.max(340, 170 * rows + 20);
+                    el.style.height = height + 'px';
+                    instance.resize();
                     instance.setOption(
                         smallMultiples(bundle, cfg, cols, rows, height),
                         { notMerge: true });
@@ -91,9 +97,17 @@
         };
     };
 
-    /** Three columns on a normal page, two when the block is narrow. */
-    function columnsFor() {
-        var w = (window.innerWidth || 1024);
+    /**
+     * Three columns on a normal page, two when the block is narrow.
+     *
+     * The BLOCK's width, not the window's: a 400 px embed on a desktop
+     * screen got three columns because `window.innerWidth` said the screen
+     * was wide.
+     */
+    function columnsFor(el) {
+        var w = (el && (el.clientWidth
+            || (el.getBoundingClientRect && el.getBoundingClientRect().width))) || 0;
+        if (!w) w = window.innerWidth || 1024;
         if (w < 640) return 1;
         if (w < 1024) return 2;
         return 3;

@@ -49,24 +49,20 @@
 
     // Single shared cache per page — the GeoJSON is identical across
     // every map so we fetch once and reuse the parsed object.
+    // A RESULT cache, kept: several maps on one page share these polygons and
+    // the win is not re-parsing 200 KB per map. The in-flight half this used
+    // to carry alongside it is gone — `P.fetchJSON` de-duplicates concurrent
+    // requests for the same URL now (S23), which is the only thing that half
+    // was doing.
     var _geojsonCache = null;
-    var _geojsonInflight = null;
     function loadGeojson(basePath) {
         if (_geojsonCache) return Promise.resolve(_geojsonCache);
-        if (_geojsonInflight) return _geojsonInflight;
         var url = (basePath || '') +
             '/modules/IwacVisualizations/asset/geo/iwac-countries.geojson';
-        _geojsonInflight = P.fetchJSON(url)
-            .then(function (geo) {
-                _geojsonCache = geo;
-                _geojsonInflight = null;
-                return geo;
-            })
-            .catch(function (err) {
-                _geojsonInflight = null;
-                throw err;
-            });
-        return _geojsonInflight;
+        return P.fetchJSON(url).then(function (geo) {
+            _geojsonCache = geo;
+            return geo;
+        });
     }
 
     /* ----------------------------------------------------------------- */

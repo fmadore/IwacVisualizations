@@ -230,8 +230,12 @@
                         renderResults(resultsRoot, state.A, state.B, ctx);
                     } else {
                         resultsRoot.innerHTML = '';
-                        resultsRoot.appendChild(P.el('div', 'iwac-vis-compare-empty',
-                            P.t('Choose two corpora to compare')));
+                        // The shared banner, so a screen reader is told the
+                        // results area changed — `iwac-vis-compare-empty`
+                        // carried no role=status.
+                        var pickTwo = P.buildEmptyState('Choose two corpora to compare');
+                        pickTwo.classList.add('iwac-vis-compare-empty');
+                        resultsRoot.appendChild(pickTwo);
                     }
                 }).catch(function (err) {
                     if (mine !== seq[side]) return;   // our own abort, or superseded

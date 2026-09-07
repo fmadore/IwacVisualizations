@@ -145,7 +145,8 @@
     function renderCell(col, row, role) {
         var value = row[col.key];
         var td = P.el('td', 'iwac-vis-table__cell' +
-            ' iwac-vis-table__cell--' + (col.render || 'text') +
+            ' iwac-vis-table__cell--' +
+            (typeof col.render === 'function' ? 'custom' : (col.render || 'text')) +
             ' iwac-vis-table__cell--card-' + role);
         td.setAttribute('role', 'cell');
         // A custom property, not `style.width`: an inline width would
@@ -154,6 +155,19 @@
         if (col.width) td.style.setProperty('--iwac-vis-col-w', col.width);
 
         var mode = col.render || 'text';
+
+        // A FUNCTION render owns the cell outright: it gets the row and the
+        // `<td>` and fills it however it likes. This exists so a caller with
+        // an interactive cell — the keyword explorer's Add / Remove button —
+        // does not have to reach into the rendered table afterwards. It used
+        // to: it read the page number back out of the pagination LABEL with
+        // `/(\d+)\s*\/\s*\d+/` and re-attached its buttons from a
+        // MutationObserver on the tbody, so a change to the pagination copy,
+        // the page size or the French wording broke Add / Remove silently.
+        if (typeof mode === 'function') {
+            mode(row, td);
+            return td;
+        }
 
         if (mode === 'thumbnail') {
             if (value) {
@@ -328,6 +342,8 @@
 
         return {
             root: wrapper,
+            /** The zero-based page currently rendered. */
+            page: function () { return currentPage; },
             update: function (newRows, newPage) {
                 rows = newRows || [];
                 if (typeof newPage === 'number') {

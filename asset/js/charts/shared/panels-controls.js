@@ -105,7 +105,7 @@
     P.buildSelectControl = function (cfg) {
         var group = P.el('div', cfg.groupClass || 'iwac-vis-select-group');
         var label = P.el('label', cfg.labelClass || 'iwac-vis-select-label',
-            cfg.label + ':');
+            P.labelColon(cfg.label));
         // `.iwac-vis-control` carries the shared control skin (padding, surface,
         // radius, focus ring) from iwac-core.css; the block class that follows
         // is layout only. Core used to enumerate every block's private control

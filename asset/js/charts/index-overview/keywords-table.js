@@ -83,7 +83,10 @@
                         key: '__action',
                         label: '',
                         width: '110px',
-                        render: 'action',  // custom — handled below via a DOM walk
+                        // The table builds this cell from the row it is
+                        // already holding — no page arithmetic, nothing to
+                        // re-attach after a pagination click.
+                        render: buildActionCell,
                         card: 'action'
                     }
                 ],
@@ -92,54 +95,18 @@
                 emptyMessage: P.t('No data available')
             });
             tableHost.appendChild(tableApi.root);
-            wireActionButtons();
         }
 
-        /**
-         * P.buildTable doesn't know about custom cell actions, so we
-         * walk the rendered rows after each render and inject a button
-         * into the last `<td>`. Re-runs after pagination / update.
-         */
-        function wireActionButtons() {
-            var trs = tableApi.root.querySelectorAll('.iwac-vis-table__row');
-            var rows = allKeywordsRows();
-            // Page slice must match P.buildTable's internal cursor,
-            // which we do not have direct access to. Read it from
-            // pagination indicator: "Page X / Y".
-            var indicator = tableApi.root.querySelector('.iwac-vis-pagination__indicator');
-            var page = 0;
-            if (indicator) {
-                var m = /(\d+)\s*\/\s*\d+/.exec(indicator.textContent || '');
-                if (m) page = Math.max(0, parseInt(m[1], 10) - 1);
-            }
-            var startIdx = page * PAGE_SIZE;
-
-            trs.forEach(function (tr, i) {
-                var row = rows[startIdx + i];
-                if (!row) return;
-                var cells = tr.querySelectorAll('td');
-                var actionCell = cells[cells.length - 1];
-                if (!actionCell) return;
-                actionCell.innerHTML = '';
-                var btn = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm',
-                    row.__selected ? P.t('Remove') : P.t('Add'));
-                btn.type = 'button';
-                if (row.__disabled) btn.disabled = true;
-                btn.addEventListener('click', function () {
-                    state.toggleKeyword(row.keyword, !row.__selected);
-                });
-                actionCell.appendChild(btn);
+        /** The Add / Remove button for one keyword row. */
+        function buildActionCell(row, td) {
+            var btn = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm',
+                row.__selected ? P.t('Remove') : P.t('Add'));
+            btn.type = 'button';
+            if (row.__disabled) btn.disabled = true;
+            btn.addEventListener('click', function () {
+                state.toggleKeyword(row.keyword, !row.__selected);
             });
-        }
-
-        // Re-wire buttons after every pagination click — P.buildTable
-        // rewrites the tbody in-place, so we observe it with a
-        // MutationObserver rather than patching the table module.
-        function installRewireObserver() {
-            var tbody = tableApi.root.querySelector('tbody');
-            if (!tbody) return;
-            var mo = new MutationObserver(function () { wireActionButtons(); });
-            mo.observe(tbody, { childList: true });
+            td.appendChild(btn);
         }
 
         var searchTimer = null;
@@ -149,19 +116,16 @@
                 query = searchInput.value || '';
                 // Lightweight path: just update rows, keep current page 0
                 if (tableApi) tableApi.update(allKeywordsRows(), 0);
-                wireActionButtons();
             }, 120);
         });
 
         buildTable();
-        installRewireObserver();
 
         // Re-render on any state change that affects the table's
         // content (type/selection). We rebuild rather than update() so
         // selection + disabled state propagate correctly.
         state.subscribe(function () {
             if (tableApi) tableApi.update(allKeywordsRows(), 0);
-            wireActionButtons();
         });
     }
 

@@ -579,12 +579,18 @@
         var timeGrid = P.buildChartsGrid();
         root.appendChild(timeGrid);
 
+        // Named panels (S13): two of the panels below are conditional, and
+        // a positional slug would renumber every embed permalink after them
+        // the first time a bundle arrives without topics or newspapers.
         var polarityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.polarity_year_title'), descWithAiNote('sentiment.polarity_year_desc'));
+            P.t('sentiment.polarity_year_title'), descWithAiNote('sentiment.polarity_year_desc'),
+            { key: 'polarity-by-year' });
         var centralityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.centrality_year_title'), descWithAiNote('sentiment.centrality_year_desc'));
+            P.t('sentiment.centrality_year_title'), descWithAiNote('sentiment.centrality_year_desc'),
+            { key: 'centrality-by-year' });
         var subjectivityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.subjectivity_title'), descWithAiNote('sentiment.subjectivity_desc'));
+            P.t('sentiment.subjectivity_title'), descWithAiNote('sentiment.subjectivity_desc'),
+            { key: 'subjectivity' });
 
         // Dynamic "Non applicable" caption under the polarity timeline.
         var naNote = P.el('p', 'iwac-vis-muted');
@@ -600,11 +606,14 @@
         root.appendChild(breakdownGrid);
 
         var countryPanel = P.buildPanel('iwac-vis-panel',
-            P.t('sentiment.polarity_country_title'), descWithAiNote('sentiment.polarity_country_desc'));
+            P.t('sentiment.polarity_country_title'), descWithAiNote('sentiment.polarity_country_desc'),
+            { key: 'polarity-by-country' });
         var correlationPanel = P.buildPanel('iwac-vis-panel',
-            P.t('sentiment.correlation_title'), descWithAiNote('sentiment.correlation_desc'));
+            P.t('sentiment.correlation_title'), descWithAiNote('sentiment.correlation_desc'),
+            { key: 'correlation' });
         var cenHeatPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.cenheat_title'), descWithAiNote('sentiment.cenheat_desc'));
+            P.t('sentiment.cenheat_title'), descWithAiNote('sentiment.cenheat_desc'),
+            { key: 'centrality-heatmap' });
 
         breakdownGrid.appendChild(countryPanel.panel);
         breakdownGrid.appendChild(correlationPanel.panel);
@@ -621,7 +630,8 @@
         var topicSortHost = null;
         if ((data.topics || []).length) {
             topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'));
+                P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'),
+                { key: 'polarity-by-topic' });
             topicPanel.chart.classList.add('iwac-vis-chart--likert');
             topicSortHost = P.el('div', 'iwac-vis-facet-host');
             topicPanel.panel.insertBefore(topicSortHost, topicPanel.chart);
@@ -633,7 +643,8 @@
             newspaperPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
                 P.t('sentiment.polarity_newspaper_title'),
                 P.t('sentiment.polarity_newspaper_desc', { min: data.newspaper_min || 50 })
-                    + ' ' + P.t('sentiment.ai_note'));
+                    + ' ' + P.t('sentiment.ai_note'),
+                { key: 'polarity-by-newspaper' });
             newspaperPanel.chart.classList.add('iwac-vis-chart--likert');
             newspaperSortHost = P.el('div', 'iwac-vis-facet-host');
             newspaperPanel.panel.insertBefore(newspaperSortHost, newspaperPanel.chart);
@@ -646,7 +657,8 @@
         root.appendChild(extremesGrid);
 
         var extremesPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.extremes_title'), descWithAiNote('sentiment.extremes_desc'));
+            P.t('sentiment.extremes_title'), descWithAiNote('sentiment.extremes_desc'),
+            { key: 'extremes' });
         var extremesControls = P.el('div', 'iwac-vis-facet-host');
         // Controls sit between the description and the chart.
         extremesPanel.panel.insertBefore(extremesControls, extremesPanel.chart);
@@ -662,7 +674,8 @@
         root.appendChild(compareGrid);
 
         var agreementPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.agreement_title'), descWithAiNote('sentiment.agreement_desc'));
+            P.t('sentiment.agreement_title'), descWithAiNote('sentiment.agreement_desc'),
+            { key: 'model-agreement' });
         var matrixCaption = P.el('p', 'iwac-vis-muted');
         compareGrid.appendChild(agreementPanel.panel);
 

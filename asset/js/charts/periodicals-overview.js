@@ -75,12 +75,15 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
-        var runsPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.runs_title'), P.t('periodicals.runs_desc'));
-        var perYearPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.issues_per_year_title'));
-        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages'));
-        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Countries'));
-        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.subjects_title'));
-        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.wordcloud_title'), P.t('periodicals.wordcloud_desc'));
+        // Named panels (S13): the holdings panel below is removed when the
+        // deployed bundle predates it, which would renumber every embed
+        // permalink after it if the slugs were positional.
+        var runsPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.runs_title'), P.t('periodicals.runs_desc'), { key: 'runs' });
+        var perYearPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.issues_per_year_title'), null, { key: 'issues-per-year' });
+        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages'), null, { key: 'languages' });
+        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Countries'), null, { key: 'countries' });
+        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.subjects_title'), null, { key: 'subjects' });
+        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.wordcloud_title'), P.t('periodicals.wordcloud_desc'), { key: 'wordcloud' });
         // Word clouds need vertical room — reuse the shared 400px host
         // reservation instead of the default 320px chart height.
         wordcloudPanel.chart.classList.add('iwac-vis-wordcloud-host');
@@ -89,7 +92,8 @@
         // 400px reservation too. The controller removes the panel when
         // the deployed bundle predates the holdings section.
         var holdingsPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('periodicals.holdings_title'), P.t('periodicals.holdings_desc'));
+            P.t('periodicals.holdings_title'), P.t('periodicals.holdings_desc'),
+            { key: 'holdings' });
         holdingsPanel.chart.classList.add('iwac-vis-chart--tall');
 
         grid.appendChild(runsPanel.panel);
