@@ -209,9 +209,15 @@
         // host, and the rest of the references dashboard is unaffected.
         return P.withMaplibre(mapEl, function () {
             var map = P.createIwacMap(mapEl, {
+                // Scholarship on West Africa is published worldwide, so
+                // this is a wider frame than P.WEST_AFRICA_VIEW on purpose.
                 center: [0, 10],
                 zoom: 2.2,
-                globe: false,
+                title: P.t('Where the scholarship was published'),
+                // The panel toolbar already carries a fullscreen button
+                // (P.addFullscreenButton, below); a second one in the map's
+                // own corner did the same thing to a different element.
+                fullscreen: false,
                 onStyleReady: addLayers
             });
             if (!map) return null;
@@ -228,7 +234,8 @@
                     var b = provenanceMap.bounds;
                     P.fitToPoints(map, locations.length === 1 ? locations : [
                         { lng: b.west, lat: b.south }, { lng: b.east, lat: b.north }
-                    ], { padding: 42, maxZoom: 7, duration: 0, singleZoom: 5 });
+                    ], { padding: P.FIT_OPTS.padding, maxZoom: P.FIT_OPTS.maxZoom,
+                        duration: 0, singleZoom: 5 });
                 });
             }
             if (P.addFullscreenButton && panelEl) {

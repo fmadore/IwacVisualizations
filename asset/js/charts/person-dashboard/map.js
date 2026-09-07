@@ -83,8 +83,8 @@
         }
 
         var createdMap = P.createIwacMap(mapContainer, {
-            center: [2, 10],
-            zoom: 3.2,
+            center: P.WEST_AFRICA_VIEW.center,
+            zoom: P.WEST_AFRICA_VIEW.zoom,
             onStyleReady: function (m) {
                 mapInstance = m;
                 // `generateId: true` gives MapLibre a stable feature
@@ -120,7 +120,7 @@
                 layers: 'person-location-circles',
                 content: popupFor,
                 popup: { closeButton: true, closeOnClick: true, maxWidth: '340px' },
-                ease: { offset: [0, 80], duration: 300 }
+                ease: { offset: [0, 80], duration: P.mapMotion(300) }
             });
             P.attachFeatureStateHover(createdMap, {
                 layer: 'person-location-circles',

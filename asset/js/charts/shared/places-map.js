@@ -95,8 +95,8 @@
         }
 
         var map = P.createIwacMap(mapEl, {
-            center: cfg.center || [2.5, 12],
-            zoom: cfg.zoom != null ? cfg.zoom : 4,
+            center: cfg.center || P.WEST_AFRICA_VIEW.center,
+            zoom: cfg.zoom != null ? cfg.zoom : P.WEST_AFRICA_VIEW.zoom,
             onStyleReady: function (m) {
                 var built = buildFeatures();
                 // Guarded like every other map panel: a style that already

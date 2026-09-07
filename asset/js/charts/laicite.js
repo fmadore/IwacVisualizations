@@ -390,6 +390,7 @@
                 for (var i = viewHost.children.length - 1; i >= 0; i--) {
                     var outgoing = viewHost.children[i];
                     if (outgoing === chartPanel || outgoing === concordance.host) continue;
+                    if (parked.places && outgoing === parked.places.root) continue;
                     ns.disposeWithin(outgoing);
                 }
             }
@@ -477,7 +478,12 @@
                     });
                 });
             } else if (state.view === 'map') {
-                mountLazy('places', function () {
+                // Parked, not rebuilt. Every other lazy view is cheap to
+                // build again; this one is a WebGL context, and browsers cap
+                // live contexts at about sixteen and silently lose the oldest
+                // — flipping between views often enough used to leave the map
+                // blank. v1.59.0 stopped it leaking; this stops it churning.
+                mountParked('places', 'map', function () {
                     return L.buildMap({
                         bundle: lazy.places,
                         metadata: metadata,
@@ -532,6 +538,32 @@
             var built = build();
             viewHost.appendChild(built.root);
             built.mount();
+        }
+
+        /** Views whose built root is kept across switches, by key. */
+        var parked = {};
+
+        /**
+         * `mountLazy` for a view that is expensive to rebuild: the first
+         * visit builds and remembers it, later visits re-attach the same
+         * nodes and re-run its `update`. The same shape scary-terms uses for
+         * its map. `draw()` skips a parked root when disposing the outgoing
+         * view, and re-attaching is what makes MapLibre re-measure.
+         */
+        function mountParked(bundleName, key, build) {
+            if (!ensure([bundleName])) {
+                viewHost.appendChild(P.buildLoadingState());
+                return;
+            }
+            if (!parked[key]) {
+                parked[key] = build();
+                viewHost.appendChild(parked[key].root);
+                parked[key].mount();
+                return;
+            }
+            viewHost.appendChild(parked[key].root);
+            if (parked[key].update) parked[key].update();
+            if (parked[key].resize) parked[key].resize();
         }
 
         // What a change means. Within one flush the row is remounted (view)

@@ -46,6 +46,11 @@
     // around it — the two must agree or the title renders at a different
     // DPI than the chart.
     var EXPORT_SCALE = 3;
+
+    // How long to wait for MapLibre's next `render` before forcing one.
+    // Only reached when no frame arrives at all — a hidden tab, where
+    // requestAnimationFrame is throttled to nothing.
+    var EXPORT_FRAME_TIMEOUT = 250;
     // Rows shown in the in-page table before the reader is pointed at the
     // CSV. A 3,000-point scatter is a download, not a page.
     var TABLE_ROW_CAP = 500;
@@ -82,33 +87,59 @@
     }
 
     /**
-     * Return the PNG data URL for a MapLibre GL instance. Relies on
-     * `preserveDrawingBuffer: true` being set in `createIwacMap` — the
-     * WebGL canvas is otherwise cleared after compositing and toDataURL
-     * returns a blank image. We trigger a synchronous repaint before
-     * reading the canvas so any in-flight tile fetch or pending render
-     * is flushed into the drawing buffer first.
+     * Promise<string|null> — the PNG data URL for a MapLibre GL instance.
+     *
+     * **Read inside the `render` event.** A WebGL canvas is cleared after
+     * the browser composites it, so `toDataURL` on an idle map returns a
+     * blank image. Until now every map on every page carried
+     * `preserveDrawingBuffer: true` to keep those pixels around — the whole
+     * site paying, on every frame, for an export almost nobody runs. The
+     * `render` handler fires synchronously at the end of MapLibre's own
+     * draw, before compositing, which is exactly the moment the buffer is
+     * both filled and still readable.
+     *
+     * The timeout is for the case where no frame ever comes (a hidden tab,
+     * where `requestAnimationFrame` does not run): force one draw and read
+     * straight after it, which is what this used to do unconditionally.
      */
     function maplibreDataUrl(el) {
         var live = ns.getLiveMap ? ns.getLiveMap(el) : null;
-        if (!live || !live.getCanvas) return null;
-        try {
-            if (typeof live.redraw === 'function') {
-                live.redraw();
-            } else if (typeof live.triggerRepaint === 'function') {
-                live.triggerRepaint();
+        if (!live || !live.getCanvas) return Promise.resolve(null);
+
+        return new Promise(function (resolve) {
+            var settled = false;
+            function read() {
+                if (settled) return;
+                settled = true;
+                try {
+                    var canvas = live.getCanvas();
+                    resolve(canvas && canvas.toDataURL ? canvas.toDataURL('image/png') : null);
+                } catch (e) {
+                    console.error('IWACVis.panel-toolbar: map toDataURL failed', e);
+                    resolve(null);
+                }
             }
-            var canvas = live.getCanvas();
-            if (!canvas || !canvas.toDataURL) return null;
-            return canvas.toDataURL('image/png');
-        } catch (e) {
-            console.error('IWACVis.panel-toolbar: map toDataURL failed', e);
-            return null;
-        }
+            try {
+                live.once('render', read);
+                live.triggerRepaint();
+            } catch (e) {
+                read();
+                return;
+            }
+            setTimeout(function () {
+                if (settled) return;
+                try { if (typeof live.redraw === 'function') live.redraw(); }
+                catch (e) { /* best effort */ }
+                read();
+            }, EXPORT_FRAME_TIMEOUT);
+        });
     }
 
+    /** Promise<string|null> — whichever renderer owns this element. */
     function resolveDataUrl(el) {
-        return echartsDataUrl(el) || maplibreDataUrl(el);
+        var fromChart = echartsDataUrl(el);
+        if (fromChart) return Promise.resolve(fromChart);
+        return maplibreDataUrl(el);
     }
 
     /* ----------------------------------------------------------------- */
@@ -206,8 +237,14 @@
      * Times New Roman instead of Public Sans.
      */
     function buildCompositeUrl(panelEl, chartEl) {
+        return resolveDataUrl(chartEl).then(function (inner) {
+            return compositeFrom(panelEl, inner);
+        });
+    }
+
+    /** The drawing half of buildCompositeUrl, once the raster is in hand. */
+    function compositeFrom(panelEl, inner) {
         return new Promise(function (resolve) {
-            var inner = resolveDataUrl(chartEl);
             if (!inner) { resolve(null); return; }
 
             var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
@@ -407,12 +444,14 @@
             btn.classList.add('iwac-vis-panel-toolbar__btn--busy');
             buildCompositeUrl(panelEl, chartEl)
                 .then(function (composite) {
-                    var dataUrl = composite || resolveDataUrl(chartEl);
-                    if (dataUrl) triggerDownload(dataUrl, filenameFromPanel(panelEl) + '.png');
+                    if (composite) return composite;
+                    return resolveDataUrl(chartEl);
                 })
                 .catch(function (err) {
                     console.error('IWACVis.panel-toolbar: download failed', err);
-                    var dataUrl = resolveDataUrl(chartEl);
+                    return resolveDataUrl(chartEl);
+                })
+                .then(function (dataUrl) {
                     if (dataUrl) triggerDownload(dataUrl, filenameFromPanel(panelEl) + '.png');
                 })
                 .then(function () {

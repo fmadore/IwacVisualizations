@@ -97,8 +97,8 @@
         var choropleth = null;
         P.withMaplibre(mapEl, function () {
             var map = P.createIwacMap(mapEl, {
-                center: [2.5, 10.5],
-                zoom: 3.4,
+                center: P.WEST_AFRICA_VIEW.center,
+                zoom: P.WEST_AFRICA_VIEW.zoom,
                 onStyleReady: function () { /* choropleth re-adds itself */ }
             });
             if (!map) return false;

@@ -215,10 +215,9 @@
         // onStyleReady would stack on every theme swap because MapLibre
         // persists filtered handlers across setStyle calls.
         var map = P.createIwacMap(mapContainer, {
-            center: [2, 10],
-            zoom: 3.2,
-            globe: true,
-            navigation: true,
+            center: P.WEST_AFRICA_VIEW.center,
+            zoom: P.WEST_AFRICA_VIEW.zoom,
+            title: P.t('Where the collection was gathered'),
             onStyleReady: onStyleReady
         });
 

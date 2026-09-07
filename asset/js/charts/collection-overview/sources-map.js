@@ -115,7 +115,8 @@
 
         function fitToSources(map) {
             if (fitDone || mappedSources.length < 2) return;
-            P.fitToPoints(map, mappedSources, { padding: 48, maxZoom: 5, duration: 0 });
+            P.fitToPoints(map, mappedSources, { padding: P.FIT_OPTS.padding,
+                maxZoom: 5, duration: 0 });
             fitDone = true;
         }
 
@@ -166,10 +167,11 @@
         }
 
         var map = P.createIwacMap(mapContainer, {
+            // NOT P.WEST_AFRICA_VIEW: a source can be a European or North
+            // American publisher, so this one is deliberately a world view.
             center: [0, 16],
             zoom: 1.8,
-            globe: true,
-            navigation: true,
+            title: P.t('Where the sources are published'),
             onStyleReady: onStyleReady
         });
 

@@ -86,8 +86,8 @@
         }
 
         var created = P.createIwacMap(host, {
-            center: [2, 10],
-            zoom: 3.2,
+            center: P.WEST_AFRICA_VIEW.center,
+            zoom: P.WEST_AFRICA_VIEW.zoom,
             onStyleReady: function (m) {
                 if (!m.getSource(SOURCE_ID)) {
                     m.addSource(SOURCE_ID, {
@@ -121,7 +121,8 @@
         // neighbouring towns indistinguishable. A single pin gets a fixed
         // zoom instead, since fitBounds on a zero-area box picks the max.
         created.once('load', function () {
-            P.fitToPoints(created, places, { padding: 48, maxZoom: 7, duration: 0, singleZoom: 6 });
+            P.fitToPoints(created, places, { padding: P.FIT_OPTS.padding,
+                maxZoom: P.FIT_OPTS.maxZoom, duration: 0, singleZoom: 6 });
         });
     }
 

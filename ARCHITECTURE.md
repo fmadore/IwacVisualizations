@@ -513,7 +513,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 
-That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
+That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. `view/common/iwac-assets.phtml` is the only place those versions live — `npm run check:cdn` reads them from there and compares them against the registry, so this file deliberately names no version of its own. (Historical changelog and roadmap entries naming MapLibre 5.24 or ECharts 6.0 are records of when a decision was taken, not statements about the current pin.) Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
 
 `scripts/check-cdn-versions.js` closes that loop — it parses the pins out of the partial and compares them against the npm registry:
 

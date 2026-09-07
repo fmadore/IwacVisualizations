@@ -90,7 +90,28 @@
                 // MapLibre measured a zero-height container.
                 window.setTimeout(function () { controller.resize(); }, 0);
             },
-            update: function () { if (controller) controller.update(); }
+            update: function () {
+                if (controller) controller.update();
+                // The ranked list is the keyboard route to the same data
+                // (M18), and it is built from the filter state. The view is
+                // parked rather than rebuilt now, so refreshing the map
+                // without refreshing the list would leave the two disagreeing
+                // the moment the reader changes frame or country.
+                var next = buildPlacesDetails(bundle, cfg.state);
+                if (details && next) {
+                    panel.replaceChild(next, details);
+                    details = next;
+                } else if (next) {
+                    panel.appendChild(next);
+                    details = next;
+                }
+            },
+            // Re-attaching a parked view puts the canvas back into a
+            // container MapLibre has not measured since it was detached.
+            resize: function () {
+                if (!controller) return;
+                window.setTimeout(function () { controller.resize(); }, 0);
+            }
         };
     };
 

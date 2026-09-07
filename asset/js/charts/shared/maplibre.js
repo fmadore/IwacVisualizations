@@ -11,8 +11,9 @@
  *   - re-runs the caller's custom-layer setup after every style load
  *     (initial render AND theme-triggered setStyle) so custom sources
  *     and layers survive basemap swaps without bookkeeping in each panel
- *   - adds NavigationControl + GlobeControl (Mercator ⇄ globe toggle
- *     with smooth transition — MapLibre 5.5+)
+ *   - adds a zoom-only NavigationControl, and MapLibre's FullscreenControl
+ *     where the panel toolbar has none. Globe is opt-in (`globe: true`):
+ *     ROADMAP §4 and §10 both list globe projection as "won't do"
  *   - exposes `P.createIwacPopup()` so every popup gets the same
  *     iwac-vis-maplibre-popup class hook that our CSS targets (fixes
  *     the oversized / mis-coloured default close button)
@@ -20,8 +21,9 @@
  * Usage:
  *
  *     var map = P.createIwacMap(container, {
- *         center: [2, 10],
- *         zoom: 3.2,
+ *         center: P.WEST_AFRICA_VIEW.center,
+ *         zoom: P.WEST_AFRICA_VIEW.zoom,
+ *         title: 'What this map shows',
  *         onStyleReady: function (m) {
  *             m.addSource('locations', { type: 'geojson', data: features });
  *             m.addLayer({ id: 'bubbles', type: 'circle', source: 'locations', paint: {...} });
@@ -46,6 +48,73 @@
         console.warn('IWACVis.maplibre: panels.js must load first');
         return;
     }
+
+    /* ----------------------------------------------------------------- */
+    /*  Camera, motion and locale defaults                                */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * The six-country region, framed once.
+     *
+     * Seven slightly different "West Africa" defaults had accumulated —
+     * `[2,10]@3.2` four times, plus `[2.5,10.5]@3.4`, `[2.5,12]@4` and
+     * `[2,10]@2.6` — so the same region opened at a different scale
+     * depending on which block you were reading. This is that view; a map
+     * whose subject is genuinely wider (source provenance, which spans
+     * Europe and North America) passes its own and says why.
+     */
+    P.WEST_AFRICA_VIEW = { center: [2, 10], zoom: 3.2 };
+
+    /**
+     * `fitBounds` options, likewise. Padding was 40 / 42 / 48 / 60 and
+     * maxZoom 5 / 7 / 8 across the same six countries. Spread and override
+     * the one value a caller actually needs.
+     */
+    P.FIT_OPTS = { padding: 48, maxZoom: 7, duration: 600 };
+
+    /**
+     * A camera-animation duration that respects `prefers-reduced-motion`.
+     *
+     * The canvas graphs have honoured the preference since v1.30; no map
+     * did, so a reader who asks the OS to stop moving things still got
+     * eleven animated `easeTo`/`flyTo`/`fitBounds` calls. Zero means
+     * MapLibre jumps, which is the documented way to opt out per call.
+     */
+    P.mapMotion = function (ms) {
+        if (ns.prefersReducedMotion && ns.prefersReducedMotion()) return 0;
+        return ms == null ? P.FIT_OPTS.duration : ms;
+    };
+
+    /**
+     * MapLibre's own UI strings, in the site's language.
+     *
+     * Only the three cooperative-gesture keys were translated, so on the
+     * French site every control still announced itself in English to a
+     * screen reader — "Zoom in", "Enter fullscreen", "Close popup". These
+     * are every key MapLibre 6.6 reads (verified against the pinned
+     * bundle's `defaultLocale`) minus the ones for controls this module
+     * never adds: geolocate, scale, terrain, logo.
+     */
+    P.mapLocale = function () {
+        if (ns.locale !== 'fr') return {};
+        return {
+            'Map.Title': 'Carte',
+            'Marker.Title': 'Repère',
+            'Popup.Close': 'Fermer la fenêtre',
+            'NavigationControl.ZoomIn': 'Zoom avant',
+            'NavigationControl.ZoomOut': 'Zoom arrière',
+            'NavigationControl.ResetBearing': 'Faire pivoter la carte ; cliquer pour revenir au nord',
+            'FullscreenControl.Enter': 'Passer en plein écran',
+            'FullscreenControl.Exit': 'Quitter le plein écran',
+            'GlobeControl.Enable': 'Activer le globe',
+            'GlobeControl.Disable': 'Désactiver le globe',
+            'AttributionControl.ToggleAttribution': 'Afficher les mentions',
+            'AttributionControl.MapFeedback': 'Signaler un problème sur la carte',
+            'CooperativeGesturesHandler.WindowsHelpText': 'Utilisez Ctrl + molette pour zoomer la carte',
+            'CooperativeGesturesHandler.MacHelpText': 'Utilisez ⌘ + molette pour zoomer la carte',
+            'CooperativeGesturesHandler.MobileHelpText': 'Utilisez deux doigts pour déplacer la carte'
+        };
+    };
 
     /* ----------------------------------------------------------------- */
     /*  Per-map theme cache                                               */
@@ -434,9 +503,14 @@
      *   callback fires on the initial render AND again after every
      *   setStyle (e.g. theme swap), so anything that was wiped by the
      *   new style gets rebuilt automatically.
-     * @param {boolean} [config.globe=true]  Show the GlobeControl toggle
+     * @param {boolean} [config.globe=false]  Show the GlobeControl toggle.
+     *   Opt-in: ROADMAP §4 and §10 both list globe projection as "won't do".
      * @param {boolean} [config.navigation=true]  Show the NavigationControl
-     * @param {boolean} [config.fullscreen=true]  Show MapLibre's native FullscreenControl
+     * @param {boolean} [config.fullscreen=true]  Show MapLibre's native
+     *   FullscreenControl. Pass false where the panel toolbar already has one.
+     * @param {string} [config.title]  What this map shows, in one phrase.
+     *   Becomes MapLibre's `Map.Title` and the host's `aria-label`, so a
+     *   screen reader announces the map rather than "application".
      * @param {string} [config.styleMode='basemap']  'basemap' uses the
      *   theme's Carto style; 'graph' uses the blank P.buildGraphStyle()
      *   canvas (and theme swaps rebuild that instead of a basemap).
@@ -459,40 +533,36 @@
             defaultStyle = ns.getBasemapStyle();
         }
 
-        // Localized cooperative-gestures hints. The historical reason
-        // for NOT enabling cooperativeGestures was MapLibre's
-        // English-only hint dialog; the `locale` map option localizes
-        // it, so the standard embedded-map etiquette (wheel zoom needs
-        // Ctrl/⌘, touch pan needs two fingers — page scroll always
-        // wins) is now on by default. Opt out per map via
-        // `mapOptions: { cooperativeGestures: false }`.
-        var fr = ns.locale === 'fr';
-        var gestureLocale = {
-            'CooperativeGesturesHandler.WindowsHelpText': fr
-                ? 'Utilisez Ctrl + molette pour zoomer la carte'
-                : 'Use Ctrl + scroll to zoom the map',
-            'CooperativeGesturesHandler.MacHelpText': fr
-                ? 'Utilisez ⌘ + molette pour zoomer la carte'
-                : 'Use ⌘ + scroll to zoom the map',
-            'CooperativeGesturesHandler.MobileHelpText': fr
-                ? 'Utilisez deux doigts pour déplacer la carte'
-                : 'Use two fingers to move the map'
-        };
-
         var baseOptions = {
             container: container,
             style: defaultStyle,
             center: config.center || [0, 0],
             zoom: config.zoom != null ? config.zoom : 2,
             attributionControl: { compact: true },
+            // The standard embedded-map etiquette: wheel zoom needs Ctrl/⌘,
+            // touch pan needs two fingers, page scroll always wins. The
+            // historical reason not to was MapLibre's English-only hint
+            // dialog, which `locale` fixes. Opt out per map via
+            // `mapOptions: { cooperativeGestures: false }`.
             cooperativeGestures: true,
-            locale: gestureLocale,
-            // Required for `canvas.toDataURL()` to return the rendered
-            // pixels instead of a blank buffer. Without this flag the
-            // WebGL context clears the drawing buffer after compositing,
-            // so the panel-toolbar's Download button would produce an
-            // empty PNG. The perf hit is negligible for our panel sizes.
-            preserveDrawingBuffer: true
+            locale: config.title
+                ? Object.assign(P.mapLocale(), { 'Map.Title': config.title })
+                : P.mapLocale(),
+            // These are flat thematic maps of one region. Rotating or
+            // pitching them produces a view no reader wants and several
+            // cannot undo (the compass that resets north is off, below).
+            // A map that genuinely wants them turns them back on through
+            // `mapOptions`.
+            dragRotate: false,
+            pitchWithRotate: false,
+            touchPitch: false,
+            // NOT preserveDrawingBuffer. Keeping the WebGL drawing buffer
+            // for the whole life of every map, on every page, to serve the
+            // rare PNG export is backwards: the toolbar now forces a fresh
+            // render immediately before it reads the canvas
+            // (`panel-toolbar.js`), which is what actually guarantees
+            // pixels. `mapOptions.preserveDrawingBuffer: true` remains the
+            // escape hatch.
         };
         // Shallow-merge caller-provided mapOptions last so they win
         if (config.mapOptions) {
@@ -535,11 +605,23 @@
         map._iwacThemeMode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
         if (graphMode) map._iwacStyleMode = 'graph';
 
-        // Built-in controls
+        // Built-in controls.
+        //
+        // No compass and no pitch dial: rotation and pitch are off (above),
+        // so a compass would reset a bearing nothing can change and a pitch
+        // dial would visualise an angle that is always zero.
         if (config.navigation !== false) {
-            map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+            map.addControl(new maplibregl.NavigationControl({
+                showCompass: false,
+                visualizePitch: false
+            }), 'top-right');
         }
-        if (config.globe !== false && typeof maplibregl.GlobeControl === 'function') {
+        // Globe is OPT-IN. ROADMAP §4 and §10 both list globe projection as
+        // "won't do" — editorial-product register, not archival — and the
+        // toggle was nonetheless shipping on ten of twelve maps because the
+        // factory defaulted it on. `globe: true` still works for a map that
+        // wants one.
+        if (config.globe === true && typeof maplibregl.GlobeControl === 'function') {
             map.addControl(new maplibregl.GlobeControl(), 'top-right');
         }
         // Native MapLibre fullscreen — applies to the `.iwac-vis-map`
@@ -564,8 +646,15 @@
         }
 
         // Register for automatic basemap swaps on theme change
+        var el = typeof container === 'string' ? document.getElementById(container) : container;
+        // Eleven of twelve map hosts carried no accessible name, so a screen
+        // reader reached an interactive canvas and could only call it
+        // "application". MapLibre's own `Map.Title` names the canvas; this
+        // names the container the reader tabs into.
+        if (el && config.title && !el.getAttribute('aria-label')) {
+            el.setAttribute('aria-label', config.title);
+        }
         if (typeof ns.registerMap === 'function') {
-            var el = typeof container === 'string' ? document.getElementById(container) : container;
             ns.registerMap(map, el);
         }
 
@@ -573,68 +662,42 @@
     };
 
     /* ----------------------------------------------------------------- */
-    /*  Popup bounds                                                      */
+    /*  Popups                                                            */
     /* ----------------------------------------------------------------- */
-
-    // MapLibre's automatic anchor chooses above/below from the popup's
-    // measured height, but cannot keep a popup inside the map when it is
-    // taller than the available space on both sides of its marker. The
-    // same geometric limit exists horizontally around narrow embedded
-    // maps. These are layout constants from MapLibre 6.3's distributed
-    // CSS and our own popup-content rule.
-    var POPUP_TIP_SIZE = 10;
-    var POPUP_CONTENT_CHROME_Y = 30;
-    var POPUP_CONTENT_CHROME_X = 60;
-    var POPUP_MAX_CONTENT_HEIGHT = 460;
-
-    function popupPadding(value) {
-        value = value || {};
-        function edge(name) {
-            var number = Number(value[name]);
-            return isFinite(number) && number > 0 ? number : 0;
-        }
-        return {
-            top: edge('top'),
-            right: edge('right'),
-            bottom: edge('bottom'),
-            left: edge('left')
-        };
-    }
-
-    function elementSize(element, clientKey, rectKey) {
-        if (!element) return 0;
-        var size = Number(element[clientKey]) || 0;
-        if (!size && typeof element.getBoundingClientRect === 'function') {
-            size = Number(element.getBoundingClientRect()[rectKey]) || 0;
-        }
-        return size;
-    }
-
-    function pixelWidth(value) {
-        var match = /^\s*(\d+(?:\.\d+)?)px\s*$/i.exec(String(value || ''));
-        return match ? Number(match[1]) : Infinity;
-    }
 
     /**
      * Create a MapLibre popup pre-scoped to the IWAC stylesheet hooks.
-     * Stacks an `iwac-vis-maplibre-popup` class onto the popup root so
-     * our CSS can target the close button, tip, and content without
-     * fighting with MapLibre's built-in rules.
      *
-     * The factory also keeps the popup inside its map container. The
-     * documented `padding` option helps MapLibre choose an anchor, but it
-     * does not resize content that cannot fit on either side of a marker.
-     * Once a popup opens, its content height is capped at half of the map's
-     * usable height (minus the 10px tip), which guarantees that either the
-     * top or bottom anchor fits. Its width is capped at two thirds of the
-     * usable map width, the corresponding guarantee for MapLibre's
-     * left/centre/right anchor thresholds. Rich bodies scroll internally.
-     * Bounds are recomputed after late content insertion and every map
-     * resize, including fullscreen changes.
+     * Stacks an `iwac-vis-maplibre-popup` class onto the popup root so our
+     * CSS can target the close button, tip and content without fighting
+     * MapLibre's built-in rules.
      *
-     * Callers can still request a smaller maxWidth or different padding.
-     * An explicit `anchor` remains the caller's responsibility because it
-     * opts out of MapLibre's automatic placement.
+     * **The bounds are CSS now.** Keeping a popup inside its map used to be
+     * ~150 lines here: six overridden methods (`addTo`, three content
+     * setters, two option setters), a `resize` listener per open popup, and
+     * three layout constants transcribed from MapLibre's distributed
+     * stylesheet — which is a copy, and had been left citing 6.3 while the
+     * pin moved to 6.6. `.iwac-vis-map` is a size container, so
+     * `iwac-maplibre.css` expresses the same two guarantees directly:
+     *
+     *   - height ≤ half the map minus the tip, so one of the top/bottom
+     *     anchors always fits;
+     *   - width ≤ two thirds of the map, the matching guarantee for
+     *     MapLibre's left/centre/right anchor thresholds.
+     *
+     * The browser re-evaluates both on every container resize, including
+     * fullscreen and late content insertion, with no listener to attach and
+     * none to leak.
+     *
+     * **One line of JavaScript survives, and it is not styling.** MapLibre
+     * picks its anchor by comparing the marker's x against `maxWidth`, the
+     * OPTION — not against the box CSS actually produced. Left at the 320px
+     * default it reasons about a wider popup than it draws and chooses a
+     * left/right anchor one threshold too early, which puts the popup
+     * partly outside a narrow map. So `addTo` reads back the width the
+     * container query resolved and hands MapLibre that number. It is the
+     * only override, it attaches no listener, and MapLibre re-anchors on
+     * every subsequent `render`, so a later resize needs nothing from here.
      *
      * @param {Object} [options]  Same shape as maplibregl.Popup options
      * @returns {maplibregl.Popup}
@@ -657,108 +720,29 @@
         merged.className = className;
 
         var popup = new maplibregl.Popup(merged);
-        var requestedMaxWidth = merged.maxWidth;
-        var requestedPadding = merged.padding;
-        var activeMap = null;
         var originalAddTo = popup.addTo;
-        var originalSetMaxWidth = popup.setMaxWidth;
-        var originalSetPadding = popup.setPadding;
-
-        function syncBounds() {
-            if (!activeMap || !popup.isOpen || !popup.isOpen()) return;
-            var mapElement = activeMap.getContainer && activeMap.getContainer();
-            var popupElement = popup.getElement && popup.getElement();
-            if (!mapElement || !popupElement) return;
-
-            var mapWidth = elementSize(mapElement, 'clientWidth', 'width');
-            var mapHeight = elementSize(mapElement, 'clientHeight', 'height');
-            if (!mapWidth || !mapHeight) return;
-
-            var padding = popupPadding(requestedPadding);
-            var usableWidth = Math.max(0, mapWidth - padding.left - padding.right);
-            var usableHeight = Math.max(0, mapHeight - padding.top - padding.bottom);
-
-            // MapLibre uses the popup root's full size, including its tip,
-            // when choosing the anchor. Reserve that tip here so the measured
-            // result never crosses the half-height proof above.
-            var contentHeight = Math.min(
-                POPUP_MAX_CONTENT_HEIGHT,
-                Math.max(0, Math.floor(usableHeight / 2) - POPUP_TIP_SIZE)
-            );
-            var bodyHeight = Math.max(0, contentHeight - POPUP_CONTENT_CHROME_Y);
-
-            // For the horizontal algorithm, 2/3 of the usable map width is
-            // the largest box that can always fit at its left, centred, or
-            // right anchor for every possible marker x-coordinate.
-            var geometricWidth = Math.max(0, Math.floor(usableWidth * 2 / 3));
-            var constrainedWidth = Math.min(pixelWidth(requestedMaxWidth), geometricWidth);
-            if (!isFinite(constrainedWidth)) constrainedWidth = geometricWidth;
-
-            popupElement.style.setProperty(
-                '--iwac-vis-popup-content-max-height', contentHeight + 'px'
-            );
-            popupElement.style.setProperty(
-                '--iwac-vis-popup-body-max-height', bodyHeight + 'px'
-            );
-            popupElement.style.setProperty(
-                '--iwac-vis-popup-inner-max-width',
-                Math.max(0, constrainedWidth - POPUP_CONTENT_CHROME_X) + 'px'
-            );
-
-            // Both public setters call MapLibre's placement update. Apply the
-            // width after the CSS variables exist, then let the padding update
-            // make the final anchor decision against the constrained box.
-            originalSetMaxWidth.call(popup, constrainedWidth + 'px');
-            originalSetPadding.call(popup, requestedPadding);
-        }
-
-        function detachResize() {
-            if (activeMap && typeof activeMap.off === 'function') {
-                activeMap.off('resize', syncBounds);
-            }
-            activeMap = null;
-        }
-
         popup.addTo = function (map) {
-            detachResize();
             var result = originalAddTo.call(popup, map);
-            activeMap = map;
-            syncBounds();
-            if (map && typeof map.on === 'function') map.on('resize', syncBounds);
+            syncAnchorWidth(popup);
             return result;
         };
-
-        // Spatial Exploration opens its pinned popup before asynchronous
-        // article content is attached. Re-run the constraint after every
-        // public content setter so that path receives the same guarantee as
-        // the usual setDOMContent(...).addTo(map) chain.
-        ['setDOMContent', 'setHTML', 'setText'].forEach(function (method) {
-            var original = popup[method];
-            if (typeof original !== 'function') return;
-            popup[method] = function () {
-                var result = original.apply(popup, arguments);
-                syncBounds();
-                return result;
-            };
-        });
-
-        // Preserve the public setters while retaining the requested value for
-        // future resize calculations. Internal syncs call the originals above
-        // so these wrappers cannot recurse.
-        popup.setMaxWidth = function (value) {
-            requestedMaxWidth = value;
-            var result = originalSetMaxWidth.call(popup, value);
-            syncBounds();
-            return result;
-        };
-        popup.setPadding = function (value) {
-            requestedPadding = value;
-            var result = originalSetPadding.call(popup, value);
-            syncBounds();
-            return result;
-        };
-
-        if (typeof popup.on === 'function') popup.on('close', detachResize);
         return popup;
     };
+
+    /**
+     * Tell MapLibre the width its own stylesheet produced, so the anchor it
+     * picks is the one that actually fits. Re-entrant by construction: the
+     * measured width is already the cap, so setting it as `maxWidth` cannot
+     * change the measurement.
+     */
+    function syncAnchorWidth(popup) {
+        try {
+            var el = popup.getElement && popup.getElement();
+            if (!el) return;
+            var content = el.querySelector('.maplibregl-popup-content');
+            if (!content) return;
+            var width = Math.ceil(content.getBoundingClientRect().width);
+            if (width > 0) popup.setMaxWidth(width + 'px');
+        } catch (e) { /* best effort: a wrong anchor is not worth throwing over */ }
+    }
 })();

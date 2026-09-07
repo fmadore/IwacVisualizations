@@ -180,9 +180,29 @@
     };
 
     /** The MapLibre `fill-color` expression for a scale. */
+    /**
+     * The fill expression, with the counts INSIDE it.
+     *
+     * They used to be written into the GeoJSON as a `_iwac_count` property,
+     * which meant every count change re-ran `setData` and MapLibre re-parsed
+     * and re-tiled ~200 KB of country polygons in the worker. The
+     * keywords-attention slider calls that per tick and per play step. A
+     * `match` on the country name reads the same numbers out of a paint
+     * expression instead, so the geometry is uploaded once for the life of
+     * the map and a count change is a `setPaintProperty` and nothing else.
+     */
     function buildFillExpression(paintConfig, counts) {
         var scale = P.choroplethScale(paintConfig, counts);
-        var expr = ['interpolate', ['linear'], ['get', '_iwac_count']];
+        var names = Object.keys(counts || {});
+        var countExpr;
+        if (names.length) {
+            countExpr = ['match', ['get', 'name']];
+            names.forEach(function (name) { countExpr.push(name, Number(counts[name]) || 0); });
+            countExpr.push(0);      // a country with no data reads as zero
+        } else {
+            countExpr = 0;          // `match` needs at least one branch
+        }
+        var expr = ['interpolate', ['linear'], countExpr];
         scale.stops.forEach(function (stop) {
             expr.push(stop.value, stop.color);
         });
@@ -416,25 +436,10 @@
         var mode = 'bubbles';
         var pendingFetch = null;
 
-        function annotate(geo) {
-            // Mutate a clone — keep _geojsonCache pristine across maps
-            // since each map has different counts.
-            var clone = {
-                type: 'FeatureCollection',
-                features: geo.features.map(function (f) {
-                    var props = {};
-                    for (var k in f.properties) {
-                        if (f.properties.hasOwnProperty(k)) props[k] = f.properties[k];
-                    }
-                    props._iwac_count = countryCounts[props.name] || 0;
-                    return {
-                        type: 'Feature',
-                        geometry: f.geometry,
-                        properties: props
-                    };
-                })
-            };
-            return clone;
+        /** This map's count for a feature, read live rather than from its
+         *  properties — the counts are no longer written into the GeoJSON. */
+        function countFor(props) {
+            return Number((countryCounts && countryCounts[props && props.name]) || 0);
         }
 
         /**
@@ -504,15 +509,12 @@
 
         function ensureLayers() {
             // If the source already exists on the current style, re-assert
-            // the layers (a theme swap carried the source and dropped them)
-            // and re-set the data — which also handles updateCounts() and
-            // the post-style.load re-init paths.
+            // the layers — a theme swap carries the source across and drops
+            // them. The DATA never needs re-setting: the counts live in the
+            // fill expression now, so the polygons are uploaded once.
             if (map.getSource(SOURCE)) {
                 addChoroplethLayers();
-                if (pendingFetch) return pendingFetch;
-                if (!_geojsonCache) return Promise.resolve();
-                map.getSource(SOURCE).setData(annotate(_geojsonCache));
-                return Promise.resolve();
+                return pendingFetch || Promise.resolve();
             }
             pendingFetch = Promise.all([
                 loadGeojson(basePath),
@@ -522,7 +524,7 @@
                 if (map.getSource(SOURCE)) { pendingFetch = null; return; }
                 map.addSource(SOURCE, {
                     type: 'geojson',
-                    data: annotate(geo),
+                    data: geo,
                     generateId: true
                 });
                 addChoroplethLayers();
@@ -552,7 +554,7 @@
             map.on('click', FILL, function (e) {
                 if (!e.features || !e.features[0]) return;
                 var p = e.features[0].properties || {};
-                var count = Number(p._iwac_count || 0);
+                var count = countFor(p);
                 P.createIwacPopup({ closeButton: true, closeOnClick: true })
                     .setLngLat(e.lngLat)
                     .setDOMContent(P.buildMapPopup({
@@ -574,7 +576,7 @@
                     if (!e.features || !e.features[0]) return;
                     map.getCanvas().style.cursor = 'pointer';
                     var hp = e.features[0].properties || {};
-                    var hc = Number(hp._iwac_count || 0);
+                    var hc = countFor(hp);
                     hoverPopup
                         .setLngLat(e.lngLat)
                         .setDOMContent(P.buildMapPopup({
@@ -686,9 +688,6 @@
                         FILL, 'fill-color',
                         buildFillExpression(currentPaint, countryCounts)
                     );
-                }
-                if (map.getSource(SOURCE) && _geojsonCache) {
-                    map.getSource(SOURCE).setData(annotate(_geojsonCache));
                 }
                 refreshLegend();
             },

@@ -376,7 +376,7 @@
                 fitted = true;
                 try {
                     m.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
-                        { padding: 40, duration: 0 });
+                        { padding: P.FIT_OPTS.padding, duration: 0 });
                 } catch (e) { /* degenerate bounds */ }
             }
         }
@@ -527,7 +527,7 @@
                     map.easeTo({
                         center: [node.lng, node.lat],
                         zoom: Math.max(map.getZoom(), mode === 'geo' ? 6.5 : 3.2),
-                        duration: 600
+                        duration: P.mapMotion(600)
                     });
                 } catch (e) { /* ignore */ }
                 select(index);
