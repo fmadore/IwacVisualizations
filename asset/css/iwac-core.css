@@ -375,8 +375,11 @@
     [class*="iwac-vis-"],
     [class*="iwac-vis-"]::before,
     [class*="iwac-vis-"]::after {
+        /* stylelint-disable declaration-no-important -- the a11y override
+           documented above; it must beat every block sheet's transitions. */
         transition-duration: 0.01ms !important;
         transition-delay: 0ms !important;
+        /* stylelint-enable declaration-no-important */
     }
 }
 

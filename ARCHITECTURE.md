@@ -212,7 +212,7 @@ IwacVisualizations/
 │       │   └── not-found.phtml
 │       └── layout/
 │           └── embed.phtml
-├── _h5.txt
+├── .stylelintrc.json
 ├── ARCHITECTURE.md                    # This file
 ├── CHANGELOG.md                       # Version history
 ├── CITATION.cff
@@ -224,11 +224,13 @@ IwacVisualizations/
 ├── Module.php                         # Structural only — NO asset listeners (see docblock)
 ├── package-lock.json
 ├── package.json
+├── phpstan.neon.dist
 ├── playwright.config.js
 ├── PRODUCT.md
 ├── README.md
 ├── REFACTORING.md                     # Audit findings and what was done about them
 ├── ROADMAP.md                         # Living roadmap and implementation tracker
+├── ruff.toml
 └── tokens.json                        # Synced from the IWAC theme; `npm run lint:theme` enforces it
 ```
 

@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 /**
- * pyflakes over scripts/*.py — the local half of the `Lint (PHP/Python)`
- * workflow's `python` job.
+ * ruff over the Python — the local half of the `Lint (PHP/Python)` workflow.
  *
  * Why this exists: `npm run lint` covered the JS/CSS side only, so a commit
  * touching a generator could pass everything runnable locally and still turn
- * CI red. That happened in v1.24.0 and again in v1.24.1 — two unused imports
- * in generate_keyness.py, exactly the class of thing pyflakes catches in a
+ * CI red. That happened in v1.24.0 and again in v1.24.1 - two unused imports
+ * in generate_keyness.py, exactly the class of thing this catches in a
  * second, found only after the push.
  *
- * Deliberately NON-FATAL when pyflakes is missing. Wiring a hard Python
+ * WAS PYFLAKES, IS RUFF (Tier 8 / B2 (3)). Same standard: ruff.toml selects
+ * `F` (ruff's pyflakes port) and `E9`, which is the previous gate rule for
+ * rule - no file had to change to pass. What the swap buys is that ruff owns
+ * its own file discovery, so the rule set, the exclusions and the
+ * per-file-ignores live in a checked-in config both this script and CI read,
+ * rather than in an argument list that has to be kept identical in two
+ * places. The old invocation passed `scripts/` explicitly and had already
+ * drifted once: it linted the generators and never `tests/python/`.
+ *
+ * pyflakes stays as a FALLBACK, not a second standard - a contributor whose
+ * venv predates this change still gets the `F` rules rather than a skip. It
+ * checks `scripts/` only, which is what it always did.
+ *
+ * Deliberately NON-FATAL when neither is installed. Wiring a hard Python
  * dependency into `npm run build` would break the JS-only workflow for anyone
  * without it, and a check nobody can run is worse than one that skips loudly.
- * CI installs pyflakes explicitly and enforces there, so a skip locally costs
- * a round trip at worst; a hard failure would cost every asset build.
- *
- * Mirrors the CI invocation exactly (`pyflakes scripts/`, recursive) so a
- * local pass means a CI pass.
+ * CI installs ruff explicitly and enforces there, so a skip locally costs a
+ * round trip at worst; a hard failure would cost every asset build.
  */
 'use strict';
 
@@ -48,14 +57,13 @@ function candidates() {
 }
 
 /**
- * Every .py under scripts/, RECURSIVELY.
+ * Every .py under scripts/, RECURSIVELY — for the pyflakes fallback only.
  *
- * A flat readdir was correct only while every generator was one top-level
- * file. Since the laicite generator became a package (Tier 8 / P4) the flat
- * version would check its 30-line CLI shim and skip the 2,400 lines behind
- * it — a local pass would stop meaning a CI pass, which is the one thing
- * this script exists to guarantee. __pycache__ is skipped because .pyc is
- * not .py, and any other build directory would be too.
+ * ruff finds its own files from ruff.toml. This list exists because pyflakes
+ * does not: a flat readdir was correct only while every generator was one
+ * top-level file, and since the laicite generator became a package (Tier 8 /
+ * P4) it would check the 30-line CLI shim and skip the 2,400 lines behind it.
+ * __pycache__ is skipped because .pyc is not .py.
  */
 function pythonFiles(dir = SCRIPTS_DIR) {
     const out = [];
@@ -71,6 +79,27 @@ function pythonFiles(dir = SCRIPTS_DIR) {
     return out.sort();
 }
 
+/** Does `<exe> -m <mod> --version` work? */
+function has(exe, mod) {
+    const probe = spawnSync(exe, ['-m', mod, '--version'], { encoding: 'utf8' });
+    return !probe.error && probe.status === 0;
+}
+
+function report(result, label, scope) {
+    const out = `${result.stdout || ''}${result.stderr || ''}`.trim();
+    if (result.status === 0) {
+        console.log(`✓ ${label}: ${scope} clean`);
+        return 0;
+    }
+    console.error(out || `${label} failed with no output`);
+    console.error(
+        `
+✗ ${label}: see above. `
+        + 'The same check runs in the Lint (PHP/Python) workflow.'
+    );
+    return 1;
+}
+
 function run() {
     const files = pythonFiles();
     if (files.length === 0) {
@@ -78,32 +107,30 @@ function run() {
         return 0;
     }
 
+    // ruff first, from the repo root so it reads ruff.toml and covers
+    // tests/python/ as well as the generators.
     for (const exe of candidates()) {
-        const probe = spawnSync(exe, ['-m', 'pyflakes', '--version'], {
-            encoding: 'utf8',
-        });
-        if (probe.error || probe.status !== 0) continue;
-
-        const result = spawnSync(exe, ['-m', 'pyflakes', ...files], {
-            encoding: 'utf8',
-        });
-        const out = `${result.stdout || ''}${result.stderr || ''}`.trim();
-        if (result.status === 0) {
-            console.log(`✓ pyflakes: ${files.length} Python files clean`);
-            return 0;
-        }
-        console.error(out || 'pyflakes failed with no output');
-        console.error(
-            `\n✗ pyflakes: ${files.length} generators checked, see above. ` +
-            'Same check runs in the Lint (PHP/Python) workflow.'
+        if (!has(exe, 'ruff')) continue;
+        return report(
+            spawnSync(exe, ['-m', 'ruff', 'check', '.'], { encoding: 'utf8', cwd: ROOT }),
+            'ruff', 'every Python file under ruff.toml'
         );
-        return 1;
+    }
+
+    // Fallback: an older venv. Same rules, narrower scope.
+    for (const exe of candidates()) {
+        if (!has(exe, 'pyflakes')) continue;
+        console.log('• ruff not installed - falling back to pyflakes (same `F` rules).');
+        return report(
+            spawnSync(exe, ['-m', 'pyflakes', ...files], { encoding: 'utf8' }),
+            'pyflakes', `${files.length} generator files`
+        );
     }
 
     console.log(
-        '• python lint SKIPPED: no interpreter with pyflakes found. ' +
-        'Install it with `pip install pyflakes==3.4.0` to catch unused imports ' +
-        'and undefined names before CI does.'
+        '• python lint SKIPPED: no interpreter with ruff or pyflakes found. '
+        + 'Install it with `pip install ruff==0.16.6` to catch unused imports '
+        + 'and undefined names before CI does.'
     );
     return 0;
 }

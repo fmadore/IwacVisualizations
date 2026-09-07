@@ -1,0 +1,28 @@
+# Ruff — the Python half of the lint gate (Tier 8 / B2 (3)).
+#
+# WHY THIS RULE SET AND NO OTHER
+# ------------------------------
+# `F` is ruff's port of pyflakes, which is what this repo enforced before:
+# undefined names, unused imports, redefinitions, f-strings with no
+# placeholders. `E9` adds the two syntax/IO errors pyflakes also reports.
+# Together they are the previous gate exactly — so the switch is a change of
+# engine, not of standard, and no existing file had to move to make it pass.
+#
+# Everything else stays off ON PURPOSE. The audit's phrasing was "zero added
+# noise", and that is the whole argument: a gate that starts by flagging four
+# hundred line lengths is a gate contributors learn to `--no-verify` past.
+# `E501`, `I` (import sorting), `UP`, `B`, `SIM` are all defensible and all
+# reformat files nobody was going to touch. Add one when it catches a bug
+# that actually happened here, the way `F` did in v1.24.0 and v1.24.1.
+#
+# Run it with `npm run lint:py` (which also finds a venv interpreter) or
+# directly: `ruff check .`
+line-length = 100
+
+[lint]
+select = ["F", "E9"]
+
+[lint.per-file-ignores]
+# The generator packages re-export their public surface through __init__, and
+# a re-export is an "unused" import to any pyflakes-shaped checker.
+"__init__.py" = ["F401"]

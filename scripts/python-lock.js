@@ -45,7 +45,7 @@ function check() {
 
 /**
  * Every pin in `tests/python/requirements.txt` that the lock also names must
- * match it exactly. A test-only tool (pyflakes) is not in the lock and is
+ * match it exactly. A test-only tool (ruff) is not in the lock and is
  * skipped rather than reported.
  */
 function checkTestDeps() {
@@ -64,7 +64,7 @@ function checkTestDeps() {
     for (const line of fs.readFileSync(testFile, 'utf8').split(NEWLINE)) {
         const m = PIN.exec(line.trim());
         if (!m) continue;
-        // A test-only tool (pyflakes) is not in the generator lock.
+        // A test-only tool (ruff) is not in the generator lock.
         if (!locked.has(norm(m[1]))) continue;
         if (locked.get(norm(m[1])) !== m[2]) {
             problems.push(

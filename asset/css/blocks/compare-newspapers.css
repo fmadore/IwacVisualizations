@@ -447,6 +447,9 @@
 /*  Side color tokens — derived from the theme palette                   */
 /* =================================================================== */
 
+/* stylelint-disable-next-line no-duplicate-selectors -- a token-only rule,
+   kept in the palette section rather than hoisted into the layout rule at
+   the top of this sheet. It declares no property the first rule sets. */
 .iwac-vis-compare-newspapers {
     /* Corpus A tracks the brand --primary; corpus B the shared --secondary
      * slate. Both auto-adjust for dark mode via the theme tokens (which

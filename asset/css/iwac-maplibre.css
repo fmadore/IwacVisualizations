@@ -74,6 +74,10 @@
  * whole popup to the right of the marker and switches at `W/2 + edge`, so
  * the worst case is `1.5W + edge ≤ usable` — which is the same bound.
  */
+/* stylelint-disable-next-line no-duplicate-selectors -- a token-only rule,
+   kept beside the arithmetic above that reads it rather than hoisted into
+   the layout rule at the top of this sheet. It declares no property the
+   first rule sets, so nothing is being silently overridden. */
 .iwac-vis-map {
     --iwac-vis-popup-edge: 16px;
 }

@@ -15,7 +15,8 @@ on:
     paths:
       - "**/*.php"
       - "**/*.phtml"
-      - "scripts/**/*.py"
+      - "**/*.py"
+      - "ruff.toml"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/python-lock.js"
@@ -26,7 +27,8 @@ on:
     paths:
       - "**/*.php"
       - "**/*.phtml"
-      - "scripts/**/*.py"
+      - "**/*.py"
+      - "ruff.toml"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/python-lock.js"
@@ -89,20 +91,22 @@ jobs:
       # Keep lint isolated from the generator stack. It catches undefined
       # names, unused imports and redefinitions before the focused test
       # dependencies are installed below.
-      - name: Install pyflakes
-        run: pip install pyflakes==3.4.0
+      - name: Install ruff
+        run: pip install ruff==0.16.6
 
       # `datasets` is lazy-loaded at the network boundary; pinned numpy+pandas
       # wheels are enough to exercise and import the pure shared helpers.
       - name: Install Python test dependencies
         run: pip install -r tests/python/requirements.txt
 
-      - name: pyflakes over the generators
-        # The DIRECTORY, not `scripts/*.py`: since the laïcité generator
-        # became a package (Tier 8 / P4) a top-level-only glob would lint the
-        # CLI shim and skip the 2,400 lines behind it. `scripts/laicite/` is
-        # not the last subpackage this file will hold.
-        run: pyflakes scripts/
+      - name: ruff over the Python
+        # No path argument: ruff.toml is the checked-in source of both the
+        # rule set (`F` + `E9` — the pyflakes gate this replaced, rule for
+        # rule) and the file discovery, so `npm run lint:py` locally and this
+        # step cannot drift the way the old explicit `scripts/` did. That
+        # argument had already drifted once: it linted the generators and
+        # never `tests/python/`, which this now covers.
+        run: ruff check .
 
       # The data validator's own self-test: it proves the checks can fail, so
       # a green "Validate the generated data" in the data workflow means

@@ -39,6 +39,7 @@
  * Exit code 1 on any inconsistency (with the offending slug), else 0.
  */
 const { readdirSync, readFileSync, existsSync } = require('fs');
+const { spawnSync } = require('child_process');
 const { join } = require('path');
 
 const ROOT = join(__dirname, '..');
@@ -55,8 +56,65 @@ const MANIFEST = join(ROOT, 'asset', 'js', 'bundles.json');
 const problems = [];
 const fail = (msg) => problems.push(msg);
 
-/** Parse BlockRegistry::BLOCKS into { slug: {invokable, class, embeddable} }. */
+/**
+ * Read `BlockRegistry::BLOCKS` — through PHP when there is a PHP, by regex
+ * when there is not.
+ *
+ * The regex path was the only path, and it kept being the wrong shape: rows
+ * had to be found by indentation so that the arrays a `shell` nests would not
+ * read as rows of their own, and a `'shell' => [` key had to be detected with
+ * a second pattern. `php -r` returns the actual array, which is both simpler
+ * and correct by construction. The regex stays as the fallback, because a
+ * contributor without a PHP binary should still get the other twenty checks
+ * rather than a skipped script (B2).
+ */
 function parseRegistry() {
+    const viaPhp = parseRegistryWithPhp();
+    if (!viaPhp) return parseRegistryWithRegex();
+    // Both readers exist, so both have to agree, or the CI run (node only,
+    // no PHP - so the fallback) would be checking something the local run
+    // is not. Comparing costs one extra file read and removes the whole
+    // class of "passes here, fails there".
+    if (JSON.stringify(viaPhp) !== JSON.stringify(parseRegistryWithRegex())) {
+        fail(
+            'the PHP and regex registry readers disagree - the fallback in '
+            + 'parseRegistryWithRegex() has drifted from BlockRegistry::BLOCKS'
+        );
+    }
+    return viaPhp;
+}
+
+function parseRegistryWithPhp() {
+    const result = spawnSync('php', [
+        '-d', 'error_reporting=0',
+        '-r',
+        `require ${JSON.stringify(REGISTRY)}; `
+        + 'echo json_encode(IwacVisualizations\\Site\\BlockRegistry::BLOCKS);',
+    ], { encoding: 'utf8' });
+    if (result.error || result.status !== 0 || !result.stdout) return null;
+    let raw;
+    try {
+        raw = JSON.parse(result.stdout);
+    } catch (e) {
+        return null;
+    }
+    const out = {};
+    for (const [slug, row] of Object.entries(raw)) {
+        const cls = String(row.class || '').split('\\').pop();
+        out[slug] = {
+            invokable: row.invokable ?? null,
+            class: cls || null,
+            embeddable: row.embeddable !== false,
+            shell: Boolean(row.shell),
+            bundle: (row.shell && row.shell.assets && row.shell.assets.bundle) || null,
+            declaresEmbedSlug: Boolean(row.shell && 'embedSlug' in row.shell),
+        };
+    }
+    return out;
+}
+
+/** The fallback: no PHP binary, so read the source. */
+function parseRegistryWithRegex() {
     const src = readFileSync(REGISTRY, 'utf8');
     const body = /const BLOCKS = \[([\s\S]*?)\n {4}\];/.exec(src);
     if (!body) {

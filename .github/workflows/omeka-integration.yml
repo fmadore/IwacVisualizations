@@ -9,6 +9,7 @@ on:
       - "src/**"
       - "view/**"
       - "tests/integration/**"
+      - "phpstan.neon.dist"
       - ".github/workflows/omeka-integration.yml"
   pull_request:
     paths:
@@ -17,6 +18,7 @@ on:
       - "src/**"
       - "view/**"
       - "tests/integration/**"
+      - "phpstan.neon.dist"
       - ".github/workflows/omeka-integration.yml"
   workflow_dispatch:
 
@@ -130,3 +132,26 @@ jobs:
         env:
           OMEKA_PATH: ${{ runner.temp }}/omeka-s
         run: php tests/integration/omeka_boot.php
+
+      # PHPStan rides along on the checkout above rather than fetching its
+      # own (Tier 8 / B2 (2)). It runs on the PRODUCTION leg only: the
+      # analysis is about this module's code against the host's signatures,
+      # and doing it twice against two Omeka versions would report the same
+      # thing twice for the cost of a second 19 MB unpack. The production
+      # leg is the one whose signatures are the ones that matter.
+      #
+      # No composer.json here on purpose - see phpstan.neon.dist - so the
+      # analyser arrives as a verified phar, the same shape as the Omeka
+      # download above.
+      - name: Download the verified PHPStan phar
+        if: matrix.target == 'production'
+        run: |
+          PHPSTAN_URL="https://github.com/phpstan/phpstan/releases/download/2.2.13/phpstan.phar"
+          curl --fail --location --retry 3 "$PHPSTAN_URL" --output "$RUNNER_TEMP/phpstan.phar"
+          echo "a3293d850a9966fbef43e39d04f2b081b8eec35839126c43a54684f21b10ad69  $RUNNER_TEMP/phpstan.phar" | sha256sum --check
+
+      - name: PHPStan level 5 over Module.php, src/ and config/
+        if: matrix.target == 'production'
+        env:
+          OMEKA_PATH: ${{ runner.temp }}/omeka-s
+        run: php "$RUNNER_TEMP/phpstan.phar" analyse --no-progress --error-format=github

@@ -77,13 +77,15 @@
 }
 
 .iwac-vis-networks-typechip--off .iwac-vis-networks-typechip__dot {
-    /*  The ONE sanctioned `!important` in the module, and it is not about
-     *  specificity: `entity-networks.js` writes the dot's colour as an INLINE
+    /*  One of the module's three sanctioned `!important`s - the other two
+     *  are the reduced-motion override in iwac-core.css - and the only one
+     *  that is not about specificity: `entity-networks.js` writes the dot's colour as an INLINE
      *  style (`dot.style.background = palette[…]`), because the palette is
      *  read from the live theme at render time. An inline style beats every
      *  selector, so this is the only way an off-state chip can grey its own
      *  dot. Moving the palette into a custom property would remove the need;
      *  until then, this is the tool. */
+    /* stylelint-disable-next-line declaration-no-important -- see above */
     background: var(--muted, #66696e) !important;
 }
 
