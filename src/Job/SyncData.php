@@ -343,7 +343,17 @@ class SyncData extends AbstractJob
      * malformed, or that does not match, throws: an unverifiable archive is
      * not installed.
      */
-    private function verifyDigest(string $sidecarUrl, string $zipPath, $logger): void
+    /**
+     * `protected`, not `private`, and only for that reason: it and
+     * `download()` below are the two methods that reach the network, so
+     * they are the seam a test overrides to hand `perform()` a local
+     * fixture archive instead. Everything between them and the atomic swap
+     * - the marker check, the zip-slip guard, the symlink refusal, the
+     * expansion ceiling, the rename dance - is then exercised for real
+     * against a real ZipArchive (Tier 8 / B3 (1)). Before this the tests
+     * could only reach the static predicates.
+     */
+    protected function verifyDigest(string $sidecarUrl, string $zipPath, $logger): void
     {
         $sidecarPath = $zipPath . self::CHECKSUM_SUFFIX;
         try {
@@ -384,7 +394,8 @@ class SyncData extends AbstractJob
      * not connect), 28 (timed out), 56 (receive error) — so an HTTP 404 or a
      * TLS failure still fails immediately, because those will fail again.
      */
-    private function download(string $url, string $dest, $logger): void
+    /** The other network seam - see verifyDigest() above. */
+    protected function download(string $url, string $dest, $logger): void
     {
         $transient = [7, 28, 56];   // CURLE_COULDNT_CONNECT / OPERATION_TIMEDOUT / RECV_ERROR
         try {

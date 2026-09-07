@@ -45,7 +45,48 @@ namespace Omeka\Module {
 }
 
 namespace Omeka\Job {
-    abstract class AbstractJob {}
+    /**
+     * Enough of Omeka's AbstractJob for SyncData::perform() to run: the
+     * service locator, the job entity it reads an id from, the argument bag
+     * and the stop flag. Real Omeka gives all four; stubbing them is what
+     * lets the archive handling be tested without a database (B3 (1)).
+     */
+    abstract class AbstractJob
+    {
+        protected $job;
+        private $services;
+        private $args;
+        public $stopAfter = null;
+        public $stopCalls = 0;
+
+        public function __construct($services = null, array $args = [], $job = null)
+        {
+            $this->services = $services;
+            $this->args = $args;
+            $this->job = $job;
+        }
+
+        public function getServiceLocator()
+        {
+            return $this->services;
+        }
+
+        public function getArg($name, $default = null)
+        {
+            return $this->args[$name] ?? $default;
+        }
+
+        /**
+         * False, unless a test asked to stop at the Nth call - which is how
+         * the "stop requested before swap" branch is reached deliberately
+         * rather than by timing.
+         */
+        public function shouldStop()
+        {
+            $this->stopCalls++;
+            return $this->stopAfter !== null && $this->stopCalls > $this->stopAfter;
+        }
+    }
 }
 
 namespace Omeka\Api\Representation {
@@ -408,6 +449,11 @@ namespace {
         in_array('stopping', \IwacVisualizations\Controller\Admin\DataController::ACTIVE_STATUSES, true),
         'a stopping sync is not treated as active'
     );
+
+    // SyncData::perform() against real ZIP fixtures. Kept in its own file:
+    // it needs a dozen fakes and a temp-directory lifecycle, which would
+    // dwarf the pure contracts above.
+    require __DIR__ . '/sync_data_archive.php';
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");
