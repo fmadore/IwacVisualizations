@@ -1137,6 +1137,25 @@ def _load_hf_dataset(**kwargs: Any) -> Any:
     return load_dataset(**kwargs)
 
 
+# A process-level memo, installed by ``run_all`` and nothing else. When it is
+# None (every direct ``python scripts/generate_x.py`` invocation, and the whole
+# test suite) ``load_dataset_safe`` does exactly what it always did: one load
+# per call, nothing retained. See ``iwac_frames.FrameStore``.
+_FRAME_STORE: Any = None
+
+
+def set_frame_store(store: Any) -> Any:
+    """Install (or, with ``None``, remove) the process-level frame memo.
+
+    Returns the previously installed store so a caller can restore it —
+    which is what makes this safe to use from a test.
+    """
+    global _FRAME_STORE
+    previous = _FRAME_STORE
+    _FRAME_STORE = store
+    return previous
+
+
 def load_dataset_safe(
     config_name: str,
     repo_id: str = DATASET_ID,
@@ -1173,6 +1192,31 @@ def load_dataset_safe(
         >>> df = load_dataset_safe("articles")
         >>> df = load_dataset_safe("articles", columns=["o:id", "title", "pub_date"])
         >>> df = load_dataset_safe("index", repo_id="fmadore/islam-west-africa-collection")
+    """
+    store = _FRAME_STORE
+    if store is not None:
+        return store.get(
+            config_name, repo_id=repo_id, token=token,
+            columns=columns, required=required,
+        )
+    return _load_subset_frame(
+        config_name, repo_id=repo_id, token=token,
+        columns=columns, required=required,
+    )
+
+
+def _load_subset_frame(
+    config_name: str,
+    repo_id: str = DATASET_ID,
+    token: Optional[str] = None,
+    columns: Optional[List[str]] = None,
+    required: bool = False,
+) -> Optional[pd.DataFrame]:
+    """The unmemoized load — one download, one pandas conversion, nothing kept.
+
+    :func:`load_dataset_safe` is the door every generator uses; this is what
+    is behind it when no :class:`iwac_frames.FrameStore` is installed, and
+    what the store itself calls on a miss.
     """
     logger = logging.getLogger(__name__)
     logger.info(f"Loading subset '{config_name}' from {repo_id}...")

@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 Omeka S module that adds interactive visualizations to the [Islam West Africa Collection](https://islam.zmo.de/) at ZMO. Charts via [ECharts 6](https://echarts.apache.org/) + [MapLibre GL](https://maplibre.org/). Data is either fetched live from the public HF dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/`. **The precompute scripts read the private full mirror `fmadore/islam-west-africa-collection-full`** (`iwac_utils.DATASET_ID`) and require an `HF_TOKEN`; in CI it comes from the repo secret.
 
-For the architectural overview — block layouts, asset partial, data strategy, theming, i18n, mobile UX — read [README.md](README.md) first. For the dataset shape consumed by the precompute scripts, see [DATA_NOTES.md](DATA_NOTES.md).
+For the architectural overview — block layouts, asset partial, data strategy, theming, i18n, mobile UX, the build — read [ARCHITECTURE.md](ARCHITECTURE.md) first; [README.md](README.md) is what the module is and which blocks exist, and the version history moved to [CHANGELOG.md](CHANGELOG.md). For the dataset shape consumed by the precompute scripts, see [DATA_NOTES.md](DATA_NOTES.md).
 
 ## Always use the `iwac-dataset` skill
 
@@ -78,7 +78,7 @@ CPU-only environment (no GPU) — match the constraint when selecting models or 
 
 1. Reach for the `iwac-dataset` skill to confirm field names and types.
 2. Model a new generator on the existing `scripts/generate_*.py`. (The `iwac-dashboard` project these were originally seeded from is deprecated — don't depend on it.)
-3. Decide live-fetch vs. precompute using the rule in README.md (precompute if > 50 parallel HF requests OR touches OCR/embeddings).
+3. Decide live-fetch vs. precompute using the rule in ARCHITECTURE.md (precompute if > 50 parallel HF requests OR touches OCR/embeddings).
 4. Write `scripts/generate_<name>.py` following the existing CLI convention; reuse `iwac_utils.py`.
 5. Register the block in `src/Site/BlockRegistry.php` (slug, label, description, `embeddable`) — that is the single source of truth for the label, the admin description, the partial name, the embed slug and the embed whitelist. Add a `BlockLayout` subclass whose whole body is `const SLUG = '<slug>';`, and the invokable in `config/module.config.php`.
 6. Wire the JS panel and orchestrator under `asset/js/charts/` and the template under `view/common/block-layout/<slug>.phtml` — the filename must equal the slug (the embed route resolves the partial by slug). End the orchestrator with a single `P.bootBlock({...})` call rather than a hand-rolled DOMContentLoaded/fetch/catch epilogue.

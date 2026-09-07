@@ -151,6 +151,21 @@ $headScript = $this->headScript();
 $headLink(['rel' => 'preconnect',   'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
 $headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
 
+// A map block pays a SECOND cold connection the moment MapLibre initializes —
+// the style JSON from basemaps.cartocdn.com, then tiles and Noto glyph ranges
+// from tiles.basemaps.cartocdn.com. Only hinted when the block declares
+// 'maplibre', so a chart-only page opens no socket to Carto.
+//
+// The URLs themselves live in ONE place, `IWACVis.BASEMAP` (asset/js/iwac-theme.js);
+// these are its two origins, and `check-maplibre-gates.js` fails the build if
+// they drift apart or if a cartocdn literal reappears anywhere else.
+if ($needMaplibre) {
+    foreach (['https://basemaps.cartocdn.com', 'https://tiles.basemaps.cartocdn.com'] as $origin) {
+        $headLink(['rel' => 'preconnect',   'href' => $origin], 'PREPEND');
+        $headLink(['rel' => 'dns-prefetch', 'href' => $origin], 'PREPEND');
+    }
+}
+
 // -- Stylesheets (minified; regenerate with `npm run build:css`) --------
 $headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));
 // iwac-maplibre.min.css is intentionally NOT enqueued here: the map renders

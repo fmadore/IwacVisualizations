@@ -15,8 +15,8 @@
  * CI installs pyflakes explicitly and enforces there, so a skip locally costs
  * a round trip at worst; a hard failure would cost every asset build.
  *
- * Mirrors the CI invocation exactly (`pyflakes scripts/*.py`) so a local pass
- * means a CI pass.
+ * Mirrors the CI invocation exactly (`pyflakes scripts/`, recursive) so a
+ * local pass means a CI pass.
  */
 'use strict';
 
@@ -38,17 +38,34 @@ function candidates() {
     return list;
 }
 
-function pythonFiles() {
-    return fs.readdirSync(SCRIPTS_DIR)
-        .filter((f) => f.endsWith('.py'))
-        .map((f) => path.join(SCRIPTS_DIR, f))
-        .sort();
+/**
+ * Every .py under scripts/, RECURSIVELY.
+ *
+ * A flat readdir was correct only while every generator was one top-level
+ * file. Since the laicite generator became a package (Tier 8 / P4) the flat
+ * version would check its 30-line CLI shim and skip the 2,400 lines behind
+ * it — a local pass would stop meaning a CI pass, which is the one thing
+ * this script exists to guarantee. __pycache__ is skipped because .pyc is
+ * not .py, and any other build directory would be too.
+ */
+function pythonFiles(dir = SCRIPTS_DIR) {
+    const out = [];
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            if (entry.name === '__pycache__' || entry.name.startsWith('.')) continue;
+            out.push(...pythonFiles(full));
+        } else if (entry.name.endsWith('.py')) {
+            out.push(full);
+        }
+    }
+    return out.sort();
 }
 
 function run() {
     const files = pythonFiles();
     if (files.length === 0) {
-        console.log('✓ python lint: no generators to check');
+        console.log('✓ python lint: no Python files to check');
         return 0;
     }
 
@@ -63,7 +80,7 @@ function run() {
         });
         const out = `${result.stdout || ''}${result.stderr || ''}`.trim();
         if (result.status === 0) {
-            console.log(`✓ pyflakes: ${files.length} generators clean`);
+            console.log(`✓ pyflakes: ${files.length} Python files clean`);
             return 0;
         }
         console.error(out || 'pyflakes failed with no output');

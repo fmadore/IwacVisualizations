@@ -21,8 +21,11 @@ import generate_periodicals_overview  # noqa: E402
 import generate_template_summary  # noqa: E402
 import generate_topic_explorer  # noqa: E402
 import iwac_embeddings  # noqa: E402
+import iwac_frames  # noqa: E402
+import laicite  # noqa: E402
 import iwac_stats  # noqa: E402
 import iwac_utils  # noqa: E402
+import run_all  # noqa: E402
 
 
 class UtilityContractTests(unittest.TestCase):
@@ -844,3 +847,189 @@ class SharedHelperTests(unittest.TestCase):
     def test_entity_index_names_the_missing_columns(self) -> None:
         with self.assertRaisesRegex(RuntimeError, "index subset missing required columns"):
             iwac_utils.build_entity_index(pd.DataFrame({"o:id": [1]}))
+
+
+class FrameStoreTests(unittest.TestCase):
+    """P1: one frame per subset, widened on demand, with today's semantics.
+
+    Every case here drives ``load_dataset_safe`` — the door the 43 call sites
+    use — rather than the store's own API, because the whole claim of the
+    runner is that no call site changes.
+    """
+
+    def setUp(self) -> None:
+        self.frames = {
+            "articles": pd.DataFrame({
+                "o:id": [1, 2],
+                "title": ["A", "B"],
+                "ocr": ["long text", "more text"],
+            }),
+            "index": pd.DataFrame({"o:id": [9], "Titre": ["Cotonou"]}),
+            "empty": pd.DataFrame({"o:id": []}),
+        }
+        self.calls: list = []
+
+        def fake_load(config_name, repo_id=iwac_utils.DATASET_ID, token=None,
+                      columns=None, required=False):
+            self.calls.append((config_name, tuple(columns) if columns else None))
+            if config_name not in self.frames:
+                if required:
+                    raise RuntimeError(f"Required subset '{config_name}' could not be loaded")
+                return None
+            df = self.frames[config_name]
+            if columns:
+                df = df[[c for c in columns if c in df.columns]]
+            if required and df.empty:
+                raise RuntimeError(f"Required subset '{config_name}' from {repo_id} is empty.")
+            return df.copy()
+
+        patcher = patch.object(iwac_utils, "_load_subset_frame", fake_load)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+        store = iwac_frames.FrameStore()
+        iwac_utils.set_frame_store(store)
+        self.addCleanup(iwac_utils.set_frame_store, None)
+        self.store = store
+
+    def test_no_store_installed_means_todays_behaviour(self) -> None:
+        iwac_utils.set_frame_store(None)
+        iwac_utils.load_dataset_safe("articles")
+        iwac_utils.load_dataset_safe("articles")
+        self.assertEqual(self.calls, [("articles", None), ("articles", None)])
+
+    def test_second_caller_is_served_from_the_memo(self) -> None:
+        first = iwac_utils.load_dataset_safe("articles")
+        second = iwac_utils.load_dataset_safe("articles")
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(list(second.columns), list(first.columns))
+        self.assertEqual(self.store.stats()["hits"], 1)
+
+    def test_a_narrow_request_is_a_projection_of_the_wide_frame(self) -> None:
+        iwac_utils.load_dataset_safe("articles")
+        narrow = iwac_utils.load_dataset_safe("articles", columns=["title", "o:id"])
+        self.assertEqual(len(self.calls), 1)
+        # The caller's column order, not the frame's.
+        self.assertEqual(list(narrow.columns), ["title", "o:id"])
+
+    def test_a_wide_request_widens_a_narrow_entry_exactly_once(self) -> None:
+        iwac_utils.load_dataset_safe("articles", columns=["o:id"])
+        iwac_utils.load_dataset_safe("articles", columns=["title"])
+        iwac_utils.load_dataset_safe("articles", columns=["o:id", "title"])
+        self.assertEqual(self.calls, [
+            ("articles", ("o:id",)),
+            ("articles", ("o:id", "title")),
+        ])
+        self.assertEqual(self.store.stats()["widenings"], 1)
+
+    def test_a_missing_column_warns_rather_than_raising(self) -> None:
+        iwac_utils.load_dataset_safe("articles")
+        with self.assertLogs("iwac_frames", level="WARNING") as logs:
+            got = iwac_utils.load_dataset_safe("articles", columns=["title", "nope"])
+        self.assertEqual(list(got.columns), ["title"])
+        self.assertIn("nope", logs.output[0])
+
+    def test_mutating_what_a_caller_got_cannot_reach_the_next_caller(self) -> None:
+        first = iwac_utils.load_dataset_safe("articles")
+        first["extra"] = 1
+        first.loc[0, "title"] = "MUTATED"
+        second = iwac_utils.load_dataset_safe("articles")
+        self.assertNotIn("extra", second.columns)
+        self.assertEqual(second.loc[0, "title"], "A")
+
+    def test_a_failed_subset_is_not_retried_but_required_still_raises(self) -> None:
+        self.assertIsNone(iwac_utils.load_dataset_safe("absent"))
+        self.assertIsNone(iwac_utils.load_dataset_safe("absent"))
+        self.assertEqual(len(self.calls), 1)
+        with self.assertRaisesRegex(RuntimeError, "Required subset 'absent'"):
+            iwac_utils.load_dataset_safe("absent", required=True)
+
+    def test_an_empty_subset_stays_fatal_for_a_required_caller_after_caching(self) -> None:
+        self.assertTrue(iwac_utils.load_dataset_safe("empty").empty)
+        with self.assertRaisesRegex(RuntimeError, "is empty"):
+            iwac_utils.load_dataset_safe("empty", required=True)
+
+    def test_the_lru_bound_evicts_and_the_evicted_subset_reloads(self) -> None:
+        iwac_utils.set_frame_store(iwac_frames.FrameStore(max_subsets=1))
+        iwac_utils.load_dataset_safe("articles")
+        iwac_utils.load_dataset_safe("index")
+        iwac_utils.load_dataset_safe("articles")
+        self.assertEqual(
+            self.calls,
+            [("articles", None), ("index", None), ("articles", None)],
+        )
+
+
+class GeneratorRunnerTests(unittest.TestCase):
+    """P1: the runner's list is the contract CI reads."""
+
+    def test_every_listed_generator_exists_and_exposes_main(self) -> None:
+        import importlib
+        for name in run_all.GENERATORS:
+            module = importlib.import_module(run_all.module_name(name))
+            self.assertTrue(callable(getattr(module, "main", None)), name)
+
+    def test_the_list_covers_every_generator_on_disk(self) -> None:
+        on_disk = {
+            p.stem[len("generate_"):]
+            for p in SCRIPTS.glob("generate_*.py")
+        }
+        self.assertEqual(sorted(on_disk), sorted(run_all.GENERATORS))
+
+
+class LaicitePackageTests(unittest.TestCase):
+    """P4: the generator is a package, and the CLI it always was.
+
+    The point of these is the *seams*, not the analysis: every view module
+    contributes exactly one mixin, the composed class still answers to every
+    method name the block's bundles are built from, and the entry point at
+    the old path still exists.
+    """
+
+    def test_the_entry_point_still_lives_at_the_old_path(self) -> None:
+        import generate_laicite
+        self.assertTrue(callable(generate_laicite.main))
+        self.assertIs(generate_laicite.LaiciteGenerator, laicite.LaiciteGenerator)
+
+    def test_every_bundle_builder_survived_the_split(self) -> None:
+        # One per JSON file write_all emits, plus the shared scan.
+        expected = [
+            "scan_all", "build_metadata", "build_countries", "build_documents",
+            "build_trends", "build_seasonality", "build_collocates",
+            "build_implicit", "build_corpora", "build_actors", "build_arenas",
+            "build_sentiment", "build_semantic", "build_bylines",
+            "build_circulation", "build_places", "build_references",
+            "build_concordance", "write_all", "run",
+        ]
+        for name in expected:
+            self.assertTrue(
+                callable(getattr(laicite.LaiciteGenerator, name, None)), name)
+
+    def test_no_two_view_modules_claim_the_same_method(self) -> None:
+        """A silent override would make one bundle quietly write another's shape."""
+        seen: dict = {}
+        for base in laicite.LaiciteGenerator.__bases__:
+            for name, value in vars(base).items():
+                if name.startswith("__") or not callable(value):
+                    continue
+                self.assertNotIn(
+                    name, seen,
+                    f"{name} defined in both {seen.get(name)} and {base.__name__}")
+                seen[name] = base.__name__
+        self.assertGreater(len(seen), 30)
+
+    def test_the_lexicon_sidecar_travelled_with_its_package(self) -> None:
+        from laicite.lexicon import LEXICON_PATH
+        self.assertTrue(LEXICON_PATH.is_file(), LEXICON_PATH)
+        self.assertEqual(LEXICON_PATH.parent.name, "laicite")
+
+    def test_the_package_mirrors_the_javascript_module_layout(self) -> None:
+        """The claim P4 makes: what collocates.js renders, collocates.py computes."""
+        js = {p.stem for p in (ROOT / "asset/js/charts/laicite").glob("*.js")
+              if not p.name.endswith(".min.js")}
+        py = {p.stem for p in (SCRIPTS / "laicite").glob("*.py")}
+        # `map` is the JS name for what the bundle calls places; controls/i18n/
+        # helpers are presentation only; generator/register/scan/__init__ have
+        # no view to render.
+        shared = js - {"map", "controls", "i18n", "helpers", "overview"}
+        self.assertTrue(shared <= py, sorted(shared - py))

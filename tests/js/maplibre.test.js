@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 const { readFileSync, readdirSync, statSync } = require('node:fs');
-const { join, relative } = require('node:path');
+const { join, relative, sep } = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
@@ -208,4 +208,101 @@ test('every module popup goes through the shared factory', () => {
         .map((path) => relative(ROOT, path).replaceAll('\\', '/'));
 
     assert.deepEqual(directConstructors, ['asset/js/charts/shared/maplibre.js']);
+});
+
+test('a theme swap carries the module\'s own sources and rebuilds its layers', () => {
+    const P = loadMaplibre();
+    // Positron and dark-matter declare the same source ids as each other; what
+    // a panel added is exactly what is in the outgoing style and not the
+    // incoming one.
+    const previous = {
+        sources: {
+            carto: { type: 'vector', url: 'https://basemaps.example/tiles.json' },
+            'spatial-places': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+            'net-edges': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+        },
+        layers: [{ id: 'background' }, { id: 'spatial-place-circles' }],
+    };
+    const next = {
+        version: 8,
+        glyphs: 'https://tiles.basemaps.example/fonts/{fontstack}/{range}.pbf',
+        sources: { carto: { type: 'vector', url: 'https://basemaps.example/dark.json' } },
+        layers: [{ id: 'background' }],
+    };
+
+    const merged = P.carryOwnSources(previous, next);
+
+    assert.deepEqual(
+        Object.keys(merged.sources).sort(),
+        ['carto', 'net-edges', 'spatial-places']
+    );
+    // The BASEMAP's version of a shared id wins — the point is a new basemap.
+    assert.equal(merged.sources.carto.url, 'https://basemaps.example/dark.json');
+    // Layers are NOT carried: onStyleReady re-adds them, which is where their
+    // paint is re-resolved against the new theme's tokens.
+    assert.deepEqual(merged.layers, next.layers);
+    assert.equal(merged.glyphs, next.glyphs);
+    // The inputs are left alone.
+    assert.equal(Object.keys(next.sources).length, 1);
+});
+
+test('carry-over ignores non-geojson leftovers and no-ops on a first load', () => {
+    const P = loadMaplibre();
+    const next = { sources: { carto: { type: 'vector' } }, layers: [] };
+    // No previous style: the very first setStyle has nothing to carry.
+    assert.equal(P.carryOwnSources(undefined, next), next);
+    // A leftover that is not inline GeoJSON belongs to a basemap, not to us.
+    const stale = { sources: { 'old-raster': { type: 'raster' } }, layers: [] };
+    assert.equal(P.carryOwnSources(stale, next), next);
+});
+
+test('every module source is inline GeoJSON, which is what carry-over assumes', () => {
+    const files = [];
+    (function walk(dir) {
+        for (const name of readdirSync(dir)) {
+            const full = join(dir, name);
+            if (statSync(full).isDirectory()) walk(full);
+            else if (name.endsWith('.js') && !name.endsWith('.min.js')) files.push(full);
+        }
+    })(join(ROOT, 'asset', 'js'));
+
+    const offenders = [];
+    for (const path of files) {
+        const source = readFileSync(path, 'utf8');
+        // `addSource(id, { type: 'x'` — capture the declared type.
+        for (const m of source.matchAll(/addSource\([^,]+,\s*\{\s*(?:\n\s*)?type:\s*'([a-z-]+)'/g)) {
+            if (m[1] !== 'geojson') offenders.push(`${relative(ROOT, path)}: ${m[1]}`);
+        }
+    }
+    assert.deepEqual(offenders, [],
+        'P.carryOwnSources only carries geojson sources; a source of another '
+        + 'type would silently be dropped on every theme swap');
+});
+
+test('a consumer that adds a source unguarded would throw once it survives a swap', () => {
+    // The M17 class of bug: with sources carried across the swap, an
+    // `addSource` that is not behind a `getSource` guard runs a second time on
+    // an id that already exists.
+    const files = [];
+    (function walk(dir) {
+        for (const name of readdirSync(dir)) {
+            const full = join(dir, name);
+            if (statSync(full).isDirectory()) walk(full);
+            else if (name.endsWith('.js') && !name.endsWith('.min.js')) files.push(full);
+        }
+    })(join(ROOT, 'asset', 'js'));
+
+    const unguarded = [];
+    for (const path of files) {
+        const label = relative(ROOT, path).split(sep).join('/');
+        // maplibre.js's own doc comment shows the unguarded form as an example.
+        if (label === 'asset/js/charts/shared/maplibre.js') continue;
+        const lines = readFileSync(path, 'utf8').split('\n');
+        lines.forEach((line, i) => {
+            if (!/\.addSource\(/.test(line)) return;
+            const window = lines.slice(Math.max(0, i - 6), i).join('\n');
+            if (!/getSource\(/.test(window)) unguarded.push(`${label}:${i + 1}`);
+        });
+    }
+    assert.deepEqual(unguarded, []);
 });

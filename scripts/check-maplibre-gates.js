@@ -61,6 +61,19 @@
  * — is the whole reason this bug class exists on one and not the other, so it
  * is asserted here rather than assumed (`checkLoaderAsymmetry`).
  *
+ * THE BASEMAP LITERALS (M14)
+ * --------------------------
+ * The Carto style / glyph URLs are also checked here, because they are a
+ * MapLibre fact and this is the MapLibre gate. They lived in three places —
+ * `iwac-theme.js`, `P.setMapTheme` (which re-implemented `getBasemapStyle`
+ * instead of calling it) and `P.createIwacMap`'s fallback for a
+ * `getBasemapStyle` that cannot be absent — so a change to one silently left
+ * two behind. `IWACVis.BASEMAP` in `iwac-theme.js` is now the only place a
+ * `cartocdn` URL may appear in JavaScript, and the partial's `preconnect`
+ * hosts must be exactly that object's origins: a hint for a host nothing
+ * fetches is dead weight, and a fetch with no hint is the cold connection the
+ * hint exists to remove.
+ *
  * SEED VERIFICATION
  * -----------------
  * `--self-test` runs the analyzer over a synthetic file reproducing the
@@ -81,6 +94,52 @@ const DEFINES_GATE = /\bP\.(whenMaplibre|withMaplibre|deferMaplibre)\s*=/;
 const DEFINES_WRAPPER = /\bP\.(createIwacMap|createIwacPopup)\s*=/;
 const CREATES_MAP = /\bP\.createIwacMap\s*\(/;
 const READS_GLOBAL = /(?:\bnew\s+maplibregl\b|\bmaplibregl\s*[.[]|\btypeof\s+maplibregl\b)/;
+
+/** The one file allowed to name a basemap host, and the object that must own it. */
+const BASEMAP_OWNER = 'asset/js/iwac-theme.js';
+const BASEMAP_HOST = /https:\/\/[a-z.]*cartocdn\.com/g;
+const BASEMAP_DECL = /ns\.BASEMAP\s*=\s*\{([\s\S]*?)\}/;
+
+/**
+ * `IWACVis.BASEMAP`'s origins must be exactly what the partial preconnects to:
+ * a hint for a host nothing fetches is dead weight, and a fetch with no hint is
+ * the cold connection the hint exists to remove.
+ *
+ * Returns a list of problems, empty when the two agree.
+ */
+function checkBasemapOrigins() {
+    const problems = [];
+    const owner = readFileSync(join(ROOT, BASEMAP_OWNER), 'utf8');
+    const decl = owner.match(BASEMAP_DECL);
+    if (!decl) {
+        return [`${BASEMAP_OWNER}: no ns.BASEMAP object — the basemap URLs must live there`];
+    }
+    const origins = new Set(decl[1].match(BASEMAP_HOST) || []);
+    if (!origins.size) problems.push(`${BASEMAP_OWNER}: ns.BASEMAP names no cartocdn host`);
+
+    const partial = readFileSync(PARTIAL, 'utf8');
+    const hinted = new Set(
+        (partial.match(/'(https:\/\/[a-z.]*cartocdn\.com)'/g) || [])
+            .map((m) => m.slice(1, -1))
+    );
+    for (const o of origins) {
+        if (!hinted.has(o)) {
+            problems.push(
+                `view/common/iwac-assets.phtml: no preconnect for ${o}, `
+                + 'which ns.BASEMAP fetches from'
+            );
+        }
+    }
+    for (const h of hinted) {
+        if (!origins.has(h)) {
+            problems.push(
+                `view/common/iwac-assets.phtml: preconnects to ${h}, `
+                + 'which ns.BASEMAP never fetches'
+            );
+        }
+    }
+    return problems;
+}
 
 /**
  * Strip comments and string/template literals so only executable code is
@@ -263,8 +322,37 @@ for (const path of walk(JS_ROOT, [])) {
 }
 const loaderProblems = checkLoaderAsymmetry();
 
+// M14: one source of truth for the basemap endpoints. Kept apart from the gate
+// violations because the two failures call for different fixes.
+const basemapProblems = checkBasemapOrigins();
+for (const path of walk(JS_ROOT, [])) {
+    const label = relative(ROOT, path).replaceAll('\\', '/');
+    if (label === BASEMAP_OWNER) continue;
+    const hits = readFileSync(path, 'utf8').match(BASEMAP_HOST);
+    if (hits) {
+        basemapProblems.push(
+            `${label}: names a basemap host (${[...new Set(hits)].join(', ')})`
+        );
+    }
+}
+
+if (violations.length || loaderProblems.length || basemapProblems.length) {
+    console.error('');
+}
+
+if (basemapProblems.length) {
+    console.error('✗ maplibre gate guard: the basemap URLs have more than one home\n');
+    for (const p of basemapProblems) console.error(`  ${p}`);
+    console.error(
+        '\n  They live in IWACVis.BASEMAP (asset/js/iwac-theme.js) and nowhere else:'
+        + '\n  call ns.getBasemapStyle(mode) for a style URL, read ns.BASEMAP.glyphs'
+        + '\n  for the font endpoint, and keep the partial\'s preconnect hosts equal'
+        + '\n  to that object\'s origins.\n'
+    );
+}
+
 if (violations.length || loaderProblems.length) {
-    console.error('\n✗ maplibre gate guard: MapLibre is imported in parallel, not in order\n');
+    console.error('✗ maplibre gate guard: MapLibre is imported in parallel, not in order\n');
     for (const v of violations) {
         console.error(`  ${v.label}`);
         console.error(`    ${v.reason}`);
@@ -277,7 +365,13 @@ if (violations.length || loaderProblems.length) {
         + '\n  P.deferMaplibre(host, factory, methods) (panels that hand a live'
         + '\n  controller to a toolbar or sidebar). See asset/js/charts/shared/panels-map.js.\n'
     );
+}
+
+if (violations.length || loaderProblems.length || basemapProblems.length) {
     process.exit(1);
 }
 
-console.log('✓ maplibre gate guard: every MapLibre consumer awaits the import (self-test passed)');
+console.log(
+    '✓ maplibre gate guard: every MapLibre consumer awaits the import, '
+    + 'basemap URLs live in one place (self-test passed)'
+);

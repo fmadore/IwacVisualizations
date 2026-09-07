@@ -109,17 +109,20 @@ jobs:
           # Everything Omeka needs to load the module. language/fr.mo is in
           # the list because it is the only translation artifact the runtime
           # reads — fr.po is inert at runtime, so a missing .mo ships a module
-          # that silently renders English on the French site.
+          # that silently renders English on the French site. CHANGELOG.md and
+          # ARCHITECTURE.md are in it because they were parts of README.md
+          # until v1.64.0 and a release that lost them would quietly ship a
+          # third of the documentation less than the one before it.
           for f in Module.php config/module.ini config/module.config.php \
                    asset/css/iwac-core.min.css asset/js/bundles.json \
                    asset/js/dist/shared-core.min.js asset/js/dist/blocks/laicite.min.js \
-                   language/fr.mo LICENSE README.md; do
+                   language/fr.mo LICENSE README.md CHANGELOG.md ARCHITECTURE.md; do
             grep -qx "IwacVisualizations/$f" /tmp/list || { echo "::error::missing $f"; exit 1; }
           done
 
           # Nothing that only exists to develop it. Mirrors .gitattributes —
           # this fails loudly if an export-ignore rule is ever dropped.
-          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
+          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|eslint\.config\.js$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
             echo "::error::development files leaked into the release archive — check .gitattributes export-ignore"
             exit 1
           fi

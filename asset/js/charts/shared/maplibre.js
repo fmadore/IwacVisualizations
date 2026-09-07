@@ -62,6 +62,49 @@
     // Returns true if the basemap actually changed, false otherwise.
     // Either way the active mode is recorded on the map.
 
+    /**
+     * Carry the module's own SOURCES across a basemap swap, and only those.
+     *
+     * A source id present in the outgoing style but absent from the incoming
+     * one is by definition not part of either basemap: positron and
+     * dark-matter are the same style with different paint, so they declare the
+     * same source ids as each other, and the graph canvas declares none. What
+     * is left over is what a panel added — `spatial-places`, `net-edges`,
+     * `iwac-choropleth-*`, and the ten others. The `geojson` test is the belt
+     * to that braces: every source this module has ever added is inline
+     * GeoJSON, so a vector or raster leftover would be a basemap's, not ours.
+     *
+     * Sources, deliberately, and NOT layers. `setStyle` diffs, so a source
+     * whose spec is unchanged is not rebuilt: the GeoJSON is not re-parsed and
+     * not re-tiled (spatial's ~544 places, the entity network's ~10k edges,
+     * the choropleth polygons), and the feature-state the hover highlight
+     * keys on lives on the source, so it survives too. Layers are left to be
+     * dropped and re-added by `onStyleReady`, which every consumer already
+     * guards with `getLayer` — and that re-add is exactly where their paint
+     * colours get re-resolved from the new theme's tokens. Carrying the
+     * layers as well would keep the OLD theme's colours baked into them,
+     * which is the one thing a theme swap must not do.
+     */
+    P.carryOwnSources = function (previous, next) {
+        if (!previous || !previous.sources) return next;
+        var kept = {};
+        var incoming = (next && next.sources) || {};
+        Object.keys(previous.sources).forEach(function (id) {
+            var source = previous.sources[id];
+            if (!incoming[id] && source && source.type === 'geojson') {
+                kept[id] = source;
+            }
+        });
+        if (!Object.keys(kept).length) return next;
+        var merged = {};
+        Object.keys(incoming).forEach(function (id) { merged[id] = incoming[id]; });
+        Object.keys(kept).forEach(function (id) { merged[id] = kept[id]; });
+        var out = {};
+        Object.keys(next || {}).forEach(function (key) { out[key] = next[key]; });
+        out.sources = merged;
+        return out;
+    };
+
     P.setMapTheme = function (map, mode) {
         if (!map) return false;
         var next = mode === 'dark' ? 'dark' : 'light';
@@ -71,13 +114,16 @@
         // freshly-built blank style instead of a Carto URL; their
         // custom layers are rebuilt by the same onStyleReady path with
         // colors re-resolved from the new theme's tokens.
+        //
+        // `transformStyle` carries the module's own GeoJSON sources over
+        // (P.carryOwnSources): the data is not re-parsed or re-tiled and the
+        // hover feature-state survives, while the layers are still rebuilt so
+        // their paint picks up the new theme.
         var style = map._iwacStyleMode === 'graph'
             ? P.buildGraphStyle()
-            : (next === 'dark'
-                ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-                : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json');
+            : ns.getBasemapStyle(next);
         try {
-            map.setStyle(style);
+            map.setStyle(style, { transformStyle: P.carryOwnSources });
             return true;
         } catch (e) {
             console.error('IWACVis.maplibre: setStyle failed', e);
@@ -104,9 +150,10 @@
         var bg = P.normalizeColorForMapLibre(tokens.background || '#f7f7f6');
         return {
             version: 8,
-            // Same CDN family as the positron/dark-matter basemaps used
-            // everywhere else in the module.
-            glyphs: 'https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf',
+            // The same font endpoint the positron/dark-matter basemaps
+            // use, from ns.BASEMAP — an abstract graph needs Noto for its
+            // node labels even though it has no basemap at all.
+            glyphs: ns.BASEMAP.glyphs,
             sources: {},
             layers: [{
                 id: 'iwac-graph-background',
@@ -409,9 +456,7 @@
         if (graphMode) {
             defaultStyle = P.buildGraphStyle();
         } else {
-            defaultStyle = ns.getBasemapStyle
-                ? ns.getBasemapStyle()
-                : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+            defaultStyle = ns.getBasemapStyle();
         }
 
         // Localized cooperative-gestures hints. The historical reason
