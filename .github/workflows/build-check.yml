@@ -35,7 +35,11 @@ on:
       - "scripts/build-css.js"
       - "eslint.config.js"
       - "scripts/build-mo.js"
+      - "scripts/build-tree.js"
       - "scripts/check-*.js"
+      # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
+      # change to the doc — or to which files exist — can fail `npm run lint`.
+      - "ARCHITECTURE.md"
       - "scripts/gettext.js"
       - "tests/js/**"
       - "tests/browser/**"
@@ -60,7 +64,11 @@ on:
       - "scripts/build-css.js"
       - "eslint.config.js"
       - "scripts/build-mo.js"
+      - "scripts/build-tree.js"
       - "scripts/check-*.js"
+      # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
+      # change to the doc — or to which files exist — can fail `npm run lint`.
+      - "ARCHITECTURE.md"
       - "scripts/gettext.js"
       - "tests/js/**"
       - "tests/browser/**"

@@ -1,8 +1,9 @@
 # IWAC Visualizations — Roadmap
 
 Living roadmap **and implementation tracker** for the IwacVisualizations
-Omeka S module. See [`README.md`](README.md) for the current
-architecture and [`DATA_NOTES.md`](DATA_NOTES.md) for the Hugging Face
+Omeka S module. See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the current
+architecture, [`README.md`](README.md) for what the module is and which
+blocks exist, and [`DATA_NOTES.md`](DATA_NOTES.md) for the Hugging Face
 dataset schema.
 
 **How tracking works:** the phases below come from the June 2026
@@ -26,7 +27,9 @@ strings, or Svelte/Sigma/Graphology dependency chain.
 
 - Hugging Face dataset: [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) — 6 subsets, ~19,420 rows.
 - `o:id` in the dataset maps 1:1 to Omeka item IDs on <https://islam.zmo.de> → per-item JSON can be keyed directly by `o:id` and consumed by resource-page blocks via the existing `data-item-id` attribute.
-- Updated roughly monthly; precompute is a manual developer step.
+- Updated roughly monthly; precompute runs in CI (`regenerate-data.yml`),
+  is published to the `data` release and pulled onto the server by the
+  admin "Pull latest data" job (issue #7) — not a manual developer step.
 - Subset ↔ template map (verified 2026-06): `articles` = template 8,
   `publications` = template **21** (bibo:Issue, 1,501 issues),
   `documents` = template **22** (own template now; legacy items were on 8),
