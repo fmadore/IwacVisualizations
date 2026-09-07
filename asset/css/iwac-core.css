@@ -172,6 +172,26 @@
      * --size-control-sm (36px), which is both on-scale and a better touch
      * target. Consumers: .iwac-vis-panel-toolbar__btn, the map popup close
      * button, the graph toolbar.) */
+
+    /*  Stacking order, named (C3).
+     *
+     *  Eight z-index literals had accumulated across six sheets — 1, 2, 5,
+     *  6, 30, 1000 and a -1 — with nothing saying which sat above which or
+     *  why. They are three roles:
+     *
+     *    raised   a thing that lifts off the panel it belongs to: a chart's
+     *             own toolbar, a hovered card, a map control row.
+     *    overlay  a thing drawn OVER the panel's content and over anything
+     *             raised: a tooltip that follows the cursor, a floating
+     *             legend.
+     *    popover  a thing that leaves the panel's flow entirely: the
+     *             fullscreen panel, which must clear the site header.
+     *
+     *  A block that needs a fourth layer is describing a fourth role and
+     *  should name it here rather than reach for a bigger number. */
+    --iwac-vis-z-raised: 5;
+    --iwac-vis-z-overlay: 6;
+    --iwac-vis-z-popover: 1000;
 }
 
 
@@ -197,6 +217,9 @@
  *  would inherit the theme's h2: serif, --text-2xl, its own margins. */
 .iwac-vis-block h3,
 .iwac-vis-block > h2 {
+    /*  A heading that wraps should break evenly rather than leave one
+     *  word alone on the second line (C2). */
+    text-wrap: balance;
     font-size: var(--text-lg, 1.1875rem);
     font-weight: 600;
     color: var(--ink, #13161c);
@@ -474,7 +497,7 @@
     position: absolute;
     top: var(--space-2, 0.5rem);
     right: var(--space-2, 0.5rem);
-    z-index: 5;
+    z-index: var(--iwac-vis-z-raised, 5);
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 0.25rem);
@@ -648,7 +671,7 @@
     position: absolute;
     top: var(--space-2, 0.5rem);
     right: var(--space-2, 0.5rem);
-    z-index: 5;
+    z-index: var(--iwac-vis-z-raised, 5);
     display: flex;
     flex-direction: row;
     gap: var(--space-1, 0.25rem);
@@ -729,10 +752,14 @@
     position: fixed;
     inset: 0;
     margin: 0;
-    z-index: 1000;
+    z-index: var(--iwac-vis-z-popover, 1000);
     padding: var(--space-5, 1.25rem);
     background: var(--surface, #fdfcfb);
     overflow: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     border-radius: 0;
 }
 
@@ -995,12 +1022,6 @@
  * row above the dashboardLayout grid with a consistent gap, and clears
  * the "Visualizations" heading. Mirrors `.iwac-vis-minimal-item__body`;
  * the publication block ships no block-CSS of its own. */
-.iwac-vis-publication__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4, 1rem);
-    margin-top: var(--space-3, 0.75rem);
-}
 
 /*  Almanac figure — not a card. Each stat is a ruled column entry:
  *  2px ink rule on top (the ledger line), uppercase eyebrow, then the
@@ -1607,6 +1628,10 @@ select.iwac-vis-control:hover {
 .iwac-vis-table-wrapper {
     width: 100%;
     overflow-x: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
 }
 
 .iwac-vis-table {
@@ -1897,6 +1922,9 @@ select.iwac-vis-control:hover {
  *  (and any future block that renders this class) visually belong to
  *  the same hierarchy as the surrounding page title. */
 .iwac-vis-section-heading {
+    /*  A heading that wraps should break evenly rather than leave one
+     *  word alone on the second line (C2). */
+    text-wrap: balance;
     margin: 0;
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
     font-size: var(--text-xl, 1.5rem);
@@ -2342,7 +2370,7 @@ select.iwac-vis-control:hover {
 
 .iwac-vis-graph-tooltip {
     position: absolute;
-    z-index: 6;
+    z-index: var(--iwac-vis-z-overlay, 6);
     max-width: 17rem;
     padding: var(--space-xs, 0.25rem) var(--space-sm, 0.5rem);
     border: 1px solid var(--border, #ced1d6);
@@ -2424,11 +2452,15 @@ select.iwac-vis-control:hover {
     position: absolute;
     left: var(--space-sm, 0.5rem);
     bottom: var(--space-sm, 0.5rem);
-    z-index: 5;
+    z-index: var(--iwac-vis-z-raised, 5);
     width: 17rem;
     max-width: calc(100% - var(--space-lg, 1.5rem));
     max-height: 60%;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
     border: 1px solid var(--border, #ced1d6);
     /*  The one structural side-stripe here: it marks the card as belonging

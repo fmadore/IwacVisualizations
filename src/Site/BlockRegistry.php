@@ -165,7 +165,16 @@ final class BlockRegistry
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
-                    'blockCss' => 'laicite',
+                    // Five sheets, in cascade order: the shell every view sits
+                    // in, then the views. One 1,458-line file meant a change to
+                    // the concordance scrolled past the arenas (C5).
+                    'blockCss' => [
+                        'laicite-shell',
+                        'laicite-overview',
+                        'laicite-concordance',
+                        'laicite-lexicon',
+                        'laicite-context',
+                    ],
                     'needs' => [
                         'chartOptions' => true,
                         'facetButtons' => true,

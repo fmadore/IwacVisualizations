@@ -1,0 +1,156 @@
+/* =================================================================== */
+/*  Laïcité — the concordance (issue #14)                                      */
+/* =================================================================== */
+/*
+ *  The KWIC list and the annotated-event `<details>` fallback.
+ *
+ *  One of five sheets. `laicite.css` was 1,458 lines — larger than
+ *  iwac-maplibre.css plus five block sheets together — for a block with
+ *  fourteen views, so a change to the concordance meant scrolling past
+ *  the arenas (C5). `blockCss` takes a list, and the registry names all
+ *  five in load order.
+ */
+
+/* =================================================================== */
+/*  Concordance (KWIC)                                                   */
+/* =================================================================== */
+
+.iwac-vis-laicite-kwic-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3, 0.75rem);
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-laicite-kwic-count {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-strong, #05070c);
+}
+
+/*  The withheld count is a rights fact about the sources, not a pipeline
+ *  gap — stated plainly rather than hidden. */
+.iwac-vis-laicite-kwic-withheld {
+    margin: 0;
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.5;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-kwic-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-kwic-row {
+    padding: var(--space-3, 0.75rem);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border-light, #e2e5e8);
+    border-radius: var(--radius-sm, 0.375rem);
+}
+
+.iwac-vis-kwic-line {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.65;
+    color: var(--ink, #13161c);
+    overflow-wrap: anywhere;
+}
+
+.iwac-vis-kwic-left,
+.iwac-vis-kwic-right {
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-kwic-match {
+    padding: 0.05em 0.25em;
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+    background: color-mix(in oklab, var(--primary, #ce4115) 22%,
+                var(--surface, #fdfcfb));
+    border-radius: var(--radius-sm, 0.375rem);
+}
+
+.iwac-vis-kwic-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    margin: var(--space-2, 0.5rem) 0 0;
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-kwic-title {
+    font-weight: 500;
+    color: var(--ink-light, #3f4349);
+}
+
+a.iwac-vis-kwic-title:hover {
+    color: var(--primary, #ce4115);
+}
+
+.iwac-vis-kwic-sep {
+    color: var(--border-strong, #aeb1b7);
+}
+
+.iwac-vis-kwic-frame,
+.iwac-vis-kwic-tagged {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem var(--space-2, 0.5rem);
+    font-size: var(--text-2xs, 0.6875rem);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--surface-sunken, #f4f1ef);
+    border-radius: var(--radius-full, 9999px);
+    white-space: nowrap;
+}
+
+.iwac-vis-kwic-tagged {
+    color: var(--primary, #ce4115);
+    background: color-mix(in oklab, var(--primary, #ce4115)
+                var(--accent-mix-subtle, 25%), var(--surface, #fdfcfb));
+}
+
+.iwac-vis-kwic-empty {
+    padding: var(--space-4, 1rem);
+    text-align: center;
+    color: var(--muted, #66696e);
+}
+
+
+/* =================================================================== */
+/*  Event `<details>` fallback                                           */
+/* =================================================================== */
+
+.iwac-vis-laicite-details {
+    margin-top: var(--space-3, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-laicite-details > summary {
+    cursor: pointer;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-laicite-details > summary:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 2px;
+}
+
+/*  `.iwac-vis-timeline-details-*` is emitted by shared/annotated-timeline.js
+ *  and lives in iwac-core.css; only the accent colour is block-local. */
+
+.iwac-vis-timeline-details-link {
+    color: var(--primary, #ce4115);
+}
+
+

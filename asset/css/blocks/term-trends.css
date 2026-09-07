@@ -45,9 +45,13 @@
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    z-index: 30;
+    z-index: var(--iwac-vis-z-overlay, 6);
     max-height: 20rem;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     background: var(--surface-raised, #faf8f6);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);

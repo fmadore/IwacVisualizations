@@ -109,6 +109,10 @@
 .iwac-vis-keywords-compare__list {
     max-height: 14rem;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;

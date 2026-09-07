@@ -23,8 +23,7 @@
     display: block;
 }
 
-.iwac-vis-person__body,
-.iwac-vis-entity__body {
+.iwac-vis-person__body {
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 1rem);
@@ -110,7 +109,11 @@
 .iwac-vis-associated__time[hidden],
 .iwac-vis-associated__controls [hidden],
 .iwac-vis-associated > .iwac-vis-empty[hidden] {
-    display: none !important;
+    /*  No `!important`: these selectors are two classes deep, so they already
+     *  outrank any single-class `display` this module sets — including
+     *  `.iwac-vis-empty { display: flex }` in iwac-core, which is the rule
+     *  that makes a bare `[hidden]` insufficient in the first place. */
+    display: none;
 }
 
 /* ---- Shared view / type / top-N controls -------------------------- */
@@ -383,7 +386,7 @@
 .iwac-vis-arc-list__name:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm, 0.375rem);
 }
 
 .iwac-vis-arc-list__type {
@@ -434,7 +437,7 @@
     height: 0.625rem;
     flex: 0 0 auto;
     border: 1px solid color-mix(in oklab, var(--primary, #ce4115) 28%, var(--border-light, #e2e5e8));
-    border-radius: 999px;
+    border-radius: var(--radius-full, 9999px);
     background: linear-gradient(
         90deg,
         color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb)),
@@ -450,6 +453,10 @@
 .iwac-vis-time-matrix__scroll {
     max-width: 100%;
     overflow-x: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     background: var(--surface, #fdfcfb);
@@ -507,14 +514,14 @@
 .iwac-vis-time-matrix__entity {
     position: sticky;
     left: 0;
-    z-index: 1;
+    z-index: var(--iwac-vis-z-raised, 5);
     width: clamp(17rem, 32vw, 28rem);
     min-width: clamp(17rem, 32vw, 28rem);
     max-width: clamp(17rem, 32vw, 28rem);
 }
 
 .iwac-vis-time-matrix__entity-head {
-    z-index: 2;
+    z-index: var(--iwac-vis-z-overlay, 6);
     padding-left: var(--space-3, 0.75rem);
     text-align: left;
 }
@@ -570,7 +577,7 @@
 .iwac-vis-time-matrix__name:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm, 0.375rem);
 }
 
 .iwac-vis-time-matrix__cell {

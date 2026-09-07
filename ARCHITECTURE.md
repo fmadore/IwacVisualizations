@@ -26,7 +26,7 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                    # 40 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                    # 48 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css              # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
 │   │   ├── iwac-embed.css
@@ -109,6 +109,7 @@ IwacVisualizations/
 │   ├── build-tree.js
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
+│   ├── check-css-dead.js
 │   ├── check-flakes.js
 │   ├── check-i18n-mo.js
 │   ├── check-i18n.js

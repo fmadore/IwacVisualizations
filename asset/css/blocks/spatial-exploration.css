@@ -55,6 +55,10 @@
 .iwac-vis-spatial-picker__places-list {
     max-height: 16rem;
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
@@ -176,7 +180,7 @@
     position: absolute;
     right: var(--space-3, 0.75rem);
     bottom: var(--space-8, 2rem);
-    z-index: 2;
+    z-index: var(--iwac-vis-z-raised, 5);
     max-width: min(13rem, calc(100% - 1.5rem));
     pointer-events: none;
 }

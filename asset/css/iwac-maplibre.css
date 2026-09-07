@@ -166,6 +166,10 @@
     max-width: min(320px, calc(100vw - 1.5rem));
     max-height: min(70vh, 420px);
     overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a table used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
     /* Touch momentum scrolling inside the article list on iOS Safari. */
     -webkit-overflow-scrolling: touch;
 }
@@ -326,7 +330,7 @@ a.iwac-vis-map-popup__item-title:hover {
 .iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
-    z-index: 1;
+    z-index: var(--iwac-vis-z-raised, 5);
 }
 
 /* MapLibre ships its control icons as a monochrome sprite whose paths
@@ -542,7 +546,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 .iwac-compare-choropleth-ctrl__btn:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
-    z-index: 1;
+    z-index: var(--iwac-vis-z-raised, 5);
 }
 
 .iwac-compare-choropleth-ctrl__btn--active {
