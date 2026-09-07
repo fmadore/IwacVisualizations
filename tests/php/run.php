@@ -286,6 +286,32 @@ namespace {
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
 
+    // H5: nineteen blocks declare their whole shell in the registry and
+    // render through `_generic`; the two that do more than declare keep
+    // their own template. Both halves are asserted, because a block with
+    // NEITHER renders nothing and a block with BOTH renders the wrong one.
+    $shellRows = 0;
+    $ownTemplate = 0;
+    foreach (BlockRegistry::slugs() as $slug) {
+        $row = BlockRegistry::get($slug);
+        $tpl = $root . '/view/common/block-layout/' . $slug . '.phtml';
+        if (!empty($row['shell'])) {
+            $shellRows++;
+            check(!is_readable($tpl), "$slug: has a registry shell AND a $slug.phtml");
+            check(!isset($row['shell']['embedSlug']),
+                "$slug: shell declares embedSlug, which _generic already supplies");
+            check(isset($row['shell']['assets']['bundle']),
+                "$slug: shell names no bundle");
+        } else {
+            $ownTemplate++;
+            check(is_readable($tpl), "$slug: no registry shell and no $slug.phtml");
+        }
+    }
+    check($shellRows === 19, "expected 19 generic blocks, found $shellRows");
+    check($ownTemplate === 2, "expected 2 blocks with their own template, found $ownTemplate");
+    check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
+        '_generic.phtml is missing — nineteen blocks render through it');
+
     $visualizations = new Visualizations();
     $view = new PhpRenderer();
     $rendered = $visualizations->render($view, new FakeTemplateResource(15));

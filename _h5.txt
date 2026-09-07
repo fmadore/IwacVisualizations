@@ -1,0 +1,330 @@
+### audiovisual-overview
+[
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            // Also pulls faceted-chart.js, which the dual-measure panel uses.
+            'facetButtons' => true,
+            // Implies pagination — table.js's own dependency.
+            'table'        => true,
+        ],
+        'bundle' => 'audiovisual-overview',
+    ],
+    'blockClass' => 'iwac-vis-audiovisual-overview',
+    'embedSlug'  => 'audiovisual-overview',
+    'loading'    => $this->translate('Loading audiovisual overview'),
+]
+
+### compare-newspapers
+[
+    'assets' => [
+        'blockCss' => 'compare-newspapers',
+        'needs' => [
+            'wordcloud'    => true,
+            'chartOptions' => true,
+            'maplibre'     => true,
+            'pagination'   => true,
+        ],
+        // The bundle: shared helpers (side colors + uid counter) first, then
+        // one module per panel, then the orchestrator, which dispatches into
+        // them via IWACVis.compareNewspapers. The file list and its order
+        // live in asset/js/bundles.json.
+        'bundle' => 'compare-newspapers',
+    ],
+    'blockClass' => 'iwac-vis-compare-newspapers',
+    'embedSlug'  => 'compare-newspapers',
+    'loading'    => $this->translate('Loading newspaper comparison'),
+]
+
+### distinctive-vocabulary
+[
+    'assets' => [
+        'blockCss' => 'distinctive-vocabulary',
+        'needs' => [
+            'chartOptions' => true,
+            // Country / Decade switch on the keyness section.
+            'facetButtons' => true,
+        ],
+        'bundle' => 'distinctive-vocabulary',
+    ],
+    'blockClass' => 'iwac-vis-keyness',
+    'embedSlug'  => 'distinctive-vocabulary',
+    'loading'    => $this->translate('Loading distinctive vocabulary'),
+]
+
+### entity-networks
+[
+    'assets' => [
+        'blockCss' => 'entity-networks',
+        'needs' => [
+            'maplibre' => true,
+            'facetButtons' => true,
+        ],
+        'bundle' => 'entity-networks',
+    ],
+    'blockClass' => 'iwac-vis-networks',
+    'embedSlug'  => 'entity-networks',
+    'loading'    => $this->translate('Loading entity networks'),
+]
+
+### index-overview
+[
+    'assets' => [
+        'blockCss' => 'index-overview',
+        'needs' => [
+            'maplibre'     => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+        ],
+        'bundle' => 'index-overview',
+    ],
+    'blockClass' => 'iwac-vis-index-overview',
+    'embedSlug'  => 'index-overview',
+    'loading'    => $this->translate('Loading index overview'),
+]
+
+### laicite
+[
+    'assets' => [
+        'blockCss' => 'laicite',
+        'needs' => [
+            'chartOptions' => true,
+            'facetButtons' => true,
+            // Timeline view — the annotated time series shared with Scary
+            // Terms; concordance view — the shared KWIC renderer, which
+            // implies pagination; map view — the MapLibre stack.
+            'timeline'     => true,
+            'concordance'  => true,
+            'maplibre'     => true,
+            // The per-corpus table is built by hand (row-header + meter),
+            // but it borrows shared/table.js's card-role tagging so it
+            // collapses into labelled records on a phone like every other
+            // table in the module.
+            'table'        => true,
+        ],
+        // The bundle: i18n strings + stateless builders + the fourteen view
+        // modules + the controls row, then the orchestrator (which aliases
+        // the builders and reads the registered translations). The file
+        // list and its order live in asset/js/bundles.json.
+        'bundle' => 'laicite',
+    ],
+    'blockClass' => 'iwac-vis-laicite',
+    'embedSlug'  => 'laicite',
+    'loading'    => $this->translate('Loading laïcité dossier'),
+    'siteBase'   => true,
+]
+
+### lexical-metrics
+[
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'bundle' => 'lexical-metrics',
+    ],
+    'blockClass' => 'iwac-vis-lexical-metrics',
+    'embedSlug'  => 'lexical-metrics',
+    'loading'    => $this->translate('Loading press language metrics'),
+]
+
+### org-cooccurrence
+[
+    'assets' => [
+        'blockCss' => 'org-cooccurrence',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'bundle' => 'org-cooccurrence',
+    ],
+    'blockClass' => 'iwac-vis-orgcooc',
+    'embedSlug'  => 'org-cooccurrence',
+    'loading'    => $this->translate('Loading organisation co-occurrences'),
+]
+
+### periodicals-landscape
+[
+    'assets' => [
+        'needs' => [
+            // C.landscape — the UMAP scatter option the three landscape
+            // views share.
+            'chartOptions' => true,
+            'facetButtons' => true,
+        ],
+        'bundle' => 'semantic-landscape',
+    ],
+    'blockClass' => 'iwac-vis-periodicals-landscape',
+    'embedSlug'  => 'periodicals-landscape',
+    'loading'    => $this->translate('Loading semantic landscape'),
+]
+
+### periodicals-overview
+[
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            'wordcloud'    => true,
+        ],
+        'bundle' => 'periodicals-overview',
+    ],
+    'blockCss'   => 'periodicals-overview',
+    'blockClass' => 'iwac-vis-periodicals-overview',
+    'embedSlug'  => 'periodicals-overview',
+    'loading'    => $this->translate('Loading periodicals overview'),
+]
+
+### press-bylines
+[
+    'assets' => [
+        'blockCss' => 'press-bylines',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'bundle' => 'press-bylines',
+    ],
+    'blockClass' => 'iwac-vis-press-bylines',
+    'embedSlug'  => 'press-bylines',
+    'loading'    => $this->translate('Loading press bylines'),
+]
+
+### press-reprints
+[
+    'assets' => [
+        'blockCss' => 'press-reprints',
+        'needs' => [
+            'chartOptions' => true,
+            'table'        => true,
+        ],
+        'bundle' => 'press-reprints',
+    ],
+    'blockClass' => 'iwac-vis-reprints',
+    'embedSlug'  => 'press-reprints',
+    'loading'    => $this->translate('Loading press reprints'),
+]
+
+### references-overview
+[
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            'maplibre'     => true,
+            // "Color by" switch on the semantic-landscape panel.
+            'facetButtons' => true,
+        ],
+        'bundle' => 'references-overview',
+    ],
+    'blockClass' => 'iwac-vis-references-overview',
+    'embedSlug'  => 'references-overview',
+    'loading'    => $this->translate('Loading references overview'),
+]
+
+### scary-terms
+[
+    'assets' => [
+        'blockCss' => 'scary-terms',
+        'needs' => [
+            'chartOptions' => true,
+            // Word cloud view (issue #4) — echarts-wordcloud + the shared
+            // facet bar; Map view (issue #3) — the MapLibre stack.
+            'wordcloud'    => true,
+            'facetButtons' => true,
+            'maplibre'     => true,
+            // Trends view (issue #2) — the annotated time series now lives
+            // in shared/, shared with the Laïcité block (issue #14).
+            'timeline'     => true,
+        ],
+        // The bundle: i18n strings + stateless builders + the three view
+        // modules + the controls row, then the orchestrator (which aliases
+        // the builders and reads the registered translations). The file
+        // list and its order live in asset/js/bundles.json.
+        'bundle' => 'scary-terms',
+    ],
+    'blockClass' => 'iwac-vis-scary',
+    'embedSlug'  => 'scary-terms',
+    'loading'    => $this->translate('Loading scary terms'),
+    'siteBase'   => true,
+]
+
+### semantic-landscape
+[
+    'assets' => [
+        'needs' => [
+            // C.landscape — the UMAP scatter option the three landscape
+            // views share.
+            'chartOptions' => true,
+            'facetButtons' => true,
+        ],
+        'bundle' => 'semantic-landscape',
+    ],
+    'blockClass' => 'iwac-vis-semantic-landscape',
+    'embedSlug'  => 'semantic-landscape',
+    'loading'    => $this->translate('Loading semantic landscape'),
+]
+
+### sentiment-atlas
+[
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            'facetButtons' => true,
+        ],
+        'bundle' => 'sentiment-atlas',
+    ],
+    'blockClass' => 'iwac-vis-sentiment-atlas',
+    'embedSlug'  => 'sentiment-atlas',
+    'loading'    => $this->translate('Loading sentiment atlas'),
+]
+
+### spatial-exploration
+[
+    'assets' => [
+        'blockCss' => 'spatial-exploration',
+        'needs' => [
+            'maplibre' => true,
+        ],
+        'bundle' => 'spatial-exploration',
+    ],
+    'blockClass' => 'iwac-vis-spatial',
+    'embedSlug'  => 'spatial-exploration',
+    'loading'    => $this->translate('Loading spatial exploration'),
+]
+
+### term-trends
+[
+    'assets' => [
+        'blockCss' => 'term-trends',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'bundle' => 'term-trends',
+    ],
+    'blockClass' => 'iwac-vis-ngram',
+    'embedSlug'  => 'term-trends',
+    'loading'    => $this->translate('Loading term trends'),
+]
+
+### topic-explorer
+[
+    'assets' => [
+        'blockCss' => 'topic-explorer',
+        'needs' => [
+            'chartOptions' => true,
+            'layout'       => true,
+            // Weighting switch on the topics-over-time panel (dominant
+            // topic vs probability-weighted prevalence).
+            'facetButtons' => true,
+            // The topic map is drawn by calling the BUILDER directly
+            // (`ns.chartOptions.treemap`, which `chartOptions` above already
+            // supplies), not by dispatching a layout slot. The per-topic
+            // detail slots (calendar heatmap, horizontal bar, similar items)
+            // are what `layout` is for: the shared-layout bundle carries
+            // every renderer.
+        ],
+        'bundle' => 'topic-explorer',
+    ],
+    'blockClass'   => 'iwac-vis-topic-explorer',
+    'embedSlug'    => 'topic-explorer',
+    'loading'      => $this->translate('Loading Topic Explorer'),
+    'loadingClass' => 'iwac-vis-topic-explorer__loading',
+]

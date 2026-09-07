@@ -90,6 +90,22 @@ class SyncData extends AbstractJob
 
         $tag = trim((string) $this->getArg('tag', ''));
 
+        // Sweep whatever a previous run left behind. The temp trees are
+        // job-scoped and cleaned in a `finally`, which does not run on SIGKILL
+        // or an OOM kill — and the cleanup only ever removed the CURRENT job's
+        // siblings, so every hard-killed sync left roughly 18k files under
+        // `files/iwac-visualizations.tmp/` forever. Safe to do here: the
+        // exclusive lock above means no other sync is using them.
+        $swept = $this->sweepStaleWork($workRoot, $jobId, $logger);
+        if ($swept > 0) {
+            $logger->info(sprintf(
+                'IWAC data sync: removed %d orphaned work director%s from an '
+                . 'earlier run that was killed before it could clean up.',
+                $swept,
+                $swept === 1 ? 'y' : 'ies'
+            ));
+        }
+
         try {
             if ($this->shouldStop()) {
                 $logger->info('IWAC data sync: stop requested before download — aborting.');
@@ -185,6 +201,24 @@ class SyncData extends AbstractJob
                     );
                 }
             }
+            // Room to land, checked before the write rather than discovered
+            // half-way through it. Twice the expanded size: the staging tree
+            // and, for the swap below, the outgoing tree that is still there
+            // until the second rename. A partial extraction is the worst
+            // outcome available — it passes the marker check and publishes a
+            // truncated dataset.
+            $free = @disk_free_space($workRoot);
+            if ($free !== false && $expandedBytes > 0 && $free < $expandedBytes * 2) {
+                $zip->close();
+                throw new \RuntimeException(sprintf(
+                    'Not enough free space to extract: %.1f MB available, %.1f MB needed '
+                    . '(twice the expanded size, because the outgoing tree is kept '
+                    . 'until the swap completes).',
+                    $free / 1048576,
+                    ($expandedBytes * 2) / 1048576
+                ));
+            }
+
             $this->rrmdir($stageDir);
             if (!@mkdir($stageDir, 0775, true) && !is_dir($stageDir)) {
                 $zip->close();
@@ -339,12 +373,42 @@ class SyncData extends AbstractJob
     }
 
     /**
-     * Stream a URL to a destination file, following redirects. Prefers ext-curl
-     * (constant memory, fails on HTTP >= 400); falls back to PHP's HTTP stream
-     * wrapper, which also follows redirects and streams chunk-by-chunk.
+     * Stream a URL to a destination file, retrying once on a transport
+     * failure.
+     *
+     * A 300 MB download over a CDN fails sometimes for reasons that have
+     * nothing to do with the archive: a dropped connection, a timeout, a
+     * refused TCP handshake. This job runs on a schedule and by hand from an
+     * admin screen, and a single blip used to mean a red job and a manual
+     * re-run. Only the three transport errno values are retried — 7 (could
+     * not connect), 28 (timed out), 56 (receive error) — so an HTTP 404 or a
+     * TLS failure still fails immediately, because those will fail again.
      */
     private function download(string $url, string $dest, $logger): void
     {
+        $transient = [7, 28, 56];   // CURLE_COULDNT_CONNECT / OPERATION_TIMEDOUT / RECV_ERROR
+        try {
+            $this->downloadOnce($url, $dest, $logger);
+            return;
+        } catch (\RuntimeException $e) {
+            if (!in_array($this->lastCurlErrno, $transient, true)) {
+                throw $e;
+            }
+            $logger->warn(sprintf(
+                'IWAC data sync: download failed with a transport error (%s) — retrying once.',
+                $e->getMessage()
+            ));
+        }
+        @unlink($dest);
+        $this->downloadOnce($url, $dest, $logger);
+    }
+
+    /** curl errno of the most recent attempt, so `download()` can decide. */
+    private int $lastCurlErrno = 0;
+
+    private function downloadOnce(string $url, string $dest, $logger): void
+    {
+        $this->lastCurlErrno = 0;
         if (function_exists('curl_init')) {
             $fp = fopen($dest, 'wb');
             if ($fp === false) {
@@ -364,6 +428,7 @@ class SyncData extends AbstractJob
             ]);
             $ok     = curl_exec($ch);
             $errNo  = curl_errno($ch);
+            $this->lastCurlErrno = $errNo;
             $errMsg = curl_error($ch);
             $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
             // No curl_close(): the CurlHandle is freed by GC when it goes out of
@@ -400,6 +465,50 @@ class SyncData extends AbstractJob
             $err = error_get_last();
             throw new \RuntimeException('Download failed: ' . ($err['message'] ?? 'unknown error'));
         }
+    }
+
+    /**
+     * Remove work directories and downloads left by a run that never reached
+     * its `finally` — a SIGKILL, an OOM kill, a fatal restart.
+     *
+     * Only entries matching the job-scoped names this class creates are
+     * touched, and only ones belonging to a DIFFERENT job id than the current
+     * one; `$workRoot` is a sibling of the live tree and must never be swept
+     * indiscriminately. The exclusive lock held by the caller is what makes
+     * this safe: no other sync can be using them.
+     *
+     * @return int how many entries were removed
+     */
+    private function sweepStaleWork(string $workRoot, int $jobId, $logger): int
+    {
+        $entries = @scandir($workRoot);
+        if ($entries === false) {
+            return 0;
+        }
+        $removed = 0;
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..' || $entry === 'sync.lock') {
+                continue;
+            }
+            if (!preg_match('~^(stage|old|download)-(\d+)(\.zip)?$~', $entry, $m)) {
+                continue;
+            }
+            if ((int) $m[2] === $jobId) {
+                continue;   // this run's own, cleaned by the finally below
+            }
+            $path = $workRoot . '/' . $entry;
+            if (is_dir($path)) {
+                $this->rrmdir($path);
+            } else {
+                @unlink($path);
+            }
+            if (!file_exists($path)) {
+                $removed++;
+            } else {
+                $logger->warn('IWAC data sync: could not remove stale work entry ' . $path);
+            }
+        }
+        return $removed;
     }
 
     /** Recursively remove a directory tree. No-op if it does not exist. */

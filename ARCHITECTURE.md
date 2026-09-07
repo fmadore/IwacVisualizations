@@ -185,7 +185,7 @@ IwacVisualizations/
 │       └── test_iwac_helpers.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/              # 22 files — one per registered block, filename === slug
+│   │   ├── block-layout/              # 4 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml
@@ -207,6 +207,7 @@ IwacVisualizations/
 │       │   └── not-found.phtml
 │       └── layout/
 │           └── embed.phtml
+├── _h5.txt
 ├── ARCHITECTURE.md                    # This file
 ├── CHANGELOG.md                       # Version history
 ├── CITATION.cff
