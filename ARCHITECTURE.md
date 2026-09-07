@@ -189,7 +189,7 @@ IwacVisualizations/
 │   ├── browser/                       # 13 files — Playwright specs
 │   ├── integration/
 │   │   └── omeka_boot.php
-│   ├── js/                            # 25 files — node:test units
+│   ├── js/                            # 26 files — node:test units
 │   ├── php/
 │   │   ├── run.php
 │   │   └── sync_data_archive.php

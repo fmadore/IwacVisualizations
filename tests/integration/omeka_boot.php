@@ -236,9 +236,18 @@ checkIntegration(
     'an embed response was not marked cacheable'
 );
 
-// 2. Every slug NOT on the whitelist must 404 and render the not-found
+// 2. Every slug NOT on the whitelist must 404 and choose the not-found
 // template - including the traversal attempts, since this same map is the
 // directory guard for `common/block-layout/<slug>`.
+//
+// These go through blockAction() DIRECTLY rather than through dispatch().
+// Once the action sets a 404 status, Laminas' own dispatch listeners replace
+// the result with the framework's `error/404` model before dispatch()
+// returns - which is the right thing to happen in production, and means the
+// returned template says nothing about what the module decided. Calling the
+// action is what tests the module's decision; the status assertion below
+// still covers the outcome. A fresh controller per call because the response
+// is a controller property and a 404 would otherwise leak into the next one.
 $rejectedSlugs = [
     '',
     'not-a-block',
@@ -248,12 +257,25 @@ $rejectedSlugs = [
     'collection_overview',
 ];
 foreach ($rejectedSlugs as $slug) {
-    $got = $dispatchEmbed(['block' => $slug], []);
-    checkIntegration($got['status'] === 404, "embed slug '{$slug}' did not 404");
+    $rejectController = $controllers->get('IwacVisualizations\Controller\Site\Embed');
+    $rejectEvent = new MvcEvent();
+    $rejectEvent->setRouteMatch(new RouteMatch(['block' => $slug, 'action' => 'block']));
+    $rejectEvent->setViewModel(new \Laminas\View\Model\ViewModel());
+    $rejectController->setEvent($rejectEvent);
+    $rejectView = $rejectController->blockAction();
+
     checkIntegration(
-        $got['template'] === 'iwac-visualizations/embed/not-found',
-        "embed slug '{$slug}' rendered '" . var_export($got['template'], true)
+        $rejectController->getResponse()->getStatusCode() === 404,
+        "embed slug '{$slug}' did not 404"
+    );
+    checkIntegration(
+        $rejectView->getTemplate() === 'iwac-visualizations/embed/not-found',
+        "embed slug '{$slug}' chose '" . var_export($rejectView->getTemplate(), true)
             . "', not the not-found template"
+    );
+    checkIntegration(
+        $rejectView->terminate(),
+        "embed slug '{$slug}' did not mark its not-found view terminal"
     );
 }
 
