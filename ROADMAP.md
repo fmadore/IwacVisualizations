@@ -228,6 +228,13 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       by default) — remove hand-tuned gutters that became redundant.
       *Needs a Playwright session against the live site after deploy —
       includes the 4.1 chord visual check.*
+      **v1.67.0:** offline Chromium now renders the shipped builders with
+      the production ECharts version. Timeline, stacked and dual-axis growth
+      charts cover 360/640/1000 px, with and without sliders. This exposed
+      persistent mobile styles after resizing to desktop; shared media
+      options now restore their desktop layout without resetting zoom.
+      Axis-name bounds pass with the existing gutters, which are retained.
+      The live-theme and chord checks remain open.
 - **Won't do:** globe projection (editorial-product register, not
   research-instrument), color-relief/terrain (n/a to these maps).
 

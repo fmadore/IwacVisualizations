@@ -12,6 +12,17 @@ See [README.md](README.md) for what the module is, [ARCHITECTURE.md](ARCHITECTUR
 for how it is put together, and [REFACTORING.md](REFACTORING.md) for the audit
 findings several of these releases implement.
 
+### v1.67.0 — responsive chart restoration (2026-09-10)
+
+- Restore desktop chart layout after a mobile media query stops matching.
+  The shared fallback resets only overridden layout fields, preserving data,
+  legend selections and zoom windows.
+- Add offline ECharts browser rendering checks for timeline, stacked and
+  dual-axis growth charts at mobile and desktop widths, with and without
+  sliders. Match the test renderer version to the module's production URL.
+- Retain the measured mobile gutters; live-theme and chord review remain
+  separate roadmap checks.
+
 ### v1.66.0 — reliable publication and selective loading (2026-09-10)
 
 - Publish immutable, checksummed data releases with per-file manifests; pin all
@@ -754,4 +765,3 @@ Major consolidation without behavior changes:
 - **CLI consistency** across all 9 generators: `--repo`, `-v/--verbose`, and `--min-cooccurrence` (for the TF-IDF network threshold) are now standard.
 - **CSS tokens**: `--iwac-vis-thumb-{lg,md,sm}`, `--iwac-vis-thumb-col-{lg,md,sm}`, `--iwac-vis-panel-toolbar-reserve`. Zero hardcoded colors remain in block CSS.
 - **Security**: fixed one unescaped `$resource->id()` in `item-set-dashboard.phtml`; fixed a latent MapLibre listener-leak bug in `collection-overview/map.js` where theme swaps stacked duplicate layer-bound handlers.
-

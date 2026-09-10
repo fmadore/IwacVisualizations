@@ -120,6 +120,26 @@
     /*  Merge utility                                                     */
     /* ----------------------------------------------------------------- */
 
+    // ECharts merges media options into the current model; it does not
+    // restore baseOption when the last query stops matching. Restore only
+    // properties touched by a media rule, so zoom windows, legend selection
+    // and series data remain the reader's. Null clears a mobile-only value
+    // and lets ECharts inherit its normal theme/default text styling again.
+    function mediaDefaults(base, override, target) {
+        Object.keys(override).forEach(function (key) {
+            var value = override[key];
+            var original = base && base[key];
+            if (value && typeof value === 'object') {
+                var array = Array.isArray(value);
+                if (!target[key] || typeof target[key] !== 'object') target[key] = array ? [] : {};
+                mediaDefaults(original, value, target[key]);
+            } else {
+                target[key] = original === undefined ? null : original;
+            }
+        });
+        return target;
+    }
+
     R.withMedia = function (baseOption /*, mediaArray1, mediaArray2, ... */) {
         var allRules = [];
         for (var i = 1; i < arguments.length; i++) {
@@ -131,6 +151,11 @@
             }
         }
         if (allRules.length === 0) return baseOption;
+        if (!allRules.some(function (rule) { return !rule.query; })) {
+            var defaults = {};
+            allRules.forEach(function (rule) { mediaDefaults(baseOption, rule.option || {}, defaults); });
+            allRules.push({ option: defaults });
+        }
         return { baseOption: baseOption, media: allRules };
     };
 })();

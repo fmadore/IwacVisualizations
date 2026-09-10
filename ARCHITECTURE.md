@@ -193,10 +193,10 @@ IwacVisualizations/
 │       ├── AssetPlan.php
 │       └── BlockRegistry.php          # THE single source of truth for every block
 ├── tests/
-│   ├── browser/                       # 14 files — Playwright specs
+│   ├── browser/                       # 16 files — Playwright specs
 │   ├── integration/
 │   │   └── omeka_boot.php
-│   ├── js/                            # 26 files — node:test units
+│   ├── js/                            # 27 files — node:test units
 │   ├── php/
 │   │   ├── run.php
 │   │   └── sync_data_archive.php

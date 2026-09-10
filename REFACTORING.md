@@ -1,6 +1,18 @@
 # REFACTORING.md — IwacVisualizations
 
-## Current status — 2026-09-10 (v1.66.0)
+## Current status — 2026-09-10 (v1.67.0)
+
+The next roadmap pass adds real, offline ECharts browser rendering for the
+mobile grid review (ROADMAP 4.8). It reproduced mobile gutters, fonts and
+slider dimensions persisting after a desktop resize. `responsive.withMedia`
+now emits a desktop fallback containing only properties overridden by media
+rules, preserving series data and reader selections. Existing mobile gutters
+remain: the fixture axis names fit, so removing them has no measured benefit.
+Live-theme, chord and colour-distinction reviews remain deployment checks;
+the library-hosting decision remains open. The ECharts development dependency
+is version-checked against the production CDN URL and stays out of releases.
+This pass passes all lint/build guards, 182 JavaScript tests and 40 browser
+tests, including zoom-window preservation through the media fallback.
 
 This index supersedes the historical status notes below. The September module
 audit is implemented: recoverable immutable data publication, a persistent
@@ -14,7 +26,7 @@ calendar/concordance records and expected calendar/term shards. Required
 aggregate filenames now live in one Python contract reused by CI. Cold-start
 model loading and local-store recovery are checked against the real framework.
 
-Validation passes: 285 PHP checks, 100 Python tests (plus 7 subtests),
+The v1.66.0 validation passed: 285 PHP checks, 100 Python tests (plus 7 subtests),
 180 JavaScript tests, 33 browser tests, the complete lint/build guards, and
 PHPStan level 5 against Omeka. The [Omeka/MariaDB matrix](https://github.com/fmadore/IwacVisualizations/actions/runs/34455948032)
 passes on Omeka 4.0.0/PHP 8.1 and Omeka 4.2.1/PHP 8.5, including generation
