@@ -138,8 +138,10 @@ namespace {
     require $root . '/src/Sentiment/Centralite.php';
     require $root . '/src/Sentiment/Subjectivite.php';
     require $root . '/src/Mvc/EmbedFramingListener.php';
-    require $root . '/src/Sentiment/ModelRegistry.php';
+    // Do not preload ModelRegistry: constructing Module must work before its
+    // namespace autoloader is registered during a real Omeka cold boot.
     require $root . '/Module.php';
+    $coldModule = new \IwacVisualizations\Module();
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';

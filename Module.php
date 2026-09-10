@@ -12,6 +12,9 @@ use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
 use Omeka\Module\AbstractModule;
 
+// Module constants are evaluated before Laminas installs this module's autoloader.
+require_once __DIR__ . '/src/Sentiment/ModelRegistry.php';
+
 /**
  * IWAC Visualizations module.
  *
