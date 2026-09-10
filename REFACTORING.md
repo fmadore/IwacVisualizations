@@ -1,6 +1,22 @@
 # REFACTORING.md — IwacVisualizations
 
-## Current status — 2026-09-10 (v1.67.0)
+## Current status — 2026-09-10 (v1.68.0): repository refactoring complete
+
+All actionable repository work is implemented. ROADMAP.md's completion table
+records the final disposition of remaining proposals, including the owner's
+decision to retain pinned CDN hosting. The historical unchecked entries are
+not an implementation queue: declined optimizations and speculative rewrites
+stay documented as decisions rather than being implemented to satisfy a box.
+
+The final accessibility pass gives thumbnail badges opaque theme surfaces and
+ink text, and the slider a contrasting inactive track. Real ECharts tests now
+cover light/dark native chord rendering, dense sentiment tables by keyboard,
+badge text contrast (4.5:1), and track contrast (3:1). The live site still
+served v1.57.0 during inspection, so post-installation production acceptance
+is explicitly separate from the completed repository refactoring.
+The final delayed-resize regression also exposed full render callbacks
+resetting zoom and legend selections; the shared lifecycle now retains that
+view state across compact-layout and theme redraws.
 
 The next roadmap pass adds real, offline ECharts browser rendering for the
 mobile grid review (ROADMAP 4.8). It reproduced mobile gutters, fonts and
@@ -8,10 +24,9 @@ slider dimensions persisting after a desktop resize. `responsive.withMedia`
 now emits a desktop fallback containing only properties overridden by media
 rules, preserving series data and reader selections. Existing mobile gutters
 remain: the fixture axis names fit, so removing them has no measured benefit.
-Live-theme, chord and colour-distinction reviews remain deployment checks;
-the library-hosting decision remains open. The ECharts development dependency
+The ECharts development dependency
 is version-checked against the production CDN URL and stays out of releases.
-This pass passes all lint/build guards, 182 JavaScript tests and 40 browser
+The v1.67.0 pass passed all lint/build guards, 182 JavaScript tests and 40 browser
 tests, including zoom-window preservation through the media fallback.
 
 This index supersedes the historical status notes below. The September module

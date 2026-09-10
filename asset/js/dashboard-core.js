@@ -388,7 +388,7 @@
                 var next = compactNow();
                 if (next === entry._compact) return;
                 entry._compact = next;
-                try { entry.render(el, entry.instance); }
+                try { preserveChartView(entry.instance, function () { entry.render(el, entry.instance); }); }
                 catch (e) { console.error('IWACVis: compact re-render failed', e); }
             }, 150));
             ro.observe(el.parentElement || el);
@@ -743,6 +743,29 @@
      * it reads `getChartTokens()` per frame, and its layout must survive the
      * swap untouched.
      */
+    // A layout/theme redraw uses callers' full-rebuild render callbacks.
+    // Retain only interactive view state, never old series or theme options.
+    // getOption is deliberately confined to these infrequent redraws.
+    function preserveChartView(instance, redraw) {
+        var state = {};
+        try {
+            var current = instance.getOption();
+            ['dataZoom', 'legend'].forEach(function (kind) {
+                if (!current[kind] || !current[kind].length) return;
+                var keys = kind === 'legend' ? ['selected'] : ['start', 'end', 'startValue', 'endValue', 'rangeMode'];
+                state[kind] = current[kind].map(function (component) {
+                    var kept = {};
+                    keys.forEach(function (key) {
+                        if (component[key] !== undefined) kept[key] = component[key];
+                    });
+                    return kept;
+                });
+            });
+        } catch (e) { /* no readable view state: still perform the redraw */ }
+        redraw();
+        if (Object.keys(state).length) instance.setOption(state);
+    }
+
     ns.applyThemeToCharts = function () {
         if (typeof ns.refreshThemes === 'function') ns.refreshThemes();
         ns.pruneCharts();
@@ -751,17 +774,17 @@
             if (entry.kind === 'echarts') {
                 if (!entry.instance || entry.instance.isDisposed()) return;
                 try {
-                    if (themeName && typeof entry.instance.setTheme === 'function') {
-                        entry.instance.setTheme(themeName);
-                    }
-                    // A theme swap is a full rebuild for a render that goes
-                    // through `ns.repaint`: the merged path keeps components
-                    // as they are, and here they must be re-created under
-                    // the new theme.
-                    ns.forgetShape(entry.instance);
-                    if (typeof entry.render === 'function' && entry.el) {
-                        entry.render(entry.el, entry.instance);
-                    }
+                    preserveChartView(entry.instance, function () {
+                        if (themeName && typeof entry.instance.setTheme === 'function') {
+                            entry.instance.setTheme(themeName);
+                        }
+                        // Re-create components under the new theme, even
+                        // when the caller normally uses merged repaints.
+                        ns.forgetShape(entry.instance);
+                        if (typeof entry.render === 'function' && entry.el) {
+                            entry.render(entry.el, entry.instance);
+                        }
+                    });
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);
                 }

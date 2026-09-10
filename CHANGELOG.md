@@ -12,6 +12,19 @@ See [README.md](README.md) for what the module is, [ARCHITECTURE.md](ARCHITECTUR
 for how it is put together, and [REFACTORING.md](REFACTORING.md) for the audit
 findings several of these releases implement.
 
+### v1.68.0 — accessibility verification and refactoring closure (2026-09-10)
+
+- Make article-card badges readable over any thumbnail with opaque theme
+  surfaces and ink text; preserve semantic accents on their borders.
+- Improve the inactive Scary Terms slider track's contrast in both themes.
+- Preserve zoom windows and legend selections through delayed compact-layout
+  redraws and theme changes, not only ECharts' own media-query updates.
+- Verify native chord rendering, dense sentiment tables by keyboard, and
+  badge/track contrast with real ECharts and the committed theme tokens.
+- Record the owner's pinned-CDN decision and final roadmap dispositions.
+  Production acceptance follows installation; the inspected server still
+  served v1.57.0.
+
 ### v1.67.0 — responsive chart restoration (2026-09-10)
 
 - Restore desktop chart layout after a mobile media query stops matching.

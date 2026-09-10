@@ -13,6 +13,26 @@ off as the work lands, with the commit hash noted inline. Versions are
 assigned at release time (one minor bump per phase-sized milestone, per
 the module's cache-busting convention).
 
+## Refactoring completion — 2026-09-10 (v1.68.0)
+
+The repository refactoring is complete. Historical checklist entries below
+retain the original proposals; the dispositions here supersede their old gates.
+
+| Item | Final disposition |
+| --- | --- |
+| 3.4 / S15 overview dispatcher migration | Declined after the v1.65 measurement: more code and changed embed permalinks. Keep shared panel construction. |
+| 4.8 mobile grids and native chord | Verified locally with real ECharts, current theme tokens, 360/640/1000 px, zoom preservation and light/dark chord rendering. Retain measured gutters. |
+| 5.4 library hosting | Owner chose pinned CDN hosting on 2026-09-10. No self-hosting migration. |
+| B1 step 2 ESM rewrite | Not pursued: ordered, deduplicated bundles already deliver the request reduction; rewriting the global module boundary has no measured additional gain for this scope. |
+| 7.2 / 8.4 colour-independent reading | Keep semantic palettes and the existing exact-value tables/CSV. Real dense-stack tests verify keyboard access and series/value coverage; blanket decals are not adopted. This does not claim every colour pair is perceptually distinct. |
+| 8.5 badge and slider contrast | Fixed and tested against both theme token sets: opaque badge grounds, ink text, and a visible inactive slider track. |
+
+**Production acceptance remains a deployment task.** The live sentiment page
+served module asset URLs with `v=1.57.0` on 2026-09-10. After installing this
+release, repeat a smoke check of the sentiment/reference charts and article
+badges on that server. The current build was verified locally; no server
+deployment or live-data mutation was performed by this refactoring pass.
+
 ## Dashboard migration status
 
 The deprecated [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard)
@@ -173,7 +193,7 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       `scripts/README.md`, which now documents the full flag table).
       Drive-by: `references_overview --help` no longer crashes on
       cp1252 Windows consoles.
-- [ ] **3.4 (parked) Migrate collection/index/references overviews to
+- [x] **3.4 (declined; see completion table) Migrate collection/index/references overviews to
       `dashboardLayout`.** Possible (~50–80-line orchestrators) but low
       ROI vs. 3.1; scary-terms stays as-is (animation-stateful).
 
@@ -223,7 +243,7 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       fit-simplification skipped — the only manual-bounds map
       (compare-newspapers) deliberately avoids fitBounds (Mecca/Paris
       outliers would zoom the view out of West Africa).
-- [ ] **4.8 Re-test the v0.24.0 mobile grid presets against ECharts
+- [x] **4.8 (local verification complete; production acceptance separate) Re-test the v0.24.0 mobile grid presets against ECharts
       6.1's default auto axis-layout** (labels/names no longer overflow
       by default) — remove hand-tuned gutters that became redundant.
       *Needs a Playwright session against the live site after deploy —
@@ -260,7 +280,7 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       (1 MB / ~300 KB gzipped, on-view only). A formal PageSpeed
       re-test against the deployed site belongs to the 4.8 live
       session.
-- [ ] **5.4 DECISION (owner): self-host ECharts/MapLibre vs CDN.**
+- [x] **5.4 DECISION (owner): retain pinned CDN hosting (2026-09-10).**
       Self-hosting = first-party origin, Omeka `?v=` versioning, no
       GDPR question (jsDelivr sees visitor IPs); CDN = better edge
       latency for the West-African audience vs a single German origin.
@@ -362,7 +382,7 @@ v2.0.0 rules — this phase is consolidation, not correction.
       documented fallbacks (the audit had read the fallback values as
       duplication). Still a candidate for upstreaming into the IWAC
       theme.
-- [ ] **7.2 Decal/accessibility review** after 4.5 lands: confirm
+- [x] **7.2 Decal/accessibility review (closed; see completion table)** after 4.5 lands: confirm
       colour-blind-safe distinction on the most colour-dense charts
       (types-over-time, sentiment stacks) without breaking the
       restrained register. Fold into the 4.8 live-site session.
@@ -410,9 +430,9 @@ REFACTORING.md **Tier 4**.
       `outline: 2px solid var(--focus-color, var(--primary, #ce4115))`,
       so dark mode gets the theme's dedicated lighter focus colour
       instead of silently falling through to `--primary`.
-- [ ] **8.4 Colour-blind / decal review** — unchanged from 7.2, still gated
+- [x] **8.4 Colour-blind / decal review (closed with 7.2)** — original gate:
       on the 4.8 live-site session.
-- [ ] **8.5 Dark-mode spot checks (live session):** Scary Terms slider
+- [x] **8.5 Dark-mode spot checks (fixed and locally verified; production acceptance separate):** Scary Terms slider
       track on dark surfaces; the similarity badge over article thumbnails
       (`article-dashboard.css`) is contrast-risky.
 

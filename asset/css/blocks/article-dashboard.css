@@ -101,17 +101,18 @@
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     border-radius: var(--radius-full, 9999px);
-    color: var(--surface, #fdfcfb);
-    backdrop-filter: blur(4px);
+    color: var(--ink, #13161c);
+    background: var(--surface-raised, #faf8f6);
+    border: 1px solid var(--border, #ced1d6);
 }
 .iwac-vis-article-card__sim {
     /* semantic similarity = primary accent */
-    background: color-mix(in oklab, var(--primary, #ce4115) 85%, transparent);
+    border-color: var(--primary, #ce4115);
 }
 .iwac-vis-article-card__shared {
     /* shared-entities = cool blue/info accent so the two badges
      * don't look like the same signal */
-    background: color-mix(in oklab, var(--info, #037ac0) 85%, transparent);
+    border-color: var(--info, #037ac0);
 }
 
 .iwac-vis-article-card__body {
