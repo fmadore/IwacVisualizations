@@ -720,6 +720,10 @@
                     type: 'slider', yAxisIndex: 0,
                     start: 0, end: 100 * windowSize / list.length,
                     right: 8,
+                    // Media resets must restore a concrete width. Clearing
+                    // ECharts' default placeholder with null stretches this
+                    // vertical slider and its handles across the chart.
+                    width: 30,
                     maxValueSpan: windowSize
                 },
                 {

@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.68.4 — correct timeline scrollbar and inactive filter indicator (2026-09-10)
+
+- Keep the Gantt scrollbar at an explicit desktop width; responsive fallback no longer replaces ECharts’ width placeholder with null and expands its handles across the chart. Applies to entity activity and newspaper coverage.
+- Hide the linked-country indicator when no country is selected, including after clearing a filter.
+- Add real ECharts desktop/mobile geometry checks and a browser check for the indicator’s select/clear lifecycle.
+
 ### v1.68.3 — restore visualization loading (2026-09-10)
 
 - Fix all visualization blocks staying at Loading: emit the per-block JSON asset manifest as template output, as required by Laminas.

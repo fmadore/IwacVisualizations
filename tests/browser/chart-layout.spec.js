@@ -147,3 +147,38 @@ for (const kind of ['timeline', 'stacked', 'growth']) {
         });
     }
 }
+
+test('Gantt scrollbar stays narrow on desktop and after mobile resizing', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1800, height: 700 });
+    await page.goto('/tests/browser/fixtures/chart-layout.html');
+    await page.evaluate(() => window.drawChart('gantt', 30));
+    for (const width of [1800, 360, 1000, 1800]) {
+        await page.setViewportSize({ width, height: 700 });
+        const size = await page.evaluate(() => {
+            window.chart.resize();
+            const model = window.chart.getModel().getComponent('dataZoom', 0);
+            const view = window.chart.getViewOfComponentModel(model);
+            const rect = view.group.getBoundingRect();
+            return { width: rect.width, height: rect.height };
+        });
+        expect(size.width).toBeLessThan(100);
+        expect(size.height).toBeLessThan(450);
+    }
+});
+
+test('linked country indicator is absent until a filter is selected and disappears on clear', async ({ page }) => {
+    await page.goto('/tests/browser/fixtures/chart-layout.html');
+    await page.evaluate(() => {
+        const P = window.IWACVis.panels;
+        window.linkedStore = P.createStore({ country: null });
+        document.body.appendChild(P.buildLinkedFilterBar({ store: window.linkedStore, labelKey: 'linked_country' }));
+    });
+    const indicator = page.locator('.iwac-vis-linked-filter');
+    await expect(indicator).toBeHidden();
+    await page.evaluate(() => window.linkedStore.patch({ country: 'Togo' }));
+    await expect(indicator).toBeVisible();
+    await expect(indicator).toContainText('Togo');
+    await indicator.getByRole('button', { name: 'Clear', exact: true }).click();
+    await expect(indicator).toBeHidden();
+});

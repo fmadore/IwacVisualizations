@@ -46,7 +46,11 @@
             var years = Array.from({ length: count }, function (_, i) { return 1980 + i; });
             var counts = years.map(function (_, i) { return 12000 + i * 300; });
             var option;
-            if (kind === 'chord') {
+            if (kind === 'gantt') {
+                option = C.gantt(years.map(function (year, i) {
+                    return { name: 'Entity ' + i, country: 'Togo', year_min: year, year_max: 2026, total: count - i };
+                }));
+            } else if (kind === 'chord') {
                 option = C.chord({ names: ['Islam', 'Education', 'Associations'], matrix: [[0, 12, 5], [12, 0, 8], [5, 8, 0]] });
             } else if (kind === 'growth') {
                 option = C.growthBar({

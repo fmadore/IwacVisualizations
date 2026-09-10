@@ -2006,6 +2006,10 @@ select.iwac-vis-control:hover {
     font-size: var(--text-sm, 0.9375rem);
 }
 
+.iwac-vis-linked-filter[hidden] {
+    display: none;
+}
+
 .iwac-vis-linked-filter__label {
     color: var(--ink-light, #3f4349);
 }
