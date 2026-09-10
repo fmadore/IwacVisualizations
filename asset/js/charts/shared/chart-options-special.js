@@ -897,7 +897,9 @@
         var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
         var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
         var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
-        var smMaxFont = Math.round(maxFont * 0.8);
+        function fontRange(scale) {
+            return [Math.round(minFont * scale), Math.round(maxFont * scale)];
+        }
 
         var wcTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var inks = C.readableInks(wcTokens.panelBg, wcTokens.ink);
@@ -929,7 +931,7 @@
                 height: '100%',
                 right: null,
                 bottom: null,
-                sizeRange: [minFont, maxFont],
+                sizeRange: fontRange(1.9),
                 rotationRange: [-45, 45],
                 rotationStep: 15,
                 gridSize: grid,
@@ -957,13 +959,18 @@
             }]
         };
 
+        // Match typography to the panel width instead of leaving the same
+        // small island of words in both a half-width card and a wide panel.
+        // Non-overlapping rules also resize the cloud without rebuilding it.
         var wcMedia = [
             {
                 query: { maxWidth: R ? R.BP.sm : 640 },
                 option: {
-                    series: [{ sizeRange: [minFont, smMaxFont] }]
+                    series: [{ sizeRange: fontRange(0.8) }]
                 }
-            }
+            },
+            { query: { minWidth: 641, maxWidth: 1024 }, option: { series: [{ sizeRange: fontRange(1.1) }] } },
+            { query: { minWidth: 1025, maxWidth: 1600 }, option: { series: [{ sizeRange: fontRange(1.5) }] } }
         ];
 
         return R && R.withMedia

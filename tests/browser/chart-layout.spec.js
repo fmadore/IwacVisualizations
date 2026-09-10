@@ -182,3 +182,54 @@ test('linked country indicator is absent until a filter is selected and disappea
     await indicator.getByRole('button', { name: 'Clear', exact: true }).click();
     await expect(indicator).toBeHidden();
 });
+
+test('language type facets retain finite visible bars when their category count shrinks', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/tests/browser/fixtures/chart-layout.html');
+    await page.evaluate(async () => {
+        await window.themeReady;
+        const P = window.IWACVis.panels;
+        const panel = P.buildPanel('iwac-vis-panel', 'Languages represented');
+        document.body.appendChild(panel.panel);
+        window.languageHost = panel.chart;
+        const global = [{ name: 'Français', count: 17000 }, { name: 'Anglais', count: 332 }];
+        window.IWACVis.collectionOverview.languages.render(panel, { languages: {
+            global, by_type: { article: global, publication: [{ name: 'Français', count: 1499 }, { name: 'Arabe', count: 2 }],
+                document: [{ name: 'Français', count: 26 }], reference: [{ name: 'Français', count: 554 }, { name: 'Anglais', count: 318 }, { name: 'Espagnol', count: 1 }] }
+        } }, {});
+    });
+    await page.getByText('By type', { exact: true }).click();
+    for (const label of ['Islamic periodical', 'Document', 'Reference', 'News article']) {
+        await page.getByText(label, { exact: true }).click();
+        await expect.poll(() => page.evaluate(() => {
+            const chart = window.echarts.getInstanceByDom(window.languageHost);
+            const series = chart.getModel().getSeriesByIndex(0).getData();
+            return Array.from({ length: series.count() }, (_, i) => {
+                const layout = series.getItemLayout(i);
+                return !!layout && Number.isFinite(layout.x) && Number.isFinite(layout.width) && Math.abs(layout.width) > 0;
+            }).every(Boolean);
+        })).toBe(true);
+    }
+});
+
+for (const width of [360, 900, 1800]) {
+    test(`word cloud fills its ${width}px panel without clipping terms`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.setViewportSize({ width, height: 650 });
+        await page.goto('/tests/browser/fixtures/chart-layout.html');
+        await page.evaluate(() => window.drawChart('wordcloud', 150));
+        const bounds = () => page.locator('#host svg text').evaluateAll(nodes => {
+            const rects = nodes.map(n => n.getBoundingClientRect());
+            return { count: rects.length, left: Math.min(...rects.map(r => r.left)), right: Math.max(...rects.map(r => r.right)),
+                top: Math.min(...rects.map(r => r.top)), bottom: Math.max(...rects.map(r => r.bottom)) };
+        });
+        await expect.poll(async () => (await bounds()).count).toBeGreaterThanOrEqual(135);
+        const rect = await bounds();
+        expect(rect.left).toBeGreaterThanOrEqual(-2);
+        expect(rect.right).toBeLessThanOrEqual(width + 2);
+        expect(rect.top).toBeGreaterThanOrEqual(-2);
+        expect(rect.bottom).toBeLessThanOrEqual(402);
+        expect(rect.right - rect.left).toBeGreaterThan(width * 0.65);
+        expect(rect.bottom - rect.top).toBeGreaterThan(230);
+    });
+}

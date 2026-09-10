@@ -245,13 +245,19 @@ test('a merged repaint drops the builder\'s dataZoom bounds so the reader\'s win
     assert.equal(fresh.dataZoom[0].start, 0, 'the caller\'s option is not mutated');
     assert.match(merged.aria.label.description, /chart_aria_zoom/, 'the keyboard hint is still announced');
 
-    // The withMedia form: the base option is trimmed, the wrapper kept.
+    // Media updates rebuild: ECharts replaceMerge otherwise deletes series
+    // on a media pass without its own series. Reader state is reapplied.
+    instance.getOption = () => ({ dataZoom: [{ start: 25, end: 75 }], legend: [{ selected: { Togo: false } }] });
     const wrapped = { baseOption: withZoom(), media: [{ query: {}, option: {} }] };
     ns.repaint(instance, wrapped);
     const third = paintedWith(instance, 2).option;
-    assert.equal(third.baseOption.dataZoom[0].start, undefined);
+    assert.equal(third.baseOption.dataZoom[0].start, 0);
     assert.equal(third.media.length, 1);
     assert.equal(wrapped.baseOption.dataZoom[0].start, 0);
+    const restored = instance.calls[instance.calls.length - 1][0];
+    assert.equal(restored.dataZoom[0].start, 25);
+    assert.equal(restored.dataZoom[0].end, 75);
+    assert.equal(restored.legend[0].selected.Togo, false);
 });
 
 test('repaint on a disposed chart is a no-op', () => {

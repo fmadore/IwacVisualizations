@@ -13,6 +13,13 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.68.5 — restore language facets and fill word-cloud panels (2026-09-10)
+
+- Rebuild responsive chart options on facet changes while preserving zoom and legend selection; ECharts media passes no longer remove the base data series. Fixes Languages represented → By type and other responsive faceted charts.
+- Keep a visible mark for counts of one on logarithmic horizontal bars.
+- Scale shared word-cloud typography with panel width to reduce unused space across visualization blocks.
+- Add real language-facet and word-cloud browser coverage using the production ECharts/word-cloud versions and published periodical term counts. The test-only peer override matches this existing production combination; CDN hosting is unchanged.
+
 ### v1.68.4 — correct timeline scrollbar and inactive filter indicator (2026-09-10)
 
 - Keep the Gantt scrollbar at an explicit desktop width; responsive fallback no longer replaces ECharts’ width placeholder with null and expands its handles across the chart. Applies to entity activity and newspaper coverage.

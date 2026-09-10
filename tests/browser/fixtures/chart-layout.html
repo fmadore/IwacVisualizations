@@ -28,8 +28,11 @@
     <input id="year" class="iwac-vis-scary-slider" type="range" min="1980" max="2020" value="2000">
     <!-- Test-only npm dependency: no CDN request and no production hosting change. -->
     <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="/node_modules/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
     <script src="/asset/js/dist/shared-core.min.js"></script>
     <script src="/asset/js/dist/shared-charts.min.js"></script>
+    <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script src="/asset/js/charts/collection-overview/languages.js"></script>
     <script>
         window.themeReady = fetch('/tokens.json').then(function (response) { return response.json(); }).then(function (tokens) {
             var theme = new URLSearchParams(location.search).get('theme') || 'light';
@@ -46,7 +49,10 @@
             var years = Array.from({ length: count }, function (_, i) { return 1980 + i; });
             var counts = years.map(function (_, i) { return 12000 + i * 300; });
             var option;
-            if (kind === 'gantt') {
+            if (kind === 'wordcloud') {
+                var pairs = await fetch('/tests/browser/fixtures/wordcloud.json').then(function (r) { return r.json(); });
+                option = C.wordcloud(pairs);
+            } else if (kind === 'gantt') {
                 option = C.gantt(years.map(function (year, i) {
                     return { name: 'Entity ' + i, country: 'Togo', year_min: year, year_max: 2026, total: count - i };
                 }));

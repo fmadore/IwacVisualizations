@@ -136,8 +136,8 @@
                     return esc(String(p.name)) + '<br/>' + esc(valueFormat(v));
                 }
             },
-            // Log axis can't anchor at 0 — start the scale at 1 (every real
-            // count is ≥1). Bars still carry their true count in the value
+            // Log axis can't anchor at 0 — start the scale at 1. Bars retain
+            // their true count in the value
             // label + tooltip; only the bar LENGTH is log-scaled.
             xAxis: opts.log
                 ? { type: 'log', min: 1, minorSplitLine: { show: false },
@@ -158,6 +158,9 @@
                 type: 'bar',
                 data: values,
                 barMaxWidth: barDef.barMaxWidth - 2,
+                // A count of one sits at the log baseline: retain a visible
+                // mark without changing its count or tooltip.
+                barMinHeight: opts.log ? 2 : 0,
                 itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: haloLabel(labelInk, halo, opts.valueFormatter),
                 emphasis: haloEmphasis(labelInk, halo)

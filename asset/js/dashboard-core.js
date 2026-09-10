@@ -541,6 +541,15 @@
         var shape = base && typeof base === 'object' ? optionShape(base) : '';
         var stable = !!(shape && instance._iwacShape === shape);
         instance._iwacShape = shape;
+        // ECharts applies media options in separate passes. replaceMerge on
+        // a media pass without series removes the base series altogether.
+        // Rebuild wrapped options while retaining the reader's zoom/legend.
+        if (stable && wrapped && !opts.notMerge) {
+            preserveChartView(instance, function () {
+                instance.setOption(option, { notMerge: true, lazyUpdate: !!opts.lazyUpdate });
+            });
+            return false;
+        }
         if (!stable || opts.notMerge) {
             instance.setOption(option, { notMerge: true, lazyUpdate: !!opts.lazyUpdate });
             return false;
