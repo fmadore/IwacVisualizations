@@ -14,10 +14,13 @@ calendar/concordance records and expected calendar/term shards. Required
 aggregate filenames now live in one Python contract reused by CI. Cold-start
 model loading and local-store recovery are checked against the real framework.
 
-Validation covers PHP import/retention/lock failures, Python data contracts,
-and browser loading/retry behavior. Full private-dataset regeneration and the
-Omeka/MariaDB integration matrix remain release-environment checks. No live
-data or server settings were changed by this implementation.
+Validation passes: 285 PHP checks, 100 Python tests (plus 7 subtests),
+180 JavaScript tests, 33 browser tests, the complete lint/build guards, and
+PHPStan level 5 against Omeka. The [Omeka/MariaDB matrix](https://github.com/fmadore/IwacVisualizations/actions/runs/34455948032)
+passes on Omeka 4.0.0/PHP 8.1 and Omeka 4.2.1/PHP 8.5, including generation
+attributes in real rendered markup. [Full private-dataset regeneration](https://github.com/fmadore/IwacVisualizations/actions/runs/34455675143)
+and publication also pass; the [verified release](https://github.com/fmadore/IwacVisualizations/releases/tag/data-build-34455675143-1)
+is ready for import. No live Omeka data or server settings were changed.
 
 The older tiers below are a historical record, not the current backlog.
 Further algorithm changes should retain domain-specific neighbor scoring and
