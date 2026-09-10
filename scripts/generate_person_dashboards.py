@@ -41,6 +41,7 @@ from dashboard_aggregator import (
     DashboardAggregator,
 )
 from iwac_utils import (
+    expect_item_outputs,
     add_standard_args,
     generate_timestamp,
     DATASET_ID,
@@ -258,6 +259,8 @@ class PersonDashboardGenerator(DashboardAggregator):
         if self.limit:
             targets = targets[: self.limit]
 
+        targets = [item_id for item_id in targets if item_id in self.targets]
+        expect_item_outputs(self.output_dir, targets)
         written = 0
         for person_o_id in targets:
             if person_o_id not in self.targets:

@@ -1,7 +1,7 @@
 <?php
 namespace IwacVisualizations;
 
-return [
+$config = [
     'block_layouts' => [
         'invokables' => [
             'audiovisualOverview' => Site\BlockLayout\AudiovisualOverview::class,
@@ -181,3 +181,15 @@ return [
         ],
     ],
 ];
+
+// New registrations use a module-owned namespace. Stored page layouts keep
+// resolving through aliases, so an upgrade does not rewrite user content.
+foreach (['block_layouts', 'resource_page_block_layouts'] as $manager) {
+    foreach ($config[$manager]['invokables'] as $legacy => $class) {
+        $name = 'iwac-' . $legacy;
+        $config[$manager]['invokables'][$name] = $class;
+        $config[$manager]['aliases'][$legacy] = $name;
+        unset($config[$manager]['invokables'][$legacy]);
+    }
+}
+return $config;

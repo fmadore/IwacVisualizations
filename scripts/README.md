@@ -9,15 +9,32 @@ the public [`fmadore/islam-west-africa-collection`](https://huggingface.co/datas
 **Where the output is served from (issue #7).** `asset/data/` is **not committed
 to git** and is **not generated on the production server**. The
 `.github/workflows/regenerate-data.yml` workflow runs these generators on a
-GitHub runner, zips `asset/data/`, and publishes `iwac-data.zip` to the moving
-`data` release. The Omeka module's admin **“Pull latest data”** button then
-unpacks that archive into `files/iwac-visualizations/`, which the JavaScript
-charts fetch same-origin at page load. Static map geometry the generators read
+GitHub runner, validates and zips `asset/data/`, and publishes an immutable
+release selected by `data/latest.json`. The Omeka admin **“Pull latest data”**
+button verifies the checksum and manifest, then activates a generation directory.
+Static map geometry the generators read
 as input lives committed under `asset/geo/` (not regenerated here).
 
 This directory is **not touched at runtime** — Omeka never imports Python.
 The generators run in CI (or on the curator's machine) whenever the dataset
 changes (roughly monthly), or whenever the schema of a generator changes.
+
+## Reproducible publication
+
+`python scripts/run_all.py` resolves one immutable dataset revision per repository
+(or uses `IWAC_DATASET_REVISION` for the default mirror) and passes it to every
+actual dataset load. The frame cache includes that revision in its key.
+A complete default run writes `.iwac-build/provenance.json` with source IDs,
+public-OCR permissions and output receipts. Per-item generators declare their
+eligible targets before writing. Partial `--only`/`--skip` runs and custom
+arguments remain useful locally but do not produce publication evidence.
+
+Run `python scripts/validate_data.py --write-manifest` after the complete run.
+It refuses missing/unexpected files, malformed JSON, incompatible aggregate
+containers, unknown exported item links and private OCR excerpts in the public
+concordance/calendar outputs. The manifest records hashes, source revisions,
+configuration and per-generator file lists. Full semantic schemas for every
+optional panel field are not claimed; add contracts alongside payload changes.
 
 ## Provenance
 
@@ -25,7 +42,7 @@ changes (roughly monthly), or whenever the schema of a generator changes.
 sibling `iwac-dashboard` SvelteKit project. **That project is deprecated** — this
 directory is now the source of truth, and `iwac_utils.py` is fully self-contained:
 add and refactor shared helpers freely, with **no** cross-repo sync constraint.
-For the HF dataset schema, the `iwac-dataset` skill is the canonical reference;
+For the HF dataset schema, the `iwac-data` skill is the canonical reference;
 model new generators on the existing `generate_*.py` here.
 
 ## Quickstart

@@ -29,7 +29,9 @@
 // here from disk under files/iwac-visualizations/ (delivered by the Sync Data
 // job, issue #7). Absent before the first data pull → the spinner shows.
 $prerendered = '';
-$snapshotPath = OMEKA_PATH . '/files/iwac-visualizations/collection-overview.json';
+$snapshotPath = OMEKA_PATH . '/files/iwac-visualizations'
+    . \IwacVisualizations\Data\Deployment::generationPath($this->setting('iwacvis_last_sync'))
+    . '/collection-overview.json';
 if (is_readable($snapshotPath)) {
     $snapshot = json_decode((string) file_get_contents($snapshotPath), true);
     if (is_array($snapshot) && !empty($snapshot['summary']) && is_array($snapshot['summary'])) {

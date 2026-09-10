@@ -57,6 +57,7 @@ import pandas as pd
 
 from iwac_embeddings import build_normalized_matrix, coerce_embedding
 from iwac_utils import (
+    expect_item_outputs,
     add_standard_args,
     generate_timestamp,
     DATASET_ID,
@@ -884,6 +885,7 @@ class ArticleDashboardGenerator:
         if self.limit:
             targets = targets[: self.limit]
 
+        expect_item_outputs(self.output_dir, targets)
         written = 0
         for article_id in targets:
             data = self.build_article_json(

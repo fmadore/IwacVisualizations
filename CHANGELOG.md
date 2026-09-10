@@ -12,6 +12,20 @@ See [README.md](README.md) for what the module is, [ARCHITECTURE.md](ARCHITECTUR
 for how it is put together, and [REFACTORING.md](REFACTORING.md) for the audit
 findings several of these releases implement.
 
+### v1.66.0 — reliable publication and selective loading (2026-09-10)
+
+- Publish immutable, checksummed data releases with per-file manifests; pin all
+  Hugging Face reads to one revision and verify output receipts before release.
+- Activate content-addressed data directories through one setting. Preserve
+  interrupted legacy backups, retain recent generations and keep the lock inode.
+- Load dependencies and initialize instances as each block approaches the viewport;
+  dependency failures offer a translated, keyboard-accessible retry.
+- Allow explicit stale-job recovery when the worker lock is free.
+- Extract deployment and asset planning, centralize sentiment models, add prefixed
+  layout registrations with legacy aliases, and share publication cosine ranking.
+- Upgrade: run the new regeneration workflow before pulling fresh data. Existing
+  installed data remains readable; new imports require the versioned manifest.
+
 ### v1.65.0 — the rest of the audit: eight waves, forty-six findings, three premises that did not survive measurement
 
 Waves 7–14 of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8), and the tier is closed. Six of its entries stay unticked and each says why in place: two wait on an owner decision, one is an explicit "keep it", two were considered and rejected in v1.64.0, and one — S15 — was measured and declined, which is the theme of this release.

@@ -919,6 +919,9 @@ class FrameStoreTests(unittest.TestCase):
                 raise RuntimeError(f"Required subset '{config_name}' from {repo_id} is empty.")
             return df.copy()
 
+        revision = patch.object(iwac_utils, "dataset_revision", return_value="fixture-sha")
+        revision.start()
+        self.addCleanup(revision.stop)
         patcher = patch.object(iwac_utils, "_load_subset_frame", fake_load)
         patcher.start()
         self.addCleanup(patcher.stop)

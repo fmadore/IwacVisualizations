@@ -117,7 +117,7 @@ if ($subset === 'audiovisual') {
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'minimal-item',
-        'needs' => [
+        'needs' => ['echarts' => false,
             'chartOptions' => true,
             'layout'       => true,
         ],

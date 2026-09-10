@@ -43,12 +43,13 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import re
 import unicodedata
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 try:
     import pandas as pd
@@ -1171,6 +1172,8 @@ def _load_hf_dataset(**kwargs: Any) -> Any:
             "Hugging Face dataset client not installed. Please run:\n"
             "pip install datasets huggingface-hub pyarrow"
         ) from exc
+    if "revision" not in kwargs:
+        kwargs["revision"] = dataset_revision(kwargs["path"], kwargs.get("token"))
     return load_dataset(**kwargs)
 
 
@@ -1179,6 +1182,29 @@ def _load_hf_dataset(**kwargs: Any) -> Any:
 # test suite) ``load_dataset_safe`` does exactly what it always did: one load
 # per call, nothing retained. See ``iwac_frames.FrameStore``.
 _FRAME_STORE: Any = None
+_DATASET_REVISIONS: Dict[str, str] = {}
+_WRITTEN_OUTPUTS: set = set()
+_EXPECTED_OUTPUTS: set = set()
+
+
+def expect_item_outputs(directory: Path, ids: Iterable) -> None:
+    """Declare eligible item files before rendering, independently of writes."""
+    _EXPECTED_OUTPUTS.update(str((directory / f"{item_id}.json").resolve()) for item_id in ids)
+
+
+def dataset_revision(repo_id: str, token: Optional[str] = None) -> str:
+    """Resolve once per process; every subset and cache widening uses this SHA."""
+    if repo_id not in _DATASET_REVISIONS:
+        pinned = os.environ.get("IWAC_DATASET_REVISION") if repo_id == DATASET_ID else None
+        if pinned:
+            if not re.fullmatch(r"[0-9a-fA-F]{40}", pinned):
+                raise ValueError("IWAC_DATASET_REVISION must be an immutable 40-hex commit SHA")
+            _DATASET_REVISIONS[repo_id] = pinned
+        else:
+            from huggingface_hub import HfApi
+            _DATASET_REVISIONS[repo_id] = HfApi(token=token).dataset_info(repo_id).sha
+    return _DATASET_REVISIONS[repo_id]
+
 
 
 def set_frame_store(store: Any) -> Any:
@@ -1357,12 +1383,10 @@ CENTRALITE_ORDER: Tuple[str, ...] = (
     "Non abordé",
 )
 
-SENTIMENT_MODELS: Tuple[str, ...] = (
-    "gpt_5_6_luna",
-    "mistral_small_2603",
-    "deepseek_v4_flash_0731",
-    "gemma_4_31b_it",
-    "qwen3_8_27b",
+SENTIMENT_MODELS: Tuple[str, ...] = tuple(
+    model["id"] for model in json.loads(
+        (Path(__file__).resolve().parents[1] / "config/sentiment-models.json").read_text(encoding="utf-8")
+    )["active"]
 )
 """Canonical model ids the whole module keys on.
 
@@ -1617,6 +1641,7 @@ def save_json(
         else:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
+    _WRITTEN_OUTPUTS.add(str(path.resolve()))
     if log:
         try:
             size_kb = path.stat().st_size / 1024

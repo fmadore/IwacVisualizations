@@ -119,9 +119,12 @@ $health = isset($health) ? $health : null;
     <h3><?= $escape($translate('Pull data')) ?></h3>
     <?= $this->form()->openTag($form) ?>
         <?= $this->formRow($form->get('tag')) ?>
+        <?php if ($running): ?>
+        <?= $this->formRow($form->get('recover')) ?>
+        <?php endif; ?>
         <?= $this->formHidden($form->get('sync_token')) ?>
         <div class="iwac-data-actions">
-            <button type="submit" class="button"<?= $running ? ' disabled aria-disabled="true"' : '' ?>>
+            <button type="submit" class="button">
                 <?= $escape($translate('Pull latest data')) ?>
             </button>
         </div>

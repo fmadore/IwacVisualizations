@@ -72,6 +72,7 @@ import numpy as np
 
 from iwac_embeddings import build_normalized_matrix, top_k_cosine
 from iwac_utils import (
+    expect_item_outputs,
     DATASET_ID,
     add_standard_args,
     canonicalize_country_field,
@@ -436,6 +437,7 @@ class ReferenceDashboardGenerator:
     ) -> int:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         targets = self.target_ids[: self.limit] if self.limit else self.target_ids
+        expect_item_outputs(self.output_dir, targets)
         written = 0
         for ref_id in targets:
             meta = self.meta[ref_id]

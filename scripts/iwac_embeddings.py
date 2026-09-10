@@ -134,6 +134,23 @@ def top_k_cosine(
     return out
 
 
+def rank_cosine_matrix(similarities: np.ndarray, k: int) -> Tuple[np.ndarray, np.ndarray]:
+    """Rank a pre-masked similarity matrix, preserving the publication tie policy.
+
+    The caller owns eligibility and self-exclusion. This helper does not change
+    zero-vector handling, score thresholds or domain-specific hub corrections.
+    """
+    count = min(k, similarities.shape[1] - 1)
+    if count <= 0:
+        return (np.empty((len(similarities), 0), dtype=np.int64),
+                np.empty((len(similarities), 0), dtype=similarities.dtype))
+    indices = np.argpartition(-similarities, count, axis=1)[:, :count]
+    scores = np.take_along_axis(similarities, indices, axis=1)
+    order = np.argsort(-scores, axis=1)
+    return (np.take_along_axis(indices, order, axis=1),
+            np.take_along_axis(scores, order, axis=1))
+
+
 def pairs_above_threshold(
     X: np.ndarray,
     threshold: float,

@@ -45,7 +45,7 @@ from dashboard_aggregator import (
     DEFAULT_MIN_COOCCURRENCE,
     DashboardAggregator,
 )
-from iwac_utils import DATASET_ID, add_standard_args, configure_logging, generate_timestamp, save_json
+from iwac_utils import expect_item_outputs, DATASET_ID, add_standard_args, configure_logging, generate_timestamp, save_json
 
 # Index Type values that we treat as "non-person entities" for this
 # generator. Keys are the Type values from the IWAC index; values are
@@ -190,6 +190,7 @@ class EntityDashboardGenerator(DashboardAggregator):
         if self.limit:
             targets = targets[: self.limit]
 
+        expect_item_outputs(self.output_dir, targets)
         written = 0
         empty = 0
         for entity_o_id in targets:

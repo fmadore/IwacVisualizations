@@ -1,5 +1,26 @@
 # REFACTORING.md — IwacVisualizations
 
+## Current status — 2026-09-10 (v1.66.0)
+
+This index supersedes the historical status notes below. The September module
+audit is implemented: recoverable immutable data publication, a persistent
+sync lock, pinned dataset reads, publication manifests and output receipts,
+per-block lazy loading with translated retry, and explicit stale-job recovery.
+Shared services now own deployment and asset planning; a neutral JSON registry
+owns sentiment models. Layout names use the `iwac-` prefix with legacy aliases.
+Publication cosine ranking is shared without changing its tie policy.
+
+Validation covers PHP import/retention/lock failures, Python data contracts,
+and browser loading/retry behavior. Full private-dataset regeneration and the
+Omeka/MariaDB integration matrix remain release-environment checks. No live
+data or server settings were changed by this implementation.
+
+The older tiers below are a historical record, not the current backlog.
+Further algorithm changes should retain domain-specific neighbor scoring and
+be justified by measured corpus-scale gains.
+
+## Historical audits
+
 Findings from a repo-wide examination for refactoring opportunities, reusable
 components, modularity, and **theme-token compliance** (proper use of the IWAC
 theme's design tokens).

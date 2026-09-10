@@ -62,8 +62,9 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from iwac_embeddings import coerce_embedding
+from iwac_embeddings import coerce_embedding, rank_cosine_matrix
 from iwac_utils import (
+    expect_item_outputs,
     add_standard_args,
     canonicalize_country_field,
     DATASET_ID,
@@ -305,11 +306,7 @@ class PublicationDashboardGenerator:
         k_eff = min(K, sims.shape[1] - 1)
         if k_eff <= 0:
             return result
-        part_idx = np.argpartition(-sims, k_eff, axis=1)[:, :k_eff]
-        part_sims = np.take_along_axis(sims, part_idx, axis=1)
-        order = np.argsort(-part_sims, axis=1)
-        top_idx = np.take_along_axis(part_idx, order, axis=1)
-        top_sims = np.take_along_axis(part_sims, order, axis=1)
+        top_idx, top_sims = rank_cosine_matrix(sims, K)
 
         for row in range(sims.shape[0]):
             if not valid[row]:
@@ -373,6 +370,7 @@ class PublicationDashboardGenerator:
     def generate_all(self, neighbours: Dict[int, List[Dict[str, Any]]]) -> int:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         targets = self.target_ids[: self.limit] if self.limit else self.target_ids
+        expect_item_outputs(self.output_dir, targets)
         written = 0
         for pub_id in targets:
             meta = self.meta[pub_id]

@@ -138,11 +138,14 @@ namespace {
     require $root . '/src/Sentiment/Centralite.php';
     require $root . '/src/Sentiment/Subjectivite.php';
     require $root . '/src/Mvc/EmbedFramingListener.php';
+    require $root . '/src/Sentiment/ModelRegistry.php';
     require $root . '/Module.php';
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
     require $root . '/src/Controller/Admin/DataController.php';
+    require $root . '/src/Data/Deployment.php';
+    require $root . '/src/Data/Manifest.php';
     require $root . '/src/Job/SyncData.php';
 
     $failures = [];
@@ -520,6 +523,16 @@ namespace {
     // it needs a dozen fakes and a temp-directory lifecycle, which would
     // dwarf the pure contracts above.
     require __DIR__ . '/sync_data_archive.php';
+    require_once __DIR__ . '/../../src/Site/AssetPlan.php';
+    check(\IwacVisualizations\Site\AssetPlan::bundles([], null) === ['shared-core'], 'minimal asset plan gained unnecessary libraries');
+    check(\IwacVisualizations\Site\AssetPlan::bundles(['table' => true, 'pagination' => true, 'maplibre' => true], null)
+        === ['shared-core', 'shared-ui', 'shared-map'], 'asset plan lost dependency ordering or deduplication');
+    try {
+        \IwacVisualizations\Site\AssetPlan::bundles([], 'unknown-bundle');
+        check(false, 'unknown bundle was accepted');
+    } catch (\RuntimeException $e) {
+        check(true, 'unknown bundle rejected');
+    }
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");

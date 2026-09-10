@@ -123,6 +123,7 @@ if ($this->getHelperPluginManager()->has('setting')) {
     $lastSync = $this->setting('iwacvis_last_sync');
     if (is_array($lastSync) && !empty($lastSync['time'])) {
         $attrs['version'] = (string) $lastSync['time'];
+        $attrs['generation'] = ltrim(\IwacVisualizations\Data\Deployment::generationPath($lastSync), '/');
     }
 }
 // Embed opt-in: data-embed-slug marks the block embeddable (embed.js adds the

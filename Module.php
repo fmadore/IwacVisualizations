@@ -64,17 +64,7 @@ class Module extends AbstractModule
      * degradation: the six raw rating rows appear on every article page
      * the run has reached, justification prose included.
      */
-    const SENTIMENT_MODEL_STEMS = [
-        // Generation 1 — vendor slots, read-only, being retired upstream.
-        'gemini', 'chatgpt', 'mistral',
-        // Generation 2 — keyed by model. The five the panel renders,
-        // plus the families whose properties exist but hold no (or
-        // superseded) values.
-        'gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731', 'gemma431bIt',
-        'qwen3827b',
-        'deepseekV4Flash', 'gemini35FlashLite', 'gemini36Flash',
-        'qwen35A3b', 'qwen35A10b',
-    ];
+    const SENTIMENT_MODEL_STEMS = \IwacVisualizations\Sentiment\ModelRegistry::STEMS;
 
     /** The six property suffixes each annotator family carries. */
     const SENTIMENT_AXIS_SUFFIXES = [

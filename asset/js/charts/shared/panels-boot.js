@@ -123,7 +123,13 @@
                 return;
             }
             var containers = document.querySelectorAll(opts.selector);
-            for (var i = 0; i < containers.length; i++) initOne(containers[i]);
+            for (var i = 0; i < containers.length; i++) {
+                (function (container) {
+                    var lazy = window.IWACVisLazy;
+                    if (lazy && lazy.whenVisible) lazy.whenVisible(container, function () { initOne(container); });
+                    else initOne(container);
+                })(containers[i]);
+            }
         }
 
         if (document.readyState === 'loading') {
@@ -309,7 +315,13 @@
                 return;
             }
             var containers = document.querySelectorAll(opts.selector);
-            for (var i = 0; i < containers.length; i++) initOne(containers[i]);
+            for (var i = 0; i < containers.length; i++) {
+                (function (container) {
+                    var lazy = window.IWACVisLazy;
+                    if (lazy && lazy.whenVisible) lazy.whenVisible(container, function () { initOne(container); });
+                    else initOne(container);
+                })(containers[i]);
+            }
         }
 
         if (document.readyState === 'loading') {

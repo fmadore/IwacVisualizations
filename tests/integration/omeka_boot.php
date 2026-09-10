@@ -75,7 +75,10 @@ foreach (BlockRegistry::BLOCKS as $slug => $definition) {
     $name = $definition['invokable'];
     $expectedClass = $definition['class'];
     checkIntegration($blockLayouts->has($name), "page-block service missing: {$name}");
+    checkIntegration($blockLayouts->has('iwac-' . $name), "prefixed page-block service missing: {$name}");
     if ($blockLayouts->has($name)) {
+        checkIntegration($blockLayouts->get('iwac-' . $name) instanceof $expectedClass,
+            "prefixed service resolves the wrong class: {$name}");
         checkIntegration(
             $blockLayouts->get($name) instanceof $expectedClass,
             "page-block service resolves the wrong class: {$name}"
@@ -86,6 +89,8 @@ foreach (BlockRegistry::BLOCKS as $slug => $definition) {
 $resourceLayouts = $services->get('Omeka\\ResourcePageBlockLayoutManager');
 checkIntegration($resourceLayouts->has('visualizations'), 'resource visualizations service missing');
 checkIntegration($resourceLayouts->has('itemSetDashboard'), 'item-set dashboard service missing');
+checkIntegration(get_class($resourceLayouts->get('visualizations')) === get_class($resourceLayouts->get('iwac-visualizations')),
+    'legacy resource alias resolves a different class');
 
 $controllers = $services->get('ControllerManager');
 checkIntegration(

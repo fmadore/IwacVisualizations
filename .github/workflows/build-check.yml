@@ -21,6 +21,8 @@ on:
   push:
     branches: [main]
     paths:
+      - "config/sentiment-models.json"
+      - "scripts/build-model-registry.js"
       - "asset/**"
       - "language/**"
       # view/ + src/ + the two config files: `npm run build` runs lint:theme
@@ -53,6 +55,8 @@ on:
       - "package-lock.json"
   pull_request:
     paths:
+      - "config/sentiment-models.json"
+      - "scripts/build-model-registry.js"
       - "asset/**"
       - "language/**"
       # view/ + src/ + the two config files: `npm run build` runs lint:theme

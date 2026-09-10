@@ -96,46 +96,15 @@ $bundle       = isset($bundle)       ? (string) $bundle : null;
 
 $needMaplibre   = !empty($needs['maplibre']);
 $needWordcloud  = !empty($needs['wordcloud']);
-$needChartOpts  = !empty($needs['chartOptions']);
 // `d3` pulls d3-force + the IWAC canvas force-graph renderer (graph-canvas →
 // graph-force → graph-panel). Opt-in: only the item-page ego networks need it.
 $needD3         = !empty($needs['d3']);
-// `table` implicitly needs pagination — pagination.js is table.js's dep.
-$needPagination = !empty($needs['pagination']) || !empty($needs['table']);
-$needTable      = !empty($needs['table']);
-$needFacets     = !empty($needs['facetButtons']);
-$needTimeline   = !empty($needs['timeline']);
-// `concordance` implicitly needs pagination — the KWIC list is paginated.
-$needConcordance = !empty($needs['concordance']);
-if ($needConcordance) {
-    $needPagination = true;
-}
-// `renderers` (a pre-1.62.0 list of which shared renderers to load) implies
-// the layout bundle, which now carries every renderer.
-$needLayout     = !empty($needs['layout']) || !empty($needs['renderers']);
-// Any of the five small UI primitives brings the one bundle that holds them all.
-$needUi         = $needPagination || $needTable || $needFacets || $needTimeline || $needConcordance;
-
 // -- The bundle manifest --------------------------------------------------
 // Read once per request (static), so the partial can validate the block's
 // bundle name and follow its `uses` (panel sets shared between blocks). A
 // block naming a bundle the manifest does not have is a build-time error in
 // scripts/check-blocks.js; here it is a loud one, not a silently blank page.
-$manifest = (static function () {
-    static $cache = null;
-    if ($cache === null) {
-        $raw = @file_get_contents(__DIR__ . '/../../asset/js/bundles.json');
-        $decoded = $raw === false ? null : json_decode($raw, true);
-        $cache = is_array($decoded) ? $decoded : ['blocks' => [], 'panels' => []];
-    }
-    return $cache;
-})();
-if ($bundle !== null && !isset($manifest['blocks'][$bundle])) {
-    throw new \RuntimeException(sprintf(
-        'IwacVisualizations: no bundle "%s" in asset/js/bundles.json — add the block there and run npm run build:js',
-        $bundle
-    ));
-}
+$plannedBundles = \IwacVisualizations\Site\AssetPlan::bundles($needs, $bundle);
 
 $module = 'IwacVisualizations';
 
@@ -210,7 +179,9 @@ foreach ((array) $blockCss as $sheet) {
 $scripts = [];
 
 // CDN libraries (echarts must precede the IWAC theme + panels).
-$scripts[] = $cdnEcharts;
+if (!isset($needs['echarts']) || $needs['echarts']) {
+    $scripts[] = $cdnEcharts;
+}
 if ($needWordcloud) {
     $scripts[] = $cdnWordcloud;
 }
@@ -237,44 +208,8 @@ if ($needMaplibre) {
 // IWAC bundles, in their fixed order. Every block carries shared-core
 // (i18n → theme → dashboard-core → the panels family → panel toolbar →
 // embed → responsive → hijri); the rest ride behind their $needs flag.
-$dist = 'js/dist/';
-$scripts[] = $this->assetUrl($dist . 'shared-core.min.js', $module);
-if ($needChartOpts) {
-    $scripts[] = $this->assetUrl($dist . 'shared-charts.min.js', $module);
-}
-if ($needUi) {
-    // pagination + table + facet buttons + faceted chart + annotated
-    // timeline + concordance: 17 KB minified, for any block that needs one.
-    $scripts[] = $this->assetUrl($dist . 'shared-ui.min.js', $module);
-}
-if ($needLayout) {
-    // The declarative dashboard layout, the dashboards' panel bridge and
-    // every shared renderer (each self-registers into the layout on load).
-    $scripts[] = $this->assetUrl($dist . 'shared-layout.min.js', $module);
-}
-if ($needMaplibre) {
-    // The IWAC map helpers (factory, popup, choropleth) — not MapLibre
-    // itself, which is the ES module the loader imports in parallel.
-    $scripts[] = $this->assetUrl($dist . 'shared-map.min.js', $module);
-}
-if ($needD3) {
-    // The canvas force-graph renderer over the d3-force globals above.
-    $scripts[] = $this->assetUrl($dist . 'shared-d3.min.js', $module);
-}
-
-// The block: panel sets it shares with another block first (the person and
-// entity dashboards draw the same eleven panels), then its own bundle, whose
-// last file is the orchestrator.
-if ($bundle !== null) {
-    $entry = $manifest['blocks'][$bundle];
-    $uses = is_array($entry) && isset($entry['uses']) ? (array) $entry['uses'] : [];
-    foreach ($uses as $set) {
-        $clean = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) $set));
-        if ($clean !== '') {
-            $scripts[] = $this->assetUrl($dist . 'panels/' . $clean . '.min.js', $module);
-        }
-    }
-    $scripts[] = $this->assetUrl($dist . 'blocks/' . $bundle . '.min.js', $module);
+foreach ($plannedBundles as $plannedBundle) {
+    $scripts[] = $this->assetUrl('js/dist/' . $plannedBundle . '.min.js', $module);
 }
 
 // -- Nothing waits for MapLibre ----------------------------------------
@@ -297,9 +232,8 @@ if ($bundle !== null) {
 // for exactly as long as the import takes.
 
 // -- On-view loader -----------------------------------------------------
-// Emitted per block; several blocks on one page merge their lists into the
-// same window.IWACVisLazy queue at runtime and only the first arms the
-// IntersectionObserver.
+// Each block has its own manifest and viewport trigger. Shared dependency
+// promises deduplicate execution across blocks.
 //
 // The loader itself is `asset/js/iwac-lazy.js` — a real file, loaded like any
 // other script. It used to be ~50 lines of string-concatenated JavaScript
@@ -313,6 +247,8 @@ if ($bundle !== null) {
 // under any CSP because it is data, not code. The HEX flags keep `<`, `&`,
 // `'` and `"` escaped so it can never break out of the element.
 $lazyManifest = json_encode([
+    'error'   => $this->translate('The visualization could not load.'),
+    'retry'   => $this->translate('Retry'),
     'scripts' => $scripts,
     'css'     => $lazyCss,
     'mjs'     => $lazyMjs,

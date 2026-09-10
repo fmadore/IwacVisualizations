@@ -4,20 +4,16 @@ declare(strict_types=1);
 namespace IwacVisualizations\Job;
 
 use Omeka\Job\AbstractJob;
+use IwacVisualizations\Data\Deployment;
 use ZipArchive;
 
 /**
  * Pull the precomputed visualisation data into the Omeka file store.
  *
- * Background to issue #7: the heavy Python generators (UMAP, ForceAtlas2,
- * numpy kNN over the Hugging Face dataset) run in GitHub Actions, never on
- * the production server, and publish their ~18k-file output as a single ZIP
- * on the repository's moving `data` release. This Job is the delivery half:
- * pure server-side I/O — no Python, no compute. It downloads that archive,
- * verifies it, extracts it to a staging directory, and **atomically swaps**
- * it into `files/iwac-visualizations/` so the live site never reads a
- * half-written tree. Every step logs to Omeka\Logger, so progress and
- * failures are visible in Admin → Jobs.
+ * Python generators publish immutable archives in GitHub Actions. This job
+ * verifies and stages an archive, publishes a content-addressed directory,
+ * then activates it through one Omeka setting. Existing readers retain their
+ * generation URLs; failed imports leave the active setting unchanged.
  *
  * Runs under Omeka's default PhpCli dispatch strategy (a detached CLI
  * process), so it resolves everything from the service locator and never
@@ -76,7 +72,7 @@ class SyncData extends AbstractJob
         $lockPath = $workRoot . '/sync.lock';
         $zipPath  = $workRoot . '/download-' . $jobId . '.zip';
         $stageDir = $workRoot . '/stage-' . $jobId;
-        $oldDir   = $workRoot . '/old-' . $jobId;
+
 
         // Concurrency guard: a non-blocking exclusive lock. The controller also
         // refuses to dispatch when a sync is running; this covers the residual race.
@@ -92,23 +88,24 @@ class SyncData extends AbstractJob
 
         $tag = trim((string) $this->getArg('tag', ''));
 
-        // Sweep whatever a previous run left behind. The temp trees are
-        // job-scoped and cleaned in a `finally`, which does not run on SIGKILL
-        // or an OOM kill — and the cleanup only ever removed the CURRENT job's
-        // siblings, so every hard-killed sync left roughly 18k files under
-        // `files/iwac-visualizations.tmp/` forever. Safe to do here: the
-        // exclusive lock above means no other sync is using them.
-        $swept = $this->sweepStaleWork($workRoot, $jobId, $logger);
-        if ($swept > 0) {
-            $logger->info(sprintf(
-                'IWAC data sync: removed %d orphaned work director%s from an '
-                . 'earlier run that was killed before it could clean up.',
-                $swept,
-                $swept === 1 ? 'y' : 'ies'
-            ));
-        }
-
         try {
+            (new Deployment())->recover($liveDir, $workRoot);
+            // Sweep whatever a previous run left behind. The temp trees are
+            // job-scoped and cleaned in a `finally`, which does not run on SIGKILL
+            // or an OOM kill — and the cleanup only ever removed the CURRENT job's
+            // siblings, so every hard-killed sync left roughly 18k files under
+            // `files/iwac-visualizations.tmp/` forever. Safe to do here: the
+            // exclusive lock above means no other sync is using them.
+            $swept = $this->sweepStaleWork($workRoot, $jobId, $logger);
+            if ($swept > 0) {
+                $logger->info(sprintf(
+                    'IWAC data sync: removed %d orphaned work director%s from an '
+                    . 'earlier run that was killed before it could clean up.',
+                    $swept,
+                    $swept === 1 ? 'y' : 'ies'
+                ));
+            }
+
             if ($this->shouldStop()) {
                 $logger->info('IWAC data sync: stop requested before download — aborting.');
                 return;
@@ -118,6 +115,7 @@ class SyncData extends AbstractJob
             // arbitrary job argument here: background-job arguments can be
             // dispatched outside this controller and would otherwise create
             // a server-side request primitive.
+            $tag = $this->resolveTag($tag, $workRoot . '/release-' . $jobId . '.json', $logger);
             $url = self::releaseUrlForTag($tag);
             $logger->info(sprintf('IWAC data sync: downloading %s', $url));
 
@@ -129,14 +127,7 @@ class SyncData extends AbstractJob
             }
             $logger->info(sprintf('IWAC data sync: downloaded %.1f MB.', $bytes / 1048576));
 
-            // 2b. Check the archive against the digest the workflow published
-            // beside it. Until v1.59.0 the archive was trusted on transport
-            // alone: a `--clobber` landing mid-download, a CDN serving a
-            // truncated body, or anyone able to replace the release asset
-            // produced a stream that CHECKCONS would usually — not provably —
-            // reject. A release that predates the sidecar degrades to that
-            // older behaviour with a warning; a sidecar that is present and
-            // does not match is fatal, which is the case it exists for.
+            // The checksum is mandatory and belongs to the resolved release.
             $this->verifyDigest($url . self::CHECKSUM_SUFFIX, $zipPath, $logger);
 
             // 3. Verify + extract into a fresh staging dir (never the live dir).
@@ -203,21 +194,15 @@ class SyncData extends AbstractJob
                     );
                 }
             }
-            // Room to land, checked before the write rather than discovered
-            // half-way through it. Twice the expanded size: the staging tree
-            // and, for the swap below, the outgoing tree that is still there
-            // until the second rename. A partial extraction is the worst
-            // outcome available — it passes the marker check and publishes a
-            // truncated dataset.
+            // Existing generations already occupy disk; reserve staging plus 10% margin.
             $free = @disk_free_space($workRoot);
-            if ($free !== false && $expandedBytes > 0 && $free < $expandedBytes * 2) {
+            if ($free !== false && $expandedBytes > 0 && $free < $expandedBytes * 1.1) {
                 $zip->close();
                 throw new \RuntimeException(sprintf(
                     'Not enough free space to extract: %.1f MB available, %.1f MB needed '
-                    . '(twice the expanded size, because the outgoing tree is kept '
-                    . 'until the swap completes).',
+                    . '(expanded size plus 10% margin).',
                     $free / 1048576,
-                    ($expandedBytes * 2) / 1048576
+                    ($expandedBytes * 1.1) / 1048576
                 ));
             }
 
@@ -234,39 +219,33 @@ class SyncData extends AbstractJob
             @unlink($zipPath);
             $logger->info(sprintf('IWAC data sync: extracted %d entries.', $count));
 
-            // 4. Atomic swap: move the current tree aside, promote the staged tree.
-            //    A request in the sub-millisecond gap 404s, which the client renders
-            //    as an empty state — it never sees a half-written tree.
             if ($this->shouldStop()) {
-                $logger->info('IWAC data sync: stop requested before swap — aborting (no changes made).');
+                $logger->info('IWAC data sync: stop requested before publication.');
                 return;
             }
-            // A process killed between the two renames can leave this job's
-            // old-tree destination behind. Clear only that job-scoped sibling
-            // before attempting the atomic swap again.
-            $this->rrmdir($oldDir);
-            $hadLive = is_dir($liveDir);
-            if ($hadLive && !@rename($liveDir, $oldDir)) {
-                throw new \RuntimeException('Could not move the current data aside.');
+            $generation = hash_file('sha256', $stageDir . '/manifest.json');
+            if (!is_string($generation)) {
+                throw new \RuntimeException('Missing data manifest.');
             }
-            if (!@rename($stageDir, $liveDir)) {
-                if ($hadLive && is_dir($oldDir)) {
-                    @rename($oldDir, $liveDir); // best-effort restore
-                }
-                throw new \RuntimeException('Could not promote the new data into place.');
-            }
-            $logger->info(sprintf('IWAC data sync: swapped %d files into files/%s.', $count, self::STORE_SUBDIR));
+            \IwacVisualizations\Data\Manifest::validate($stageDir);
+            (new Deployment())->promote($stageDir, $liveDir, $generation);
 
             // 5. Record success for the admin status panel + the client cache-buster.
+            $previous = $settings->get(self::SETTING_LAST_SYNC);
             $settings->set(self::SETTING_LAST_SYNC, [
+                'generation' => $generation,
                 'time'  => gmdate('Y-m-d\TH:i:s\Z'),
                 'count' => $count,
                 'bytes' => $bytes,
                 'tag'   => $tag !== '' ? $tag : 'data',
             ]);
+            try {
+                (new Deployment())->prune($liveDir, [$generation, $previous['generation'] ?? ''], time());
+            } catch (\Throwable $e) {
+                $logger->warn('IWAC data sync: activated successfully; retention cleanup failed: ' . $e->getMessage());
+            }
             $logger->info('IWAC data sync: complete.');
         } finally {
-            $this->rrmdir($oldDir);
             $this->rrmdir($stageDir); // no-op once renamed into place
             if (is_file($zipPath)) {
                 @unlink($zipPath);
@@ -276,7 +255,7 @@ class SyncData extends AbstractJob
             }
             flock($lock, LOCK_UN);
             fclose($lock);
-            @unlink($lockPath);
+            // Keep the lock inode: unlinking it permits competing locks.
         }
     }
 
@@ -325,6 +304,25 @@ class SyncData extends AbstractJob
             . '/' . self::ASSET_NAME;
     }
 
+    /** The moving release contains only a pointer to a fully published immutable pair. */
+    protected function resolveTag(string $tag, string $path, $logger): string
+    {
+        if ($tag !== '' && $tag !== 'data') {
+            return $tag;
+        }
+        try {
+            $this->download(self::RELEASE_BASE . 'data/latest.json', $path, $logger);
+            $pointer = json_decode((string) file_get_contents($path), true, 16, JSON_THROW_ON_ERROR);
+            $resolved = $pointer['tag'] ?? '';
+            if (!is_string($resolved) || !preg_match('/^data-build-[0-9]+-[0-9]+$/D', $resolved)) {
+                throw new \RuntimeException('Invalid data release pointer.');
+            }
+            return $resolved;
+        } finally {
+            @unlink($path);
+        }
+    }
+
     /**
      * Accept a Unix ZIP entry only when its mode describes a regular file,
      * directory, or carries no file-type bits. The last form is emitted by
@@ -336,25 +334,7 @@ class SyncData extends AbstractJob
         return $type === 0 || $type === 0100000 || $type === 0040000;
     }
 
-    /**
-     * Fetch the checksum sidecar and compare it with the downloaded archive.
-     *
-     * A missing sidecar (a release built before the workflow published one, a
-     * transient fetch failure) is a warning, not a failure — the archive is
-     * then installed as it always was. A sidecar that is present but
-     * malformed, or that does not match, throws: an unverifiable archive is
-     * not installed.
-     */
-    /**
-     * `protected`, not `private`, and only for that reason: it and
-     * `download()` below are the two methods that reach the network, so
-     * they are the seam a test overrides to hand `perform()` a local
-     * fixture archive instead. Everything between them and the atomic swap
-     * - the marker check, the zip-slip guard, the symlink refusal, the
-     * expansion ceiling, the rename dance - is then exercised for real
-     * against a real ZipArchive (Tier 8 / B3 (1)). Before this the tests
-     * could only reach the static predicates.
-     */
+    /** Require a matching checksum. Protected for fixture-based network tests. */
     protected function verifyDigest(string $sidecarUrl, string $zipPath, $logger): void
     {
         $sidecarPath = $zipPath . self::CHECKSUM_SUFFIX;
@@ -362,11 +342,7 @@ class SyncData extends AbstractJob
             $this->download($sidecarUrl, $sidecarPath, $logger);
         } catch (\RuntimeException $e) {
             @unlink($sidecarPath);
-            $logger->warn(
-                'IWAC data sync: no checksum sidecar for this release — installing without an integrity check ('
-                . $e->getMessage() . ').'
-            );
-            return;
+            throw new \RuntimeException('Checksum could not be fetched; active data is unchanged.', 0, $e);
         }
         $expected = self::expectedDigestFromSidecar((string) @file_get_contents($sidecarPath));
         @unlink($sidecarPath);
@@ -508,6 +484,9 @@ class SyncData extends AbstractJob
             }
             if ((int) $m[2] === $jobId) {
                 continue;   // this run's own, cleaned by the finally below
+            }
+            if ($m[1] === 'old' && is_file($workRoot . '/' . $entry . '/collection-overview.json')) {
+                continue; // A recoverable legacy backup is never an orphan.
             }
             $path = $workRoot . '/' . $entry;
             if (is_dir($path)) {

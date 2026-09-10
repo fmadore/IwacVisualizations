@@ -24,6 +24,8 @@ on:
   push:
     branches: [main]
     paths:
+      - "config/sentiment-models.json"
+      - ".github/workflows/regenerate-data.yml"
       - "scripts/**/*.py"
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
@@ -130,6 +132,7 @@ jobs:
         run: |
           set -euo pipefail
           export NUMBA_CACHE_DIR="$HOME/.cache/numba"
+          export IWAC_DATASET_REVISION="${{ steps.hf.outputs.sha }}"
           python scripts/run_all.py
 
       # A 90-minute job that fails leaves nothing behind but a red tick in a
@@ -157,24 +160,10 @@ jobs:
       - name: Validate the generated data
         run: python scripts/validate_data.py
 
-      - name: Write data manifest
-        # Build-stamp the archive so the client can cache-bust on each data sync
-        # (data refreshes no longer bump the module ?v=). The PHP job also records
-        # its own last-sync time; this is the in-archive provenance record.
-        run: |
-          python - <<'PY'
-          import datetime, json, os
-          manifest = {
-              "generatedAt": datetime.datetime.now(datetime.timezone.utc)
-                  .strftime("%Y-%m-%dT%H:%M:%SZ"),
-              "buildId":   (os.environ.get("GITHUB_SHA", "") or "")[:12],
-              "runId":     os.environ.get("GITHUB_RUN_ID", ""),
-              "runNumber": os.environ.get("GITHUB_RUN_NUMBER", ""),
-          }
-          with open("asset/data/manifest.json", "w", encoding="utf-8") as fh:
-              json.dump(manifest, fh, ensure_ascii=False)
-          print(manifest)
-          PY
+      - name: Write verified data manifest
+        env:
+          IWAC_DATASET_REVISION: ${{ steps.hf.outputs.sha }}
+        run: python scripts/validate_data.py --write-manifest
 
       - name: Package archive
         # Entries land at the zip ROOT (e.g. collection-overview.json,
@@ -226,26 +215,23 @@ jobs:
           echo "Archive size:"; ls -lh iwac-data.zip
           echo "Entry count:"; unzip -l iwac-data.zip | tail -1
 
-      - name: Publish release asset
+      - name: Publish immutable release and activate pointer
         env:
           GH_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
-          TAG="${{ inputs.tag }}"
-          if [ -n "$TAG" ]; then
-            # Immutable, versioned snapshot — pull it explicitly with the Job's `tag` arg.
-            gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" \
-              --title "Precomputed visualization data ($TAG)" \
-              --notes "Automated data build from ${GITHUB_SHA:0:12} (run ${GITHUB_RUN_ID})." \
-              --latest=false
-            gh release upload "$TAG" iwac-data.zip iwac-data.zip.sha256 --clobber
+          TAG="data-build-${{ github.run_id }}-${{ github.run_attempt }}"
+          gh release create "$TAG" iwac-data.zip iwac-data.zip.sha256 \
+            --title "Precomputed data $TAG" --notes "Generated from $GITHUB_SHA" --latest=false
+          # A versioned override is immutable too: existing tags fail, never clobber.
+          if [ -n "$REQUESTED_TAG" ]; then
+            gh release create "$REQUESTED_TAG" iwac-data.zip iwac-data.zip.sha256 \
+              --title "Precomputed data $REQUESTED_TAG" --notes "Generated from $GITHUB_SHA" --latest=false
           else
-            # Moving `data` release — the stable URL the Sync Data job downloads by default:
-            #   https://github.com/${{ github.repository }}/releases/download/data/iwac-data.zip
             gh release view data >/dev/null 2>&1 || gh release create data \
-              --title "Precomputed visualization data (latest)" \
-              --notes "Moving release: the latest automated data build, refreshed by the regenerate-data workflow." \
-              --latest=false
-            gh release upload data iwac-data.zip iwac-data.zip.sha256 --clobber
+              --title "Latest precomputed data" --notes "Pointer to an immutable build." --latest=false
+            export IWAC_RELEASE_TAG="$TAG"
+            python -c 'import json,os; open("latest.json","w").write(json.dumps({"tag":os.environ["IWAC_RELEASE_TAG"]}))'
+            gh release upload data latest.json --clobber
           fi
-          echo "Published iwac-data.zip + iwac-data.zip.sha256 to release '${TAG:-data}'."

@@ -52,6 +52,11 @@ final class FixtureSyncData extends SyncData
     /** @var bool Set when download() ran, so a test can prove it was reached. */
     public $downloaded = false;
 
+    protected function resolveTag(string $tag, string $path, $logger): string
+    {
+        return $tag !== '' ? $tag : 'data';
+    }
+
     protected function download(string $url, string $dest, $logger): void
     {
         $this->downloaded = true;
@@ -164,6 +169,11 @@ function syncMakeZip(string $path, array $entries, bool $withMarker = true): voi
     if ($withMarker && !array_key_exists(SyncData::MARKER_ENTRY, $entries)) {
         $entries[SyncData::MARKER_ENTRY] = '{"ok":true}';
     }
+    $files = [];
+    foreach ($entries as $name => $contents) {
+        $files[$name] = ['sha256' => hash('sha256', $contents)];
+    }
+    $entries['manifest.json'] = json_encode(['schemaVersion' => 1, 'files' => $files]);
     foreach ($entries as $name => $contents) {
         $zip->addFromString($name, $contents);
     }
@@ -231,6 +241,7 @@ $s = syncScenario('ok', [
 ]);
 $syncRoots[] = $s['root'];
 $err = syncRun($s['job']);
+$s['liveDir'] .= \IwacVisualizations\Data\Deployment::generationPath($s['services']->settings->get(SyncData::SETTING_LAST_SYNC));
 
 check($err === '', 'a well-formed archive failed to sync: ' . $err);
 check($s['job']->downloaded, 'perform() never reached the download seam');
@@ -247,7 +258,7 @@ check(
     'a nested entry did not survive extraction'
 );
 check(
-    $s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['count'] === 2,
+    $s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['count'] === 3,
     'the last-sync setting did not record the entry count'
 );
 check(
@@ -273,6 +284,9 @@ file_put_contents($s['liveDir'] . '/stale.json', 'from the previous release');
 $err = syncRun($s['job']);
 
 check($err === '', 'a sync over an existing tree failed: ' . $err);
+$legacyDir = $s['liveDir'];
+$s['liveDir'] .= \IwacVisualizations\Data\Deployment::generationPath($s['services']->settings->get(SyncData::SETTING_LAST_SYNC));
+check(file_get_contents($legacyDir . '/collection-overview.json') === '{"generation":1}', 'legacy readers lost their snapshot');
 check(
     file_get_contents($s['liveDir'] . '/collection-overview.json') === '{"generation":2}',
     'the live tree was not replaced by the new archive'
@@ -407,7 +421,7 @@ check(
     'a stop before the swap still replaced the live tree'
 );
 check(
-    $s['services']->logger->has('stop requested before swap'),
+    $s['services']->logger->has('stop requested before publication'),
     'the stop-before-swap branch did not log'
 );
 check(
@@ -451,6 +465,101 @@ check(
     $s['services']->logger->has('orphaned work director'),
     'the orphan sweep did not report what it removed'
 );
+
+
+// Failure injection: failed promotion never disturbs legacy or active data.
+class RefusingDeployment extends \IwacVisualizations\Data\Deployment
+{
+    protected function move(string $from, string $to): bool { return false; }
+}
+$root = syncTempDir('recovery');
+$syncRoots[] = $root;
+mkdir($root . '/work/old-1', 0775, true);
+file_put_contents($root . '/work/old-1/collection-overview.json', '{"previous":true}');
+try { (new RefusingDeployment())->recover($root . '/live', $root . '/work'); }
+catch (\RuntimeException $e) { /* expected */ }
+check(is_file($root . '/work/old-1/collection-overview.json'), 'failed restore deleted the backup');
+(new \IwacVisualizations\Data\Deployment())->recover($root . '/live', $root . '/work');
+check(is_file($root . '/live/collection-overview.json'), 'interrupted legacy swap was not recovered');
+mkdir($root . '/stage');
+file_put_contents($root . '/stage/collection-overview.json', '{"next":true}');
+try { (new RefusingDeployment())->promote($root . '/stage', $root . '/live', str_repeat('a', 64)); }
+catch (\RuntimeException $e) { /* expected */ }
+check(is_file($root . '/stage/collection-overview.json'), 'failed promotion discarded staging');
+check(file_get_contents($root . '/live/collection-overview.json') === '{"previous":true}', 'failed promotion changed active data');
+
+// A manifest cannot authorize missing files, extra executable files or incompatible schemas.
+$bad = syncScenario('manifest', ['collection-overview.json' => '{}', 'extra.php' => '<?php exit;']);
+$syncRoots[] = $bad['root'];
+check(syncRun($bad['job']) !== '', 'an executable archive entry passed manifest validation');
+
+// Repeat imports preserve the same immutable directory, while retention keeps
+// both recent readers and the immediately previous generation.
+$s = syncScenario('repeat', ['collection-overview.json' => '{}']);
+$syncRoots[] = $s['root'];
+check(syncRun($s['job']) === '', 'first immutable import failed');
+$first = $s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['generation'];
+check(syncRun($s['job']) === '', 'repeated immutable import failed');
+check($s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['generation'] === $first, 'repeat changed the generation');
+$generationRoot = $s['liveDir'] . '/generations/';
+$old = str_repeat('b', 64);
+$previous = str_repeat('c', 64);
+$recent = str_repeat('d', 64);
+foreach ([$old, $previous, $recent] as $id) {
+    mkdir($generationRoot . $id);
+    file_put_contents($generationRoot . $id . '/data.json', '{}');
+    touch($generationRoot . $id, time() - ($id === $recent ? 1 : 40) * 86400);
+}
+(new \IwacVisualizations\Data\Deployment())->prune($s['liveDir'], [$first, $previous], time());
+check(!is_dir($generationRoot . $old), 'expired unreferenced generation survived retention');
+check(is_dir($generationRoot . $previous) && is_dir($generationRoot . $recent), 'retention deleted previous or recent readers');
+file_put_contents($generationRoot . $first . '/collection-overview.json', '{"tampered":true}');
+check(syncRun($s['job']) !== '', 'repeat import accepted corrupted immutable data');
+
+// A separate PHP process must observe the same persistent lock inode.
+$work = $s['liveDir'] . '.tmp';
+$held = fopen($work . '/sync.lock', 'c');
+flock($held, LOCK_EX);
+$probe = '$f=fopen($argv[1],"c");$ok=flock($f,LOCK_EX|LOCK_NB);echo $ok?"free":"held";fclose($f);';
+$process = proc_open([PHP_BINARY, '-r', $probe, $work . '/sync.lock'],
+    [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+if (is_resource($process)) {
+    fclose($pipes[0]);
+    $output = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    check(proc_close($process) === 0 && $output === 'held', 'another process bypassed the persistent lock');
+} else {
+    check(false, 'could not run the cross-process lock probe');
+}
+flock($held, LOCK_UN);
+fclose($held);
+check(!\IwacVisualizations\Data\Deployment::isLocked($work), 'released lock remains active');
+check(is_file($work . '/sync.lock'), 'lock inode was removed');
+
+class ChecksumProbe extends SyncData
+{
+    public $response;
+    public function verify(string $zip): void { $this->verifyDigest('fixture', $zip, new FakeLogger()); }
+    protected function download(string $url, string $dest, $logger): void
+    {
+        if ($this->response === null) throw new \RuntimeException('Transport failed');
+        file_put_contents($dest, $this->response);
+    }
+}
+$probe = new ChecksumProbe();
+foreach ([null, '<html>Unavailable</html>', str_repeat('0', 64) . '  iwac-data.zip'] as $response) {
+    $probe->response = $response;
+    try {
+        $probe->verify($s['fixture']);
+        check(false, 'missing, malformed or wrong checksum was accepted');
+    } catch (\RuntimeException $e) {
+        check(true, 'unverifiable checksum rejected');
+    }
+}
+$probe->response = hash_file('sha256', $s['fixture']) . '  iwac-data.zip';
+$probe->verify($s['fixture']);
+check(true, 'matching checksum accepted');
 
 foreach ($syncRoots as $dir) {
     syncRrmdir($dir);

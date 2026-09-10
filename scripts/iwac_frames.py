@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
 
 # ``columns`` is None for "the whole schema"; otherwise the union of every
 # column any caller has asked for so far.
-_Key = Tuple[str, str]
+_Key = Tuple[str, str, str]
 
 
 class _Entry:
@@ -166,7 +166,14 @@ class FrameStore:
         # this module.
         import iwac_utils
 
-        key = (repo_id, config_name)
+        try:
+            revision = iwac_utils.dataset_revision(repo_id, token)
+        except Exception:
+            if required:
+                raise
+            logger.warning("Could not resolve dataset revision for %s", repo_id)
+            return None
+        key = (repo_id, config_name, revision)
         entry = self._entries.get(key)
 
         if entry is not None and entry.failed:
@@ -239,5 +246,5 @@ class FrameStore:
             "loads": self.loads,
             "hits": self.hits,
             "widenings": self.widenings,
-            "held": [name for _repo, name in self._order],
+            "held": [name for _repo, name, _revision in self._order],
         }

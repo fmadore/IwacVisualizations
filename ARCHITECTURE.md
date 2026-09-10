@@ -99,13 +99,15 @@ IwacVisualizations/
 │       └── iwac-theme.js              # ECharts theme from live CSS vars; owns BASEMAP
 ├── config/
 │   ├── module.config.php              # Block + resource-page-block invokables
-│   └── module.ini                     # Module metadata; version drives the asset cache-bust
+│   ├── module.ini                     # Module metadata; version drives the asset cache-bust
+│   └── sentiment-models.json
 ├── language/                          # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
 │   ├── laicite/                       # 20 files — one module per bundle, mirroring asset/js/charts/laicite/
 │   ├── build-css.js
 │   ├── build-js.js                    # esbuild bundler driven by asset/js/bundles.json
 │   ├── build-mo.js
+│   ├── build-model-registry.js
 │   ├── build-tree.js
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
@@ -169,12 +171,16 @@ IwacVisualizations/
 │   │   │   └── DataController.php
 │   │   └── Site/
 │   │       └── EmbedController.php
+│   ├── Data/
+│   │   ├── Deployment.php
+│   │   └── Manifest.php
 │   ├── Job/
 │   │   └── SyncData.php               # Pure-PHP "Pull latest data" job (issue #7)
 │   ├── Mvc/
 │   │   └── EmbedFramingListener.php
 │   ├── Sentiment/
 │   │   ├── Centralite.php
+│   │   ├── ModelRegistry.php
 │   │   ├── Polarite.php
 │   │   └── Subjectivite.php
 │   ├── Service/
@@ -184,9 +190,10 @@ IwacVisualizations/
 │   └── Site/
 │       ├── BlockLayout/               # 22 files — one `const SLUG` each; BlockRegistry.php is the truth
 │       ├── ResourcePageBlockLayout/   # 3 files — template-ID dispatch + the item-set block
+│       ├── AssetPlan.php
 │       └── BlockRegistry.php          # THE single source of truth for every block
 ├── tests/
-│   ├── browser/                       # 13 files — Playwright specs
+│   ├── browser/                       # 14 files — Playwright specs
 │   ├── integration/
 │   │   └── omeka_boot.php
 │   ├── js/                            # 26 files — node:test units
@@ -195,7 +202,8 @@ IwacVisualizations/
 │   │   └── sync_data_archive.php
 │   └── python/
 │       ├── requirements.txt
-│       └── test_iwac_helpers.py
+│       ├── test_iwac_helpers.py
+│       └── test_publication.py
 ├── view/
 │   ├── common/
 │   │   ├── block-layout/              # 4 files — one per registered block, filename === slug
@@ -346,19 +354,26 @@ The precomputed JSON is **not committed to git** and is **not generated on the
 production server**. Three stages keep the repo lean and the ZMO host a plain
 PHP box:
 
-1. **Compute (GitHub Actions)** — `.github/workflows/regenerate-data.yml` runs
-   the Python generators on a runner (`workflow_dispatch`, optional monthly
-   cron), writes `asset/data/`, and zips it.
-2. **Publish (GitHub Release)** — the workflow uploads `iwac-data.zip` to the
-   moving **`data`** release. Stable URL:
-   `…/releases/download/data/iwac-data.zip`.
-3. **Deliver (admin pull)** — **Admin → IWAC Visualizations → “Pull latest
-   data”** dispatches the pure-PHP `IwacVisualizations\Job\SyncData`, which
-   downloads the archive and **atomically swaps** it into
-   `files/iwac-visualizations/`. Progress + logs appear in **Admin → Jobs**.
+1. **Compute** — the runner pins all subsets to one Hugging Face commit and
+   records source IDs, OCR visibility and generator output receipts. Validation
+   checks JSON contracts, eligible item outputs and published references, then
+   writes a versioned manifest containing per-file SHA-256 hashes.
+2. **Publish** — the workflow creates an immutable `data-build-<run>-<attempt>`
+   release containing the archive and checksum, then updates `data/latest.json`.
+3. **Deliver** — SyncData resolves the pointer once, requires the checksum and
+   manifest, and publishes `generations/<manifest-sha256>/`. One Omeka setting
+   activates the directory. The permanent lock serializes workers; deployment
+   recovery preserves usable legacy backups. Retention keeps the previous and
+   all generations younger than 30 days. Logs appear in **Admin → Jobs**.
+
+Each page carries `data-generation`; the shared fetcher resolves aggregate and
+sidecar requests into that immutable directory. Legacy pages retain their old
+root until reloaded. `Site/AssetPlan` caches the bundle registry once per request.
+The browser loader maintains per-block readiness and shared dependency promises;
+a failed script stops dependent execution and exposes a translated retry control.
 
 The chart JS therefore fetches generated data same-origin from
-`{basePath}/files/iwac-visualizations/…`. The only data **still committed** to
+`{basePath}/files/iwac-visualizations/generations/<sha256>/…`. The only data **still committed** to
 the module is `asset/geo/` (static map geometry the generators read as input and
 the client fetches from `{basePath}/modules/IwacVisualizations/asset/geo/…`) and
 the two hand-curated event annotation files, `asset/data/scary-terms-events.json`

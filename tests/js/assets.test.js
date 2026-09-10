@@ -1,324 +1,93 @@
 'use strict';
-
-// Guards for the on-view asset loader in `view/common/iwac-assets.phtml`,
-// specifically the MapLibre 6 ESM path added in 1.37.0.
-//
-// Why this file exists: MapLibre 6 removed the UMD build entirely. There is no
-// `dist/maplibre-gl.js` any more, so the old classic-<script> pin would 404 and
-// every map on the site would silently degrade to "map unavailable". The
-// replacement — import the `.mjs`, republish the namespace as
-// `window.maplibregl`, and run the classic chain alongside it — has four
-// properties that are easy to regress and invisible until a map block renders:
-//
-//   1. NOTHING in the chain waits for the import, orchestrator included. This
-//      took three goes: awaiting it in front of everything (~1 MB of MapLibre
-//      ahead of echarts and ~30 module files), then gating just the
-//      orchestrator in 1.51.0 — which is still the script that paints all
-//      twelve panels — and finally, in 1.52.0, moving the wait into the map
-//      panels themselves via `P.whenMaplibre()`
-//   2. the import promise must be PUBLISHED (`IWACVisLazy.mjsP`), because that
-//      is what those panels await
-//   3. a failed import must reject that promise and leave the chain alone
-//      (ECharts panels must survive a MapLibre CDN outage)
-//   4. blocks with no map must not pay for an import at all
-//
-// Rather than restate the loader here (a copy would drift), these tests parse
-// the real PHP partial, rebuild the emitted JS, and execute it.
-
+const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const vm = require('node:vm');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
-const test = require('node:test');
-const vm = require('node:vm');
+const ROOT = join(__dirname, '../..');
+const source = readFileSync(join(ROOT, 'asset/js/iwac-lazy.js'), 'utf8');
+const flush = () => new Promise(resolve => setImmediate(resolve));
 
-const ROOT = join(__dirname, '..', '..');
-const PARTIAL = readFileSync(
-    join(ROOT, 'view', 'common', 'iwac-assets.phtml'),
-    'utf8'
-);
-
-/**
- * The loader, read as a file.
- *
- * These tests used to reassemble it out of PHP string concatenation — they
- * literally parsed `$headScript->appendScript('…' . '…')` back into
- * JavaScript, because the loader WAS that concatenation, which is also why a
- * host CSP broke every block page. Since H6 it is `asset/js/iwac-lazy.js`, so
- * this reads the file, and the payload arrives the way the browser delivers
- * it: as a JSON manifest in the DOM.
- */
-const LOADER = readFileSync(join(ROOT, 'asset', 'js', 'iwac-lazy.js'), 'utf8');
-
-/**
- * Execute the loader against fake DOM globals and report what it injected.
- *
- * `import()` cannot run inside a plain vm context without an ESM loader, so the
- * single dynamic-import call is rewritten to a stub. The assertion above the
- * rewrite pins the real source to `import(S.mjs)`, so swapping the mechanism
- * for something else fails here rather than passing against a stale stub.
- */
-function runLoader(payload, options = {}) {
-    const source = LOADER;
-    assert.match(
-        source,
-        /\bimport\(S\.mjs\)/,
-        'loader no longer uses dynamic import() for the MapLibre ESM chunk'
-    );
-
-    const injected = [];
-    const readyListeners = [];
-    const manifests = [];
-    let importCalls = 0;
-
-    const sandbox = {
-        console: { error() {} },
-        IntersectionObserver: function () {},
-        __dynamicImport(url) {
-            importCalls += 1;
-            return (options.importMjs || (() => Promise.resolve({})))(url);
-        },
-    };
-    sandbox.document = {
-        // 'loading' holds load() back until fireReady(), which is the only way
-        // to merge a second block's payload the way a real page does: every
-        // block's inline script runs while the head is still parsing.
-        readyState: options.pending ? 'loading' : 'complete',
-        head: {
-            appendChild(node) {
-                // Snapshot the global at injection time: asserting only on the
-                // final state would pass even if the chain ran first.
-                injected.push({ ...node, maplibreAtInject: sandbox.maplibregl });
-                return node;
-            },
-        },
-        createElement(tag) {
-            return { tag, src: '', href: '', rel: '', async: true };
-        },
-        // The payload reaches the loader the way the browser delivers it:
-        // as `<script type="application/json" class="iwac-vis-lazy-manifest">`
-        // beside each block. `.iwac-vis-block` stays empty, so the loader
-        // takes its documented "no block marker" fallback and calls load()
-        // immediately, which is what these tests exercise.
-        querySelectorAll(selector) {
-            if (selector !== '.iwac-vis-lazy-manifest') return [];
-            return manifests.map((p) => ({ textContent: JSON.stringify(p), dataset: {} }));
-        },
-        addEventListener(name, fn) {
-            if (name === 'DOMContentLoaded') readyListeners.push(fn);
-        },
-    };
-
-    vm.createContext(sandbox);
+function harness(payloads, fail = new Set()) {
+    const injected = [], hosts = [], nodes = [], calls = [];
+    function element(tag) {
+        return { tag, children: [], textContent: '', dataset: {},
+            appendChild(node) { this.children.push(node); },
+            setAttribute(k, v) { this[k] = v; },
+            addEventListener(k, fn) { this[k] = fn; }, remove() { this.removed = true; } };
+    }
+    const sandbox = { console: { error() {} }, setTimeout, clearTimeout };
     sandbox.window = sandbox;
-    // Additional blocks on the same page add their own manifest; the loader
-    // reads all of them, which is how their lists merge.
-    manifests.push(payload, ...(options.alsoBlocks || []));
-    vm.runInContext(
-        source.replace('import(S.mjs)', '__dynamicImport(S.mjs)'),
-        sandbox
-    );
-
-    return {
-        sandbox,
-        scripts: () => injected.filter((n) => n.tag === 'script'),
-        links: () => injected.filter((n) => n.tag === 'link'),
-        importCalls: () => importCalls,
-        fireReady: () => readyListeners.forEach((fn) => fn()),
+    sandbox.IntersectionObserver = function (callback) {
+        sandbox.intersect = host => callback([{ target: host, isIntersecting: true }]);
+        this.observe = () => {};
+        this.unobserve = () => {};
     };
+    sandbox.__dynamicImport = url => { calls.push(url); return Promise.resolve({}); };
+    payloads.forEach(payload => {
+        const host = element('div');
+        const loading = element('div');
+        host.loading = loading;
+        host.querySelector = () => loading;
+        hosts.push(host);
+        nodes.push({ textContent: JSON.stringify(payload), nextElementSibling: host });
+    });
+    sandbox.document = { readyState: 'complete', createElement: element,
+        querySelectorAll: () => nodes,
+        head: { appendChild(node) {
+            injected.push(node);
+            if (node.tag === 'script') queueMicrotask(() => {
+                if (fail.has(node.src)) node.onerror(); else node.onload();
+            });
+        } }
+    };
+    vm.runInNewContext(source.replace('import(S.mjs)', '__dynamicImport(S.mjs)'), sandbox);
+    return { hosts, injected, calls, sandbox, activate: i => sandbox.intersect(hosts[i]),
+        scripts: () => injected.filter(n => n.tag === 'script').map(n => n.src) };
 }
 
-/** Resolve after the microtask queue has drained. */
-const flush = () => new Promise((resolve) => setImmediate(resolve));
-
-const ORCHESTRATOR = '/js/dist/blocks/collection-overview.min.js';
-const MAP_PAYLOAD = {
-    scripts: [
-        '/js/dist/shared-core.min.js',
-        '/js/dist/shared-map.min.js',
-        ORCHESTRATOR,
-    ],
-    css: ['/css/iwac-maplibre.min.css'],
-    mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.mjs',
-};
-
-test('MapLibre pin is a v6 ES module, and JS and CSS agree on the version', () => {
-    const js = /\$cdnMaplibreJs\s*=\s*'([^']+)'/.exec(PARTIAL);
-    const css = /\$cdnMaplibreCss\s*=\s*'([^']+)'/.exec(PARTIAL);
-    assert.ok(js && css, 'MapLibre CDN constants are missing');
-
-    assert.match(
-        js[1],
-        /\/maplibre-gl@(\d+)[^/]*\/dist\/maplibre-gl\.mjs$/,
-        'MapLibre 6 ships no UMD build — the JS pin must end in .mjs, not .js'
-    );
-    const version = (url) => /maplibre-gl@(\d+)\.(\d+)\.(\d+)/.exec(url);
-    const jsVersion = version(js[1]);
-    const cssVersion = version(css[1]);
-    assert.ok(jsVersion && cssVersion, 'MapLibre pins are not exact versions');
-    assert.ok(Number(jsVersion[1]) >= 6, 'expected MapLibre 6 or newer');
-    assert.equal(jsVersion[0], cssVersion[0], 'MapLibre JS and CSS pins disagree');
-});
-
-test('MapLibre never enters the classic $scripts chain', () => {
-    assert.doesNotMatch(
-        PARTIAL,
-        /\$scripts\[\]\s*=\s*\$cdnMaplibreJs/,
-        'an ES module cannot execute as a classic <script>: keep it on $lazyMjs'
-    );
-    assert.match(
-        PARTIAL,
-        /\$lazyMjs\s*=\s*\$cdnMaplibreJs/,
-        'the MapLibre ESM URL is no longer handed to the loader'
-    );
-});
-
-test('the whole chain, orchestrator included, starts before the import settles', async () => {
-    const namespace = { Map() {}, Popup() {} };
-    const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
-
-    // Synchronously: stylesheets AND every script are already in, with the
-    // import still pending. This is the regression the 1.52.0 split fixed —
-    // the orchestrator paints all twelve panels, so gating it meant first
-    // paint still waited on a library two of them use.
-    assert.equal(run.links().length, 1);
-    assert.deepEqual(
-        run.scripts().map((s) => s.src),
-        MAP_PAYLOAD.scripts,
-        'the chain must be injected before the import settles'
-    );
-    for (const script of run.scripts()) {
-        assert.equal(
-            script.maplibreAtInject,
-            undefined,
-            'nothing in the chain may wait for the global — map panels await P.whenMaplibre()'
-        );
-        assert.equal(script.async, false, 'async=false is what keeps the chain in order');
-    }
-
-    await flush();
-
-    assert.equal(run.importCalls(), 1);
-    assert.equal(run.sandbox.maplibregl, namespace);
-    assert.deepEqual(
-        run.scripts().map((s) => s.src),
-        MAP_PAYLOAD.scripts,
-        'the import settling must not inject anything further'
-    );
-});
-
-test('publishes the import promise so map panels can await it', async () => {
-    const namespace = { Map() {}, Popup() {} };
-    const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
-
-    const promise = run.sandbox.IWACVisLazy.mjsP;
-    assert.ok(promise && typeof promise.then === 'function',
-        'IWACVisLazy.mjsP is what P.whenMaplibre() resolves off — without it, no map ever draws');
-
-    assert.equal(await promise, namespace, 'the promise resolves with the namespace');
-    assert.equal(run.sandbox.maplibregl, namespace);
-});
-
-test('a failed MapLibre import rejects the promise and leaves the chain alone', async () => {
-    const run = runLoader(MAP_PAYLOAD, {
-        importMjs: () => Promise.reject(new Error('CDN unreachable')),
-    });
-
-    await flush();
-
-    assert.equal(run.sandbox.maplibregl, undefined);
-    assert.deepEqual(
-        run.scripts().map((s) => s.src),
-        MAP_PAYLOAD.scripts,
-        'a MapLibre outage must cost the page its map, not its ECharts panels'
-    );
-    // Rejected, so the panel can show a real error state rather than spin —
-    // and pre-handled by the loader, so a page whose map is never scrolled
-    // into view does not log an unhandled rejection.
-    await assert.rejects(() => run.sandbox.IWACVisLazy.mjsP, /CDN unreachable/);
-});
-
-test('blocks without a map import nothing and expose no promise', () => {
-    const run = runLoader({
-        scripts: ['/js/dist/shared-core.min.js', '/js/dist/blocks/term-trends.min.js'],
-        css: [],
-        mjs: null,
-    });
-
-    assert.equal(run.importCalls(), 0, 'map-less blocks must not pay for MapLibre');
-    assert.equal(run.sandbox.IWACVisLazy.mjsP, null,
-        'no import was armed, so P.whenMaplibre() must reject rather than hang');
-    assert.deepEqual(run.scripts().map((s) => s.src), [
-        '/js/dist/shared-core.min.js',
-        '/js/dist/blocks/term-trends.min.js',
+test('only the approached block loads its libraries, and shared scripts execute once', async () => {
+    const run = harness([
+        { scripts: ['/core.js', '/simple.js'] },
+        { scripts: ['/core.js', '/map.js'], mjs: '/map.mjs' }
     ]);
+    assert.deepEqual(run.scripts(), []);
+    run.activate(0); await flush();
+    assert.deepEqual(run.scripts(), ['/core.js', '/simple.js']);
+    assert.deepEqual(run.calls, []);
+    run.activate(1); await flush();
+    assert.deepEqual(run.scripts(), ['/core.js', '/simple.js', '/map.js']);
+    assert.deepEqual(run.calls, ['/map.mjs']);
 });
 
-test('two blocks on one page merge into one queue and one import', async () => {
-    const namespace = { Map() {}, Popup() {} };
-    const run = runLoader(MAP_PAYLOAD, {
-        pending: true,
-        importMjs: () => Promise.resolve(namespace),
-        alsoBlocks: [
-            { scripts: ['/js/dist/shared-core.min.js', '/js/dist/blocks/term-trends.min.js'], css: [], mjs: null },
-        ],
-    });
-
-    assert.equal(run.scripts().length, 0, 'nothing loads until the block nears the viewport');
-    run.fireReady();
-    await flush();
-
-    assert.equal(run.importCalls(), 1, 'one import serves every block on the page');
-    assert.deepEqual(
-        run.scripts().map((s) => s.src),
-        [...MAP_PAYLOAD.scripts, '/js/dist/blocks/term-trends.min.js'],
-        'shared URLs are de-duped and later blocks join the end of the queue'
-    );
+test('a failed dependency stops dependents, shows a translated retry and then recovers', async () => {
+    const fail = new Set(['/library.js']);
+    const run = harness([{ scripts: ['/library.js', '/block.js'], error: 'Chargement impossible', retry: 'Réessayer' }], fail);
+    run.activate(0); await flush();
+    assert.deepEqual(run.scripts(), ['/library.js']);
+    const region = run.hosts[0].loading;
+    assert.equal(region.children[0].textContent, 'Chargement impossible');
+    assert.equal(region.children[1].textContent, 'Réessayer');
+    fail.clear(); region.children[1].click(); await flush();
+    assert.deepEqual(run.scripts(), ['/library.js', '/library.js', '/block.js']);
 });
 
-test('the orchestrator always rides the ordinary chain', () => {
-    assert.doesNotMatch(
-        PARTIAL,
-        /\$deferred/,
-        'gating a script behind the MapLibre import is the pattern P.whenMaplibre() replaced'
-    );
-    assert.match(
-        PARTIAL,
-        /\$scripts\[\] = \$this->assetUrl\(\$dist \. 'blocks\/' \. \$bundle \. '\.min\.js'/,
-        'the block bundle (orchestrator last inside it) must be appended to the ungated chain'
-    );
+test('each instance boots only after its own block dependencies are ready', async () => {
+    const run = harness([{ scripts: ['/same.js'] }, { scripts: ['/same.js'] }]);
+    const started = [];
+    run.sandbox.IWACVisLazy.whenVisible(run.hosts[0], () => started.push(0));
+    run.sandbox.IWACVisLazy.whenVisible(run.hosts[1], () => started.push(1));
+    run.activate(0); await flush();
+    assert.deepEqual(started, [0]);
+    run.activate(1); await flush();
+    assert.deepEqual(started, [0, 1]);
+    assert.deepEqual(run.scripts(), ['/same.js']);
 });
 
-test('the block page carries no inline script, and its payload is inert data', () => {
-    // The point of H6. `headScript->appendScript(...)` emits an INLINE
-    // `<script>`, which a host with `script-src 'self'` refuses — and Omeka's
-    // headScript has no nonce plumbing, so there is no way to allow it. Both
-    // partials are checked because the manifest moved from one to the other.
-    for (const file of ['iwac-assets.phtml', 'iwac-block-shell.phtml']) {
-        const src = readFileSync(join(ROOT, 'view', 'common', file), 'utf8');
-        assert.doesNotMatch(
-            src, /appendScript\s*\(/,
-            `${file}: appendScript emits an inline <script>, which a host CSP refuses`
-        );
-    }
-
-    const shell = readFileSync(join(ROOT, 'view', 'common', 'iwac-block-shell.phtml'), 'utf8');
-    assert.match(
-        shell, /type="application\/json" class="iwac-vis-lazy-manifest"/,
-        'the lazy manifest must ship as inert JSON, not as executable script'
-    );
-
-    const assets = readFileSync(join(ROOT, 'view', 'common', 'iwac-assets.phtml'), 'utf8');
-    // json_encode with the HEX flags is what makes `</script>` in a filename
-    // — or any quote — unable to break out of the JSON element.
+test('MapLibre stays an ES module and never joins the ordered classic chain', () => {
+    const assets = readFileSync(join(ROOT, 'view/common/iwac-assets.phtml'), 'utf8');
+    assert.match(source, /import\(S\.mjs\)/);
+    assert.doesNotMatch(assets, /\$scripts\[\]\s*=\s*\$cdnMaplibreJs/);
     assert.match(assets, /JSON_HEX_TAG/);
-    assert.match(assets, /JSON_HEX_AMP/);
-    assert.match(assets, /JSON_HEX_APOS/);
-    assert.match(assets, /JSON_HEX_QUOT/);
-});
-
-test('the loader is a real bundle, loaded like every other script', () => {
-    const manifest = JSON.parse(readFileSync(join(ROOT, 'asset', 'js', 'bundles.json'), 'utf8'));
-    assert.deepEqual(manifest.shared.lazy, ['iwac-lazy.js']);
-    const assets = readFileSync(join(ROOT, 'view', 'common', 'iwac-assets.phtml'), 'utf8');
-    assert.match(assets, /js\/dist\/shared-lazy\.min\.js/);
+    assert.match(source, /node\.async = false/);
 });

@@ -58,7 +58,9 @@ class DataController extends AbstractActionController
             return null;
         }
         $path = rtrim((string) $this->store->getLocalPath(''), '/\\')
-            . '/' . SyncData::STORE_SUBDIR . '/corpus-health.json';
+            . '/' . SyncData::STORE_SUBDIR
+            . \IwacVisualizations\Data\Deployment::generationPath($this->settings()->get(SyncData::SETTING_LAST_SYNC))
+            . '/corpus-health.json';
         if (!is_readable($path)) {
             return null;
         }
@@ -81,7 +83,10 @@ class DataController extends AbstractActionController
 
         // Refuse to start a second sync while one is active.
         $running = $this->findRunningSync();
-        if ($running) {
+        $recover = (bool) $form->get('recover')->getValue();
+        $work = rtrim((string) $this->store->getLocalPath(''), '/\\')
+            . '/' . SyncData::STORE_SUBDIR . '.tmp';
+        if ($running && (!$recover || \IwacVisualizations\Data\Deployment::isLocked($work))) {
             $this->messenger()->addWarning('A data sync is already running.'); // @translate
             return $this->redirect()->toRoute('admin/id', [
                 'controller' => 'job', 'action' => 'show', 'id' => $running->id(),
@@ -142,6 +147,14 @@ class DataController extends AbstractActionController
             'attributes' => [
                 'id'          => 'iwac-sync-tag',
                 'placeholder' => 'data',
+            ],
+        ]);
+
+        $form->add([
+            'type' => Element\Checkbox::class,
+            'name' => 'recover',
+            'options' => [
+                'label' => 'Retry an interrupted sync if no worker holds the data lock', // @translate
             ],
         ]);
 

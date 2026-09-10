@@ -159,6 +159,12 @@
 
     P.fetchJSON = function (url, opts) {
         var u = url;
+        var root = document.querySelector && document.querySelector('.iwac-vis-block[data-generation]');
+        var generation = root && root.dataset.generation;
+        if (generation && /^generations\/[a-f0-9]{64}$/.test(generation)
+            && u.indexOf('/files/iwac-visualizations/generations/') < 0) {
+            u = u.replace('/files/iwac-visualizations/', '/files/iwac-visualizations/' + generation + '/');
+        }
         if (ns.assetVersion && !/[?&]v=/.test(u)) {
             u += (u.indexOf('?') === -1 ? '?' : '&')
                 + 'v=' + encodeURIComponent(ns.assetVersion);

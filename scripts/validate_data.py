@@ -32,10 +32,13 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -167,11 +170,93 @@ def check_payload(name: str, payload: Any) -> List[str]:
     for key in REQUIRED_KEYS.get(name, ()):
         if not isinstance(payload, dict) or key not in payload:
             problems.append(f"{name}: missing top-level {key!r}, which the block reads")
+        elif not isinstance(payload[key], (dict, list)):
+            problems.append(f"{name}: {key!r} must be an object or array")
     return problems
+
+
+def read_json(path: Path) -> Any:
+    def invalid(value):
+        raise ValueError(f"Non-finite JSON number: {value}")
+    return json.loads(path.read_text(encoding="utf-8"), parse_constant=invalid)
+
+
+def reference_population(sources: dict) -> tuple:
+    return ({str(i) for subset in sources.values() for i in subset["ids"]},
+            {str(i) for subset in sources.values() for i in subset["publicOcrIds"]})
+
+
+def check_references(name: str, payload: Any, sources: dict, population=None) -> List[str]:
+    """Validate public-text gates and links against the pinned source population."""
+    errors = []
+    all_ids, public_ids = population if population is not None else reference_population(sources)
+
+    def walk(value):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                if key in ("o_id", "o:id") and child is not None and str(child) not in all_ids:
+                    errors.append(f"{name}: unknown item {child}")
+                walk(child)
+        elif isinstance(value, list):
+            for child in value:
+                walk(child)
+    walk(payload)
+    if name.startswith("on-this-day/") and isinstance(payload, dict):
+        for row in payload.get("items", []):
+            if not isinstance(row, list) or len(row) < 7:
+                errors.append(f"{name}: invalid day row")
+            elif row[4] == "a" and row[6] and str(row[1]) not in public_ids:
+                errors.append(f"{name}: non-public OCR excerpt for {row[1]}")
+    if name.startswith("laicite-concordance-") and isinstance(payload, dict):
+        items = payload.get("items", [])
+        for row in payload.get("rows", []):
+            index = row.get("i")
+            if not isinstance(index, int) or not 0 <= index < len(items):
+                errors.append(f"{name}: invalid concordance item index")
+            elif row.get("d") == "OCR" and str(items[index]["o"]) not in public_ids:
+                errors.append(f"{name}: non-public OCR concordance")
+    return errors
+
+
+def write_manifest(data_dir: Path, provenance: Path) -> None:
+    proof = read_json(provenance)
+    from run_all import GENERATORS
+    if set(proof["outputs"]) != set(GENERATORS):
+        raise ValueError("Publication requires a complete generator run")
+    expected = {name for names in proof["outputs"].values() for name in names} | set(COMMITTED)
+    actual = {p.relative_to(data_dir).as_posix() for p in data_dir.rglob("*.json")
+              if p.name != "manifest.json"}
+    if expected != actual:
+        raise ValueError(f"Output receipts differ: missing={sorted(expected - actual)}, unexpected={sorted(actual - expected)}")
+    files = {}
+    population = reference_population(proof["sources"])
+    for name in sorted(expected):
+        path = data_dir / name
+        payload = read_json(path)
+        errors = check_references(name, payload, proof["sources"], population)
+        if errors:
+            raise ValueError("\n".join(errors))
+        files[name] = {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                       "bytes": path.stat().st_size, "schema": name.split("/")[0],
+                       "records": len(payload) if isinstance(payload, list) else None}
+    manifest = {"schemaVersion": 1, "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "buildId": os.environ.get("GITHUB_SHA", "local"),
+                "sourceRevisions": proof["revisions"], "configuration": proof["configuration"],
+                "generators": proof["outputs"], "files": files}
+    (data_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, sort_keys=True), encoding="utf-8")
 
 
 def validate(data_dir: Path) -> List[str]:
     problems: List[str] = []
+
+    # All sidecars and all per-item files must parse, not just named aggregates.
+    for path in data_dir.rglob("*.json"):
+        try:
+            value = read_json(path)
+            if not isinstance(value, (dict, list)):
+                problems.append(f"{path}: expected an object or array")
+        except (ValueError, UnicodeError) as exc:
+            problems.append(f"{path}: invalid JSON ({exc})")
 
     for name in sorted(REQUIRED_KEYS):
         path = data_dir / name
@@ -251,6 +336,8 @@ def main() -> int:
                         help="Directory to validate (default: %(default)s)")
     parser.add_argument("--self-test", action="store_true",
                         help="Check that the checks can fail, and exit")
+    parser.add_argument("--write-manifest", action="store_true")
+    parser.add_argument("--provenance", default=".iwac-build/provenance.json")
     args = parser.parse_args()
 
     failures = self_test()
@@ -275,6 +362,8 @@ def main() -> int:
         )
         return 1
 
+    if args.write_manifest:
+        write_manifest(Path(args.dir), Path(args.provenance))
     print(f"✓ validate_data: {len(REQUIRED_KEYS)} bundles, "
           f"{len(REQUIRED_FANOUT)} fan-outs, metadata and required keys present")
     return 0

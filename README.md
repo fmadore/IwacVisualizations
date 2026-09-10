@@ -292,6 +292,26 @@ Two things worth knowing before reading anything else:
   (issue #7). `asset/data/` is gitignored apart from two hand-curated event
   sidecars.
 
+## Upgrading to 1.66.0
+
+Existing installed data continues to serve. Before the next **Pull latest data**,
+run the updated regeneration workflow successfully: the importer now requires
+`manifest.json` and a checksum. The moving `data/latest.json` pointer selects
+an immutable `data-build-<run>-<attempt>` release. Explicit tags must also contain
+the new archive format; unsigned or manifest-free archives are rejected.
+
+New data lives under `files/iwac-visualizations/generations/<manifest-sha256>/`.
+Page markup records its generation so subsequent sidecar requests use the same
+snapshot. Previous and recent generations remain available for at least 30 days;
+the old legacy tree is preserved during migration. Very old open tabs should be
+reloaded after that retention window. Never delete `sync.lock` to clear a stuck
+job: use the explicit recovery checkbox in the admin screen, which checks the
+worker lock before dispatching a replacement.
+
+To change sentiment models, edit `config/sentiment-models.json`, run
+`node scripts/build-model-registry.js`, then `npm run build`. Python reads the
+same registry directly. Existing saved layout names remain supported as aliases.
+
 ## Installation
 
 Not yet released. For local development:
@@ -342,7 +362,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.65.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.66.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

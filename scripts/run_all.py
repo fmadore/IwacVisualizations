@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import json
 import logging
 import os
 import sys
@@ -167,14 +168,35 @@ def main() -> int:
     store = None if args.no_share else FrameStore(max_subsets=args.max_subsets)
     previous = iwac_utils.set_frame_store(store)
 
+    # Only the complete, default-output run produces publication evidence.
+    publication = selected == GENERATORS and not args.passthrough
+    proof_dir = SCRIPTS_DIR.parent / ".iwac-build"
+    proof_path = proof_dir / "provenance.json"
+    proof_path.unlink(missing_ok=True)
+    sources = {}
+    receipts = {}
     failures: List[str] = []
     started = time.monotonic()
     try:
+        if publication:
+            for subset in iwac_utils.SUBSETS:
+                frame = iwac_utils.load_dataset_safe(subset, columns=["o:id", "OCR_is_public"], required=True)
+                ids = frame["o:id"].astype(str)
+                public = frame["OCR_is_public"].fillna(False).eq(True) if "OCR_is_public" in frame else None
+                sources[subset] = {"ids": ids.tolist(), "publicOcrIds": ids[public].tolist() if public is not None else []}
         for name in selected:
             logger.info("::group::generate_%s", name)
             t0 = time.monotonic()
             try:
+                iwac_utils._WRITTEN_OUTPUTS.clear()
+                iwac_utils._EXPECTED_OUTPUTS.clear()
                 run_one(name, args.passthrough)
+                missing = iwac_utils._EXPECTED_OUTPUTS - iwac_utils._WRITTEN_OUTPUTS
+                if missing:
+                    raise ValueError(f"Eligible outputs were not written: {sorted(missing)}")
+                if publication:
+                    receipts[name] = sorted(Path(p).relative_to(SCRIPTS_DIR.parent / "asset/data").as_posix()
+                                            for p in iwac_utils._WRITTEN_OUTPUTS)
             except Exception as exc:                       # noqa: BLE001
                 failures.append(name)
                 logger.error("generate_%s FAILED: %s", name, exc, exc_info=True)
@@ -200,6 +222,11 @@ def main() -> int:
     if failures:
         logger.error("failed: %s", ", ".join(failures))
         return 1
+    if publication:
+        proof = {"sources": sources, "revisions": iwac_utils._DATASET_REVISIONS,
+                 "outputs": receipts, "configuration": vars(args)}
+        proof_dir.mkdir(exist_ok=True)
+        proof_path.write_text(json.dumps(proof), encoding="utf-8")
     return 0
 
 

@@ -29,6 +29,8 @@ module.exports = [
             // this the documented local setup breaks the documented local
             // gate with 26 errors in files nobody here wrote.
             '.venv/**',
+            '.pytest_cache/**',
+            '.iwac-build/**',
             'asset/js/dist/**',
             '**/*.min.js',
             'playwright-report/**',

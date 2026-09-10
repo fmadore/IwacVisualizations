@@ -52,13 +52,7 @@ class SentimentExtractor
      * peripheral — so an article showing four lanes instead of five is
      * usually that, not an unfinished run.
      */
-    const MODELS = [
-        'gpt56Luna',
-        'mistralSmall2603',
-        'deepseekV4Flash0731',
-        'gemma431bIt',
-        'qwen3827b',
-    ];
+    const MODELS = \IwacVisualizations\Sentiment\ModelRegistry::MODELS;
 
     /**
      * Presentation chrome for the rating models: the precise model
@@ -85,50 +79,7 @@ class SentimentExtractor
      * MODELS here is a genuine list of which `iwac:` properties to look
      * at and does have to be updated on a rater-panel change.
      */
-    const MODEL_INFO = [
-        'gpt56Luna' => [
-            'name'  => 'GPT-5.6 Luna',
-            'org'   => 'OpenAI',
-            'short' => 'GPT-5.6 Luna',
-            'logo'  => 'ChatGPT_logo.svg',
-        ],
-        'mistralSmall2603' => [
-            'name'  => 'Mistral Small 4',
-            'org'   => 'Mistral AI',
-            'short' => 'Mistral Small 4',
-            'logo'  => 'Mistral_AI_logo.svg',
-        ],
-        'deepseekV4Flash0731' => [
-            'name'  => 'DeepSeek V4 Flash',
-            'org'   => 'DeepSeek',
-            'short' => 'DeepSeek V4 Flash',
-            'logo'  => 'DeepSeek_logo.svg',
-        ],
-        // The Google slot since 2026-08-14, replacing a Gemini 3.5 Flash
-        // Lite entry that was declared upstream and never wrote a value.
-        // Raster rather than SVG like the other three: the mark is a
-        // gradient-filled glyph over a construction grid, and a hand-traced
-        // approximation of someone's logo is worse than a 96px bitmap
-        // rendered into an 18px slot.
-        'gemma431bIt' => [
-            'name'  => 'Gemma 4 31B',
-            'org'   => 'Google DeepMind',
-            'short' => 'Gemma 4 31B',
-            'logo'  => 'Gemma_logo.png',
-        ],
-        // Self-hosted on the project's own vLLM cluster since 2026-08-25,
-        // which is why the org line names the lab that built the model
-        // rather than an API vendor — nobody served this one to us. Raster
-        // for the same reason as Gemma: the supplied mark is a bitmap, so
-        // there is no vector to recover and tracing it by hand would only
-        // approximate someone's logo.
-        'qwen3827b' => [
-            'name'  => 'Qwen3.8 27B',
-            'org'   => 'Alibaba Cloud',
-            'short' => 'Qwen3.8 27B',
-            'logo'  => 'Qwen_logo.png',
-        ],
-    ];
+    const MODEL_INFO = \IwacVisualizations\Sentiment\ModelRegistry::INFO;
 
     /**
      * Extract and return the `[$model => [...]]` sentiment bundle.
