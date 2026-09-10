@@ -167,6 +167,11 @@ class DataController extends AbstractActionController
             'name' => 'sync_token',
         ]);
 
+        // The recovery checkbox is rendered only while a sync is running.
+        // Its absence is the normal submission, not a validation failure.
+        // Keep Checkbox's value validator and the CSRF input intact.
+        $form->getInputFilter()->get('recover')->setRequired(false);
+
         return $form;
     }
 }

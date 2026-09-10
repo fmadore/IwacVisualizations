@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.68.2 — allow normal data-pull submissions (2026-09-10)
+
+- Fix the optional recovery checkbox being required even when it is not
+  rendered. Normal data pulls were rejected with the misleading "Invalid or
+  expired form submission" message despite having a valid CSRF token.
+- Validate blank/default pulls, explicit tags, both recovery choices and
+  rejected CSRF/checkbox values against Omeka's actual form validators.
+
 ### v1.68.1 — consolidated maintenance documentation (2026-09-10)
 
 - Replace the two historical implementation trackers with one concise roadmap.

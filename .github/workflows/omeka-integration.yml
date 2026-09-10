@@ -137,6 +137,11 @@ jobs:
           OMEKA_PATH: ${{ runner.temp }}/omeka-s
         run: php tests/integration/omeka_boot.php
 
+      - name: Validate data-pull forms with real CSRF and checkbox inputs
+        env:
+          OMEKA_PATH: ${{ runner.temp }}/omeka-s
+        run: php tests/integration/sync_form.php
+
       # PHPStan rides along on the checkout above rather than fetching its
       # own (Tier 8 / B2 (2)). It runs on the PRODUCTION leg only: the
       # analysis is about this module's code against the host's signatures,
