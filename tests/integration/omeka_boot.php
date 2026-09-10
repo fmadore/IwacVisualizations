@@ -154,7 +154,8 @@ if (count($seededBlocks) === 1) {
         $generation = str_repeat('a', 64);
         $settings->set('iwacvis_last_sync', ['generation' => $generation, 'time' => '2026-09-10T00:00:00Z']);
         $snapshotBlock = $blockLayouts->get('iwac-collectionOverview')->render($renderer, $seededBlock);
-        checkIntegration(strpos($snapshotBlock, 'data-generation="generations/' . $generation . '"') !== false,
+        $decodedSnapshot = html_entity_decode($snapshotBlock, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        checkIntegration(strpos($decodedSnapshot, 'data-generation="generations/' . $generation . '"') !== false,
             'active generation did not reach the rendered block');
     } finally {
         $settings->set('iwacvis_last_sync', $previousSync);
