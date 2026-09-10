@@ -129,7 +129,9 @@ for (const kind of ['timeline', 'stacked', 'growth']) {
                     expect(label.bottom, label.text).toBeLessThanOrEqual(401);
                 }
             }
-            expect(await page.evaluate(() => window.chartLayout())).toEqual(desktop);
+            // ECharts can flush SVG text on the next animation frame after
+            // resize; compare settled geometry, not an intermediate frame.
+            await expect.poll(() => page.evaluate(() => window.chartLayout())).toEqual(desktop);
             if (count > 20) {
                 await page.evaluate(() => window.chart.dispatchAction({ type: 'dataZoom', start: 25, end: 75 }));
                 await page.setViewportSize({ width: 360, height: 600 });

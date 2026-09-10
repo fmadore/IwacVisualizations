@@ -36,6 +36,9 @@
             document.body.dataset.theme = theme;
             Object.keys(tokens[theme]).forEach(function (key) { document.body.style.setProperty(key, tokens[theme][key]); });
             document.body.style.setProperty('--panel-bg', tokens[theme]['--surface-raised']);
+            // Register the token-backed theme before the first chart. The
+            // asynchronous theme observer otherwise races the baseline image.
+            IWACVis.refreshThemes();
         });
         window.drawChart = async function (kind, count) {
             await window.themeReady;
@@ -67,6 +70,8 @@
                 instance.setOption(option, true);
             }, { renderer: 'svg' });
             IWACVis.panels.addTableButtons(document.getElementById('accessible-data'), document.getElementById('host'));
+            await document.fonts.ready;
+            await new Promise(function (resolve) { requestAnimationFrame(resolve); });
         };
         window.chartLayout = function () {
             var option = window.chart.getOption();
