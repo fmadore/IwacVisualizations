@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.68.3 — restore visualization loading (2026-09-10)
+
+- Fix all visualization blocks staying at Loading: emit the per-block JSON asset manifest as template output, as required by Laminas.
+- Remove the collection overview’s static period/sparkline preview and its unused styles.
+- Test real nested Laminas rendering for all 27 block manifests and the overview in both supported Omeka versions.
+
 ### v1.68.2 — allow normal data-pull submissions (2026-09-10)
 
 - Fix the optional recovery checkbox being required even when it is not

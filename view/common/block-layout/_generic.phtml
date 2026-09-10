@@ -12,9 +12,8 @@
  * the block layouts all read. "Which blocks load MapLibre?" was nineteen
  * files to open; it is one array now.
  *
- * The two blocks that do more than declare — `collection-overview`, which
- * server-renders its summary from the snapshot on disk, and `on-this-day`,
- * which reads its layout setting — keep their own templates. A registry row
+ * `collection-overview` retains its dedicated asset template; `on-this-day`
+ * has its own template to read its layout setting. A registry row
  * without a `shell` key gets its own template; `AbstractIwacBlockLayout`
  * routes on exactly that.
  *

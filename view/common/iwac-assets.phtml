@@ -263,6 +263,5 @@ $headScript->appendFile(
 );
 
 // The caller (iwac-block-shell) echoes this into the body next to the block.
-// Returned rather than echoed here because this partial runs inside a
-// `<head>`-building pass and its own output is discarded.
-return $lazyManifest;
+// Laminas captures printed template output; a PHP return value is discarded.
+echo $lazyManifest;

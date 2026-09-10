@@ -140,6 +140,15 @@ if (count($seededBlocks) === 1) {
     $renderedBlock = $blockLayouts->get('collectionOverview')->render($renderer, $seededBlock);
     $decodedBlock = html_entity_decode($renderedBlock, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     checkIntegration(
+        preg_match('~<script type="application/json" class="iwac-vis-lazy-manifest">(.*?)</script>~s', $renderedBlock, $manifestMatch) === 1,
+        'seeded overview did not emit its lazy-loader manifest'
+    );
+    $manifestPayload = json_decode($manifestMatch[1] ?? '', true);
+    checkIntegration(
+        !empty($manifestPayload['scripts']) && !empty($manifestPayload['mjs']),
+        'seeded overview is missing its chart scripts or MapLibre import'
+    );
+    checkIntegration(
         strpos($decodedBlock, 'class="iwac-vis-block iwac-vis-overview"') !== false,
         'seeded collection overview did not render its module wrapper: '
             . substr(preg_replace('/\s+/', ' ', $renderedBlock), 0, 240)

@@ -195,6 +195,7 @@ IwacVisualizations/
 ├── tests/
 │   ├── browser/                       # 16 files — Playwright specs
 │   ├── integration/
+│   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
 │   │   └── sync_form.php
 │   ├── js/                            # 27 files — node:test units
@@ -207,7 +208,7 @@ IwacVisualizations/
 │       └── test_publication.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/              # 4 files — one per registered block, filename === slug
+│   │   ├── block-layout/              # 3 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml

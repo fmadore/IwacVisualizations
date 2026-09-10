@@ -142,6 +142,11 @@ jobs:
           OMEKA_PATH: ${{ runner.temp }}/omeka-s
         run: php tests/integration/sync_form.php
 
+      - name: Render every block asset manifest through real Laminas partials
+        env:
+          OMEKA_PATH: ${{ runner.temp }}/omeka-s
+        run: php tests/integration/block_assets.php
+
       # PHPStan rides along on the checkout above rather than fetching its
       # own (Tier 8 / B2 (2)). It runs on the PRODUCTION leg only: the
       # analysis is about this module's code against the host's signatures,
