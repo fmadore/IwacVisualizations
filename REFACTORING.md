@@ -9,6 +9,10 @@ per-block lazy loading with translated retry, and explicit stale-job recovery.
 Shared services now own deployment and asset planning; a neutral JSON registry
 owns sentiment models. Layout names use the `iwac-` prefix with legacy aliases.
 Publication cosine ranking is shared without changing its tie policy.
+Follow-up validation covers columnar semantic IDs, per-item identity, compact
+calendar/concordance records and expected calendar/term shards. Required
+aggregate filenames now live in one Python contract reused by CI. Cold-start
+model loading and local-store recovery are checked against the real framework.
 
 Validation covers PHP import/retention/lock failures, Python data contracts,
 and browser loading/retry behavior. Full private-dataset regeneration and the

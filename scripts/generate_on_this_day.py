@@ -118,6 +118,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from iwac_utils import (
+    expect_item_outputs,
     FULL_DATE_RE,
     add_standard_args,
     clean_str,
@@ -440,6 +441,7 @@ def collect_days(repo_id: str, hijri: bool = True
 def write_fanout(days: Dict[str, List[List[Any]]], out_dir: Path,
                  minify: bool, extra: Optional[Dict[str, Any]] = None) -> int:
     """Write one day file per key, year-ascending. Returns the item total."""
+    expect_item_outputs(out_dir, days)
     total = 0
     for day_key in sorted(days):
         items = sorted(days[day_key], key=lambda r: (r[0], str(r[1])))

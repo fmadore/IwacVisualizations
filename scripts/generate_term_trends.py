@@ -42,6 +42,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from iwac_utils import (
+    expect_item_outputs,
     add_standard_args,
     extract_year,
     generate_timestamp,
@@ -129,6 +130,7 @@ def generate(
         shards[shard_key(term)][term] = counts
 
     shard_dir = output_dir / "term-trends"
+    expect_item_outputs(shard_dir, shards)
     for key, terms in sorted(shards.items()):
         save_json(terms, shard_dir / f"{key}.json", minify=True)
     logger.info(f"Wrote {len(shards)} shards to {shard_dir}")

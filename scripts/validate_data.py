@@ -115,6 +115,63 @@ REQUIRED_FANOUT = (
 #: The two hand-curated sidecars ride in from the checkout, not a generator.
 COMMITTED = ("scary-terms-events.json", "laicite-events.json")
 
+# Every aggregate and index required for publication; formerly duplicated in CI shell.
+REQUIRED_FILES = (
+    "audiovisual-overview.json",
+    "collection-map.json",
+    "collection-overview.json",
+    "collection-wordcloud.json",
+    "compare-newspapers/index.json",
+    "corpus-health.json",
+    "entity-networks-global.json",
+    "entity-networks-spatial.json",
+    "index-overview.json",
+    "keyness.json",
+    "keyword-explorer-metadata.json",
+    "keyword-explorer-spatial.json",
+    "keyword-explorer-subjects.json",
+    "laicite-actors.json",
+    "laicite-arenas.json",
+    "laicite-bylines.json",
+    "laicite-circulation.json",
+    "laicite-collocates.json",
+    "laicite-concordance.json",
+    "laicite-corpora.json",
+    "laicite-countries.json",
+    "laicite-documents.json",
+    "laicite-events.json",
+    "laicite-implicit.json",
+    "laicite-metadata.json",
+    "laicite-places.json",
+    "laicite-references.json",
+    "laicite-seasonality.json",
+    "laicite-semantic.json",
+    "laicite-sentiment.json",
+    "laicite-trends.json",
+    "lexical-metrics.json",
+    "org-cooccurrence.json",
+    "periodicals-landscape.json",
+    "periodicals-overview.json",
+    "press-bylines.json",
+    "press-reprints.json",
+    "references-overview.json",
+    "scary-terms-cooccurrence.json",
+    "scary-terms-countries.json",
+    "scary-terms-events.json",
+    "scary-terms-global.json",
+    "scary-terms-metadata.json",
+    "scary-terms-places.json",
+    "scary-terms-temporal.json",
+    "scary-terms-trends.json",
+    "scary-terms-wordcloud.json",
+    "semantic-landscape.json",
+    "sentiment-atlas.json",
+    "spatial-exploration.json",
+    "template-summary.json",
+    "term-trends-index.json",
+    "topic-explorer.json",
+)
+
 TIMESTAMP = re.compile(r"^\d{4}-\d{2}-\d{2}T[\d:.]+Z$")
 
 
@@ -182,38 +239,64 @@ def read_json(path: Path) -> Any:
 
 
 def reference_population(sources: dict) -> tuple:
-    return ({str(i) for subset in sources.values() for i in subset["ids"]},
-            {str(i) for subset in sources.values() for i in subset["publicOcrIds"]})
+    by_subset = {name: {str(i) for i in subset["ids"]} for name, subset in sources.items()}
+    return (set().union(*by_subset.values()),
+            {str(i) for subset in sources.values() for i in subset["publicOcrIds"]}, by_subset)
 
 
 def check_references(name: str, payload: Any, sources: dict, population=None) -> List[str]:
     """Validate public-text gates and links against the pinned source population."""
     errors = []
-    all_ids, public_ids = population if population is not None else reference_population(sources)
+    all_ids, public_ids, by_subset = population if population is not None else reference_population(sources)
+
+    # Item identity is a contract too: a valid JSON for the wrong item is still wrong.
+    match = re.fullmatch(r"(article|person|entity|publication|reference)-dashboards/([0-9]+)\.json", name)
+    if match:
+        kind, item_id = match.groups()
+        header = payload.get(kind, {}) if kind in ("article", "person", "entity") and isinstance(payload, dict) else payload
+        if not isinstance(header, dict) or str(header.get("o_id")) != item_id:
+            errors.append(f"{name}: item header does not match filename")
+        subset = {"person": "index", "entity": "index"}.get(kind, kind + "s")
+        if item_id not in by_subset.get(subset, set()):
+            errors.append(f"{name}: item is not in the {subset} source population")
 
     def walk(value):
         if isinstance(value, dict):
             for key, child in value.items():
-                if key in ("o_id", "o:id") and child is not None and str(child) not in all_ids:
-                    errors.append(f"{name}: unknown item {child}")
+                if key in ("o_id", "o:id"):
+                    # Semantic landscapes use columnar arrays; dashboards use scalars.
+                    for item_id in child if isinstance(child, list) else [child]:
+                        if item_id is not None and str(item_id) not in all_ids:
+                            errors.append(f"{name}: unknown item {item_id}")
                 walk(child)
         elif isinstance(value, list):
             for child in value:
                 walk(child)
     walk(payload)
-    if name.startswith("on-this-day/") and isinstance(payload, dict):
-        for row in payload.get("items", []):
+    if re.fullmatch(r"on-this-day/(?:h/)?[0-9]{2}-[0-9]{2}\.json", name):
+        if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+            return errors + [f"{name}: missing calendar items array"]
+        for row in payload["items"]:
             if not isinstance(row, list) or len(row) < 7:
                 errors.append(f"{name}: invalid day row")
-            elif row[4] == "a" and row[6] and str(row[1]) not in public_ids:
-                errors.append(f"{name}: non-public OCR excerpt for {row[1]}")
+            else:
+                subset = {"a": "articles", "p": "publications"}.get(row[4]) if isinstance(row[4], str) else None
+                if subset is None or str(row[1]) not in by_subset.get(subset, set()):
+                    errors.append(f"{name}: unknown calendar item {row[1]}")
+                if row[4] == "a" and row[6] and str(row[1]) not in public_ids:
+                    errors.append(f"{name}: non-public OCR excerpt for {row[1]}")
     if name.startswith("laicite-concordance-") and isinstance(payload, dict):
-        items = payload.get("items", [])
-        for row in payload.get("rows", []):
-            index = row.get("i")
-            if not isinstance(index, int) or not 0 <= index < len(items):
+        items, rows = payload.get("items"), payload.get("rows")
+        if not isinstance(items, list) or not isinstance(rows, list):
+            return errors + [f"{name}: missing concordance items or rows array"]
+        for item in items:
+            if not isinstance(item, dict) or str(item.get("o")) not in all_ids:
+                errors.append(f"{name}: unknown concordance item")
+        for row in rows:
+            index = row.get("i") if isinstance(row, dict) else None
+            if type(index) is not int or not 0 <= index < len(items) or not isinstance(items[index], dict):
                 errors.append(f"{name}: invalid concordance item index")
-            elif row.get("d") == "OCR" and str(items[index]["o"]) not in public_ids:
+            elif row.get("d") == "OCR" and str(items[index].get("o")) not in public_ids:
                 errors.append(f"{name}: non-public OCR concordance")
     return errors
 
@@ -248,30 +331,24 @@ def write_manifest(data_dir: Path, provenance: Path) -> None:
 
 def validate(data_dir: Path) -> List[str]:
     problems: List[str] = []
+    seen = set()
 
     # All sidecars and all per-item files must parse, not just named aggregates.
     for path in data_dir.rglob("*.json"):
+        name = path.relative_to(data_dir).as_posix()
+        seen.add(name)
         try:
             value = read_json(path)
             if not isinstance(value, (dict, list)):
                 problems.append(f"{path}: expected an object or array")
+            if name in REQUIRED_KEYS:
+                problems.extend(check_payload(name, value))
         except (ValueError, UnicodeError) as exc:
             problems.append(f"{path}: invalid JSON ({exc})")
 
-    for name in sorted(REQUIRED_KEYS):
-        path = data_dir / name
-        if not path.is_file():
+    for name in sorted(set(REQUIRED_FILES) | set(REQUIRED_KEYS)):
+        if name not in seen:
             problems.append(f"{name}: missing")
-            continue
-        if path.stat().st_size == 0:
-            problems.append(f"{name}: empty file")
-            continue
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            problems.append(f"{name}: not valid JSON ({exc})")
-            continue
-        problems.extend(check_payload(name, payload))
 
     for name in COMMITTED:
         path = data_dir / name

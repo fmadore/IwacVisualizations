@@ -31,8 +31,11 @@ arguments remain useful locally but do not produce publication evidence.
 
 Run `python scripts/validate_data.py --write-manifest` after the complete run.
 It refuses missing/unexpected files, malformed JSON, incompatible aggregate
-containers, unknown exported item links and private OCR excerpts in the public
-concordance/calendar outputs. The manifest records hashes, source revisions,
+containers, mismatched per-item filenames, unknown exported item links and
+private OCR excerpts in the public concordance/calendar outputs. The required
+aggregate list lives in the Python validator; CI reuses it without a second
+shell-maintained copy. Calendar and term shards declare their expected files
+before writing, alongside the five dashboard generators. The manifest records hashes, source revisions,
 configuration and per-generator file lists. Full semantic schemas for every
 optional panel field are not claimed; add contracts alongside payload changes.
 

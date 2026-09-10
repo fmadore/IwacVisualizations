@@ -23,6 +23,10 @@ findings several of these releases implement.
 - Allow explicit stale-job recovery when the worker lock is free.
 - Extract deployment and asset planning, centralize sentiment models, add prefixed
   layout registrations with legacy aliases, and share publication cosine ranking.
+- Validate scalar and columnar item IDs, dashboard filenames and compact records;
+  declare expected calendar/term shards and share required-output checks with CI.
+- Load the model registry before Omeka registers the module autoloader and guard
+  local-store recovery capability.
 - Upgrade: run the new regeneration workflow before pulling fresh data. Existing
   installed data remains readable; new imports require the versioned manifest.
 

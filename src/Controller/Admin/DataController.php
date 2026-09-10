@@ -84,9 +84,13 @@ class DataController extends AbstractActionController
         // Refuse to start a second sync while one is active.
         $running = $this->findRunningSync();
         $recover = (bool) $form->get('recover')->getValue();
-        $work = rtrim((string) $this->store->getLocalPath(''), '/\\')
-            . '/' . SyncData::STORE_SUBDIR . '.tmp';
-        if ($running && (!$recover || \IwacVisualizations\Data\Deployment::isLocked($work))) {
+        $canRecover = false;
+        if ($running && $recover && $this->store && method_exists($this->store, 'getLocalPath')) {
+            $work = rtrim((string) $this->store->getLocalPath(''), '/\\')
+                . '/' . SyncData::STORE_SUBDIR . '.tmp';
+            $canRecover = !\IwacVisualizations\Data\Deployment::isLocked($work);
+        }
+        if ($running && !$canRecover) {
             $this->messenger()->addWarning('A data sync is already running.'); // @translate
             return $this->redirect()->toRoute('admin/id', [
                 'controller' => 'job', 'action' => 'show', 'id' => $running->id(),

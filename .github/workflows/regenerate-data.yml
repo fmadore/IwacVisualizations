@@ -2,9 +2,8 @@ name: Regenerate visualization data
 
 # Heavy Python precompute (UMAP / ForceAtlas2 / numpy kNN over the Hugging Face
 # dataset) runs HERE — never on the production Omeka server, which stays a plain
-# PHP box. The output is published as a single ZIP on the moving `data` release;
-# the module's "Pull latest data" admin Job downloads it and unpacks it into
-# files/iwac-visualizations/. See issue #7.
+# PHP box. Immutable archive releases are selected by data/latest.json;
+# the admin import verifies them and activates a content-addressed generation.
 
 on:
   workflow_dispatch:
@@ -153,13 +152,8 @@ jobs:
             echo "\`::group::\` line names the one that stopped."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # The output CONTRACT, not just the file sizes. "Package archive" below
-      # proves every expected file is non-empty; a bundle can be 400 KB of
-      # valid JSON with the one key its panel reads renamed, and the only
-      # symptom is a blank panel on the live site (P10).
-      - name: Validate the generated data
-        run: python scripts/validate_data.py
-
+      # Check required files, payload contracts, output receipts and source
+      # references before writing the per-file integrity manifest.
       - name: Write verified data manifest
         env:
           IWAC_DATASET_REVISION: ${{ steps.hf.outputs.sha }}
@@ -171,40 +165,7 @@ jobs:
         # straight into files/iwac-visualizations/ and looks for that root marker.
         run: |
           set -euo pipefail
-          # Every bundle the blocks fetch must exist and be non-empty before
-          # anything is published. Until v1.59.0 only collection-overview.json
-          # was checked, and one generator (wordcloud) could write an EMPTY
-          # payload and exit 0 — a partial build must never reach the release.
-          # Names are the generators' save_json targets; the two *-events
-          # files are committed and ride in from the checkout.
-          fail=0
-          for f in \
-            audiovisual-overview.json collection-map.json collection-overview.json \
-            collection-wordcloud.json compare-newspapers/index.json corpus-health.json \
-            entity-networks-global.json entity-networks-spatial.json index-overview.json \
-            keyness.json keyword-explorer-metadata.json keyword-explorer-spatial.json \
-            keyword-explorer-subjects.json \
-            laicite-actors.json laicite-arenas.json laicite-bylines.json laicite-circulation.json \
-            laicite-collocates.json laicite-concordance.json laicite-corpora.json \
-            laicite-countries.json laicite-documents.json laicite-events.json laicite-implicit.json \
-            laicite-metadata.json laicite-places.json laicite-references.json \
-            laicite-seasonality.json laicite-semantic.json laicite-sentiment.json laicite-trends.json \
-            lexical-metrics.json org-cooccurrence.json periodicals-landscape.json \
-            periodicals-overview.json press-bylines.json press-reprints.json references-overview.json \
-            scary-terms-cooccurrence.json scary-terms-countries.json scary-terms-events.json \
-            scary-terms-global.json scary-terms-metadata.json scary-terms-places.json \
-            scary-terms-temporal.json scary-terms-trends.json scary-terms-wordcloud.json \
-            semantic-landscape.json sentiment-atlas.json spatial-exploration.json \
-            template-summary.json term-trends-index.json topic-explorer.json
-          do
-            test -s "asset/data/$f" || { echo "::error::missing or empty output: asset/data/$f"; fail=1; }
-          done
-          for d in article-dashboards compare-newspapers entity-dashboards on-this-day \
-                   person-dashboards publication-dashboards reference-dashboards term-trends
-          do
-            [ -n "$(ls -A "asset/data/$d" 2>/dev/null)" ] || { echo "::error::empty fan-out: asset/data/$d"; fail=1; }
-          done
-          [ "$fail" -eq 0 ] || exit 1
+          # The preceding manifest step checks the complete publication contract.
           ( cd asset/data && zip -r -q -X "$GITHUB_WORKSPACE/iwac-data.zip" . )
           # The digest the Sync Data job verifies before it installs anything
           # (SyncData::verifyDigest). Published beside the archive under the

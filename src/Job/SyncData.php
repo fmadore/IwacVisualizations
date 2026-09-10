@@ -200,7 +200,7 @@ class SyncData extends AbstractJob
                 $zip->close();
                 throw new \RuntimeException(sprintf(
                     'Not enough free space to extract: %.1f MB available, %.1f MB needed '
-                    . '(expanded size plus 10% margin).',
+                    . '(expanded size plus 10%% margin).',
                     $free / 1048576,
                     ($expandedBytes * 1.1) / 1048576
                 ));

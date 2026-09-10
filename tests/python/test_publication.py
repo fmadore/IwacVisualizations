@@ -15,6 +15,36 @@ from iwac_embeddings import rank_cosine_matrix
 
 
 class PublicationTests(unittest.TestCase):
+    def test_columnar_semantic_ids_are_validated_individually(self):
+        sources = {'articles': {'ids': ['1', '2'], 'publicOcrIds': []}}
+        self.assertFalse(validation.check_references('laicite-semantic.json', {'o_id': [1, 2]}, sources))
+        self.assertEqual(validation.check_references('laicite-semantic.json', {'o_id': [1, 999]}, sources),
+                         ['laicite-semantic.json: unknown item 999'])
+
+    def test_dashboard_identity_matches_filename_and_source_subset(self):
+        sources = {'articles': {'ids': ['1', '2'], 'publicOcrIds': []},
+                   'publications': {'ids': ['3'], 'publicOcrIds': []}}
+        self.assertFalse(validation.check_references('article-dashboards/1.json', {'article': {'o_id': 1}}, sources))
+        self.assertTrue(validation.check_references('article-dashboards/1.json', {'article': {'o_id': 2}}, sources))
+        self.assertTrue(validation.check_references('article-dashboards/3.json', {'article': {'o_id': 3}}, sources))
+        self.assertFalse(validation.check_references('publication-dashboards/3.json', {'o_id': 3}, sources))
+
+    def test_compact_record_links_and_malformed_concordance_rows(self):
+        sources = {'articles': {'ids': ['1'], 'publicOcrIds': ['1']}}
+        self.assertTrue(validation.check_references('on-this-day/h/01-01.json',
+                        {'items': [[2000, '999', 'Title', 'Source', 'a', '', '']]}, sources))
+        self.assertTrue(validation.check_references('on-this-day/01-01.json', {}, sources))
+        good = {'items': [{'o': '1'}], 'rows': [{'i': 0, 'd': 'OCR'}]}
+        self.assertFalse(validation.check_references('laicite-concordance-articles.json', good, sources))
+        for payload in ({}, {'items': [{'o': '999'}], 'rows': []},
+                        {'items': [{}], 'rows': [None, {'i': True}, {'i': 0, 'd': 'OCR'}]}):
+            self.assertTrue(validation.check_references('laicite-concordance-articles.json', payload, sources))
+
+    def test_required_sidecars_are_checked_by_python(self):
+        self.assertIn('laicite-concordance.json', validation.REQUIRED_FILES)
+        with tempfile.TemporaryDirectory() as root:
+            self.assertIn('laicite-concordance.json: missing', validation.validate(Path(root)))
+
     def test_publication_ranking_preserves_scores_and_ties(self):
         sims = np.array([[-np.inf, 0.5, 0.5], [0.5, -np.inf, 0], [0.5, 0, -np.inf]])
         for k in (1, 2, 8):

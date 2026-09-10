@@ -148,6 +148,17 @@ if (count($seededBlocks) === 1) {
         strpos($renderedBlock, 'data-embed-slug="collection-overview"') !== false,
         'seeded collection overview did not render its embed contract'
     );
+    $settings = $services->get('Omeka\\Settings');
+    $previousSync = $settings->get('iwacvis_last_sync');
+    try {
+        $generation = str_repeat('a', 64);
+        $settings->set('iwacvis_last_sync', ['generation' => $generation, 'time' => '2026-09-10T00:00:00Z']);
+        $snapshotBlock = $blockLayouts->get('iwac-collectionOverview')->render($renderer, $seededBlock);
+        checkIntegration(strpos($snapshotBlock, 'data-generation="generations/' . $generation . '"') !== false,
+            'active generation did not reach the rendered block');
+    } finally {
+        $settings->set('iwacvis_last_sync', $previousSync);
+    }
 }
 
 // ---------------------------------------------------------------------------
