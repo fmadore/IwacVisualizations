@@ -431,7 +431,7 @@ where `1 - cdf` cancels to zero.
 
 ## Shared embedding helpers — `iwac_embeddings.py`
 
-The coerce → normalize → batched-cosine stack (REFACTORING.md Tier 4):
+The coerce → normalize → batched-cosine stack ([historical audit, Tier 4](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md)):
 `coerce_embedding`, `build_normalized_matrix`, `top_k_cosine`,
 `pairs_above_threshold`. First consumer: `generate_reprints.py`; the
 four older embedding generators (`article_dashboards`,

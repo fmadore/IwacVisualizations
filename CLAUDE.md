@@ -8,16 +8,16 @@ Omeka S module that adds interactive visualizations to the [Islam West Africa Co
 
 For the architectural overview — block layouts, asset partial, data strategy, theming, i18n, mobile UX, the build — read [ARCHITECTURE.md](ARCHITECTURE.md) first; [README.md](README.md) is what the module is and which blocks exist, and the version history moved to [CHANGELOG.md](CHANGELOG.md). For the dataset shape consumed by the precompute scripts, see [DATA_NOTES.md](DATA_NOTES.md).
 
-## Always use the `iwac-dataset` skill
+## Always use the `iwac-data` skill
 
-When writing or modifying any Python that reads the HF dataset (anything under `scripts/generate_*.py`, anything that calls `load_dataset(…)` on the IWAC dataset or its `-full` mirror, or any new generator added next to them), invoke the **`iwac-dataset` skill** before touching code. It carries:
+When writing or modifying any Python that reads the HF dataset (anything under `scripts/generate_*.py`, anything that calls `load_dataset(…)` on the IWAC dataset or its `-full` mirror, or any new generator added next to them), invoke the **`iwac-data` skill** before touching code. It carries:
 
 - Verified per-subset schema (field names, types, `embedding_OCR` vs `embedding_tableOfContents`, the multi-model AI sentiment shape, `lda_topic_*` columns, etc.)
 - Conventions: pipe-separated multi-values, ISO dates, `lda_topic_id == -1` outliers, country canonicalization
 - Authority-record join pattern (`articles.subject` ↔ `index.Titre`)
 - Place geocoding via `index.Coordonnées`
 - Established TF-IDF entity co-occurrence formula and semantic kNN recipes
-- Omeka resource templates ↔ resource classes table (e.g. `articles` and `publications` both use template 8 — distinguished by class 36 vs 60)
+- Omeka resource templates ↔ resource classes table (e.g. `articles` use template 8 and `publications` template 21 — classes 36 vs 60)
 
 The skill catches the kind of subtle mistakes that have already cost real time here (e.g. the `embedding_descriptionAI` field that doesn't exist; `articles.lda_topic_id` is `float64`, not int; `articles.subject` strings are tag-membership matches, not substring matches).
 
@@ -76,7 +76,7 @@ CPU-only environment (no GPU) — match the constraint when selecting models or 
 
 ## Adding a new visualization
 
-1. Reach for the `iwac-dataset` skill to confirm field names and types.
+1. Reach for the `iwac-data` skill to confirm field names and types.
 2. Model a new generator on the existing `scripts/generate_*.py`. (The `iwac-dashboard` project these were originally seeded from is deprecated — don't depend on it.)
 3. Decide live-fetch vs. precompute using the rule in ARCHITECTURE.md (precompute if > 50 parallel HF requests OR touches OCR/embeddings).
 4. Write `scripts/generate_<name>.py` following the existing CLI convention; reuse `iwac_utils.py`.

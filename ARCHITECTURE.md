@@ -7,7 +7,7 @@ build.
 
 For what the module *is* and which blocks exist, see [README.md](README.md).
 For the dataset the generators read, [DATA_NOTES.md](DATA_NOTES.md). For the
-audit findings behind several of the decisions here, [REFACTORING.md](REFACTORING.md).
+maintenance status and architectural decisions, see the [consolidated roadmap](https://github.com/fmadore/IwacVisualizations/blob/main/ROADMAP.md).
 
 ## Repository layout
 
@@ -244,8 +244,7 @@ IwacVisualizations/
 ├── playwright.config.js
 ├── PRODUCT.md
 ├── README.md
-├── REFACTORING.md                     # Audit findings and what was done about them
-├── ROADMAP.md                         # Living roadmap and implementation tracker
+├── ROADMAP.md                         # Consolidated maintenance status and decisions
 ├── ruff.toml
 └── tokens.json                        # Synced from the IWAC theme; `npm run lint:theme` enforces it
 ```
@@ -561,4 +560,3 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 1. Add block-specific selectors to `asset/css/blocks/<block>.css`. If the block shares a pattern with an existing one (e.g. "chip controls", "form controls"), add your selector to the canonical rule in `iwac-core.css` — never redefine base chip/button styles per block.
 2. Enqueue `iwac-core.css` first in the block template, then maplibre (if needed), then the block sheet.
 3. Colors and spacing must resolve through IWAC theme tokens (`--primary`, `--ink`, `--surface`, `--space-*`, `--radius-*`). **Never hardcode hex in JS** — shared chart code reads these via `getComputedStyle` / `ns.resolveCssVar`.
-

@@ -97,8 +97,7 @@ const ANNOTATIONS = {
     'ARCHITECTURE.md': 'This file',
     'CHANGELOG.md': 'Version history',
     'DATA_NOTES.md': 'The Hugging Face dataset schema',
-    'REFACTORING.md': 'Audit findings and what was done about them',
-    'ROADMAP.md': 'Living roadmap and implementation tracker',
+    'ROADMAP.md': 'Consolidated maintenance status and decisions',
     'tokens.json': 'Synced from the IWAC theme; `npm run lint:theme` enforces it',
 };
 

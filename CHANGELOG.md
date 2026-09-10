@@ -9,8 +9,17 @@ A **data** refresh needs no version bump: since issue #7 the data cache-buster
 is the Sync Data job's last-sync time, stamped on each block as `data-version`.
 
 See [README.md](README.md) for what the module is, [ARCHITECTURE.md](ARCHITECTURE.md)
-for how it is put together, and [REFACTORING.md](REFACTORING.md) for the audit
-findings several of these releases implement.
+for how it is put together, and the [consolidated roadmap](https://github.com/fmadore/IwacVisualizations/blob/main/ROADMAP.md)
+for current maintenance status and decisions. Audit references in older entries
+link to the historical documents preserved in Git.
+
+### v1.68.1 — consolidated maintenance documentation (2026-09-10)
+
+- Replace the two historical implementation trackers with one concise roadmap.
+- Preserve old audit references through links to Git history; update the
+  architecture index and generated repository tree.
+- Package the completed publication, loading, responsive-chart and accessibility
+  refactoring from v1.66.0–v1.68.0 in the next installable release.
 
 ### v1.68.0 — accessibility verification and refactoring closure (2026-09-10)
 
@@ -56,7 +65,7 @@ findings several of these releases implement.
 
 ### v1.65.0 — the rest of the audit: eight waves, forty-six findings, three premises that did not survive measurement
 
-Waves 7–14 of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8), and the tier is closed. Six of its entries stay unticked and each says why in place: two wait on an owner decision, one is an explicit "keep it", two were considered and rejected in v1.64.0, and one — S15 — was measured and declined, which is the theme of this release.
+Waves 7–14 of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8), and the tier is closed. Six of its entries stay unticked and each says why in place: two wait on an owner decision, one is an explicit "keep it", two were considered and rejected in v1.64.0, and one — S15 — was measured and declined, which is the theme of this release.
 
 **Readers get their own dictionary, and every block is checked against it.** `iwac-i18n.js` shipped 106 KB to every page that loads any block, including 116 keys only one block could ever ask for; those moved to five per-block dictionaries that arrive with their bundle, and `shared-core.min.js` went from 134.8 KB to 118.6 KB. The parity guard was rewritten to read all 19 dictionaries at once and check something it could not before — *reachability*: whether the bundle that renders a block actually loads the dictionary holding its keys. It found a live-adjacent bug on the first run, a concordance string keyed in the laïcité dictionary while the code reading it ships in `shared.ui`, plus one real divergence where the same English string had two different French translations. Counts now go through `Intl.PluralRules`, so "1 articles" and French "0 article" are both gone — English and French disagree about zero, which one `n === 1` test cannot express.
 
@@ -82,7 +91,7 @@ Two things found while implementing: a scratch file from the block-registry wave
 
 ### v1.64.0 — the structural wave: one process for the generators, three files for the docs
 
-The sixth and last wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: P1, P4, M13, M14, M15, D1). Structural rather than cosmetic: nothing a reader sees on a page changes except a map that stops throwing away its data on every theme toggle.
+The sixth and last wave of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8: P1, P4, M13, M14, M15, D1). Structural rather than cosmetic: nothing a reader sees on a page changes except a map that stops throwing away its data on every theme toggle.
 
 **The generators run in one process.** A CI run started 31 interpreters and converted the seven Hugging Face subsets to pandas about ninety times, `articles` roughly twenty-six of them; the v1.59.0 cache had removed the downloads and left every conversion, which is where the memory actually goes. `scripts/run_all.py` runs all 31 in one interpreter with a `FrameStore` installed — one frame per subset, widened on demand, bounded to four so holding `articles` wide never stacks with `publications` wide under a UMAP fit. **No call site changed:** the store is installed onto `iwac_utils`, so `load_dataset_safe` routes through it under the runner and behaves exactly as before without one. Running a generator directly is untouched. The generator order moved out of the workflow's bash array into `run_all.GENERATORS`, where a test checks it against what is on disk.
 
@@ -98,7 +107,7 @@ Two things found while implementing: ESLint was linting `.venv/`, so the Python 
 
 ### v1.63.0 — the duplication clusters: one landscape, one heatmap, one bubble map
 
-The fifth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: E6–E10, M10, M12, C1, P3, P5–P7). Nothing here is a feature; every change replaces a copy with the thing it copied, and every one was proved against the committed version — an old-versus-new harness loads each module from `HEAD` and from the working tree under identical stubs and compares every option a chart is painted with, every click target, every MapLibre source, layer, paint update, fit and popup, and every promoted stylesheet selector's resolved declarations. What differs is listed in REFACTORING.md, because it is intended.
+The fifth wave of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8: E6–E10, M10, M12, C1, P3, P5–P7). Nothing here is a feature; every change replaces a copy with the thing it copied, and every one was proved against the committed version — an old-versus-new harness loads each module from `HEAD` and from the working tree under identical stubs and compares every option a chart is painted with, every click target, every MapLibre source, layer, paint update, fit and popup, and every promoted stylesheet selector's resolved declarations. What differs is listed in REFACTORING.md, because it is intended.
 
 **One landscape, one heatmap, one entities panel.** `C.landscape` is the UMAP scatter the semantic landscape, the laïcité semantic map and the bibliography's landscape each carried (point size, opacity, tooltip lines, a per-bucket colour and an overlay were the only differences, and are the options). The sentiment atlas's two heatmaps are `C.heatmapMatrix` calls, and the cell labels every matrix shows are locale-formatted now. The top-entities panel two overviews drew is `P.buildEntitiesPanel`; its tabs are the shared segmented control and its page changes animate. `P.itemUrl` and `P.navigateOnClick` replace eight click-to-navigate handlers; a chart with no site to address no longer navigates anywhere.
 
@@ -114,7 +123,7 @@ The fifth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8
 
 ### v1.62.0 — the load order becomes data: bundles, sourcemaps and an ESLint gate
 
-The fourth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: B1 step 1, B2's ESLint, B8). The two steps that do not wait on the owner's self-hosting decision (ROADMAP 5.4).
+The fourth wave of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8: B1 step 1, B2's ESLint, B8). The two steps that do not wait on the owner's self-hosting decision (ROADMAP 5.4).
 
 **One manifest, thirty-four bundles.** Every source under `asset/js/` was minified to a `.min.js` sibling and `view/common/iwac-assets.phtml` listed them one by one — about thirty-three `<script>` tags per block, the order held in PHP where nothing could check it against the files. `asset/js/bundles.json` now holds that order: six shared bundles (`shared-core` for every block; `shared-charts`, `shared-ui`, `shared-layout`, `shared-map`, `shared-d3` each behind a `$needs` flag), one bundle per panel set two blocks share (`panels/person`, drawn by the person and entity dashboards), and one bundle per block with its orchestrator last. `scripts/build-js.js` (esbuild, replacing terser) writes `asset/js/dist/**` with a sourcemap beside each bundle that carries the original sources, and fails when a source is missing, listed twice, or in no bundle. A block is three to seven requests instead of thirty-three; 155 sources become 34 bundles, 1.93 MB → 722 KB. Shared code never enters a block bundle — the on-view loader de-duplicates by URL, so two blocks on one page share every bundle they have in common and each executes once.
 
@@ -126,7 +135,7 @@ The fourth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 
 
 ### v1.61.0 — the data back to the reader: every chart as a table, every choropleth with a scale
 
-The third wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S3, E17, M11, M18). A chart's numbers reached a reader in two forms until now: the pixels, and the one-sentence description a screen reader gets instead of ECharts' own recitation. Nothing on the site let anyone read the figures, sort them, or take them into a spreadsheet.
+The third wave of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8: S3, E17, M11, M18). A chart's numbers reached a reader in two forms until now: the pixels, and the one-sentence description a screen reader gets instead of ECharts' own recitation. Nothing on the site let anyone read the figures, sort them, or take them into a spreadsheet.
 
 **"View as table" and "Download CSV" on every panel.** The panel toolbar gained two buttons beside the PNG export. `P.optionToRows` (new `shared/chart-rows.js`) reads the option a chart was painted with back into rows — a category axis with N series, the heatmap matrix, name/value series with nested trees flattened, scatter points — and returns nothing for the shapes that have no honest table (graphs, custom series). The table opens under the chart as a disclosure (`aria-expanded`, `aria-controls`), follows every repaint (a facet change under an open table changes the table), and is capped at 500 rows with a note pointing at the CSV, which carries all of them. The CSV is RFC 4180 with a UTF-8 BOM and raw numbers; a cell that begins like a formula is neutralised. Panels opt out with `data-iwac-no-table="1"`. `dashboard-core` keeps the last data-bearing option by reference and announces each repaint on the host.
 
@@ -140,7 +149,7 @@ The third wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8
 
 ### v1.60.0 — the reactive core: controls that keep your focus, views with an address
 
-The second wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S11, S1, S2, S7, S8, E3, E5, S25, and the `setActive` half of S19). Where v1.59.0 made the charts render honestly, this release makes the controls around them behave like an instrument rather than a form that reloads.
+The second wave of the 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8: S11, S1, S2, S7, S8, E3, E5, S25, and the `setActive` half of S19). Where v1.59.0 made the charts render honestly, this release makes the controls around them behave like an instrument rather than a form that reloads.
 
 **One state store per block.** `P.createStore(state, { reduce })` keeps the block's own state object (nothing was rewritten to copies), batches a tick's patches into one notification, and wakes subscribers by key. That last part is the whole point: a block now says *a change of view remounts the controls row, anything else syncs values into the widgets that exist* as two subscriptions. The cross-field rules that six laïcité change handlers and two scary-terms selects applied by hand — a corpus clears the country and vice versa, a scope resets its slice, a map frame clears the map country — live in one reducer per block. Adopted by the Laïcité dossier, Scary Terms, Term Trends, Compare Newspapers and the Sentiment Atlas.
 
@@ -156,7 +165,7 @@ The second wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 
 
 ### v1.59.0 — the sixth audit's first wave: one render pass, bounded fetches, maps that fail out loud
 
-The 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8) asked where the module still behaves like a set of static pictures rather than a reactive instrument. This release lands its "quick, safe, build-verifiable" wave — twenty-three items, every one behind a lint gate or a test.
+The 2026-09-05 audit ([REFACTORING.md](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md), Tier 8) asked where the module still behaves like a set of static pictures rather than a reactive instrument. This release lands its "quick, safe, build-verifiable" wave — twenty-three items, every one behind a lint gate or a test.
 
 **Every chart render is one ECharts update pass again.** The text alternative a screen reader hears was produced *after* each render: a deep `getOption()` clone of the live option, series data included, followed by a second synchronous `setOption` — and `registerChart` then did the same again, so one render was four full update passes, and the five callers that ask for `lazyUpdate` never got their deferred frame. The description is now folded into the outgoing option before the native call: one pass, the caller's `{ notMerge, lazyUpdate }` form untouched, `getOption()` never consulted. `tests/js/lifecycle.test.js` counts the passes.
 
@@ -642,7 +651,7 @@ Two new page blocks porting the core views of the standalone [IWAC-spatial-overv
 - `language/template.pot` + `language/fr.po` rebuilt from the current sources: **58 entries** (was 17) — all v1.5/v1.6 block labels, admin descriptions, and loading strings now have French; six entries for retired blocks (Knowledge Graph, Compare Projects, …) dropped. `fr.mo` compiled (polib — no gettext needed on Windows).
 - `ReferencesOverview`'s admin description corrected (it still claimed live Hugging Face fetch; the block has been precompute-backed since v1.x) and translated accordingly.
 
-### v1.6.0 — four new corpus blocks + Index Overview payload split (Phases 5–6 of [ROADMAP](ROADMAP.md))
+### v1.6.0 — four new corpus blocks + Index Overview payload split (Phases 5–6 of [ROADMAP](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/ROADMAP.md))
 
 - **Periodicals Overview page block** — corpus view of the Islamic press: periodical-runs gantt (25 runs, 1981–2024), issues/year by country, languages (log axis), countries, top subjects. 4.6 KB bundle.
 - **Semantic Landscape page block** — zoomable UMAP scatter of all 12,286 articles by full-text embedding similarity, faceted by Country / Decade / Topic, click-through to articles. The bundle is deliberately the module's heaviest (~1 MB minified / ~300 KB gzipped; titles dominate) and loads on-view only. `umap-learn` added to `scripts/requirements.txt`.
@@ -651,7 +660,7 @@ Two new page blocks porting the core views of the standalone [IWAC-spatial-overv
 - **Item Set Dashboard went live** (was a placeholder since the scaffold) — see its section above; reuses the compare-newspapers corpus aggregates, zero new precompute.
 - **Index Overview split**: `index-overview.json` now carries only the chart aggregates (**186 KB**, was 779); the 4,385 table rows moved to `index-overview-table.json` (**567 KB**) fetched when the table panel nears the viewport. With the v1.3.0 Section B deferral, the block's eager payload dropped ~1.9 MB → ~190 KB.
 
-### v1.4.0 — ECharts 6 adoption + compare-newspapers modularization + payload diet (Phases 3–5 of [ROADMAP](ROADMAP.md))
+### v1.4.0 — ECharts 6 adoption + compare-newspapers modularization + payload diet (Phases 3–5 of [ROADMAP](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/ROADMAP.md))
 
 - **Native `chord` series.** `C.chord` now emits ECharts 6.0's reintroduced `series-chord` instead of the `graph`+`layout:'circular'` emulation written in the ECharts-5 era — ribbon widths finally encode the pairwise co-occurrence weights directly. Same `{names, matrix}` contract, so the shared `chord` renderer and the person-dashboard co-occurrence panel needed no changes.
 - **Graph minimap.** The person association network and the article 3-layer context network opt into ECharts 6's `thumbnail` component (`C.network(…, {thumbnail: true})`) — a token-styled minimap with a viewport window for orientation while roaming; auto-hidden ≤ 640px.
@@ -663,7 +672,7 @@ Two new page blocks porting the core views of the standalone [IWAC-spatial-overv
 - **World map payload**: `world_countries_simple.geojson` simplified with mapshaper from **1,022 KB to 200 KB** (242 features and the `name` property set verified identical).
 - **`P.formatDate`** passes unparseable inputs through verbatim instead of slicing them to 10 chars (the publications subset's range dates like `2009-05/2009-08` were being cut mid-range).
 
-### v1.3.0 — performance + correctness quick wins (Phase 1 of [ROADMAP](ROADMAP.md))
+### v1.3.0 — performance + correctness quick wins (Phase 1 of [ROADMAP](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/ROADMAP.md))
 
 - **Exact CDN pins.** `iwac-assets.phtml` now pins `echarts@6.1.0`, `maplibre-gl@5.24.0`, `echarts-wordcloud@2.1.0` instead of floating major tags — the floating `@6` had silently auto-upgraded the live site to ECharts 6.1.0 on 2026-05-19. Exact-version jsDelivr URLs are also immutable-cached for a year (floating tags resolve through a short-TTL redirect), so repeat-visit LCP improves and every upgrade becomes a deliberate, testable constant bump.
 - **CDN preconnect.** A `<link rel="preconnect">` (+ `dns-prefetch` fallback) to `cdn.jsdelivr.net` is emitted from the shared partial — the on-view lazy loader meant the first library request also paid DNS + TCP + TLS (~100–200 ms) right when the user reached the block.
