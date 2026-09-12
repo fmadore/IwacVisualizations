@@ -18,9 +18,9 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
-        'spatial_pick_hint':         'Pick an entity to map the places mentioned alongside it. Without a selection, the map shows every place in the collection.',
+        'spatial_pick_hint':         'Choose a person, organisation, event, subject or place to map locations associated with the same records. Without a selection, the map shows the places available in the mapped data.',
         'places_count':              '{count} places',
-        'spatial_map_description':   'The larger the bubble, the more often the place is mentioned. Hover over a place for a preview, or click it for the full list of items.',
+        'spatial_map_description':   'Larger bubbles indicate places linked to more items through catalogue tags. Only places with known coordinates can be mapped. The map reflects the collection’s records, so an unmarked place may simply lack cataloguing or coordinates. Hover for a preview, or click a place for the item list.',
         'admin_units_count':         '{count} units',
         'more_items_click':          '{count} more \u2014 click for the full list',
     });
@@ -28,7 +28,7 @@
     ns.addTranslations('fr', {
         'Places mentioned in the collection': 'Lieux mentionnés dans la collection',
         'Pick an entity':            'Choisir une entit\u00e9',
-        'spatial_pick_hint':         'Choisissez une entit\u00e9 pour cartographier les lieux mentionn\u00e9s \u00e0 ses c\u00f4t\u00e9s. Sans s\u00e9lection, la carte montre tous les lieux de la collection.',
+        'spatial_pick_hint':         'Choisissez une personne, une organisation, un événement, un sujet ou un lieu pour situer les lieux associés aux mêmes notices. Sans sélection, la carte affiche les lieux disponibles dans les données cartographiques.',
         'places_count':              '{count} lieux',
         'View item page':            'Voir la fiche de l\u2019\u00e9l\u00e9ment',
         'Top places':                'Principaux lieux',
@@ -43,7 +43,7 @@
         'Quantile':                  'Quantile',
         'Linear':                    'Lin\u00e9aire',
         'Square root':               'Racine carr\u00e9e',
-        'spatial_map_description':   'Plus la bulle est grande, plus le lieu est souvent mentionn\u00e9. Survolez un lieu pour un aper\u00e7u ou cliquez dessus pour la liste compl\u00e8te des \u00e9l\u00e9ments.',
+        'spatial_map_description':   'Les bulles les plus grandes indiquent les lieux associés à davantage de documents par les mots-clés du catalogue. Seuls les lieux aux coordonnées connues peuvent être cartographiés. La carte reflète les notices de la collection : un lieu absent peut simplement manquer d’indexation ou de coordonnées. Survolez un lieu pour un aperçu ou cliquez pour voir les documents.',
         'admin_units_count':         '{count} unit\u00e9s',
         'No administrative data':    'Aucune donn\u00e9e administrative',
         'No mapped places':          'Aucun lieu cartographi\u00e9',

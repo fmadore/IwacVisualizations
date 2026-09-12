@@ -554,14 +554,14 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
-        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('References by type over time'));
-        var typesPanel     = P.buildPanel('iwac-vis-panel', P.t('Reference types'));
-        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages represented'));
-        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Content by country'));
-        var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'));
-        var publishersPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top publishers'));
-        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'));
-        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
+        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('References by type over time'), P.t('references.timeline_desc'));
+        var typesPanel     = P.buildPanel('iwac-vis-panel', P.t('Reference types'), P.t('references.types_desc'));
+        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages represented'), P.t('references.languages_desc'));
+        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Content by country'), P.t('references.countries_desc'));
+        var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'), P.t('references.authors_desc'));
+        var publishersPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top publishers'), P.t('references.publishers_desc'));
+        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'), P.t('references.subjects_desc'));
+        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'), P.t('references.breakdown_desc'));
         // Nested treemap (country › source) — give it room past the 320px
         // floor, matching the collection-overview breakdown panel.
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
@@ -610,7 +610,7 @@
             P.t('references_subject_cooccurrence_desc')
         );
         subjectCooccurrencePanel.chart.classList.add('iwac-vis-chord-host');
-        var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'));
+        var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'), P.t('references.network_desc'));
         // The collaboration network needs the same breathing room as
         // the entity-dashboard graph host so labels on the outer ring
         // don't clip and the force layout has somewhere to expand to.

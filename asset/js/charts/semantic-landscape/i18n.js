@@ -17,24 +17,24 @@
 
         ns.addTranslations('en', {
             'Loading semantic landscape': 'Loading semantic landscape',
-            'Semantic landscape': 'Semantic landscape',
-            'desc_semantic_landscape': 'Every article in the collection, placed according to how similar its full text is to the others. An AI model compares the texts, and a technique called UMAP flattens those comparisons onto two dimensions, so the axes carry no meaning and only nearness does. Faint labels mark where each major topic is densest. Drag to move around the map, scroll to zoom, and click a point to open the article.',
+            'Semantic landscape': 'Articles by text similarity',
+            'desc_semantic_landscape': 'Each point is an article with a usable AI representation of its full text. UMAP, a method for arranging these representations in two dimensions, places broadly similar texts near one another. Nearby points are leads for comparison; distances and gaps are not precise measures of similarity. The axes have no historical or geographical meaning. Labels indicate concentrations of major topics. Drag to move, scroll to zoom, and click a point to open the article.',
             'Topic': 'Topic',
             'Other': 'Other',
             'Unknown year': 'Unknown year',
             'landscape_points': '{count} articles placed',
-            'Periodicals semantic landscape': 'Periodicals semantic landscape',
-            'desc_periodicals_landscape': 'Every Islamic periodical issue in the collection, placed according to how similar its table of contents is to the others. An AI model compares the contents lists, and a technique called UMAP flattens those comparisons onto two dimensions, so the axes carry no meaning and only nearness does. Drag to move around the map, scroll to zoom, and click a point to open the issue.',
+            'Periodicals semantic landscape': 'Periodical issues by contents-list similarity',
+            'desc_periodicals_landscape': 'Each point is a periodical issue with a usable AI representation of its table of contents. UMAP arranges these representations in two dimensions to bring broadly similar contents lists together. Nearby points suggest issues to compare; distances are approximate and the axes have no historical or geographical meaning. The comparison uses contents lists, so it may miss differences within the articles themselves. Drag to move, scroll to zoom, and click a point to open the issue.',
             'landscape_points_issues': '{count} issues placed'
         });
         ns.addTranslations('fr', {
             'Loading semantic landscape': 'Chargement du paysage sémantique',
-            'Semantic landscape': 'Paysage sémantique',
-            'desc_semantic_landscape': 'Chaque article de la collection, positionn\u00e9 selon la ressemblance de son texte int\u00e9gral avec celui des autres. Un mod\u00e8le d\u2019IA compare les textes, puis une technique appel\u00e9e UMAP ram\u00e8ne ces comparaisons \u00e0 deux dimensions ; les axes n\u2019ont donc pas de sens et seul compte le voisinage. Des libell\u00e9s discrets marquent la zone la plus dense de chaque grand th\u00e8me. Faites glisser pour vous d\u00e9placer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir l\u2019article.',
+            'Semantic landscape': 'Articles selon leur similarité textuelle',
+            'desc_semantic_landscape': 'Chaque point correspond à un article dont le texte intégral dispose d’une représentation exploitable produite par IA. La méthode UMAP dispose ces représentations en deux dimensions et rapproche les textes globalement similaires. Les voisinages donnent des pistes de comparaison ; les distances et les espaces vides ne mesurent pas précisément la similarité. Les axes n’ont aucun sens historique ou géographique. Les libellés situent les concentrations des principaux thèmes. Faites glisser pour vous déplacer, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir l’article.',
             'Unknown year': 'Année inconnue',
             'landscape_points': '{count} articles positionnés',
-            'Periodicals semantic landscape': 'Paysage sémantique des périodiques',
-            'desc_periodicals_landscape': 'Chaque num\u00e9ro de p\u00e9riodique islamique de la collection, positionn\u00e9 selon la ressemblance de son sommaire avec celui des autres. Un mod\u00e8le d\u2019IA compare les sommaires, puis une technique appel\u00e9e UMAP ram\u00e8ne ces comparaisons \u00e0 deux dimensions ; les axes n\u2019ont donc pas de sens et seul compte le voisinage. Faites glisser pour vous d\u00e9placer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir le num\u00e9ro.',
+            'Periodicals semantic landscape': 'Numéros de périodiques selon la similarité des sommaires',
+            'desc_periodicals_landscape': 'Chaque point correspond à un numéro de périodique dont le sommaire dispose d’une représentation exploitable produite par IA. La méthode UMAP dispose ces représentations en deux dimensions pour rapprocher les sommaires globalement similaires. Les voisinages suggèrent des numéros à comparer ; les distances sont approximatives et les axes n’ont aucun sens historique ou géographique. La comparaison repose sur les sommaires et peut donc masquer des différences entre les articles eux-mêmes. Faites glisser pour vous déplacer, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir le numéro.',
             'landscape_points_issues': '{count} numéros positionnés'
         });
 })();

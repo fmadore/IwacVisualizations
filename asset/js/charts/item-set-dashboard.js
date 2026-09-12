@@ -45,13 +45,12 @@
             'Items': 'Items',
             'Items per year': 'Items per year',
             'Top subjects': 'Top subjects',
-            'Spatial coverage': 'Spatial coverage',
             'Most frequent words': 'Most frequent words',
-            'desc_item_set_corpus': 'Compiled in advance from the IWAC corpus for this collection.'
+            'desc_item_set_corpus': 'These charts describe the items represented in the available data for this collection. Coverage depends on which material has been collected and catalogued.'
         });
         ns.addTranslations('fr', {
             'Items per year': 'Éléments par année',
-            'desc_item_set_corpus': 'Compil\u00e9 \u00e0 l\u2019avance \u00e0 partir du corpus IWAC pour cette collection.'
+            'desc_item_set_corpus': 'Ces graphiques décrivent les documents représentés dans les données disponibles pour cette collection. La couverture dépend des documents collectés et catalogués.'
         });
     }
 
@@ -122,7 +121,7 @@
             var series = {};
             series[seriesName] = tl.counts || [];
             var tlPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year'),
-                null, headingOpts);
+                P.t('desc_item_set_timeline'), headingOpts);
             grid.appendChild(tlPanel.panel);
             ns.registerChart(tlPanel.chart, function (el, instance) {
                 instance.setOption(C.timeline(
@@ -139,7 +138,7 @@
         ].forEach(function (def) {
             var entries = (corpus[def.key] || []).slice(0, 15);
             if (!entries.length) return;
-            var panel = P.buildPanel('iwac-vis-panel', P.t(def.title), null, headingOpts);
+            var panel = P.buildPanel('iwac-vis-panel', P.t(def.title), P.t('desc_item_set_tags'), headingOpts);
             grid.appendChild(panel.panel);
             ns.registerChart(panel.chart, function (el, instance) {
                 instance.setOption(C.horizontalBar(entries), true);
@@ -152,7 +151,7 @@
         var pairs = corpus.wordcloud || [];
         if (pairs.length) {
             var wcPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most frequent words'),
-                null, headingOpts);
+                P.t('desc_word_cloud'), headingOpts);
             grid.appendChild(wcPanel.panel);
             ns.registerChart(wcPanel.chart, function (el, instance) {
                 try {

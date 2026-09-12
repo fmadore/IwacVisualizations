@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.68.6 — clearer bilingual explanations for researchers (2026-09-12)
+
+- Review English and French headings, descriptions and methodological notes across all 21 visualization blocks and the resource-page dashboards, with language accessible to social scientists.
+- Add missing chart captions and explain catalogue tags, publication dates, collection coverage, topic weights, vocabulary measures and similarity scores.
+- Correct the newspaper-only scope of the radicalism vocabulary views and clarify that Laïcité searches include descriptive fields as well as source text.
+- Qualify AI assessments, possible press reprints and network relationships so exploratory patterns are not presented as established historical findings.
+- Update all block-picker descriptions, French translations and compiled assets; preserve revised Laïcité frame notes when reading older data bundles.
+
 ### v1.68.5 — restore language facets and fill word-cloud panels (2026-09-10)
 
 - Rebuild responsive chart options on facet changes while preserving zoom and legend selection; ECharts media passes no longer remove the base data series. Fixes Languages represented → By type and other responsive faceted charts.

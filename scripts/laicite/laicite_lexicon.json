@@ -36,8 +36,8 @@
         "laïques",
         "laïcat"
       ],
-      "note_en": "The juridical-political register the francophone West African press actually argues in.",
-      "note_fr": "Le registre juridico-politique dans lequel la presse ouest-africaine francophone argumente réellement."
+      "note_en": "Core vocabulary concerning laïcité and the secular state. Matches help select the dossier; their meaning depends on the passage.",
+      "note_fr": "Vocabulaire central de la laïcité et de l’État laïque. Les correspondances contribuent à sélectionner le dossier ; leur sens dépend du passage."
     },
     "secularisme": {
       "label_en": "Secularism / secularisation",
@@ -53,8 +53,8 @@
         "séculiers",
         "séculières"
       ],
-      "note_en": "Kept although nearly empty: the sociological register is largely absent from this press, and that absence is the finding — hiding the frame would hide it.",
-      "note_fr": "Conservé bien que presque vide : le registre sociologique est largement absent de cette presse, et cette absence est le résultat — masquer le cadre le masquerait aussi."
+      "note_en": "Vocabulary of secularism and secularisation. Low counts describe the selected terms and available fields, not the absence of these concepts from public debate.",
+      "note_fr": "Vocabulaire du sécularisme et de la sécularisation. Les faibles nombres décrivent les termes sélectionnés et les champs disponibles, sans établir l’absence de ces concepts dans le débat public."
     },
     "separation": {
       "label_en": "Separation / neutrality",
@@ -212,8 +212,8 @@
         "fondamentaliste",
         "fondamentalistes"
       ],
-      "note_en": "The rival vocabulary — the pole the Scary Terms block covers. Counted here per item so the laïcité ↔ intégrisme overlap can be read off individual documents.",
-      "note_fr": "Le vocabulaire concurrent — le pôle que couvre le bloc Termes alarmants. Compté ici document par document, afin que le recoupement laïcité ↔ intégrisme se lise sur les documents eux-mêmes."
+      "note_en": "Terms associated with radicalism, counted within dossier items. Their presence alongside laïcité suggests passages to compare; it does not classify the people or organisations discussed.",
+      "note_fr": "Termes associés au radicalisme, comptés dans les documents du dossier. Leur présence aux côtés de la laïcité suggère des passages à comparer, sans classer les personnes ou organisations évoquées."
     }
   },
   "_disambiguation": "The `laïc` / `laïque` FALSE-POSITIVE TRAP. In a corpus with heavy Catholic press coverage these forms ALSO mean 'lay person' (the laity, as opposed to the clergy) — 'les fidèles laïcs', 'l'apostolat des laïcs', 'le laïcat'. That is a different concept from 'laïcité de l'État' and it contaminates counts if matched naively. This is the same class of problem as the `fondamental` / `fondamentalisme` exclusion documented in generate_scary_terms.py, but it cannot be fixed by an exclusion list alone, because the SAME surface form carries both senses. So each ambiguous occurrence is classified by a narrow window: an immediate qualifier decides when present (±2 tokens), otherwise a ±8-token neighbourhood vote. Occurrences classified `laity` are counted and reported but do NOT contribute to frame counts, and never seed dossier membership on their own. Measured demotion rates when this file was written: documents 2.9%, publications 2.4%, articles 2.9%, references 8.0% — references being highest because the scholarly corpus discusses Catholic lay movements directly. Spot-checked precision on both sides was high but not perfect; the counts are logged by the generator and surfaced in laicite-metadata.json so the decision stays auditable and tunable here rather than in code.",

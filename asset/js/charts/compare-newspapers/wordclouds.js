@@ -20,6 +20,7 @@
     function buildWordclouds(dataA, dataB) {
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('Most frequent words')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('compare.words_desc')));
         var wrap = P.el('div', 'iwac-vis-compare-wordclouds');
         panel.appendChild(wrap);
 

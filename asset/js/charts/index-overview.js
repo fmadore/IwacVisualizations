@@ -55,7 +55,7 @@
         var gridA = P.buildChartsGrid();
         sectionA.appendChild(gridA);
 
-        var typePanel       = P.buildPanel('iwac-vis-panel', P.t('Entities by type'));
+        var typePanel       = P.buildPanel('iwac-vis-panel', P.t('Entities by type'), P.t('index.types_desc'));
         var topEntitiesPanel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('Top entities'),
@@ -77,7 +77,7 @@
             P.t('Temporal extent'),
             P.t('desc_temporal_extent')
         );
-        var indexPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Index table'));
+        var indexPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Index table'), P.t('index.table_desc'));
 
         [
             typePanel, topEntitiesPanel,
@@ -107,10 +107,10 @@
         var keywordsMain = P.el('div', 'iwac-vis-keywords-main');
         keywordsLayout.appendChild(keywordsMain);
 
-        var chartPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Keywords over time'));
+        var chartPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Keywords over time'), P.t('index.keywords_desc'));
         keywordsMain.appendChild(chartPanel.panel);
 
-        var tablePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('All keywords'));
+        var tablePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('All keywords'), P.t('index.keywords_table_desc'));
         keywordsMain.appendChild(tablePanel.panel);
 
         // Derived Section B panels (ROADMAP 9.7 / 9.8) — both feed off

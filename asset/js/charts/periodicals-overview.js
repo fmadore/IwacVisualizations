@@ -79,10 +79,10 @@
         // deployed bundle predates it, which would renumber every embed
         // permalink after it if the slugs were positional.
         var runsPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.runs_title'), P.t('periodicals.runs_desc'), { key: 'runs' });
-        var perYearPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.issues_per_year_title'), null, { key: 'issues-per-year' });
-        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages'), null, { key: 'languages' });
-        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Countries'), null, { key: 'countries' });
-        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.subjects_title'), null, { key: 'subjects' });
+        var perYearPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.issues_per_year_title'), P.t('periodicals.years_desc'), { key: 'issues-per-year' });
+        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages'), P.t('periodicals.languages_desc'), { key: 'languages' });
+        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Countries'), P.t('periodicals.countries_desc'), { key: 'countries' });
+        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.subjects_title'), P.t('periodicals.subjects_desc'), { key: 'subjects' });
         var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.wordcloud_title'), P.t('periodicals.wordcloud_desc'), { key: 'wordcloud' });
         // Word clouds need vertical room — reuse the shared 400px host
         // reservation instead of the default 320px chart height.

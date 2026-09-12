@@ -45,8 +45,8 @@
         ns.addTranslations('en', {
             'Loading on this day': 'Loading on this day',
             'otd.title':      'On this day',
-            'otd.desc':       'Published on {date}, across the decades of the collection.',
-            'otd.desc_h':     'Published on {date}, across the decades of the collection: the same lunar date, one Gregorian year to the next.',
+            'otd.desc':       'Articles and periodical issues with a full publication date matching {date}, across the collection’s years.',
+            'otd.desc_h':     'Items published on {date} in the converted Islamic (Hijri) calendar, across the collection’s years. Converted dates may differ from local lunar observations.',
             'otd.type_a':     'Article',
             'otd.type_p':     'Periodical',
             'otd.ago':        '{count} years ago',
@@ -70,8 +70,8 @@
         ns.addTranslations('fr', {
             'Loading on this day': 'Chargement de « ce jour-là »',
             'otd.title':      'Ce jour-là',
-            'otd.desc':       'Publiés un {date}, au fil des décennies de la collection.',
-            'otd.desc_h':     'Publi\u00e9s un {date}, au fil des d\u00e9cennies de la collection : la m\u00eame date lunaire, d\u2019une ann\u00e9e gr\u00e9gorienne \u00e0 l\u2019autre.',
+            'otd.desc':       'Articles et numéros de périodiques dont la date de publication complète correspond au {date}, au fil des années de la collection.',
+            'otd.desc_h':     'Documents publiés le {date} selon le calendrier islamique (hégirien) converti, au fil des années de la collection. Les dates converties peuvent différer des observations lunaires locales.',
             'otd.type_a':     'Article',
             'otd.type_p':     'Périodique',
             'otd.ago':        'il y a {count} ans',

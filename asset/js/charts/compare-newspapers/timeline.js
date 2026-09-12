@@ -20,6 +20,7 @@
     function buildTimeline(dataA, dataB) {
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('Timeline (items per year)')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('compare.timeline_desc')));
         var host = P.el('div', 'iwac-vis-chart');
         panel.appendChild(host);
 

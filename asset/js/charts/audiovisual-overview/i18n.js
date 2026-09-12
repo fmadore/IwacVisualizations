@@ -30,7 +30,7 @@
         // differ in every property a reader would otherwise average over.
         // Printed as the block's standfirst, so the panels below are read
         // as a comparison rather than as one population with outliers.
-        'av.populations_desc':            'This collection holds recordings deposited with the collection alongside video published on the web by West African channels. They differ in almost every respect, so the panels below keep them apart rather than averaging over them.',
+        'av.populations_desc':            'The collection includes deposited recordings and videos published online by West African channels. The panels distinguish these sources so that their coverage and recording lengths can be compared.',
         'av.source_youtube':              'Published on the web',
         'av.source_deposited':            'Deposited with the collection',
         'av.source_unknown':              'Source not recorded',
@@ -39,9 +39,9 @@
         // and runtime rank the sources differently, and a reader who only
         // ever sees one measure never learns that.
         'av.channels_title':              'Sources',
-        'av.channels_desc':               'Who published this material. Counting recordings and counting runtime give different answers: a channel posting short news reports can lead on one measure and trail on the other, so both are here.',
+        'av.channels_desc':               'Sources ranked by the number of collected recordings or their combined duration. Switch measures to compare the volume of recordings with the amount of listening or viewing time. Totals reflect the material in the collection.',
         'av.countries_title':             'Countries',
-        'av.countries_desc':              'Where this material comes from, by number of recordings and by runtime. As with the sources, the two measures do not agree.',
+        'av.countries_desc':              'Countries recorded for the material, ranked by number of recordings or combined duration. Only known durations contribute to runtime totals.',
         'av.measure_items':               'Recordings',
         'av.measure_runtime':             'Runtime',
         'av.tip_items':                   '{count} recordings · {duration} in total',
@@ -49,7 +49,7 @@
         'av.tip_median':                  'Typical length {duration}',
 
         'av.durations_title':             'How long the recordings run',
-        'av.durations_desc':              'Runtime of every recording, grouped. The two kinds of material barely overlap: web video is measured in minutes, the deposited recordings in hours.',
+        'av.durations_desc':              'Recordings grouped by duration. Compare the distribution of online videos with deposited recordings. Recordings without a known duration are omitted.',
         'av.bucket_lt2m':                 'Under 2 min',
         'av.bucket_2to5m':                '2–5 min',
         'av.bucket_5to15m':               '5–15 min',
@@ -57,7 +57,7 @@
         'av.bucket_gt1h':                 'Over 1 h',
 
         'av.timeline_title':              'Published per year',
-        'av.timeline_desc':               'When this material was published, by source. The web video is recent and still arriving; the deposited recordings are the sparse early years.',
+        'av.timeline_desc':               'Collected recordings by publication year and source. This timeline follows publication dates, not dates of addition to IWAC; changes also reflect which material has been collected.',
         'av.timeline_other':              'Other sources',
         'av.timeline_partial':            '{year} is incomplete — the collection runs to {date}.',
         'av.timeline_undated':            '{count} recordings carry no publication date and are not shown.',
@@ -66,8 +66,8 @@
         // column charted on its own would read as a finding about the
         // sources; as a completeness row beside `subject` at 1.5% it reads
         // as what it is — metadata surfaces of very different maturity.
-        'av.coverage_title':              'What the records carry',
-        'av.coverage_desc':               'How much of each field this material actually carries. These are properties of the cataloguing, not of the recordings: a field can be near-complete because it was filled in by a script, and near-empty because describing it takes a person.',
+        'av.coverage_title':              'Information available in the catalogue',
+        'av.coverage_desc':               'Share of recording records with a value in each catalogue field. A completed field indicates available information, without assessing its accuracy or detail. An empty field does not establish that the recording lacks the corresponding content.',
         'av.coverage_description':        'Description',
         'av.coverage_transcription':      'Transcription',
         'av.coverage_pub_date':           'Publication date',
@@ -91,15 +91,15 @@
         'av.channels':                    'Sources',
         'av.countries':                   'Pays',
 
-        'av.populations_desc':            'Cette collection réunit des enregistrements déposés dans la collection et des vidéos publiées sur le web par des chaînes ouest-africaines. Tout ou presque les distingue : les panneaux ci-dessous les gardent séparés plutôt que d’en faire la moyenne.',
+        'av.populations_desc':            'La collection comprend des enregistrements déposés et des vidéos publiées en ligne par des chaînes ouest-africaines. Les panneaux distinguent ces sources pour comparer leur couverture et la durée des enregistrements.',
         'av.source_youtube':              'Publié sur le web',
         'av.source_deposited':            'Déposé dans la collection',
         'av.source_unknown':              'Source non renseignée',
 
         'av.channels_title':              'Sources',
-        'av.channels_desc':               'Qui a publié ces documents. Compter les enregistrements et compter la durée ne donnent pas le même résultat : une chaîne qui publie de courts reportages peut dominer une mesure et non l’autre. Les deux sont donc proposées.',
+        'av.channels_desc':               'Sources classées par nombre d’enregistrements collectés ou par durée cumulée. Changez de mesure pour comparer le nombre d’enregistrements au temps d’écoute ou de visionnage. Les totaux portent sur les documents de la collection.',
         'av.countries_title':             'Pays',
-        'av.countries_desc':              'D’où viennent ces documents, en nombre d’enregistrements et en durée. Comme pour les sources, les deux mesures divergent.',
+        'av.countries_desc':              'Pays enregistrés pour les documents, classés par nombre d’enregistrements ou par durée cumulée. Seules les durées connues contribuent aux totaux de durée.',
         'av.measure_items':               'Enregistrements',
         'av.measure_runtime':             'Durée',
         'av.tip_items':                   '{count} enregistrements · {duration} au total',
@@ -107,7 +107,7 @@
         'av.tip_median':                  'Durée habituelle {duration}',
 
         'av.durations_title':             'Durée des enregistrements',
-        'av.durations_desc':              'Durée de chaque enregistrement, par tranches. Les deux types de documents ne se recoupent presque pas : la vidéo web se compte en minutes, les enregistrements déposés en heures.',
+        'av.durations_desc':              'Enregistrements regroupés par durée. Comparez la répartition des vidéos en ligne et des enregistrements déposés. Ceux dont la durée est inconnue sont omis.',
         'av.bucket_lt2m':                 'Moins de 2 min',
         'av.bucket_2to5m':                '2–5 min',
         'av.bucket_5to15m':               '5–15 min',
@@ -115,13 +115,13 @@
         'av.bucket_gt1h':                 'Plus d’1 h',
 
         'av.timeline_title':              'Publications par année',
-        'av.timeline_desc':               'Date de publication de ces documents, par source. La vidéo web est récente et continue d’arriver ; les enregistrements déposés occupent les premières années, plus clairsemées.',
+        'av.timeline_desc':               'Enregistrements collectés par année de publication et par source. Cette chronologie suit les dates de publication, et non d’ajout à IWAC ; les variations reflètent aussi les choix de collecte.',
         'av.timeline_other':              'Autres sources',
         'av.timeline_partial':            'L’année {year} est incomplète — la collection s’arrête au {date}.',
         'av.timeline_undated':            '{count} enregistrements sans date de publication ne sont pas représentés.',
 
-        'av.coverage_title':              'Ce que contiennent les notices',
-        'av.coverage_desc':               'Le taux de remplissage de chaque champ. Ce sont des propriétés du catalogage, non des enregistrements : un champ peut être presque complet parce qu’un script l’a rempli, et presque vide parce que le décrire demande une personne.',
+        'av.coverage_title':              'Informations disponibles dans le catalogue',
+        'av.coverage_desc':               'Part des notices d’enregistrement dont chaque champ du catalogue est renseigné. Un champ rempli indique une information disponible, sans en évaluer l’exactitude ou la précision. Un champ vide n’établit pas que le contenu correspondant est absent de l’enregistrement.',
         'av.coverage_description':        'Description',
         'av.coverage_transcription':      'Transcription',
         'av.coverage_pub_date':           'Date de publication',

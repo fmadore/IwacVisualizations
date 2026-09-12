@@ -36,12 +36,12 @@
             'bylines.card_unique':    'Distinct bylines',
             'bylines.card_prolific':  'Bylines with 10+ articles',
             'bylines.trend_title':    'Signed articles over time',
-            'bylines.trend_desc':     'The share of each year’s articles carrying a byline, counting journalists and press agencies alike. The rest ran unsigned.',
+            'bylines.trend_desc':     'Share of each year’s collected articles with a recorded byline: the name of a journalist or press agency credited with the text. Other articles have no byline recorded; they may have appeared unsigned or have incomplete catalogue records.',
             'bylines.trend_axis':     'Signed share (%)',
             'bylines.trend_tip':      '{signed} of {total} articles signed',
             'bylines.top_title':      'Most prolific bylines',
-            'bylines.top_desc':       'The {n} most frequent bylines across the corpus, journalists and press agencies alike. Click a bar to open the byline’s authority record where one exists.',
-            'bylines.active':         'Active {first}–{last}',
+            'bylines.top_desc':       'The {n} bylines recorded on the most articles in the collection, including journalists and press agencies. This ranking reflects collected and catalogued material, not total career output. Click a bar to open the corresponding index record where available.',
+            'bylines.active':         'Recorded here: {first}–{last}',
             'bylines.papers':         'Newspapers',
             'bylines.topics':         'Frequent subjects'
         });
@@ -52,12 +52,12 @@
             'bylines.card_unique':    'Signatures distinctes',
             'bylines.card_prolific':  'Signatures avec 10 articles ou plus',
             'bylines.trend_title':    'Articles signés au fil du temps',
-            'bylines.trend_desc':     'Part des articles de chaque ann\u00e9e portant une signature, journalistes comme agences de presse. Le reste a paru non sign\u00e9.',
+            'bylines.trend_desc':     'Part des articles collectés pour chaque année dont la notice indique une signature, c’est-à-dire le nom du journaliste ou de l’agence crédité du texte. Les autres articles n’ont pas de signature enregistrée ; ils peuvent être parus sans signature ou avoir une notice incomplète.',
             'bylines.trend_axis':     'Part signée (%)',
             'bylines.trend_tip':      '{signed} articles signés sur {total}',
             'bylines.top_title':      'Signatures les plus prolifiques',
-            'bylines.top_desc':       'Les {n} signatures les plus fr\u00e9quentes du corpus, journalistes comme agences de presse. Cliquez sur une barre pour ouvrir la notice d\u2019autorit\u00e9 quand elle existe.',
-            'bylines.active':         'En activité {first}–{last}',
+            'bylines.top_desc':       'Les {n} signatures enregistrées sur le plus grand nombre d’articles de la collection, journalistes et agences de presse compris. Ce classement reflète les documents collectés et catalogués, sans mesurer toute la production d’une carrière. Cliquez sur une barre pour ouvrir la notice d’index correspondante, lorsqu’elle existe.',
+            'bylines.active':         'Présence dans la collection : {first}–{last}',
             'bylines.papers':         'Journaux',
             'bylines.topics':         'Sujets fréquents'
         });

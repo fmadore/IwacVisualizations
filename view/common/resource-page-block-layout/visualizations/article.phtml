@@ -150,7 +150,7 @@ if ($hasSentiment) {
         <h4><?= $translate('AI sentiment') ?></h4>
         <p class="iwac-vis-panel-desc">
             <?= $escapeHtml(sprintf(
-                $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced independently by %s. Read directly from this item’s record.'),
+                $translate('AI assessments produced independently by %s. Polarity describes the tone towards Islam and Muslims; centrality describes their prominence in the article; subjectivity describes factual or opinion-based language. These ratings need checking against the text. Subjectivity is particularly uncertain, and agreement between models does not establish accuracy.'),
                 implode(', ', $ratedNames)
             )) ?>
         </p>

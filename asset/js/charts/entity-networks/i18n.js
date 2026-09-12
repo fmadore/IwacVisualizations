@@ -18,9 +18,9 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
-        'networks_description':      'Entities that appear in the same items, placed closer together the more often they are mentioned together. Click a node to see its connections.',
-        'network_select_hint':       'Click a node to see its strongest co-occurrences; click the background to clear.',
-        'network_links_note':        'A link joins two entities that appear in the same item at least {count} times.',
+        'networks_description':      'Each point represents a person, organisation, place, subject or event in the catalogue. Lines join entries recorded on the same items. The layout helps reveal groups of connections, but distances are approximate. Shared records do not by themselves establish a social relationship. Click a point to inspect its connections.',
+        'network_select_hint':       'Click a point to see the entries sharing the most items with it; click the background to clear the selection.',
+        'network_links_note':        'A line joins two entries recorded together on at least {count} items.',
         'cooccurrence_title':        'Co-occur in {count} items',
         'more_links_count':          '+{count} more links',
         'links_count':               '{count} links',
@@ -29,10 +29,10 @@
     ns.addTranslations('fr', {
         'Entities': 'Entit\u00e9s',
         'Co-occurrence network':     'R\u00e9seau de cooccurrences',
-        'networks_description':      'Les entit\u00e9s qui apparaissent dans les m\u00eames \u00e9l\u00e9ments, d\u2019autant plus proches qu\u2019elles sont souvent mentionn\u00e9es ensemble. Cliquez sur un n\u0153ud pour voir ses liens.',
+        'networks_description':      'Chaque point représente une personne, une organisation, un lieu, un sujet ou un événement du catalogue. Les lignes relient les entrées associées aux mêmes documents. La disposition aide à repérer des groupes de liens, mais les distances sont approximatives. Des notices communes ne suffisent pas à établir une relation sociale. Cliquez sur un point pour examiner ses liens.',
         'About this network':        '\u00c0 propos de ce r\u00e9seau',
-        'network_select_hint':       'Cliquez sur un n\u0153ud pour voir ses cooccurrences les plus fortes\u202f; cliquez sur le fond pour effacer.',
-        'network_links_note':        'Un lien relie deux entit\u00e9s qui apparaissent dans le m\u00eame \u00e9l\u00e9ment au moins {count} fois.',
+        'network_select_hint':       'Cliquez sur un point pour voir les entrées partageant le plus de documents avec lui ; cliquez sur le fond pour effacer la sélection.',
+        'network_links_note':        'Une ligne relie deux entrées associées à au moins {count} documents communs.',
         'Strongest co-occurrences':  'Cooccurrences les plus fortes',
         'cooccurrence_title':        'Cooccurrence dans {count} \u00e9l\u00e9ments',
         'more_links_count':          '+{count} liens suppl\u00e9mentaires',

@@ -99,6 +99,7 @@
     function buildOverlapPanel(titleKey, listA, listB, dataA, dataB, ctx) {
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t(titleKey)));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('compare.overlap_desc')));
         var grid = P.el('div', 'iwac-vis-compare-overlap');
         panel.appendChild(grid);
 

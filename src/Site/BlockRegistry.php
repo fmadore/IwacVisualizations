@@ -49,7 +49,7 @@ final class BlockRegistry
             'invokable'   => 'audiovisualOverview',
             'class'       => BlockLayout\AudiovisualOverview::class,
             'label'       => 'Audiovisual Overview', // @translate
-            'description' => 'Corpus view of the audiovisual material: sources and countries ranked by recordings or by runtime, how long the recordings run, publication over time, and what the records carry. No configuration needed.', // @translate
+            'description' => 'Compare collected recordings by source, country, duration and publication year, and see which catalogue fields are available.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -70,14 +70,14 @@ final class BlockRegistry
             'invokable'   => 'collectionOverview',
             'class'       => BlockLayout\CollectionOverview::class,
             'label'       => 'Collection Overview', // @translate
-            'description' => 'Aggregate visualisations across the entire collection. No configuration needed.', // @translate
+            'description' => 'Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries.', // @translate
             'embeddable'  => true,
         ],
         'compare-newspapers' => [
             'invokable'   => 'compareNewspapers',
             'class'       => BlockLayout\CompareNewspapers::class,
             'label'       => 'Compare Newspapers', // @translate
-            'description' => 'Side-by-side comparison of two newspaper corpora (articles or Islamic publications), scoped either to a whole country or a single newspaper. No configuration needed.', // @translate
+            'description' => 'Compare two selections of newspaper articles or Islamic periodical issues by publication year, catalogue tags, vocabulary and available AI ratings. Choose a country or a single publication for each selection.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -102,7 +102,7 @@ final class BlockRegistry
             'invokable'   => 'distinctiveVocabulary',
             'class'       => BlockLayout\DistinctiveVocabulary::class,
             'label'       => 'Distinctive Vocabulary', // @translate
-            'description' => 'What sets each part of the press apart, in two views: the vocabulary a country or a decade uses more than the rest of the collection does (log-likelihood keyness with a false-discovery correction, ranked by effect size), and the years in which coverage of a subject suddenly spiked above its own base rate (Kleinberg burst detection). Complements Term Trends, which shows how often a word is used rather than where it stands out. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
+            'description' => 'Find words used at higher relative rates in one country or decade than in the remaining newspaper articles. A second view identifies periods of increased use of subject tags. Statistical thresholds are explained alongside the charts.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -122,7 +122,7 @@ final class BlockRegistry
             'invokable'   => 'entityNetworks',
             'class'       => BlockLayout\EntityNetworks::class,
             'label'       => 'Entity Networks', // @translate
-            'description' => 'Co-occurrence networks across the collection: an entity graph linking persons, organisations, events, subjects and places that appear in the same items (layout precomputed), and a geographic network of co-mentioned places drawn over the basemap. No configuration needed.', // @translate
+            'description' => 'Explore links between people, organisations, places, subjects and events recorded on the same items. Shared records indicate catalogue associations, which require interpretation through the sources.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -141,7 +141,7 @@ final class BlockRegistry
             'invokable'   => 'indexOverview',
             'class'       => BlockLayout\IndexOverview::class,
             'label'       => 'Index Overview', // @translate
-            'description' => 'Explore authority entities (persons, places, organisations, events, topics) and Dublin Core Subject + Spatial Coverage prevalence over time. No configuration needed.', // @translate
+            'description' => 'Explore the catalogue index and the use of subject and place tags over time. Counts describe recorded associations rather than word occurrences in the original texts.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -163,7 +163,7 @@ final class BlockRegistry
             'invokable'   => 'laicite',
             'class'       => BlockLayout\Laicite::class,
             'label'       => 'Laïcité', // @translate
-            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, archival documents and scholarship. Eleven views: where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that prompted them, the archival dossier, a searchable concordance of the actual sentences, collocates, the press-versus-periodicals comparison, the actors and institutions, the arenas being contested, the per-model AI framing, a map of the places named, and the bibliography. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
+            'description' => 'Explore a dossier selected through the Laïcité subject tag and a vocabulary of laïcité and secularism. Compare source types, terms in context, associated entries and AI ratings. Searches include titles, available full text and descriptive fields; readable extracts follow each field’s public status.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -207,7 +207,7 @@ final class BlockRegistry
             'invokable'   => 'lexicalMetrics',
             'class'       => BlockLayout\LexicalMetrics::class,
             'label'       => 'Press Language', // @translate
-            'description' => 'Press language metrics of the newspaper articles: readability (Flesch), lexical richness (MATTR) and article length over time, with newspapers ranked by readability and richness. Data is precomputed from the OCR text of the IWAC articles subset. No configuration needed.', // @translate
+            'description' => 'Compare estimated reading ease, vocabulary diversity and article length over time and by newspaper. Measures use extracted text; the charts explain the scores and their limitations.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -224,14 +224,14 @@ final class BlockRegistry
             'invokable'   => 'onThisDay',
             'class'       => BlockLayout\OnThisDay::class,
             'label'       => 'On This Day', // @translate
-            'description' => 'Items published on today\'s date across the collection\'s decades: newspaper articles and periodical issues with full publication dates, with page scans and a line of the text where they exist. Readers can read the day in the Gregorian or the Hijri calendar (each picks its own documents), switch between three layouts, and unfold the full list for the day. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset.', // @translate
+            'description' => 'Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade and clipping layouts. Only records with suitable dates can appear.', // @translate
             'embeddable'  => true,
         ],
         'org-cooccurrence' => [
             'invokable'   => 'orgCooccurrence',
             'class'       => BlockLayout\OrgCooccurrence::class,
             'label'       => 'Islamic Organisations Co-occurrence', // @translate
-            'description' => 'A heatmap of the ideas that cluster around each major West African Islamic organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen organisation, which pairs of words keep turning up together near its name. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
+            'description' => 'Compare pairs of words found near the names of selected Islamic organisations in newspaper articles. Darker cells indicate pairs found together in more articles.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -249,7 +249,7 @@ final class BlockRegistry
             'invokable'   => 'periodicalsLandscape',
             'class'       => BlockLayout\PeriodicalsLandscape::class,
             'label'       => 'Periodicals Semantic Landscape', // @translate
-            'description' => 'Zoomable map of the Islamic-periodical corpus: every issue placed by the semantic similarity of its table of contents (UMAP over AI embeddings), colour-faceted by country or decade. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Explore Islamic periodical issues arranged by an AI comparison of their tables of contents. Nearby points suggest issues to compare; positions and distances are approximate.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -269,7 +269,7 @@ final class BlockRegistry
             'invokable'   => 'periodicalsOverview',
             'class'       => BlockLayout\PeriodicalsOverview::class,
             'label'       => 'Periodicals Overview', // @translate
-            'description' => 'Islamic periodicals overview: publication runs, issues per year by country, languages, countries, and top subjects. Data is precomputed from the IWAC publications subset. No configuration needed.', // @translate
+            'description' => 'Explore Islamic periodical holdings by year, publication, country, language and catalogue subject, with vocabulary and statistically modelled themes. Gaps in the collection do not establish gaps in publication.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -288,7 +288,7 @@ final class BlockRegistry
             'invokable'   => 'pressBylines',
             'class'       => BlockLayout\PressBylines::class,
             'label'       => 'Press Bylines', // @translate
-            'description' => 'Who signed the press: byline coverage over time and the most prolific journalists and press agencies, with active spans and frequent subjects, linked to their authority records where they exist. Data is precomputed from the IWAC articles subset. No configuration needed.', // @translate
+            'description' => 'Explore recorded journalists and press agencies, the share of articles with a byline, and their representation over time. A missing byline may reflect incomplete cataloguing.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -306,7 +306,7 @@ final class BlockRegistry
             'invokable'   => 'pressReprints',
             'class'       => BlockLayout\PressReprints::class,
             'label'       => 'Press Reprints', // @translate
-            'description' => 'Pairs of near-identical articles printed by different newspapers: syndicated wire copy (PANA, AFP), shared communiqués and reprints, found by comparing how closely articles are worded. Shows which outlets circulated the same copy, with the full pair list. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
+            'description' => 'Find articles from different newspapers with highly similar AI text representations. These candidate pairs may indicate shared dispatches, communiqués or reprints; read both articles before concluding that copying occurred.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -325,7 +325,7 @@ final class BlockRegistry
             'invokable'   => 'referencesOverview',
             'class'       => BlockLayout\ReferencesOverview::class,
             'label'       => 'References Overview', // @translate
-            'description' => 'Bibliographic references overview: timeline, types, languages, countries, top authors and subjects, country-by-type treemap, and co-authorship network. Data is precomputed from the IWAC references subset. No configuration needed.', // @translate
+            'description' => 'Explore the bibliography by publication date, type, language, associated country, author and subject. Additional views show authorship links, available full text, modelled themes and text similarity.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -345,7 +345,7 @@ final class BlockRegistry
             'invokable'   => 'scaryTerms',
             'class'       => BlockLayout\ScaryTerms::class,
             'label'       => 'Scary Terms', // @translate
-            'description' => 'Terms related to radicalism and extremism across the IWAC collection in seven views: an animated bar-chart race, time trends with historical-event markers, by country, global, a co-occurrence matrix, a word cloud of the surrounding vocabulary, and a map of the places mentioned. No configuration needed.', // @translate
+            'description' => 'Explore selected vocabulary associated with radicalism and extremism in newspaper articles: occurrences, trends, countries, term pairs, surrounding vocabulary and tagged places. Counts describe language use, not the extremism of the people discussed.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -376,7 +376,7 @@ final class BlockRegistry
             'invokable'   => 'semanticLandscape',
             'class'       => BlockLayout\SemanticLandscape::class,
             'label'       => 'Semantic Landscape', // @translate
-            'description' => 'Zoomable map of the whole press corpus: every article placed by the semantic similarity of its full text (UMAP over AI embeddings), colour-faceted by country, decade or topic. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Explore newspaper articles arranged by an AI comparison of their full texts, with colours for country, decade or modelled topic. Nearby points suggest texts to compare; distances are approximate.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -396,7 +396,7 @@ final class BlockRegistry
             'invokable'   => 'sentimentAtlas',
             'class'       => BlockLayout\SentimentAtlas::class,
             'label'       => 'Sentiment Atlas', // @translate
-            'description' => 'AI sentiment atlas of the newspaper articles: polarity, centrality of Islam and subjectivity over time and by country as rated by several language models, plus cross-model agreement. All figures are AI-generated assessments precomputed from the IWAC articles subset. No configuration needed.', // @translate
+            'description' => 'Compare AI assessments of tone towards Islam and Muslims, their prominence in articles, and subjectivity. Views show changes over time, differences between sources and model agreement. Ratings require checking against the texts, especially for subjectivity.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -414,7 +414,7 @@ final class BlockRegistry
             'invokable'   => 'spatialExploration',
             'class'       => BlockLayout\SpatialExploration::class,
             'label'       => 'Spatial Exploration', // @translate
-            'description' => 'Interactive world map of every place mentioned in the collection, with country focus and an entity picker (persons, organisations, events, subjects, places) that maps the locations related to the selected entity. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Map places linked through catalogue records, with filters for countries and associated people, organisations, subjects or events. Only places with coordinates appear; the map does not include every location mentioned in the texts.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -432,7 +432,7 @@ final class BlockRegistry
             'invokable'   => 'termTrends',
             'class'       => BlockLayout\TermTrends::class,
             'label'       => 'Term Trends', // @translate
-            'description' => 'The IWAC "Ngram viewer": chart the per-year share of articles whose full text contains any frequent term. Search the vocabulary, overlay up to eight terms, and switch between shares and absolute counts. Data is precomputed from the articles subset. No configuration needed.', // @translate
+            'description' => 'Compare the number or share of dated newspaper articles containing selected words. Search the frequent-word vocabulary and compare up to eight terms. Each word counts once per article, and only articles with usable processed text enter the calculation.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
@@ -450,7 +450,7 @@ final class BlockRegistry
             'invokable'   => 'topicExplorer',
             'class'       => BlockLayout\TopicExplorer::class,
             'label'       => 'Topic Explorer', // @translate
-            'description' => 'LDA-30 topic overview of the IWAC articles subset, with a treemap of all topics and a per-topic drill-down (calendar heatmap, country / newspaper distributions, most-representative articles). No configuration needed.', // @translate
+            'description' => 'Explore 30 themes identified in newspaper articles by a statistical topic model. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [

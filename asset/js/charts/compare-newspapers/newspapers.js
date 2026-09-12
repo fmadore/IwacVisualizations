@@ -26,6 +26,7 @@
 
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('Newspapers within each corpus')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('compare.newspapers_desc')));
         var wrap = P.el('div', 'iwac-vis-compare-wordclouds');
         panel.appendChild(wrap);
 

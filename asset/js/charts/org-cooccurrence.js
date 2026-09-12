@@ -30,7 +30,7 @@
         ns.addTranslations('en', {
             'Loading organisation co-occurrences': 'Loading organisation co-occurrences',
             'orgcooc.title':        'Islamic organisations and the words around them',
-            'orgcooc.description':  'Which ideas gather around an organisation in the West African press. For the organisation you choose, the panel collects the words that appear near its name, within about {window} words, then counts how often each pair of those words turns up together in the same article. The darker the cell, the more articles the pair recurs in, marking a thread that runs through how the press writes about the group. The diagonal is blank, since pairing a word with itself says nothing.',
+            'orgcooc.description':  'Pairs of words found near the selected organisation’s name in newspaper articles. The search collects words within about {window} words on either side of each name match, then counts each pair once per article. Darker cells indicate more shared articles; the diagonal is left blank. The words may occur around different mentions within an article, so use the matrix to select texts for closer reading.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Sort',
             'orgcooc.sort_freq':    'Frequency',
@@ -39,7 +39,7 @@
             'orgcooc.card_vocab':    'Distinct context words',
             'orgcooc.card_maxpair':  'Strongest pair (articles)',
             'orgcooc.card_span':     'Coverage span',
-            'orgcooc.matrix_title':  'Co-occurrence matrix: {org}',
+            'orgcooc.matrix_title':  'Words appearing together near {org}',
             'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} shared articles',
             'orgcooc.term_total':    '{term}: in {count} matching articles',
             'orgcooc.view_record':   'View authority record'
@@ -47,7 +47,7 @@
         ns.addTranslations('fr', {
             'Loading organisation co-occurrences': 'Chargement des co-occurrences',
             'orgcooc.title':        'Les organisations islamiques et les mots qui les entourent',
-            'orgcooc.description':  'Quelles idées se regroupent autour d’une organisation dans la presse ouest-africaine. Pour l’organisation choisie, le panneau rassemble les mots qui apparaissent près de son nom, à environ {window} mots, puis compte combien de fois chaque paire de ces mots se retrouve ensemble dans un même article. Plus la cellule est sombre, plus la paire revient dans un grand nombre d’articles, signe d’un fil qui traverse la manière dont la presse traite le groupe. La diagonale est vide, car associer un mot à lui-même n’apporte rien.',
+            'orgcooc.description':  'Paires de mots trouvés près du nom de l’organisation sélectionnée dans les articles de presse. La recherche recueille les mots situés à environ {window} mots de part et d’autre de chaque nom repéré, puis compte chaque paire une fois par article. Les cellules foncées indiquent davantage d’articles communs ; la diagonale reste vide. Les mots peuvent entourer des mentions différentes dans un même article : la matrice aide donc à choisir des textes à examiner.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Tri',
             'orgcooc.sort_freq':    'Fréquence',
@@ -56,7 +56,7 @@
             'orgcooc.card_vocab':    'Mots de contexte distincts',
             'orgcooc.card_maxpair':  'Paire la plus forte (articles)',
             'orgcooc.card_span':     'Période couverte',
-            'orgcooc.matrix_title':  'Matrice de co-occurrence : {org}',
+            'orgcooc.matrix_title':  'Mots apparaissant ensemble près de {org}',
             'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} articles partagés',
             'orgcooc.term_total':    '{term} : dans {count} articles correspondants',
             'orgcooc.view_record':   'Voir la notice d’autorité'

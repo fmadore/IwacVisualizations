@@ -242,8 +242,12 @@
                 P.t('laicite.frame_share', { percent: L.pct(items, totalMembers) })));
 
             var spec = (metadata.frames || {})[frame] || {};
-            var note = (ns.locale === 'fr' ? spec.note_fr : spec.note_en)
-                || spec.note_en;
+            // Revised notes also apply to previously generated data bundles.
+            var noteKey = 'laicite.frame_note.' + frame;
+            var note = P.t(noteKey);
+            if (note === noteKey) {
+                note = (ns.locale === 'fr' ? spec.note_fr : spec.note_en) || spec.note_en;
+            }
             if (note) {
                 card.appendChild(P.el('p', 'iwac-vis-laicite-frame-note', note));
             }

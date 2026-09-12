@@ -19,6 +19,7 @@
     function buildTopSubjects(dataA, dataB) {
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('Top subjects (combined top 15)')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('compare.subjects_desc')));
         var host = P.el('div', 'iwac-vis-chart');
         panel.appendChild(host);
 

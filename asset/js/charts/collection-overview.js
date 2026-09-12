@@ -69,27 +69,27 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
-        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year, by country'));
-        var typesPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items by type, over time'));
-        var growthPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection growth over time'));
-        var ganttPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Newspaper coverage'));
-        var countryPanel   = P.buildPanel('iwac-vis-panel',                      P.t('Content by country'));
-        var languagePanel  = P.buildPanel('iwac-vis-panel',                      P.t('Languages represented'));
-        var entitiesPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most-cited entities'));
+        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year, by country'), P.t('collection.timeline_desc'));
+        var typesPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items by type, over time'), P.t('collection.types_desc'));
+        var growthPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection growth over time'), P.t('collection.growth_desc'));
+        var ganttPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Newspaper coverage'), P.t('collection.gantt_desc'));
+        var countryPanel   = P.buildPanel('iwac-vis-panel',                      P.t('Content by country'), P.t('collection.country_desc'));
+        var languagePanel  = P.buildPanel('iwac-vis-panel',                      P.t('Languages represented'), P.t('collection.language_desc'));
+        var entitiesPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most-cited entities'), P.t('collection.entities_desc'));
         entitiesPanel.panel.classList.add('iwac-vis-entities-panel');
-        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
+        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'), P.t('collection.breakdown_desc'));
         // Nested treemap (country › type › source) needs more vertical
         // room than the 320px floor so 3 levels of headers stay legible.
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
-        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'));
-        var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'));
+        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'), P.t('collection.wordcloud_desc'));
+        var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'), P.t('collection.map_desc'));
         var sourcesPanel   = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide iwac-vis-sources-map',
             P.t('Source locations'),
             P.t('source_locations_desc')
         );
         var recentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
-                                          P.t('Recent additions'));
+                                          P.t('Recent additions'), P.t('collection.recent_desc'));
 
         [
             timelinePanel, typesPanel, growthPanel, ganttPanel,

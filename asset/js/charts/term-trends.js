@@ -38,7 +38,7 @@
         ns.addTranslations('en', {
             'Loading term trends':   'Loading term trends',
             'ngram.title':           'Term trends',
-            'ngram.description':     'How often a word appears in the digitised press over time: the share of each year’s articles whose text contains the term, or the number of them. The vocabulary is the {n} most frequent dictionary forms, so “terroriste” and “terroristes” count as one term.',
+            'ngram.description':     'Number or share of each year’s articles containing a selected word. Only dated articles with usable processed text enter the calculation, and repeated uses count once per article. Search among the {n} most frequent dictionary forms: “terroriste” and “terroristes” count together. Changes reflect the collected texts and may also be affected by text-recognition errors.',
             'ngram.search':          'Search a term…',
             'ngram.no_matches':      'No matching term',
             'ngram.selected':        'Terms (up to {max})',
@@ -56,7 +56,7 @@
         ns.addTranslations('fr', {
             'Loading term trends':   'Chargement des tendances lexicales',
             'ngram.title':           'Tendances lexicales',
-            'ngram.description':     'Fr\u00e9quence d\u2019un mot dans la presse num\u00e9ris\u00e9e au fil du temps : la part des articles de chaque ann\u00e9e dont le texte contient le terme, ou leur nombre. Le vocabulaire retenu est celui des {n} formes de dictionnaire les plus fr\u00e9quentes, si bien que \u00ab terroriste \u00bb et \u00ab terroristes \u00bb comptent comme un seul terme.',
+            'ngram.description':     'Nombre ou part des articles de chaque année contenant un mot sélectionné. Le calcul porte sur les articles datés dont le texte traité est exploitable ; les répétitions comptent une seule fois par article. La recherche couvre les {n} formes de dictionnaire les plus fréquentes : « terroriste » et « terroristes » sont comptés ensemble. Les variations reflètent les textes collectés et peuvent aussi subir l’effet des erreurs de reconnaissance.',
             'ngram.search':          'Rechercher un terme…',
             'ngram.no_matches':      'Aucun terme correspondant',
             'ngram.selected':        'Termes (jusqu’à {max})',
