@@ -30,6 +30,7 @@
      * @param {Object} state    {trendsCountry, trendsSubset}
      */
     L.resolveTrendsSeries = function (trends, state) {
+        if (trends && trends.research && L.researchSeries) return L.researchSeries(trends.research, state);
         if (!trends || !trends.years || !trends.years.length) return null;
         var series = trends.global;
         if (state.trendsSubset) {
@@ -58,10 +59,10 @@
             seriesNames: resolved.frames,
             series: resolved.series,
             colors: cfg.frameColors,
-            labelFor: function (frame) { return L.frameLabel(metadata, frame); },
-            events: cfg.events,
+            labelFor: function (frame) { return resolved.label || L.frameLabel(metadata, frame); },
+            events: cfg.state.trendsSubset === 'references' ? null : cfg.events,
             showEvents: cfg.state.showEvents,
-            country: cfg.state.trendsSubset ? null : cfg.state.trendsCountry,
+            country: cfg.state.trendsCountry,
             // Every curated marker here is national — national conferences,
             // constitutional moments, the Ouagadougou forum — so the
             // unfiltered view shows all of them rather than none. Filtering
@@ -75,7 +76,7 @@
             // read in full and carry their links.
             numberedEvents: true,
             compact: cfg.compact,
-            valueAxisLabel: P.t('laicite.occurrences'),
+            valueAxisLabel: resolved.label || P.t('laicite.occurrences'),
             focusRange: metadata.focus_range
         });
     };
@@ -83,7 +84,9 @@
     L.trendsTitle = function (state) {
         if (state.trendsSubset) {
             return P.t('laicite.trends_chart_title') + ' — '
-                + L.subsetLabel(state.trendsSubset);
+                + [L.subsetLabel(state.trendsSubset), state.trendsCountry, state.trendsOutlet,
+                    P.t('laicite.research_' + (state.trendsField || 'fulltext')),
+                    P.t('laicite.research_' + (state.trendsPrecision || 'strict'))].filter(Boolean).join(' · ');
         }
         if (state.trendsCountry) {
             return P.t('laicite.trends_country_chart_title',
@@ -101,7 +104,7 @@
     L.buildEventsDetails = function (events, state, siteBase) {
         return P.buildTimelineEventsDetails(
             events,
-            state.trendsSubset ? null : state.trendsCountry,
+            state.trendsCountry,
             {
                 summaryKey: 'Historical events',
                 className: 'iwac-vis-laicite-details',

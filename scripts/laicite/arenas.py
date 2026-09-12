@@ -28,7 +28,7 @@ class ArenasMixin:
         analysis was published, not by the period it analyses.
         """
         scans = self.scan_all()
-        usable = [s for s in scans if s.year and s.subset != "references"]
+        usable = [s for s in scans if s.year and s.said and s.subset != "references"]
         decades = sorted({self._decade(s.year) for s in usable if s.year})
         # Membership frames are excluded: an item is in the dossier BECAUSE
         # it says laïcité, so that panel reads ~95% in every decade — it is
@@ -51,7 +51,7 @@ class ArenasMixin:
         for s in usable:
             i = idx[self._decade(s.year)]
             global_totals[i] += 1
-            touched = [f for f in frames if s.frame_counts.get(f)]
+            touched = [f for f in frames if s.nearby_frame_counts.get(f)]
             for frame in touched:
                 global_counts[frame][i] += 1
             for country in s.countries:
@@ -75,6 +75,9 @@ class ArenasMixin:
             f"{len(keep)} countries")
         return {
             "generated_at": generate_timestamp(),
+            "context_window": 80,
+            "minimum_cell": 5,
+            "excluded_without_anchor": sum(1 for s in scans if s.subset != "references" and not s.said),
             "frames": frames,
             "decades": decades,
             "countries": sorted(keep),
@@ -85,11 +88,9 @@ class ArenasMixin:
             "dropped_countries": dropped,
             "membership_excluded": excluded,
             "scope": (
-                "Press, periodicals and archival documents; scholarship is "
-                "excluded from the decade axis because it is dated by when "
-                "the analysis was published, not by the period it analyses. "
-                "Membership frames are excluded as panels: they are the "
-                "dossier's selection criterion, not something contested "
-                "within it."
+                "Primary sources with a core match, including YouTube. "
+                "Categories must occur within 80 tokens of a core match "
+                "in the same field. Scholarship and unanchored tag-only "
+                "records are excluded. This is lexical context, not argument coding."
             ),
         }

@@ -44,6 +44,7 @@ from laicite.circulation import CirculationMixin
 from laicite.places import PlacesMixin
 from laicite.references import ReferencesMixin
 from laicite.concordance import ConcordanceMixin
+from laicite.research import ResearchMixin
 
 
 class LaiciteGenerator(
@@ -62,8 +63,9 @@ class LaiciteGenerator(
     PlacesMixin,
     ReferencesMixin,
     ConcordanceMixin,
+    ResearchMixin,
 ):
-    """Build the laïcité dossier bundles from four IWAC subsets.
+    """Build the laïcité dossier bundles from five IWAC subsets.
 
     The bases are the fifteen view modules; the order is the order
     ``write_all`` writes them, and none of them override each other's names.
@@ -120,6 +122,9 @@ class LaiciteGenerator(
         self.texts: Dict[Tuple[str, str], Dict[str, str]] = {}
         self.subset_totals: Dict[str, int] = {}
         self.subset_public: Dict[str, int] = {}
+        self.subset_fulltext: Dict[str, int] = {}
+        self.source_records = []
+        self._sentiment_source_rows = []
         self.laity_by_subset: Dict[str, int] = defaultdict(int)
         self.state_by_subset: Dict[str, int] = defaultdict(int)
         #: Sentiment over the WHOLE `articles` corpus, dossier or not. The
@@ -129,6 +134,8 @@ class LaiciteGenerator(
 
     def write_all(self) -> None:
         self.scan_all()
+
+        save_json(self.build_research(), self.output_dir / "laicite-research.json", minify=True)
 
         metadata = self.build_metadata()
         save_json(metadata, self.output_dir / "laicite-metadata.json",

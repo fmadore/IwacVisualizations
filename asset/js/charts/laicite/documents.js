@@ -33,6 +33,10 @@
         panel.appendChild(P.el('h4', null, P.t('laicite.documents_title')));
         panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
             P.t('laicite.documents_desc')));
+        if (bundle && bundle.concentration) {
+            panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
+                P.t('laicite.research_concentration', bundle.concentration)));
+        }
 
         if (!docs.length) {
             panel.appendChild(P.buildEmptyState('laicite.documents_empty'));

@@ -85,6 +85,25 @@
     gap: var(--space-3, 0.75rem);
 }
 
+.iwac-vis-laicite .iwac-vis-select-group {
+    max-width: 100%;
+    min-width: 0;
+}
+
+.iwac-vis-laicite .iwac-vis-select {
+    max-width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 599px) {
+    .iwac-vis-laicite .iwac-vis-select-group {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+}
+
 .iwac-vis-laicite-view-desc {
     margin: 0;
     max-width: var(--measure-base, 52.5rem);
@@ -298,5 +317,4 @@
     margin-top: var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
 }
-
 

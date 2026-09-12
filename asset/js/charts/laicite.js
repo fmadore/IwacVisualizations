@@ -158,10 +158,14 @@
         var state = {
             view: 'overview',
             trendsCountry: null,
-            trendsSubset: null,
+            trendsSubset: 'articles',
+            trendsField: 'fulltext',
+            trendsMetric: 'rate',
+            trendsPrecision: '',
+            trendsOutlet: '',
             trendsAxis: 'years',
             seasonSubset: 'articles',
-            colScope: 'global',
+            colScope: 'by_language',
             colSlice: null,
             showEvents: true,
             kwicSubset: 'articles',
@@ -181,7 +185,8 @@
             metadata: metadata,
             dataBase: ctx.dataBase,
             siteBase: siteBase,
-            state: state
+            state: state,
+            onLoaded: function () { if (controls) controls.sync(); }
         });
 
         // Default the concordance to the first corpus that actually has rows,
@@ -207,14 +212,16 @@
         // step, and only for a country the dossier actually holds: an unknown
         // value would narrow a view to nothing.
         var COUNTRY_KEYS = ['trendsCountry', 'kwicCountry', 'arenaCountry', 'mapCountry'];
+        if (trends && trends.research) {
+            trendsCountries = Array.from(new Set(trends.research.cells.map(function (r) { return r.country; }).filter(Boolean))).sort();
+        }
         var knownCountries = (metadata.countries || []).slice();
 
         var store = P.createStore(state, {
             reduce: function (st, changed) {
                 var extra = {};
                 var has = function (k) { return changed.indexOf(k) !== -1; };
-                if (has('trendsCountry') && st.trendsCountry) extra.trendsSubset = null;
-                if (has('trendsSubset') && st.trendsSubset) extra.trendsCountry = null;
+                if (has('trendsSubset')) extra.trendsOutlet = '';
                 if (has('colScope')) extra.colSlice = null;
                 if (has('kwicSubset')) extra.kwicCountry = '';
                 if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
@@ -249,6 +256,9 @@
                 { key: 'trendsCountry', param: 'country', values: trendsCountries },
                 { key: 'trendsSubset', param: 'subset', values: L.SUBSETS },
                 { key: 'trendsAxis', param: 'axis', values: ['years', 'seasons'] },
+                { key: 'trendsField', param: 'field', values: ['title', 'fulltext', 'union'] },
+                { key: 'trendsMetric', param: 'metric', values: ['rate', 'matches', 'hits'] },
+                { key: 'trendsPrecision', param: 'precision', values: ['', 'broad_'] },
                 { key: 'kwicSubset', param: 'corpus', values: available },
                 { key: 'kwicFrame', param: 'frame', values: frames },
                 { key: 'kwicQuery', param: 'q' }
@@ -314,6 +324,7 @@
             metadata: metadata,
             countries: metadata.countries || [],
             trendsCountries: trendsCountries,
+            research: trends && trends.research,
             trailing: url && P.buildCopyLinkButton
                 ? P.buildCopyLinkButton({ href: url.href })
                 : null,
@@ -379,6 +390,19 @@
                         items: P.formatNumber(cov.items || 0)
                     })));
                 detailsHost.appendChild(note);
+                if (L.researchTable && cov.gregorian_exposure) {
+                    var seasonEvidence = P.el('details');
+                    seasonEvidence.appendChild(P.el('summary', null, P.t('laicite.research_inspect')));
+                    ['gregorian', 'hijri'].forEach(function (calendar) {
+                        seasonEvidence.appendChild(P.el('h5', null, P.t('laicite.' + calendar)));
+                        var names = P.t('laicite.' + (calendar === 'gregorian' ? 'months' : 'hijri_months')).split(',');
+                        seasonEvidence.appendChild(L.researchTable([P.t('laicite.' + calendar),
+                            P.t('laicite.research_selected'), P.t('laicite.research_eligible')], names.map(function (name, i) {
+                            return [name, cov[calendar][i], cov[calendar + '_exposure'][i]];
+                        })));
+                    });
+                    detailsHost.appendChild(seasonEvidence);
+                }
                 return;
             }
 
@@ -399,7 +423,8 @@
                 compact: P.isCompact(chartEl)
             });
             currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
-            if (events) {
+            if (L.buildTrendEvidence) detailsHost.appendChild(L.buildTrendEvidence(trends, state));
+            if (events && state.trendsSubset !== 'references') {
                 var details = L.buildEventsDetails(events, state, siteBase);
                 if (details) detailsHost.appendChild(details);
             }
@@ -454,6 +479,8 @@
                     store.patch({ view: 'concordance' });
                 }));
                 viewHost.appendChild(L.buildSubsetTable(metadata));
+                if (L.buildResearch) viewHost.appendChild(L.buildResearch(trends && trends.research));
+                viewHost.appendChild(L.buildVideos(metadata, siteBase));
                 viewHost.appendChild(L.buildRightsNote(metadata));
                 viewHost.appendChild(L.buildFrameLegend(metadata, frameColors));
             } else if (state.view === 'trends') {
@@ -468,6 +495,7 @@
                     }, 0);
                 }
             } else if (state.view === 'documents') {
+                viewHost.appendChild(L.buildSourceComparisons(siteBase));
                 viewHost.appendChild(L.buildDocumentDossier(
                     bundle.documents, metadata, {
                         siteBase: siteBase,

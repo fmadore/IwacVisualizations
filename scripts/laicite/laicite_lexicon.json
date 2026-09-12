@@ -1,5 +1,5 @@
 {
-  "_comment": "Curated lexicon for generate_laicite.py (GitHub issue #14). Matching is accent- and case-insensitive, whole-word, over RAW text (title + OCR + descriptionAI/abstract/tableOfContents) — NOT over lemma_text, because the concordance needs character offsets into readable text and the `documents` subset carries no lemma columns at all. Surface forms are written here WITH their diacritics for curatorial readability; the generator folds both sides before matching, so 'laïcité' also catches the frequent OCR spelling 'laicite'. Multi-word forms are matched with flexible whitespace and an optional elided article, so 'séparation de l'État et' also catches 'separation de l Etat et'. Edit this file to revise the research instrument — no code change needed.",
+  "_comment": "Curated lexicon for generate_laicite.py. Match only titles and original full text (OCR), never summaries, abstracts or tables of contents. Matching folds case, accents and apostrophe variants while preserving concordance offsets. Categories are independent and may overlap. Edit this file to revise the research instrument.",
   "_membership": "MEMBERSHIP RULE (load-bearing, do not widen): an item joins the dossier when it carries the Omeka subject tag 'Laïcité' OR when its text matches a frame listed in `membership_frames`. Every OTHER frame is an annotation computed WITHIN members — never a membership criterion. Widening membership to, say, `ecole` would pull in every education article ever written and the arenas view would silently measure schooling coverage instead of the laïcité contest over schooling.",
   "membership_frames": [
     "laicite",
@@ -42,7 +42,7 @@
     "secularisme": {
       "label_en": "Secularism / secularisation",
       "label_fr": "Sécularisme / sécularisation",
-      "note": "Deliberately kept even though it is nearly empty: the sociological register's ABSENCE from the West African press is a publishable finding, and the panel says so rather than hiding the frame.",
+      "note": "French and English secularism vocabulary. Low observed counts cannot establish the absence of a concept; ambiguous senses require positive context.",
       "forms": [
         "sécularisme",
         "sécularisation",
@@ -51,8 +51,12 @@
         "séculier",
         "séculière",
         "séculiers",
-        "séculières"
+        "séculières",
+        "secularism",
+        "secularization",
+        "secularisation"
       ],
+      "ambiguous": ["séculier", "séculière", "séculiers", "séculières"],
       "note_en": "Vocabulary of secularism and secularisation. Low counts describe the selected terms and available fields, not the absence of these concepts from public debate.",
       "note_fr": "Vocabulaire du sécularisme et de la sécularisation. Les faibles nombres décrivent les termes sélectionnés et les champs disponibles, sans établir l’absence de ces concepts dans le débat public."
     },
@@ -168,10 +172,17 @@
         "statut personnel",
         "polygamie",
         "état civil",
-        "succession",
         "héritage",
-        "divorce"
-      ]
+        "divorce",
+        "droits de succession",
+        "droit de succession",
+        "succession patrimoniale",
+        "droit successoral",
+        "droits successoraux",
+        "partage de la succession"
+      ],
+      "note_en": "Family-law vocabulary. Succession is matched only in explicit legal phrases; a bare succession can refer to political office or unrelated material.",
+      "note_fr": "Vocabulaire du droit de la famille. La succession est recherchée dans des expressions juridiques explicites ; le mot isolé peut désigner une succession politique ou un contenu sans rapport."
     },
     "etat-rites": {
       "label_en": "State & rites",

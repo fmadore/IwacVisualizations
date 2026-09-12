@@ -22,6 +22,37 @@
     var P = ns.panels;
     var L = ns.laicite = ns.laicite || {};
 
+    /** Videos without transcripts remain inspectable, even without KWIC rows. */
+    L.buildVideos = function (metadata, siteBase) {
+        var host = P.el('div', 'iwac-vis-panel');
+        var coverage = (metadata.subsets || {}).audiovisual;
+        if (!coverage) { host.hidden = true; return host; }
+        host.appendChild(P.el('h4', null, P.t('laicite.subset_audiovisual')));
+        host.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.video_coverage', {
+            total: P.formatNumber(coverage.corpus_size || 0),
+            transcribed: P.formatNumber(coverage.corpus_with_fulltext || 0),
+            members: P.formatNumber(coverage.members || 0),
+            matchedTranscribed: P.formatNumber(coverage.members_with_fulltext || 0)
+        })));
+        host.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.video_note')));
+        if (!(metadata.video_items || []).length) { return host; }
+        var details = P.el('details');
+        details.appendChild(P.el('summary', null, P.t('laicite.video_browse')));
+        var list = P.el('ul');
+        (metadata.video_items || []).forEach(function (video) {
+            var row = P.el('li');
+            var link = P.el('a', null, video.title);
+            link.href = siteBase + '/item/' + encodeURIComponent(video.o_id);
+            row.appendChild(link);
+            row.appendChild(P.el('span', null, ' — ' + P.t(video.has_transcript
+                ? 'laicite.video_transcript' : 'laicite.video_title_only')));
+            list.appendChild(row);
+        });
+        details.appendChild(list);
+        host.appendChild(details);
+        return host;
+    };
+
     /**
      * The tag-vs-text Venn, as three proportional bands rather than circles:
      * a real Venn with these ratios is unreadable, and the bands are also

@@ -248,6 +248,13 @@
         var months = P.t('laicite.months').split(',');
         var hijri = P.t('laicite.hijri_months').split(',');
         void metadata;
+        var rates = function (calendar) {
+            var exposure = data[calendar + '_exposure'];
+            return (data[calendar] || []).map(function (n, i) {
+                if (!exposure) return n;
+                return exposure[i] >= 5 ? Math.round(10000 * n / exposure[i]) / 100 : null;
+            });
+        };
 
         var R = ns.responsive;
         var base = {
@@ -264,21 +271,21 @@
                   axisLabel: { interval: 0, rotate: 40 } }
             ],
             yAxis: [
-                { type: 'value', gridIndex: 0, name: P.t('laicite.items') },
-                { type: 'value', gridIndex: 1, name: P.t('laicite.items') }
+                { type: 'value', gridIndex: 0, name: P.t('laicite.research_dossier_rate') },
+                { type: 'value', gridIndex: 1, name: P.t('laicite.research_dossier_rate') }
             ],
             series: [
                 {
                     name: P.t('laicite.gregorian'),
                     type: 'bar',
-                    data: data.gregorian || [],
+                    data: rates('gregorian'),
                     xAxisIndex: 0, yAxisIndex: 0,
                     itemStyle: { color: palette[0] }
                 },
                 {
                     name: P.t('laicite.hijri'),
                     type: 'bar',
-                    data: data.hijri || [],
+                    data: rates('hijri'),
                     xAxisIndex: 1, yAxisIndex: 1,
                     itemStyle: { color: palette[1] }
                 }

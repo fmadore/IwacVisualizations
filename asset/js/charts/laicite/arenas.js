@@ -157,17 +157,15 @@
         // Shares, computed once so the shared axis maximum can be read off
         // the same numbers the series carry.
         var shares = {};
-        var peak = 0;
         frames.forEach(function (frame) {
             shares[frame] = decades.map(function (_, i) {
                 var total = picked.totals[i] || 0;
-                if (!total) return null;
+                if (total < 5) return null;
                 var pct = ((picked.counts[frame] || [])[i] || 0) / total * 100;
-                if (pct > peak) peak = pct;
                 return Math.round(pct * 10) / 10;
             });
         });
-        var axisMax = Math.min(100, Math.max(10, Math.ceil(peak / 10) * 10));
+        var axisMax = 100;
 
         // Horizontal in percent, vertical in pixels. ECharts takes a number
         // (px) or a percentage string per property but has no calc(), so the
@@ -246,7 +244,8 @@
                     return P.escapeHtml(p.seriesName) + '<br>'
                         + P.escapeHtml(String(p.name)) + ': <strong>'
                         + (p.value == null ? '—' : p.value + '%')
-                        + '</strong>';
+                        + '</strong> (' + ((picked.counts[frames[p.seriesIndex]] || [])[p.dataIndex] || 0)
+                        + '/' + (picked.totals[p.dataIndex] || 0) + ')';
                 }
             },
             animationDuration: 400

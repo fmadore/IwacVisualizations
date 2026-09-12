@@ -78,21 +78,44 @@
         function ensureSkeleton() {
             if (row) return;
             row = P.el('div', 'iwac-vis-laicite-controls-row');
+            var groups = {
+                understand: ['overview', 'trends', 'corpora'],
+                read: ['documents', 'concordance', 'references'],
+                compare: ['collocates', 'actors', 'arenas', 'sentiment', 'map', 'semantic', 'circulation', 'bylines']
+            };
+            function groupFor(view) {
+                return Object.keys(groups).filter(function (k) { return groups[k].indexOf(view) !== -1; })[0] || 'understand';
+            }
+            function viewOptions(view) {
+                return VIEWS.filter(function (v) { return groups[groupFor(view)].indexOf(v.key) !== -1; })
+                    .map(function (v) { return { value: v.key, label: P.t(v.labelKey) }; });
+            }
             toggle = P.buildSegmented({
                 name: 'laicite-view',
                 ariaLabel: P.t('laicite.title'),
-                options: VIEWS.map(function (v) {
-                    return { key: v.key, label: P.t(v.labelKey) };
+                options: Object.keys(groups).map(function (key) {
+                    return { key: key, label: P.t('laicite.research_' + key) };
                 }),
-                active: state.view,
+                active: groupFor(state.view),
                 classes: {
                     root: 'iwac-vis-chip-row iwac-vis-laicite-views',
                     btn: 'iwac-vis-laicite-view-btn',
                     active: 'is-active'
                 },
-                onChange: function (key) { store.patch({ view: key }); }
+                onChange: function (key) { store.patch({ view: groups[key][0] }); }
             });
             row.appendChild(toggle.root);
+            var views = P.buildSelectControl({
+                name: 'laicite-view', idPrefix: 'laicite-view', label: P.t('laicite.title'),
+                options: viewOptions(state.view), current: state.view,
+                onChange: function (value) { store.patch({ view: value }); }
+            });
+            row.appendChild(views);
+            var setGroup = toggle.set;
+            toggle.set = function (view) {
+                setGroup(groupFor(view));
+                views.setOptions(viewOptions(view), view);
+            };
             slot = P.el('div', 'iwac-vis-controls-slot');
             row.appendChild(slot);
             if (ctx.trailing) row.appendChild(ctx.trailing);
@@ -241,14 +264,37 @@
 
             live.trendsSubset = select('trendsSubset', {
                 label: P.t('laicite.scope_subset'),
-                options: [{ value: '', label: P.t('laicite.filter_all') }]
-                    .concat(L.SUBSETS.map(function (s) {
+                options: L.SUBSETS.map(function (s) {
                         return { value: s, label: L.subsetLabel(s) };
-                    })),
+                    }),
                 idPrefix: 'laicite-trends-subset',
                 nullable: true
             });
             slot.appendChild(live.trendsSubset);
+
+            [
+                ['trendsField', 'evidence_field', ['fulltext', 'title', 'union']],
+                ['trendsMetric', 'measure', ['rate', 'matches', 'hits']],
+                ['trendsPrecision', 'matching', ['', 'broad_']]
+            ].forEach(function (spec) {
+                live[spec[0]] = select(spec[0], {
+                    label: P.t('laicite.' + spec[1]),
+                    options: spec[2].map(function (k) {
+                        return { value: k, label: P.t('laicite.research_' + (k || 'strict')) };
+                    }), idPrefix: 'laicite-' + spec[0]
+                });
+                slot.appendChild(live[spec[0]]);
+            });
+            live.trendsOutlet = select('trendsOutlet', {
+                label: P.t('laicite.research_outlet'),
+                options: [{ value: '', label: P.t('laicite.filter_all') }].concat(
+                    Array.from(new Set(((ctx.research || {}).cells || []).filter(function (r) {
+                        return r.subset === state.trendsSubset && r.outlet;
+                    }).map(function (r) { return r.outlet; }))).sort().map(function (v) {
+                        return { value: v, label: v };
+                    })), idPrefix: 'laicite-trends-outlet'
+            });
+            slot.appendChild(live.trendsOutlet);
 
             var evtWrap = P.el('label', 'iwac-vis-laicite-check');
             var cb = P.el('input');
@@ -268,7 +314,16 @@
                     if (live.seasonSubset) live.seasonSubset.hidden = !seasons;
                     live.trendsCountry.hidden = seasons;
                     live.trendsSubset.hidden = seasons;
+                    ['trendsField', 'trendsMetric', 'trendsPrecision', 'trendsOutlet'].forEach(function (k) {
+                        live[k].hidden = seasons;
+                    });
                     evtWrap.hidden = seasons;
+                    live.trendsOutlet.setOptions([{ value: '', label: P.t('laicite.filter_all') }].concat(
+                        Array.from(new Set(((ctx.research || {}).cells || []).filter(function (r) {
+                            return r.subset === state.trendsSubset && r.outlet;
+                        }).map(function (r) { return r.outlet; }))).sort().map(function (v) {
+                            return { value: v, label: v };
+                        })), state.trendsOutlet || '');
                 }
             };
         }

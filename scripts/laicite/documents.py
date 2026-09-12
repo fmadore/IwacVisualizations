@@ -52,4 +52,8 @@ class DocumentsMixin:
                 "petitions. Never summed with press coverage."
             ),
             "documents": docs,
+            "concentration": {"items": len(docs),
+                "occurrences": sum(len(s.occurrences) for s in self.scans if s.subset == "documents"),
+                "largest_document_occurrences": max((len(s.occurrences) for s in self.scans
+                                                      if s.subset == "documents"), default=0)},
         }

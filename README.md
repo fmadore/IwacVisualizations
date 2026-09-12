@@ -362,7 +362,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.68.6). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.69.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

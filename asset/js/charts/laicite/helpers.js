@@ -16,7 +16,7 @@
     var P = ns.panels;
     var L = ns.laicite = ns.laicite || {};
 
-    L.SUBSETS = ['articles', 'publications', 'documents', 'references'];
+    L.SUBSETS = ['articles', 'publications', 'documents', 'audiovisual', 'references'];
 
     /** Frame → colour, from the registered IWAC palette so admin-configured
      *  primaries and dark mode flow through. */
@@ -62,7 +62,6 @@
             { value: totals.members || 0, labelKey: 'laicite.kpi_members', featured: true },
             { value: totals.tagged || 0, labelKey: 'laicite.kpi_tagged' },
             { value: totals.said || 0, labelKey: 'laicite.kpi_said' },
-            { value: totals.occurrences || 0, labelKey: 'laicite.kpi_occurrences' },
             { value: totals.countries || 0, labelKey: 'laicite.kpi_countries' },
             { value: span.length === 2 ? span[0] + '–' + span[1] : '—',
               labelKey: 'laicite.kpi_span', text: true }

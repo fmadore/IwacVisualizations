@@ -186,6 +186,17 @@
             P.t('laicite.bylines_note')));
         root.appendChild(panel);
 
+        if (L.researchTable && (bundle.top || []).some(function (r) { return r.corpus_articles; })) {
+            var normalized = P.el('details');
+            normalized.appendChild(P.el('summary', null, P.t('laicite.research_bylines')));
+            normalized.appendChild(P.el('p', null, P.t('laicite.research_bylines_note')));
+            normalized.appendChild(L.researchTable([P.t('laicite.research_byline'), P.t('laicite.research_selected'),
+                P.t('laicite.research_records'), P.t('laicite.research_rate')], bundle.top.map(function (r) {
+                return [r.name, r.count, r.corpus_articles, r.dossier_share == null ? '—' : (100 * r.dossier_share).toFixed(1) + '%'];
+            })));
+            root.appendChild(normalized);
+        }
+
         // Coverage BEFORE the ranking, deliberately: the ranking is only
         // interpretable through it.
         var coverage = P.buildPanel('iwac-vis-panel iwac-vis-laicite-bylines-coverage',

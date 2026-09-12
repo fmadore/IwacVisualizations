@@ -13,6 +13,15 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.69.0 — Laïcité methodology and source coverage (2026-09-12)
+
+- Restrict vocabulary to titles and original full text; include YouTube with visible transcript coverage.
+- Add field sensitivity, normalized annual document rates with joint country/outlet filters, and matched calendar populations.
+- Filter ambiguous senses conservatively, add English secularism forms, and restrict vocabulary-context panels to a local core-term window.
+- Correct concordance sampling, keyness truncation order and comparator labels, and unique-item circulation counts.
+- Add matched sentiment comparisons, normalized byline output, public-text reuse evidence and checked archival reading guides.
+- Group navigation, preserve sparse-data gaps, and add bilingual responsive regression coverage and a reproducible human-coding worklist.
+
 ### v1.68.6 — clearer bilingual explanations for researchers (2026-09-12)
 
 - Review English and French headings, descriptions and methodological notes across all 21 visualization blocks and the resource-page dashboards, with language accessible to social scientists.

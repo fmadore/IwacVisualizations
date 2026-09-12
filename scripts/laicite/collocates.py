@@ -57,6 +57,8 @@ class CollocatesMixin:
         by_country: Dict[str, Counter] = defaultdict(Counter)
         by_subset: Dict[str, Counter] = defaultdict(Counter)
         by_source: Dict[str, Counter] = defaultdict(Counter)
+        language_windows = defaultdict(Counter)
+        language_rest = defaultdict(Counter)
         decade_items: Counter = Counter()
         country_items: Counter = Counter()
         # Document frequency per slice: how many distinct items a token
@@ -67,6 +69,10 @@ class CollocatesMixin:
             if not s.window_tokens:
                 continue
             distinct = set(s.window_tokens)
+            language = " | ".join(sorted(s.extra.get("languages", []))) or "Unknown"
+            language_windows[language].update(s.window_tokens)
+            language_rest[language].update(s.rest_tokens)
+            df["language:" + language].update(distinct)
             pooled_window.update(s.window_tokens)
             pooled_rest.update(s.rest_tokens)
             by_subset[s.subset].update(s.window_tokens)
@@ -100,7 +106,7 @@ class CollocatesMixin:
             if len(usable) < 2:
                 return {}
             return keyness_for_slices(
-                usable, top_n=self.top_collocates, min_count=min_count)
+                usable, top_n=len(set().union(*(set(c) for c in usable.values()))), min_count=min_count)
 
         global_scored = score(
             {"window": pooled_window, "rest": pooled_rest}, self.min_collocate_count)
@@ -151,11 +157,10 @@ class CollocatesMixin:
                 "word more than it does elsewhere in writing already about it."
             ),
             "source_scope": (
-                "Press articles, Islamic periodicals and archival documents "
-                "are all primary sources; scholarship is writing about them. "
-                "It supplies 44% of all occurrences and is largely anglophone, "
-                "so the pooled list mixes two populations — this slicing "
-                "separates them."
+                "Press, periodicals, archives and YouTube are primary sources; "
+                "scholarship is separate. Language, genre and length can "
+                "confound pooled comparisons. Use the within-language view "
+                "to compare keyword windows with the rest of those texts."
             ),
             "decade_scope": (
                 "Press, periodicals and archival documents only. Scholarship "
@@ -168,6 +173,13 @@ class CollocatesMixin:
             "top_n": self.top_collocates,
             "min_document_frequency": self.min_document_frequency,
             "global": global_list,
+            "by_language": {lang: self._apply_df_floor(
+                score({"window": window, "rest": language_rest[lang]},
+                      self.min_collocate_count).get("window", []), df["language:" + lang])
+                for lang, window in language_windows.items()},
+            "comparators": {"global": "windows_vs_rest_same_documents",
+                            "by_language": "windows_vs_rest_same_language_documents",
+                            "other_slices": "windows_vs_other_slices_windows"},
             "by_source_type": by_source_type,
             "by_decade": self._floor_slices(
                 score(decades, self.min_slice_count), df, "decade:"),
@@ -241,7 +253,7 @@ class CollocatesMixin:
             if entry["token"] in proper:
                 entry["proper"] = True
             out.append(entry)
-        return out
+        return out[:self.top_collocates]
 
     def _floor_slices(
         self, scored: Dict[str, List[Dict[str, Any]]], df: Dict[str, Counter],
@@ -313,7 +325,7 @@ class CollocatesMixin:
         if n_tagged_only and n_said:
             scored = keyness_for_slices(
                 {"tagged_only": tagged_only, "said": said},
-                top_n=max(self.top_collocates, 60),
+                top_n=len(set(tagged_only) | set(said)),
                 min_count=max(3, self.min_slice_count // 2),
             )
             significant = [
@@ -367,7 +379,8 @@ class CollocatesMixin:
                 # at 5+. A distribution piled on 1 is the whole argument.
                 "document_spread": {str(k): spread.get(k, 0) for k in range(1, 6)},
             },
-            "terms": surviving,
+            "verdict_is_heuristic": True,
+            "terms": surviving[:self.top_collocates],
             # Kept for audit even when the verdict is negative: a reader
             # should be able to see exactly what was rejected and why.
             "rejected_terms": [

@@ -52,7 +52,7 @@ IwacVisualizations/
 │       │   ├── compare-newspapers/    # 10 files — panel modules
 │       │   ├── entity-networks/       # 3 files — panel modules
 │       │   ├── index-overview/        # 14 files — panel modules
-│       │   ├── laicite/               # 17 files — panel modules
+│       │   ├── laicite/               # 18 files — panel modules
 │       │   ├── lexical-metrics/       # 1 file — panel module
 │       │   ├── on-this-day/           # 4 files — panel modules
 │       │   ├── periodicals-overview/  # 2 files — panel modules
@@ -103,7 +103,7 @@ IwacVisualizations/
 │   └── sentiment-models.json
 ├── language/                          # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
-│   ├── laicite/                       # 20 files — one module per bundle, mirroring asset/js/charts/laicite/
+│   ├── laicite/                       # 21 files — one module per bundle, mirroring asset/js/charts/laicite/
 │   ├── build-css.js
 │   ├── build-js.js                    # esbuild bundler driven by asset/js/bundles.json
 │   ├── build-mo.js
@@ -193,7 +193,7 @@ IwacVisualizations/
 │       ├── AssetPlan.php
 │       └── BlockRegistry.php          # THE single source of truth for every block
 ├── tests/
-│   ├── browser/                       # 17 files — Playwright specs
+│   ├── browser/                       # 18 files — Playwright specs
 │   ├── integration/
 │   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
@@ -205,6 +205,7 @@ IwacVisualizations/
 │   └── python/
 │       ├── requirements.txt
 │       ├── test_iwac_helpers.py
+│       ├── test_laicite_methodology.py
 │       └── test_publication.py
 ├── view/
 │   ├── common/
@@ -238,6 +239,7 @@ IwacVisualizations/
 ├── DATA_NOTES.md                      # The Hugging Face dataset schema
 ├── DESIGN.md
 ├── eslint.config.js
+├── LAICITE_METHODOLOGY.md
 ├── LICENSE
 ├── Module.php                         # Structural only — NO asset listeners (see docblock)
 ├── package-lock.json

@@ -43,6 +43,10 @@ def fold_preserving(text: str) -> str:
     """
     out: List[str] = []
     for ch in text:
+        # Typography must not change retrieval; preserve the 1:1 offsets
+        # needed to quote the original spelling in the concordance.
+        if ch in "’‘ʼ":
+            ch = "'"
         decomposed = unicodedata.normalize("NFD", ch)
         base = decomposed[0] if decomposed else ch
         out.append(base.lower())
@@ -102,10 +106,11 @@ class Lexicon:
         # and keyness vocabularies — otherwise every slice would return the
         # selectors as their own top result.
         self.all_form_tokens: Set[str] = set()
-        for spec in self.frames.values():
+        for name, spec in self.frames.items():
+            if name not in self.membership_frames:
+                continue
             for form in spec["forms"]:
                 self.all_form_tokens.update(ASCII_TOKEN_RE.findall(fold_plain(form)))
-        self.all_form_tokens.update(ASCII_TOKEN_RE.findall(fold_plain(" ".join(self.frames))))
 
         # Bilingual corpus: iwac_utils.STOPWORDS is French-only, and the
         # scholarly subset is largely English. Plus digitisation artefacts,
@@ -155,12 +160,11 @@ class Lexicon:
     # -- disambiguation ---------------------------------------------------
 
     def classify_ambiguous(self, tokens: Sequence[str], idx: int) -> str:
-        """Return ``'state'`` or ``'laity'`` for an ambiguous hit.
+        """Return ``'state'``, ``'laity'`` or ``'unresolved'``.
 
         An immediate qualifier decides when one is present; otherwise a
-        narrow neighbourhood vote does, defaulting to ``state`` on a tie
-        (the dossier's own concept is the more likely reading inside a
-        corpus already filtered to it).
+        narrow neighbourhood vote does. Ties stay unresolved: selection
+        cannot assume that a source is already about the target concept.
         """
         token = tokens[idx]
         if token == "laicat":          # the body of lay people, never the principle
@@ -170,6 +174,14 @@ class Lexicon:
         left2 = tokens[idx - 2] if idx >= 2 else ""
         right1 = tokens[idx + 1] if idx + 1 < len(tokens) else ""
         right2 = tokens[idx + 2] if idx + 2 < len(tokens) else ""
+
+        if token.startswith("secul") and any(
+            t in {"langue", "langues", "bras", "clerge", "pretres", "pretre"}
+            for t in (left1, left2, right1, right2)
+        ):
+            return "laity"
+        if left1 in {"simple", "simples"}:
+            return "laity"
 
         if left1 in self.state_left or left2 in self.state_left:
             return "state"
@@ -186,4 +198,6 @@ class Lexicon:
         window = tokens[lo:hi]
         laity_votes = sum(1 for t in window if t in self.laity_near)
         state_votes = sum(1 for t in window if t in self.state_near)
-        return "laity" if laity_votes > state_votes else "state"
+        if laity_votes > state_votes:
+            return "laity"
+        return "state" if state_votes > laity_votes else "unresolved"

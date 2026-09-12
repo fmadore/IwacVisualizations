@@ -1,10 +1,9 @@
 """KWIC rows — ``laicite-concordance*.json``. RIGHTS-GATED.
 
 A snippet cut from ``OCR`` is emitted only when the row's ``OCR_is_public``
-flag is true. The gate is per source field, not per item: ``title``,
-``descriptionAI``, ``abstract`` and ``tableOfContents`` are public columns,
-so a match in one of them is quotable even when the same item's ``OCR`` is
-not. Never relax it.
+flag is true. The gate is per source field, not per item: a title match is
+quotable even when the same item's ``OCR`` is not. Descriptive fields are
+never searched or quoted in this concordance. Never relax the OCR gate.
 """
 from __future__ import annotations
 
@@ -149,9 +148,7 @@ class ConcordanceMixin:
         return index, files
 
     def _sample_across(self, items: List[Any], cap: int, key) -> List[Any]:
-        """Cap ``items`` at ``cap`` while keeping every ``key`` stratum
-        represented in proportion — round-robin across strata, so small
-        strata survive and large ones are thinned."""
+        """Proportional stratified sample using largest-remainder quotas."""
         if len(items) <= cap:
             return items
         strata: Dict[Any, List[Any]] = defaultdict(list)
@@ -161,16 +158,12 @@ class ConcordanceMixin:
             self.rng.shuffle(bucket)
         out: List[Any] = []
         order = sorted(strata.keys(), key=lambda k: str(k))
-        while len(out) < cap:
-            progressed = False
-            for k in order:
-                if strata[k]:
-                    out.append(strata[k].pop())
-                    progressed = True
-                    if len(out) >= cap:
-                        break
-            if not progressed:
-                break
+        quotas = {k: cap * len(strata[k]) // len(items) for k in order}
+        remainder = sorted(order, key=lambda k: -(cap * len(strata[k]) % len(items)))
+        for k in remainder[:cap - sum(quotas.values())]:
+            quotas[k] += 1
+        for k in order:
+            out.extend(strata[k][:quotas[k]])
         return out
 
     @staticmethod

@@ -53,6 +53,8 @@ class BylinesMixin:
         total = len(articles)
 
         counts: Counter = Counter()
+        corpus_by_author = Counter(name for r in self.source_records if r["subset"] == "articles"
+                                   for name in set(r["authors"]))
         first_year: Dict[str, int] = {}
         last_year: Dict[str, int] = {}
         by_paper: Dict[str, Counter] = defaultdict(Counter)
@@ -93,6 +95,8 @@ class BylinesMixin:
             {
                 "name": name,
                 "count": int(count),
+                "corpus_articles": corpus_by_author[name],
+                "dossier_share": round(count / corpus_by_author[name], 4) if corpus_by_author[name] else None,
                 "first": first_year.get(name),
                 "last": last_year.get(name),
                 "newspapers": [

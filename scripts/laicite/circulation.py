@@ -85,6 +85,7 @@ class CirculationMixin:
                 "a": self._circulation_side(a),
                 "b": self._circulation_side(b),
                 "year_gap": self._year_gap(a, b),
+                "text_check": self._reuse_evidence(a, b),
             })
 
         pairs.sort(key=lambda p: -p["similarity"])
@@ -96,7 +97,7 @@ class CirculationMixin:
         link_counts: Dict[frozenset, int] = defaultdict(int)
         paper_counts: Counter = Counter()
         reprinted: Set[str] = set()
-        by_decade: Counter = Counter()
+        decade_ids = defaultdict(set)
         for p in pairs:
             pa, pb = p["a"]["newspaper"], p["b"]["newspaper"]
             link_counts[frozenset((pa, pb))] += 1
@@ -107,7 +108,7 @@ class CirculationMixin:
             for side in ("a", "b"):
                 decade = self._decade(p[side]["year"])
                 if decade:
-                    by_decade[decade] += 1
+                    decade_ids[decade].add(p[side]["o_id"])
 
         links = []
         for pair, count in sorted(link_counts.items(),
@@ -132,7 +133,7 @@ class CirculationMixin:
             "total_pairs": len(pairs),
             "reprinted_items": len(reprinted),
             "median_year_gap": median_gap,
-            "by_decade": dict(sorted(by_decade.items())),
+            "by_decade": {d: len(ids) for d, ids in sorted(decade_ids.items())},
             "newspapers": [
                 {"name": name, "pairs": int(count)}
                 for name, count in sorted(paper_counts.items(),
@@ -151,6 +152,26 @@ class CirculationMixin:
             "country": scan.countries[0] if scan.countries else "",
             "year": scan.year,
         }
+
+    def _reuse_evidence(self, a, b):
+        from difflib import SequenceMatcher
+        from laicite.lexicon import fold_plain
+        import re
+        # No excerpt or text-derived detail from withheld full text.
+        if not a.ocr_public or not b.ocr_public:
+            return {"status": "not_public"}
+        ta = self.texts.get((a.subset, a.o_id), {}).get("OCR", "")
+        tb = self.texts.get((b.subset, b.o_id), {}).get("OCR", "")
+        wa, wb = re.findall(r"\w+", fold_plain(ta)), re.findall(r"\w+", fold_plain(tb))
+        if not wa or not wb:
+            return {"status": "missing"}
+        def grams(words):
+            return {tuple(words[i:i + 5]) for i in range(max(0, len(words) - 4))}
+        ga, gb = grams(wa), grams(wb)
+        return {"status": "compared", "words_a": len(wa), "words_b": len(wb),
+                "sequence_ratio": round(SequenceMatcher(None, wa, wb).ratio(), 4),
+                "fivegram_jaccard": round(len(ga & gb) / len(ga | gb), 4) if ga | gb else 0,
+                "excerpt_a": ta[:700], "excerpt_b": tb[:700]}
 
     @staticmethod
     def _year_gap(a: ItemScan, b: ItemScan) -> Optional[int]:

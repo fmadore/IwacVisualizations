@@ -163,7 +163,7 @@ final class BlockRegistry
             'invokable'   => 'laicite',
             'class'       => BlockLayout\Laicite::class,
             'label'       => 'Laïcité', // @translate
-            'description' => 'Explore a dossier selected through the Laïcité subject tag and a vocabulary of laïcité and secularism. Compare source types, terms in context, associated entries and AI ratings. Searches include titles, available full text and descriptive fields; readable extracts follow each field’s public status.', // @translate
+            'description' => 'Explore a dossier selected through the Laïcité subject tag and vocabulary in titles and available full text, including YouTube transcripts. Compare source types, terms in context, associated entries and AI ratings. Descriptive fields are excluded from vocabulary counts; extracts follow each field’s public status.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [

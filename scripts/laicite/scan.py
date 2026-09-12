@@ -1,4 +1,4 @@
-"""The one pass over the four subsets, and the records it produces.
+"""The one pass over the five source subsets, and the records it produces.
 
 ``ItemScan`` is the shared input every builder in this package reads: one
 row of one subset, its occurrences with character offsets, its rights flag,
@@ -39,10 +39,11 @@ from laicite.register import _register_add, _register_bucket
 # `is_public_column` False means the field is `OCR` and rides the rights
 # gate; True means the column is public on the Hub and is always quotable.
 SUBSET_FIELDS: Dict[str, List[Tuple[str, bool]]] = {
-    "articles":     [("title", True), ("descriptionAI", True), ("OCR", False)],
-    "publications": [("title", True), ("tableOfContents", True), ("OCR", False)],
-    "documents":    [("title", True), ("descriptionAI", True), ("OCR", False)],
-    "references":   [("title", True), ("abstract", True), ("OCR", False)],
+    "articles":     [("title", True), ("OCR", False)],
+    "publications": [("title", True), ("OCR", False)],
+    "documents":    [("title", True), ("OCR", False)],
+    "audiovisual":  [("title", True), ("OCR", False)],
+    "references":   [("title", True), ("OCR", False)],
 }
 
 # Columns pulled per subset. Deliberately narrow: the 768-dim embedding
@@ -81,6 +82,11 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
         "language", "OCR", "OCR_is_public", "nb_mots", "abstract", "iwac_url",
         "o:resource_class",
     ],
+    "audiovisual": [
+        "o:id", "title", "country", "pub_date", "subject", "spatial",
+        "language", "OCR", "OCR_is_public", "nb_mots", "iwac_url",
+        "source_type", "hijri_month", "URL",
+    ],
 }
 
 # Evidentiary status, not genre. Press articles, Islamic periodicals and
@@ -95,6 +101,7 @@ SOURCE_TYPES: Dict[str, str] = {
     "articles": "primary",
     "publications": "primary",
     "documents": "primary",
+    "audiovisual": "primary",
     "references": "scholarship",
 }
 
@@ -106,6 +113,7 @@ PER_ITEM_SNIPPET_CAP: Dict[str, Optional[int]] = {
     "publications": 12,
     "articles": 6,
     "references": 4,
+    "audiovisual": 6,
 }
 
 
@@ -164,6 +172,10 @@ class ItemScan:
     #: Byline names, pipe-split. `articles` only. Includes press agencies
     #: alongside journalists — these are bylines, not people.
     authors: List[str] = field(default_factory=list)
+    #: Unfiltered word tokens in exactly the fields searched, for density.
+    analyzed_words: int = 0
+    nearby_frame_counts: Dict[str, int] = field(default_factory=dict)
+    unresolved_hits: int = 0
 
     @property
     def said(self) -> bool:
@@ -186,7 +198,14 @@ class ScanMixin:
             )
             if df is None:
                 raise RuntimeError(f"Failed to load '{subset}' subset")
+            if subset == "audiovisual":
+                if "source_type" not in df.columns:
+                    raise RuntimeError("YouTube selection requires source_type")
+                df = df[df["source_type"] == "youtube"]
             self.subset_totals[subset] = len(df)
+            self.subset_fulltext[subset] = int(
+                df["OCR"].fillna("").str.strip().ne("").sum()
+            ) if "OCR" in df.columns else 0
             if "OCR_is_public" in df.columns:
                 self.subset_public[subset] = int(df["OCR_is_public"].fillna(False).sum())
             else:
@@ -200,6 +219,7 @@ class ScanMixin:
                 if subset == "articles":
                     self._tally_baseline_sentiment(row)
                 rec = self._scan_row(row, subset, fields, tag_folded)
+                self._observe_source(row, subset, rec)
                 if rec is not None:
                     self.scans.append(rec)
                     members += 1
@@ -228,11 +248,13 @@ class ScanMixin:
         occurrences: List[Occurrence] = []
         membership_hits = 0
         laity_demoted = 0
+        unresolved_hits = 0
         texts: Dict[str, str] = {}
         # Token index of every membership-frame hit, per field, so the
         # collocate windows can be cut after the whole field is scanned.
         hit_token_idx: Dict[str, List[int]] = defaultdict(list)
         field_tokens: Dict[str, List[str]] = {}
+        positions = {}
 
         for column, is_public_column in fields:
             if column not in row:
@@ -247,28 +269,30 @@ class ScanMixin:
             # per match.
             tokens, token_at = self._tokenize_with_offsets(folded)
             field_tokens[column] = tokens
+            positions[column] = token_at
             quotable = is_public_column or ocr_public
 
-            claimed: List[Tuple[int, int]] = []
             for frame, pattern in self.lex.patterns.items():
                 ambiguous_forms = self.lex.ambiguous.get(frame, set())
                 for m in pattern.finditer(folded):
                     span = (m.start(), m.end())
-                    # Longest-first alternation still lets two frames claim
-                    # overlapping spans ("école laïque" is both `ecole` and
-                    # `laicite`); keep the first claim per span.
-                    if any(s < span[1] and span[0] < e for s, e in claimed):
-                        continue
+                    # Categories are independent: "école laïque" supplies
+                    # both membership and schooling evidence. Suppressing
+                    # overlap across categories erased the schooling hit.
+                    # finditer still avoids duplicates within one category.
                     surface = m.group(0)
                     if surface in ambiguous_forms:
                         idx = token_at.get(m.start())
-                        if idx is not None and \
-                                self.lex.classify_ambiguous(tokens, idx) == "laity":
-                            laity_demoted += 1
-                            self.laity_by_subset[subset] += 1
-                            continue
+                        if idx is not None:
+                            sense = self.lex.classify_ambiguous(tokens, idx)
+                            if sense == "unresolved":
+                                unresolved_hits += 1
+                                continue
+                            if sense == "laity":
+                                laity_demoted += 1
+                                self.laity_by_subset[subset] += 1
+                                continue
                         self.state_by_subset[subset] += 1
-                    claimed.append(span)
                     frame_counts[frame] += 1
                     occurrences.append(Occurrence(
                         frame=frame, field=column,
@@ -317,6 +341,12 @@ class ScanMixin:
             richness=clean_float(row.get("Richesse_Lexicale_OCR")),
             authors=(parse_pipe_separated(row.get("author"))
                      if subset == "articles" else []),
+            analyzed_words=sum(len(tokens) for tokens in field_tokens.values()),
+            unresolved_hits=unresolved_hits,
+            nearby_frame_counts=dict(Counter(o.frame for o in occurrences
+                if o.frame not in self.lex.membership_frames and any(
+                    abs(positions[o.field].get(o.start, -10000) - anchor) <= 80
+                    for anchor in hit_token_idx.get(o.field, [])))),
         )
         if subset == "documents":
             rec.extra = {
@@ -335,6 +365,9 @@ class ScanMixin:
             }
         elif subset == "articles":
             rec.extra = {"sentiment": self._row_sentiment(row)}
+        elif subset == "audiovisual":
+            rec.extra = {"url": str(row.get("URL") or "").strip()}
+        rec.extra["languages"] = parse_pipe_separated(row.get("language"))
         self.texts[(subset, rec.o_id)] = texts
         return rec
 

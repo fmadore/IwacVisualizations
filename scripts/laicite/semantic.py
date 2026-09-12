@@ -125,11 +125,10 @@ class SemanticMixin:
     def build_semantic(self) -> Dict[str, Any]:
         """2-D UMAP projection of the dossier's press half.
 
-        Two jobs. It is a discovery view — discourse clusters that cut
-        across the hand-crafted frames — and a robustness check on the
-        frame taxonomy itself: if the embedding clusters do not roughly
-        recover the curated frames, that is worth knowing before anyone
-        publishes the arena counts from the arenas view.
+        A discovery view of embedding similarity. UMAP can distort local
+        and global structure; apparent clusters do not validate the lexical
+        categories and disagreement does not refute them. Read sources to
+        assess substantive relationships.
 
         **`articles` only, and the panel says so.** This is a constraint
         of the data, not a shortcut:

@@ -128,6 +128,8 @@
         // through a footnote they may never reach.
         var notice = buildAiNotice(bundle, data, model);
         panel.appendChild(notice);
+        var matched = L.buildMatchedSentiment ? L.buildMatchedSentiment(data) : P.el('div');
+        panel.appendChild(matched);
 
         var comparison = buildPolarityComparison(data);
         panel.appendChild(comparison);
@@ -239,6 +241,12 @@
                 var nextNotice = buildAiNotice(bundle, d, m);
                 panel.replaceChild(nextNotice, notice);
                 notice = nextNotice;
+                if (L.buildMatchedSentiment) {
+                    var nextMatched = L.buildMatchedSentiment(d);
+                    nextMatched.open = matched.open;
+                    panel.replaceChild(nextMatched, matched);
+                    matched = nextMatched;
+                }
                 var nextComparison = buildPolarityComparison(d);
                 panel.replaceChild(nextComparison, comparison);
                 comparison = nextComparison;
@@ -274,6 +282,10 @@
                 items: P.formatNumber(bundle.items || 0),
                 corpus: P.formatNumber((data.corpus || {}).rated || 0)
             })));
+        Object.keys(data.property_coverage || {}).forEach(function (key) {
+            box.appendChild(P.el('p', null, P.t('laicite.research_' + key) + ': '
+                + data.property_coverage[key] + '/' + bundle.items));
+        });
         return box;
     }
 

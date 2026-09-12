@@ -39,14 +39,16 @@ Three consequences shape the code:
 1. **The concept has a curated authority record** (``index`` o:id 5,
    *Laïcité*), so the dossier is defined by the tag *and* the text, and the
    divergence between them is surfaced rather than smoothed away.
-2. **It scans four subsets, not one.** ``articles`` (press coverage),
+2. **It scans five subsets, not one.** ``articles`` (press coverage),
    ``publications`` (Islamic periodicals), ``documents`` (archival material)
-   and ``references`` (scholarship) are different evidentiary objects, so
+   ``audiovisual`` (YouTube videos only), and ``references`` (scholarship)
+   are different evidentiary objects, so
    every record carries a ``subset`` discriminator and **no bundle sums
-   across subsets without labelling it**. The first three are all primary
+   across subsets without labelling it**. The first four are all primary
    sources — see ``SOURCE_TYPES``, which is about evidentiary status, not
-   genre; ``references`` is the only one that is commentary rather than
-   evidence, and it is excluded from every temporal facet for that reason.
+   genre; ``references`` contains scholarship. Its publication dates must
+   be interpreted separately from dates of primary-source coverage; the
+   primary-source aggregate excludes it, and its own chronology is opt-in.
 3. **It matches RAW text, not ``lemma_text``.** Scary Terms counts against
    the lemma column; that is the one recipe here that must not be ported.
    The concordance is built on character offsets into readable text with
@@ -91,15 +93,24 @@ publicly from ``files/iwac-visualizations/``. So a KWIC snippet cut from
 the same per-value gate ``publish_public.py`` applies, and the identical
 constraint ``generate_on_this_day.py`` documents. Never relax it.
 
-The gate is applied **per source field, not per item**: ``title``,
-``descriptionAI``, ``abstract`` and ``tableOfContents`` are public columns,
-so a match in one of them is quotable even when the same item's ``OCR`` is
-not. Aggregate counts are computed over all text (derived statistics, no
-verbatim reproduction); only the readable snippets are gated. The two
-denominators differ and the metadata bundle carries both, **per subset**,
-because the split is wildly uneven (documents 25/26 public, publications
-1298/1501, articles 7549/12356, references 7/867) and one global percentage
-would imply an evenness that does not exist.
+The gate is applied **per source field, not per item**: titles are public,
+while original full text and transcripts follow ``OCR_is_public``. Only
+``title`` and ``OCR`` are searched. AI descriptions, abstracts, video
+descriptions and tables of contents remain contextual metadata and never
+supply vocabulary matches or concordance passages. Rates use alphabetic
+word tokens in those same searched fields, including titles.
+
+YouTube videos are selected from ``audiovisual.source_type == "youtube"``.
+A catalogue tag can select a video without a transcript; its missing text
+is not replaced by the description. Metadata reports transcript coverage
+for the YouTube corpus and the selected videos. Publication/upload dates
+may differ from the date of the recorded event.
+
+Categories are independent: overlapping phrases can belong to more than
+one category, but matches are non-overlapping within each category. Bare
+"succession" is excluded from law/family vocabulary; explicit legal
+phrases are retained. Typographic apostrophes are normalized for matching
+without changing the original excerpt offsets.
 
 Usage
 -----
@@ -124,7 +135,7 @@ from pathlib import Path
 # ``scripts/generate_laicite.py`` keeps working.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from iwac_utils import add_standard_args, parse_standard_args  # noqa: E402
+from iwac_utils import add_standard_args, parse_standard_args, save_json  # noqa: E402
 
 from laicite import LaiciteGenerator  # noqa: E402
 
@@ -211,8 +222,10 @@ def main() -> None:
              "view (default: %(default)s).",
     )
     add_standard_args(parser, minify_default=False)
+    parser.add_argument("--validation-output", type=Path,
+                        help="Write a metadata-only stratified human-coding worklist to this JSON path.")
     args = parse_standard_args(parser)
-    LaiciteGenerator(
+    generator = LaiciteGenerator(
         output_dir=Path(args.output_dir),
         repo_id=args.repo,
         minify=args.minify,
@@ -226,7 +239,10 @@ def main() -> None:
         min_actor_items=args.min_actor_items,
         min_place_items=args.min_place_items,
         min_byline_items=args.min_byline_items,
-    ).run()
+    )
+    generator.run()
+    if args.validation_output:
+        save_json(generator.validation_sample(), args.validation_output)
 
 
 if __name__ == "__main__":

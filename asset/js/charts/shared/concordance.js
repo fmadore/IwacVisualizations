@@ -37,6 +37,7 @@
      * @param {string} [cfg.siteBase]        site root for item links
      * @param {number} [cfg.pageSize=25]
      * @param {function(Object):string} [cfg.labelForFrame]
+     * @param {function(Object):string} [cfg.labelForField]
      * @param {function(Object, Object):Node} [cfg.renderMeta]  custom meta line
      * @param {string} [cfg.emptyKey]        i18n key when there are no rows
      * @param {string} [cfg.className]       extra class on the root
@@ -98,6 +99,7 @@
                 meta.appendChild(P.el('span', 'iwac-vis-kwic-title', item.t || ''));
             }
             var bits = [];
+            if (cfg.labelForField && row.d) bits.push(cfg.labelForField(row));
             if (item.n) bits.push(item.n);
             if (item.y) bits.push(String(item.y));
             if (item.c && item.c.length) bits.push(item.c.join(', '));

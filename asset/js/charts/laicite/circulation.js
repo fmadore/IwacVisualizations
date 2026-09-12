@@ -146,6 +146,21 @@
                 li.appendChild(row);
             });
             list.appendChild(li);
+            if (pair.text_check) {
+                var check = pair.text_check;
+                var evidence = P.el('details');
+                evidence.appendChild(P.el('summary', null, P.t('laicite.research_reuse')));
+                evidence.appendChild(P.el('p', null, P.t('laicite.research_reuse_' + check.status)));
+                if (check.status === 'compared') {
+                    evidence.appendChild(P.el('p', null, P.t('laicite.research_reuse_scores', {
+                        sequence: (100 * check.sequence_ratio).toFixed(1), grams: (100 * check.fivegram_jaccard).toFixed(1)
+                    })));
+                    evidence.appendChild(P.el('blockquote', null, check.excerpt_a));
+                    evidence.appendChild(P.el('blockquote', null, check.excerpt_b));
+                }
+                li.appendChild(evidence);
+            }
+
         });
         wrap.appendChild(list);
         return wrap;

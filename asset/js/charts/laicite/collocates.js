@@ -26,7 +26,7 @@
     var L = ns.laicite = ns.laicite || {};
 
     L.COLLOCATE_SCOPES = [
-        'global', 'by_source_type', 'by_subset', 'by_decade', 'by_country'
+        'global', 'by_language', 'by_source_type', 'by_subset', 'by_decade', 'by_country'
     ];
 
     /** The slice keys available for the active scope. */
@@ -89,7 +89,9 @@
         // reading the JSON directly; the panel renders the catalog so the
         // French site is not half-translated.
         var method = P.el('div', 'iwac-vis-laicite-method');
-        method.appendChild(P.el('p', null, P.t('laicite.collocates_reference')));
+        if (scope === 'global' || scope === 'by_language') {
+            method.appendChild(P.el('p', null, P.t('laicite.collocates_reference')));
+        }
         if (scope === 'by_source_type') {
             method.appendChild(P.el('p', null,
                 P.t('laicite.collocates_source_scope')));
@@ -113,7 +115,7 @@
                 })));
         }
         method.appendChild(P.el('p', 'iwac-vis-laicite-method-stats',
-            P.t('laicite.collocates_method', {
+            P.t(scope === 'global' || scope === 'by_language' ? 'laicite.collocates_method' : 'laicite.research_collocate_comparator', {
                 window: bundle.window,
                 docs: bundle.min_document_frequency
             })));
@@ -184,6 +186,7 @@
         }
 
         var sizes = implicit.slice_sizes || {};
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.research_heuristic')));
         panel.appendChild(P.el('p', 'iwac-vis-laicite-implicit-sizes',
             P.t('laicite.implicit_sizes', {
                 tagged: P.formatNumber(sizes.tagged_only || 0),
@@ -191,6 +194,11 @@
             })));
 
         if (implicit.has_vocabulary && (implicit.terms || []).length) {
+            var diagnostics = implicit.diagnostics || {};
+            panel.appendChild(P.el('p', null, P.t('laicite.implicit_diagnostics', {
+                significant: diagnostics.significant_terms || 0,
+                surviving: diagnostics.surviving_terms || 0, docs: implicit.min_documents || 0
+            })));
             panel.appendChild(buildRankedList(implicit.terms));
             return panel;
         }

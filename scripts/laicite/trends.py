@@ -27,7 +27,7 @@ class TrendsMixin:
         (press coverage and primary sources must never share a total without
         saying so) and item counts alongside occurrence counts.
         """
-        scans = self.scan_all()
+        scans = [s for s in self.scan_all() if s.subset != "references"]
         frames = list(self.lex.frames.keys())
         years_present = sorted({s.year for s in scans if s.year})
         if not years_present:
@@ -75,6 +75,7 @@ class TrendsMixin:
             # Every bundle says when it was made; this one and the scary
             # temporal map were the two with no provenance at all (P10).
             "generated_at": generate_timestamp(),
+            "research": self.build_research(),
             "years": years,
             "families": frames,
             "global": global_series,
@@ -100,13 +101,14 @@ class TrendsMixin:
         scans = self.scan_all()
         out: Dict[str, Any] = {}
         for subset in SUBSET_FIELDS:
+            if subset == "references":
+                continue
             sub = [s for s in scans if s.subset == subset]
             greg: Counter = Counter()
             hijri: Counter = Counter()
             for s in sub:
-                if s.month:
+                if s.month and s.hijri_month:
                     greg[s.month] += 1
-                if s.hijri_month:
                     hijri[s.hijri_month] += 1
             if not greg and not hijri:
                 continue
@@ -116,6 +118,12 @@ class TrendsMixin:
                 "hijri": [hijri.get(m, 0) for m in range(1, 13)],
                 "gregorian_coverage": sum(greg.values()),
                 "hijri_coverage": sum(hijri.values()),
+                "gregorian_exposure": [sum(1 for r in self.source_records
+                    if r["subset"] == subset and r["month"] == m and r["hijri_month"])
+                    for m in range(1, 13)],
+                "hijri_exposure": [sum(1 for r in self.source_records
+                    if r["subset"] == subset and r["hijri_month"] == m and r["month"])
+                    for m in range(1, 13)],
             }
         self.logger.info(f"  seasonality: {len(out)} corpora with dated items")
         return {

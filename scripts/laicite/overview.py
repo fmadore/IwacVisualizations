@@ -36,6 +36,11 @@ class OverviewMixin:
             years = [s.year for s in sub if s.year]
             per_subset[subset] = {
                 "corpus_size": self.subset_totals.get(subset, 0),
+                "corpus_with_fulltext": self.subset_fulltext.get(subset, 0),
+                "members_with_fulltext": sum(
+                    bool(self.texts.get((s.subset, s.o_id), {}).get("OCR"))
+                    for s in sub
+                ),
                 "members": len(sub),
                 "tagged": tagged,
                 "said": said,
@@ -50,6 +55,7 @@ class OverviewMixin:
                 "corpus_ocr_public": self.subset_public.get(subset, 0),
                 "members_ocr_public": sum(1 for s in sub if s.ocr_public),
                 "laity_demoted": sum(s.laity_demoted for s in sub),
+                "unresolved_hits": sum(s.unresolved_hits for s in sub),
                 "year_range": [min(years), max(years)] if years else [],
             }
 
@@ -112,14 +118,19 @@ class OverviewMixin:
             # so the client opens on the window where the evidence actually
             # sits and lets the reader zoom back out to the full range.
             "focus_range": self._focus_range(years),
-            # Which text layer each subset was matched against, so the panel
-            # can state what was actually searched rather than implying a
-            # uniform full-text scan (references are mostly title+abstract:
-            # only 423/867 carry OCR at all, and 7 are public).
+            # Field-level scope is part of the research instrument. Missing
+            # full text is not replaced by a descriptive or AI field.
             "matched_fields": {
                 subset: [c for c, _ in fields]
                 for subset, fields in SUBSET_FIELDS.items()
             },
+            "method_version": "source-text-v3",
+            "density_denominator": "alphabetic tokens in title and OCR",
+            "video_items": [{
+                "o_id": s.o_id, "title": s.title, "url": s.iwac_url,
+                "year": s.year,
+                "has_transcript": bool(self.texts.get((s.subset, s.o_id), {}).get("OCR")),
+            } for s in scans if s.subset == "audiovisual"],
             "rights_note": (
                 "Counts are computed over all text; only readable snippets are "
                 "gated on OCR_is_public, per source field."

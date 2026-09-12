@@ -62,6 +62,7 @@
                 })
                 .then(function () {
                     pending[subset] = false;
+                    if (cfg.onLoaded) cfg.onLoaded();
                     render();
                 });
         }
@@ -123,6 +124,9 @@
                 pageSize: 25,
                 emptyKey: 'laicite.concordance_empty',
                 taggedHintKey: 'concordance.tagged_hint',
+                labelForField: function (row) {
+                    return P.t('laicite.field_' + row.d);
+                },
                 labelForFrame: function (row) {
                     return L.frameLabel(metadata, row.f);
                 }

@@ -101,6 +101,9 @@ class SentimentMixin:
             ]
             base = self._baseline_sentiment.get(model, {})
             by_model[model] = {
+                "matched": self._matched_sentiment(model),
+                "property_coverage": {"polarity": sum(polarity.values()),
+                    "centrality": sum(centrality.values()), "subjectivity": sum(subjectivity.values())},
                 "rated": rated,
                 "polarity": dict(polarity),
                 "centrality": dict(centrality),
@@ -168,3 +171,41 @@ class SentimentMixin:
         the label table itself is shared with every other generator.
         """
         return subjectivite_ordinal(value)
+
+    def _matched_sentiment(self, model):
+        """Exact strata, per property, without replacement across strata.
+
+        Controls are non-dossier articles. Weight each eligible control stratum
+        to the corresponding dossier stratum. Unmatched targets are reported.
+        """
+        out = {}
+        columns = self._sentiment_cols.get(model, {})
+        for prop, column in columns.items():
+            if not column:
+                continue
+            groups = defaultdict(lambda: [Counter(), Counter()])
+            eligible = 0
+            for record, values in self._sentiment_source_rows:
+                value = values.get(column)
+                if value is None or str(value).strip() in ("", "nan", "None"):
+                    continue
+                if not record["year"] or not record["outlet"] or not record["countries"]:
+                    eligible += int(record["selected"])
+                    continue
+                key = (tuple(sorted(record["countries"])), record["year"], record["outlet"])
+                groups[key][0 if record["selected"] else 1][str(value)] += 1
+                eligible += int(record["selected"])
+            target, baseline = Counter(), Counter()
+            controls, strata = 0, 0
+            for a, b in groups.values():
+                if not a or not b:
+                    continue
+                n, m = sum(a.values()), sum(b.values())
+                target.update(a)
+                baseline.update({k: v * n / m for k, v in b.items()})
+                controls += m
+                strata += 1
+            out[prop] = {"dossier": dict(target), "weighted_controls": dict(baseline),
+                         "matched": sum(target.values()), "eligible": eligible,
+                         "control_items": controls, "strata": strata}
+        return out

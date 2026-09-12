@@ -21,7 +21,7 @@ class CorporaMixin:
         continuously while the mainstream press writes about it in crises.
         Item counts cannot show that: a 100-page periodical issue and a
         400-word news item are not commensurable, so every rate here is per
-        10,000 words of the matched items, using ``nb_mots``.
+        10,000 word tokens in the titles and full text actually searched.
 
         Also carries the per-newspaper frame fingerprints (review idea E) —
         the same contrast one level down, at outlet rather than corpus level.
@@ -34,7 +34,7 @@ class CorporaMixin:
             sub = [s for s in scans if s.subset == subset]
             if not sub:
                 continue
-            words = sum(s.nb_mots for s in sub)
+            words = sum(s.analyzed_words for s in sub)
             occ = sum(len(s.occurrences) for s in sub)
             frame_occ = {f: sum(s.frame_counts.get(f, 0) for s in sub) for f in frames}
             by_year: Dict[str, Dict[str, float]] = {}
@@ -43,7 +43,7 @@ class CorporaMixin:
             for s in sub:
                 if not s.year:
                     continue
-                year_words[s.year] += s.nb_mots
+                year_words[s.year] += s.analyzed_words
                 year_occ[s.year] += len(s.occurrences)
             for year in sorted(year_words):
                 w = year_words[year]
@@ -106,9 +106,11 @@ class CorporaMixin:
         return {
             "generated_at": generate_timestamp(),
             "note": (
-                "Rates are per 10,000 words of the matched items, not per "
-                "item: a periodical issue and a news article are not "
-                "commensurable units."
+                "Rates are per 10,000 unfiltered alphabetic word tokens in "
+                "the titles and full text of matched items. Descriptive "
+                "fields are excluded from both counts and denominators. "
+                "Categories can overlap; these are vocabulary matches, "
+                "not a measure of the share of text devoted to an argument."
             ),
             "frames": frames,
             "by_subset": per_subset,
