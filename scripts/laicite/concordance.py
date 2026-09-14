@@ -90,11 +90,22 @@ class ConcordanceMixin:
                     entry = {
                         "o": s.o_id, "t": s.title, "u": s.iwac_url,
                         "y": s.year, "c": s.countries,
+                        # Membership strength travels with the item, not
+                        # the row: it is a property of how the item joined
+                        # the dossier, and every row of that item shares it.
+                        "s": s.membership_route,
                     }
                     if s.newspaper:
                         entry["n"] = s.newspaper
                     if s.is_tagged:
                         entry["g"] = 1
+                    # Flags are omitted rather than zeroed — most items
+                    # carry neither, and this table is the largest thing in
+                    # the bundle.
+                    if s.title_hit:
+                        entry["h"] = 1
+                    if s.bib_only:
+                        entry["b"] = 1
                     items.append(entry)
                 r.pop("decade", None)
                 r["i"] = index_of[s.o_id]
@@ -143,6 +154,16 @@ class ConcordanceMixin:
             "row_keys": {
                 "i": "index into items[]", "f": "frame", "d": "source field",
                 "l": "left context", "m": "match", "r": "right context",
+            },
+            # The per-subset files' items[] table. Short keys, so the map
+            # ships with the index rather than living in the client.
+            "item_keys": {
+                "o": "o:id", "t": "title", "u": "item URL", "y": "year",
+                "c": "countries", "n": "newspaper (omitted when absent)",
+                "g": "1 when carrying the curated subject tag",
+                "s": "membership route: tag+text | text>=2 | text=1 | tag-only",
+                "h": "1 when a core hit falls in the title",
+                "b": "1 when every core full-text hit sits in a bibliography",
             },
         }
         return index, files

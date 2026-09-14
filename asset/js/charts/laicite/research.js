@@ -106,7 +106,84 @@
         root.appendChild(details); return root;
     };
 
-    L.buildResearch = function (bundle) {
+    /**
+     * The model-assisted relevance screen, rendered ENTIRELY from
+     * `metadata.audit_screen`. Every number on screen comes from the
+     * versioned verdict ledger the generator emits, so a later audit of
+     * newly ingested records updates this panel by republishing data — the
+     * alternative, a paragraph of hardcoded percentages, is stale the day
+     * the corpus grows and nothing in the build would say so.
+     *
+     * Returns null when the field is absent (older bundles) or when nothing
+     * has been screened: a screen with no verdicts has nothing to report,
+     * and "0 of 0 judged relevant" would read as a finding.
+     *
+     * @param {Object} metadata  laicite-metadata.json
+     * @returns {HTMLElement|null}
+     */
+    L.buildAuditScreen = function (metadata) {
+        var a = (metadata || {}).audit_screen;
+        if (!a || !a.members_judged) return null;
+
+        var judged = a.members_judged || 0;
+        var total = a.members_total || judged;
+        var relevant = a.relevant || 0;
+
+        var root = P.el('details');
+        root.appendChild(P.el('summary', null, P.t('laicite.research_screen', {
+            date: a.judged_at
+                ? P.formatDate(a.judged_at, { year: 'numeric', month: 'long' })
+                : '—'
+        })));
+        root.appendChild(P.el('p', null, P.t('laicite.research_screen_note', {
+            model: a.model || '—',
+            judged: P.formatNumber(judged),
+            total: P.formatNumber(total),
+            relevant: P.formatNumber(relevant),
+            percent: L.pct(relevant, judged)
+        })));
+        // Coverage of the screen itself. A reader comparing the dossier
+        // total with the screened total should not have to subtract.
+        if (total > judged) {
+            root.appendChild(P.el('p', null,
+                P.t('laicite.research_screen_pending',
+                    { count: P.formatNumber(total - judged) })));
+        }
+
+        /** One breakdown table from a {key: {judged, relevant}} map. */
+        function breakdown(headingKey, firstColKey, map, labelFor, order) {
+            var keys = order
+                ? order.filter(function (k) { return map[k]; })
+                : Object.keys(map || {});
+            if (!keys.length) return;
+            root.appendChild(P.el('h5', null, text(headingKey)));
+            root.appendChild(table(
+                [text(firstColKey), text('research_screen_judged'),
+                    text('research_screen_relevant'), text('research_screen_share')],
+                keys.map(function (k) {
+                    var cell = map[k] || {};
+                    var n = cell.judged || 0;
+                    return [labelFor(k) || k, P.formatNumber(n),
+                        P.formatNumber(cell.relevant || 0),
+                        n ? L.pct(cell.relevant || 0, n) + '%' : '—'];
+                })));
+        }
+
+        breakdown('research_screen_routes', 'research_screen_route',
+            a.by_route || {}, L.routeLabel, L.ROUTE_ORDER);
+        breakdown('research_screen_subsets', 'scope_subset',
+            a.by_subset || {}, L.subsetLabel, L.SUBSETS);
+
+        // The two readings the numbers do NOT license, and the provenance
+        // of the verdicts. Static text: neither depends on the counts.
+        root.appendChild(P.el('p', null, text('research_screen_tag_only')));
+        root.appendChild(P.el('p', null, text('research_screen_lexicon')));
+        root.appendChild(P.el('p', null, P.t('laicite.research_screen_limit',
+            { rule: a.rule_version || '—' })));
+        return root;
+    };
+
+    L.buildResearch = function (bundle, metadata) {
         var root = P.el('section', 'iwac-vis-panel');
         root.appendChild(P.el('h4', null, text('research_coverage')));
         if (!bundle) { root.appendChild(P.buildNoDataState()); return root; }
@@ -158,6 +235,8 @@
                 var c = groups[k]; return [k, c.title_matches, c.fulltext_matches, c.union_matches, c.broad_union_matches, c.legacy_only];
             })));
             output.appendChild(d);
+            var screen = L.buildAuditScreen(metadata);
+            if (screen) output.appendChild(screen);
         }
         draw(); return root;
     };

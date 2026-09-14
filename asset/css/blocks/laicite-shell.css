@@ -217,6 +217,23 @@
     font-variant-numeric: tabular-nums;
 }
 
+/*  The route into the dossier: curated tag, core vocabulary, or both.
+ *  Reads as a neutral qualifier, not as an endorsement — the tagged chip
+ *  already owns the accent — and `is-weak` marks the one route the
+ *  September 2026 screen found thin, with a dashed edge rather than a
+ *  colour, so it survives a monochrome print and a colour-blind reader. */
+.iwac-vis-laicite-chip.is-route {
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--muted, #66696e);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
+}
+
+.iwac-vis-laicite-chip.is-route.is-weak {
+    border-style: dashed;
+}
+
 /*  Frame chips carry a colour stripe keyed to the timeline series, so a
  *  reader can match a chip to a line. Structural data marker, which is
  *  the one case the theme allows a side-stripe border. */

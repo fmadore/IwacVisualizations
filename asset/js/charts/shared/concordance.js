@@ -39,6 +39,12 @@
      * @param {function(Object):string} [cfg.labelForFrame]
      * @param {function(Object):string} [cfg.labelForField]
      * @param {function(Object, Object):Node} [cfg.renderMeta]  custom meta line
+     * @param {function(Object, Object):Array<Object>} [cfg.itemBadges]
+     *        (item, row) → [{label, className?, title?}] — small qualifiers
+     *        appended to the meta line. Generic on purpose: the component
+     *        knows nothing about what makes an item weak or strong, so the
+     *        caller names its own badges rather than this file growing a
+     *        block-specific flag per dossier.
      * @param {string} [cfg.emptyKey]        i18n key when there are no rows
      * @param {string} [cfg.className]       extra class on the root
      * @returns {{root: HTMLElement, update: function(Array, Array=), page: function():number}}
@@ -121,6 +127,18 @@
                 // key as a tooltip.
                 if (cfg.taggedHintKey) tag.title = P.t(cfg.taggedHintKey);
                 meta.appendChild(tag);
+            }
+            // Caller-supplied qualifiers on the ITEM (how it joined the set),
+            // as opposed to the frame chip, which qualifies the row.
+            if (cfg.itemBadges) {
+                (cfg.itemBadges(item, row) || []).forEach(function (badge) {
+                    if (!badge || !badge.label) return;
+                    var el = P.el('span',
+                        'iwac-vis-kwic-badge ' + (badge.className || ''),
+                        badge.label);
+                    if (badge.title) el.title = badge.title;
+                    meta.appendChild(el);
+                });
             }
             li.appendChild(meta);
             return li;

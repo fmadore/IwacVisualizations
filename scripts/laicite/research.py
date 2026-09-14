@@ -38,6 +38,9 @@ class ResearchMixin:
             "title_hits": hits["title"], "fulltext_hits": hits["OCR"],
             "broad_title_hits": broad["title"], "broad_fulltext_hits": broad["OCR"],
             "selected": rec is not None, "tagged": bool(rec and rec.is_tagged),
+            # Membership strength, so the worklist can be coded route by
+            # route. Empty for a row the dossier did not select.
+            "route": rec.membership_route if rec else "",
             "legacy_description_match": legacy,
             "month": extract_month_num(row.get("pub_date")),
             "hijri_month": hm if hm and 1 <= hm <= 12 else None,
@@ -97,7 +100,8 @@ class ResearchMixin:
                 result.append({
                     "id": r["id"], "url": "https://islam.zmo.de/s/westafrica/item/" + r["id"],
                     "subset": key[0], "language": key[1], "decade": key[2],
-                    "stratum": key[3], "population": len(rows),
+                    "stratum": key[3], "route": r["route"],
+                    "population": len(rows),
                     "sampled": min(per_stratum, len(rows)),
                     "fulltext_available": r["fulltext_available"],
                     "public_fulltext": r["public_fulltext"],

@@ -76,6 +76,28 @@ def _form_to_pattern(form: str) -> str:
     return r"[\s']+".join(parts)
 
 
+def _with_negative_context(fragment: str, blocked: Sequence[str]) -> str:
+    """Append a negative lookahead for a form's ``not_followed_by`` tokens.
+
+    The lookahead is zero-width and sits *inside* the frame's alternation,
+    between the form and the pattern's trailing ``\\b``: an alternative that
+    trips it simply fails, the other alternatives are still tried at the same
+    position, and the surrounding word-boundary logic is untouched. The
+    separator is the same ``[\\s']+`` multi-word forms join on, so the rule
+    reads "immediately followed by", and the blocked tokens carry their own
+    ``\\b`` so ``divorce entretenu`` is not mistaken for ``divorce entre``.
+    Longest first, for the same reason the forms themselves are sorted.
+    """
+    if not blocked:
+        return fragment
+    alternation = "|".join(
+        re.escape(t) for t in sorted(set(blocked), key=len, reverse=True) if t
+    )
+    if not alternation:
+        return fragment
+    return fragment + r"(?![\s']+(?:" + alternation + r")\b)"
+
+
 class Lexicon:
     """The curated frame lexicon plus the laity/state disambiguator."""
 
@@ -87,12 +109,29 @@ class Lexicon:
         self.membership_frames: List[str] = list(raw["membership_frames"])
         self.authority: Dict[str, Any] = raw.get("authority", {})
 
+        # Per-form negative right context, folded on both sides so the
+        # sidecar can spell a key the way the language does. See the
+        # `_not_followed_by` note in the JSON for when this is the right
+        # instrument and when a form belongs in `ambiguous` instead.
+        self.not_followed_by: Dict[str, Dict[str, List[str]]] = {
+            name: {
+                fold_plain(form): [fold_plain(t) for t in tokens]
+                for form, tokens in spec.get("not_followed_by", {}).items()
+            }
+            for name, spec in self.frames.items()
+        }
+
         self.patterns: Dict[str, re.Pattern] = {}
         for name, spec in self.frames.items():
+            blocked = self.not_followed_by.get(name, {})
             # Longest first so "état laïc" wins over the bare "laïc" at the
             # same position; the scan takes non-overlapping matches.
             forms = sorted(spec["forms"], key=len, reverse=True)
-            alternation = "|".join(_form_to_pattern(f) for f in forms)
+            alternation = "|".join(
+                _with_negative_context(
+                    _form_to_pattern(f), blocked.get(fold_plain(f), []))
+                for f in forms
+            )
             self.patterns[name] = re.compile(r"\b(?:" + alternation + r")\b")
 
         # Ambiguous forms, per frame, as folded whole tokens.

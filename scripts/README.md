@@ -11,6 +11,34 @@ publish and sync the generated bundles through the normal data workflow.
 The optional `--validation-output` flag on `generate_laicite.py` creates a
 metadata-only human-coding worklist; it does not perform human validation.
 
+`audit_laicite.py` is the separate, manual relevance screen of that dossier —
+a language model reading the full text under the written rule sheets in
+`laicite/audit/`, as triage ahead of human coding and never as a substitute
+for it. It takes three subcommands, all requiring `HF_TOKEN` because they read
+the private mirror:
+
+```bash
+python scripts/audit_laicite.py extract --work-dir .test-tmp/laicite-audit
+python scripts/audit_laicite.py merge --work-dir .test-tmp/laicite-audit --model <id>
+python scripts/audit_laicite.py status
+```
+
+`extract` writes one batch file per group of unjudged dossier members (tier 2)
+and judgeable annotation occurrences (tier 1), plus a manifest; a reader writes
+a verdict file per batch; `merge` folds those verdicts into the ledger;
+`status` reports coverage, staleness and what is left. Verdicts already in the
+ledger are never re-extracted, so a run after new records are ingested judges
+only the new material (`--include-stale` re-extracts records whose matched text
+has since changed).
+
+**The ledger, `laicite/audit_ledger.json`, is committed; the batches and the
+raw verdict files are not.** The ledger holds identifiers, verdicts, the date,
+the model and a hash of the rule text — no source text and no reader notes,
+which can quote private OCR and must stay under the gitignored `.test-tmp`.
+`generate_laicite.py` reads the ledger and publishes only the aggregate
+`audit_screen` object in `laicite-metadata.json`; a checkout without the ledger
+still generates every bundle, with that aggregate empty.
+
 Python scripts that read the Hugging Face dataset
 `fmadore/islam-west-africa-collection-full` — the **private** full mirror of
 the public [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)

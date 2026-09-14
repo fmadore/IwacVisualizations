@@ -12,7 +12,8 @@ from typing import Any, Dict, List
 
 from iwac_utils import generate_timestamp
 
-from laicite.scan import SUBSET_FIELDS
+from laicite.audit_ledger import load_ledger
+from laicite.scan import MEMBERSHIP_ROUTES, SUBSET_FIELDS
 
 
 class OverviewMixin:
@@ -59,6 +60,24 @@ class OverviewMixin:
                 "year_range": [min(years), max(years)] if years else [],
             }
 
+        # How each member got in, per subset. A displayed strength
+        # attribute rather than a filter — see MEMBERSHIP_ROUTES. The `all`
+        # entry is a plain sum: routes are per item and items belong to
+        # exactly one subset, so nothing is double-counted here.
+        membership_routes: Dict[str, Dict[str, int]] = {}
+        route_fields = MEMBERSHIP_ROUTES + ("title_hit", "bib_only")
+        for subset in SUBSET_FIELDS:
+            sub = [s for s in scans if s.subset == subset]
+            entry = {r: sum(1 for s in sub if s.membership_route == r)
+                     for r in MEMBERSHIP_ROUTES}
+            entry["title_hit"] = sum(1 for s in sub if s.title_hit)
+            entry["bib_only"] = sum(1 for s in sub if s.bib_only)
+            membership_routes[subset] = entry
+        membership_routes["all"] = {
+            key: sum(entry[key] for entry in membership_routes.values())
+            for key in route_fields
+        }
+
         countries = sorted({c for s in scans for c in s.countries})
         years = [s.year for s in scans if s.year]
 
@@ -101,6 +120,8 @@ class OverviewMixin:
                 name: list(spec["forms"]) for name, spec in self.lex.frames.items()
             },
             "subsets": per_subset,
+            "membership_routes": membership_routes,
+            "audit_screen": self._audit_screen(scans),
             "totals": {
                 "members": len(scans),
                 "tagged": sum(1 for s in scans if s.is_tagged),
@@ -134,6 +155,80 @@ class OverviewMixin:
             "rights_note": (
                 "Counts are computed over all text; only readable snippets are "
                 "gated on OCR_is_public, per source field."
+            ),
+        }
+
+    def _audit_screen(self, scans: List[Any]) -> Dict[str, Any]:
+        """Aggregate the committed relevance screen over the CURRENT scan.
+
+        A verdict is keyed by ``<subset>:<o:id>``, so a member the lexicon no
+        longer selects simply drops out of the count — which is the point: the
+        denominators must describe the dossier as it now stands, not as it
+        stood when the screen ran. For the same reason the route breakdown
+        reads ``membership_route`` off the live scan rather than the route
+        stored beside the verdict; a lexicon edit can move an item from
+        ``text>=2`` to ``text=1`` without changing whether a reader judged it
+        relevant.
+
+        Never a validation accuracy. One model, one written rule, reported as
+        a screen with its rule hash so the claim stays auditable.
+        """
+        ledger = load_ledger()
+        members = ledger.get("members", {})
+        rules = ledger.get("rules", {})
+        by_id = {(s.subset, s.o_id): s for s in scans}
+
+        judged: List[Dict[str, Any]] = []
+        for entry in members.values():
+            if not isinstance(entry, dict):
+                continue
+            scan = by_id.get((entry.get("subset"), str(entry.get("id") or "")))
+            if scan is None:
+                continue
+            judged.append({"entry": entry, "scan": scan})
+
+        def tally(bucket_of) -> Dict[str, Dict[str, int]]:
+            out: Dict[str, Dict[str, int]] = {}
+            for row in judged:
+                bucket = out.setdefault(
+                    bucket_of(row), {"judged": 0, "relevant": 0})
+                bucket["judged"] += 1
+                bucket["relevant"] += int(row["entry"].get("relevant") == "yes")
+            return out
+
+        by_route = tally(lambda r: r["scan"].membership_route)
+        for route in MEMBERSHIP_ROUTES:
+            by_route.setdefault(route, {"judged": 0, "relevant": 0})
+
+        judged_at = [e["entry"].get("judged_at") for e in judged
+                     if e["entry"].get("judged_at")]
+        models = Counter(e["entry"].get("model") for e in judged
+                         if e["entry"].get("model"))
+        # The rule version is the one the most recent tier-2 verdicts cite —
+        # tier-1 rules judge occurrences, not membership, so they never
+        # describe this aggregate.
+        latest = max(judged_at) if judged_at else ""
+        tier2 = Counter(
+            e["entry"].get("rule") for e in judged
+            if e["entry"].get("rule")
+            and (not latest or e["entry"].get("judged_at") == latest)
+            and rules.get(e["entry"].get("rule"), {}).get("tier") == 2
+        )
+
+        return {
+            "judged_at": latest,
+            "model": models.most_common(1)[0][0] if models else "",
+            "rule_version": tier2.most_common(1)[0][0] if tier2 else "",
+            "members_total": len(scans),
+            "members_judged": len(judged),
+            "relevant": sum(1 for e in judged
+                            if e["entry"].get("relevant") == "yes"),
+            "by_route": {r: by_route[r] for r in MEMBERSHIP_ROUTES},
+            "by_subset": tally(lambda r: r["scan"].subset),
+            "note": (
+                "A model-assisted screen under a written rule, not human "
+                "validation accuracy. Members no longer selected by the "
+                "lexicon are excluded; routes are read from the current scan."
             ),
         }
 

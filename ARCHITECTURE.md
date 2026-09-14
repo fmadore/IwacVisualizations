@@ -103,7 +103,8 @@ IwacVisualizations/
 │   └── sentiment-models.json
 ├── language/                          # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
-│   ├── laicite/                       # 21 files — one module per bundle, mirroring asset/js/charts/laicite/
+│   ├── laicite/                       # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
+│   ├── audit_laicite.py
 │   ├── build-css.js
 │   ├── build-js.js                    # esbuild bundler driven by asset/js/bundles.json
 │   ├── build-mo.js
@@ -205,6 +206,7 @@ IwacVisualizations/
 │   └── python/
 │       ├── requirements.txt
 │       ├── test_iwac_helpers.py
+│       ├── test_laicite_audit.py
 │       ├── test_laicite_methodology.py
 │       └── test_publication.py
 ├── view/
@@ -443,6 +445,20 @@ methods and validation protocol are documented in
 cells, including records without matches or full text. Regenerate and sync
 these data alongside the other Laïcité bundles after a methodology update;
 installing the module archive alone does not refresh them.
+
+`scripts/audit_laicite.py` sits beside that generator as a separate, manual
+tool: an incremental model-assisted relevance screen of the dossier, whose
+verdicts live in the committed sidecar `scripts/laicite/audit_ledger.json`
+(identifiers, verdicts, model and rule hash only — never source text, never
+reader notes, both of which stay in the gitignored `.test-tmp`). Its
+`extract` / `merge` / `status` subcommands write batches only for records the
+ledger does not already cover, against the rule sheets in
+`scripts/laicite/audit/`. The generator never runs the screen; it reads the
+ledger through `laicite/audit_ledger.py` and publishes one aggregate,
+`audit_screen` in `laicite-metadata.json`, which the block renders. A
+checkout without the ledger still builds, with an empty aggregate. See
+[LAICITE_METHODOLOGY.md](LAICITE_METHODOLOGY.md) for what the screen is and
+is not.
 
 CI does not run the generators one at a time. `scripts/run_all.py` runs all 31
 in a single interpreter with a `FrameStore` installed, so the seven Hugging

@@ -273,3 +273,38 @@ a.iwac-vis-laicite-doc-title:hover {
 }
 
 
+
+
+/* =================================================================== */
+/*  Membership routes                                                    */
+/* =================================================================== */
+/*  Under the bands, and secondary to them: the bands answer "tag or
+ *  text?", this answers "on how much text?". A chip row rather than a
+ *  fourth band — these four counts partition the same total the bands
+ *  do, and a second proportional bar beside the first would invite the
+ *  reading that they are two halves of one figure. */
+.iwac-vis-laicite-routes {
+    margin-top: var(--space-4, 1rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-laicite-routes-title {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-laicite-routes-row {
+    margin-bottom: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-laicite-routes-note {
+    margin: 0 0 var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.55;
+    color: var(--muted, #66696e);
+}

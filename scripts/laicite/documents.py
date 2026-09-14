@@ -39,6 +39,8 @@ class DocumentsMixin:
                 "subjects": s.subjects,
                 "spatial": s.spatial,
                 "is_tagged": s.is_tagged,
+                "membership_route": s.membership_route,
+                "title_hit": s.title_hit,
                 "ocr_public": s.ocr_public,
                 "frame_counts": s.frame_counts,
                 "occurrences": len(s.occurrences),

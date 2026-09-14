@@ -479,6 +479,27 @@
             });
             searchWrap.appendChild(input);
             slot.appendChild(searchWrap);
+
+            // Membership strength, as a filter rather than as a silent
+            // tightening of the dossier. Off by default: a single-mention
+            // record is still a record, and hiding it by default would make
+            // the dossier smaller than the methodology says it is.
+            var strictWrap = P.el('label', 'iwac-vis-laicite-check');
+            var strict = P.el('input');
+            strict.type = 'checkbox';
+            strict.checked = !!state.kwicStrict;
+            strict.setAttribute('data-iwac-control', 'laicite-kwic-strict');
+            strict.addEventListener('change', function () {
+                store.patch({ kwicStrict: strict.checked });
+            });
+            strictWrap.appendChild(strict);
+            strictWrap.appendChild(P.el('span', null, P.t('laicite.kwic_strict')));
+            strictWrap.title = P.t('laicite.kwic_strict_hint');
+            slot.appendChild(strictWrap);
+            live.kwicStrict = {
+                sync: function () { strict.checked = !!state.kwicStrict; }
+            };
+
             live.kwicQuery = {
                 sync: function () {
                     // Never overwrite what the reader is typing: the store

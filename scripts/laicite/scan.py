@@ -7,6 +7,7 @@ its frames. ``ScanMixin.scan_all`` fills the list once per run — every
 """
 from __future__ import annotations
 
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -117,6 +118,92 @@ PER_ITEM_SNIPPET_CAP: Dict[str, Optional[int]] = {
 }
 
 
+# -- membership strength ----------------------------------------------------
+#
+# The four routes an item can take into the dossier, in the order the
+# September 2026 relevance audit measured them (97.7% / ~93% / ~76% / 34%
+# judged relevant on `articles`). They are emitted as a displayed attribute,
+# NOT as a filter: tightening membership to `text>=2` would have dropped 207
+# relevant single-hit members to remove 59 false ones, and the `tag-only`
+# stratum is precisely where the curator's broader religion–state concept
+# exceeds the lexical one. Exposing the route lets a reader weigh a row.
+MEMBERSHIP_ROUTES: Tuple[str, ...] = ("tag+text", "text>=2", "text=1", "tag-only")
+
+
+def membership_route(is_tagged: bool, membership_hits: int) -> str:
+    """Which of the four routes carried this item into the dossier."""
+    if is_tagged:
+        return "tag+text" if membership_hits else "tag-only"
+    return "text>=2" if membership_hits >= 2 else "text=1"
+
+
+# -- bibliography-only hits -------------------------------------------------
+#
+# Scholarship cites other scholarship, so a `references` item can match the
+# core vocabulary only inside its own reference list — the audit found seven
+# such false members whose sole hit was a cited title ("voie africaine de la
+# laïcité"). Two cheap signals, both computed on the folded OCR:
+#
+#   1. a heading line that folds to one of BIB_HEADINGS and sits past
+#      BIB_HEADING_FRACTION of the text — everything after it is the list;
+#   2. failing a usable heading (OCR often loses line breaks), a hit in the
+#      last BIB_TAIL_FRACTION of the text with a citation cue — a four-digit
+#      year, a `pp. 12` page marker or a `120-134` range — within
+#      ±BIB_NEIGHBOURHOOD characters.
+#
+# Only ever applied to BIB_ONLY_SUBSETS. A press article ends with a date far
+# too often for rule 2 to mean anything there, and news copy has no
+# bibliography for rule 1 to find.
+BIB_ONLY_SUBSETS: Set[str] = {"references"}
+BIB_HEADING_FRACTION = 0.60
+BIB_TAIL_FRACTION = 0.20
+BIB_NEIGHBOURHOOD = 60
+BIB_HEADINGS: Set[str] = {
+    "bibliographie", "bibliographies", "bibliographie selective",
+    "bibliographie sommaire", "references", "reference",
+    "references bibliographiques", "bibliography", "select bibliography",
+    "works cited", "sources", "sources et bibliographie",
+}
+# Citation cues, on folded text. The year class is deliberately wide (a
+# reference list cites 17th-century editions) but still four digits, so an
+# OCR page number cannot pass for one.
+BIB_CUE_RE = re.compile(r"\b1[5-9]\d\d\b|\b20[0-4]\d\b|pp?\.\s*\d|\d+[-–—]\d+")
+# A heading line, once numbering and decorative punctuation are stripped.
+BIB_HEADING_TRIM = " \t\r*.:-–—_|0123456789"
+
+
+def bibliography_start(folded: str) -> Optional[int]:
+    """Character offset where the reference list begins, or ``None``.
+
+    Only a heading past ``BIB_HEADING_FRACTION`` counts: "Sources" as a
+    section of an argument, or "References" in a running header on page two,
+    is not the end matter.
+    """
+    if not folded:
+        return None
+    floor = len(folded) * BIB_HEADING_FRACTION
+    for m in re.finditer(r"[^\n]+", folded):
+        if m.start() < floor:
+            continue
+        line = re.sub(r"\s+", " ", m.group(0)).strip(BIB_HEADING_TRIM).strip()
+        if line in BIB_HEADINGS:
+            return m.start()
+    return None
+
+
+def is_bibliographic(start: int, folded: str, bib_start: Optional[int]) -> bool:
+    """Does the hit at ``start`` sit in the end matter rather than the text?"""
+    if bib_start is not None and start >= bib_start:
+        return True
+    if not folded:
+        return False
+    if start < len(folded) * (1.0 - BIB_TAIL_FRACTION):
+        return False
+    lo = max(0, start - BIB_NEIGHBOURHOOD)
+    hi = min(len(folded), start + BIB_NEIGHBOURHOOD)
+    return bool(BIB_CUE_RE.search(folded[lo:hi]))
+
+
 @dataclass
 class Occurrence:
     """One matched form, located in one field of one item."""
@@ -176,6 +263,16 @@ class ItemScan:
     analyzed_words: int = 0
     nearby_frame_counts: Dict[str, int] = field(default_factory=dict)
     unresolved_hits: int = 0
+    #: Which of ``MEMBERSHIP_ROUTES`` carried this item into the dossier —
+    #: a displayed strength attribute, never a filter. See the constant.
+    membership_route: str = ""
+    #: A membership-frame hit in the TITLE. The strongest single signal the
+    #: audit found: all 24 text-only members with one were judged relevant.
+    title_hit: bool = False
+    #: Text-only member whose every core full-text hit sits in the end
+    #: matter — a citation of someone else's title, not a statement. Only
+    #: ever computed for ``BIB_ONLY_SUBSETS``.
+    bib_only: bool = False
 
     @property
     def said(self) -> bool:
@@ -250,6 +347,7 @@ class ScanMixin:
         laity_demoted = 0
         unresolved_hits = 0
         texts: Dict[str, str] = {}
+        folded_texts: Dict[str, str] = {}
         # Token index of every membership-frame hit, per field, so the
         # collocate windows can be cut after the whole field is scanned.
         hit_token_idx: Dict[str, List[int]] = defaultdict(list)
@@ -264,6 +362,7 @@ class ScanMixin:
                 continue
             texts[column] = value
             folded = fold_preserving(value)
+            folded_texts[column] = folded
             # One token list per field, plus a char→token index, so the
             # disambiguator can look at neighbours without re-tokenizing
             # per match.
@@ -307,6 +406,24 @@ class ScanMixin:
         if not is_tagged and membership_hits == 0:
             return None
 
+        core = [o for o in occurrences if o.frame in self.lex.membership_frames]
+        title_hit = any(o.field == "title" for o in core)
+        route = membership_route(is_tagged, membership_hits)
+
+        # Bibliography-only: a text-only member whose core evidence is
+        # entirely somebody else's citation. A title hit or the curator's
+        # tag settles the question on its own, so neither is second-guessed.
+        bib_only = False
+        if subset in BIB_ONLY_SUBSETS and not is_tagged and not title_hit:
+            core_ocr = [o for o in core if o.field == "OCR"]
+            folded_ocr = folded_texts.get("OCR", "")
+            if core_ocr and folded_ocr:
+                bib_start = bibliography_start(folded_ocr)
+                bib_only = all(
+                    is_bibliographic(o.start, folded_ocr, bib_start)
+                    for o in core_ocr
+                )
+
         window_tokens, rest_tokens = self._split_window_vocabulary(
             field_tokens, hit_token_idx)
 
@@ -343,6 +460,9 @@ class ScanMixin:
                      if subset == "articles" else []),
             analyzed_words=sum(len(tokens) for tokens in field_tokens.values()),
             unresolved_hits=unresolved_hits,
+            membership_route=route,
+            title_hit=title_hit,
+            bib_only=bib_only,
             nearby_frame_counts=dict(Counter(o.frame for o in occurrences
                 if o.frame not in self.lex.membership_frames and any(
                     abs(positions[o.field].get(o.start, -10000) - anchor) <= 80

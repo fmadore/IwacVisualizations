@@ -107,4 +107,38 @@
         if (title) el.title = title;
         return el;
     };
+
+    /**
+     * How a record joined the dossier. The generator emits one of four
+     * route strings per member; anything else (including nothing at all,
+     * on data generated before the routes existed) returns null and the
+     * caller renders no chip rather than an "unknown" one.
+     */
+    L.ROUTE_KEYS = {
+        'tag+text': 'laicite.route_tag_text',
+        'text>=2': 'laicite.route_text_multi',
+        'text=1': 'laicite.route_text_single',
+        'tag-only': 'laicite.route_tag_only'
+    };
+
+    /** The four routes in the order a reader should read them: strongest first. */
+    L.ROUTE_ORDER = ['tag+text', 'text>=2', 'text=1', 'tag-only'];
+
+    L.routeLabel = function (route) {
+        var key = L.ROUTE_KEYS[route];
+        return key ? P.t(key) : null;
+    };
+
+    /**
+     * The route as a chip. `text=1` is the one route the September 2026
+     * screen found weak, so it is the only one marked as such — colouring
+     * all four would say the routes differ in kind rather than in strength.
+     */
+    L.routeChip = function (route) {
+        var label = L.routeLabel(route);
+        if (!label) return null;
+        return L.chip(label,
+            'is-route' + (route === 'text=1' ? ' is-weak' : ''),
+            P.t('laicite.route_hint'));
+    };
 })();

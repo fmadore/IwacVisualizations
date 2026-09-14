@@ -22,6 +22,82 @@
     var L = ns.laicite = ns.laicite || {};
 
     /**
+     * Does this item join the dossier on evidence a reader should treat as
+     * weak? Two cases, both established by the September 2026 screen: a
+     * single core-vocabulary hit (read as substantively about laïcité about
+     * three times in four), and a scholarly record whose only hits sit in a
+     * bibliography.
+     *
+     * Bundles generated before the route fields existed carry neither key,
+     * so every item reads as strong and the strict filter hides nothing —
+     * which is the honest behaviour when the evidence is simply unknown.
+     */
+    L.isWeakMember = function (item) {
+        if (!item) return false;
+        return item.s === 'text=1' || !!item.b;
+    };
+
+    /**
+     * Badges for the shared renderer's `itemBadges` hook. Only weakness is
+     * marked: a tag+text or title-hit item is the unremarkable case, and a
+     * badge on every line would carry no information.
+     */
+    L.concordanceItemBadges = function (item) {
+        var badges = [];
+        if (!item) return badges;
+        if (item.s === 'text=1') {
+            badges.push({
+                label: P.t('laicite.badge_single_mention'),
+                className: 'is-single',
+                title: P.t('laicite.badge_single_mention_hint')
+            });
+        }
+        if (item.b) {
+            badges.push({
+                label: P.t('laicite.badge_bibliography'),
+                className: 'is-bibliography',
+                title: P.t('laicite.badge_bibliography_hint')
+            });
+        }
+        return badges;
+    };
+
+    /**
+     * Rows for one corpus after every facet, plus how many RECORDS the
+     * strict filter removed. Pure, and exported, because the count in the
+     * summary line and the rows in the list have to come from one pass:
+     * computing them separately is how a "3 records hidden" line ends up
+     * over a list that still shows them.
+     *
+     * @param {Object} payload  a per-corpus concordance bundle
+     * @param {Object} state    the block state
+     * @returns {{rows: Array<Object>, hiddenRecords: number}}
+     */
+    L.filterConcordanceRows = function (payload, state) {
+        payload = payload || {};
+        state = state || {};
+        var items = payload.items || [];
+        var rows = [];
+        var hidden = {};
+        (payload.rows || []).forEach(function (row) {
+            if (state.kwicFrame && row.f !== state.kwicFrame) return;
+            var item = items[row.i] || {};
+            if (state.kwicCountry
+                && (item.c || []).indexOf(state.kwicCountry) === -1) return;
+            if (state.kwicQuery
+                && !P.concordanceMatches(row, state.kwicQuery)) return;
+            // Last, so the count reports what the STRICT rule removed from
+            // what the reader's other facets had already selected.
+            if (state.kwicStrict && L.isWeakMember(item)) {
+                hidden[row.i] = true;
+                return;
+            }
+            rows.push(row);
+        });
+        return { rows: rows, hiddenRecords: Object.keys(hidden).length };
+    };
+
+    /**
      * Create the concordance controller.
      *
      * @param {Object} cfg
@@ -67,20 +143,9 @@
                 });
         }
 
-        /** Rows for the active corpus, after frame / country / text filters. */
+        /** Rows for the active corpus, after frame / country / text / strict. */
         function filteredRows(payload) {
-            var state = cfg.state;
-            var items = payload.items || [];
-            return (payload.rows || []).filter(function (row) {
-                if (state.kwicFrame && row.f !== state.kwicFrame) return false;
-                if (state.kwicCountry) {
-                    var item = items[row.i] || {};
-                    if ((item.c || []).indexOf(state.kwicCountry) === -1) return false;
-                }
-                if (state.kwicQuery
-                    && !P.concordanceMatches(row, state.kwicQuery)) return false;
-                return true;
-            });
+            return L.filterConcordanceRows(payload, cfg.state);
         }
 
         function render() {
@@ -101,12 +166,20 @@
                 return;
             }
 
-            var rows = filteredRows(payload);
+            var filtered = filteredRows(payload);
+            var rows = filtered.rows;
 
             var summary = P.el('div', 'iwac-vis-laicite-kwic-summary');
             summary.appendChild(P.el('p', 'iwac-vis-laicite-kwic-count',
                 P.t('laicite.concordance_count',
                     { count: P.formatNumber(rows.length) })));
+            // What the strict filter is costing, stated rather than left for
+            // the reader to infer from a shorter list.
+            if (filtered.hiddenRecords) {
+                summary.appendChild(P.el('p', 'iwac-vis-laicite-kwic-hidden',
+                    P.t('laicite.concordance_strict_hidden',
+                        { count: P.formatNumber(filtered.hiddenRecords) })));
+            }
             // The honest denominator. Withheld occurrences are a rights fact
             // about the sources, not a gap in the pipeline, and hiding them
             // would let the panel imply the corpus is fully quotable.
@@ -124,6 +197,7 @@
                 pageSize: 25,
                 emptyKey: 'laicite.concordance_empty',
                 taggedHintKey: 'concordance.tagged_hint',
+                itemBadges: L.concordanceItemBadges,
                 labelForField: function (row) {
                     return P.t('laicite.field_' + row.d);
                 },

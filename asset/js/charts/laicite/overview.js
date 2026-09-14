@@ -103,9 +103,44 @@
             bar.appendChild(seg);
         });
         panel.appendChild(bar);
+        var routes = buildRouteBreakdown(metadata);
+        if (routes) panel.appendChild(routes);
         void totals;
         return panel;
     };
+
+    /**
+     * The four membership routes, under the bands. The bands answer "tag or
+     * text?"; this answers "on how much text?", which is the question the
+     * September 2026 screen showed actually predicts whether a record is
+     * about laïcité. Returns null when the bundle predates the field, so a
+     * deploy on older data loses the breakdown and keeps the bands.
+     */
+    function buildRouteBreakdown(metadata) {
+        var routes = (metadata.membership_routes || {}).all;
+        if (!routes) return null;
+        var row = P.el('div', 'iwac-vis-chip-row iwac-vis-laicite-routes-row');
+        L.ROUTE_ORDER.forEach(function (route) {
+            var n = routes[route];
+            if (n == null) return;
+            row.appendChild(L.chip(
+                L.routeLabel(route) + ' · ' + P.formatNumber(n), 'is-count'));
+        });
+        if (!row.childNodes.length) return null;
+
+        var wrap = P.el('div', 'iwac-vis-laicite-routes');
+        wrap.appendChild(P.el('h5', 'iwac-vis-laicite-routes-title',
+            P.t('laicite.routes_title')));
+        wrap.appendChild(row);
+        if (routes.title_hit != null) {
+            wrap.appendChild(P.el('p', 'iwac-vis-laicite-routes-note',
+                P.t('laicite.routes_title_hit',
+                    { count: P.formatNumber(routes.title_hit) })));
+        }
+        wrap.appendChild(P.el('p', 'iwac-vis-laicite-routes-note',
+            P.t('laicite.routes_note')));
+        return wrap;
+    }
 
     /**
      * One row per corpus. No total row — see the module docblock.

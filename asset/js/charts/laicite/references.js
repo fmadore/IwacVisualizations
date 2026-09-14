@@ -223,6 +223,19 @@
         if (work.tagged) {
             flags.appendChild(L.chip(P.t('laicite.doc_tagged'), 'is-tagged'));
         }
+        var route = L.routeChip(work.membership_route);
+        if (route) flags.appendChild(route);
+        if (work.title_hit) {
+            flags.appendChild(L.chip(P.t('laicite.route_title_hit'), 'is-route',
+                P.t('laicite.route_title_hit_hint')));
+        }
+        // A scholarly match can sit in a reference list rather than in the
+        // argument. Saying so on the work itself is the difference between
+        // a reader trusting the row and a reader checking it.
+        if (work.bib_only) {
+            flags.appendChild(L.chip(P.t('laicite.badge_bibliography'),
+                'is-route is-weak', P.t('laicite.badge_bibliography_hint')));
+        }
         if (work.occurrences) {
             flags.appendChild(L.chip(
                 P.t('laicite.occurrences') + ' ' + P.formatNumber(work.occurrences),

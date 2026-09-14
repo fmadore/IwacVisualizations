@@ -13,6 +13,15 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.70.0 — Laïcité relevance audit and membership strength (2026-09-14)
+
+- Show how each record joined the Laïcité dossier — catalogue tag, two or more vocabulary matches, a single match, or the tag alone — as a displayed strength attribute, with a badge for a core term in the title.
+- Add a strict concordance filter that hides records resting on one incidental mention, and mark scholarly works whose only matches sit in a reference list.
+- Revise the family-law vocabulary: bare “héritage” is matched only in explicit legal phrases, and the metaphorical “divorce entre” / “divorce avec” is excluded. Family-law occurrences fall from 1,377 to 906 and total category matches from 17,728 to 17,257; dossier membership is unchanged.
+- Publish a model-assisted relevance screen of all 1,244 members and 3,115 annotation occurrences, rendered from the data with its limits stated: one model's reading under a written rule, not human validation, and the catalogue tag and the core vocabulary measure different concepts.
+- Add `scripts/audit_laicite.py` and a committed verdict ledger so a later screen judges only newly ingested records; the ledger carries identifiers, verdicts, model and rule hash, never source text or reader notes.
+- Document the routes, the revised lexicon, the screen and the 14 September verification run in the Laïcité methodology, and record the audit tooling in the architecture and pipeline documentation.
+
 ### v1.69.1 — Concordance pagination and documentation (2026-09-14)
 
 - Jump to the top of the new concordance list when using next or previous page controls.

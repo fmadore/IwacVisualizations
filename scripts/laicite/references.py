@@ -51,6 +51,9 @@ class ReferencesMixin:
                 "countries": s.countries,
                 "occurrences": sum(s.frame_counts.values()),
                 "tagged": s.is_tagged,
+                "membership_route": s.membership_route,
+                "title_hit": s.title_hit,
+                "bib_only": s.bib_only,
             })
 
         items.sort(key=lambda r: (-(r["year"] or 0), r["title"]))

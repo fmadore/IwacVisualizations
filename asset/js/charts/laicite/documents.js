@@ -78,6 +78,14 @@
         if (doc.is_tagged) {
             flags.appendChild(L.chip(P.t('laicite.doc_tagged'), 'is-tagged'));
         }
+        // How this record joined the dossier. Absent on bundles generated
+        // before the routes existed, and then simply not shown.
+        var route = L.routeChip(doc.membership_route);
+        if (route) flags.appendChild(route);
+        if (doc.title_hit) {
+            flags.appendChild(L.chip(P.t('laicite.route_title_hit'), 'is-route',
+                P.t('laicite.route_title_hit_hint')));
+        }
         if (doc.ocr_public && doc.has_text) {
             flags.appendChild(L.chip(P.t('laicite.doc_full_text'), 'is-public'));
         }

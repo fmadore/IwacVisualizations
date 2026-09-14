@@ -172,6 +172,7 @@
             kwicFrame: '',
             kwicCountry: '',
             kwicQuery: '',
+            kwicStrict: false,
             actorType: '',
             arenaCountry: '',
             sentModel: '',
@@ -261,7 +262,8 @@
                 { key: 'trendsPrecision', param: 'precision', values: ['', 'broad_'] },
                 { key: 'kwicSubset', param: 'corpus', values: available },
                 { key: 'kwicFrame', param: 'frame', values: frames },
-                { key: 'kwicQuery', param: 'q' }
+                { key: 'kwicQuery', param: 'q' },
+                { key: 'kwicStrict', param: 'strict', values: [false, true] }
             ]
         }) : null;
 
@@ -479,7 +481,7 @@
                     store.patch({ view: 'concordance' });
                 }));
                 viewHost.appendChild(L.buildSubsetTable(metadata));
-                if (L.buildResearch) viewHost.appendChild(L.buildResearch(trends && trends.research));
+                if (L.buildResearch) viewHost.appendChild(L.buildResearch(trends && trends.research, metadata));
                 viewHost.appendChild(L.buildVideos(metadata, siteBase));
                 viewHost.appendChild(L.buildRightsNote(metadata));
                 viewHost.appendChild(L.buildFrameLegend(metadata, frameColors));

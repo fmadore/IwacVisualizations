@@ -164,6 +164,188 @@ class LaiciteMethodologyTests(unittest.TestCase):
         self.assertEqual(sum(season["gregorian"]), 1)
         self.assertEqual(sum(season["hijri"]), 1)
 
+    # -- the September 2026 relevance audit ------------------------------
+
+    def test_bare_heritage_is_not_family_law(self):
+        """38% sense precision over 487 hits, so the bare word is retired.
+
+        Accent folding made it match `heritage` too; what it actually
+        caught was colonial legacy, political legacy, the hadith on the
+        prophets' héritage and a newspaper named L'Héritage.
+        """
+        for text in ["Laïcité et héritage colonial.",
+                     "Laïcité. Un héritage.",
+                     "Laicite and the colonial heritage."]:
+            with self.subTest(text=text):
+                self.assertNotIn("droit-famille",
+                                 self.scan(OCR=text).frame_counts)
+        for text in ["Laïcité et part d'héritage.",
+                     "Laïcité : le droit à l'héritage.",
+                     "Laïcité et partage de l’héritage.",
+                     "Laïcité et héritage en islam."]:
+            with self.subTest(text=text):
+                self.assertEqual(
+                    self.scan(OCR=text).frame_counts["droit-famille"], 1)
+
+    def test_metaphorical_divorce_is_excluded_by_right_context(self):
+        """`not_followed_by` — the political divorce, not the family one."""
+        for text in ["Laïcité : le divorce entre l'État et l'église.",
+                     "Laïcité. Son divorce avec le parti."]:
+            with self.subTest(text=text):
+                self.assertNotIn("droit-famille",
+                                 self.scan(OCR=text).frame_counts)
+        # Only the immediately following token is blocked, and only as a
+        # whole word. `divorcé` folds onto `divorce` and still counts;
+        # `divorcée` does not, and never did — it is not a listed form.
+        for text in ["Laïcité : le divorce est prononcé.",
+                     "Laïcité et le divorce, entre autres sujets.",
+                     "Laïcité : un divorce entretenu.",
+                     "Laïcité : il est divorcé."]:
+            with self.subTest(text=text):
+                self.assertEqual(
+                    self.scan(OCR=text).frame_counts["droit-famille"], 1)
+
+    def test_membership_route_records_how_each_item_got_in(self):
+        cases = {
+            "tag+text": dict(OCR="Laïcité.", subject="Laïcité"),
+            "tag-only": dict(OCR="Un texte.", subject="Laïcité"),
+            "text>=2": dict(OCR="Laïcité et laïcité."),
+            "text=1": dict(OCR="Laïcité."),
+        }
+        for route, fields in cases.items():
+            with self.subTest(route=route):
+                self.assertEqual(self.scan(**fields).membership_route, route)
+
+    def test_title_hit_is_recorded_separately_from_the_route(self):
+        titled = self.scan(title="Laïcité au Bénin", OCR="Un texte.")
+        self.assertTrue(titled.title_hit)
+        self.assertEqual(titled.membership_route, "text=1")
+        self.assertFalse(self.scan(title="Un débat", OCR="Laïcité.").title_hit)
+        # An annotation frame in the title is not a core hit.
+        self.assertFalse(self.scan(title="Le divorce",
+                                   OCR="Laïcité.").title_hit)
+
+    def test_concordance_items_carry_strength_attributes(self):
+        self.g.scans = [self.scan(title="Laïcité", OCR="Laïcité.",
+                                  subject="Laïcité")]
+        index, bundles = self.g.build_concordance()
+        entry = bundles["articles"]["items"][0]
+        self.assertEqual(entry["s"], "tag+text")
+        self.assertEqual(entry["h"], 1)
+        self.assertNotIn("b", entry)
+        self.assertEqual(set("otuycngshb"), set(index["item_keys"]))
+
+    def test_metadata_membership_routes_sum_across_subsets(self):
+        self.g.scans = [
+            self.scan(OCR="Laïcité.", subject="Laïcité"),
+            self.scan(OCR="Laïcité et laïcité."),
+            self.scan(title="Laïcité", OCR="Un texte."),
+            self.scan("documents", OCR="Un texte.", subject="Laïcité"),
+        ]
+        routes = self.g.build_metadata()["membership_routes"]
+        self.assertEqual(routes["articles"],
+                         {"tag+text": 1, "text>=2": 1, "text=1": 1,
+                          "tag-only": 0, "title_hit": 1, "bib_only": 0})
+        self.assertEqual(routes["documents"]["tag-only"], 1)
+        self.assertEqual(routes["all"]["tag-only"], 1)
+        self.assertEqual(
+            sum(routes["all"][r] for r in
+                ("tag+text", "text>=2", "text=1", "tag-only")),
+            len(self.g.scans))
+        # Every scanned subset is present, plus the `all` roll-up.
+        self.assertEqual(set(routes), set(SUBSET_FIELDS) | {"all"})
+
+    def test_bibliography_only_hits_are_flagged_in_scholarship(self):
+        """A cited title is not a statement — measured at 6/6 on the audit."""
+        body = "Un chapitre d'histoire religieuse au Dahomey. " * 40
+        end_matter = ("\nBibliographie\n"
+                      "Koné, A. (1998). La voie africaine de la laïcité, "
+                      "pp. 12-34.\n")
+        cited = self.scan("references", OCR=body + end_matter)
+        self.assertEqual(cited.membership_route, "text=1")
+        self.assertTrue(cited.bib_only)
+
+        # A hit in the argument itself is never bibliography-only, even
+        # when the same reference list is present.
+        argued = self.scan("references",
+                           OCR="La laïcité y est débattue. " + body + end_matter)
+        self.assertFalse(argued.bib_only)
+        # Neither is a title hit, nor the curator's tag.
+        self.assertFalse(self.scan("references", title="Laïcité",
+                                   OCR=body + end_matter).bib_only)
+        self.assertFalse(self.scan("references", subject="Laïcité",
+                                   OCR=body + end_matter).bib_only)
+        # Never computed outside the scholarly subset: press copy ends with
+        # a date far too often for the tail rule to mean anything there.
+        self.assertFalse(self.scan(OCR=body + end_matter).bib_only)
+
+    def test_validation_worklist_carries_the_route(self):
+        row = {"o:id": "1", "title": "Laïcité", "OCR": "",
+               "pub_date": "2020", "OCR_is_public": False}
+        rec = self.g._scan_row(row, "articles", SUBSET_FIELDS["articles"],
+                               "laicite")
+        self.g._observe_source(row, "articles", rec)
+        negative = {"o:id": "2", "title": "Autre", "OCR": "Un texte.",
+                    "pub_date": "2020", "OCR_is_public": False}
+        self.g._observe_source(negative, "articles", None)
+        by_id = {r["id"]: r for r in self.g.validation_sample()}
+        self.assertEqual(by_id["1"]["route"], "text=1")
+        self.assertEqual(by_id["2"]["route"], "")
+
+    def test_audit_screen_aggregates_the_ledger_over_the_current_scan(self):
+        kept = self.scan(OCR="Laïcité.", subject="Laïcité")
+        kept.o_id = "11"
+        other = self.scan(OCR="Laïcité et laïcité.")
+        other.o_id = "22"
+        self.g.scans = [kept, other]
+        ledger = {
+            "rules": {"r2": {"tier": 2}, "r1": {"tier": 1}},
+            "members": {
+                # The stored route is deliberately stale: the aggregate
+                # must read the route off the current scan instead.
+                "articles:11": {"subset": "articles", "id": "11",
+                                "route": "text=1", "relevant": "yes",
+                                "judged_at": "2026-09-14",
+                                "model": "claude-sonnet-5", "rule": "r2"},
+                "articles:22": {"subset": "articles", "id": "22",
+                                "route": "text>=2", "relevant": "no",
+                                "judged_at": "2026-09-14",
+                                "model": "claude-sonnet-5", "rule": "r2"},
+                # No longer selected by the lexicon — simply not counted.
+                "articles:99": {"subset": "articles", "id": "99",
+                                "route": "text=1", "relevant": "yes",
+                                "judged_at": "2026-09-14",
+                                "model": "claude-sonnet-5", "rule": "r2"},
+            },
+            "occurrences": {},
+        }
+        with patch("laicite.overview.load_ledger", return_value=ledger):
+            screen = self.g.build_metadata()["audit_screen"]
+        self.assertEqual(screen["members_total"], 2)
+        self.assertEqual(screen["members_judged"], 2)
+        self.assertEqual(screen["relevant"], 1)
+        self.assertEqual(screen["model"], "claude-sonnet-5")
+        self.assertEqual(screen["judged_at"], "2026-09-14")
+        self.assertEqual(screen["rule_version"], "r2")
+        self.assertEqual(screen["by_route"]["tag+text"],
+                         {"judged": 1, "relevant": 1})
+        self.assertEqual(screen["by_route"]["text>=2"],
+                         {"judged": 1, "relevant": 0})
+        self.assertEqual(screen["by_route"]["text=1"],
+                         {"judged": 0, "relevant": 0})
+        self.assertEqual(screen["by_subset"]["articles"],
+                         {"judged": 2, "relevant": 1})
+
+    def test_audit_screen_survives_a_missing_ledger(self):
+        self.g.scans = [self.scan(OCR="Laïcité.")]
+        with patch("laicite.overview.load_ledger",
+                   return_value={"rules": {}, "members": {}, "occurrences": {}}):
+            screen = self.g.build_metadata()["audit_screen"]
+        self.assertEqual(screen["members_judged"], 0)
+        self.assertEqual(screen["rule_version"], "")
+        self.assertEqual(set(screen["by_route"]),
+                         {"tag+text", "text>=2", "text=1", "tag-only"})
+
 
 if __name__ == "__main__":
     unittest.main()
