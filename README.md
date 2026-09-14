@@ -15,7 +15,7 @@ Every registered block is wired end-to-end with live data — twenty-one page bl
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 16 panels, incl. full-text coverage, per-model LDA topics + semantic landscape | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — seven views: race, trends, country/global counts, co-occurrence, context word cloud, and mentioned-place map | Precompute (`generate_scary_terms.py`) |
-| Laïcité | page block | **Live** — fourteen views: overview with the tag-vs-text Venn and per-corpus rights split, annotated timeline (year axis or Gregorian-vs-lunar seasonality), archival dossier, rights-gated KWIC concordance, log-likelihood collocates sliced by source type/corpus/decade/country, token-normalised corpus comparison with per-outlet frame fingerprints, actors & institutions by decade, arenas small-multiples, per-model AI framing against a whole-corpus baseline (with a register chart over readability and lexical richness), MapLibre place map, UMAP semantic map of the press half, cross-outlet circulation of near-duplicate copy, bylines with their coverage denominators, and the bibliography. Scans four subsets (articles, publications, documents, references); counts are never summed across them | Precompute (`generate_laicite.py` + committed `laicite-events.json`) |
+| Laïcité | page block | **Live** — source coverage and field sensitivity; normalized timelines and seasonality; archival reading guides; rights-gated concordance; nearby vocabulary and local vocabulary contexts; matched model-rating comparisons; maps, circulation evidence, bylines and bibliography. Searches titles and original full text across articles, publications, documents, references and YouTube records, with missing transcripts explicitly reported. See [methodology and limitations](LAICITE_METHODOLOGY.md). | Precompute (`generate_laicite.py`, including `laicite-research.json`, + committed `laicite-events.json`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview (treemap + topics-over-time, switchable between dominant-topic share and probability-weighted prevalence) + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
 | Periodicals Overview | page block | **Live** — 11 panels: runs gantt, issue-holdings matrix, issues/year, languages & countries donuts, top subjects, word cloud, and LDA themes (mixtures over `lda_topic_topk` — prevalence over time, per-theme ranking, representative issues) | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets, topic cluster labels | Precompute (`generate_semantic_landscape.py`) |
@@ -362,7 +362,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.69.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.69.1). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

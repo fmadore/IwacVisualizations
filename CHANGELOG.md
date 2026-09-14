@@ -13,6 +13,11 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.69.1 — Concordance pagination and documentation (2026-09-14)
+
+- Jump to the top of the new concordance list when using next or previous page controls.
+- Update the README's Laïcité description and link methodology, coverage and data-refresh guidance from the architecture and pipeline documentation.
+
 ### v1.69.0 — Laïcité methodology and source coverage (2026-09-12)
 
 - Restrict vocabulary to titles and original full text; include YouTube with visible transcript coverage.

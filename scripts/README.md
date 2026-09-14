@@ -1,5 +1,16 @@
 # IWAC Visualizations — precompute pipeline
 
+For the Laïcité generator's source population, text fields, denominators and
+validation protocol, see [LAICITE_METHODOLOGY.md](../LAICITE_METHODOLOGY.md).
+It searches titles and original full text, including available YouTube
+transcripts; descriptions, abstracts and tables of contents are excluded from
+lexical counts. `laicite-research.json` retains aggregate coverage and sensitivity
+counts for the full population, including records without matches or transcripts.
+Run `python scripts/run_all.py --only laicite` from the repository root, then
+publish and sync the generated bundles through the normal data workflow.
+The optional `--validation-output` flag on `generate_laicite.py` creates a
+metadata-only human-coding worklist; it does not perform human validation.
+
 Python scripts that read the Hugging Face dataset
 `fmadore/islam-west-africa-collection-full` — the **private** full mirror of
 the public [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)

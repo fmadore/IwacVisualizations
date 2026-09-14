@@ -63,8 +63,8 @@
                 paint();
                 // Keep the reader's place: jump back to the top of the list
                 // rather than leaving them mid-page after a page turn.
-                if (root.scrollIntoView) {
-                    root.scrollIntoView({ block: 'nearest' });
+                if (list.scrollIntoView) {
+                    list.scrollIntoView({ block: 'start', behavior: 'instant' });
                 }
             }
         });

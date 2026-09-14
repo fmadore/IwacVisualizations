@@ -436,6 +436,14 @@ IWACVis.registerChart(el, function (el, chart) {
 
 Full workflow documented in **`scripts/README.md`**.
 
+The Laïcité generator's population, field restrictions, denominators, comparison
+methods and validation protocol are documented in
+[LAICITE_METHODOLOGY.md](LAICITE_METHODOLOGY.md). Its `research.py` module builds
+`laicite-research.json` with whole-collection coverage and field-sensitivity
+cells, including records without matches or full text. Regenerate and sync
+these data alongside the other Laïcité bundles after a methodology update;
+installing the module archive alone does not refresh them.
+
 CI does not run the generators one at a time. `scripts/run_all.py` runs all 31
 in a single interpreter with a `FrameStore` installed, so the seven Hugging
 Face subsets are converted to pandas once each rather than ~90 times across 31
