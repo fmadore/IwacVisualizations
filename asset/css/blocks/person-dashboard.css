@@ -249,21 +249,13 @@
     font-variant-numeric: tabular-nums;
 }
 
-/*  Layout-only overrides on the shared control: the two selects sit in the
- *  same bar as the chips, so they carry the chip's 2.25rem box rather than
- *  the taller default and the whole row shares one optical baseline. */
-.iwac-vis-associated__limit,
-.iwac-vis-associated__period {
-    min-height: 2.25rem;
-    padding-block: var(--space-1, 0.25rem);
-}
-
-.iwac-vis-associated__limit {
-    min-width: 5.25rem;
-}
-
-.iwac-vis-associated__period {
-    min-width: 9.5rem;
+/*  The top-N chips are bare numerals: an equal box for each, the figure
+ *  centred and tabular, so "10" and "50" sit in the same column of the
+ *  row and the active one is a shift of tint, not of width. */
+.iwac-vis-associated__choice--num {
+    min-width: 3rem;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ---- Ranked relational list -------------------------------------- */
@@ -656,10 +648,10 @@
         align-items: stretch;
         gap: var(--space-1, 0.25rem);
     }
-    .iwac-vis-associated__limit,
-    .iwac-vis-associated__period {
-        min-height: var(--size-control-lg, 2.75rem);
-        width: 100%;
+    /*  A field's own chip group stacks under its eyebrow, the eyebrow
+     *  re-uses the gutter label's row spacing. */
+    .iwac-vis-associated__field-label {
+        margin-bottom: var(--space-1, 0.25rem);
     }
     /* Curves need horizontal room to remain interpretable. On phones the
      * ranked DOM list is the accessible, exact view and no relationship is

@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.70.3 — Associated-entities count and period as chips (2026-09-16)
+
+- On the person and entity dashboards, "Number shown" (10 / 20 / 30 / 50) and the time view's "Period" (five-year periods / decades) are chip groups like the view and entity-type rows above them, instead of native selects. The select was the one control in the bar drawn by the theme's form rules, full width and taller, so the row read as a form field stranded among toggles. The numeral chips share one width with the figure centred; `aria-pressed` reports the state as it does on the other rows.
+
 ### v1.70.2 — Phone layout of the Press Reprints network (2026-09-16)
 
 - The ECharts graph toolbar (Press Reprints circulation network) gets the phone treatment v1.70.1 gave the force graphs. It now mounts in a zero-height anchor just before the chart host rather than inside it, so on desktop the overlay takes the chart's top-right corner (it used to hang off the panel's corner beside the title), and below `sm` the anchor is in flow and the bar is a grid of 44px controls above the graph. Inside the host there was no flow to drop into: ECharts sizes its div from the host, so an in-flow bar there would have grown the host and the div in turn.

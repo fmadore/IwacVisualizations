@@ -222,22 +222,44 @@
         return { root: root, choices: choices };
     }
 
-    /** Same two-column row, but the second cell is a caller-filled strip. */
+    /**
+     * Same two-column row, but the second cell is a strip that holds MORE
+     * than one group: the gutter label names the first group, and any
+     * further group carries its own inline eyebrow (`labelledChoices`).
+     */
     function fieldGroup(label, className) {
         var root = P.el('div', 'iwac-vis-associated__control ' + className);
-        var labelEl = P.el('label', 'iwac-vis-associated__control-label', label);
+        var labelEl = P.el('span', 'iwac-vis-associated__control-label', label);
+        var id = 'iwac-vis-associated-control-' + (++controlId);
+        labelEl.id = id;
         var body = P.el('div', 'iwac-vis-associated__fields');
+        var choices = P.el('div', 'iwac-vis-associated__choices');
+        choices.setAttribute('role', 'group');
+        choices.setAttribute('aria-labelledby', id);
+        body.appendChild(choices);
         root.appendChild(labelEl);
         root.appendChild(body);
-        return { root: root, label: labelEl, body: body };
+        return { root: root, body: body, choices: choices };
     }
 
-    function labelledSelect(label, className) {
-        var root = P.el('label', 'iwac-vis-associated__field');
-        root.appendChild(P.el('span', 'iwac-vis-associated__field-label', label));
-        var select = P.el('select', 'iwac-vis-control ' + className);
-        root.appendChild(select);
-        return { root: root, select: select };
+    /** An eyebrow-labelled chip group that rides inside a field strip. */
+    function labelledChoices(label, className) {
+        var root = P.el('div', 'iwac-vis-associated__field ' + className);
+        var labelEl = P.el('span', 'iwac-vis-associated__field-label', label);
+        var id = 'iwac-vis-associated-control-' + (++controlId);
+        labelEl.id = id;
+        var choices = P.el('div', 'iwac-vis-associated__choices');
+        choices.setAttribute('role', 'group');
+        choices.setAttribute('aria-labelledby', id);
+        root.appendChild(labelEl);
+        root.appendChild(choices);
+        return { root: root, choices: choices };
+    }
+
+    /** Marks a chip and reports the state to assistive tech in one place. */
+    function setPressed(button, on) {
+        button.classList.toggle('iwac-vis-associated__choice--active', on);
+        button.setAttribute('aria-pressed', String(on));
     }
 
     function choiceButton(label, onClick) {
@@ -327,39 +349,43 @@
         controls.appendChild(typeGroup.root);
 
         /*  Both sizing controls share the last row: the gutter label belongs
-         *  to the top-N select, and the period select carries its own inline
-         *  eyebrow so that showing / hiding it (time view only) never moves
-         *  anything above it. */
+         *  to the top-N chips, and the period chips carry their own inline
+         *  eyebrow so that showing / hiding them (time view only) never moves
+         *  anything above them.
+         *
+         *  Chips, not selects, since v1.70.3. A native <select> in a bar of
+         *  chip groups was the one control drawn by the theme's form rules —
+         *  full-width, taller, a different face — so the row read as a form
+         *  field stranded among toggles. Four fixed values and a pair are
+         *  exactly what the chip groups above already express. */
         var displayGroup = fieldGroup(P.t('Number shown'), 'iwac-vis-associated__control--display');
 
-        var limitSelect = P.el('select', 'iwac-vis-control iwac-vis-associated__limit');
-        limitSelect.id = 'iwac-vis-associated-limit-' + (++controlId);
-        displayGroup.label.htmlFor = limitSelect.id;
+        var limitButtons = {};
         LIMITS.forEach(function (limit) {
-            var option = P.el('option', null, String(limit));
-            option.value = String(limit);
-            limitSelect.appendChild(option);
+            var button = choiceButton(String(limit), function () {
+                if (viewLimits[activeView] === limit) return;
+                viewLimits[activeView] = limit;
+                apply(true);
+            });
+            button.classList.add('iwac-vis-associated__choice--num');
+            limitButtons[limit] = button;
+            displayGroup.choices.appendChild(button);
         });
-        limitSelect.addEventListener('change', function () {
-            viewLimits[activeView] = parseInt(limitSelect.value, 10) || viewLimits[activeView];
-            apply(true);
-        });
-        displayGroup.body.appendChild(limitSelect);
 
-        var period = labelledSelect(P.t('Period'), 'iwac-vis-associated__period');
+        var period = labelledChoices(P.t('Period'), 'iwac-vis-associated__field--period');
         var periodControl = period.root;
-        var periodSelect = period.select;
+        var periodButtons = {};
         [
             { value: 5, label: P.t('Five-year periods') },
             { value: 10, label: P.t('Decades') }
         ].forEach(function (option) {
-            var el = P.el('option', null, option.label);
-            el.value = String(option.value);
-            periodSelect.appendChild(el);
-        });
-        periodSelect.addEventListener('change', function () {
-            periodSize = parseInt(periodSelect.value, 10) === 10 ? 10 : 5;
-            apply(true);
+            var button = choiceButton(option.label, function () {
+                if (periodSize === option.value) return;
+                periodSize = option.value;
+                apply(true);
+            });
+            periodButtons[option.value] = button;
+            period.choices.appendChild(button);
         });
         periodControl.hidden = true;
         displayGroup.body.appendChild(periodControl);
@@ -434,9 +460,13 @@
                 button.querySelector('.iwac-vis-associated__choice-count').textContent =
                     ' ' + P.formatNumber(count);
             });
-            limitSelect.value = String(viewLimits[activeView]);
+            LIMITS.forEach(function (limit) {
+                setPressed(limitButtons[limit], viewLimits[activeView] === limit);
+            });
             periodControl.hidden = activeView !== 'time';
-            periodSelect.value = String(periodSize);
+            Object.keys(periodButtons).forEach(function (value) {
+                setPressed(periodButtons[value], periodSize === parseInt(value, 10));
+            });
             paintTypes();
         }
 
