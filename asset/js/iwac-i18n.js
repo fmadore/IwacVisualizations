@@ -286,6 +286,8 @@
             // ('Show all labels', 'Freeze the layout', …) fall through the
             // identity default and are translated in the fr table below.
             'shared_items_count': '{count} shared items',
+            'shared_items_count_one': '{count} shared item',
+            'shared_items_count_other': '{count} shared items',
             'connections_count':        '{formatted} connections',
             'connections_count_one':    '{formatted} connection',
             'connections_count_other':  '{formatted} connections',
@@ -811,6 +813,8 @@
             'Open the record':              'Ouvrir la fiche',
             'Close':                        'Fermer',
             'shared_items_count':           '{count} documents en commun',
+            'shared_items_count_one':       '{count} document en commun',
+            'shared_items_count_other':     '{count} documents en commun',
             'connections_count':            '{formatted} liens',
             'connections_count_one':        '{formatted} lien',
             'connections_count_other':      '{formatted} liens',
@@ -1150,6 +1154,13 @@
      * dashboard reporting a single article said "1 articles", and French
      * "0 article" could not be expressed at all.
      *
+     * **Formatting.** A numeric `count` is also written into `{count}` with
+     * the locale's thousands separator, exactly as `formatNumber` would.
+     * Callers used to pre-format it to get the separator, which handed t()
+     * a string and silently switched the plural off: the article context
+     * graph labelled every single-document edge "1 documents en commun".
+     * Pass the number; a pre-formatted string still interpolates as before.
+     *
      * @param {string} key
      * @param {Object} [params] Values for {placeholder} interpolation; a
      *   numeric `count` also selects a plural variant of the key
@@ -1173,7 +1184,10 @@
 
         if (params) {
             str = str.replace(/\{(\w+)\}/g, function (_, name) {
-                return params[name] != null ? params[name] : '{' + name + '}';
+                var value = params[name];
+                if (value == null) return '{' + name + '}';
+                if (name === 'count' && typeof value === 'number') return ns.formatNumber(value);
+                return value;
             });
         }
         return str;

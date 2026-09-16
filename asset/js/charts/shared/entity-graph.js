@@ -167,9 +167,11 @@
                         width: cross ? 1 + Math.sqrt(norm) * 2 : 1 + Math.sqrt(norm) * 4,
                         alpha: cross ? 0.36 : 0.6,
                         weak: cross,
+                        // Numbers, not `fmt()` strings: t() formats a numeric
+                        // count itself, and only a number selects the plural.
                         name: cross
-                            ? t('shared_items_count', { count: fmt(e.cooc || 0) })
-                            : t('mentions_count', { count: fmt(e.cooc || 0) }),
+                            ? t('shared_items_count', { count: e.cooc || 0 })
+                            : t('mentions_count', { count: e.cooc || 0 }),
                         data: e
                     };
                 })
@@ -190,7 +192,7 @@
                 if (!node.isCenter) rows.push(P.el('div', null, typeLabel(node)));
                 var d = node.data || {};
                 if (d.cooc != null) {
-                    rows.push(P.el('div', null, t('mentions_count', { count: fmt(d.cooc) })));
+                    rows.push(P.el('div', null, t('mentions_count', { count: d.cooc })));
                 }
                 if (d.score != null) {
                     rows.push(P.el('div', null, t('Distinctiveness score') + ': '
@@ -224,7 +226,7 @@
             var d = node.data || {};
             var parts = [node.name];
             if (!node.isCenter) parts.push(typeLabel(node));
-            if (d.cooc != null) parts.push(t('mentions_count', { count: fmt(d.cooc) }));
+            if (d.cooc != null) parts.push(t('mentions_count', { count: d.cooc }));
             parts.push(P.connectionsLabel(node.deg || 0));
             return parts.join('. ');
         }

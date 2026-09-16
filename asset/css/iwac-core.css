@@ -2338,6 +2338,62 @@ select.iwac-vis-control:hover {
     min-height: 0;
 }
 
+/* ---- Phones: the toolbar leaves the overlay ------------------------ */
+
+/*  Nine 36px buttons stacked top-right are some 360px of column. On a
+ *  520px phone host that is most of the canvas height: the column sat over
+ *  the right-hand label gutter, over the legend chips, and once the panel
+ *  bottomed out, over the page below it (article 74586, v1.70.0). Below
+ *  `sm` the toolbar is not an overlay at all. It drops into the host's
+ *  flex column after the legend, as a grid of equal cells the theme's
+ *  44px control tall: within thumb reach, covering nothing, in the order
+ *  the DOM already has, so focus order and reading order agree.
+ *
+ *  In flow inside the panel the buttons are flat, per
+ *  Flat-Inside-The-Panel; the hairline shadow was for floating over the
+ *  canvas. The ECharts graphs (`P.buildGraphPanelToolbar`) keep the
+ *  overlay: their host IS the chart, so there is no flow to drop into. */
+@media (max-width: 599px) { /* sm */
+    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--size-control-lg, 2.75rem), 1fr));
+        gap: var(--space-1, 0.25rem);
+        flex: 0 0 auto;
+    }
+    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar > .iwac-vis-graph-toolbar__btn {
+        width: auto;
+        height: var(--size-control-lg, 2.75rem);
+        box-shadow: none;
+    }
+    /*  Two rows of chrome now share the host with the canvas, so the stage
+     *  keeps a floor of its own and the host grows to fit, rather than the
+     *  canvas paying for the toolbar. Not in fullscreen, where the host's
+     *  height is the viewport and the stage takes whatever is left. */
+    .iwac-vis-graph-host--force > .iwac-vis-graph-stage {
+        min-height: 22rem;
+    }
+    .iwac-vis-panel--fullscreen > .iwac-vis-graph-host--force > .iwac-vis-graph-stage,
+    .iwac-vis-panel:fullscreen > .iwac-vis-graph-host--force > .iwac-vis-graph-stage {
+        min-height: 0;
+    }
+    /*  The desktop pill is a 26px mouse target; a thumb gets the theme's
+     *  40px control. */
+    .iwac-vis-graph-host--force > .iwac-vis-graph-legend > .iwac-vis-graph-legend__item {
+        min-height: var(--size-control-md, 2.5rem);
+    }
+    /*  The card spans the stage. With the toolbar gone from the overlay
+     *  there is nothing to its right to keep clear of, and a 17rem card on
+     *  a phone was a column with a useless stripe of canvas beside it. */
+    .iwac-vis-graph-host--force .iwac-vis-graph-card {
+        left: var(--space-sm, 0.5rem);
+        right: var(--space-sm, 0.5rem);
+        width: auto;
+        max-width: none;
+        max-height: 70%;
+    }
+}
+
 .iwac-vis-graph-canvas {
     position: absolute;
     inset: 0;
@@ -2501,11 +2557,20 @@ select.iwac-vis-control:hover {
     outline-offset: 1px;
 }
 
-.iwac-vis-graph-card__title {
+/*  Chained to the card so it outranks both the theme's `h4` (the display
+ *  serif at `--text-xl`, balanced, with a heading's margins) and this
+ *  module's own `.iwac-vis-block h4`. Unchained, the declared `--text-sm`
+ *  lost to the latter and the family to the former, and the record's
+ *  title opened the card as a three-line serif heading. The card is UI:
+ *  it names a node, it is not a heading in the page's outline. */
+.iwac-vis-graph-card > .iwac-vis-graph-card__title {
     margin: 0 0 0.15rem;
+    font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
     line-height: 1.3;
+    letter-spacing: normal;
+    text-wrap: pretty;
     color: var(--ink-strong, #05070c);
 }
 
@@ -2525,7 +2590,12 @@ select.iwac-vis-control:hover {
     font-size: var(--text-xs, 0.8125rem);
 }
 
+/*  The theme's base `dt` is a metadata label at `--text-lg` (`--text-xl`
+ *  from `md`), weight 600. Here a dt is one cell of a two-column fact
+ *  grid whose size is set on the grid, so both are reset explicitly. */
 .iwac-vis-graph-card__facts dt {
+    font-size: inherit;
+    font-weight: 400;
     color: var(--muted, #66696e);
 }
 

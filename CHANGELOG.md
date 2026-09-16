@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.70.1 — Phone layout of the item-page networks (2026-09-16)
+
+- Below the `sm` breakpoint the force-graph toolbar (zoom, reset, labels, connection names, freeze, download, fullscreen) leaves its top-right overlay and drops into the panel below the legend as a grid of 44px controls. The nine-button column was taller than the phone canvas: it covered the right-hand node labels and the legend chips and ran past the bottom of the panel. The canvas keeps a floor of its own so the panel grows to fit rather than the graph paying for the controls. Applies to the article, person and entity dashboards.
+- The selection card (the "fiche" that opens on a node) renders as UI again: the theme's heading and definition-list rules had turned the record title into a three-line display-serif heading and the fact labels into 19px bold labels. On phones the card spans the canvas.
+- Fix "1 documents en commun" / "1 mentions" on graph edges and cards: `t()` now formats a numeric count with the locale separator itself, so callers pass the number and the plural variant is selected.
+
 ### v1.70.0 — Laïcité relevance audit and membership strength (2026-09-14)
 
 - Show how each record joined the Laïcité dossier — catalogue tag, two or more vocabulary matches, a single match, or the tag alone — as a displayed strength attribute, with a badge for a core term in the title.
