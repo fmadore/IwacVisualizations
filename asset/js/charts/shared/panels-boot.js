@@ -337,8 +337,8 @@
 
     /**
      * Build the shared 6-button toolbar for a force-graph panel (zoom in /
-     * out / reset / legend toggle / PNG download / fullscreen) and append
-     * it to `panelEl.chart`. Owns the legend-visibility state so the panel's
+     * out / reset / legend toggle / PNG download / fullscreen) and mount
+     * it beside `panelEl.chart`. Owns the legend-visibility state so the panel's
      * `buildFullOption` can read it back via the returned `isLegendVisible()`.
      *
      * Buttons compose `.iwac-vis-btn .iwac-vis-graph-toolbar__btn` so they
@@ -453,7 +453,22 @@
         };
         document.addEventListener('fullscreenchange', onFullscreenChange);
 
-        panelEl.chart.appendChild(bar);
+        // The bar lives BESIDE the chart host, not inside it, in a zero-height
+        // anchor inserted just before the host. Inside the host it had no
+        // flow to drop into on a phone: ECharts sizes its own div from the
+        // host, so an in-flow bar after that div grows the host, which grows
+        // the div, which pushes the bar down — the ratchet all over again.
+        // The anchor gives the overlay the host's top edge as its origin on
+        // desktop (`iwac-core.css`, `.iwac-vis-graph-toolbar-anchor`) and
+        // becomes an ordinary in-flow row below `sm`.
+        var host = panelEl.chart;
+        if (host.parentNode) {
+            var anchor = P.el('div', 'iwac-vis-graph-toolbar-anchor');
+            anchor.appendChild(bar);
+            host.parentNode.insertBefore(anchor, host);
+        } else {
+            host.appendChild(bar);
+        }
 
         return { el: bar, isLegendVisible: function () { return legendVisible; } };
     };

@@ -521,6 +521,19 @@
     color: var(--primary, #ce4115);
 }
 
+/*  The ECharts graphs' toolbar (`P.buildGraphPanelToolbar`) sits in a
+ *  zero-height anchor inserted just before the chart host, so the
+ *  absolutely positioned bar takes the host's top edge as its origin and
+ *  overlays the chart's top-right exactly as the force graphs' bar does.
+ *  It used to be appended INSIDE the host, whose only positioned ancestor
+ *  is the panel, so it actually hung off the panel's corner beside the
+ *  title. Below `sm` the anchor is in flow and the bar becomes the same
+ *  grid the force graphs use (see the phone block further down). */
+.iwac-vis-graph-toolbar-anchor {
+    position: relative;
+    height: 0;
+}
+
 /* -------------------------------------------------------------------
  * Treemap host — fully-nested treemaps (country › type › source) stack
  * a header bar per level on top of the leaf tiles, so the 320px floor
@@ -2351,20 +2364,28 @@ select.iwac-vis-control:hover {
  *
  *  In flow inside the panel the buttons are flat, per
  *  Flat-Inside-The-Panel; the hairline shadow was for floating over the
- *  canvas. The ECharts graphs (`P.buildGraphPanelToolbar`) keep the
- *  overlay: their host IS the chart, so there is no flow to drop into. */
+ *  canvas. The ECharts graphs (`P.buildGraphPanelToolbar`) get the same
+ *  row through their anchor, which sits BEFORE the chart host: their host
+ *  is the chart itself, with no legend and no flow of its own, so the row
+ *  reads as the control bar above the graph rather than a footer. */
 @media (max-width: 599px) { /* sm */
-    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar {
+    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar,
+    .iwac-vis-graph-toolbar-anchor > .iwac-vis-graph-toolbar {
         position: static;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(var(--size-control-lg, 2.75rem), 1fr));
         gap: var(--space-1, 0.25rem);
         flex: 0 0 auto;
     }
-    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar > .iwac-vis-graph-toolbar__btn {
+    .iwac-vis-graph-host--force > .iwac-vis-graph-toolbar > .iwac-vis-graph-toolbar__btn,
+    .iwac-vis-graph-toolbar-anchor > .iwac-vis-graph-toolbar > .iwac-vis-graph-toolbar__btn {
         width: auto;
         height: var(--size-control-lg, 2.75rem);
         box-shadow: none;
+    }
+    .iwac-vis-graph-toolbar-anchor {
+        height: auto;
+        margin-bottom: var(--space-sm, 0.5rem);
     }
     /*  Two rows of chrome now share the host with the canvas, so the stage
      *  keeps a floor of its own and the host grows to fit, rather than the

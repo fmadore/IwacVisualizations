@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.70.2 — Phone layout of the Press Reprints network (2026-09-16)
+
+- The ECharts graph toolbar (Press Reprints circulation network) gets the phone treatment v1.70.1 gave the force graphs. It now mounts in a zero-height anchor just before the chart host rather than inside it, so on desktop the overlay takes the chart's top-right corner (it used to hang off the panel's corner beside the title), and below `sm` the anchor is in flow and the bar is a grid of 44px controls above the graph. Inside the host there was no flow to drop into: ECharts sizes its div from the host, so an in-flow bar there would have grown the host and the div in turn.
+
 ### v1.70.1 — Phone layout of the item-page networks (2026-09-16)
 
 - Below the `sm` breakpoint the force-graph toolbar (zoom, reset, labels, connection names, freeze, download, fullscreen) leaves its top-right overlay and drops into the panel below the legend as a grid of 44px controls. The nine-button column was taller than the phone canvas: it covered the right-hand node labels and the legend chips and ran past the bottom of the panel. The canvas keeps a floor of its own so the panel grows to fit rather than the graph paying for the controls. Applies to the article, person and entity dashboards.
