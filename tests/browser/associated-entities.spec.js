@@ -19,7 +19,7 @@ test('switches between the network and ranked relational list', async ({ page })
     await expect(page.locator('.iwac-vis-arc-list__arc').first()).toHaveAttribute('d', /C/);
     await expect(page.locator('.fixture-force')).toBeHidden();
 
-    await page.getByLabel('Number shown').selectOption('10');
+    await page.getByRole('group', { name: 'Number shown' }).getByRole('button', { name: '10' }).click();
     await expect(page.locator('.iwac-vis-arc-list__row')).toHaveCount(10);
 });
 
@@ -27,7 +27,8 @@ test('compares ranked entities across five-year periods or decades', async ({ pa
     await page.goto(FIXTURE);
     await page.getByRole('button', { name: 'Over time' }).click();
 
-    await expect(page.getByLabel('Period')).toHaveValue('5');
+    const period = page.getByRole('group', { name: 'Period' });
+    await expect(period.getByRole('button', { name: 'Five-year periods' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('.iwac-vis-time-matrix__table tbody tr')).toHaveCount(10);
     await expect(page.locator('.iwac-vis-time-matrix__period-head')).toHaveCount(7);
     await expect(page.locator('.iwac-vis-time-matrix__caveat')).toContainText('2');
@@ -36,7 +37,7 @@ test('compares ranked entities across five-year periods or decades', async ({ pa
         /shared items, 1990–1994/
     );
 
-    await page.getByLabel('Period').selectOption('10');
+    await period.getByRole('button', { name: 'Decades' }).click();
     await expect(page.locator('.iwac-vis-time-matrix__period-head')).toHaveCount(4);
     await expect(page.locator('.iwac-vis-time-matrix__period-head').first()).toContainText('1990s');
 
@@ -113,9 +114,9 @@ test('lines every control up on one label gutter and holds its height', async ({
     expect(new Set(network.lefts).size).toBe(1);
     expect(new Set(network.tops).size).toBe(3);
 
-    // The period select joins the top-N row, so no view switch reflows the bar.
+    // The period chips join the top-N row, so no view switch reflows the bar.
     await page.getByRole('button', { name: 'Over time' }).click();
-    await expect(page.getByLabel('Period')).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Period' })).toBeVisible();
     const time = await readBar();
     expect(time.tops).toEqual(network.tops);
     expect(time.height).toBe(network.height);
