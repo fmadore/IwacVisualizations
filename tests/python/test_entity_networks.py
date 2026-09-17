@@ -12,7 +12,8 @@ import sys
 import unittest
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List, Set, Tuple
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
@@ -69,11 +70,23 @@ class PairParsingTests(unittest.TestCase):
         self.assertNotIn(("Sujets", "Sujets"), pairs)
 
 
+def stub_layout(
+    nodes: List[int],
+    edges: Dict[Tuple[int, int], int],
+) -> Dict[int, Tuple[float, float]]:
+    """Stand in for ``compute_layout``. Positions are irrelevant to every
+    assertion here, and the real one imports networkx — a generator
+    dependency the lint job deliberately does not install (see
+    tests/python/requirements.txt)."""
+    return {o_id: (0.0, 0.0) for o_id in nodes}
+
+
 class GlobalEdgeTests(unittest.TestCase):
     def build(self, items: Dict[str, Set[int]], weight_min: int = 1) -> Dict[str, Any]:
         agg = FakeAggregator(items, ENTITIES)
-        payload = networks.build_global_network(
-            agg, networks.parse_pairs(networks.DEFAULT_PAIRS), weight_min)
+        with patch.object(networks, "compute_layout", stub_layout):
+            payload = networks.build_global_network(
+                agg, networks.parse_pairs(networks.DEFAULT_PAIRS), weight_min)
         labels = [node[1] for node in payload["nodes"]]
         payload["_edges_by_label"] = {
             frozenset((labels[a], labels[b])): w for a, b, w in payload["edges"]
