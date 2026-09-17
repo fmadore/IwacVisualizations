@@ -9,12 +9,14 @@ page block:
     asset/data/entity-networks-global.json
     asset/data/entity-networks-spatial.json
 
-**Global network** — cross-type co-occurrence between index entities.
-For every content item (articles, publications, references via the
-shared ``DashboardAggregator`` resolution pipeline) and every
-configured type pair, each (A, B) entity pair appearing in the same
-item adds 1 to that edge's weight. Edges below ``--min-cooccurrence``
-are pruned, isolated nodes dropped. Node positions are computed HERE
+**Global network** — co-occurrence between index entities. For every
+content item (articles, publications, references via the shared
+``DashboardAggregator`` resolution pipeline) and every configured type
+pair, each (A, B) entity pair appearing in the same item adds 1 to that
+edge's weight. Pairs may be cross-type (``personnes-organisations``) or
+same-type (``personnes-personnes``), the latter walked as unordered
+combinations so a node never links to itself. Edges below
+``--min-cooccurrence`` are pruned, isolated nodes dropped. Node positions are computed HERE
 with networkx ForceAtlas2 and baked into the payload as lng/lat
 pseudo-coordinates (inverse Web-Mercator projection of the layout
 plane), so the client renders the graph with MapLibre GL at zero
@@ -34,7 +36,7 @@ Usage
 -----
     python scripts/generate_entity_networks.py
     python scripts/generate_entity_networks.py --min-cooccurrence 3 -v
-    python scripts/generate_entity_networks.py --pairs "personnes-organisations,lieux-evenements"
+    python scripts/generate_entity_networks.py --pairs "personnes-personnes,lieux-evenements"
 """
 from __future__ import annotations
 
@@ -64,17 +66,26 @@ TYPE_SLUGS: Dict[str, str] = {
 # slots and filter chips by index.
 TYPE_ORDER = ["Personnes", "Organisations", "Événements", "Sujets", "Lieux"]
 
-# Default cross-type pairs, mirroring IWAC-spatial-overview's
-# build_networks.py: events act as connective tissue between every
-# other type, plus the person↔organisation affiliation axis. Same-type
-# and subject↔person-style pairs are excluded on purpose — subjects
-# co-occur with nearly everything and would melt the graph into hair.
+# Default pairs. Events act as connective tissue between every other
+# type, plus the person↔organisation affiliation axis. The three
+# same-type pairs below carry the questions the cross-type star cannot
+# answer — which people are named together, which organisations share
+# coverage, which places are co-mentioned — so a click on a person now
+# reaches other people directly instead of only through an event.
+#
+# ``sujets-sujets`` stays out on purpose: subjects tag nearly every
+# item, so that one pair alone is O(n²) per item and would dominate the
+# ForceAtlas2 layout, melting the graph into hair. Subject↔person-style
+# cross pairs are excluded for the same reason.
 DEFAULT_PAIRS = (
     "personnes-organisations,"
     "personnes-evenements,"
     "organisations-evenements,"
     "sujets-evenements,"
-    "lieux-evenements"
+    "lieux-evenements,"
+    "personnes-personnes,"
+    "organisations-organisations,"
+    "lieux-lieux"
 )
 
 DEFAULT_MIN_COOCCURRENCE = 2
@@ -159,8 +170,9 @@ def parse_pairs(raw: str) -> List[Tuple[str, str]]:
                 f"Bad --pairs entry {chunk!r}; use slugs {sorted(TYPE_SLUGS)} as 'a-b'"
             )
         a, b = TYPE_SLUGS[parts[0]], TYPE_SLUGS[parts[1]]
-        if a == b:
-            raise ValueError(f"Same-type pair {chunk!r} is not supported")
+        # Same-type pairs are supported; build_global_network() walks
+        # them as an unordered combination so no node self-loops and no
+        # pair is counted twice.
         pairs.append((a, b))
     if not pairs:
         raise ValueError("--pairs resolved to an empty list")
@@ -235,9 +247,18 @@ def build_global_network(
             if info:
                 by_type[info["type"]].append(o_id)
         for type_a, type_b in pairs:
-            for a in by_type.get(type_a, ()):  # cross-type only: a != b always
-                for b in by_type.get(type_b, ()):
-                    edge_weights[(a, b) if a < b else (b, a)] += 1
+            if type_a == type_b:
+                # Unordered combinations within one bucket: i < j drops
+                # the self-loop (a, a) and the mirrored (b, a) that a
+                # full cross product would add on top of (a, b).
+                bucket = sorted(by_type.get(type_a, ()))
+                for i in range(len(bucket)):
+                    for j in range(i + 1, len(bucket)):
+                        edge_weights[(bucket[i], bucket[j])] += 1
+            else:
+                for a in by_type.get(type_a, ()):  # a != b always
+                    for b in by_type.get(type_b, ()):
+                        edge_weights[(a, b) if a < b else (b, a)] += 1
 
     # Sorted at the pruning step so everything downstream is deterministic
     # across Python builds: the layout graph's edge-insertion order (which
@@ -388,7 +409,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--pairs", default=DEFAULT_PAIRS,
-        help="Comma-separated cross-type pairs as ASCII slugs (default: %(default)s)",
+        help="Comma-separated type pairs as ASCII slugs; a-b may name the same "
+             "type twice (default: %(default)s)",
     )
     args = parse_standard_args(parser)
     pairs = parse_pairs(args.pairs)

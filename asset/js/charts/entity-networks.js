@@ -1,7 +1,7 @@
 /**
  * IWAC Visualizations — Entity Networks block (orchestrator)
  *
- * Fetches `asset/data/entity-networks-global.json` (the cross-type
+ * Fetches `asset/data/entity-networks-global.json` (the co-occurrence
  * entity graph with precomputed ForceAtlas2 positions), builds the
  * mode facet (Entities | Places), the toolbar (type chips, min-weight
  * select, node search) and the graph + details layout, then delegates

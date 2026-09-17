@@ -290,14 +290,14 @@ python3 scripts/generate_spatial_exploration.py --no-minify -v
 ### `generate_entity_networks.py`
 
 Writes the two payloads behind the Entity Networks page block:
-`asset/data/entity-networks-global.json` (cross-type entity graph) and
+`asset/data/entity-networks-global.json` (entity co-occurrence graph) and
 `asset/data/entity-networks-spatial.json` (geographic co-mention
 network). Requires `networkx` (ForceAtlas2 layout).
 
 ```bash
 python3 scripts/generate_entity_networks.py
 python3 scripts/generate_entity_networks.py --min-cooccurrence 3 -v
-python3 scripts/generate_entity_networks.py --pairs "personnes-organisations,lieux-evenements"
+python3 scripts/generate_entity_networks.py --pairs "personnes-personnes,lieux-evenements"
 ```
 
 **Workflow:**
@@ -305,11 +305,14 @@ python3 scripts/generate_entity_networks.py --pairs "personnes-organisations,lie
 1. Reuse the `DashboardAggregator` loading + resolution pipeline
    (index lookup with `Titre alternatif` aliases; per-item subject +
    spatial references over articles / publications / references)
-2. **Global**: for each item and each configured cross-type pair
-   (default mirrors IWAC-spatial-overview: person↔org plus events as
-   connective tissue), every co-occurring entity pair adds 1 to its
-   edge weight; prune below `--min-cooccurrence` (default 2), drop
-   isolated nodes
+2. **Global**: for each item and each configured type pair —
+   cross-type (person↔org plus events as connective tissue) and the
+   three same-type pairs person↔person, org↔org, place↔place — every
+   co-occurring entity pair adds 1 to its edge weight; prune below
+   `--min-cooccurrence` (default 2), drop isolated nodes. Same-type
+   pairs are walked as unordered combinations (no self-loops, no
+   double counting). `sujets-sujets` stays out: subjects tag nearly
+   every item and would dominate the layout
 3. Layout with `networkx.forceatlas2_layout` (seeded, weighted), then
    project to pseudo-lng/lat through the **inverse Web-Mercator** so
    MapLibre's forward projection reproduces the layout plane exactly —
