@@ -13,6 +13,11 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.70.4 — Fullscreen keeps the network's controls and details (2026-09-17)
+
+- Fullscreen on the Co-occurrence network expands the whole block — type chips, min-link-strength select, node search, graph and the details sidebar — instead of the bare canvas. MapLibre's `FullscreenControl` targets the map container by default, which is right for a basemap and wrong here: the graph is read through its filters and through the sidebar naming the selected node's connection count and the weight of each edge, and every one of those was left behind on the page. `createIwacMap` takes a `fullscreenContainer` for the case where the map is only part of the interface; the network passes its layout.
+- With the room fullscreen buys, the co-occurrence list drops its 22rem cap and runs the height of the sidebar, so a hub's strongest links are visible at once rather than scrolled inside a third of an empty column. Below `sm` the sidebar still stacks under the graph and the overlay scrolls, rather than clipping it off a screen with no page behind it.
+
 ### v1.70.3 — Associated-entities count and period as chips (2026-09-16)
 
 - On the person and entity dashboards, "Number shown" (10 / 20 / 30 / 50) and the time view's "Period" (five-year periods / decades) are chip groups like the view and entity-type rows above them, instead of native selects. The select was the one control in the bar drawn by the theme's form rules, full width and taller, so the row read as a form field stranded among toggles. The numeral chips share one width with the figure centred; `aria-pressed` reports the state as it does on the other rows.

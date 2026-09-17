@@ -5,7 +5,8 @@
 /*  toolbar, and the node search dropdown. Chip / tab / form-control     */
 /*  styling comes from iwac-core.css; map chrome from iwac-maplibre.css. */
 /*                                                                       */
-/*  Breakpoints (match iwac-core.css): sm 640 / md 768 / lg 1024.        */
+/*  Breakpoints (theme tokens, per tokens.json): sm 600 / md 768 /       */
+/*  lg 1024. `npm run lint:theme` is the authority, not this comment.     */
 /* =================================================================== */
 
 .iwac-vis-networks-main {
@@ -253,4 +254,102 @@
     color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
+}
+
+
+/* =================================================================== */
+/*  Fullscreen                                                          */
+/*                                                                      */
+/*  MapLibre's FullscreenControl expands `.iwac-vis-networks-layout`    */
+/*  rather than the canvas it sits on (`fullscreenContainer` in         */
+/*  shared/maplibre.js). Expanding the canvas alone left the type       */
+/*  chips, the min-strength select, the node search and the details     */
+/*  sidebar behind on the page — so fullscreen handed the reader a      */
+/*  graph they could not filter, search or interrogate, and the         */
+/*  connection counts and per-edge weights that explain a selected      */
+/*  node were exactly what disappeared.                                 */
+/*                                                                      */
+/*  Note this is the `:fullscreen` pseudo-class only: the layout has no */
+/*  `--fullscreen` class to mirror, because nothing here toggles one.   */
+/*  Native Esc / F11 therefore stay in sync with no JS involved.        */
+/* =================================================================== */
+
+.iwac-vis-networks-layout:fullscreen {
+    height: 100%;
+    /*  The UA gives a fullscreen element width/height 100%, and this
+     *  padding would otherwise be ADDED to that — the layout came out
+     *  exactly 2 × --space-4 taller than the viewport, cropping the
+     *  bottom of the sidebar off the screen with nothing to scroll. */
+    box-sizing: border-box;
+    padding: var(--space-4, 1rem);
+    background: var(--surface, #fdfcfb);
+    align-items: stretch;
+    /*  `auto`, never `hidden`: below `sm` the grid stacks the sidebar
+     *  under the graph, and hidden would clip it off a screen that has
+     *  no page behind it to scroll. */
+    overflow: auto;
+    /*  Stop a scroll at the end of the sidebar chaining to the page
+     *  behind the overlay — inside an embed that page is the host's. */
+    overscroll-behavior: contain;
+}
+
+/*  Everything below fills the viewport exactly, so it applies only where
+ *  the sidebar sits BESIDE the graph. Stacked, the two have to be free to
+ *  exceed the height and scroll — and the canvas must keep the explicit
+ *  height it has on the page, or `flex: 1` in an auto-sized grid row
+ *  collapses it to nothing.
+ *
+ *  The two columns start at `sm` rather than the `lg` the page layout
+ *  waits for: a laptop at 900px is still wide enough for both, and in
+ *  fullscreen there is no page to scroll down to reach a stacked sidebar. */
+@media (min-width: 600px) { /* sm */
+    .iwac-vis-networks-layout:fullscreen {
+        grid-template-columns: 1fr minmax(240px, 300px);
+        overflow: hidden;
+    }
+
+    /*  The graph column absorbs the height: each wrapper down to the
+     *  canvas has to opt into flex for the panel's fixed 580px canvas
+     *  to give way. */
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-main,
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-graph-panel,
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-graph-panel .iwac-vis-chart {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-graph-panel,
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-graph-panel .iwac-vis-chart {
+        flex: 1 1 auto;
+    }
+
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-canvas {
+        flex: 1 1 auto;
+        height: auto;
+        min-height: 0;
+    }
+
+    /*  The sidebar scrolls on its own. `.iwac-vis-aside` is `align-self:
+     *  start`, which would let a long co-occurrence list run past the
+     *  bottom of the screen with no way to reach it. */
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-aside {
+        align-self: stretch;
+        max-height: 100%;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /*  Let the co-occurrence list use the height fullscreen just bought
+     *  it. The 22rem cap is sized for the list sitting in a page column;
+     *  keeping it here would scroll fifteen links inside a third of an
+     *  otherwise empty sidebar, on the one screen with room to show them
+     *  all at once. */
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-details__list {
+        max-height: none;
+        flex: 0 1 auto;
+        min-height: 0;
+    }
 }

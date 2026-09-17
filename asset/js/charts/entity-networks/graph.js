@@ -57,6 +57,11 @@
         opts = opts || {};
         var mode = opts.mode === 'geo' ? 'geo' : 'abstract';
         var onSelect = opts.onSelect || function () {};
+        // What fullscreen expands. The orchestrator passes the whole
+        // layout — toolbar, graph and details sidebar — because a graph
+        // without its filters and its selection panel is not the same
+        // tool. Omitted, MapLibre expands the bare canvas.
+        var fullscreenContainer = opts.fullscreenContainer || null;
 
         var data = null;          // { nodes, edges, weightMin }
         var adjacency = [];       // node index → [{ j, w }]
@@ -434,7 +439,8 @@
 
         var mapConfig = {
             onStyleReady: addAll,
-            navigation: true
+            navigation: true,
+            fullscreenContainer: fullscreenContainer
         };
         if (mode === 'abstract') {
             mapConfig.styleMode = 'graph';

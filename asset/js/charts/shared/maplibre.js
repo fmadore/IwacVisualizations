@@ -508,6 +508,11 @@
      * @param {boolean} [config.navigation=true]  Show the NavigationControl
      * @param {boolean} [config.fullscreen=true]  Show MapLibre's native
      *   FullscreenControl. Pass false where the panel toolbar already has one.
+     * @param {HTMLElement} [config.fullscreenContainer]  Element to expand
+     *   instead of the map container. Use it where the map is only half the
+     *   interface — a graph whose filters and selection sidebar are siblings,
+     *   not chrome — and pass the wrapper that holds all of it. Must contain
+     *   the map, or fullscreen would show a box with no canvas in it.
      * @param {string} [config.title]  What this map shows, in one phrase.
      *   Becomes MapLibre's `Map.Title` and the host's `aria-label`, so a
      *   screen reader announces the map rather than "application".
@@ -629,8 +634,20 @@
         // maps have their own zoom / pan controls and users want to
         // expand the basemap itself, not the chrome around it. Opt-out
         // by passing `fullscreen: false`.
+        //
+        // `fullscreenContainer` overrides that target for the case the
+        // default gets wrong: a map that is not the whole interface. The
+        // entity network reads through its type chips, its min-strength
+        // select and the sidebar listing the selected node's links — expand
+        // the canvas alone and every one of them is left behind on the page,
+        // so fullscreen drops the reader into a graph they cannot filter,
+        // cannot search and cannot interrogate.
         if (config.fullscreen !== false && typeof maplibregl.FullscreenControl === 'function') {
-            map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+            var fsOpts = {};
+            if (config.fullscreenContainer instanceof HTMLElement) {
+                fsOpts.container = config.fullscreenContainer;
+            }
+            map.addControl(new maplibregl.FullscreenControl(fsOpts), 'top-right');
         }
 
         // Run the caller's custom-layer setup on every style load so

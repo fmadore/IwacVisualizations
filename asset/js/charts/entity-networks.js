@@ -69,6 +69,10 @@
         /*  Layout skeleton                                              */
         /* ----------------------------------------------------------- */
 
+        // Fullscreen expands THIS element, not the bare canvas — see the
+        // `fullscreenContainer` note in shared/maplibre.js. The graph is
+        // read through the toolbar above it and the details sidebar beside
+        // it, and both are inside the layout.
         var layout = P.el('div', 'iwac-vis-layout--sidebar-end iwac-vis-networks-layout');
         var main = P.el('div', 'iwac-vis-networks-main');
         var aside = P.el('aside', 'iwac-vis-aside iwac-vis-networks-aside');
@@ -131,7 +135,8 @@
         // describe the DATA, which is already here, so they paint immediately.
         var abstractGraph = EN.graph.create(abstractWrap, {
             mode: 'abstract',
-            onSelect: handleSelect
+            onSelect: handleSelect,
+            fullscreenContainer: layout
         });
         var geoGraph = null;
 
@@ -163,7 +168,8 @@
                 if (!geoGraph) {
                     geoGraph = EN.graph.create(geoWrap, {
                         mode: 'geo',
-                        onSelect: handleSelect
+                        onSelect: handleSelect,
+                        fullscreenContainer: layout
                     });
                     geoGraph.setData(spatialData);
                 } else {
