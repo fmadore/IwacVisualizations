@@ -478,10 +478,11 @@ def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
     rows a day-precision extractor already drops.
 
     Goes through ``int()`` inside the guard rather than trusting the
-    column dtype: these are stored ``int64`` on most subsets but
-    ``float64`` on ``articles``, and pandas widens the rest to float on
-    read anyway because the partial dates leave nulls. ``int(nan)``
-    raises ``ValueError``, which is caught here.
+    column dtype. The pipeline stores them nullable ``int64``, but
+    revisions published before its canonical types had ``float64`` on
+    several subsets. Pandas widens them to float on read anyway wherever
+    a partial date leaves a null, and returns numpy ``int64`` where none
+    does. ``int(nan)`` raises ``ValueError``, which is caught here.
     """
     y_col, m_col = cols.get("hijri_year"), cols.get("hijri_month")
     if not y_col or not m_col:

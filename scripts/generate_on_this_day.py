@@ -150,7 +150,9 @@ COLUMNS = ["pub_date", "o:id", "title", "newspaper",
            "thumbnail", "OCR", "OCR_is_public", "tableOfContents",
            "hijri_year", "hijri_month", "hijri_day"]
 
-# The Hijri columns the dataset ships beside `pub_date`. Nullable Int64,
+# The Hijri columns the dataset ships beside `pub_date`. Stored nullable
+# int64 (float64 in pandas wherever a subset has a null, and on revisions
+# before the pipeline's canonical types), so `read_hijri` casts each cell;
 # populated exactly where `pub_date` is a complete YYYY-MM-DD — which is
 # also the only case this script keeps — and absent on `references`, which
 # is not one of our SOURCES.

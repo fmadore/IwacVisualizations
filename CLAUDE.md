@@ -19,7 +19,9 @@ When writing or modifying any Python that reads the HF dataset (anything under `
 - Established TF-IDF entity co-occurrence formula and semantic kNN recipes
 - Omeka resource templates ↔ resource classes table (e.g. `articles` use template 8 and `publications` template 21 — classes 36 vs 60)
 
-The skill catches the kind of subtle mistakes that have already cost real time here (e.g. the `embedding_descriptionAI` field that doesn't exist; `articles.lda_topic_id` is `float64`, not int; `articles.subject` strings are tag-membership matches, not substring matches).
+The skill catches the kind of subtle mistakes that have already cost real time here (e.g. the `embedding_descriptionAI` field that doesn't exist; `lda_topic_id` is stored nullable `int64` but still reads as `float64` in pandas wherever the subset has a null; `articles.subject` strings are tag-membership matches, not substring matches).
+
+**Column types moved under this module in 2026-09.** The upstream pipeline now conforms every push to declared types: nullable `int64` for the counts, ids, pages and dates (`nb_pages`, `nb_mots`, `hijri_*`, `pub_year`, `lda_topic_id`, `frequency`, `duration_seconds`), where earlier revisions had several of them as `float64`, and `list<float32>` embeddings, where they had `list<float64>`. A subset keeps its old types until its next push. Read these cells through `clean_int` / `clean_float` / `coerce_embedding` and never assume either dtype. [DATA_NOTES.md](DATA_NOTES.md) ("Column types") covers what changes in pandas, including why a raw numpy `int64` cell now breaks `save_json`.
 
 ## Match the IWAC theme — design integration
 

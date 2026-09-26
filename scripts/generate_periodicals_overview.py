@@ -331,8 +331,10 @@ def compute_wordcloud(
 def _topic_id(value: Any) -> Optional[int]:
     """Dominant topic id as an int, or None when the issue is unmodelled.
 
-    ``lda_topic_id`` is float64 on every modelled subset (nulls force the
-    widening). On ``publications`` an unmodelled issue is **null**, not
+    ``lda_topic_id`` is stored nullable int64 (float64 on revisions before
+    the pipeline's canonical types) and reads as float64 in pandas on every
+    modelled subset, because the nulls force the widening, so the cast goes
+    through ``float``. On ``publications`` an unmodelled issue is **null**, not
     ``-1`` — the ``references`` convention rather than the ``articles``
     one — but ``-1`` is rejected here too, so a change of upstream
     convention degrades to "uncovered" instead of inventing topic -1.

@@ -164,8 +164,10 @@ def _clean_unique_list(values: List[str]) -> List[str]:
 def _topic_id(value: Any) -> Optional[int]:
     """``lda_topic_id`` cell → int topic id, or None.
 
-    The column is float64 (NaN where no topic was predicted), and ``-1``
-    is the outlier bucket rather than a topic — both are excluded.
+    The column is stored nullable int64 (float64 before the pipeline's
+    canonical types) and reads as float64 here, NaN where no topic was
+    predicted; ``-1`` is the outlier bucket rather than a topic. Both are
+    excluded, whichever dtype the cell arrives in.
     """
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return None
