@@ -915,57 +915,6 @@
     /*  Shared helpers                                                    */
     /* ----------------------------------------------------------------- */
 
-    /**
-     * Resolve a CSS custom property to a concrete color string that
-     * ECharts' color parser can understand (`rgb(...)` / `rgba(...)`).
-     *
-     * Why this exists: our theme ramps under iwac-core.css
-     * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
-     * are defined as `color-mix(in oklab, var(--primary), var(--surface))`
-     * expressions so they track the IWAC theme's --primary / --surface
-     * tokens. Two things conspire against ECharts here:
-     *   1. `getPropertyValue('--x')` returns the raw source — ECharts has
-     *      no idea what `color-mix(...)` means and falls back to grayscale.
-     *   2. `getComputedStyle(probe).color` DOES compute the expression,
-     *      but modern Chromium serializes the result as
-     *      `color(srgb 0.98 0.93 0.92)` (CSS Color Module Level 4).
-     *      ECharts' parser doesn't understand `color()` either.
-     * So we force the browser to compute the expression via an offscreen
-     * probe, then if the result comes back as `color(srgb ...)`, parse it
-     * ourselves and emit legacy `rgb()` / `rgba()`.
-     *
-     * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
-     * @returns {string} legacy-rgb color, or '' if undefined / unresolvable
-     */
-    ns.resolveCssVar = function (varName) {
-        if (typeof document === 'undefined' || !document.body) return '';
-        var probe = document.createElement('span');
-        probe.style.cssText =
-            'position:absolute;visibility:hidden;width:0;height:0;' +
-            'color:var(' + varName + ',transparent)';
-        document.body.appendChild(probe);
-        var resolved = getComputedStyle(probe).color;
-        document.body.removeChild(probe);
-        if (!resolved || resolved === 'rgba(0, 0, 0, 0)') return '';
-
-        // rgb / rgba are already Color-3-legal — fast path.
-        if (/^rgba?\(/i.test(resolved)) return resolved;
-
-        // After IWAC theme v2.0.0 reframed tokens around OKLCH, modern
-        // Chromium serializes `color-mix(in oklab, …)` and `oklch(…)`
-        // results as oklab(…) / oklch(…) AS-IS, not as rgb. ECharts'
-        // parse → undefined → hover lift fails → orange "disappears".
-        // ns._convertModernColor (defined in iwac-theme.js) does pure-JS
-        // Oklab → linear sRGB → sRGB math, so the result is parseable
-        // by ECharts AND accepted by MapLibre's style validator. No
-        // canvas (anti-fingerprinting layers can corrupt canvas reads).
-        if (typeof ns._convertModernColor === 'function') {
-            var converted = ns._convertModernColor(resolved);
-            if (converted) return converted;
-        }
-        return resolved;
-    };
-
     /** Convert either {key: value} or array format to [{ name, value, itemId? }]. */
     ns.toEntries = function (data) {
         if (!data) return [];

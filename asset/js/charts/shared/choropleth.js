@@ -34,7 +34,7 @@
  * Returns `{ getMode, setMode, updateCounts(newCounts), destroy }`.
  *
  * Dependencies: maplibre.js (P.normalizeColorForMapLibre,
- * P.createIwacPopup), panels.js, dashboard-core.js (ns.resolveCssVar,
+ * P.createIwacPopup), panels.js, iwac-theme.js (ns.resolveCssVar,
  * ns.getChartTokens), iwac-i18n.js (P.t).
  */
 (function () {
@@ -591,7 +591,9 @@
                         title: hp.name || '',
                         subtitleLines: [P.formatNumber(hc) + ' ' + P.t(labelKey)]
                     }));
-                    if (!hoverPopup.isOpen()) hoverPopup.addTo(map);
+                    // Re-added even when open: `addTo` is where the factory
+                    // measures the new label's width for MapLibre's anchor.
+                    hoverPopup.addTo(map);
                 });
                 map.on('mouseleave', FILL, function () {
                     map.getCanvas().style.cursor = '';

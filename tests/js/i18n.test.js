@@ -11,7 +11,7 @@ const SOURCE = readFileSync(
     'utf8'
 );
 
-function loadI18n(lang) {
+function loadI18n(lang, lazy) {
     const context = {
         Intl,
         document: {
@@ -21,7 +21,7 @@ function loadI18n(lang) {
                 },
             },
         },
-        window: { IWACVis: {} },
+        window: { IWACVis: {}, IWACVisLazy: lazy },
     };
     vm.createContext(context);
     vm.runInContext(SOURCE, context, { filename: 'iwac-i18n.js' });
@@ -32,6 +32,16 @@ test('locale detection normalizes Omeka locale variants', () => {
     assert.equal(loadI18n('fr-FR').locale, 'fr');
     assert.equal(loadI18n('en_US').locale, 'en');
     assert.equal(loadI18n('de-DE').locale, 'en');
+});
+
+test('the locale the loader fetched bundles for is the one t() uses', () => {
+    // A per-locale bundle carries only its own language's strings, so the
+    // loader's choice has to win over a second reading of <html lang>.
+    assert.equal(loadI18n('en', { locale: 'fr' }).locale, 'fr');
+    assert.equal(loadI18n('fr-FR', { locale: 'en' }).locale, 'en');
+    // Anything else the loader might publish is ignored, not trusted.
+    assert.equal(loadI18n('fr-FR', { locale: 'de' }).locale, 'fr');
+    assert.equal(loadI18n('fr-FR', {}).locale, 'fr');
 });
 
 test('translations interpolate parameters and fall back to the source key', () => {

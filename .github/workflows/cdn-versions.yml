@@ -25,6 +25,7 @@ on:
     paths:
       - "view/common/iwac-assets.phtml"
       - "scripts/check-cdn-versions.js"
+      - "scripts/cdn-integrity.js"
       - ".github/workflows/cdn-versions.yml"
 
 permissions:
@@ -51,3 +52,11 @@ jobs:
         run: >-
           node scripts/check-cdn-versions.js
           ${{ github.event_name == 'pull_request' && '--warn-only' || '' }}
+
+      # Fatal in both modes: a recorded hash that differs from what jsDelivr
+      # serves is a library every browser will refuse to run. This is the one
+      # place the hashes (taken from the npm tarballs by `npm run update:sri`)
+      # are checked against the CDN itself.
+      - name: Check every recorded integrity hash against jsDelivr
+        if: always()
+        run: node scripts/cdn-integrity.js --verify

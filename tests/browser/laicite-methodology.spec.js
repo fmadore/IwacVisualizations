@@ -38,7 +38,8 @@ for (const lang of ['en', 'fr']) {
             window.IWACVis.panels.fetchJSON = url => Promise.resolve(bundles[url.split('/').pop()] || null);
             document.querySelector('main').innerHTML = '<div class="iwac-vis-block iwac-vis-laicite" data-site-base="/s/westafrica"></div>';
         });
-        await page.addScriptTag({ url: '/asset/js/dist/blocks/laicite.min.js' });
+        // Built once per locale, like shared-core: load the page's language.
+        await page.addScriptTag({ url: `/asset/js/dist/blocks/laicite.${lang}.min.js` });
         await expect(page.getByRole('heading', { name: lang === 'fr' ? 'Que pouvons-nous observer ?' : 'What can we observe?' })).toBeVisible();
         await expect(page.locator('meter')).toHaveCount(1);
         // The membership routes are a claim about how wide the dossier is,

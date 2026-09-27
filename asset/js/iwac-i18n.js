@@ -31,7 +31,13 @@
         return short === 'fr' ? 'fr' : 'en';
     }
 
-    ns.locale = detectLocale();
+    // The on-view loader decides the locale first, because it chooses which
+    // per-locale bundle to fetch — and this file, inside that bundle, carries
+    // only that locale's dictionary. Its choice wins so the two can never
+    // disagree; a page without the loader (a fixture, a foreign embed)
+    // detects its own.
+    var lazy = window.IWACVisLazy;
+    ns.locale = (lazy && (lazy.locale === 'en' || lazy.locale === 'fr')) ? lazy.locale : detectLocale();
 
     /* ----------------------------------------------------------------- */
     /*  Translation dictionary                                            */

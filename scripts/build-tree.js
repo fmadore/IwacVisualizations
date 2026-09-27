@@ -93,6 +93,8 @@ const ANNOTATIONS = {
     'scripts/iwac_utils.py': 'Shared generator helpers (self-contained)',
     'scripts/dashboard_aggregator.py': 'Shared person/entity aggregation core',
     'scripts/build-js.js': 'esbuild bundler driven by asset/js/bundles.json',
+    'scripts/i18n-strip.js': 'Empties the other locale\'s dictionaries for per-locale bundles',
+    'scripts/cdn-integrity.js': 'SRI hashes for the CDN pins: --check / --update / --verify',
     'scripts/requirements.lock': 'Hash-pinned; `npm run lint:python-lock` checks it',
     'ARCHITECTURE.md': 'This file',
     'CHANGELOG.md': 'Version history',

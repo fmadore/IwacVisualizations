@@ -33,8 +33,23 @@ foreach (array_keys(\IwacVisualizations\Site\AssetPlan::manifest()['blocks']) as
     }
     $payload = json_decode($match[1], true, 512, JSON_THROW_ON_ERROR);
     $scripts = $payload['scripts'];
-    if (end($scripts) !== '/modules/IwacVisualizations/asset/js/dist/blocks/' . $bundle . '.min.js') {
+    // A bundle carrying translation dictionaries is built once per locale and
+    // listed as {locale: url}; the loader picks the page's language.
+    $base = '/modules/IwacVisualizations/asset/js/dist/blocks/' . $bundle;
+    $last = end($scripts);
+    $expected = is_array($last)
+        ? array_combine(array_keys($last), array_map(fn ($locale) => $base . '.' . $locale . '.min.js', array_keys($last)))
+        : $base . '.min.js';
+    if ($last !== $expected || (is_array($last) && array_keys($last) !== ['en', 'fr'])) {
         throw new \RuntimeException($bundle . ': missing orchestrator');
+    }
+    foreach ($scripts as $script) {
+        foreach ((array) $script as $url) {
+            $file = dirname(__DIR__, 2) . '/asset/' . substr($url, strlen('/modules/IwacVisualizations/asset/'));
+            if (strpos($url, '/modules/') === 0 && !is_file($file)) {
+                throw new \RuntimeException($bundle . ': manifest names ' . $url . ', which the build did not write');
+            }
+        }
     }
     $count++;
 }

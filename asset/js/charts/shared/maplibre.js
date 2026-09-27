@@ -737,10 +737,11 @@
         merged.className = className;
 
         var popup = new maplibregl.Popup(merged);
+        var requestedMaxWidth = merged.maxWidth;
         var originalAddTo = popup.addTo;
         popup.addTo = function (map) {
             var result = originalAddTo.call(popup, map);
-            syncAnchorWidth(popup);
+            syncAnchorWidth(popup, requestedMaxWidth);
             return result;
         };
         return popup;
@@ -748,16 +749,23 @@
 
     /**
      * Tell MapLibre the width its own stylesheet produced, so the anchor it
-     * picks is the one that actually fits. Re-entrant by construction: the
-     * measured width is already the cap, so setting it as `maxWidth` cannot
-     * change the measurement.
+     * picks is the one that actually fits.
+     *
+     * The cap the caller asked for is restored BEFORE measuring. The measured
+     * width becomes the popup's `maxWidth`, and a popup that is reused — the
+     * hover read-outs keep one and swap its content — would otherwise be
+     * measured inside the previous content's box: the width could only ever
+     * shrink, so a narrow first label squeezed every longer one after it.
+     * With the cap restored, the same content measures the same width every
+     * time, which keeps the sync re-entrant.
      */
-    function syncAnchorWidth(popup) {
+    function syncAnchorWidth(popup, requestedMaxWidth) {
         try {
             var el = popup.getElement && popup.getElement();
             if (!el) return;
             var content = el.querySelector('.maplibregl-popup-content');
             if (!content) return;
+            if (requestedMaxWidth) popup.setMaxWidth(requestedMaxWidth);
             var width = Math.ceil(content.getBoundingClientRect().width);
             if (width > 0) popup.setMaxWidth(width + 'px');
         } catch (e) { /* best effort: a wrong anchor is not worth throwing over */ }

@@ -90,7 +90,7 @@ IwacVisualizations/
 │       │   ├── spatial-exploration.js
 │       │   ├── term-trends.js
 │       │   └── topic-explorer.js
-│       ├── dist/                      # 72 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                      # 111 files — built by scripts/build-js.js from bundles.json; committed
 │       ├── bundles.json               # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js          # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-height.js
@@ -110,6 +110,7 @@ IwacVisualizations/
 │   ├── build-mo.js
 │   ├── build-model-registry.js
 │   ├── build-tree.js
+│   ├── cdn-integrity.js               # SRI hashes for the CDN pins: --check / --update / --verify
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
 │   ├── check-css-dead.js
@@ -155,6 +156,7 @@ IwacVisualizations/
 │   ├── generate_wordcloud.py
 │   ├── generate_world_map.py
 │   ├── gettext.js
+│   ├── i18n-strip.js                  # Empties the other locale's dictionaries for per-locale bundles
 │   ├── iwac_embeddings.py
 │   ├── iwac_frames.py                 # The FrameStore run_all installs
 │   ├── iwac_stats.py
@@ -199,7 +201,7 @@ IwacVisualizations/
 │   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
 │   │   └── sync_form.php
-│   ├── js/                            # 27 files — node:test units
+│   ├── js/                            # 29 files — node:test units
 │   ├── php/
 │   │   ├── run.php
 │   │   └── sync_data_archive.php
@@ -547,6 +549,8 @@ The tree at the top of this file is **generated**. Edit
 the repository disagree, which is the drift that left the hand-written version
 naming 6 `BlockLayout` classes out of 21.
 
+**Bundles that carry translations are built once per locale.** A page is read in one language, so a bundle containing a dictionary — `shared-core` (the shared `iwac-i18n.js`) and every block with an `addTranslations` file — is written as `<name>.en.min.js` and `<name>.fr.min.js`, each with the other locale's tables emptied by `scripts/i18n-strip.js`, and listed in the generated `dist/locales.json`. `Site\AssetPlan::bundlePath()` hands the loader both URLs; the loader requests the one matching `<html lang>` and publishes its choice as `IWACVisLazy.locale`, which `iwac-i18n.js` adopts, so the language `t()` uses is always the one whose strings were fetched. Emptying the other tables changes nothing `t()` can observe — `lint:i18n` requires every `en` key to exist in `fr` — and `tests/js/i18n-locales.test.js` proves it for every key of all nineteen dictionaries. Dictionaries must stay inline object literals (`ns.addTranslations('fr', { … })`); the build fails on a call it cannot strip.
+
 `node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 
 A block is now three to seven script requests (the ECharts CDN, `shared-core`, the shared bundles it needs, its own) instead of about thirty-three; 155 sources → 34 bundles, ≈ 1.93 MB → 722 KB (−62.7%). Shared code never goes into a block bundle: the on-view loader de-duplicates by URL, so two blocks on one page share every bundle they have in common and each executes once, whereas a shared file inlined into two block bundles would execute twice.
@@ -584,6 +588,16 @@ npm run check:cdn
 ```
 
 It runs monthly on a schedule (a red run is the notification) and on pull requests that touch the partial, where it is advisory only — pinning behind `latest` is a legitimate choice. One thing stays fatal in both modes: the same package pinned at two different versions, which is what happens when the MapLibre JS URL gets bumped and the CSS one next to it does not.
+
+**Every pinned file also carries a Subresource Integrity hash** (since v1.72.0), in a generated `$cdnIntegrity` block of the same partial. The loader sets `integrity` and `crossorigin="anonymous"` on each CDN script, its `preload`, and the MapLibre sheet, so a browser refuses a file whose bytes differ from what was published. `import()` takes no `integrity`, so MapLibre's two main-thread modules are verified through `modulepreload` links that carry it, and the loader imports only once the entry's preload has settled — the import then resolves against the verified module rather than fetching again. MapLibre's worker is the one file outside this: it boots from a blob and imports its chunk in its own module graph. A version bump is therefore three steps:
+
+```bash
+# 1. edit the URL constants in view/common/iwac-assets.phtml
+npm run update:sri   # 2. rewrite the hashes from the npm tarballs (each verified against the registry's own sha512)
+npm run lint:sri     # 3. (also part of `npm run lint`) fails while the block and the pins disagree
+```
+
+The `CDN versions` workflow then runs `node scripts/cdn-integrity.js --verify`, which downloads every file from jsDelivr itself and fails on any hash that does not match — the one check against the bytes visitors are actually served.
 
 **Conventions for adding a new block:**
 
