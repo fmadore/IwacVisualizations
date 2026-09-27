@@ -91,7 +91,7 @@
      * Only the three cooperative-gesture keys were translated, so on the
      * French site every control still announced itself in English to a
      * screen reader — "Zoom in", "Enter fullscreen", "Close popup". These
-     * are every key MapLibre 6.6 reads (verified against the pinned
+     * are every key MapLibre 6.11 reads (verified against the pinned
      * bundle's `defaultLocale`) minus the ones for controls this module
      * never adds: geolocate, scale, terrain, logo.
      */

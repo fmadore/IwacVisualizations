@@ -91,3 +91,18 @@ test('MapLibre stays an ES module and never joins the ordered classic chain', ()
     assert.match(assets, /JSON_HEX_TAG/);
     assert.match(source, /node\.async = false/);
 });
+
+test('MapLibre\'s shared chunk is modulepreloaded once, alongside the entry import', async () => {
+    const map = { scripts: ['/core.js'], mjs: '/map.mjs', mjsPreload: ['/map-shared.mjs'] };
+    const run = harness([map, { ...map }]);
+    const hints = () => run.injected
+        .filter(n => n.tag === 'link' && n.rel === 'modulepreload')
+        .map(n => n.href);
+    assert.deepEqual(hints(), []);
+    run.activate(0); await flush();
+    assert.deepEqual(hints(), ['/map-shared.mjs']);
+    assert.deepEqual(run.calls, ['/map.mjs']);
+    run.activate(1); await flush();
+    assert.deepEqual(hints(), ['/map-shared.mjs'], 'a second map block reuses the first import');
+    assert.deepEqual(run.calls, ['/map.mjs']);
+});

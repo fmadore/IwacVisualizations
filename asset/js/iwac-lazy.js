@@ -37,8 +37,15 @@
         return scripts[src];
     }
 
-    function mapModule(url) {
+    function mapModule(url, preload) {
         if (S.mjsP) return;
+        // The entry's static imports are only discovered once it has
+        // downloaded; hinting them here fetches the whole graph at once.
+        (preload || []).forEach(function (href) {
+            var hint = document.createElement('link');
+            hint.rel = 'modulepreload'; hint.href = href;
+            document.head.appendChild(hint);
+        });
         S.mjs = url;
         S.mjsP = import(S.mjs).then(function (m) {
             window.maplibregl = m;
@@ -81,7 +88,7 @@
             link.onerror = function () { delete styles[href]; link.remove(); };
             document.head.appendChild(link);
         });
-        if (payload.mjs) mapModule(payload.mjs);
+        if (payload.mjs) mapModule(payload.mjs, payload.mjsPreload);
         // Preload concurrently, execute in dependency order. A failed dependency
         // prevents dependent code from executing and poisoning its retry.
         (payload.scripts || []).forEach(function (src) {
@@ -95,9 +102,6 @@
             chain = chain.then(function () { return script(src); });
         });
         block.pending = chain.then(function () {
-            if (window.IWACVis && window.IWACVis.registerEChartsThemes) {
-                window.IWACVis.registerEChartsThemes();
-            }
             block.ready = true;
             var callbacks = block.callbacks.splice(0);
             callbacks.forEach(function (start) { start(); });

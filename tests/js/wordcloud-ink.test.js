@@ -27,6 +27,8 @@ const SOURCES = [
     ['iwac-i18n.js', read('asset', 'js', 'iwac-i18n.js')],
     ['panels.js', read('asset', 'js', 'charts', 'shared', 'panels.js')],
     ['chart-options.js', read('asset', 'js', 'charts', 'shared', 'chart-options.js')],
+    // The bar builder the cloud falls back to when the plugin is missing.
+    ['chart-options-hbar.js', read('asset', 'js', 'charts', 'shared', 'chart-options-hbar.js')],
     ['chart-options-special.js', read('asset', 'js', 'charts', 'shared', 'chart-options-special.js')],
 ];
 
@@ -52,7 +54,7 @@ function contrast(a, b) {
     return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 
-function load(theme) {
+function load(theme, init) {
     const palette = TOKENS.series[theme];
     const panelBg = TOKENS.values[theme]['--panel-bg'];
     const context = {
@@ -69,7 +71,7 @@ function load(theme) {
         echarts: {
             // Enough for the availability probe to succeed, so the test walks
             // the real word-cloud branch rather than its bar-chart fallback.
-            init: () => ({ setOption() {}, dispose() {} }),
+            init: init || (() => ({ setOption() {}, getOption: () => ({ series: [{}] }), dispose() {} })),
             color: {
                 parse: parseColor,
                 modifyAlpha: (c, a) => `alpha(${c},${a})`,
@@ -165,4 +167,19 @@ test('readableInks still answers when nothing qualifies', () => {
     const inks = C.readableInks('#7f7f7f', '#000000');
     assert.equal(inks.length, 1);
     assert.equal(inks[0], '#000000');
+});
+
+test('a missing echarts-wordcloud plugin falls back to a bar chart', () => {
+    // What the production ECharts build does with a series type nobody
+    // registered: it accepts the option, drops the series and does not throw.
+    // The probe used to test only for the throw, so it always said "available".
+    const { C } = load('light', () => ({
+        setOption() {},
+        getOption: () => ({ series: [] }),
+        dispose() {},
+    }));
+    const option = C.wordcloud([['alpha', 3], ['beta', 2]]);
+    assert.ok(option.series.every((s) => s.type !== 'wordCloud'),
+        'an unregistered wordCloud series paints nothing, so it must not be emitted');
+    assert.equal(option.series[0].type, 'bar');
 });

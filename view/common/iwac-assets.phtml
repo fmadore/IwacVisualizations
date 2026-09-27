@@ -73,8 +73,15 @@ $cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/ech
 // That is the case bundler users must call `setWorkerUrl()` for; loading
 // straight from a CDN, as we do, resolves on its own. It does require `blob:`
 // in `worker-src` wherever the site enforces a CSP.
-$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.mjs';
-$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.css';
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.mjs';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.css';
+// The entry above is only half the library: it statically imports this
+// chunk (~500 KB, shared with the worker), which the browser can discover
+// only once the entry has downloaded and parsed — a second round trip in
+// series. The loader `modulepreload`s it alongside the import so both
+// download at once. A future release that renames the chunk costs one
+// wasted preload, never a broken map: the import resolves its own graph.
+$cdnMaplibreShared = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl-shared.mjs';
 // d3-force for the item-page ego networks (~17 KB total, vs the 640 KB
 // ECharts bundle they used to lean on for a `graph`/`force` series).
 // ORDER IS LOAD-BEARING: the UMD builds all attach to one shared `d3`
@@ -115,10 +122,38 @@ $headScript = $this->headScript();
 // The on-view lazy loader (bottom of this file) injects the chart
 // libraries only when a block nears the viewport — without this hint the
 // very first library request also pays DNS + TCP + TLS (~100-200 ms).
-// Classic <script>/<link> fetches are non-CORS, so no crossorigin variant
-// is needed (a crossorigin preconnect would open a second, unused socket).
-$headLink(['rel' => 'preconnect',   'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
-$headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
+//
+// A preconnect only helps the requests that can use its socket, and the
+// browser keeps CORS-without-credentials requests on a separate connection
+// from ordinary ones. So the `crossorigin` flag must match the requests:
+//   - classic <script>/<link> fetches (echarts, wordcloud, d3, the MapLibre
+//     sheet) are non-CORS → a plain preconnect;
+//   - MapLibre itself is `import()`ed, and a module fetch is always CORS →
+//     a crossorigin preconnect, on map blocks only;
+//   - everything MapLibre asks Carto for (style JSON, tiles, glyphs) goes
+//     through `fetch()` without credentials → crossorigin too. The plain
+//     preconnect these origins used to get opened a socket no map request
+//     could reuse, so every map still paid its own cold handshake.
+//
+// Emitted once per page: this partial runs once per BLOCK, and headLink()'s
+// invoke form does not de-duplicate, so a page with three blocks used to
+// carry three copies of each hint.
+$resourceHint = function (string $rel, string $href, bool $cors = false) use ($headLink): void {
+    $crossorigin = $cors ? 'anonymous' : null;
+    foreach ($headLink->getContainer() as $item) {
+        if (($item->rel ?? null) === $rel && ($item->href ?? null) === $href
+            && ($item->crossorigin ?? null) === $crossorigin) {
+            return;
+        }
+    }
+    $attributes = ['rel' => $rel, 'href' => $href];
+    if ($cors) {
+        $attributes['crossorigin'] = $crossorigin;
+    }
+    $headLink($attributes, 'PREPEND');
+};
+$resourceHint('preconnect',   'https://cdn.jsdelivr.net');
+$resourceHint('dns-prefetch', 'https://cdn.jsdelivr.net');
 
 // A map block pays a SECOND cold connection the moment MapLibre initializes —
 // the style JSON from basemaps.cartocdn.com, then tiles and Noto glyph ranges
@@ -129,9 +164,10 @@ $headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREP
 // these are its two origins, and `check-maplibre-gates.js` fails the build if
 // they drift apart or if a cartocdn literal reappears anywhere else.
 if ($needMaplibre) {
+    $resourceHint('preconnect', 'https://cdn.jsdelivr.net', true);
     foreach (['https://basemaps.cartocdn.com', 'https://tiles.basemaps.cartocdn.com'] as $origin) {
-        $headLink(['rel' => 'preconnect',   'href' => $origin], 'PREPEND');
-        $headLink(['rel' => 'dns-prefetch', 'href' => $origin], 'PREPEND');
+        $resourceHint('preconnect',   $origin, true);
+        $resourceHint('dns-prefetch', $origin);
     }
 }
 
@@ -196,8 +232,10 @@ $lazyCss = [];
 // `maplibregl` global. It travels as its own payload key and the loader
 // imports it in parallel with the classic chain.
 $lazyMjs = null;
+$lazyMjsPreload = [];
 if ($needMaplibre) {
     $lazyMjs = $cdnMaplibreJs;
+    $lazyMjsPreload[] = $cdnMaplibreShared;
     // The map renders on-view only, so its stylesheets ride along with the loader
     // instead of render-blocking the whole page: the CDN maplibre CSS plus the
     // theme's map overrides (iwac-maplibre.min.css).
@@ -252,6 +290,7 @@ $lazyManifest = json_encode([
     'scripts' => $scripts,
     'css'     => $lazyCss,
     'mjs'     => $lazyMjs,
+    'mjsPreload' => $lazyMjsPreload,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
 // The manifest is emitted into the body by `iwac-block-shell`, one per block;

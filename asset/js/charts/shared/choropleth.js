@@ -566,23 +566,36 @@
             // collection map opts in so the choropleth isn't a silent block
             // of colour. The transient popup is independent of the
             // click-to-pin popup above.
+            //
+            // Only the anchor follows every mousemove. The body is rebuilt,
+            // and the popup added, when the pointer crosses into another
+            // country: re-adding on each event tore the popup out of the DOM
+            // and rebuilt it ~60 times a second, and each `addTo` measured it
+            // (createIwacPopup's anchor sync), a forced layout per event.
             if (hoverInfo) {
                 var hoverPopup = P.createIwacPopup({ closeButton: false, closeOnClick: false });
+                var hoverKey = null;
                 map.on('mousemove', FILL, function (e) {
-                    if (!e.features || !e.features[0]) return;
+                    var f = e.features && e.features[0];
+                    if (!f) return;
                     map.getCanvas().style.cursor = 'pointer';
-                    var hp = e.features[0].properties || {};
+                    var hp = f.properties || {};
                     var hc = countFor(hp);
-                    hoverPopup
-                        .setLngLat(e.lngLat)
-                        .setDOMContent(P.buildMapPopup({
-                            title: hp.name || '',
-                            subtitleLines: [P.formatNumber(hc) + ' ' + P.t(labelKey)]
-                        }))
-                        .addTo(map);
+                    // The count is part of the key: the filter can change it
+                    // under a pointer that has not moved to another country.
+                    var key = (f.id != null ? f.id : hp.name) + '|' + hc;
+                    hoverPopup.setLngLat(e.lngLat);
+                    if (key === hoverKey && hoverPopup.isOpen()) return;
+                    hoverKey = key;
+                    hoverPopup.setDOMContent(P.buildMapPopup({
+                        title: hp.name || '',
+                        subtitleLines: [P.formatNumber(hc) + ' ' + P.t(labelKey)]
+                    }));
+                    if (!hoverPopup.isOpen()) hoverPopup.addTo(map);
                 });
                 map.on('mouseleave', FILL, function () {
                     map.getCanvas().style.cursor = '';
+                    hoverKey = null;
                     hoverPopup.remove();
                 });
             }

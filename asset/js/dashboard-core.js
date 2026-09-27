@@ -49,11 +49,6 @@
         };
     }
 
-    // Ensure themes are registered even if iwac-theme.js loaded before ECharts.
-    if (typeof ns.registerEChartsThemes === 'function') {
-        ns.registerEChartsThemes();
-    }
-
     /* ----------------------------------------------------------------- */
     /*  Chart tracking                                                    */
     /* ----------------------------------------------------------------- */
@@ -284,6 +279,12 @@
         return live && live._iwacLastOption ? live._iwacLastOption : null;
     };
 
+    /** The keys `makeChartFocusable` moves a dataZoom window with. */
+    var WINDOW_KEYS = {
+        ArrowRight: true, ArrowDown: true, ArrowLeft: true, ArrowUp: true,
+        PageDown: true, PageUp: true, Home: true, End: true
+    };
+
     function makeChartFocusable(el) {
         if (!el || el._iwacKeyboard) return;
         el._iwacKeyboard = true;
@@ -294,8 +295,17 @@
         el.setAttribute('role', 'img');
         el.addEventListener('keydown', function (event) {
             if (event.altKey || event.ctrlKey || event.metaKey) return;
+            if (!WINDOW_KEYS[event.key]) return;
             var instance = ns.getLiveChart(el);
             if (!instance) return;
+            // `getOption()` deep-copies the whole live option, series data
+            // included, so it is read only once we know it can matter: Tab
+            // leaving the chart, or an arrow key held down to scroll past a
+            // chart that has no window, used to copy every point per keypress.
+            // The option the chart was last painted with is kept by reference
+            // (trackOptionChanges) and answers "is there a window?" for free.
+            var painted = instance._iwacLastOption;
+            if (painted && !hasZoom(painted)) return;
             var option;
             try { option = instance.getOption(); } catch (e) { return; }
             if (!hasZoom(option)) return;
@@ -864,19 +874,19 @@
     /* ----------------------------------------------------------------- */
     //
     // ECharts canvases do NOT auto-resize when their container shrinks or
-    // grows. Without this, the chart keeps its initial pixel size and
-    // overflows its grid cell on window resize. Debounced so we don't
-    // thrash during the drag.
+    // grows. `registerChart` gives every chart its own ResizeObserver, so
+    // this window listener is only the fallback for a browser without one.
+    //
+    // MapLibre maps are deliberately absent. `trackResize` (on by default)
+    // gives each map a ResizeObserver on its own container, which a window
+    // resize already trips; resizing them again here re-measured and
+    // re-rendered every map on the page a second time per drag.
 
     var handleWindowResize = debounce(function () {
         ns.pruneCharts();
         ns._charts.forEach(function (entry) {
             try {
-                // ECharts entries with a per-chart ResizeObserver are already
-                // handled by that observer — skip them here to avoid double resize.
                 if (entry.kind === 'echarts' && entry.instance && !entry._resizeObserver) {
-                    entry.instance.resize();
-                } else if (entry.kind === 'maplibre' && entry.instance) {
                     entry.instance.resize();
                 }
             } catch (e) {
@@ -886,6 +896,7 @@
     }, 120);
 
     function observeResize() {
+        if (typeof ResizeObserver !== 'undefined') return;
         window.addEventListener('resize', handleWindowResize, { passive: true });
     }
 
