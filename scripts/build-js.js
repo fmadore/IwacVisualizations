@@ -30,12 +30,20 @@
  * bundle and every listed source exists — the build fails otherwise, which
  * is the point of having the order in data.
  *
+ * A bundle that carries translation dictionaries is built once per locale —
+ * `<name>.en.min.js`, `<name>.fr.min.js` — each with the other locale's
+ * tables emptied (scripts/i18n-strip.js), and listed in the generated
+ * `dist/locales.json`. The asset partial hands the loader both URLs and the
+ * loader requests the one matching the page, so an English page no longer
+ * downloads the French half of every dictionary, and vice versa.
+ *
  * Usage: node scripts/build-js.js
  */
 
-const { readdirSync, readFileSync, statSync, mkdirSync, rmSync, existsSync } = require('fs');
+const { readdirSync, readFileSync, statSync, mkdirSync, rmSync, existsSync, writeFileSync } = require('fs');
 const { join, relative } = require('path');
 const esbuild = require('esbuild');
+const { LOCALES, hasDictionaries, keepLocale } = require('./i18n-strip');
 
 const ROOT = join(__dirname, '..');
 const SRC_DIR = join(ROOT, 'asset', 'js');
@@ -111,10 +119,26 @@ function readManifest() {
     return bundles;
 }
 
-async function buildBundle(bundle) {
+/** An esbuild plugin that loads every source with only `locale`'s dictionaries. */
+function localePlugin(locale) {
+    return {
+        name: 'iwac-locale',
+        setup(build) {
+            build.onLoad({ filter: /\.js$/ }, (args) => {
+                if (!args.path.startsWith(SRC_DIR)) return undefined;
+                const source = readFileSync(args.path, 'utf8');
+                return { contents: keepLocale(source, locale, relative(ROOT, args.path)), loader: 'js' };
+            });
+        },
+    };
+}
+
+async function buildBundle(bundle, locale) {
     const entry = bundle.files.map((f) => `import './${f}';`).join('\n');
+    const outfile = locale ? bundle.outfile.replace(/\.min\.js$/, `.${locale}.min.js`) : bundle.outfile;
     const result = await esbuild.build({
         stdin: { contents: entry, resolveDir: SRC_DIR, sourcefile: `${bundle.name}.entry.js` },
+        plugins: locale ? [localePlugin(locale)] : [],
         bundle: true,
         minify: true,
         sourcemap: true,
@@ -124,7 +148,7 @@ async function buildBundle(bundle) {
         charset: 'utf8',
         legalComments: 'none',
         logLevel: 'silent',
-        outfile: bundle.outfile,
+        outfile,
         write: true,
         metafile: true,
     });
@@ -132,7 +156,7 @@ async function buildBundle(bundle) {
         for (const w of result.warnings) console.warn(`  warning (${bundle.name}): ${w.text}`);
     }
     const out = Object.entries(result.metafile.outputs).find(([k]) => k.endsWith('.min.js'));
-    return out ? out[1].bytes : statSync(bundle.outfile).size;
+    return { outfile, bytes: out ? out[1].bytes : statSync(outfile).size };
 }
 
 (async () => {
@@ -145,25 +169,40 @@ async function buildBundle(bundle) {
 
     let bytesIn = 0;
     let bytesOut = 0;
+    const localized = [];
     for (const bundle of bundles) {
         const inBytes = bundle.files.reduce((n, f) => n + statSync(join(SRC_DIR, f)).size, 0);
-        let outBytes;
+        let builds;
         try {
-            outBytes = await buildBundle(bundle);
+            const perLocale = bundle.files.some((f) => hasDictionaries(readFileSync(join(SRC_DIR, f), 'utf8'), f));
+            if (perLocale) localized.push(bundle.name);
+            builds = [];
+            for (const locale of perLocale ? LOCALES : [null]) builds.push(await buildBundle(bundle, locale));
         } catch (err) {
             console.error(`FAIL ${bundle.name}: ${err.message}`);
             process.exitCode = 1;
             continue;
         }
+        // Totals count what one page downloads: one variant of each bundle.
         bytesIn += inBytes;
-        bytesOut += outBytes;
-        const pct = ((1 - outBytes / inBytes) * 100).toFixed(1);
-        console.log(
-            `${relative(ROOT, bundle.outfile).padEnd(52)} ${String(bundle.files.length).padStart(3)} files ${String(inBytes).padStart(7)}B -> ${String(outBytes).padStart(6)}B  (-${pct}%)`
-        );
+        bytesOut += builds[0].bytes;
+        for (const { outfile, bytes } of builds) {
+            const pct = ((1 - bytes / inBytes) * 100).toFixed(1);
+            console.log(
+                `${relative(ROOT, outfile).padEnd(52)} ${String(bundle.files.length).padStart(3)} files ${String(inBytes).padStart(7)}B -> ${String(bytes).padStart(6)}B  (-${pct}%)`
+            );
+        }
     }
+    // Which bundles the partial must request per locale. Generated, committed
+    // with the bundles, and read by Site\AssetPlan — so the PHP side cannot
+    // name a variant the build did not write.
+    writeFileSync(
+        join(DIST_DIR, 'locales.json'),
+        JSON.stringify({ locales: LOCALES, bundles: localized }, null, 2) + '\n'
+    );
     const totalPct = bytesIn ? ((1 - bytesOut / bytesIn) * 100).toFixed(1) : '0.0';
     console.log(
-        `\n${bundles.length} bundles: ${bytesIn}B -> ${bytesOut}B (-${totalPct}%, saved ${bytesIn - bytesOut}B) in ${relative(ROOT, DIST_DIR)}/`
+        `\n${bundles.length} bundles (${localized.length} per locale): ${bytesIn}B -> ${bytesOut}B per page set `
+        + `(-${totalPct}%, saved ${bytesIn - bytesOut}B) in ${relative(ROOT, DIST_DIR)}/`
     );
 })();

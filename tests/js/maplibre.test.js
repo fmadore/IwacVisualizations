@@ -145,6 +145,30 @@ test('the popup patches addTo, and only addTo', () => {
     }
 });
 
+test('a reused popup is measured at the requested cap, not at its last width', () => {
+    // The hover read-outs keep one popup and swap its content. The measured
+    // width is fed back as `maxWidth`, so measuring inside it let the width
+    // only ever shrink: a short first label squeezed every longer one after.
+    const P = loadMaplibre();
+    const popup = P.createIwacPopup({ closeButton: false });
+    let natural = 150;
+    const px = (value) => parseFloat(value) || Infinity;
+    // CSS in miniature: the box is its content's natural width, capped.
+    const content = { getBoundingClientRect: () => ({ width: Math.min(natural, px(popup.options.maxWidth)) }) };
+    popup.getElement = () => ({ querySelector: () => content });
+
+    popup.setDOMContent({ html: 'Togo' }).addTo({});
+    assert.equal(popup.options.maxWidth, '150px');
+
+    natural = 260;
+    popup.setDOMContent({ html: "Côte d'Ivoire — 1 234 mentions" }).addTo({});
+    assert.equal(popup.options.maxWidth, '260px', 'the longer label gets its own width back');
+
+    natural = 400;
+    popup.addTo({});
+    assert.equal(popup.options.maxWidth, '320px', 'and never more than the cap the caller asked for');
+});
+
 test('the map host is a size container and the popup bounds are map-relative', () => {
     // The guarantees the deleted JS enforced, now expressed once in CSS:
     // half the map's height minus MapLibre's 10px tip (so one of the

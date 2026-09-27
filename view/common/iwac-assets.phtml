@@ -73,8 +73,15 @@ $cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/ech
 // That is the case bundler users must call `setWorkerUrl()` for; loading
 // straight from a CDN, as we do, resolves on its own. It does require `blob:`
 // in `worker-src` wherever the site enforces a CSP.
-$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.mjs';
-$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.css';
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.mjs';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.css';
+// The entry above is only half the library: it statically imports this
+// chunk (~500 KB, shared with the worker), which the browser can discover
+// only once the entry has downloaded and parsed — a second round trip in
+// series. The loader `modulepreload`s it alongside the import so both
+// download at once. A future release that renames the chunk costs one
+// wasted preload, never a broken map: the import resolves its own graph.
+$cdnMaplibreShared = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl-shared.mjs';
 // d3-force for the item-page ego networks (~17 KB total, vs the 640 KB
 // ECharts bundle they used to lean on for a `graph`/`force` series).
 // ORDER IS LOAD-BEARING: the UMD builds all attach to one shared `d3`
@@ -88,6 +95,37 @@ $cdnD3 = [
     'https://cdn.jsdelivr.net/npm/d3-timer@3.0.1/dist/d3-timer.min.js',
     'https://cdn.jsdelivr.net/npm/d3-force@3.0.0/dist/d3-force.min.js',
 ];
+
+// -- Subresource Integrity ----------------------------------------------
+// Exact pins make the bytes behind each URL fixed, so the browser is told
+// what they are and refuses to run anything else — a compromised CDN or a
+// file swapped in transit fails its hash instead of executing on every
+// page that carries a block. The loader sets `integrity` and
+// `crossorigin="anonymous"` (SRI on a cross-origin file requires CORS,
+// which jsDelivr serves) on each script, its preload, the MapLibre sheet,
+// and the `modulepreload` that fetches MapLibre's two main-thread modules.
+// MapLibre's WORKER is the one gap: it boots from a blob and imports its
+// chunk in the worker's own module graph, which no document-side
+// attribute reaches.
+//
+// After bumping a pin: `npm run update:sri` rewrites this block from the
+// npm tarballs (each checked against the registry's own integrity),
+// `npm run lint:sri` fails the build while it is out of step with the
+// pins, and the CDN versions workflow re-checks every hash against
+// jsDelivr itself.
+// BEGIN GENERATED INTEGRITY (npm run update:sri) — do not edit by hand.
+$cdnIntegrity = [
+    'https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js'                     => 'sha384-C2iskrW/uPW46KzOjrvJIQo4YkV8lkD+QS0CrDN18IIPIpT/g2USu8bTP3nvmIAD',
+    'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js' => 'sha384-U1KEY0DDCF4Dq6Yx1J+EZ5Hnj8X5bMn52OAcJB8C4OiAWeU4iJhJ/Tv5KhTqu8zZ',
+    'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.mjs'               => 'sha384-KQzExYlfg1SnYNpLaXHTnaCTjr5wmiZ6X3sasvPb94caZfH+3+T1Sl4eJziXUtmN',
+    'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.css'               => 'sha384-ntw3zEt6rcVML7jDK0ULmHa5hxLB23afsPqzqfY+gLgMfAkbFCnCgPpkZvV5mmZX',
+    'https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl-shared.mjs'        => 'sha384-V59ofCEPEqpSk5Mswc19DtDYbZWJtne210dFzS328Il6O31eLwTV7v57+Z3NjW/7',
+    'https://cdn.jsdelivr.net/npm/d3-dispatch@3.0.1/dist/d3-dispatch.min.js'             => 'sha384-oGUk7ZMuIJXyjegrWZrjUkxuWZHJoUPTeaUNKzjcEhND8HzfagI4EnXVspF2mP60',
+    'https://cdn.jsdelivr.net/npm/d3-quadtree@3.0.1/dist/d3-quadtree.min.js'             => 'sha384-JzQQZeN94rbeGRpksNSu8TCkRWLlzTHev53JZngDT0faxrmd9bApgXS5pZWShqJb',
+    'https://cdn.jsdelivr.net/npm/d3-timer@3.0.1/dist/d3-timer.min.js'                   => 'sha384-brChTSJXF1bpEGi+e8fNotmiEQtehLbv5EWt3njlDFlYjl/SwmXs4xofe0gvWd7E',
+    'https://cdn.jsdelivr.net/npm/d3-force@3.0.0/dist/d3-force.min.js'                   => 'sha384-RM+ykRJc5/xPC56TVMOAYbZeVThoKXqcRlmRHZZc3YDHDCvFJrsEH2dpLMqL50K8',
+];
+// END GENERATED INTEGRITY
 
 // -- Defaults -----------------------------------------------------------
 $blockCss     = isset($blockCss)     ? $blockCss     : null;
@@ -115,10 +153,37 @@ $headScript = $this->headScript();
 // The on-view lazy loader (bottom of this file) injects the chart
 // libraries only when a block nears the viewport — without this hint the
 // very first library request also pays DNS + TCP + TLS (~100-200 ms).
-// Classic <script>/<link> fetches are non-CORS, so no crossorigin variant
-// is needed (a crossorigin preconnect would open a second, unused socket).
-$headLink(['rel' => 'preconnect',   'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
-$headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
+//
+// A preconnect only helps the requests that can use its socket, and the
+// browser keeps CORS-without-credentials requests on a separate connection
+// from ordinary ones. So the `crossorigin` flag must match the requests:
+//   - every jsDelivr file is fetched in CORS mode — the scripts and the
+//     MapLibre sheet because they carry `integrity` (see $cdnIntegrity), and
+//     MapLibre's modules because a module fetch always is → crossorigin;
+//   - everything MapLibre asks Carto for (style JSON, tiles, glyphs) goes
+//     through `fetch()` without credentials → crossorigin too. The plain
+//     preconnect these origins used to get opened a socket no map request
+//     could reuse, so every map still paid its own cold handshake.
+//
+// Emitted once per page: this partial runs once per BLOCK, and headLink()'s
+// invoke form does not de-duplicate, so a page with three blocks used to
+// carry three copies of each hint.
+$resourceHint = function (string $rel, string $href, bool $cors = false) use ($headLink): void {
+    $crossorigin = $cors ? 'anonymous' : null;
+    foreach ($headLink->getContainer() as $item) {
+        if (($item->rel ?? null) === $rel && ($item->href ?? null) === $href
+            && ($item->crossorigin ?? null) === $crossorigin) {
+            return;
+        }
+    }
+    $attributes = ['rel' => $rel, 'href' => $href];
+    if ($cors) {
+        $attributes['crossorigin'] = $crossorigin;
+    }
+    $headLink($attributes, 'PREPEND');
+};
+$resourceHint('preconnect',   'https://cdn.jsdelivr.net', true);
+$resourceHint('dns-prefetch', 'https://cdn.jsdelivr.net');
 
 // A map block pays a SECOND cold connection the moment MapLibre initializes —
 // the style JSON from basemaps.cartocdn.com, then tiles and Noto glyph ranges
@@ -130,8 +195,8 @@ $headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREP
 // they drift apart or if a cartocdn literal reappears anywhere else.
 if ($needMaplibre) {
     foreach (['https://basemaps.cartocdn.com', 'https://tiles.basemaps.cartocdn.com'] as $origin) {
-        $headLink(['rel' => 'preconnect',   'href' => $origin], 'PREPEND');
-        $headLink(['rel' => 'dns-prefetch', 'href' => $origin], 'PREPEND');
+        $resourceHint('preconnect',   $origin, true);
+        $resourceHint('dns-prefetch', $origin);
     }
 }
 
@@ -196,8 +261,10 @@ $lazyCss = [];
 // `maplibregl` global. It travels as its own payload key and the loader
 // imports it in parallel with the classic chain.
 $lazyMjs = null;
+$lazyMjsPreload = [];
 if ($needMaplibre) {
     $lazyMjs = $cdnMaplibreJs;
+    $lazyMjsPreload[] = $cdnMaplibreShared;
     // The map renders on-view only, so its stylesheets ride along with the loader
     // instead of render-blocking the whole page: the CDN maplibre CSS plus the
     // theme's map overrides (iwac-maplibre.min.css).
@@ -208,8 +275,22 @@ if ($needMaplibre) {
 // IWAC bundles, in their fixed order. Every block carries shared-core
 // (i18n → theme → dashboard-core → the panels family → panel toolbar →
 // embed → responsive → hijri); the rest ride behind their $needs flag.
+//
+// A bundle that carries translation dictionaries is built once per locale
+// (see AssetPlan::localized()); it is listed as `{en: url, fr: url}` and the
+// loader requests the variant matching the page's `<html lang>`, so a page
+// downloads only its own language's strings.
 foreach ($plannedBundles as $plannedBundle) {
-    $scripts[] = $this->assetUrl('js/dist/' . $plannedBundle . '.min.js', $module);
+    $bundlePath = \IwacVisualizations\Site\AssetPlan::bundlePath($plannedBundle);
+    if (is_array($bundlePath)) {
+        $variants = [];
+        foreach ($bundlePath as $locale => $path) {
+            $variants[$locale] = $this->assetUrl($path, $module);
+        }
+        $scripts[] = $variants;
+    } else {
+        $scripts[] = $this->assetUrl($bundlePath, $module);
+    }
 }
 
 // -- Nothing waits for MapLibre ----------------------------------------
@@ -246,12 +327,24 @@ foreach ($plannedBundles as $plannedBundle) {
 // The payload travels as `<script type="application/json">`, which is INERT
 // under any CSP because it is data, not code. The HEX flags keep `<`, `&`,
 // `'` and `"` escaped so it can never break out of the element.
+// Only the hashes this block's own CDN files need. The module's bundles
+// and sheets are same-origin and ship with the module, so they carry none.
+$lazyIntegrity = [];
+foreach (array_merge($scripts, $lazyCss, $lazyMjs !== null ? [$lazyMjs] : [], $lazyMjsPreload) as $url) {
+    if (is_string($url) && isset($cdnIntegrity[$url])) {
+        $lazyIntegrity[$url] = $cdnIntegrity[$url];
+    }
+}
+
 $lazyManifest = json_encode([
     'error'   => $this->translate('The visualization could not load.'),
     'retry'   => $this->translate('Retry'),
     'scripts' => $scripts,
     'css'     => $lazyCss,
     'mjs'     => $lazyMjs,
+    'mjsPreload' => $lazyMjsPreload,
+    // An object even when empty, so the loader indexes it by URL either way.
+    'integrity' => (object) $lazyIntegrity,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
 // The manifest is emitted into the body by `iwac-block-shell`, one per block;

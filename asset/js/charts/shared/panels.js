@@ -274,19 +274,24 @@
      */
     P.lazyInit = function (target, render, opts) {
         var fired = false;
+        var observer = null;
         function fire() {
             if (fired) return;
             fired = true;
+            // A forced trigger (a tab opened, a fullscreen toggle) used to
+            // leave the observer armed — holding `target` and this closure
+            // for the life of the page when the element never scrolled into
+            // view, and waking once more when it did.
+            if (observer) observer.disconnect();
             render();
         }
         if (typeof IntersectionObserver === 'undefined') {
             fire();
             return fire;
         }
-        var observer = new IntersectionObserver(function (entries) {
+        observer = new IntersectionObserver(function (entries) {
             for (var i = 0; i < entries.length; i++) {
                 if (entries[i].isIntersecting) {
-                    observer.disconnect();
                     fire();
                     return;
                 }

@@ -49,11 +49,6 @@
         };
     }
 
-    // Ensure themes are registered even if iwac-theme.js loaded before ECharts.
-    if (typeof ns.registerEChartsThemes === 'function') {
-        ns.registerEChartsThemes();
-    }
-
     /* ----------------------------------------------------------------- */
     /*  Chart tracking                                                    */
     /* ----------------------------------------------------------------- */
@@ -284,6 +279,12 @@
         return live && live._iwacLastOption ? live._iwacLastOption : null;
     };
 
+    /** The keys `makeChartFocusable` moves a dataZoom window with. */
+    var WINDOW_KEYS = {
+        ArrowRight: true, ArrowDown: true, ArrowLeft: true, ArrowUp: true,
+        PageDown: true, PageUp: true, Home: true, End: true
+    };
+
     function makeChartFocusable(el) {
         if (!el || el._iwacKeyboard) return;
         el._iwacKeyboard = true;
@@ -294,8 +295,17 @@
         el.setAttribute('role', 'img');
         el.addEventListener('keydown', function (event) {
             if (event.altKey || event.ctrlKey || event.metaKey) return;
+            if (!WINDOW_KEYS[event.key]) return;
             var instance = ns.getLiveChart(el);
             if (!instance) return;
+            // `getOption()` deep-copies the whole live option, series data
+            // included, so it is read only once we know it can matter: Tab
+            // leaving the chart, or an arrow key held down to scroll past a
+            // chart that has no window, used to copy every point per keypress.
+            // The option the chart was last painted with is kept by reference
+            // (trackOptionChanges) and answers "is there a window?" for free.
+            var painted = instance._iwacLastOption;
+            if (painted && !hasZoom(painted)) return;
             var option;
             try { option = instance.getOption(); } catch (e) { return; }
             if (!hasZoom(option)) return;
@@ -864,19 +874,19 @@
     /* ----------------------------------------------------------------- */
     //
     // ECharts canvases do NOT auto-resize when their container shrinks or
-    // grows. Without this, the chart keeps its initial pixel size and
-    // overflows its grid cell on window resize. Debounced so we don't
-    // thrash during the drag.
+    // grows. `registerChart` gives every chart its own ResizeObserver, so
+    // this window listener is only the fallback for a browser without one.
+    //
+    // MapLibre maps are deliberately absent. `trackResize` (on by default)
+    // gives each map a ResizeObserver on its own container, which a window
+    // resize already trips; resizing them again here re-measured and
+    // re-rendered every map on the page a second time per drag.
 
     var handleWindowResize = debounce(function () {
         ns.pruneCharts();
         ns._charts.forEach(function (entry) {
             try {
-                // ECharts entries with a per-chart ResizeObserver are already
-                // handled by that observer — skip them here to avoid double resize.
                 if (entry.kind === 'echarts' && entry.instance && !entry._resizeObserver) {
-                    entry.instance.resize();
-                } else if (entry.kind === 'maplibre' && entry.instance) {
                     entry.instance.resize();
                 }
             } catch (e) {
@@ -886,6 +896,7 @@
     }, 120);
 
     function observeResize() {
+        if (typeof ResizeObserver !== 'undefined') return;
         window.addEventListener('resize', handleWindowResize, { passive: true });
     }
 
@@ -903,57 +914,6 @@
     /* ----------------------------------------------------------------- */
     /*  Shared helpers                                                    */
     /* ----------------------------------------------------------------- */
-
-    /**
-     * Resolve a CSS custom property to a concrete color string that
-     * ECharts' color parser can understand (`rgb(...)` / `rgba(...)`).
-     *
-     * Why this exists: our theme ramps under iwac-core.css
-     * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
-     * are defined as `color-mix(in oklab, var(--primary), var(--surface))`
-     * expressions so they track the IWAC theme's --primary / --surface
-     * tokens. Two things conspire against ECharts here:
-     *   1. `getPropertyValue('--x')` returns the raw source — ECharts has
-     *      no idea what `color-mix(...)` means and falls back to grayscale.
-     *   2. `getComputedStyle(probe).color` DOES compute the expression,
-     *      but modern Chromium serializes the result as
-     *      `color(srgb 0.98 0.93 0.92)` (CSS Color Module Level 4).
-     *      ECharts' parser doesn't understand `color()` either.
-     * So we force the browser to compute the expression via an offscreen
-     * probe, then if the result comes back as `color(srgb ...)`, parse it
-     * ourselves and emit legacy `rgb()` / `rgba()`.
-     *
-     * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
-     * @returns {string} legacy-rgb color, or '' if undefined / unresolvable
-     */
-    ns.resolveCssVar = function (varName) {
-        if (typeof document === 'undefined' || !document.body) return '';
-        var probe = document.createElement('span');
-        probe.style.cssText =
-            'position:absolute;visibility:hidden;width:0;height:0;' +
-            'color:var(' + varName + ',transparent)';
-        document.body.appendChild(probe);
-        var resolved = getComputedStyle(probe).color;
-        document.body.removeChild(probe);
-        if (!resolved || resolved === 'rgba(0, 0, 0, 0)') return '';
-
-        // rgb / rgba are already Color-3-legal — fast path.
-        if (/^rgba?\(/i.test(resolved)) return resolved;
-
-        // After IWAC theme v2.0.0 reframed tokens around OKLCH, modern
-        // Chromium serializes `color-mix(in oklab, …)` and `oklch(…)`
-        // results as oklab(…) / oklch(…) AS-IS, not as rgb. ECharts'
-        // parse → undefined → hover lift fails → orange "disappears".
-        // ns._convertModernColor (defined in iwac-theme.js) does pure-JS
-        // Oklab → linear sRGB → sRGB math, so the result is parseable
-        // by ECharts AND accepted by MapLibre's style validator. No
-        // canvas (anti-fingerprinting layers can corrupt canvas reads).
-        if (typeof ns._convertModernColor === 'function') {
-            var converted = ns._convertModernColor(resolved);
-            if (converted) return converted;
-        }
-        return resolved;
-    };
 
     /** Convert either {key: value} or array format to [{ name, value, itemId? }]. */
     ns.toEntries = function (data) {

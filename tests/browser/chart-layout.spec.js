@@ -225,10 +225,46 @@ for (const width of [360, 900, 1800]) {
         });
         await expect.poll(async () => (await bounds()).count).toBeGreaterThanOrEqual(135);
         const rect = await bounds();
-        expect(rect.left).toBeGreaterThanOrEqual(-2);
-        expect(rect.right).toBeLessThanOrEqual(width + 2);
-        expect(rect.top).toBeGreaterThanOrEqual(-2);
-        expect(rect.bottom).toBeLessThanOrEqual(402);
+        // Clipping is about the letters, not their boxes. A text element's box
+        // is its em box — ascent and descent padding included — and turned
+        // 45° its corners reach past the ink, so a term the library placed
+        // inside the panel (it lays words out by their painted pixels) still
+        // had a box 5–10 px over the edge in about one load in ten. So the
+        // cloud is painted again with room around it and every pixel outside
+        // the panel is measured: nothing may reach more than the same 2 px
+        // past the edge the box check allowed (a glyph's anti-aliased rim).
+        const ink = await page.evaluate(async () => {
+            const source = document.querySelector('#host svg');
+            const w = source.width.baseVal.value, h = source.height.baseVal.value, m = 120;
+            const svg = source.cloneNode(true);
+            svg.setAttribute('width', w + 2 * m);
+            svg.setAttribute('height', h + 2 * m);
+            svg.setAttribute('viewBox', `${-m} ${-m} ${w + 2 * m} ${h + 2 * m}`);
+            svg.setAttribute('overflow', 'visible');
+            svg.querySelectorAll('rect').forEach((node) => node.remove());
+            const image = new Image();
+            image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            await image.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = w + 2 * m;
+            canvas.height = h + 2 * m;
+            const context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0);
+            const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+            let inside = 0, overshoot = 0;
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    if (pixels[(y * canvas.width + x) * 4 + 3] < 64) continue;
+                    const px = x - m, py = y - m;
+                    const past = Math.max(-px, px - (w - 1), -py, py - (h - 1), 0);
+                    if (past > 0) overshoot = Math.max(overshoot, past);
+                    else inside++;
+                }
+            }
+            return { inside, overshoot };
+        });
+        expect(ink.inside, 'the re-painted cloud has ink to measure').toBeGreaterThan(10000);
+        expect(ink.overshoot, 'no term is painted past the panel edge').toBeLessThanOrEqual(2);
         expect(rect.right - rect.left).toBeGreaterThan(width * 0.65);
         expect(rect.bottom - rect.top).toBeGreaterThan(230);
     });

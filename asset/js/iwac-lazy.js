@@ -3,7 +3,43 @@
     'use strict';
     var S = window.IWACVisLazy = window.IWACVisLazy || {};
     var scripts = {}, styles = {}, blocks = [];
+    // Subresource Integrity, by URL, merged from every block's manifest: a
+    // pinned CDN file hashes the same wherever it is requested from.
+    var integrity = {};
     S.mjsP = null;
+
+    /**
+     * The page's language, by the same rule as iwac-i18n.js's detectLocale —
+     * and published, because iwac-i18n.js adopts it: a bundle built per
+     * locale carries only that locale's strings, so the language `t()` uses
+     * has to be the one the loader fetched, not a second opinion.
+     */
+    S.locale = (function () {
+        var root = document.documentElement;
+        var raw = ((root && root.getAttribute('lang')) || 'en').toLowerCase();
+        return raw.split(/[-_]/)[0] === 'fr' ? 'fr' : 'en';
+    })();
+
+    /** A manifest entry's URL: itself, or its `{locale: url}` variant for this page. */
+    function pick(entry) {
+        if (!entry || typeof entry === 'string') return entry;
+        return entry[S.locale] || entry.en || entry[Object.keys(entry)[0]];
+    }
+
+    /**
+     * Stamp a node with its file's recorded hash. SRI on a cross-origin
+     * file also needs CORS, so `crossorigin` comes with it — and must come
+     * on the matching `preload` too, or the browser cannot reuse the
+     * preloaded response and fetches the file a second time.
+     */
+    function withIntegrity(node, url) {
+        var hash = integrity[url];
+        if (hash) {
+            node.integrity = hash;
+            node.crossOrigin = 'anonymous';
+        }
+        return node;
+    }
     S.whenVisible = function (host, start) {
         var block = blocks.filter(function (b) { return b.host === host; })[0];
         if (!block) { start(); return; } // Standalone fixtures / legacy themes.
@@ -28,6 +64,7 @@
                     reject(err);
                 } else resolve();
             }
+            withIntegrity(node, src);
             node.src = src;
             node.async = false;
             node.onload = function () { finish(); };
@@ -37,10 +74,45 @@
         return scripts[src];
     }
 
-    function mapModule(url) {
+    function supportsModulePreload() {
+        var link = document.createElement('link');
+        return !!(link.relList && link.relList.supports && link.relList.supports('modulepreload'));
+    }
+
+    /** Settles when a `modulepreload` of `href` has fetched (and verified) it. */
+    function modulePreload(href) {
+        return new Promise(function (resolve, reject) {
+            var link = withIntegrity(document.createElement('link'), href);
+            link.rel = 'modulepreload';
+            link.onload = function () { resolve(); };
+            link.onerror = function () { reject(new Error('Module failed: ' + href)); };
+            link.href = href;
+            document.head.appendChild(link);
+        });
+    }
+
+    /**
+     * Import MapLibre, in parallel with the classic chain.
+     *
+     * The entry and its chunk are `modulepreload`ed together: the entry's
+     * static import of the chunk is otherwise discovered only once the entry
+     * has downloaded, a second round trip in series. The preloads are also
+     * how the modules get their integrity check — `import()` takes no
+     * `integrity` — so the import waits for the entry's preload to settle and
+     * then resolves against the module map entry it made, verified. Where
+     * `modulepreload` is unsupported the import simply runs unhinted.
+     */
+    function mapModule(url, preload) {
         if (S.mjsP) return;
         S.mjs = url;
-        S.mjsP = import(S.mjs).then(function (m) {
+        var ready = Promise.resolve();
+        if (supportsModulePreload()) {
+            var hinted = [url].concat(preload || []).map(modulePreload);
+            // The chunk's own failure surfaces through the import that needs it.
+            hinted.slice(1).forEach(function (p) { p.catch(function () {}); });
+            ready = hinted[0];
+        }
+        S.mjsP = ready.then(function () { return import(S.mjs); }).then(function (m) {
             window.maplibregl = m;
             return m;
         });
@@ -73,31 +145,31 @@
     function load(block) {
         if (block.pending) return block.pending;
         var payload = block.payload;
+        var hashes = payload.integrity || {};
+        Object.keys(hashes).forEach(function (url) { integrity[url] = hashes[url]; });
         (payload.css || []).forEach(function (href) {
             if (styles[href]) return;
             styles[href] = true;
-            var link = document.createElement('link');
+            var link = withIntegrity(document.createElement('link'), href);
             link.rel = 'stylesheet'; link.href = href;
             link.onerror = function () { delete styles[href]; link.remove(); };
             document.head.appendChild(link);
         });
-        if (payload.mjs) mapModule(payload.mjs);
+        if (payload.mjs) mapModule(payload.mjs, payload.mjsPreload);
         // Preload concurrently, execute in dependency order. A failed dependency
         // prevents dependent code from executing and poisoning its retry.
-        (payload.scripts || []).forEach(function (src) {
+        var list = (payload.scripts || []).map(pick);
+        list.forEach(function (src) {
             if (scripts[src]) return;
-            var link = document.createElement('link');
+            var link = withIntegrity(document.createElement('link'), src);
             link.rel = 'preload'; link.as = 'script'; link.href = src;
             document.head.appendChild(link);
         });
         var chain = Promise.resolve();
-        (payload.scripts || []).forEach(function (src) {
+        list.forEach(function (src) {
             chain = chain.then(function () { return script(src); });
         });
         block.pending = chain.then(function () {
-            if (window.IWACVis && window.IWACVis.registerEChartsThemes) {
-                window.IWACVis.registerEChartsThemes();
-            }
             block.ready = true;
             var callbacks = block.callbacks.splice(0);
             callbacks.forEach(function (start) { start(); });

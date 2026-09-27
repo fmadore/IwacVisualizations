@@ -79,6 +79,12 @@
     </main>
     <!-- The bundle every block loads, as production serves it (i18n, theme,
          dashboard-core, the panels family, the toolbar, embed). -->
-    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <!-- shared-core is built once per locale, and production serves the
+         variant matching <html lang>; written during parsing so the
+         scripts after it still run in order. -->
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.'
+            + (/^fr/i.test(document.documentElement.lang) ? 'fr' : 'en') + '.min.js"><\/script>');
+    </script>
 </body>
 </html>

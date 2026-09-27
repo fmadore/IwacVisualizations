@@ -133,7 +133,13 @@
     <!-- The three bundles the block's template asks for, as production
          serves them: shared-core, shared-layout (with every renderer), and the
          block's own bundle with the orchestrator last. -->
-    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <!-- shared-core is built once per locale, and production serves the
+         variant matching <html lang>; written during parsing so the
+         scripts after it still run in order. -->
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.'
+            + (/^fr/i.test(document.documentElement.lang) ? 'fr' : 'en') + '.min.js"><\/script>');
+    </script>
     <script src="/asset/js/dist/shared-layout.min.js"></script>
     <script src="/asset/js/dist/blocks/minimal-item-dashboard.min.js"></script>
 </body>

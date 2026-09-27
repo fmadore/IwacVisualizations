@@ -844,9 +844,16 @@
             document.body.appendChild(probe);
             var tmp = echarts.init(probe);
             tmp.setOption({ series: [{ type: 'wordCloud', data: [{ name: 'a', value: 1 }] }] });
+            // The production ECharts build does not throw on a series type
+            // nobody registered — it drops the series and carries on — so
+            // "setOption did not throw" was true with or without the plugin
+            // and the bar-chart fallback below could never run. Whether the
+            // series SURVIVED is the answer.
+            var kept = (tmp.getOption().series || []).length > 0;
             tmp.dispose();
             document.body.removeChild(probe);
-            _wordcloudAvailable = true;
+            _wordcloudAvailable = kept;
+            if (!kept) console.warn('IWACVis.wordcloud: echarts-wordcloud not loaded, falling back');
         } catch (e) {
             console.warn('IWACVis.wordcloud: echarts-wordcloud not loaded, falling back', e);
             _wordcloudAvailable = false;
