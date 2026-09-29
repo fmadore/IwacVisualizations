@@ -18,6 +18,8 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
+        'network_stats_entities':    '{nodes} entities \u00b7 {links} links',
+        'network_stats_places':      '{nodes} places \u00b7 {links} links',
         'networks_description':      'Each point represents a person, organisation, place, subject or event in the catalogue. Lines join entries recorded on the same items. The layout helps reveal groups of connections, but distances are approximate. Shared records do not by themselves establish a social relationship. Click a point to inspect its connections.',
         'network_select_hint':       'Click a point to see the entries sharing the most items with it; click the background to clear the selection.',
         'network_links_note':        'A line joins two entries recorded together on at least {count} items.',
@@ -27,6 +29,8 @@
     });
 
     ns.addTranslations('fr', {
+        'network_stats_entities':    '{nodes} entit\u00e9s \u00b7 {links} liens',
+        'network_stats_places':      '{nodes} lieux \u00b7 {links} liens',
         'Entities': 'Entit\u00e9s',
         'Co-occurrence network':     'R\u00e9seau de cooccurrences',
         'networks_description':      'Chaque point représente une personne, une organisation, un lieu, un sujet ou un événement du catalogue. Les lignes relient les entrées associées aux mêmes documents. La disposition aide à repérer des groupes de liens, mais les distances sont approximatives. Des notices communes ne suffisent pas à établir une relation sociale. Cliquez sur un point pour examiner ses liens.',

@@ -668,7 +668,14 @@
         // reader reached an interactive canvas and could only call it
         // "application". MapLibre's own `Map.Title` names the canvas; this
         // names the container the reader tabs into.
+        //
+        // The name needs a role to attach to: `aria-label` on an element with
+        // no role (a bare <div>) is PROHIBITED in ARIA 1.2, and assistive
+        // technology may ignore it — which the name above existed to fix.
+        // `group` names the map and its controls together without adding one
+        // landmark per map to a page that can carry a dozen of them.
         if (el && config.title && !el.getAttribute('aria-label')) {
+            if (!el.getAttribute('role')) el.setAttribute('role', 'group');
             el.setAttribute('aria-label', config.title);
         }
         if (typeof ns.registerMap === 'function') {

@@ -16,14 +16,14 @@
     min-height: 420px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg, 1.5rem);
+    gap: var(--space-6, 1.5rem);
 }
 
 .iwac-vis-compare-root,
 .iwac-vis-compare-results {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg, 1.5rem);
+    gap: var(--space-6, 1.5rem);
 }
 
 
@@ -34,7 +34,7 @@
 .iwac-vis-compare-pickers {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md, 1rem);
+    gap: var(--space-4, 1rem);
 }
 
 @media (min-width: 768px) { /* md */
@@ -47,10 +47,10 @@
     background: var(--surface-raised, #faf8f6);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-lg, 0.75rem);
-    padding: var(--space-md, 1rem);
+    padding: var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
     position: relative;
     overflow: hidden;
 }
@@ -84,7 +84,7 @@
 .iwac-vis-compare-picker__row {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 @media (min-width: 600px) { /* sm */
@@ -161,7 +161,7 @@
 .iwac-vis-compare-metrics {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 @media (min-width: 768px) { /* md */
@@ -174,7 +174,7 @@
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -183,7 +183,7 @@
 .iwac-vis-compare-metric__pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
     align-items: baseline;
 }
 
@@ -248,7 +248,7 @@
 .iwac-vis-compare-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md, 1rem);
+    gap: var(--space-4, 1rem);
 }
 
 @media (min-width: 1024px) { /* lg */
@@ -264,10 +264,10 @@
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-md, 1rem);
+    padding: var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 .iwac-vis-compare-grid .iwac-vis-panel h4 {
@@ -294,7 +294,7 @@
 .iwac-vis-compare-overlap {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 @media (min-width: 768px) { /* md */
@@ -307,7 +307,7 @@
     background: color-mix(in oklab, var(--surface-raised, #faf8f6) 70%, var(--surface, #fdfcfb));
     border: 1px solid var(--border-light, #e2e5e8);
     border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -381,7 +381,7 @@
 .iwac-vis-compare-wordclouds {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 @media (min-width: 768px) { /* md */
@@ -416,13 +416,13 @@
 .iwac-vis-compare-pagination {
     display: flex;
     justify-content: center;
-    margin-top: var(--space-xs, 0.25rem);
+    margin-top: var(--space-1, 0.25rem);
 }
 
 .iwac-vis-compare-pagination .iwac-vis-pagination {
     display: flex;
     align-items: center;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-light, #3f4349);
 }
@@ -434,7 +434,7 @@
 
 .iwac-vis-compare-empty {
     text-align: center;
-    padding: var(--space-xl, 2rem);
+    padding: var(--space-8, 2rem);
     color: var(--muted, #66696e);
     font-size: var(--text-sm, 0.9375rem);
     background: var(--surface-raised, #faf8f6);
@@ -503,9 +503,9 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 
 .iwac-vis-compare-map-legend {
     display: flex;
-    gap: var(--space-md, 1rem);
+    gap: var(--space-4, 1rem);
     flex-wrap: wrap;
-    margin-top: var(--space-sm, 0.5rem);
+    margin-top: var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
 }
@@ -534,7 +534,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 .iwac-vis-compare-sentiment {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md, 1rem);
+    gap: var(--space-4, 1rem);
 }
 
 @media (min-width: 1024px) { /* lg */
@@ -546,7 +546,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 .iwac-vis-compare-sentiment__col {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 .iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {

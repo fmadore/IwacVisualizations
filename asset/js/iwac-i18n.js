@@ -56,25 +56,12 @@
     var DICTIONARY = {
         en: {
             'Top LDA topics': 'Most frequent modelled themes',
-            'Lifespan × frequency': 'Years represented and recorded frequency',
             'Logarithmic scale': 'Log scale (equal ratios)',
             'Year × month heatmap': 'Recorded items by year and month',
             'Spatial coverage': 'Places associated with the items',
-            'Spatial Coverage': 'Place tags',
-            'No overlap': 'No shared tags in these lists',
-            'Spatial coverage overlap': 'Places shared by the selections',
-            'Subject overlap': 'Subjects shared by the selections',
-            'Context network': 'This article’s catalogue connections',
             'Knowledge Graph': 'Connections between catalogue entries',
             'Toggle choropleth view': 'Switch between shaded areas and bubbles',
             'Show choropleth': 'Shade areas by count',
-            'desc_item_set_tags': 'The 15 most frequent catalogue tags in this collection. Counts refer to tagged items, not word occurrences; an item can have several tags.',
-            'desc_item_set_timeline': 'Items by recorded publication year. Gaps can reflect missing holdings or dates rather than an interruption in publication.',
-            'compare.overlap_desc': 'Tags found in both selections or in only one of the supplied tag lists. Each column shows its most frequent entries; shared counts are listed in A / B order. The source lists are limited, so absence from a list does not establish absence from the full selection.',
-            'compare.newspapers_desc': 'Number of collected items per newspaper or periodical in each selection. This describes IWAC holdings, not the publication’s total production.',
-            'compare.words_desc': 'Frequent words in the available text of each selection, after common grammatical words are removed. Word sizes are scaled separately in each cloud; use the counts to compare frequencies.',
-            'compare.subjects_desc': 'The 15 catalogue subjects with the highest combined counts across both selections. Bars count tagged items, not repeated words. Larger selections can produce larger counts without giving a subject a greater share of their coverage.',
-            'compare.timeline_desc': 'Items in each selection by publication year. These are counts, so the size and date coverage of each selection affect the comparison. An article and a periodical issue are different units.',
             // The block-level linked facet chip (S4).
             'linked_country': 'Filtered to {value}',
             // UI chrome. The source key keeps the American spelling the call
@@ -86,9 +73,6 @@
             // Collection overview — summary labels
 
             // Publication (periodical issue) dashboard
-            'desc_publication_run': 'Issues of this periodical per year. The dot marks this issue.',
-            'desc_publication_similar': 'Issues ranked by an AI comparison of their tables of contents. The score reflects similarity between contents lists, which may hide differences within the articles themselves.',
-            'desc_publication_wordcloud': 'The words that appear most often in this issue’s text.',
             'desc_word_cloud': 'The most frequent words, sized by how often they appear.',
 
             // Collection overview — chart titles
@@ -114,11 +98,6 @@
             'gantt_window_all': 'Showing all {total} newspapers.',
             'gantt_show_all': 'Show all {total}',
             'gantt_show_top': 'Show top {shown}',
-            // Index-overview activity Gantt: the rows are the top entities of
-            // one family, already capped at 30 by the generator, so the window
-            // is a second truncation on top of a cap.
-            'activity_window_note': 'Showing the {shown} most frequent of {total} entities.',
-            'activity_window_all': 'Showing all {total} entities.',
 
             // Chart text alternatives. ECharts generates its own summary
             // otherwise — up to 2,500 characters, truncated mid-list at "the
@@ -139,9 +118,6 @@
             // References overview — full text + topics (2026-07 pipeline)
 
             // References overview — semantic landscape panel
-            'references_landscape_empty': 'No semantic map is available for this bibliography',
-            'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
-            'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
             'Color by': 'Colour by',
             'Decade': 'Decade',
             'Type': 'Type',
@@ -191,9 +167,6 @@
             'articles_count': '{count} articles',
             'articles_count_one': '{count} article',
             'articles_count_other': '{count} articles',
-            'publications_count': '{count} publications',
-            'publications_count_one': '{count} publication',
-            'publications_count_other': '{count} publications',
             'references_count': '{count} references',
             'references_count_one': '{count} reference',
             'references_count_other': '{count} references',
@@ -336,36 +309,10 @@
 
             // Article dashboard — panel titles
 
-            // Article dashboard — panel descriptions (written for a
-            // general audience; no jargon like "cosine similarity" or
-            // "thematic siblings").
-            'desc_article_context_network':
-                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Drag a node to rearrange the graph, or click one to see its connections and a link to its page.',
-            'desc_article_further_reading':
-                'Other material from the collection that connects to this article. Use the tabs to switch between the ways of finding it.',
-            'desc_further_reading_tags':
-                'Articles tagged with the same people, places, organisations or subjects as this one. The badge shows how many tags they share.',
-            'desc_further_reading_scholarship':
-                'Scholarly works suggested by an AI comparison of their full texts with this article. Long works are represented by averages of their passages, so a match can reflect broad subject matter. Check the work before using it as a reference; the match does not establish that it discusses this article.',
-            'desc_further_reading_content':
-                'Articles ranked by an AI comparison of their full texts, including articles with no shared catalogue tags. The badge gives a similarity score expressed as a percentage, not the probability of a correct match. Read the articles to assess what they have in common.',
-
-            // Article dashboard — card labels + tooltips
-            'shares_n_entities':       '{count} shared tags',
-            'No related articles':     'No articles with shared tags',
-            'No entities tagged':      'No entities tagged on this article',
-
             // Further reading — toggle labels
 
             // Compare newspapers block
-            'Only in A':                     'Only in {name}',
-            'Only in B':                     'Only in {name}',
             'Single-newspaper corpus — no breakdown': 'Single-newspaper corpus: no breakdown',
-            'Sentiment only on articles':    'Sentiment ratings cover articles only',
-            'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
-                'Places mentioned in each corpus, matched against the IWAC authority index. The larger the bubble, the more items tagged that place.',
-            'Distribution of polarity and centrality in articles of each corpus, as rated by the AI models. The picker swaps the model; publications are not rated.':
-                'How polarity and centrality are distributed across the articles of each corpus, as rated by the AI models. Use the picker to change model; publications are not rated.',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
@@ -377,75 +324,18 @@
             'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)':
                 'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)',
 
-            // MapLibre choropleth toggle (shared/choropleth.js)
-            'Diverging A minus B':          'Difference: A minus B',
-
-            // Minimal item dashboard (Audio / Video / YouTube / Document / Photograph)
-            'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
-            'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
-            'desc_minimal_similar_semantic':     'Photographs ranked by an AI comparison of the images themselves. The model may identify visual or thematic similarities. The percentage is a similarity score, not the probability that the photographs show the same person, place or event.',
-            'desc_minimal_sparkline_scoped':     'When this channel or collection published, year by year. The dot marks the year of the current item.',
-            'desc_minimal_similar_scoped':       'Other recordings from the same channel or collection, most recent first. Click one to open its page.',
-            'items_from_source':                 '{count} items from {source}',
-            'hours_count':                       '{count} h',
-            'minutes_count':                     '{count} min',
-
             // Topic Explorer — labels + descriptions
             'desc_horizontal_bar':          'Top values by count, ranked from highest to lowest.',
-            'desc_topic_treemap':           'Each rectangle is one of the 30 themes identified by a statistical topic model (LDA), which groups words commonly used together. Its area shows the number of articles assigned that theme as their strongest match. These groupings support exploration and need interpretation through the texts. Click a rectangle to explore a theme.',
-            'cal_panel_title':              'Publication calendar',
-            'desc_topic_calendar':          'When articles classified into this topic were published. Only articles with a full date, down to the day, appear here; those dated to a year or a month alone are left out rather than placed on 1 January.',
-            'topic_copy_link':              'Copy link to this topic',
-            'topic_link_copied':            'Link copied',
-            'desc_topic_countries':         'Distribution of articles in this topic by country of publication.',
-            'desc_topic_newspapers':        'Newspapers and periodicals where this topic appears most often.',
-            'desc_topic_top_articles':      'Articles ranked by the weight the statistical topic model assigns to this theme. A high weight makes an article a useful example to examine; it is not a probability that the interpretation is correct.',
-            // Article dashboard — spatial panel
-            'desc_article_spatial':         'Places recorded in this article’s catalogue tags and located through the IWAC place index. Each pin marks one tagged place; equal pin sizes do not indicate how often a place is named in the text. Click a pin to open its record.',
-            'article_place_subtitle':       'Mentioned in this article',
-            'No geocoded places':           'No places on this article could be located',
 
             // Reference dashboard (bibliography item pages)
             'Authors':                      'Authors',
             'Publisher':                    'Publisher',
             'DOI':                          'DOI',
-            'This work in the bibliography': 'This work in the bibliography',
-            'Closest works in the bibliography': 'Closest works in the bibliography',
-            'Press coverage this resembles': 'Press coverage this resembles',
-            'desc_reference_activity':      'Where this work sits in the IWAC bibliography’s own publication timeline. The dot marks its year.',
-            'desc_reference_similar':       'Works ranked by an AI comparison of their full texts. Only references with usable text representations can appear. These matches suggest reading leads; they do not establish that the works share an argument or cite one another.',
-            'desc_reference_press':         'Newspaper articles ranked by an AI comparison with this work’s full text. Long texts are represented by averages of their passages, which can hide differences within a work. Check each match by reading it; similarity does not establish that the work discusses that article.',
-            'reference_topic_label':        'Topic',
-            'reference_topic_model':        'Machine-generated topic words, from the model “{model}”. Each language has its own model, so topic numbers are not comparable across them.',
-            'reference_topic_generated':    'Machine-generated topic words, not curated subject headings.',
-            'reference_reviews_prefix':     'Reviews:',
-            'reference_reviewed_by_prefix': 'Reviewed in:',
 
             // Distinctive Vocabulary block (keyness + bursts)
             'Loading distinctive vocabulary': 'Loading distinctive vocabulary',
-            'Distinctive vocabulary':       'Distinctive vocabulary',
-            'Coverage bursts':              'Coverage bursts',
-            'keyness_title':                'Words that set this part of the collection apart',
-            'keyness_desc':                 'Words whose rate of use is at least {ratio} times higher in this selection than in the remaining articles. Bar lengths use a logarithmic scale (base 2); labels give the rate multiplier. Words need at least {min} occurrences in the selection and pass a statistical test corrected for multiple comparisons (false-discovery rate threshold {alpha}). This identifies distinctive vocabulary, whose meaning needs checking in context.',
-            'keyness_slice_caption':        '{slice}: {docs} articles, {tokens} words, {terms} distinctive terms.',
-            'keyness_axis':                 'Times more frequent than elsewhere (log₂)',
-            'keyness_tooltip_ratio':        'Used {ratio}× as often as in the rest of the collection',
-            'keyness_tooltip_count':        '{count} occurrences in {slice}',
-            'keyness_tooltip_stats':        'Log-likelihood G² {g2}, corrected p {q}',
-            'bursts_title':                 'When coverage of a subject surged',
-            'bursts_desc':                  'Periods when the share of articles carrying a subject tag rose above its usual rate. The detection model uses a rate multiplier of {s}; each bar marks one detected episode. Subjects need at least {min} tagged articles to be considered. The initial period of a tag’s use is excluded. These episodes may reflect changes in coverage, cataloguing or the material collected.',
-            'bursts_caption':               '{bursts} episodes across {subjects} subjects ({found} of {tested} tested subjects burst at all).',
-            'bursts_tooltip_span':          'Burst: {start}–{end}',
-            'bursts_tooltip_mentions':      '{mentions} of the subject’s {total} articles fall in this burst',
-            'bursts_tooltip_weight':        'Burst strength {weight}',
 
-            'topics_over_time_title':       'Topics over time',
-            'topics_over_time_desc':        'Distribution of modelled themes in the collected newspaper articles by publication year. The 12 largest themes are shown separately; the rest are grouped as “Other topics”. Select a band to explore its theme.',
             'topic_other':                  'Other topics',
-            'topics_weighting_dominant':    'Dominant topic',
-            'topics_weighting_weighted':    'Probability-weighted',
-            'topics_over_time_dominant_note': 'Each band is a topic’s share of the articles it was the single best label for that year, so every year sums to 100%. An article the model split evenly between three topics counts wholly for one of them.',
-            'topics_over_time_weighted_note': 'Each band is the average probability the model assigned to that topic across the year’s articles, so an evenly split article contributes to all three of its topics. Only the top {k} topics of each article are recorded, so the stack tops out around {mass}% rather than 100%. The gap is thematic weight spread too thinly to be stored, and not articles left unclassified.',
 
             // Shared renderer labels (calendar heatmap, chord, radar,
             // sibling sparkline, similar-items strip, sunburst, treemap)
@@ -476,28 +366,14 @@
 
             // Index overview — map layer facets + index table search
 
-            // Keyword Explorer — filters + tabs
-            'Top frequent':              'Most frequent',
-
             // Keyword Explorer — chart + table
 
             // Keyword Explorer — derived panels (ROADMAP 9.7 / 9.8)
             // Spatial Exploration block
-            'places_count_one':          '{count} place',
-            'places_count_other':        '{count} places',
             // Entity Networks block
-            'network_stats_entities':    '{nodes} entities \u00b7 {links} links',
-            'network_stats_places':      '{nodes} places \u00b7 {links} links',
             'table_rows_capped':         'Showing the first {shown} of {total} rows; the CSV has all of them.',
         },
         fr: {
-            'desc_item_set_tags': 'Les 15 mots-clés du catalogue les plus fréquents dans cette collection. Les nombres portent sur les documents indexés, et non sur les occurrences de mots ; un document peut porter plusieurs mots-clés.',
-            'desc_item_set_timeline': 'Documents par année de publication enregistrée. Les lacunes peuvent refléter des documents ou des dates manquants plutôt qu’une interruption de publication.',
-            'compare.overlap_desc': 'Mots-clés présents dans les deux sélections ou dans une seule des listes fournies. Chaque colonne montre ses entrées les plus fréquentes ; les nombres communs sont indiqués dans l’ordre A / B. Les listes sources sont limitées : l’absence d’un mot-clé dans une liste n’établit pas son absence de la sélection entière.',
-            'compare.newspapers_desc': 'Nombre de documents collectés par journal ou périodique dans chaque sélection. Cette vue décrit les collections IWAC, et non toute la production d’un titre.',
-            'compare.words_desc': 'Mots fréquents dans le texte disponible de chaque sélection, après retrait des mots grammaticaux courants. La taille des mots est ajustée séparément dans chaque nuage ; utilisez les nombres pour comparer les fréquences.',
-            'compare.subjects_desc': 'Les 15 sujets du catalogue aux nombres cumulés les plus élevés dans les deux sélections. Les barres comptent les documents indexés, et non les répétitions de mots. Une sélection plus grande peut produire des nombres plus élevés sans consacrer une part supérieure de sa couverture à un sujet.',
-            'compare.timeline_desc': 'Documents de chaque sélection par année de publication. Il s’agit de nombres : le volume et la période couverte par chaque sélection affectent la comparaison. Un article et un numéro de périodique constituent des unités différentes.',
             // The block-level linked facet chip (S4).
             'linked_country': 'Filtré sur {value}',
             'Clear': 'Effacer',
@@ -543,7 +419,6 @@
             'Total items': 'Total d\u2019items',
             'Articles': 'Articles',
             'Publications': 'Publications',
-            'Documents': 'Documents',
             'Audiovisual': 'Audiovisuel',
             'References': 'R\u00e9f\u00e9rences',
             'Countries': 'Pays',
@@ -552,17 +427,10 @@
             'Newspapers': 'Journaux',
             'Unknown': 'Inconnu',
             'Pages': 'Pages',
-            'Issue': 'Numéro',
             'Language': 'Langue',
             'Date': 'Date',
 
             // Publication (periodical issue) dashboard
-            'This issue in its periodical run': 'Ce numéro dans la collection du périodique',
-            'desc_publication_run': 'Numéros de ce périodique par année. Le point marque ce numéro.',
-            'Similar issues': 'Numéros similaires',
-            'desc_publication_similar': 'Numéros classés par comparaison de leurs sommaires au moyen d’une IA. Le score reflète la similarité des sommaires, qui peut masquer des différences entre les articles eux-mêmes.',
-            'Most frequent words in this issue': 'Mots les plus fréquents de ce numéro',
-            'desc_publication_wordcloud': 'Les mots qui reviennent le plus souvent dans le texte de ce numéro.',
             'Word cloud': 'Nuage de mots',
             'desc_word_cloud': 'Les mots les plus fr\u00e9quents, dimensionn\u00e9s selon le nombre de leurs occurrences.',
 
@@ -586,8 +454,6 @@
             'gantt_window_all': 'Affichage des {total} journaux.',
             'gantt_show_all': 'Afficher les {total}',
             'gantt_show_top': 'Afficher les {shown} premiers',
-            'activity_window_note': 'Affichage des {shown} entités les plus fréquentes sur {total}.',
-            'activity_window_all': 'Affichage des {total} entités.',
 
             // Chart text alternatives
             'chart_aria_plain': '{title} : graphique.',
@@ -606,18 +472,12 @@
 
             // References overview
             'Authors': 'Auteurs',
-            'Publishers': 'Éditeurs',
             'Reference type': 'Type de r\u00e9f\u00e9rence',
             'Top subjects': 'Sujets r\u00e9currents',
-            'No provenance locations available': 'Aucun lieu de provenance disponible',
-            'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
 
             // References overview — texte intégral + thèmes (pipeline 2026-07)
 
             // References overview — paysage sémantique
-            'references_landscape_empty': 'Aucune carte sémantique disponible pour cette bibliographie',
-            'references_landscape_empty_umap': 'La carte sémantique n’a pas été calculée, faute du paquet umap-learn lors de la construction de ces données',
-            'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour tracer une carte significative',
             'Color by': 'Colorer par',
             'Decade': 'Décennie',
 
@@ -665,9 +525,6 @@
             'articles_count': '{count} articles',
             'articles_count_one': '{count} article',
             'articles_count_other': '{count} articles',
-            'publications_count': '{count} publications',
-            'publications_count_one': '{count} publication',
-            'publications_count_other': '{count} publications',
             'references_count': '{count} r\u00e9f\u00e9rences',
             'references_count_one': '{count} référence',
             'references_count_other': '{count} références',
@@ -850,8 +707,6 @@
                 'Graphe de r\u00e9seau. Utilisez les fl\u00e8ches pour circuler entre les entit\u00e9s reli\u00e9es et Entr\u00e9e pour en s\u00e9lectionner une.',
             'Network of the entities most associated with this record. Use the arrow keys to move between them and Enter to select one.':
                 'R\u00e9seau des entit\u00e9s les plus associ\u00e9es \u00e0 cette notice. Utilisez les fl\u00e8ches pour circuler entre elles et Entr\u00e9e pour en s\u00e9lectionner une.',
-            'Network of the entities this article is tagged with and the articles sharing them. Use the arrow keys to move between them and Enter to select one.':
-                'R\u00e9seau des entit\u00e9s balis\u00e9es dans cet article et des articles qui les partagent. Utilisez les fl\u00e8ches pour circuler entre elles et Entr\u00e9e pour en s\u00e9lectionner une.',
 
             // Entity type labels (legend + tooltips of the entity graphs)
             'entity_type_center': 'Centre',
@@ -862,71 +717,18 @@
             'entity_type_\u00c9v\u00e9nements': '\u00c9v\u00e9nements',
             'entity_type_article': 'Article de presse',
 
-            // Article dashboard — panel titles
-            'Context network': 'Liens de cet article dans le catalogue',
-            'Further reading':         'Pour aller plus loin',
-
-            // Article dashboard — panel descriptions (langage accessible)
-            'desc_article_context_network':
-                'Cet article est au centre, entour\u00e9 des personnes, lieux, organisations et sujets qui y sont balis\u00e9s. Les articles qui partagent plusieurs de ces balises apparaissent en p\u00e9riph\u00e9rie. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe ou cliquez dessus pour voir ses liens et acc\u00e9der \u00e0 sa fiche.',
-            'desc_article_further_reading':
-                'D\u2019autres documents de la collection qui se rattachent \u00e0 cet article. Les onglets permettent de changer de mani\u00e8re de les trouver.',
-            'desc_further_reading_tags':
-                'Articles balis\u00e9s avec les m\u00eames personnes, lieux, organisations ou sujets que celui-ci. Le badge indique combien de balises ils ont en commun.',
-            'desc_further_reading_scholarship':
-                'Travaux scientifiques suggérés par comparaison de leurs textes intégraux avec cet article au moyen d’une IA. Les textes longs sont représentés par une moyenne de leurs passages ; un rapprochement peut donc refléter un sujet général. Examinez le travail avant de le citer ; le rapprochement n’établit pas qu’il traite de cet article.',
-            'desc_further_reading_content':
-                'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA, y compris sans mots-clés communs dans le catalogue. Le badge indique un score de similarité exprimé en pourcentage, et non la probabilité d’un rapprochement correct. Lisez les articles pour évaluer leurs points communs.',
-
             // Article dashboard — card labels + tooltips
             'Similarity':              'Similarit\u00e9',
-            'Shares':                  'Partage',
-            'shares_n_entities':       '{count} balises partag\u00e9es',
-            'No related articles':     'Aucun article avec des balises communes',
-            'No further reading found':'Aucun autre article \u00e0 sugg\u00e9rer',
-            'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
-
-            // Further reading — toggle labels
-            'By shared tags':          'Par balises communes',
-            'By similar content':      'Par contenu similaire',
-            'In the scholarship':      'Dans la littérature',
-            'No related scholarship':  'Aucun travail scientifique proche',
 
             // Compare newspapers block
-            'Corpus A':                      'Corpus A',
-            'Corpus B':                      'Corpus B',
-            'Newspaper articles':            'Articles de presse',
-            'Islamic publications':          'Publications islamiques',
-            'Scope':                         'P\u00e9rim\u00e8tre',
             'Selection':                     'S\u00e9lection',
-            'Whole country':                 'Pays entier',
-            'Single newspaper':              'Un seul journal',
-            'Choose two corpora to compare': 'Choisissez deux corpus \u00e0 comparer',
-            'Subject overlap': 'Sujets communs aux sélections',
-            'Spatial coverage overlap': 'Lieux communs aux sélections',
-            'Timeline (items per year)':     'Chronologie (items par ann\u00e9e)',
-            'Top subjects (combined top 15)': 'Principaux sujets (top 15 combin\u00e9)',
             'Most frequent words':           'Mots les plus fr\u00e9quents',
-            'Newspapers within each corpus': 'Journaux dans chaque corpus',
-            'Shared':                        'Communs',
-            'Only in A':                     'Seulement dans {name}',
-            'Only in B':                     'Seulement dans {name}',
-            'No overlap': 'Aucun mot-clé commun dans ces listes',
             'Places mentioned':              'Lieux mentionn\u00e9s',
-            'Unique subjects':               'Sujets distincts',
             'Period covered':                'P\u00e9riode couverte',
             'Single-newspaper corpus \u2014 no breakdown': 'Corpus \u00e0 un seul journal, pas de d\u00e9tail',
-            'Geographic comparison':         'Comparaison g\u00e9ographique',
-            'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
-                'Lieux mentionn\u00e9s dans chaque corpus, reli\u00e9s \u00e0 l\u2019index d\u2019autorit\u00e9 IWAC. La taille de la bulle est proportionnelle au nombre d\u2019articles o\u00f9 ce lieu est balis\u00e9.',
             'mentions':                      'mentions',
             'Open entity':                   'Ouvrir la fiche',
-            'AI sentiment comparison':       'Comparaison des sentiments (IA)',
-            'Distribution of polarity and centrality in articles of each corpus, as rated by the AI models. The picker swaps the model; publications are not rated.':
-                'Distribution de la polarit\u00e9 et de la centralit\u00e9 des articles de chaque corpus, \u00e9valu\u00e9es par les mod\u00e8les d\u2019IA. Le s\u00e9lecteur change de mod\u00e8le\u00a0; les publications ne sont pas \u00e9valu\u00e9es.',
-            'Axis':                          'Axe',
             'Model':                         'Mod\u00e8le',
-            'Sentiment only on articles':    'Sentiments uniquement sur les articles',
 
             // Sentiment panel (server-rendered) \u2014 French translations
             // keyed on the IwacSentiment English source labels.
@@ -961,98 +763,34 @@
             'Show choropleth': 'Colorer les zones selon le nombre',
             'Show bubbles':                 'Afficher les bulles',
             'Toggle choropleth view': 'Passer des zones colorées aux bulles',
-            'Bubbles':                      'Bulles',
-            'Show point bubbles':           'Afficher les bulles ponctuelles',
-            'Diverging A minus B':          'Carte divergente A moins B',
 
             // Minimal item dashboard \u2014 French
             'Loading visualisations':            'Chargement des visualisations',
             'Activity over time':                'Activit\u00e9 dans le temps',
             'Other items in this collection':    'Autres \u00e9l\u00e9ments de cette collection',
-            'Visually similar photographs':      'Photographies visuellement similaires',
-            'desc_minimal_sparkline':            'O\u00f9 cet \u00e9l\u00e9ment se situe dans la chronologie d\u2019activit\u00e9 de sa collection. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
-            'desc_minimal_similar':              'Autres \u00e9l\u00e9ments du m\u00eame sous-ensemble IWAC, du plus r\u00e9cent au plus ancien. Cliquez sur un \u00e9l\u00e9ment pour ouvrir sa fiche.',
-            'desc_minimal_similar_semantic':     'Photographies classées par comparaison des images elles-mêmes au moyen d’une IA. Le modèle peut relever des ressemblances visuelles ou thématiques. Le pourcentage est un score de similarité, et non la probabilité que les photographies montrent la même personne, le même lieu ou le même événement.',
             'Activity of this source over time': 'Activit\u00e9 de cette source dans le temps',
             'More from this source':             'Autres contenus de cette source',
-            'desc_minimal_sparkline_scoped':     'Le rythme de publication de cette cha\u00eene ou de cette collection, ann\u00e9e par ann\u00e9e. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
-            'desc_minimal_similar_scoped':       'Autres enregistrements de la m\u00eame cha\u00eene ou de la m\u00eame collection, du plus r\u00e9cent au plus ancien. Cliquez sur l\u2019un d\u2019eux pour ouvrir sa fiche.',
-            'items_from_source':                 '{count} \u00e9l\u00e9ments de {source}',
-            'hours_count':                       '{count} h',
-            'minutes_count':                     '{count} min',
             'Items':                             '\u00c9l\u00e9ments',
-            'Videos':                            'Vid\u00e9os',
             'Total runtime':                     'Dur\u00e9e totale',
-            'Median length':                     'Dur\u00e9e m\u00e9diane',
             'Watch on YouTube':                  'Regarder sur YouTube',
 
             // Topic Explorer \u2014 French
             'Loading Topic Explorer':       'Chargement de l\u2019explorateur de th\u00e8mes',
-            'Topic distribution':           'Distribution des th\u00e8mes',
-            'All topics':                   'Tous les th\u00e8mes',
             'Topic':                        'Th\u00e8me',
-            'Topics':                       'Th\u00e8mes',
-            'Articles classified':          'Articles classifi\u00e9s',
-            'Outliers':                     'Hors th\u00e8me',
-            'Back to all topics':           'Retour \u00e0 tous les th\u00e8mes',
-            'cal_panel_title':              'Calendrier de publication',
-            'topic_copy_link':              'Copier le lien vers ce th\u00e8me',
-            'topic_link_copied':            'Lien copi\u00e9',
             'Top countries':                'Principaux pays',
-            'Most representative articles': 'Articles les plus repr\u00e9sentatifs',
             'Top values':                   'Valeurs principales',
             'desc_horizontal_bar':          'Valeurs principales tri\u00e9es de la plus \u00e9lev\u00e9e \u00e0 la plus basse.',
-            'desc_topic_treemap':           'Chaque rectangle correspond à l’un des 30 thèmes identifiés par un modèle statistique (LDA), qui regroupe les mots fréquemment employés ensemble. Sa surface indique le nombre d’articles auxquels ce thème est attribué comme correspondance principale. Ces regroupements facilitent l’exploration et demandent une interprétation à partir des textes. Cliquez sur un rectangle pour explorer un thème.',
-            'desc_topic_calendar':          'Dates de parution des articles class\u00e9s dans ce th\u00e8me. Seuls les articles dont la date est compl\u00e8te, jusqu\u2019au jour, figurent ici ; ceux dat\u00e9s d\u2019une ann\u00e9e ou d\u2019un mois seulement sont \u00e9cart\u00e9s plut\u00f4t que ramen\u00e9s au 1er janvier.',
-            'desc_topic_countries':         'R\u00e9partition des articles de ce th\u00e8me par pays de publication.',
-            'desc_topic_newspapers':        'Journaux et p\u00e9riodiques o\u00f9 ce th\u00e8me appara\u00eet le plus souvent.',
-            'desc_topic_top_articles':      'Articles classés selon le poids que le modèle statistique attribue à ce thème. Un poids élevé fait de l’article un exemple à examiner ; il ne donne pas la probabilité que l’interprétation soit correcte.',
             // Article dashboard \u2014 panneau spatial \u2014 French
             'Spatial coverage': 'Lieux associés aux documents',
-            'desc_article_spatial':         'Lieux indiqués dans les mots-clés de la notice de cet article et localisés grâce à l’index IWAC. Chaque repère correspond à un lieu indexé ; leur taille identique n’indique pas sa fréquence dans le texte. Cliquez sur un repère pour ouvrir sa notice.',
-            'article_place_subtitle':       'Mentionn\u00e9 dans cet article',
-            'No geocoded places':           'Aucun lieu de cet article n\u2019a pu \u00eatre localis\u00e9',
 
             // Reference dashboard \u2014 French
             'Publisher':                    '\u00c9diteur',
             'DOI':                          'DOI',
-            'This work in the bibliography': 'Ce travail dans la bibliographie',
-            'Closest works in the bibliography': 'Travaux les plus proches dans la bibliographie',
-            'Press coverage this resembles': 'Couverture de presse comparable',
-            'desc_reference_activity':      'Position de ce travail dans la chronologie de publication de la bibliographie IWAC. Le point indique son ann\u00e9e.',
-            'desc_reference_similar':       'Travaux classés par comparaison de leurs textes intégraux au moyen d’une IA. Seules les références disposant d’une représentation textuelle exploitable peuvent apparaître. Ces rapprochements donnent des pistes de lecture, sans établir que les travaux partagent un argument ou se citent.',
-            'desc_reference_press':         'Articles de presse classés par comparaison avec le texte intégral de ce travail au moyen d’une IA. Les textes longs sont représentés par une moyenne de leurs passages, ce qui peut masquer des différences internes. Vérifiez chaque rapprochement par la lecture ; la similarité n’établit pas que le travail traite de cet article.',
-            'reference_topic_label':        'Th\u00e8me',
-            'reference_topic_model':        'Mots-cl\u00e9s de th\u00e8me g\u00e9n\u00e9r\u00e9s automatiquement, \u00e0 partir du mod\u00e8le \u00ab {model} \u00bb. Chaque langue a son propre mod\u00e8le : les num\u00e9ros de th\u00e8mes ne sont pas comparables entre eux.',
-            'reference_topic_generated':    'Mots-cl\u00e9s de th\u00e8me g\u00e9n\u00e9r\u00e9s automatiquement, et non des vedettes-mati\u00e8re valid\u00e9es.',
-            'reference_reviews_prefix':     'Compte rendu de :',
-            'reference_reviewed_by_prefix': 'Recens\u00e9 dans :',
 
             // Distinctive Vocabulary \u2014 French
             'Loading distinctive vocabulary': 'Chargement du vocabulaire distinctif',
-            'Distinctive vocabulary':       'Vocabulaire distinctif',
-            'Coverage bursts':              'Pics de couverture',
-            'keyness_title':                'Les mots qui distinguent cette partie de la collection',
-            'keyness_desc':                 'Mots dont la fréquence relative est au moins {ratio} fois plus élevée dans cette sélection que dans les autres articles. La longueur des barres suit une échelle logarithmique de base 2 ; les libellés donnent le multiplicateur de fréquence. Les mots doivent compter au moins {min} occurrences dans la sélection et satisfaire un test corrigé pour les comparaisons multiples (seuil de taux de fausses découvertes {alpha}). Ce vocabulaire distinctif doit être interprété en contexte.',
-            'keyness_slice_caption':        '{slice} : {docs} articles, {tokens} mots, {terms} termes distinctifs.',
-            'keyness_axis':                 'Fois plus fr\u00e9quent qu\u2019ailleurs (log\u2082)',
-            'keyness_tooltip_ratio':        'Employ\u00e9 {ratio} fois plus souvent que dans le reste de la collection',
-            'keyness_tooltip_count':        '{count} occurrences dans {slice}',
-            'keyness_tooltip_stats':        'Log-vraisemblance G\u00b2 {g2}, p corrig\u00e9 {q}',
-            'bursts_title':                 'Quand la couverture d\u2019un sujet s\u2019est intensifi\u00e9e',
-            'bursts_desc':                  'Périodes où la part des articles portant un mot-clé de sujet dépasse son niveau habituel. Le modèle de détection utilise un multiplicateur de fréquence de {s} ; chaque barre marque un épisode détecté. Seuls les sujets associés à au moins {min} articles sont examinés. La période initiale d’usage d’un mot-clé est exclue. Ces épisodes peuvent refléter des changements de couverture, d’indexation ou de documents collectés.',
-            'bursts_caption':               '{bursts} \u00e9pisodes r\u00e9partis sur {subjects} sujets ({found} sujets sur {tested} test\u00e9s pr\u00e9sentent au moins un pic).',
-            'bursts_tooltip_span':          'Pic : {start}-{end}',
-            'bursts_tooltip_mentions':      '{mentions} des {total} articles du sujet se situent dans ce pic',
-            'bursts_tooltip_weight':        'Intensit\u00e9 du pic : {weight}',
 
-            'topics_over_time_title':       'Th\u00e8mes au fil du temps',
-            'topics_over_time_desc':        'Répartition des thèmes modélisés dans les articles de presse collectés, par année de publication. Les 12 thèmes les plus importants sont affichés séparément ; les autres sont regroupés sous « Autres thèmes ». Sélectionnez une bande pour explorer son thème.',
             'topic_other':                  'Autres th\u00e8mes',
-            'topics_weighting_dominant':    'Th\u00e8me dominant',
-            'topics_weighting_weighted':    'Pond\u00e9r\u00e9 par probabilit\u00e9',
-            'topics_over_time_dominant_note': 'Chaque bande donne la part d\u2019un th\u00e8me parmi les articles dont il est le meilleur libell\u00e9 unique pour l\u2019ann\u00e9e ; le total de chaque ann\u00e9e fait donc 100 %. Un article que le mod\u00e8le r\u00e9partit \u00e0 parts \u00e9gales entre trois th\u00e8mes est compt\u00e9 enti\u00e8rement pour l\u2019un d\u2019eux.',
-            'topics_over_time_weighted_note': 'Chaque bande correspond \u00e0 la probabilit\u00e9 moyenne attribu\u00e9e par le mod\u00e8le \u00e0 ce th\u00e8me sur les articles de l\u2019ann\u00e9e ; un article r\u00e9parti \u00e0 parts \u00e9gales contribue donc \u00e0 ses trois th\u00e8mes. Seuls les {k} th\u00e8mes principaux de chaque article sont enregistr\u00e9s, si bien que l\u2019empilement plafonne autour de {mass} % et non \u00e0 100 %. L\u2019\u00e9cart correspond \u00e0 une masse th\u00e9matique trop dispers\u00e9e pour \u00eatre enregistr\u00e9e, et non \u00e0 des articles laiss\u00e9s sans classement.',
 
             // Shared renderer labels \u2014 French
             'Calendar heatmap':         'Calendrier thermique',
@@ -1083,23 +821,14 @@
 
             'Loading index overview':    'Chargement de la vue d\u2019ensemble de l\u2019index',
 
-            // Index overview — Section A panel titles
-            'Lifespan × frequency': 'Années représentées et fréquence enregistrée',
-
             // Index overview — Section A panel descriptions
 
             // Index overview — summary cards + scatter axes
-            'Total entities':            'Entit\u00e9s au total',
-            'With coordinates':          'Avec coordonn\u00e9es',
             'Frequency':                 'Fr\u00e9quence',
 
             // Index overview — map layer facets + index table search
 
             // Keyword Explorer — filters + tabs
-            'Spatial Coverage': 'Mots-clés de lieux',
-            'By newspaper':              'Par journal',
-            'Top frequent':              'Plus fr\u00e9quents',
-            'Compare':                   'Comparer',
             'Clear selection':           'Effacer la s\u00e9lection',
 
             // Keyword Explorer — chart + table
@@ -1112,18 +841,9 @@
             'Entity type':               'Type d\u2019entit\u00e9',
             'Search entities':           'Rechercher des entit\u00e9s',
             'No matches':                'Aucun r\u00e9sultat',
-            'places_count_one':          '{count} lieu',
-            'places_count_other':        '{count} lieux',
-            'Regions':                   'R\u00e9gions',
-            'Region':                    'R\u00e9gion',
-            'Prefectures':               'Pr\u00e9fectures',
-            'Prefecture':                'Pr\u00e9fecture',
             'Places map':                'Carte des lieux',
             'Click for details':         'Cliquer pour les d\u00e9tails',
             'items':                     '\u00e9l\u00e9ments',
-            // Entity Networks block
-            'network_stats_entities':    '{nodes} entit\u00e9s \u00b7 {links} liens',
-            'network_stats_places':      '{nodes} lieux \u00b7 {links} liens',
         }
     };
 

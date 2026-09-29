@@ -305,3 +305,43 @@ test('a consumer that adds a source unguarded would throw once it survives a swa
     }
     assert.deepEqual(unguarded, []);
 });
+
+test('a named map host gets a role, so its aria-label is not a prohibited attribute', () => {
+    // Anything createIwacMap asks of a map or a control is answered with a
+    // chainable no-op: this test is about what it does to the HOST element.
+    const inert = () => new Proxy(function () {}, {
+        get: (target, key) => (key === 'then' ? undefined : inert()),
+        apply: () => inert(),
+        construct: () => inert(),
+    });
+    const makeHost = (attrs = {}) => ({
+        attrs,
+        getAttribute(name) { return name in this.attrs ? this.attrs[name] : null; },
+        setAttribute(name, value) { this.attrs[name] = String(value); },
+    });
+    const context = {
+        HTMLElement: class {},
+        console: { warn() {}, error() {}, log() {} },
+        document: {
+            createElement: () => ({ getContext: () => null, style: {}, setAttribute() {}, appendChild() {} }),
+            getElementById: () => null,
+        },
+        maplibregl: new Proxy({ Popup: FakePopup }, {
+            get: (target, key) => (key in target ? target[key] : class { constructor() { return inert(); } }),
+        }),
+        window: { IWACVis: { panels: {}, getBasemapStyle: () => 'style.json', t: (k) => k } },
+    };
+    vm.createContext(context);
+    vm.runInContext(MAPLIBRE_SOURCE, context, { filename: 'maplibre.js' });
+    const P = context.window.IWACVis.panels;
+
+    const host = makeHost();
+    P.createIwacMap(host, { title: 'Places mentioned' });
+    assert.equal(host.attrs['aria-label'], 'Places mentioned');
+    assert.equal(host.attrs.role, 'group');
+
+    // A host that already names itself, or already has a role, is left alone.
+    const named = makeHost({ 'aria-label': 'Own name', role: 'region' });
+    P.createIwacMap(named, { title: 'Places mentioned' });
+    assert.deepEqual({ ...named.attrs }, { 'aria-label': 'Own name', role: 'region' });
+});

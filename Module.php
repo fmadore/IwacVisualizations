@@ -174,10 +174,16 @@ class Module extends AbstractModule
      */
     public static function sentimentProperties(): array
     {
-        $terms = [];
-        foreach (self::SENTIMENT_MODEL_STEMS as $model) {
-            foreach (self::SENTIMENT_AXIS_SUFFIXES as $axis) {
-                $terms[] = "iwac:{$model}{$axis}";
+        // Built once per request: the listener below runs on EVERY item
+        // representation's display values, and the list never changes
+        // within a request.
+        static $terms = null;
+        if ($terms === null) {
+            $terms = [];
+            foreach (self::SENTIMENT_MODEL_STEMS as $model) {
+                foreach (self::SENTIMENT_AXIS_SUFFIXES as $axis) {
+                    $terms[] = "iwac:{$model}{$axis}";
+                }
             }
         }
         return $terms;

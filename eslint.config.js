@@ -33,6 +33,9 @@ module.exports = [
             '.iwac-build/**',
             'asset/js/dist/**',
             '**/*.min.js',
+            // Synced verbatim from IWAC-theme (scripts/lib/theme-token-guard.cjs)
+            // by the theme's `npm run sync:tokens`, and linted there.
+            'scripts/theme-token-guard.cjs',
             'playwright-report/**',
             'test-results/**',
         ],
@@ -76,8 +79,8 @@ module.exports = [
         rules: {
             'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
             'no-empty': ['error', { allowEmptyCatch: true }],
-            // check-theme-tokens.js writes `/* … */` inside its own block
-            // comments with a zero-width space so the comment does not end.
+            // A few scripts write `/* … */` inside their own block comments
+            // with a zero-width space so the comment does not end.
             'no-irregular-whitespace': ['error', { skipComments: true }],
         },
     },

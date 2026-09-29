@@ -406,6 +406,7 @@
     });
 
     ns.addTranslations('fr', {
+        'Documents': 'Documents',
 
         "laicite.research_dossier_rate": "Documents du dossier (%)",
         "laicite.research_heuristic": "Le seuil de vocabulaire partagé est heuristique, et non un test validé d’argument commun. Les filtres de significativité et de fréquence documentaire précèdent la limite d’affichage. Les répétitions dans les documents ne sont pas des observations indépendantes.",

@@ -87,7 +87,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Python generator lock matches its input
         run: node scripts/python-lock.js --check

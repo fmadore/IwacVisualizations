@@ -28,14 +28,14 @@
            can never trigger a horizontal scrollbar on the host page. */
         .iwac-embed-body .iwac-vis-block {
             margin: 0 auto;
-            padding: var(--space-md, 1rem);
+            padding: var(--space-4, 1rem);
             box-sizing: border-box;
         }
         /* Source-attribution footer. Styled inline (with token fallbacks) so it
            reads correctly even on this bare route before iwac-core.css lands. */
         .iwac-embed-source {
             margin: 0;
-            padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+            padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
             text-align: right;
             font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
             font-size: var(--text-xs, 0.8125rem);
@@ -53,13 +53,19 @@
  *  `--iwac-vis-embed-primary` / `--iwac-vis-embed-secondary` are set by a `style`
  *  attribute on <html> when the request carries an accent (?primary=, or the
  *  theme's own setting). Absent, these rules resolve to nothing and the
- *  theme's own --primary / --secondary stand.
+ *  token sheet's --primary / --secondary (iwac-embed-tokens.css) stand.
+ *
+ *  These are the module's only sanctioned re-declarations of theme tokens —
+ *  a per-request override on a route that carries no theme — hence the
+ *  `allow-override` markers the token guard requires. They outrank the token
+ *  sheet on specificity (html[style*=…] beats :root; the dark pair beats
+ *  [data-theme="dark"]), so load order does not matter.
  * =================================================================== */
 
 :root:not([style*="--iwac-vis-embed-primary"]) { --iwac-vis-embed-primary: initial; }
 
-html[style*="--iwac-vis-embed-primary"] { --primary: var(--iwac-vis-embed-primary); }
-html[style*="--iwac-vis-embed-secondary"] { --secondary: var(--iwac-vis-embed-secondary); }
+html[style*="--iwac-vis-embed-primary"] { --primary: var(--iwac-vis-embed-primary); } /* allow-override */
+html[style*="--iwac-vis-embed-secondary"] { --secondary: var(--iwac-vis-embed-secondary); } /* allow-override */
 
 /*  Match the theme's dark-mode habit of lightening the accent (e.g.
  *  #e64a19 -> #ec653f) rather than carrying the light value. The mode is
@@ -70,8 +76,8 @@ html[style*="--iwac-vis-embed-secondary"] { --secondary: var(--iwac-vis-embed-se
  *  when the surface flips; here the surface cannot flip — the branch IS the
  *  dark one — so white is the correct direction and both lines opt out. */
 html[style*="--iwac-vis-embed-primary"] body[data-theme="dark"] {
-    --primary: color-mix(in oklab, var(--iwac-vis-embed-primary), white 12%); /* allow-absolute-mix */
+    --primary: color-mix(in oklab, var(--iwac-vis-embed-primary), white 12%); /* allow-absolute-mix allow-override */
 }
 html[style*="--iwac-vis-embed-secondary"] body[data-theme="dark"] {
-    --secondary: color-mix(in oklab, var(--iwac-vis-embed-secondary), white 14%); /* allow-absolute-mix */
+    --secondary: color-mix(in oklab, var(--iwac-vis-embed-secondary), white 14%); /* allow-absolute-mix allow-override */
 }

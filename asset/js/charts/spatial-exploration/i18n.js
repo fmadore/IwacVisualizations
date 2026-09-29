@@ -18,6 +18,8 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
+        'places_count_one':          '{count} place',
+        'places_count_other':        '{count} places',
         'spatial_pick_hint':         'Choose a person, organisation, event, subject or place to map locations associated with the same records. Without a selection, the map shows the places available in the mapped data.',
         'places_count':              '{count} places',
         'spatial_map_description':   'Larger bubbles indicate places linked to more items through catalogue tags. Only places with known coordinates can be mapped. The map reflects the collection’s records, so an unmarked place may simply lack cataloguing or coordinates. Hover for a preview, or click a place for the item list.',
@@ -26,6 +28,12 @@
     });
 
     ns.addTranslations('fr', {
+        'places_count_one':          '{count} lieu',
+        'places_count_other':        '{count} lieux',
+        'Regions':                   'R\u00e9gions',
+        'Region':                    'R\u00e9gion',
+        'Prefectures':               'Pr\u00e9fectures',
+        'Prefecture':                'Pr\u00e9fecture',
         'Places mentioned in the collection': 'Lieux mentionnés dans la collection',
         'Pick an entity':            'Choisir une entit\u00e9',
         'spatial_pick_hint':         'Choisissez une personne, une organisation, un événement, un sujet ou un lieu pour situer les lieux associés aux mêmes notices. Sans sélection, la carte affiche les lieux disponibles dans les données cartographiques.',

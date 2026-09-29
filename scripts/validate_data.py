@@ -92,6 +92,24 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "term-trends-index.json":         ("years", "terms", "totals"),
 }
 
+#: Nested figures a consumer OUTSIDE this module reads, keyed by
+#: (bundle, parent key) → (required keys, optional keys).
+#:
+#: IWAC-theme's helper/BannerStats.php reads these from collection-overview's
+#: `summary` for the homepage banner (its SUMMARY_KEYS). It is a
+#: cross-repository contract nothing asserted: a renamed key would silently
+#: drop a figure from the banner, with every check in both repositories green.
+#: `total_pages` is optional because the generator emits it only when the
+#: dataset carries a pages column — and the banner already tolerates that —
+#: but when it IS present it must be a number, like the rest.
+NESTED_FIGURES: Dict[Tuple[str, str], Tuple[Tuple[str, ...], Tuple[str, ...]]] = {
+    ("collection-overview.json", "summary"): (
+        ("newspapers", "references_count", "total_words", "unique_sources",
+         "document_types", "audiovisual_minutes", "languages"),
+        ("total_pages",),
+    ),
+}
+
 #: Bundles whose metadata is INLINE at the top level — `generated_at` beside
 #: the data rather than inside a `metadata` block. Four idioms coexist (P10);
 #: this validator accepts all of them rather than forcing a payload change
@@ -231,6 +249,20 @@ def check_payload(name: str, payload: Any) -> List[str]:
             problems.append(f"{name}: missing top-level {key!r}, which the block reads")
         elif not isinstance(payload[key], (dict, list)):
             problems.append(f"{name}: {key!r} must be an object or array")
+
+    for (bundle, parent), (required, optional) in NESTED_FIGURES.items():
+        # A missing or malformed parent is already reported above.
+        if bundle != name or not isinstance(payload, dict) or not isinstance(payload.get(parent), dict):
+            continue
+        figures = payload[parent]
+        for key in required + optional:
+            if key not in figures:
+                if key in required:
+                    problems.append(f"{name}: {parent}.{key} is missing - IWAC-theme's BannerStats reads it")
+                continue
+            value = figures[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                problems.append(f"{name}: {parent}.{key} must be a number - IWAC-theme's BannerStats reads it")
     return problems
 
 
@@ -371,7 +403,10 @@ def self_test() -> List[str]:
     """Prove the checks can fail — the same contract check-*.js scripts keep."""
     failures: List[str] = []
 
-    good = {"metadata": {"generatedAt": "2026-09-07T05:00:00Z"}, "summary": {},
+    banner = {"newspapers": 41, "references_count": 1200, "total_words": 9_000_000,
+              "unique_sources": 88, "document_types": 7, "audiovisual_minutes": 1234,
+              "languages": 5}
+    good = {"metadata": {"generatedAt": "2026-09-07T05:00:00Z"}, "summary": banner,
             "timeline": {}, "countries": [], "treemap": {}}
     if check_payload("collection-overview.json", good):
         failures.append("a well-formed payload was rejected")
@@ -382,6 +417,10 @@ def self_test() -> List[str]:
         ("a +00:00 timestamp", {**good, "metadata": {"generatedAt": "2026-09-07T05:00:00+00:00"}}),
         ("no generatedAt", {**good, "metadata": {"totalRecords": 1}}),
         ("a missing required key", {k: v for k, v in good.items() if k != "timeline"}),
+        ("a banner figure the theme reads, missing",
+         {**good, "summary": {k: v for k, v in banner.items() if k != "total_words"}}),
+        ("a banner figure that is not a number", {**good, "summary": {**banner, "languages": "5"}}),
+        ("an optional banner figure of the wrong type", {**good, "summary": {**banner, "total_pages": None}}),
     ]
     for label, payload in cases:
         if not check_payload("collection-overview.json", payload):

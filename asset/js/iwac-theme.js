@@ -46,6 +46,8 @@
         surface:       '#fdfcfb',  // oklch(99.2% 0.002 60)  near-white, not cream
         surfaceRaised: '#faf8f6',  // oklch(98.0% 0.003 60)
         background:    '#f7f5f3',  // oklch(97.0% 0.003 60)
+        // What a panel paints: --panel-bg aliases --surface in light…
+        panelBg:       '#fdfcfb',
         border:        '#ced1d6',  // oklch(86% 0.007 258) cool-neutral
         borderLight:   '#e2e5e8'   // oklch(92% 0.005 258)
     };
@@ -61,6 +63,11 @@
         surface:       '#110c08',  // oklch(16% 0.012 70)
         surfaceRaised: '#1a1510',  // oklch(20% 0.013 70)
         background:    '#080503',  // oklch(12% 0.012 75)
+        // …but --surface-raised in dark. The degraded-mode panel used to fall
+        // back to `surface` in both themes, so anything measuring contrast
+        // against the panel (the word cloud's knocked-out text) measured the
+        // wrong ground in dark mode. The guard pins both to tokens.json.
+        panelBg:       '#1a1510',
         border:        '#352f28',  // oklch(31% 0.015 70)
         borderLight:   '#26211a'   // oklch(25% 0.014 70)
     };
@@ -446,7 +453,7 @@
             // --panel-bg to --surface in light but to --surface-raised in
             // dark, so anything measuring contrast against the panel (the word
             // cloud's knocked-out text) has to read this and not guess.
-            panelBg:       readColorVar('--panel-bg')       || fallback.surface,
+            panelBg:       readColorVar('--panel-bg')       || fallback.panelBg,
             background:    readColorVar('--background')     || fallback.background,
             border:        readColorVar('--border')         || fallback.border,
             borderLight:   readColorVar('--border-light')   || fallback.borderLight,
