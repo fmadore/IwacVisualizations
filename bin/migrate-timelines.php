@@ -11,7 +11,7 @@ if (PHP_SAPI !== 'cli') {
 $args = getopt('', ['omeka:', 'user-id:', 'apply', 'backup:', 'restore:']);
 $root = realpath($args['omeka'] ?? '');
 if (!$root || !is_file($root . '/bootstrap.php') || empty($args['user-id'])) {
-    fwrite(STDERR, "Usage: php scripts/migrate_timelines.php --omeka=/path/to/omeka --user-id=ADMIN_ID [--apply --backup=/private/backup.json] [--restore=/private/backup.json]\n");
+    fwrite(STDERR, "Usage: php bin/migrate-timelines.php --omeka=/path/to/omeka --user-id=ADMIN_ID [--apply --backup=/private/backup.json] [--restore=/private/backup.json]\n");
     exit(2);
 }
 require $root . '/bootstrap.php';

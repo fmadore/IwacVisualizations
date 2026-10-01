@@ -109,6 +109,8 @@ IwacVisualizations/
 │       ├── iwac-i18n.js                 # Locale detection + en/fr dictionary + t()
 │       ├── iwac-lazy.js
 │       └── iwac-theme.js                # ECharts theme from live CSS vars; owns BASEMAP
+├── bin/
+│   └── migrate-timelines.php
 ├── config/
 │   ├── module.config.php                # Block + resource-page-block invokables
 │   ├── module.ini                       # Module metadata; version drives the asset cache-bust
@@ -183,7 +185,6 @@ IwacVisualizations/
 │   ├── iwac_stats.py
 │   ├── iwac_timeline.py
 │   ├── iwac_utils.py                    # Shared generator helpers (self-contained)
-│   ├── migrate_timelines.php
 │   ├── org_cooccurrence_targets.json
 │   ├── python-lock.js
 │   ├── README.md

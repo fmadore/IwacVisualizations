@@ -115,14 +115,14 @@ using an active Omeka global administrator's numeric user ID:
 
 ```sh
 # Read-only preview, the default:
-php scripts/migrate_timelines.php --omeka=/var/www/omeka-s --user-id=1
+php bin/migrate-timelines.php --omeka=/var/www/omeka-s --user-id=1
 
 # Apply the same recognition rules and create a new private backup:
-php scripts/migrate_timelines.php --omeka=/var/www/omeka-s --user-id=1 \
+php bin/migrate-timelines.php --omeka=/var/www/omeka-s --user-id=1 \
   --apply --backup=/srv/private/iwac-timelines-before.json
 
 # Preview a rollback; add --apply and a NEW --backup path to execute it:
-php scripts/migrate_timelines.php --omeka=/var/www/omeka-s --user-id=1 \
+php bin/migrate-timelines.php --omeka=/var/www/omeka-s --user-id=1 \
   --restore=/srv/private/iwac-timelines-before.json
 ```
 
