@@ -70,9 +70,9 @@ function everyKey() {
     return [...keys];
 }
 
-test('the dictionaries the stripper finds are the twenty-six the i18n guard counts', () => {
+test('the dictionaries the stripper finds are the twenty-seven the i18n guard counts', () => {
     // 19 until v1.73.0, which gave seven blocks their own dictionary.
-    assert.equal(BLOCKS.length + 1, 26);
+    assert.equal(BLOCKS.length + 1, 27);
 });
 
 for (const locale of LOCALES) {

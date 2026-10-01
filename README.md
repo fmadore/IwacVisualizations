@@ -1,5 +1,7 @@
 # IWAC Visualizations
 
+Native timelines: [authoring, data pipeline, editor and migration](docs/TIMELINES.md).
+
 An [Omeka S](https://omeka.org/s/) module that adds interactive visualizations to the [Islam West Africa Collection (IWAC)](https://islam.zmo.de/) digital archive at ZMO. Charts are powered by [ECharts 6](https://echarts.apache.org/) and [MapLibre GL](https://maplibre.org/), with [d3-force](https://d3js.org/d3-force) driving the interactive item-page networks; the underlying data is either fetched live from the public Hugging Face dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/` (the precompute pipeline reads the **private** full mirror `fmadore/islam-west-africa-collection-full` and requires an `HF_TOKEN` — see `scripts/README.md`).
 
 The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It reads the theme's CSS custom properties at runtime so chart colours and type track the site's configured `--primary` / `--ink` / `--surface` colours and `--font-headings` / `--font-body` stacks, it respects the light/dark toggle via a `MutationObserver` on `body[data-theme]`, and it follows the Internationalisation module's language switching (English / French).
@@ -362,7 +364,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.73.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.74.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

@@ -393,7 +393,7 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 21, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 22, 'page-block registry count drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
@@ -420,7 +420,7 @@ namespace {
         }
     }
     check($shellRows === 19, "expected 19 generic blocks, found $shellRows");
-    check($ownTemplate === 2, "expected 2 blocks with their own template, found $ownTemplate");
+    check($ownTemplate === 3, "expected 3 blocks with their own template, found $ownTemplate");
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
         '_generic.phtml is missing — nineteen blocks render through it');
 
@@ -535,6 +535,8 @@ namespace {
     } catch (\RuntimeException $e) {
         check(true, 'unknown bundle rejected');
     }
+
+    require __DIR__ . '/timeline.php';
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");

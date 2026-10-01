@@ -24,6 +24,7 @@ $config = [
             'sentimentAtlas' => Site\BlockLayout\SentimentAtlas::class,
             'spatialExploration' => Site\BlockLayout\SpatialExploration::class,
             'termTrends' => Site\BlockLayout\TermTrends::class,
+            'timeline' => Site\BlockLayout\IwacTimeline::class,
             'topicExplorer' => Site\BlockLayout\TopicExplorer::class,
         ],
     ],
@@ -142,6 +143,11 @@ $config = [
                     ],
                 ],
             ],
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            'iwacTimelineData' => Service\ViewHelper\TimelineDataFactory::class,
         ],
     ],
     'view_manager' => [

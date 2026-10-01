@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "slug": "history",
+  "locale": "en",
+  "title": {
+    "id": "intro",
+    "headline": "A history in the sources",
+    "textHtml": "<p>Follow a narrative drawn from archival documents, or read all events in chronological order.</p>",
+    "start": null,
+    "end": null,
+    "sourceOrder": 0,
+    "displayDate": "",
+    "media": null,
+    "relatedResources": []
+  },
+  "events": [
+    {
+      "id": "later",
+      "headline": "A later event",
+      "textHtml": "<p>Selected archival sources place this event in its historical context.</p><blockquote>A quotation preserved from the source.</blockquote><p><a href=\"https://islam.zmo.de/s/westafrica/item/42\">Read the document</a></p>",
+      "start": {
+        "value": "1982-02-01",
+        "precision": "day"
+      },
+      "end": null,
+      "sourceOrder": 0,
+      "displayDate": "",
+      "media": null,
+      "relatedResources": []
+    },
+    {
+      "id": "range",
+      "headline": "An overlapping period",
+      "textHtml": "<p>Selected archival sources place this event in its historical context.</p><blockquote>A quotation preserved from the source.</blockquote><p><a href=\"https://islam.zmo.de/s/westafrica/item/42\">Read the document</a></p>",
+      "start": {
+        "value": "1970",
+        "precision": "year"
+      },
+      "end": {
+        "value": "1980",
+        "precision": "year"
+      },
+      "sourceOrder": 1,
+      "displayDate": "",
+      "media": {
+        "type": "image",
+        "url": "https://example.org/archive.jpg",
+        "thumbnail": "",
+        "alt": "Archival page showing the original document",
+        "captionHtml": "<a href=\"https://islam.zmo.de/s/westafrica/item/42\">Archival document, 1970</a>",
+        "creditHtml": "Islam West Africa Collection"
+      },
+      "relatedResources": []
+    },
+    {
+      "id": "first",
+      "headline": "A month, not an invented day",
+      "textHtml": "<p>Selected archival sources place this event in its historical context.</p><blockquote>A quotation preserved from the source.</blockquote><p><a href=\"https://islam.zmo.de/s/westafrica/item/42\">Read the document</a></p>",
+      "start": {
+        "value": "1975-04",
+        "precision": "month"
+      },
+      "end": null,
+      "sourceOrder": 2,
+      "displayDate": "",
+      "media": null,
+      "relatedResources": []
+    },
+    {
+      "id": "same",
+      "headline": "Another event in the same month",
+      "textHtml": "<p>Selected archival sources place this event in its historical context.</p><blockquote>A quotation preserved from the source.</blockquote><p><a href=\"https://islam.zmo.de/s/westafrica/item/42\">Read the document</a></p>",
+      "start": {
+        "value": "1975-04",
+        "precision": "month"
+      },
+      "end": null,
+      "sourceOrder": 3,
+      "displayDate": "",
+      "media": null,
+      "relatedResources": []
+    }
+  ]
+}

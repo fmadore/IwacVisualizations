@@ -30,3 +30,4 @@ require('./theme-animation.test.js');
 require('./hijri.test.js');
 require('./laicite-update.test.js');
 require('./responsive.test.js');
+require('./timeline.test.js');
