@@ -1,0 +1,29 @@
+<?php
+/** Native timeline: the server renders the entire reading view before JS enhances it. */
+if (empty($timeline)) {
+    echo '<p class="iwac-vis-timeline-unavailable">' . $this->escapeHtml($this->translate(
+        'This timeline is temporarily unavailable.'
+    )) . '</p>';
+    return;
+}
+
+$reading = $this->partial('common/timeline-reading', [
+    'timeline' => $timeline,
+    'instance' => $instance,
+]);
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'iwac-timeline',
+        'needs' => ['echarts' => false],
+        'bundle' => 'timeline',
+    ],
+    'blockClass' => 'iwac-vis-timeline',
+    'prerendered' => $reading,
+    'data' => [
+        'timeline' => $timeline['slug'],
+        'timeline-locale' => $timeline['locale'],
+        'instance' => $instance,
+        'start-slide' => $startSlide ?? 'intro',
+        'layout' => $layout ?? 'narrative',
+    ],
+]);

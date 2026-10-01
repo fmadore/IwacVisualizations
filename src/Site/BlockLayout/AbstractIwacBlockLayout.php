@@ -13,13 +13,14 @@ use Omeka\Site\BlockLayout\AbstractBlockLayout;
 /**
  * Shared scaffolding for IWAC page blocks.
  *
- * Every IWAC block is zero-configuration: form() renders a description,
+ * The default IWAC block is zero-configuration: form() renders a description,
  * render() calls a template partial with the block as the only argument.
  * A subclass supplies its slug and nothing else — label, description and
  * partial path all resolve through `BlockRegistry`, which is also what the
  * embed controller and the block lint read. Before v1.23.0 each subclass
  * carried its own copy of the label and description, and the embed
- * controller carried a second copy of the label.
+ * controller carried a second copy of the label. Configured subclasses such
+ * as IwacTimeline override form() and render().
  */
 abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
 {

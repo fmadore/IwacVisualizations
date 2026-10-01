@@ -13,6 +13,13 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.74.0 — Native bilingual timelines (2026-10-01)
+
+- Add the IWAC Timeline page block with a server-rendered chronological reading view, authored narrative navigation, date axis with range lanes, keyboard and touch controls, stable event links, and complete no-JavaScript/print output.
+- Import all four published sheets into two bilingual exhibits through the verified data-release pipeline. Preserve date precision, source links, images and captions; repair known quotation typos and validate HTML, stable IDs and provenance before publication.
+- Match IWAC-theme 2.22 typography, paper surfaces and light/dark tokens without loading ECharts or third-party timeline/media frames.
+- Provide a preview/apply/rollback migration command that changes only the four recognised legacy blocks, preserves their IDs and page layout, and saves a private backup. See [TIMELINES.md](docs/TIMELINES.md) for deployment and authoring instructions.
+
 ### v1.73.0 — Dark embeds, one token guard, block-sized dictionaries (2026-09-29)
 
 - Dark embeds are dark. The embed route renders without the theme's stylesheet, so every `var(--token, fallback)` painted its light fallback, and `?theme=dark` only lightened the brand accent: the panels stayed light while `iwac-theme.js`, seeing `data-theme="dark"`, drew the charts with the dark ink (#e7e4df) — about 1.2:1. The embed layout now loads `asset/css/iwac-embed-tokens.css`, the theme's tokens for both modes printed as literals from tokens.json by `npm run build:embed-tokens` and asserted by `npm run lint:embed-tokens`. Checked in Chromium: the dark panel now paints the theme's own `--panel-bg` (#1a1510) under #e7e4df ink, the charts read the same ground, and `?primary=` still outranks the sheet. A new browser test fails without the sheet.

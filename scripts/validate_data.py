@@ -90,6 +90,7 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "keyness.json":                   (),
     "template-summary.json":          (),
     "term-trends-index.json":         ("years", "terms", "totals"),
+    "timelines/index.json":          ("timelines",),
 }
 
 #: Nested figures a consumer OUTSIDE this module reads, keyed by
@@ -363,6 +364,40 @@ def write_manifest(data_dir: Path, provenance: Path) -> None:
     (data_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, sort_keys=True), encoding="utf-8")
 
 
+def check_timelines(data_dir: Path) -> List[str]:
+    """The catalogue and every bilingual exhibit must agree before publication."""
+    from iwac_timeline import IDENTIFIER, validate_timeline
+    errors = []
+    try:
+        index = read_json(data_dir / "timelines/index.json")
+        if index.get("schemaVersion") != 1 or not isinstance(index.get("timelines"), list) or not index["timelines"]:
+            raise ValueError("Invalid timeline catalogue")
+        expected = {"index.json"}
+        slugs = set()
+        for entry in index["timelines"]:
+            slug = entry["slug"]
+            if not IDENTIFIER.fullmatch(slug) or slug in slugs or not entry["locales"]:
+                raise ValueError("Invalid/duplicate catalogue entry")
+            slugs.add(slug)
+            for locale, detail in entry["locales"].items():
+                name = f"{slug}.{locale}.json"
+                if locale not in {"en", "fr"} or detail["file"] != name:
+                    raise ValueError("Invalid catalogue filename")
+                expected.add(name)
+                payload = read_json(data_dir / "timelines" / name)
+                validate_timeline(payload)
+                errors.extend(check_payload("timelines/" + name, payload))
+                if (payload["slug"] != slug or payload["locale"] != locale
+                        or len(payload["events"]) != detail["eventCount"]
+                        or payload["title"]["headline"] != detail["title"]):
+                    raise ValueError(f"Catalogue disagrees with {name}")
+        if {p.name for p in (data_dir / "timelines").glob("*.json")} != expected:
+            raise ValueError("Orphan timeline bundle")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        errors.append(f"timelines: {exc}")
+    return errors
+
+
 def validate(data_dir: Path) -> List[str]:
     problems: List[str] = []
     seen = set()
@@ -396,6 +431,7 @@ def validate(data_dir: Path) -> List[str]:
         elif not any(directory.rglob("*.json")):
             problems.append(f"{name}/: no JSON files")
 
+    problems.extend(check_timelines(data_dir))
     return problems
 
 

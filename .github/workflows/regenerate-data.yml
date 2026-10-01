@@ -24,6 +24,7 @@ on:
     branches: [main]
     paths:
       - "config/sentiment-models.json"
+      - "config/timelines.json"
       - ".github/workflows/regenerate-data.yml"
       - "scripts/**/*.py"
       - "scripts/requirements.txt"

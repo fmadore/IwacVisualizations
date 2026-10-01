@@ -1,5 +1,7 @@
 # Architecture — IWAC Visualizations
 
+Native timelines: [authoring, data pipeline, editor and migration](docs/TIMELINES.md).
+
 How the module is put together: the file layout, how assets are declared and
 loaded, the two data paths and how generated data reaches the server, then the
 cross-cutting concerns — i18n, theme switching, mobile behaviour — and the
@@ -27,7 +29,7 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                      # 48 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                      # 50 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css                # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
 │   │   ├── iwac-embed-tokens.css
@@ -70,6 +72,7 @@ IwacVisualizations/
 │       │   ├── sentiment-atlas/         # 1 file — panel module
 │       │   ├── shared/                  # 41 files — the reusable primitives every block draws on
 │       │   ├── spatial-exploration/     # 4 files — panel modules
+│       │   ├── timeline/                # 4 files — panel modules
 │       │   ├── topic-explorer/          # 1 file — panel module
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
@@ -97,18 +100,28 @@ IwacVisualizations/
 │       │   ├── sentiment-atlas.js
 │       │   ├── spatial-exploration.js
 │       │   ├── term-trends.js
+│       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                        # 125 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                        # 129 files — built by scripts/build-js.js from bundles.json; committed
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-height.js
 │       ├── iwac-i18n.js                 # Locale detection + en/fr dictionary + t()
 │       ├── iwac-lazy.js
 │       └── iwac-theme.js                # ECharts theme from live CSS vars; owns BASEMAP
+├── bin/
+│   └── migrate-timelines.php
 ├── config/
 │   ├── module.config.php                # Block + resource-page-block invokables
 │   ├── module.ini                       # Module metadata; version drives the asset cache-bust
-│   └── sentiment-models.json
+│   ├── sentiment-models.json
+│   └── timelines.json
+├── docs/
+│   ├── images/
+│   │   ├── timeline-dark.png
+│   │   ├── timeline-light.png
+│   │   └── timeline-mobile.png
+│   └── TIMELINES.md
 ├── language/                            # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
@@ -161,6 +174,7 @@ IwacVisualizations/
 │   ├── generate_spatial_exploration.py
 │   ├── generate_template_summary.py
 │   ├── generate_term_trends.py
+│   ├── generate_timeline.py
 │   ├── generate_topic_explorer.py
 │   ├── generate_wordcloud.py
 │   ├── generate_world_map.py
@@ -169,6 +183,7 @@ IwacVisualizations/
 │   ├── iwac_embeddings.py
 │   ├── iwac_frames.py                   # The FrameStore run_all installs
 │   ├── iwac_stats.py
+│   ├── iwac_timeline.py
 │   ├── iwac_utils.py                    # Shared generator helpers (self-contained)
 │   ├── org_cooccurrence_targets.json
 │   ├── python-lock.js
@@ -197,34 +212,47 @@ IwacVisualizations/
 │   │   ├── Polarite.php
 │   │   └── Subjectivite.php
 │   ├── Service/
-│   │   └── Controller/
-│   │       └── Admin/
-│   │           └── DataControllerFactory.php
-│   └── Site/
-│       ├── BlockLayout/                 # 22 files — one `const SLUG` each; BlockRegistry.php is the truth
-│       ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
-│       ├── AssetPlan.php
-│       └── BlockRegistry.php            # THE single source of truth for every block
+│   │   ├── Controller/
+│   │   │   └── Admin/
+│   │   │       └── DataControllerFactory.php
+│   │   └── ViewHelper/
+│   │       └── TimelineDataFactory.php
+│   ├── Site/
+│   │   ├── BlockLayout/                 # 23 files — one `const SLUG` each; BlockRegistry.php is the truth
+│   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
+│   │   ├── AssetPlan.php
+│   │   └── BlockRegistry.php            # THE single source of truth for every block
+│   ├── Timeline/
+│   │   ├── Catalog.php
+│   │   └── Migration.php
+│   └── View/
+│       └── Helper/
+│           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 21 files — Playwright specs
+│   ├── browser/                         # 24 files — Playwright specs
+│   ├── fixtures/
+│   │   └── timeline.json
 │   ├── integration/
 │   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
-│   │   └── sync_form.php
-│   ├── js/                              # 29 files — node:test units
+│   │   ├── sync_form.php
+│   │   └── timeline.php
+│   ├── js/                              # 30 files — node:test units
 │   ├── php/
 │   │   ├── run.php
-│   │   └── sync_data_archive.php
+│   │   ├── sync_data_archive.php
+│   │   └── timeline.php
 │   └── python/
 │       ├── requirements.txt
 │       ├── test_entity_networks.py
 │       ├── test_iwac_helpers.py
 │       ├── test_laicite_audit.py
 │       ├── test_laicite_methodology.py
-│       └── test_publication.py
+│       ├── test_publication.py
+│       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/                # 3 files — one per registered block, filename === slug
+│   │   ├── block-layout/                # 4 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml
@@ -235,7 +263,8 @@ IwacVisualizations/
 │   │   │   │   └── reference.phtml
 │   │   │   └── item-set-dashboard.phtml
 │   │   ├── iwac-assets.phtml            # Shared asset-loader partial — declare needs here
-│   │   └── iwac-block-shell.phtml       # Shared block wrapper + loading scaffold
+│   │   ├── iwac-block-shell.phtml       # Shared block wrapper + loading scaffold
+│   │   └── timeline-reading.phtml
 │   └── iwac-visualizations/
 │       ├── admin/
 │       │   └── data/
