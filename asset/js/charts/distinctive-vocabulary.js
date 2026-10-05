@@ -60,7 +60,7 @@
                         lines.push(P.t('keyness_tooltip_ratio', { ratio: term.rate_ratio }));
                     }
                     lines.push(P.t('keyness_tooltip_count', {
-                        count: P.formatNumber(term.count || 0),
+                        count: term.count || 0,
                         slice: P.escapeHtml(slice.name || '')
                     }));
                     lines.push(P.t('keyness_tooltip_stats', {
@@ -251,7 +251,11 @@
 
         root.appendChild(panel.panel);
         ns.registerChart(panel.chart, function (el, chart) {
-            var option = C.gantt(rows);
+            // A burst has no country, so the shared Gantt would draw it in
+            // its neutral "unassigned" grey; one series, one accent.
+            var option = C.gantt(rows, {
+                unassignedColor: ((ns.getChartTokens && ns.getChartTokens()) || {}).primary
+            });
             // The shared gantt's tooltip is written for coverage spans; a
             // burst needs its own numbers (strength, mentions inside the
             // burst vs the subject's whole run).
@@ -309,12 +313,6 @@
         warnLabel:      'IWACVis distinctive vocabulary',
         requireECharts: true,
         dataFile:       'keyness.json',
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) {
-                loadingLabel.textContent = P.t('Loading distinctive vocabulary') + '…';
-            }
-        },
         render:         render
     });
 })();

@@ -15,7 +15,6 @@
     }
 
         ns.addTranslations('en', {
-            'Loading scary terms':              'Loading "scary" terms',
             'scary.title':                      'Radicalism and extremism vocabulary in the press',
             'scary.description':                'Occurrences of selected French terms associated with radicalism and extremism in the collection’s newspaper articles. Related forms are grouped into families, so “terrorisme” and “terroriste” count together. These counts describe vocabulary use; they do not classify the people or organisations discussed. Differences can reflect the amount of material collected and text-recognition errors.',
             'scary.cross_laicite':              'These counts are anonymous totals. To see which individual articles pair this vocabulary with laïcité, go to the Laïcité dossier →',
@@ -35,6 +34,7 @@
             'scary.matrix_empty':               'No term pairs were found for this selection.',
             'scary.matrix_pair_tooltip':        '{a} × {b}<br>{count} shared articles',
             'scary.matrix_articles':            '{count} articles',
+            'scary.matrix_articles_one':        '{count} article',
             'scary.total_articles':             'Total articles',
             'scary.term_families':              'Term families',
             'scary.term_variants':              'Term variants',
@@ -57,7 +57,6 @@
             'scary.wordcloud_chart_title':      'Vocabulary of matching articles',
             'scary.wordcloud_description':      'Words found in the largest number of articles containing at least one selected term. Each word counts once per article, and larger words appear in more articles. The selected term families are excluded. The cloud describes the vocabulary of whole articles, including words far from the matching terms.',
             'scary.wordcloud_word_list':        'Word list',
-            'scary.wordcloud_meta':             '{articles} articles · {words} words shown',
             'scary.by_family':                  'By family',
             'scary.by_period':                  'By period',
             'scary.word':                       'Word',
@@ -72,7 +71,6 @@
             'scary.map_place':                  'Place'
         });
         ns.addTranslations('fr', {
-            'Loading scary terms':              'Chargement des termes \u00ab scary \u00bb',
             'scary.title':                      'Vocabulaire du radicalisme et de l’extrémisme dans la presse',
             'scary.description':                'Occurrences de termes français sélectionnés, associés au radicalisme et à l’extrémisme, dans les articles de presse de la collection. Les formes apparentées sont regroupées en familles : « terrorisme » et « terroriste » sont ainsi comptés ensemble. Ces nombres décrivent l’usage du vocabulaire sans classer les personnes ou organisations évoquées. Les écarts peuvent refléter le volume de documents collectés et les erreurs de reconnaissance du texte.',
             'scary.cross_laicite':              'Ces d\u00e9comptes sont des totaux anonymes. Pour savoir quels articles associent ce vocabulaire \u00e0 la la\u00efcit\u00e9, consulter le dossier La\u00efcit\u00e9 \u2192',
@@ -92,6 +90,7 @@
             'scary.matrix_empty':               'Aucune paire de termes trouvée pour cette sélection.',
             'scary.matrix_pair_tooltip':        '{a} \u00d7 {b}<br>{count} articles partag\u00e9s',
             'scary.matrix_articles':            '{count} articles',
+            'scary.matrix_articles_one':        '{count} article',
             'scary.total_articles':             'Articles totaux',
             'scary.term_families':              'Familles de termes',
             'scary.term_variants':              'Variantes',
@@ -114,7 +113,6 @@
             'scary.wordcloud_chart_title':      'Vocabulaire des articles correspondants',
             'scary.wordcloud_description':      'Mots présents dans le plus grand nombre d’articles contenant au moins un terme sélectionné. Chaque mot est compté une fois par article ; les mots les plus grands apparaissent dans davantage d’articles. Les familles de termes sélectionnées sont exclues. Le nuage décrit le vocabulaire des articles entiers, y compris les mots éloignés des termes recherchés.',
             'scary.wordcloud_word_list':        'Liste des mots',
-            'scary.wordcloud_meta':             '{articles} articles \u00b7 {words} mots affich\u00e9s',
             'scary.by_family':                  'Par famille',
             'scary.by_period':                  'Par p\u00e9riode',
             'scary.word':                       'Mot',

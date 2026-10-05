@@ -13,8 +13,8 @@
  * how much of it was about schooling — and that answer is comparable across
  * decades and across countries of very different sizes.
  *
- * All panels share one y-axis maximum, so a frame's height means the same
- * thing in every cell of the grid.
+ * All panels share one fixed 0–100% y-axis, so a frame's height means the
+ * same thing in every cell of the grid.
  *
  * Rendered as ONE ECharts instance with N grids rather than N instances:
  * one theme-swap re-init, one resize observer, one legend.
@@ -154,17 +154,21 @@
         var picked = seriesFor(bundle, cfg.state.arenaCountry);
         if (!decades.length) return P.emptyChartOption();
 
-        // Shares, computed once so the shared axis maximum can be read off
-        // the same numbers the series carry.
+        // Shares, one array per frame. A decade with fewer documents than
+        // the bundle's `minimum_cell` (5 when it does not say) is a gap,
+        // not a share: two documents out of three would read as 67%.
+        var floor = bundle.minimum_cell || 5;
         var shares = {};
         frames.forEach(function (frame) {
             shares[frame] = decades.map(function (_, i) {
                 var total = picked.totals[i] || 0;
-                if (total < 5) return null;
+                if (total < floor) return null;
                 var pct = ((picked.counts[frame] || [])[i] || 0) / total * 100;
                 return Math.round(pct * 10) / 10;
             });
         });
+        // Every panel on the same fixed 0–100% scale, so a frame's height
+        // means the same thing in every cell of the grid.
         var axisMax = 100;
 
         // Horizontal in percent, vertical in pixels. ECharts takes a number
@@ -243,7 +247,7 @@
                 formatter: function (p) {
                     return P.escapeHtml(p.seriesName) + '<br>'
                         + P.escapeHtml(String(p.name)) + ': <strong>'
-                        + (p.value == null ? '—' : p.value + '%')
+                        + L.formatPercent(p.value)
                         + '</strong> (' + ((picked.counts[frames[p.seriesIndex]] || [])[p.dataIndex] || 0)
                         + '/' + (picked.totals[p.dataIndex] || 0) + ')';
                 }

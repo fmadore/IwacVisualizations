@@ -81,8 +81,6 @@
             total:      rows().length,
             noteKey:    'activity_window_note',
             allKey:     'activity_window_all',
-            showAllKey: 'window_show_all',
-            showTopKey: 'window_show_top',
             onToggle:   redraw
         });
         panelEl.panel.insertBefore(disclosure.root, panelEl.chart);

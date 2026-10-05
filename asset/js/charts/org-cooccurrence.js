@@ -28,7 +28,6 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Loading organisation co-occurrences': 'Loading organisation co-occurrences',
             'orgcooc.title':        'Islamic organisations and the words around them',
             'orgcooc.description':  'Pairs of words found near the selected organisation’s name in newspaper articles. The search collects words within about {window} words on either side of each name match, then counts each pair once per article. Darker cells indicate more shared articles; the diagonal is left blank. The words may occur around different mentions within an article, so use the matrix to select texts for closer reading.',
             'orgcooc.organisation': 'Organisation',
@@ -45,7 +44,6 @@
             'orgcooc.view_record':   'View authority record'
         });
         ns.addTranslations('fr', {
-            'Loading organisation co-occurrences': 'Chargement des co-occurrences',
             'orgcooc.title':        'Les organisations islamiques et les mots qui les entourent',
             'orgcooc.description':  'Paires de mots trouvés près du nom de l’organisation sélectionnée dans les articles de presse. La recherche recueille les mots situés à environ {window} mots de part et d’autre de chaque nom repéré, puis compte chaque paire une fois par article. Les cellules foncées indiquent davantage d’articles communs ; la diagonale reste vide. Les mots peuvent entourer des mentions différentes dans un même article : la matrice aide donc à choisir des textes à examiner.',
             'orgcooc.organisation': 'Organisation',
@@ -206,10 +204,10 @@
                         return P.t('orgcooc.pair_tooltip', {
                             a: P.escapeHtml(String(labels[v[0]] || '')),
                             b: P.escapeHtml(String(labels[v[1]] || '')),
-                            count: P.formatNumber(v[2] || 0)
+                            count: v[2] || 0
                         }) + '<br>' + P.t('orgcooc.term_total', {
                             term: P.escapeHtml(String(labels[v[0]] || '')),
-                            count: P.formatNumber(counts[labels[v[0]]] || 0)
+                            count: counts[labels[v[0]]] || 0
                         });
                     }
                 }

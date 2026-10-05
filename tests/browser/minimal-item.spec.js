@@ -71,7 +71,7 @@ test('the channel view reads in French', async ({ page }) => {
     // A channel slice counts videos; the mixed subset counts items.
     await expect(page.locator('.iwac-vis-summary-card__label').first()).toHaveText('Vidéos');
     await page.goto(`${FIXTURE}?lang=fr&scope=none`);
-    await expect(page.locator('.iwac-vis-summary-card__label').first()).toHaveText('Éléments');
+    await expect(page.locator('.iwac-vis-summary-card__label').first()).toHaveText('Documents');
 });
 
 test('the block does not overflow a 375 px viewport', async ({ page }) => {

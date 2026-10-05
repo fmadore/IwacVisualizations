@@ -19,12 +19,20 @@
  * laïcité framing view read them from here rather than repeating them. The individual chart builders live in sibling files that extend
  * the same IWACVis.chartOptions (C) namespace:
  *
- *   chart-options-bar.js      timeline, growthBar, stackedBar
- *   chart-options-hbar.js     horizontalBar, newspaper, entities, scaryTerms,
- *                             divergingBar (+ divergingExtent)
- *   chart-options-graph.js    chord, collaborationNetwork, sankey
+ *   chart-options-bar.js      timeline, stackedBar
+ *   chart-options-hbar.js     horizontalBar (+ the newspaper, entities
+ *                             wrappers over it)
+ *   chart-options-graph.js    _forceGraphBase, chord
  *   chart-options-special.js  pie, treemap, gantt, wordcloud, segmentedBar,
- *                             sunburst, heatmap
+ *                             sunburst, heatmap, landscape, heatmapMatrix
+ *
+ * A builder exactly one block draws lives beside that block instead, still
+ * extending this namespace, so this bundle — on every chart page — carries
+ * only what two or more blocks share: growthBar (collection-overview/
+ * growth-bar.js), scaryTerms (scary-terms/bars.js), divergingBar
+ * (sentiment-atlas/diverging-bar.js), collaborationNetwork
+ * (references-overview/collaboration-network.js). segmentedBar stays: the
+ * person and entity dashboards both draw it.
  *
  * Load order: after panels.js, this core file first, then the four
  * builder files (any order), before any block controller. The shared
@@ -177,7 +185,7 @@
      */
     C._stableLabelColor = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return tokens.ink || '#2c2f37';
+        return tokens.ink;
     };
 
     /**
@@ -193,7 +201,7 @@
     C._labelHalo = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         return {
-            textBorderColor: tokens.surface || '#fdfdfd',
+            textBorderColor: tokens.surface,
             textBorderWidth: 2
         };
     };

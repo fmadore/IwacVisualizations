@@ -83,7 +83,7 @@
         if (!pairs.length) return null;
         var total = (slice && slice.total_articles) || 0;
 
-        var details = P.el('details', 'iwac-vis-scary-details');
+        var details = P.el('details', 'iwac-vis-details');
         details.appendChild(P.el('summary', null, P.t('scary.wordcloud_word_list')));
 
         var table = P.el('table', 'iwac-vis-scary-details-table');

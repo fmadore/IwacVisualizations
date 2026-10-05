@@ -39,7 +39,7 @@
         var typeButtons = {};
         [
             { key: 'subject', labelKey: 'Subjects' },
-            { key: 'spatial', labelKey: 'Spatial Coverage' }
+            { key: 'spatial', labelKey: 'index.place_tags' }
         ].forEach(function (t) {
             var btn = P.el('button', 'iwac-vis-tab', P.t(t.labelKey));
             btn.type = 'button';

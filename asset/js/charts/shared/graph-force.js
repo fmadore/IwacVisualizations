@@ -29,8 +29,7 @@
  *       nodes: [{ id, name, category, size, isCenter?, url?, data? }],
  *       categories: [{ name }],
  *       seed: 1234,
- *       colorOf: function (categoryIndex) { return '#ce4115'; },
- *       haloOf: function (node) { return '#8e2a4c' || null; },
+ *       colorOf: function (categoryIndex) { return ns.getSeriesColor(categoryIndex); },
  *       tooltip: function (node, link) { return [Element, …]; },
  *       announce: function (node) { return 'spoken description'; },
  *       forces: { distance, linkStrength, chargeOf }   // all optional
@@ -114,9 +113,9 @@
         }
         var categories = spec.categories || [];
         var forces = Object.assign({}, DEFAULT_FORCES, spec.forces || {});
-        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
-        var colorOf = spec.colorOf || function () { return palette[0]; };
-        var haloOf = spec.haloOf || function () { return null; };
+        // Read at paint time, never copied: a copy is what a theme toggle
+        // leaves behind on the old palette.
+        var colorOf = spec.colorOf || function () { return ns.getSeriesColor(0); };
         var reduced = !!(ns.prefersReducedMotion && ns.prefersReducedMotion());
         var rng = makeRng(spec.seed || 1);
 
@@ -165,13 +164,12 @@
         var hoverLink = null;     // link under the pointer (only when no node is)
         var focusId = null;       // keyboard focus
         var selectedId = null;    // the reader's anchor — persists until they clear it
-        var showHalos = true;
         var labelsAll = false;
         var edgeLabels = false;
         var frozen = false;
         var hiddenCats = {};      // category index → true when toggled off
         var onPinChangeCb = null;
-        var onThemeCb = null;
+        var onThemeCbs = [];      // chrome that repaints with the canvas (legend swatches)
         var onSelectCb = null;
 
         function isVisible(n) { return !hiddenCats[n.category]; }
@@ -209,10 +207,10 @@
         function scene() {
             return {
                 nodes: visibleNodes(), links: visibleLinks(), categories: categories,
-                colorOf: colorOf, haloOf: haloOf,
+                colorOf: colorOf,
                 hoverId: hoverId, focusId: focusId, selectedId: selectedId,
                 hoverLink: hoverLink, focusSet: focusSet(),
-                showHalos: showHalos, labelsAll: labelsAll, edgeLabels: edgeLabels
+                labelsAll: labelsAll, edgeLabels: edgeLabels
             };
         }
 
@@ -648,12 +646,19 @@
         // re-simulate. Registered as a third `kind` in dashboard-core's chart
         // registry so it rides the same body[data-theme] observer as ECharts
         // and MapLibre.
-        var registration = null;
+        //
+        // The chrome's callbacks run FIRST and the canvas paints last: a
+        // listener that refreshes anything the painter reads has to have
+        // done so before the paint, or the canvas shows the old theme until
+        // the next interaction. Every listener runs — this used to keep one,
+        // so the entity layer's registration silently replaced the legend's.
         if (typeof ns.registerRenderer === 'function') {
-            registration = ns.registerRenderer(container, function () {
-                palette = (ns.getPalette && ns.getPalette()) || palette;
+            ns.registerRenderer(container, function () {
+                onThemeCbs.forEach(function (cb) {
+                    try { cb(); }
+                    catch (e) { console.error('IWACVis.ForceGraph: theme listener failed', e); }
+                });
                 gc.paint(scene());
-                if (onThemeCb) onThemeCb();
             });
         }
 
@@ -678,7 +683,6 @@
                 requestPaint();
             },
             isCategoryVisible: function (i) { return !hiddenCats[i]; },
-            toggleHalos: function () { showHalos = !showHalos; requestPaint(); return showHalos; },
             toggleLabels: function () { labelsAll = !labelsAll; requestPaint(); return labelsAll; },
             toggleFrozen: function () {
                 frozen = !frozen;
@@ -699,11 +703,9 @@
             selected: function () { return selectedId != null ? byId[selectedId] : null; },
             onSelect: function (cb) { onSelectCb = cb; },
             onPinChange: function (cb) { onPinChangeCb = cb; },
-            onTheme: function (cb) { onThemeCb = cb; },
-            pinnedCount: pinnedCount,
+            /** Add (never replace) a listener run on a theme swap, before the repaint. */
+            onTheme: function (cb) { if (typeof cb === 'function') onThemeCbs.push(cb); },
             reducedMotion: reduced,
-            visibleNodes: visibleNodes,
-            adjacency: function () { return pass.adj; },
             neighbours: function (id) {
                 var out = [];
                 var nb = pass.adj[id] || {};
@@ -712,18 +714,10 @@
                 }
                 return out;
             },
-            toDataURL: function () { return gc.exportPng(scene()); },
-            dispose: function () {
-                if (sim) sim.stop();
-                if (registration && registration.remove) registration.remove();
-            }
+            /** PNG of the whole graph at `scale` × its on-screen size (default 2). */
+            toDataURL: function (scale) { return gc.exportPng(scene(), scale); }
         };
     }
 
-    ns.ForceGraph = {
-        create: create,
-        makeRng: makeRng,
-        DEFAULT_FORCES: DEFAULT_FORCES,
-        radiusOf: radiusOf
-    };
+    ns.ForceGraph = { create: create };
 })();

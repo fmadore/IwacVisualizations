@@ -35,7 +35,7 @@ const read = (file) => readFileSync(join(SHARED, file), 'utf8');
 const SCALE = ['Très négatif', 'Négatif', 'Neutre', 'Positif', 'Très positif'];
 const NEUTRAL = 'Neutre';
 
-/** Load the real chart-options core + horizontal-bar builders in a VM. */
+/** Load the real chart-options core + the Sentiment Atlas's diverging bar in a VM. */
 function loadChartOptions() {
     const window = {
         IWACVis: {
@@ -60,6 +60,7 @@ function loadChartOptions() {
     vm.createContext(sandbox);
     vm.runInContext(read('chart-options.js'), sandbox);
     vm.runInContext(read('chart-options-hbar.js'), sandbox);
+    vm.runInContext(readFileSync(join(ROOT, 'asset', 'js', 'charts', 'sentiment-atlas', 'diverging-bar.js'), 'utf8'), sandbox);
     return window.IWACVis.chartOptions;
 }
 

@@ -31,8 +31,10 @@
 }
 
 /*  The withheld count is a rights fact about the sources, not a pipeline
- *  gap — stated plainly rather than hidden. */
-.iwac-vis-laicite-kwic-withheld {
+ *  gap — stated plainly rather than hidden. The strict filter's hidden
+ *  count sits beside the line count it reduced, in the same voice. */
+.iwac-vis-laicite-kwic-withheld,
+.iwac-vis-laicite-kwic-hidden {
     margin: 0;
     font-size: var(--text-xs, 0.8125rem);
     line-height: 1.5;
@@ -46,13 +48,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-3, 0.75rem);
-}
-
-.iwac-vis-kwic-row {
-    padding: var(--space-3, 0.75rem);
-    background: var(--surface, #fdfcfb);
-    border: 1px solid var(--border-light, #e2e5e8);
-    border-radius: var(--radius-sm, 0.375rem);
 }
 
 .iwac-vis-kwic-line {
@@ -141,11 +136,6 @@ a.iwac-vis-kwic-title:hover {
     color: var(--ink-subtle, #5a5e63);
 }
 
-.iwac-vis-laicite-details > summary:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
-    outline-offset: 2px;
-}
-
 /*  `.iwac-vis-timeline-details-*` is emitted by shared/annotated-timeline.js
  *  and lives in iwac-core.css; only the accent colour is block-local. */
 
@@ -180,12 +170,4 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-kwic-badge.is-bibliography {
     border-style: dashed;
-}
-
-/*  What the strict filter is costing, beside the line count it reduced. */
-.iwac-vis-laicite-kwic-hidden {
-    margin: 0;
-    font-size: var(--text-xs, 0.8125rem);
-    line-height: 1.5;
-    color: var(--muted, #66696e);
 }

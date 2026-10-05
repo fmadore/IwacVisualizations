@@ -18,7 +18,9 @@
  * connections, and offers the record as an explicit link the reader can
  * middle-click, copy or ignore.
  *
- * Depends on: panels.js (P.el, P.t, P.formatNumber), graph-force.js.
+ * Depends on: panels.js (P.el, P.t, P.formatNumber), panel-toolbar.js
+ * (P.iconButton, P.bindFullscreen, P.downloadPanelImage), iwac-theme.js,
+ * graph-force.js.
  */
 (function () {
     'use strict';
@@ -54,26 +56,21 @@
     /**
      * The vertical icon column, top-right of the stage. Glyphs and classes
      * match `P.buildGraphPanelToolbar` (the ECharts graphs' toolbar) so the two
-     * families stay visually identical while both exist.
+     * families stay visually identical while both exist; the buttons, the
+     * export and the fullscreen binding are the panel toolbar's own.
      */
     function buildToolbar(graph, panelEl, opts) {
         var bar = P.el('div', 'iwac-vis-graph-toolbar');
 
         function btn(label, title, onClick) {
-            var b = P.el('button', 'iwac-vis-btn iwac-vis-graph-toolbar__btn', label);
-            b.type = 'button';
-            b.setAttribute('aria-label', title);
-            b.title = title;
-            b.addEventListener('click', onClick);
+            var b = P.iconButton(label, title, onClick, 'iwac-vis-graph-toolbar__btn');
             bar.appendChild(b);
             return b;
         }
         /** A toggle whose pressed state mirrors what the graph reports back. */
         function toggle(label, title, fn) {
             var b = btn(label, title, function () {
-                var on = fn();
-                b.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !!on);
-                b.setAttribute('aria-pressed', String(!!on));
+                b.setAttribute('aria-pressed', String(!!fn()));
             });
             b.setAttribute('aria-pressed', 'false');
             return b;
@@ -92,47 +89,23 @@
         unpinBtn.hidden = true;
         graph.onPinChange(function (count) { unpinBtn.hidden = (count === 0); });
 
+        // Rendered at the export scale and framed with the panel's title,
+        // date and attribution, like every other panel's download.
         btn('⭳', t('Download chart'), function () {
-            var dataUrl = graph.toDataURL();
-            if (!dataUrl) return;
-            var a = document.createElement('a');
-            a.download = opts.downloadName || 'iwac-graph.png';
-            a.href = dataUrl;
-            a.rel = 'noopener';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            P.downloadPanelImage(panelEl.panel, graph.toDataURL(P.EXPORT_SCALE), opts.downloadName);
         });
 
-        var fullBtn = btn('⛶', t('Toggle fullscreen'), function () {
-            var host = panelEl.panel;
-            if (!host) return;
-            if (!document.fullscreenElement) {
-                if (host.requestFullscreen) host.requestFullscreen();
-            } else if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        });
-
-        // Self-cleaning (same rule as panel-toolbar.js): a panel that has
-        // left the document drops its listener on the next change.
-        var onFullscreenChange = function () {
-            var host = panelEl.panel;
-            if (!host || !document.body.contains(host)) {
-                document.removeEventListener('fullscreenchange', onFullscreenChange);
-                return;
-            }
-            var isFull = (document.fullscreenElement === host);
-            host.classList.toggle('iwac-vis-panel--fullscreen', isFull);
-            fullBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', isFull);
-            // Give the browser a frame to apply the new size. The graph's own
-            // ResizeObserver usually beats us to it; this is the belt-and-braces
-            // path for browsers that don't fire it on a fullscreen transition.
-            // A deliberate re-fit is NOT forced here: if the reader had zoomed
-            // in, that zoom is theirs to keep (Reset view is one click away).
-            setTimeout(function () { graph.resize(); }, 50);
-        };
-        document.addEventListener('fullscreenchange', onFullscreenChange);
+        var fullBtn = btn('⛶', t('Toggle fullscreen'));
+        if (panelEl.panel) {
+            P.bindFullscreen(fullBtn, panelEl.panel, {
+                // The graph's own ResizeObserver usually beats this to it;
+                // it is the belt-and-braces path for browsers that don't fire
+                // one on a fullscreen transition. A deliberate re-fit is NOT
+                // forced: if the reader had zoomed in, that zoom is theirs to
+                // keep (Reset view is one click away).
+                onChange: function () { graph.resize(); }
+            });
+        }
 
         return bar;
     }
@@ -144,7 +117,9 @@
     /**
      * Category chips below the stage, in flow — not an overlay, so they never
      * cover a node. Clicking one hides that category; the swatch keeps the
-     * colour the painter uses so the mapping is never in doubt.
+     * colour the painter uses so the mapping is never in doubt. The chip is
+     * the shared `.iwac-vis-type-chip`, the same control Entity Networks
+     * filters its types with.
      *
      * Rebuilt on every graph swap: a facet flip can change which categories are
      * present, and a legend entry for an absent type is a dead control.
@@ -161,20 +136,19 @@
                 // The centre is category 0 and is never hideable — losing it
                 // would leave a graph with no anchor and no way back.
                 if (i === 0 || !used[i]) return;
-                var chip = P.el('button', 'iwac-vis-graph-legend__item');
+                var chip = P.el('button', 'iwac-vis-type-chip');
                 chip.type = 'button';
                 var visible = graph.isCategoryVisible(i);
                 chip.setAttribute('aria-pressed', String(visible));
-                chip.classList.toggle('iwac-vis-graph-legend__item--off', !visible);
-                var swatch = P.el('span', 'iwac-vis-graph-legend__swatch');
-                swatch.style.background = colorOf(i);
-                chip.appendChild(swatch);
+                chip.classList.toggle('iwac-vis-type-chip--off', !visible);
+                chip.style.setProperty('--iwac-vis-entity-color', colorOf(i));
+                chip.appendChild(P.el('span', 'iwac-vis-type-chip__swatch'));
                 chip.appendChild(P.el('span', null, cat.name));
                 chip.addEventListener('click', function () {
                     var next = !graph.isCategoryVisible(i);
                     graph.toggleCategory(i, next);
                     chip.setAttribute('aria-pressed', String(next));
-                    chip.classList.toggle('iwac-vis-graph-legend__item--off', !next);
+                    chip.classList.toggle('iwac-vis-type-chip--off', !next);
                 });
                 bar.appendChild(chip);
             });
@@ -252,7 +226,7 @@
                 card.appendChild(ul);
                 if (nb.length > 6) {
                     card.appendChild(P.el('p', 'iwac-vis-graph-card__more',
-                        t('and_n_more', { count: fmt(nb.length - 6) })));
+                        t('and_n_more', { count: nb.length - 6 })));
                 }
             }
 
@@ -312,9 +286,8 @@
         var stage = P.el('div');
         host.appendChild(stage);
 
-        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
         var categories = spec.categories || [];
-        var colorOf = spec.colorOf || function (i) { return palette[i % palette.length]; };
+        var colorOf = spec.colorOf || function (i) { return ns.getSeriesColor(i); };
 
         var graph = ns.ForceGraph.create(stage, {
             nodes: spec.nodes,
@@ -348,12 +321,9 @@
         host.appendChild(buildToolbar(graph, panelEl, spec));
 
         graph.onSelect(function (node) { card.render(node); });
-        // A theme swap re-reads the palette, so the legend swatches have to be
-        // repainted with it — the canvas gets that for free via registerRenderer.
-        graph.onTheme(function () {
-            palette = (ns.getPalette && ns.getPalette()) || palette;
-            legend.refresh();
-        });
+        // The swatches are DOM, not canvas, so a theme swap has to rebuild
+        // them; `colorOf` reads the live palette, so a rebuild is all it takes.
+        graph.onTheme(legend.refresh);
 
         return {
             graph: graph,

@@ -154,7 +154,7 @@
                 values:    activity.values,
                 highlight: activity.highlight,
                 caption:   P.t('references_count', {
-                    count: P.formatNumber(activity.total || 0)
+                    count: activity.total || 0
                 })
             } : null;
             return {

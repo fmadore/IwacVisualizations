@@ -290,7 +290,7 @@
         }
 
         function buildEventsToggle() {
-            var label = P.el('label', 'iwac-vis-scary-check');
+            var label = P.el('label', 'iwac-vis-check');
             var cb = P.el('input');
             cb.type = 'checkbox';
             cb.checked = state.showEvents;

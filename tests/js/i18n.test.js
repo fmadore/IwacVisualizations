@@ -36,7 +36,7 @@ test('locale detection normalizes Omeka locale variants', () => {
 
 test('translations interpolate parameters and fall back to the source key', () => {
     const ns = loadI18n('fr-FR');
-    assert.equal(ns.t('Loading dashboard'), 'Chargement du tableau de bord');
+    assert.equal(ns.t('Download chart'), 'Télécharger le graphique');
     assert.equal(
         ns.t('period_covered', { min: 1950, max: 2024 }),
         'Période couverte : 1950 – 2024'

@@ -69,10 +69,10 @@
         /*  Layout skeleton                                              */
         /* ----------------------------------------------------------- */
 
-        // Fullscreen expands THIS element, not the bare canvas — see the
-        // `fullscreenContainer` note in shared/maplibre.js. The graph is
+        // Fullscreen expands THIS element, not the bare canvas: the graph is
         // read through the toolbar above it and the details sidebar beside
-        // it, and both are inside the layout.
+        // it, and both are inside the layout. One block-level toggle does it
+        // (below) — neither map carries MapLibre's own control.
         var layout = P.el('div', 'iwac-vis-layout--sidebar-end iwac-vis-networks-layout');
         var main = P.el('div', 'iwac-vis-networks-main');
         var aside = P.el('aside', 'iwac-vis-aside iwac-vis-networks-aside');
@@ -135,8 +135,7 @@
         // describe the DATA, which is already here, so they paint immediately.
         var abstractGraph = EN.graph.create(abstractWrap, {
             mode: 'abstract',
-            onSelect: handleSelect,
-            fullscreenContainer: layout
+            onSelect: handleSelect
         });
         var geoGraph = null;
 
@@ -153,12 +152,66 @@
 
         // The panel toolbar's Download button binds to one canvas; with
         // two stacked map canvases (Entities / Places) it must follow
-        // the visible one, or it would export the hidden graph.
+        // the visible one, or it would export the hidden graph. Retargeted
+        // in place: removing and re-adding the button moved it to the end
+        // of the toolbar on every mode switch.
         function retargetDownload(visibleEl) {
-            if (!P.addDownloadButton) return;
-            var btn = graphPanel.panel.querySelector('.iwac-vis-panel-toolbar__btn--download');
-            if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
-            P.addDownloadButton(graphPanel.panel, visibleEl);
+            if (P.setDownloadTarget) P.setDownloadTarget(graphPanel.panel, visibleEl);
+        }
+
+        /* ----------------------------------------------------------- */
+        /*  Toolbar: download, table + CSV, fullscreen                   */
+        /* ----------------------------------------------------------- */
+
+        // Built here rather than left to the maps' auto-attach, so the
+        // buttons exist (and sit in the usual order, fullscreen last) before
+        // MapLibre has landed; the maps' own registration then finds them.
+        if (P.addDownloadButton) P.addDownloadButton(graphPanel.panel, abstractWrap);
+        if (P.addTableButtons) P.addTableButtons(graphPanel.panel, abstractWrap);
+        if (P.addFullscreenButton) {
+            P.addFullscreenButton(graphPanel.panel, {
+                target: layout,
+                stateClass: 'iwac-vis-networks-layout--fullscreen',
+                // The canvas changes size with the layout; MapLibre only
+                // notices a window resize on its own.
+                onResize: function () { activeGraph().resize(); }
+            });
+        }
+
+        // "View as table" / "Download CSV": the graph's own nodes, as the
+        // reader currently filters them. Without rows the two buttons sat
+        // permanently disabled — the map registers no ECharts option for
+        // the table to read back.
+        function tableRows() {
+            var data = activeData();
+            if (!data) return null;
+            var isGeo = mode === 'places';
+            var nodes = data.nodes.filter(function (n) {
+                return isGeo || enabledTypes.indexOf(n.type) !== -1;
+            }).sort(function (a, b) { return (b.count || 0) - (a.count || 0); });
+            if (!nodes.length) return null;
+            var columns = [{ label: P.t(isGeo ? 'Place' : 'Entry'), numeric: false }];
+            if (!isGeo) columns.push({ label: P.t('Type'), numeric: false });
+            columns.push({ label: P.t('Items'), numeric: true });
+            columns.push({ label: P.t('Links'), numeric: true });
+            return {
+                columns: columns,
+                rows: nodes.map(function (n) {
+                    var row = [ctx.siteBase && n.id
+                        ? { text: n.label, href: ctx.siteBase + '/item/' + n.id }
+                        : n.label];
+                    if (!isGeo) {
+                        var type = data.types && data.types[n.type];
+                        row.push(type ? P.t('entity_type_' + type) : '');
+                    }
+                    row.push(n.count || 0, n.degree || 0);
+                    return row;
+                })
+            };
+        }
+
+        function rowsChanged() {
+            if (P.panelRowsChanged) P.panelRowsChanged(graphPanel.panel);
         }
 
         function showPlaces() {
@@ -168,8 +221,7 @@
                 if (!geoGraph) {
                     geoGraph = EN.graph.create(geoWrap, {
                         mode: 'geo',
-                        onSelect: handleSelect,
-                        fullscreenContainer: layout
+                        onSelect: handleSelect
                     });
                     geoGraph.setData(spatialData);
                 } else {
@@ -178,6 +230,7 @@
                 retargetDownload(geoWrap);
                 overviewFor(spatialData, true);
                 syncToolbar();
+                rowsChanged();
                 return;
             }
             if (!spatialPromise) {
@@ -203,6 +256,7 @@
             retargetDownload(abstractWrap);
             overviewFor(globalData, false);
             syncToolbar();
+            rowsChanged();
         }
 
         /* ----------------------------------------------------------- */
@@ -224,6 +278,9 @@
                 } else {
                     showEntities();
                 }
+                // Places may still be loading: the table empties now and
+                // fills when they land, rather than listing the other mode.
+                rowsChanged();
             }
         });
         graphPanel.panel.insertBefore(facetBar.root, graphPanel.chart);
@@ -232,17 +289,22 @@
         graphPanel.panel.insertBefore(toolbar, graphPanel.chart);
 
         // --- Type chips (abstract mode only) --------------------------
-        var palette = (ns.getPalette && ns.getPalette()) || [];
+        // The shared `.iwac-vis-type-chip` — the item-page graphs' legend
+        // control — coloured through `--iwac-vis-entity-color` from the one
+        // type → slot table, so a type is the same colour here as on every
+        // item page. The colour is a custom property, not an inline
+        // background, which is what lets the off state grey the swatch in
+        // plain CSS; `paintChips` re-reads it on a theme swap.
         var enabledTypes = globalData.types.map(function (_t, i) { return i; });
         var chipsWrap = P.el('div', 'iwac-vis-chip-row iwac-vis-networks-typechips');
+        chipsWrap.setAttribute('role', 'group');
+        chipsWrap.setAttribute('aria-label', P.t('Filter by entity type'));
         var chipButtons = [];
         globalData.types.forEach(function (type, idx) {
-            var chip = P.el('button', 'iwac-vis-networks-typechip');
+            var chip = P.el('button', 'iwac-vis-type-chip');
             chip.type = 'button';
             chip.setAttribute('aria-pressed', 'true');
-            var dot = P.el('span', 'iwac-vis-networks-typechip__dot');
-            dot.style.background = palette[idx % palette.length] || '';
-            chip.appendChild(dot);
+            chip.appendChild(P.el('span', 'iwac-vis-type-chip__swatch'));
             chip.appendChild(P.el('span', null, P.t('entity_type_' + type)));
             chip.addEventListener('click', function () {
                 var pos = enabledTypes.indexOf(idx);
@@ -253,17 +315,27 @@
                 } else {
                     return; // never allow zero enabled types
                 }
-                chip.classList.toggle('iwac-vis-networks-typechip--off', enabledTypes.indexOf(idx) === -1);
+                chip.classList.toggle('iwac-vis-type-chip--off', enabledTypes.indexOf(idx) === -1);
                 chip.setAttribute('aria-pressed', enabledTypes.indexOf(idx) === -1 ? 'false' : 'true');
                 abstractGraph.setTypeFilter(enabledTypes);
+                rowsChanged();
             });
             chipButtons.push(chip);
             chipsWrap.appendChild(chip);
         });
         toolbar.appendChild(chipsWrap);
 
+        function paintChips() {
+            chipButtons.forEach(function (chip, idx) {
+                chip.style.setProperty('--iwac-vis-entity-color',
+                    ns.getEntityTypeColor(globalData.types[idx]));
+            });
+        }
+        paintChips();
+        if (typeof ns.registerRenderer === 'function') ns.registerRenderer(chipsWrap, paintChips);
+
         // --- Min-weight select ----------------------------------------
-        var weightLabel = P.el('label', 'iwac-vis-networks-toolbar__label',
+        var weightLabel = P.el('label', 'iwac-vis-toolbar__label',
             P.t('Min. link strength'));
         var weightSelect = P.el('select', 'iwac-vis-control iwac-vis-networks-toolbar__select');
         weightLabel.appendChild(weightSelect);
@@ -289,18 +361,12 @@
         });
 
         // --- Node search (shared debounced dropdown) ---------------------
+        // The shared `.iwac-vis-search` skin; the root keeps a block hook
+        // for the one thing that is the block's own — its place in the row.
         var search = P.buildSearchDropdown({
             placeholder: P.t('Find in network'),
             openOnFocus: true,
-            classes: {
-                root:     'iwac-vis-networks-search',
-                input:    'iwac-vis-control iwac-vis-networks-search__input',
-                dropdown: 'iwac-vis-networks-search__results',
-                item:     'iwac-vis-networks-search__item',
-                name:     'iwac-vis-list__name iwac-vis-networks-search__item-name',
-                count:    'iwac-vis-networks-search__item-count',
-                empty:    'iwac-vis-muted'
-            },
+            classes: { root: 'iwac-vis-search iwac-vis-networks-search' },
             getMatches: function (query) {
                 query = fold(query);
                 var data = activeData();
@@ -332,6 +398,7 @@
         }
 
         fillWeightOptions();
+        if (P.setPanelRows) P.setPanelRows(graphPanel.panel, tableRows);
     }
 
     P.bootBlock({

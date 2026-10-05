@@ -143,7 +143,6 @@
             total:      runs.length,
             noteKey:    'periodicals.runs_window_note',
             allKey:     'periodicals.runs_window_all',
-            showAllKey: 'periodicals.runs_show_all',
             showTopKey: 'periodicals.runs_show_top',
             onToggle:   redraw
         });
@@ -231,7 +230,7 @@
                         return P.t('periodicals.holdings_tip', {
                             name: P.escapeHtml((holdings.periodicals || [])[v[1]] || ''),
                             year: (holdings.years || [])[v[0]],
-                            count: P.formatNumber(v[2])
+                            count: v[2]
                         });
                     }
                 }), true);
@@ -298,10 +297,6 @@
         warnLabel:      'IWACVis periodicals overview',
         requireECharts: true,
         dataFile:       'periodicals-overview.json',
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) loadingLabel.textContent = P.t('Loading periodicals overview') + '…';
-        },
         render:         render
     });
 })();

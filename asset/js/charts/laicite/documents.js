@@ -24,7 +24,9 @@
     /**
      * @param {Object} bundle    laicite-documents.json
      * @param {Object} metadata
-     * @param {Object} opts      {siteBase, frameColors, onFocusYear}
+     * @param {Object} opts      {frameColors, onShowTimeline}
+     *        `onShowTimeline(country)` — a record's year chip opens the
+     *        timeline scoped to its first country
      */
     L.buildDocumentDossier = function (bundle, metadata, opts) {
         opts = opts || {};
@@ -92,15 +94,15 @@
         // The year chip is the cross-link into the timeline: clicking it
         // switches to the trends view scoped to the document's first
         // country, which is how a reader gets from the source to the
-        // coverage it generated. The year rides along for a future
-        // year-focus — the trends view carries no year-window state yet,
-        // so the orchestrator currently discards it.
-        if (doc.year && opts.onFocusYear) {
+        // coverage it generated. The year itself is not passed: the
+        // timeline carries no year-window state, and the orchestrator
+        // discarded it.
+        if (doc.year && opts.onShowTimeline) {
             var yearChip = P.el('button', 'iwac-vis-laicite-chip is-year',
                 String(doc.year));
             yearChip.type = 'button';
             yearChip.addEventListener('click', function () {
-                opts.onFocusYear(doc.year, doc.countries && doc.countries[0]);
+                opts.onShowTimeline(doc.countries && doc.countries[0]);
             });
             flags.appendChild(yearChip);
         }

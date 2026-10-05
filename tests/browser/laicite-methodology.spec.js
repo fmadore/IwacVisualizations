@@ -32,7 +32,9 @@ for (const lang of ['en', 'fr']) {
                         members_total: 5, members_judged: 4, relevant: 3,
                         by_route: { 'tag+text': { judged: 2, relevant: 2 }, 'tag-only': { judged: 1, relevant: 0 } },
                         by_subset: { articles: { judged: 4, relevant: 3 } } } },
-                'laicite-trends.json': { years: [2020, 2021], families: ['laicite'], global: {}, by_country: { Togo: {} }, research },
+                // `research` only: the timeline, the coverage table and the
+                // country list read nothing else from this bundle.
+                'laicite-trends.json': { research },
                 'laicite-concordance.json': { by_subset: { articles: { emitted: 0 } } },
             };
             window.IWACVis.panels.fetchJSON = url => Promise.resolve(bundles[url.split('/').pop()] || null);
@@ -40,7 +42,14 @@ for (const lang of ['en', 'fr']) {
         });
         await page.addScriptTag({ url: '/asset/js/dist/blocks/laicite.min.js' });
         await expect(page.getByRole('heading', { name: lang === 'fr' ? 'Que pouvons-nous observer ?' : 'What can we observe?' })).toBeVisible();
-        await expect(page.locator('meter')).toHaveCount(1);
+        // The coverage meter is the themed span the corpus table draws, not
+        // a native <meter> painted in the browser's own colours.
+        await expect(page.locator('.iwac-vis-laicite-coverage .iwac-vis-laicite-meter')).toHaveCount(1);
+        await expect(page.locator('meter')).toHaveCount(0);
+        // The coverage country is the block's country: picking it here is
+        // picking it on the timeline, and it is in the address.
+        await page.locator('select[data-iwac-control="laicite-coverage-country"]').selectOption('Togo');
+        await expect(page).toHaveURL(/laicite\.country=Togo/);
         // The membership routes are a claim about how wide the dossier is,
         // so they ride beside the tag-vs-text bands, not in a footnote.
         await expect(page.getByText(lang === 'fr'
@@ -59,6 +68,8 @@ for (const lang of ['en', 'fr']) {
         await page.locator('select[data-iwac-control="laicite-view"]').selectOption('trends');
         const country = page.locator('select[data-iwac-control="laicite-trends-country"]');
         const subset = page.locator('select[data-iwac-control="laicite-trends-subset"]');
+        await expect(country).toHaveValue('Togo');
+        await country.selectOption('');
         await country.selectOption('Togo');
         await expect(subset).toHaveValue('articles');
         await expect(country).toHaveValue('Togo');
@@ -143,8 +154,8 @@ for (const lang of ['en', 'fr']) {
         await expect(page.locator('.iwac-vis-kwic-badge')).toHaveCount(0);
         await expect(page.locator('.iwac-vis-laicite-kwic-hidden'))
             .toContainText(lang === 'en'
-                ? '1 records hidden by the strict filter'
-                : '1 documents masqués par le filtre strict');
+                ? '1 record hidden by the strict filter'
+                : '1 document masqué par le filtre strict');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     });
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 // C.scaryTerms race mode — the bar chart race that did not race
-// (asset/js/charts/shared/chart-options-hbar.js, Tier 8 / E2).
+// (asset/js/charts/scary-terms/bars.js, Tier 8 / E2).
 //
 // A bar race is ECharts' `realtimeSort`: EVERY term against a FIXED
 // category axis, ECharts doing the ranking, each bar animating to its new
@@ -28,6 +28,8 @@ function load() {
     for (const f of ['panels.js', 'responsive.js', 'chart-options.js', 'chart-options-bar.js', 'chart-options-hbar.js']) {
         vm.runInContext(read('charts', 'shared', f), context, { filename: f });
     }
+    // The race builder lives beside its one block, extending the same namespace.
+    vm.runInContext(read('charts', 'scary-terms', 'bars.js'), context, { filename: 'scary-terms/bars.js' });
     return context.window.IWACVis;
 }
 

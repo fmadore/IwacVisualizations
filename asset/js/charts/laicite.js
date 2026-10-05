@@ -5,8 +5,9 @@
  *
  *   - overview     KPIs, the tag-vs-text Venn, the per-corpus table,
  *                  the rights note and the frame legend
- *   - trends       annotated timeline, scoped globally / by country / by
- *                  corpus, with a Gregorian-vs-lunar seasonality axis
+ *   - trends       annotated timeline of the research series — corpus ×
+ *                  country × outlet × field × matching rule — with a
+ *                  Gregorian-vs-lunar seasonality axis
  *   - documents    the archival dossier
  *   - concordance  KWIC lines, lazy-loaded per corpus
  *   - collocates   log-likelihood collocates, sliced by source type /
@@ -23,9 +24,10 @@
  *   - bylines      who signs the beat, always beside its denominator
  *   - references   the scholarship, on its own axis
  *
- * Data strategy: the four small bundles (metadata, trends, documents,
- * countries) plus the committed events sidecar load up front — about 60 KB
- * together. The concordance index is small too; the per-corpus KWIC bundles
+ * Data strategy: the three small bundles (metadata, trends, documents)
+ * plus the committed events sidecar load up front — about 60 KB together.
+ * The generator's `laicite-countries.json` is not fetched: nothing here
+ * reads it. The concordance index is small too; the per-corpus KWIC bundles
  * are fetched only when that view first activates, and only for the corpus
  * being browsed. Every Phase 2 and Phase 3 bundle loads the same way, on
  * first activation of the view that needs it.
@@ -35,16 +37,18 @@
  *
  * State lives in one P.createStore; the controls row patches it and the
  * subscriptions at the foot of render() turn a change into a remount, a
- * sync or a redraw. The view, the trends scope, the concordance corpus /
- * frame / query are URL-addressable (`?laicite.view=…`) through
- * P.bindUrlState.
+ * sync or a redraw. Its cross-field rules are `L.laiciteReducer`
+ * (controls.js). The view, the trends scope and outlet, the coverage
+ * grouping and the concordance corpus / frame / query are URL-addressable
+ * (`?laicite.view=…`) through P.bindUrlState.
  *
  * Dependencies (in load order before this file):
  *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js → panels.js →
  *   pagination.js → facet-buttons.js → maplibre stack → annotated-timeline.js →
- *   concordance.js → laicite/{i18n,helpers,overview,trends,documents,
- *   concordance,collocates,corpora,actors,arenas,sentiment,map,semantic,
- *   circulation,bylines,references,controls}.js
+ *   concordance.js → table.js → store.js → laicite/{i18n,helpers,overview,
+ *   research,trends,documents,concordance,collocates,corpora,actors,arenas,
+ *   sentiment,map,semantic,circulation,bylines,references,controls}.js
+ *   (the block bundle in asset/js/bundles.json is the source of truth)
  */
 (function () {
     'use strict';
@@ -61,7 +65,6 @@
         metadata:    'laicite-metadata.json',
         trends:      'laicite-trends.json',
         documents:   'laicite-documents.json',
-        countries:   'laicite-countries.json',
         events:      'laicite-events.json',
         concordance: 'laicite-concordance.json',
         collocates:  'laicite-collocates.json',
@@ -91,7 +94,6 @@
                 P.fetchJSON(ctx.dataBase + DATA_FILES.metadata),
                 optional('trends'),
                 optional('documents'),
-                optional('countries'),
                 optional('events'),
                 optional('concordance')
             ]);
@@ -101,9 +103,8 @@
                 metadata:    results[0],
                 trends:      results[1],
                 documents:   results[2],
-                countries:   results[3],
-                events:      results[4],
-                concordance: results[5]
+                events:      results[3],
+                concordance: results[4]
             }, ctx);
         }
     });
@@ -164,6 +165,7 @@
             trendsPrecision: '',
             trendsOutlet: '',
             trendsAxis: 'years',
+            coveragePeriod: '',
             seasonSubset: 'articles',
             colScope: 'by_language',
             colSlice: null,
@@ -178,6 +180,7 @@
             sentModel: '',
             mapFrame: '',
             mapCountry: '',
+            semanticFacet: '',
             refType: ''
         };
 
@@ -201,51 +204,18 @@
         // subscriptions at the foot of this function turn a change into a
         // remount (view), a sync (anything) and a redraw. The cross-field
         // rules that six change handlers used to apply by hand — a corpus
-        // clears the country and vice versa, a scope resets its slice, a
-        // frame clears the map country — live in the reducer, once.
-        var trendsCountries = trends && trends.by_country
-            ? Object.keys(trends.by_country).sort() : [];
-        // The four country keys are ONE choice (S4). Each view spells its
-        // empty value differently — the timeline uses null, the three select-
-        // driven views use '' — and they used to move independently, so a
-        // reader who picked Togo on the timeline had to pick it again on the
-        // map, the arenas and the concordance. The reducer keeps them in
-        // step, and only for a country the dossier actually holds: an unknown
-        // value would narrow a view to nothing.
-        var COUNTRY_KEYS = ['trendsCountry', 'kwicCountry', 'arenaCountry', 'mapCountry'];
-        if (trends && trends.research) {
-            trendsCountries = Array.from(new Set(trends.research.cells.map(function (r) { return r.country; }).filter(Boolean))).sort();
-        }
-        var knownCountries = (metadata.countries || []).slice();
+        // resets its outlet, a scope resets its slice, a frame clears the
+        // map country, one country key moves all four — live in the
+        // reducer, once.
+        var research = trends && trends.research;
+        var trendsCountries = L.researchCountries(research);
+        var allOutlets = [];
+        L.SUBSETS.forEach(function (subset) {
+            allOutlets = allOutlets.concat(L.researchOutlets(research, subset));
+        });
 
         var store = P.createStore(state, {
-            reduce: function (st, changed) {
-                var extra = {};
-                var has = function (k) { return changed.indexOf(k) !== -1; };
-                if (has('trendsSubset')) extra.trendsOutlet = '';
-                if (has('colScope')) extra.colSlice = null;
-                if (has('kwicSubset')) extra.kwicCountry = '';
-                if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
-                if (has('mapCountry') && st.mapCountry) extra.mapFrame = '';
-
-                // Whichever country key the reader touched wins for all four.
-                var moved = null;
-                for (var i = 0; i < COUNTRY_KEYS.length; i++) {
-                    if (has(COUNTRY_KEYS[i])) { moved = COUNTRY_KEYS[i]; break; }
-                }
-                if (moved) {
-                    var value = st[moved] || '';
-                    var shareable = !value || knownCountries.indexOf(value) !== -1;
-                    if (shareable) {
-                        COUNTRY_KEYS.forEach(function (k) {
-                            if (k === moved) return;
-                            // null for the timeline, '' for the selects.
-                            extra[k] = k === 'trendsCountry' ? (value || null) : value;
-                        });
-                    }
-                }
-                return extra;
-            }
+            reduce: L.laiciteReducer(metadata.countries)
         });
 
         // The citable state is addressable: `?laicite.view=trends&
@@ -260,6 +230,11 @@
                 { key: 'trendsField', param: 'field', values: ['title', 'fulltext', 'union'] },
                 { key: 'trendsMetric', param: 'metric', values: ['rate', 'matches', 'hits'] },
                 { key: 'trendsPrecision', param: 'precision', values: ['', 'broad_'] },
+                // Any corpus's outlet: a URL naming both the corpus and the
+                // outlet hydrates them in one patch, before the corpus the
+                // outlet belongs to is in the state to check against.
+                { key: 'trendsOutlet', param: 'outlet', values: allOutlets },
+                { key: 'coveragePeriod', param: 'coverage', values: ['', 'decade'] },
                 { key: 'kwicSubset', param: 'corpus', values: available },
                 { key: 'kwicFrame', param: 'frame', values: frames },
                 { key: 'kwicQuery', param: 'q' },
@@ -273,16 +248,19 @@
         var lazy = {};
         var lazyPending = {};
 
-        function ensure(names, after) {
+        /**
+         * True once every named bundle has settled (loaded or failed). If
+         * one is still missing, request it and return false; its arrival
+         * remounts the controls and redraws.
+         */
+        function ensure(names) {
             var missing = names.filter(function (n) {
                 return lazy[n] === undefined && !lazyPending[n];
             });
             if (!missing.length) {
-                var ready = names.every(function (n) {
+                return names.every(function (n) {
                     return lazy[n] !== undefined;
                 });
-                if (ready && after) after();
-                return ready;
             }
             missing.forEach(function (name) {
                 lazyPending[name] = true;
@@ -324,9 +302,8 @@
             controlsEl: controlsEl,
             store: store,
             metadata: metadata,
-            countries: metadata.countries || [],
             trendsCountries: trendsCountries,
-            research: trends && trends.research,
+            research: research,
             trailing: url && P.buildCopyLinkButton
                 ? P.buildCopyLinkButton({ href: url.href })
                 : null,
@@ -381,7 +358,7 @@
                     store.patch({ seasonSubset: subsets[0] }, { silent: true });
                 }
                 currentInstance.setOption(
-                    L.seasonalityOption(season, state.seasonSubset, metadata),
+                    L.seasonalityOption(season, state.seasonSubset),
                     { notMerge: true, lazyUpdate: true });
                 var note = P.el('div', 'iwac-vis-laicite-season-note');
                 note.appendChild(P.el('p', null, P.t('laicite.seasonality_desc')));
@@ -392,25 +369,17 @@
                         items: P.formatNumber(cov.items || 0)
                     })));
                 detailsHost.appendChild(note);
-                if (L.researchTable && cov.gregorian_exposure) {
-                    var seasonEvidence = P.el('details');
-                    seasonEvidence.appendChild(P.el('summary', null, P.t('laicite.research_inspect')));
-                    ['gregorian', 'hijri'].forEach(function (calendar) {
-                        seasonEvidence.appendChild(P.el('h5', null, P.t('laicite.' + calendar)));
-                        var names = P.t('laicite.' + (calendar === 'gregorian' ? 'months' : 'hijri_months')).split(',');
-                        seasonEvidence.appendChild(L.researchTable([P.t('laicite.' + calendar),
-                            P.t('laicite.research_selected'), P.t('laicite.research_eligible')], names.map(function (name, i) {
-                            return [name, cov[calendar][i], cov[calendar + '_exposure'][i]];
-                        })));
-                    });
-                    detailsHost.appendChild(seasonEvidence);
-                }
+                var seasonEvidence = L.buildSeasonalityEvidence(cov);
+                if (seasonEvidence) detailsHost.appendChild(seasonEvidence);
                 return;
             }
 
             chartTitle.textContent = L.trendsTitle(state);
             currentInstance.hideLoading();
-            if (!trends) {
+            // `research` is the only series this view draws; a bundle
+            // without it (the generator always writes it, and
+            // validate_data.py requires it) gets the empty state.
+            if (!research) {
                 currentInstance.setOption(
                     P.emptyChartOption('Visualization data is not available yet.'),
                     { notMerge: true });
@@ -425,7 +394,7 @@
                 compact: P.isCompact(chartEl)
             });
             currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
-            if (L.buildTrendEvidence) detailsHost.appendChild(L.buildTrendEvidence(trends, state));
+            detailsHost.appendChild(L.buildTrendEvidence(trends, state));
             if (events && state.trendsSubset !== 'references') {
                 var details = L.buildEventsDetails(events, state, siteBase);
                 if (details) detailsHost.appendChild(details);
@@ -438,6 +407,15 @@
          * in-place update path below (Tier 8 / S17).
          */
         var active = null;
+
+        /** Views whose built root is kept across switches, by key. */
+        var parked = {};
+
+        function isParked(node) {
+            return Object.keys(parked).some(function (k) {
+                return parked[k].root === node;
+            });
+        }
 
         function draw() {
             // A change WITHIN the current view, to a view that can absorb
@@ -460,31 +438,37 @@
             // are thrown away — every lazy view builds fresh ones, and until
             // v1.59.0 each visit to the sentiment view left four ECharts
             // instances alive behind detached nodes and each visit to the
-            // map view leaked a WebGL context. Two children are parked, not
-            // rebuilt, and must survive: the trends chart panel and the
-            // concordance host.
+            // map view leaked a WebGL context. Parked children are kept, not
+            // rebuilt, and must survive: the trends chart panel, the
+            // concordance host and every `mountParked` root. The map was
+            // parked under `parked.map` while this guard checked
+            // `parked.places`, so leaving the map removed it and coming back
+            // re-attached a dead canvas.
             if (ns.disposeWithin) {
                 for (var i = viewHost.children.length - 1; i >= 0; i--) {
                     var outgoing = viewHost.children[i];
                     if (outgoing === chartPanel || outgoing === concordance.host) continue;
-                    if (parked.places && outgoing === parked.places.root) continue;
+                    if (isParked(outgoing)) continue;
                     ns.disposeWithin(outgoing);
                 }
             }
             viewHost.innerHTML = '';
             if (state.view === 'overview') {
-                viewHost.appendChild(L.buildVenn(metadata, function (cell) {
-                    // "Tagged, never says it" has no concordance lines by
-                    // definition — those items carry no text match — so the
-                    // Venn only routes the two cells that do.
-                    if (cell === 'tagged_only') return;
+                // Only the two Venn cells with text matches route to the
+                // concordance; buildVenn disables the third.
+                viewHost.appendChild(L.buildVenn(metadata, function () {
                     store.patch({ view: 'concordance' });
                 }));
                 viewHost.appendChild(L.buildSubsetTable(metadata));
-                if (L.buildResearch) viewHost.appendChild(L.buildResearch(trends && trends.research, metadata));
+                var coverage = L.buildResearch(research, metadata, store);
+                viewHost.appendChild(coverage.root);
                 viewHost.appendChild(L.buildVideos(metadata, siteBase));
                 viewHost.appendChild(L.buildRightsNote(metadata));
                 viewHost.appendChild(L.buildFrameLegend(metadata, frameColors));
+                // The coverage pickers are block state now, so their change
+                // reaches draw(); repaint the two tables in place rather
+                // than rebuilding the overview under the reader's focus.
+                active = { key: 'overview', built: coverage };
             } else if (state.view === 'trends') {
                 viewHost.appendChild(chartPanel);
                 drawTrends();
@@ -500,13 +484,11 @@
                 viewHost.appendChild(L.buildSourceComparisons(siteBase));
                 viewHost.appendChild(L.buildDocumentDossier(
                     bundle.documents, metadata, {
-                        siteBase: siteBase,
                         frameColors: frameColors,
-                        onFocusYear: function (year, country) {
+                        onShowTimeline: function (country) {
                             var changes = { view: 'trends' };
                             if (country) changes.trendsCountry = country;
                             store.patch(changes);
-                            void year;
                         }
                     }));
             } else if (state.view === 'concordance') {
@@ -520,17 +502,13 @@
                 viewHost.appendChild(L.buildCollocates({
                     bundle: lazy.collocates,
                     implicit: lazy.implicit,
-                    metadata: metadata,
-                    state: state,
-                    siteBase: siteBase
+                    state: state
                 }));
             } else if (state.view === 'corpora') {
                 mountLazy('corpora', function () {
                     return L.buildCorpora({
                         bundle: lazy.corpora,
-                        metadata: metadata,
-                        state: state,
-                        frameColors: frameColors
+                        metadata: metadata
                     });
                 });
             } else if (state.view === 'actors') {
@@ -579,7 +557,10 @@
                         metadata: metadata,
                         state: state,
                         frameColors: frameColors,
-                        siteBase: siteBase
+                        siteBase: siteBase,
+                        onFacet: function (facet) {
+                            store.patch({ semanticFacet: facet });
+                        }
                     });
                 });
             } else if (state.view === 'circulation') {
@@ -621,15 +602,13 @@
             active = { key: state.view, built: built };
         }
 
-        /** Views whose built root is kept across switches, by key. */
-        var parked = {};
-
         /**
          * `mountLazy` for a view that is expensive to rebuild: the first
          * visit builds and remembers it, later visits re-attach the same
          * nodes and re-run its `update`. The same shape scary-terms uses for
-         * its map. `draw()` skips a parked root when disposing the outgoing
-         * view, and re-attaching is what makes MapLibre re-measure.
+         * its map. `draw()` skips every parked root when disposing the
+         * outgoing view (`isParked`), and re-attaching is what makes
+         * MapLibre re-measure.
          */
         function mountParked(bundleName, key, build) {
             if (!ensure([bundleName])) {

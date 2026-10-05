@@ -132,7 +132,10 @@ function load() {
         console,
         document,
         setTimeout, clearTimeout,
-        window: { IWACVis: { t: (k) => k, locale: 'en' } },
+        // getChartTokens as iwac-theme.js serves it with no stylesheet: every
+        // key filled from the theme's fallbacks, which is what lets the
+        // heatmap ramp degrade to two stops instead of carrying literals.
+        window: { IWACVis: { t: (k) => k, locale: 'en', getChartTokens: () => ({ surface: '#fdfcfb', primary: '#ce4115' }) } },
     };
     context.window.document = document;
     vm.createContext(context);

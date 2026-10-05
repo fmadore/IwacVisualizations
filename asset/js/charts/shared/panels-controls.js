@@ -330,6 +330,10 @@
      * Class names default to the shared `.iwac-vis-tabs` family and may be
      * overridden per block so existing stylesheets keep matching.
      *
+     * A button the caller disables (an option with nothing behind it right
+     * now) is skipped by the arrow keys, Home and End, the way a disabled
+     * radio is: focus never lands where Enter would do nothing.
+     *
      * @param {Object} cfg
      * @param {Array<{key:string, label:string}>} cfg.options
      * @param {string} [cfg.active]      initially pressed key
@@ -399,16 +403,20 @@
                     if (buttons[order[i]] === e.target) { idx = i; break; }
                 }
                 if (idx === -1 || !order.length) return;
-                var next;
+                var start, step;
                 switch (e.key) {
-                    case 'ArrowRight': case 'ArrowDown': next = (idx + 1) % order.length; break;
-                    case 'ArrowLeft':  case 'ArrowUp':   next = (idx - 1 + order.length) % order.length; break;
-                    case 'Home': next = 0; break;
-                    case 'End':  next = order.length - 1; break;
+                    case 'ArrowRight': case 'ArrowDown': start = idx + 1; step = 1; break;
+                    case 'ArrowLeft':  case 'ArrowUp':   start = idx - 1; step = -1; break;
+                    case 'Home': start = 0; step = 1; break;
+                    case 'End':  start = order.length - 1; step = -1; break;
                     default: return;
                 }
                 e.preventDefault();
-                buttons[order[next]].focus();
+                // Walk (wrapping) to the first enabled button; at most one lap.
+                for (var n = 0; n < order.length; n++) {
+                    var key = order[(((start + step * n) % order.length) + order.length) % order.length];
+                    if (!buttons[key].disabled) { buttons[key].focus(); return; }
+                }
             });
         }
 
@@ -524,6 +532,11 @@
      * NOT for filterable list boxes (spatial-exploration's picker keeps
      * its always-visible role=listbox — different widget).
      *
+     * Styled by the shared `.iwac-vis-search` family in iwac-core.css; its
+     * results are `.iwac-vis-list-item` rows, the same row the Entity
+     * Networks sidebar and the spatial picker list. The two callers used to
+     * pass their own class family each and restyle the same dropdown twice.
+     *
      * @param {Object} cfg
      * @param {string} cfg.placeholder  translated placeholder + aria-label
      * @param {function(string):Array<{label:string, detail?:string}>} cfg.getMatches
@@ -533,15 +546,26 @@
      *   cleared and the dropdown closed before this fires)
      * @param {string} [cfg.emptyText]  "no matches" row (default t('No matches'))
      * @param {boolean} [cfg.openOnFocus=false]  re-open on input focus
-     * @param {Object} cfg.classes  per-block class names so existing CSS
-     *   keeps working: { root, input, dropdown, item, name, count, empty }
+     * @param {Object} [cfg.classes]  override any of the shared class names
+     *   { root, input, dropdown, item, name, count, empty } — typically just
+     *   `root`, to add a block hook for the widget's place in its row
      * @returns {{root:HTMLElement, input:HTMLInputElement,
      *            close:function():void, clear:function():void}}
      */
+    var SEARCH_CLASSES = {
+        root:     'iwac-vis-search',
+        input:    'iwac-vis-search__input',
+        dropdown: 'iwac-vis-search__results',
+        item:     'iwac-vis-list-item iwac-vis-search__item',
+        name:     'iwac-vis-list__name',
+        count:    'iwac-vis-list-item__count',
+        empty:    'iwac-vis-search__empty'
+    };
+
     P.buildSearchDropdown = function (cfg) {
-        var classes = cfg.classes || {};
+        var classes = Object.assign({}, SEARCH_CLASSES, cfg.classes || {});
         var wrap = P.el('div', classes.root);
-        var input = P.el('input', 'iwac-vis-control ' + (classes.input || 'iwac-vis-search-input'));
+        var input = P.el('input', 'iwac-vis-control ' + classes.input);
         input.type = 'search';
         input.placeholder = cfg.placeholder;
         input.setAttribute('aria-label', cfg.placeholder);
@@ -561,7 +585,7 @@
             }
             var matches = cfg.getMatches(query) || [];
             if (!matches.length) {
-                dropdown.appendChild(P.el('div', classes.empty || 'iwac-vis-muted',
+                dropdown.appendChild(P.el('div', classes.empty,
                     cfg.emptyText || P.t('No matches')));
                 dropdown.style.display = '';
                 return;
@@ -593,8 +617,12 @@
                 e.preventDefault();
                 var first = dropdown.querySelector('button');
                 if (first) first.click();
-            } else if (e.key === 'Escape') {
+            } else if (e.key === 'Escape' && dropdown.style.display !== 'none') {
+                // An open list is the innermost thing to dismiss: Escape
+                // closes it and stops there, rather than also leaving a
+                // fullscreen overlay the widget sits in (P.bindFullscreen).
                 close();
+                e.stopPropagation();
             }
         });
         if (cfg.openOnFocus) input.addEventListener('focus', renderResults);

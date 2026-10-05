@@ -323,7 +323,7 @@
             extent: extent,
             countName: P.t('Articles'),
             countNote: function (n) {
-                return P.t('sentiment.rated_n', { count: P.formatNumber(n) });
+                return P.t('sentiment.rated_n', { count: n });
             },
             // LDA term pairs run long; newspaper mastheads do not.
             labelWidth: kind === 'topic' ? 264 : 170
@@ -390,7 +390,7 @@
                             ? '—'
                             : P.t('sentiment.subj_tooltip', {
                                 value: P.formatNumber(p.value),
-                                count: P.formatNumber(n)
+                                count: n
                             });
                         lines.push(p.marker + ' ' + P.escapeHtml(p.seriesName) + ': ' + value);
                     });
@@ -442,7 +442,7 @@
                     country: P.escapeHtml(countries[v[1]] || ''),
                     year: years[v[0]],
                     value: P.formatNumber(v[2]),
-                    count: P.formatNumber((p.data && p.data.n) || 0)
+                    count: (p.data && p.data.n) || 0
                 });
             }
         });
@@ -507,7 +507,7 @@
                     la: P.escapeHtml(labels[p.value[1]] || ''),
                     b: P.escapeHtml(labelB),
                     lb: P.escapeHtml(labels[p.value[0]] || ''),
-                    count: P.formatNumber(p.value[2] || 0)
+                    count: p.value[2] || 0
                 });
             }
         });
@@ -528,7 +528,7 @@
                     ? '—'
                     : P.t('sentiment.pct_value', { pct: P.formatNumber(entry.agreement_pct) })));
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label',
-                P.t('sentiment.co_rated', { count: P.formatNumber(entry.co_rated || 0) })));
+                P.t('sentiment.co_rated', { count: entry.co_rated || 0 })));
             cardsEl.appendChild(card);
         });
         return cardsEl;
@@ -776,7 +776,7 @@
         function updateNaNote() {
             var model = data.models[state.model] || {};
             h.naNote.textContent = P.t('sentiment.na_note', {
-                count: P.formatNumber(model.not_applicable || 0)
+                count: model.not_applicable || 0
             });
         }
         updateNaNote();
@@ -786,7 +786,7 @@
                 buildExtremes(data, state.model, state.exCategory, state.exType));
             var bucket = ((data.models[state.model] || {}).extremes || {})[state.exCategory] || {};
             h.extremesNote.textContent = P.t('sentiment.extremes_n', {
-                count: P.formatNumber(bucket.n || 0)
+                count: bucket.n || 0
             });
         }
 
@@ -989,10 +989,6 @@
         selector:       '.iwac-vis-sentiment-atlas',
         warnLabel:      'IWACVis sentiment atlas',
         requireECharts: true,
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) loadingLabel.textContent = P.t('Loading sentiment atlas') + '…';
-        },
         load:           function (ctx) {
             return P.fetchJSON(ctx.dataBase + 'sentiment-atlas.json');
         },

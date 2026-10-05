@@ -20,8 +20,11 @@
     ns.addTranslations('en', {
         'spatial_pick_hint':         'Choose a person, organisation, event, subject or place to map locations associated with the same records. Without a selection, the map shows the places available in the mapped data.',
         'places_count':              '{count} places',
+        'places_count_one':          '{count} place',
+        'places_count_other':        '{count} places',
         'spatial_map_description':   'Larger bubbles indicate places linked to more items through catalogue tags. Only places with known coordinates can be mapped. The map reflects the collection’s records, so an unmarked place may simply lack cataloguing or coordinates. Hover for a preview, or click a place for the item list.',
         'admin_units_count':         '{count} units',
+        'admin_units_count_one':     '{count} unit',
         'more_items_click':          '{count} more \u2014 click for the full list',
     });
 
@@ -30,7 +33,9 @@
         'Pick an entity':            'Choisir une entit\u00e9',
         'spatial_pick_hint':         'Choisissez une personne, une organisation, un événement, un sujet ou un lieu pour situer les lieux associés aux mêmes notices. Sans sélection, la carte affiche les lieux disponibles dans les données cartographiques.',
         'places_count':              '{count} lieux',
-        'View item page':            'Voir la fiche de l\u2019\u00e9l\u00e9ment',
+        'places_count_one':          '{count} lieu',
+        'places_count_other':        '{count} lieux',
+        'View item page':            'Voir la fiche du document',
         'Top places':                'Principaux lieux',
         'Map mode':                  'Mode de carte',
         'Place bubbles':             'Bulles de lieux',
@@ -45,8 +50,13 @@
         'Square root':               'Racine carr\u00e9e',
         'spatial_map_description':   'Les bulles les plus grandes indiquent les lieux associés à davantage de documents par les mots-clés du catalogue. Seuls les lieux aux coordonnées connues peuvent être cartographiés. La carte reflète les notices de la collection : un lieu absent peut simplement manquer d’indexation ou de coordonnées. Survolez un lieu pour un aperçu ou cliquez pour voir les documents.',
         'admin_units_count':         '{count} unit\u00e9s',
+        'admin_units_count_one':     '{count} unit\u00e9',
         'No administrative data':    'Aucune donn\u00e9e administrative',
         'No mapped places':          'Aucun lieu cartographi\u00e9',
         'more_items_click':          '{count} de plus \u2014 cliquer pour la liste compl\u00e8te',
+        'Regions':                   'R\u00e9gions',
+        'Region':                    'R\u00e9gion',
+        'Prefectures':               'Pr\u00e9fectures',
+        'Prefecture':                'Pr\u00e9fecture',
     });
 })();

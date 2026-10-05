@@ -20,6 +20,7 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     var PAGE_SIZE = 25;
@@ -96,9 +97,7 @@
         var palette = (ns.getPalette && ns.getPalette()) || [];
         var R = ns.responsive;
         var base = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 56, top: 32, bottom: 52 })
-                : { left: 56, right: 24, top: 32, bottom: 52, containLabel: true },
+            grid: C._grid({ left: 56, top: 32, bottom: 52 }),
             tooltip: { trigger: 'axis', confine: true, axisPointer: { type: 'shadow' } },
             xAxis: {
                 type: 'category',
@@ -109,12 +108,8 @@
                 axisLabel: { rotate: years.length > 20 ? 45 : 0 }
             },
             yAxis: Object.assign({ type: 'value' },
-                (ns.chartOptions && ns.chartOptions._valueAxisName)
-                    ? ns.chartOptions._valueAxisName(P.t('laicite.references_axis'))
-                    : { name: P.t('laicite.references_axis') }),
-            dataZoom: (ns.chartOptions && ns.chartOptions._dataZoom)
-                ? ns.chartOptions._dataZoom(years.length, { threshold: 30 })
-                : [],
+                C._valueAxisName(P.t('laicite.references_axis'))),
+            dataZoom: C._dataZoom(years.length, { threshold: 30 }),
             series: [{
                 type: 'bar',
                 name: P.t('laicite.references_axis'),
@@ -131,9 +126,9 @@
     function buildBreakdown(bundle) {
         var wrap = P.el('div', 'iwac-vis-laicite-breakdown');
         [
-            { key: 'laicite.references_by_type', data: bundle.by_type },
-            { key: 'laicite.references_by_language', data: bundle.by_language },
-            { key: 'laicite.references_by_country', data: bundle.by_country }
+            { key: 'Type', data: bundle.by_type },
+            { key: 'Language', data: bundle.by_language },
+            { key: 'Country', data: bundle.by_country }
         ].forEach(function (group) {
             var keys = Object.keys(group.data || {});
             if (!keys.length) return;
@@ -171,7 +166,7 @@
 
         function paint() {
             count.textContent = P.t('laicite.references_count',
-                { count: P.formatNumber(items.length) });
+                { count: items.length });
             list.innerHTML = '';
             list.setAttribute('start', String(page * PAGE_SIZE + 1));
             items.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
@@ -206,7 +201,7 @@
         var title;
         if (siteBase && work.o_id) {
             title = P.el('a', 'iwac-vis-laicite-work-title', work.title);
-            title.href = siteBase + '/item/' + work.o_id;
+            title.href = P.itemUrl(siteBase, work.o_id);
         } else {
             title = P.el('span', 'iwac-vis-laicite-work-title', work.title);
         }
@@ -238,7 +233,7 @@
         }
         if (work.occurrences) {
             flags.appendChild(L.chip(
-                P.t('laicite.occurrences') + ' ' + P.formatNumber(work.occurrences),
+                P.t('Occurrences') + ' ' + P.formatNumber(work.occurrences),
                 'is-count'));
         }
         (work.countries || []).forEach(function (country) {

@@ -30,7 +30,6 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Loading press bylines':  'Loading press bylines',
             'bylines.card_signed':    'Signed articles',
             'bylines.card_pct':       'Share of all articles (%)',
             'bylines.card_unique':    'Distinct bylines',
@@ -46,7 +45,6 @@
             'bylines.topics':         'Frequent subjects'
         });
         ns.addTranslations('fr', {
-            'Loading press bylines':  'Chargement des signatures de presse',
             'bylines.card_signed':    'Articles signés',
             'bylines.card_pct':       'Part de tous les articles (%)',
             'bylines.card_unique':    'Signatures distinctes',

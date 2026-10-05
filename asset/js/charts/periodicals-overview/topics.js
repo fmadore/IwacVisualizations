@@ -102,7 +102,7 @@
                     // year readable as thin rather than as a real signal.
                     footer: function (i) {
                         return P.t('periodicals.topics_year_issues', {
-                            count: P.formatNumber((prevalence.n_docs || [])[i] || 0)
+                            count: (prevalence.n_docs || [])[i] || 0
                         });
                     }
                 })

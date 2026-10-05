@@ -1,34 +1,87 @@
-/** Source coverage and inspectable annual numerators/denominators. */
+/**
+ * IWAC Visualizations — Laïcité block: the research evidence (issue #14).
+ *
+ * What the collection makes observable — the coverage table and its
+ * sensitivity check — plus the inspectable numbers behind every summary:
+ * the timeline's annual numerators and denominators, the seasonality
+ * months, the matched-sentiment comparison, the two editorial source
+ * comparisons and the model-assisted relevance screen. The tables here are
+ * the evidence the charts compress, so each one is a real table: a reader
+ * can check a rate against its denominator without opening the JSON.
+ *
+ * All of it reads `trends.research`, the per corpus × country × outlet ×
+ * year cells, or the metadata bundle; nothing here fetches.
+ */
 (function () {
     'use strict';
+
     var ns = window.IWACVis;
-    if (!ns || !ns.panels) return;
+    if (!ns || !ns.panels) {
+        console.warn('IWACVis.laicite research: missing panels — check load order');
+        return;
+    }
     var P = ns.panels;
     var L = ns.laicite = ns.laicite || {};
 
-    function table(headers, rows) {
-        var wrap = P.el('div', 'iwac-vis-table-wrapper');
-        wrap.tabIndex = 0;
-        var t = P.el('table', 'iwac-vis-table');
-        var head = P.el('thead');
-        var tr = P.el('tr');
-        headers.forEach(function (h) { var th = P.el('th', 'iwac-vis-table__header', h); th.scope = 'col'; tr.appendChild(th); });
-        head.appendChild(tr); t.appendChild(head);
-        var body = P.el('tbody');
-        rows.forEach(function (r) {
-            var row = P.el('tr');
-            r.forEach(function (v, i) {
-                var cell = P.el(i ? 'td' : 'th', 'iwac-vis-table__cell', String(v));
-                cell.setAttribute('data-label', headers[i]);
-                if (!i) cell.scope = 'row';
-                row.appendChild(cell);
-            });
-            body.appendChild(row);
-        });
-        t.appendChild(body); wrap.appendChild(t); return wrap;
-    }
     function text(key) { return P.t('laicite.' + key); }
-    L.researchTable = table;
+
+    /**
+     * An evidence table: `P.buildTable` fed positional rows.
+     *
+     * The shared table brings what the hand-built one here lacked: the ARIA
+     * roles, the card roles that turn it into labelled records below `sm`
+     * (the old `data-label` attributes matched no rule anywhere, so on a
+     * phone these scrolled sideways), and locale formatting — "12345" used
+     * to print bare on the French site.
+     *
+     * A header is a label, or a column spec (`{label, render, card}`) handed
+     * through to buildTable; a function render owns its cell. A column whose
+     * values are all numbers renders as `'number'`; a number in a mixed
+     * column (a count beside an em dash) is formatted here, so no cell
+     * prints an unformatted figure. Years go in as strings — a locale
+     * formatter writes 1995 as "1,995".
+     *
+     * @param {Array<string|Object>} headers
+     * @param {Array<Array<*>>} rows
+     * @returns {HTMLElement}  the table wrapper
+     */
+    L.researchTable = function (headers, rows) {
+        var columns = headers.map(function (h, i) {
+            var col = typeof h === 'string' ? { label: h } : Object.assign({}, h);
+            col.key = 'c' + i;
+            if (!col.render) {
+                var numeric = rows.length > 0 && rows.every(function (r) {
+                    return r[i] == null || typeof r[i] === 'number';
+                });
+                col.render = numeric ? 'number' : 'text';
+            }
+            return col;
+        });
+        var objects = rows.map(function (r) {
+            var row = {};
+            columns.forEach(function (col, i) {
+                var v = r[i];
+                row[col.key] = col.render === 'text' && typeof v === 'number'
+                    ? P.formatNumber(v) : v;
+            });
+            return row;
+        });
+        return P.buildTable({ columns: columns, rows: objects }).root;
+    };
+
+    /** The countries the research cells are split by, sorted. */
+    L.researchCountries = function (bundle) {
+        return Array.from(new Set(((bundle || {}).cells || []).map(function (r) {
+            return r.country;
+        }).filter(Boolean))).sort();
+    };
+
+    /** The outlets one corpus's research cells name, sorted. */
+    L.researchOutlets = function (bundle, subset) {
+        return Array.from(new Set(((bundle || {}).cells || []).filter(function (r) {
+            return r.subset === subset && r.outlet;
+        }).map(function (r) { return r.outlet; }))).sort();
+    };
 
     L.buildMatchedSentiment = function (data) {
         var root = P.el('details');
@@ -39,10 +92,13 @@
             var heading = prop === 'polarite' ? 'polarity' : prop === 'centralite' ? 'centrality' : 'subjectivity';
             root.appendChild(P.el('h5', null, text('research_' + heading)));
             root.appendChild(P.el('p', null, P.t('laicite.research_matched_n', d)));
-            root.appendChild(table([text('research_label'), text('research_selected'), text('research_controls')],
+            var share = function (n) {
+                return d.matched ? L.formatPercent(L.pct(n || 0, d.matched)) : '—';
+            };
+            root.appendChild(L.researchTable(
+                [text('research_label'), text('research_selected'), text('research_controls')],
                 Array.from(new Set(Object.keys(d.dossier).concat(Object.keys(d.weighted_controls)))).sort().map(function (k) {
-                    return [P.t(k), d.matched ? (100 * (d.dossier[k] || 0) / d.matched).toFixed(1) + '%' : '—',
-                        d.matched ? (100 * (d.weighted_controls[k] || 0) / d.matched).toFixed(1) + '%' : '—'];
+                    return [P.t(k), share(d.dossier[k]), share(d.weighted_controls[k])];
                 })));
         });
         return root;
@@ -53,7 +109,7 @@
         root.appendChild(P.el('h4', null, text('research_cases')));
         ['76294', '11382'].forEach(function (id) {
             var link = P.el('a', null, text('research_case_' + id));
-            link.href = siteBase + '/item/' + id;
+            link.href = P.itemUrl(siteBase, id);
             root.appendChild(link);
             root.appendChild(P.el('p', null, text('research_case_note_' + id)));
         });
@@ -98,12 +154,40 @@
         var r = L.researchSeries(trends.research, state);
         var details = P.el('details');
         details.appendChild(P.el('summary', null, text('research_inspect')));
-        details.appendChild(table([text('research_year'), text('research_matches'), text('research_hits'),
+        details.appendChild(L.researchTable([P.t('Year'), text('research_matches'), text('research_hits'),
             text('research_eligible'), text('research_records')], r.years.map(function (y) {
             var c = r.evidence[y] || { matches: 0, hits: 0, eligible: 0, records: 0 };
-            return [y, c.matches, c.hits, c.eligible, c.records];
+            return [String(y), c.matches, c.hits, c.eligible, c.records];
         })));
         root.appendChild(details); return root;
+    };
+
+    /**
+     * The month counts behind the seasonality chart: for each calendar,
+     * the dossier documents and the eligible documents per month — the
+     * numerator and the denominator of every bar. Null when the bundle
+     * predates the exposure arrays, which is when the chart plots raw
+     * counts and there is no denominator to show.
+     *
+     * @param {Object} coverage  one corpus of laicite-seasonality.json
+     * @returns {HTMLElement|null}
+     */
+    L.buildSeasonalityEvidence = function (coverage) {
+        var cov = coverage || {};
+        if (!cov.gregorian_exposure || !cov.hijri_exposure) return null;
+        var details = P.el('details');
+        details.appendChild(P.el('summary', null, text('research_inspect')));
+        ['gregorian', 'hijri'].forEach(function (calendar) {
+            details.appendChild(P.el('h5', null, text(calendar)));
+            var names = text(calendar === 'gregorian' ? 'months' : 'hijri_months').split(',');
+            details.appendChild(L.researchTable(
+                [text(calendar), text('research_selected'), text('research_eligible')],
+                names.map(function (name, i) {
+                    return [name, (cov[calendar] || [])[i] || 0,
+                        cov[calendar + '_exposure'][i] || 0];
+                })));
+        });
+        return details;
     };
 
     /**
@@ -140,14 +224,13 @@
             judged: P.formatNumber(judged),
             total: P.formatNumber(total),
             relevant: P.formatNumber(relevant),
-            percent: L.pct(relevant, judged)
+            percent: L.formatDecimal(L.pct(relevant, judged))
         })));
         // Coverage of the screen itself. A reader comparing the dossier
         // total with the screened total should not have to subtract.
         if (total > judged) {
             root.appendChild(P.el('p', null,
-                P.t('laicite.research_screen_pending',
-                    { count: P.formatNumber(total - judged) })));
+                P.t('laicite.research_screen_pending', { count: total - judged })));
         }
 
         /** One breakdown table from a {key: {judged, relevant}} map. */
@@ -157,15 +240,14 @@
                 : Object.keys(map || {});
             if (!keys.length) return;
             root.appendChild(P.el('h5', null, text(headingKey)));
-            root.appendChild(table(
+            root.appendChild(L.researchTable(
                 [text(firstColKey), text('research_screen_judged'),
                     text('research_screen_relevant'), text('research_screen_share')],
                 keys.map(function (k) {
                     var cell = map[k] || {};
                     var n = cell.judged || 0;
-                    return [labelFor(k) || k, P.formatNumber(n),
-                        P.formatNumber(cell.relevant || 0),
-                        n ? L.pct(cell.relevant || 0, n) + '%' : '—'];
+                    return [labelFor(k) || k, n, cell.relevant || 0,
+                        n ? L.formatPercent(L.pct(cell.relevant || 0, n)) : '—'];
                 })));
         }
 
@@ -183,61 +265,163 @@
         return root;
     };
 
-    L.buildResearch = function (bundle, metadata) {
-        var root = P.el('section', 'iwac-vis-panel');
+    /**
+     * The full-text cell of the coverage table: the count and its share of
+     * the records, over the same themed meter the corpus table draws. A
+     * native `<meter>` here painted in the browser's own green, the one
+     * unthemed colour on the page, and ignored dark mode.
+     *
+     * @param {string} label  the column label, repeated in the record layout
+     * @param {string} key    the cell's key in the row ('c' + column index)
+     */
+    function fullTextCell(label, key) {
+        return function (row, td) {
+            var v = row[key] || {};
+            td.className += ' iwac-vis-laicite-readable';
+            var cardLabel = P.tableCardLabel(label);
+            if (cardLabel) td.appendChild(cardLabel);
+            var share = L.pct(v.available || 0, v.records);
+            td.appendChild(P.el('span', 'iwac-vis-laicite-readable-n',
+                P.formatNumber(v.available || 0) + ' (' + L.formatPercent(share) + ')'));
+            var meter = P.el('span', 'iwac-vis-laicite-meter');
+            var fill = P.el('span', 'iwac-vis-laicite-meter-fill');
+            fill.style.width = share + '%';
+            meter.appendChild(fill);
+            td.appendChild(meter);
+        };
+    }
+
+    /**
+     * "What can we observe?" — coverage of the whole input collection, per
+     * corpus, by country and optionally by decade, with the field-choice
+     * sensitivity check and the relevance screen beneath it.
+     *
+     * The two pickers are block state, not local variables. The country is
+     * the block's `trendsCountry` — this table and the timeline read the
+     * same research cells, so they are one choice, kept in step with the
+     * map, the arenas and the concordance by the reducer and addressable as
+     * `laicite.country`; the grouping is `coveragePeriod`
+     * (`laicite.coverage=decade`). Both used to be local variables: a
+     * fifth country picker the URL and the other four never heard about.
+     *
+     * Built once per visit; `update(state)` swaps the two tables and
+     * nothing else, so the sensitivity `<details>` and the screen keep
+     * whatever the reader opened.
+     *
+     * @param {Object|null} bundle    `trends.research`
+     * @param {Object} metadata
+     * @param {Object} [store]        the block's P.createStore; without one
+     *        (a standalone render) the pickers drive a private state
+     * @returns {{root: HTMLElement, update: function(Object=):void}}
+     */
+    L.buildResearch = function (bundle, metadata, store) {
+        var root = P.el('section', 'iwac-vis-panel iwac-vis-laicite-coverage');
         root.appendChild(P.el('h4', null, text('research_coverage')));
-        if (!bundle) { root.appendChild(P.buildNoDataState()); return root; }
+        if (!bundle) {
+            root.appendChild(P.buildNoDataState());
+            return { root: root, update: function () {} };
+        }
         root.appendChild(P.el('p', 'iwac-vis-panel-desc', text('research_coverage_note')));
-        var output = P.el('div');
-        var country = '';
-        var grouped = false;
+
+        var state = store ? store.state : { trendsCountry: null, coveragePeriod: '' };
+        function set(changes) {
+            if (store) { store.patch(changes); return; }
+            Object.assign(state, changes);
+            paint(state);
+        }
+
+        var countries = L.researchCountries(bundle);
         var controls = P.el('div', 'iwac-vis-controls-slot');
-        var countries = Array.from(new Set(bundle.cells.map(function (r) { return r.country; }).filter(Boolean))).sort();
-        controls.appendChild(P.buildSelectControl({
-            name: 'coverage-country', idPrefix: 'laicite-coverage-country', label: text('filter_country'),
+        var countrySelect = P.buildSelectControl({
+            name: 'laicite-coverage-country', idPrefix: 'laicite-coverage-country',
+            label: P.t('Country'),
             options: [{ value: '', label: text('scope_global') }].concat(countries.map(function (c) {
                 return { value: c, label: c };
-            })), current: '', onChange: function (v) { country = v; draw(); }
-        }));
-        controls.appendChild(P.buildSelectControl({
-            name: 'coverage-period', idPrefix: 'laicite-coverage-period', label: text('research_period'),
-            options: [{ value: '', label: text('filter_all') }, { value: 'decade', label: text('research_decade') }],
-            current: '', onChange: function (v) { grouped = !!v; draw(); }
-        }));
-        root.appendChild(controls); root.appendChild(output);
-        function draw() {
-            output.innerHTML = '';
+            })),
+            current: '',
+            onChange: function (v) { set({ trendsCountry: v || null }); }
+        });
+        var periodSelect = P.buildSelectControl({
+            name: 'laicite-coverage-period', idPrefix: 'laicite-coverage-period',
+            label: text('research_period'),
+            options: [{ value: '', label: text('filter_all') },
+                { value: 'decade', label: text('research_decade') }],
+            current: '',
+            onChange: function (v) { set({ coveragePeriod: v }); }
+        });
+        controls.appendChild(countrySelect);
+        controls.appendChild(periodSelect);
+        root.appendChild(controls);
+
+        var coverageHost = P.el('div');
+        root.appendChild(coverageHost);
+
+        var sensitivity = P.el('details');
+        sensitivity.appendChild(P.el('summary', null, text('research_sensitivity')));
+        sensitivity.appendChild(P.el('p', null, text('research_sensitivity_note')));
+        var sensitivityTable = null;
+        root.appendChild(sensitivity);
+
+        var screen = L.buildAuditScreen(metadata);
+        if (screen) root.appendChild(screen);
+
+        var painted = null;
+        function paint(st) {
+            // A country the research cells do not split by (one picked on
+            // the map, say) reads as all countries here rather than as an
+            // empty table under a select showing something else.
+            var country = countries.indexOf(st.trendsCountry) !== -1 ? st.trendsCountry : '';
+            var grouped = st.coveragePeriod === 'decade';
+            countrySelect.control.value = country;
+            periodSelect.control.value = grouped ? 'decade' : '';
+            // update() runs on every change anywhere in the block; only
+            // these two keys change what the tables say.
+            var key = country + '|' + grouped;
+            if (key === painted) return;
+            painted = key;
+
             var groups = {};
             bundle.cells.filter(function (r) { return r.country === country; }).forEach(function (r) {
-                var label = L.subsetLabel(r.subset) + (grouped ? ' · ' + (r.year ? Math.floor(r.year / 10) * 10 : '—') : '');
+                var label = L.subsetLabel(r.subset)
+                    + (grouped ? ' · ' + (r.year ? Math.floor(r.year / 10) * 10 : '—') : '');
                 var c = groups[label] = groups[label] || {};
-                Object.keys(r).forEach(function (k) { if (typeof r[k] === 'number' && k !== 'year') c[k] = (c[k] || 0) + r[k]; });
+                Object.keys(r).forEach(function (k) {
+                    if (typeof r[k] === 'number' && k !== 'year') c[k] = (c[k] || 0) + r[k];
+                });
             });
             var labels = Object.keys(groups).sort();
-            var coverage = table([text('scope_subset'), text('research_records'), text('research_title'),
-                text('research_fulltext'), text('research_public'), text('research_selected')], labels.map(function (k) {
+
+            coverageHost.innerHTML = '';
+            coverageHost.appendChild(L.researchTable([
+                { label: text('scope_subset'), card: 'title' },
+                text('research_records'),
+                text('research_title'),
+                { label: text('research_fulltext'), card: 'row', render: fullTextCell(text('research_fulltext'), 'c3') },
+                text('research_public'),
+                text('research_selected')
+            ], labels.map(function (k) {
                 var c = groups[k];
-                return [k, c.records, c.title_available, c.fulltext_available + ' (' + (100 * c.fulltext_available / c.records).toFixed(1) + '%)',
+                return [k, c.records, c.title_available,
+                    { available: c.fulltext_available, records: c.records },
                     c.public_fulltext, c.selected];
-            }));
-            coverage.querySelectorAll('tbody tr').forEach(function (row, i) {
-                var c = groups[labels[i]];
-                var meter = P.el('meter');
-                meter.min = 0; meter.max = c.records; meter.value = c.fulltext_available;
-                meter.setAttribute('aria-label', labels[i] + ': ' + text('research_fulltext'));
-                row.children[3].appendChild(meter);
-            });
-            output.appendChild(coverage);
-            var d = P.el('details'); d.appendChild(P.el('summary', null, text('research_sensitivity')));
-            d.appendChild(P.el('p', null, text('research_sensitivity_note')));
-            d.appendChild(table([text('scope_subset'), text('research_title'), text('research_fulltext'), text('research_union'),
-                text('research_broad_'), text('research_legacy')], labels.map(function (k) {
-                var c = groups[k]; return [k, c.title_matches, c.fulltext_matches, c.union_matches, c.broad_union_matches, c.legacy_only];
             })));
-            output.appendChild(d);
-            var screen = L.buildAuditScreen(metadata);
-            if (screen) output.appendChild(screen);
+
+            var next = L.researchTable([text('scope_subset'), text('research_title'),
+                text('research_fulltext'), text('research_union'),
+                text('research_broad_'), text('research_legacy')], labels.map(function (k) {
+                var c = groups[k];
+                return [k, c.title_matches, c.fulltext_matches, c.union_matches,
+                    c.broad_union_matches, c.legacy_only];
+            }));
+            if (sensitivityTable) sensitivity.replaceChild(next, sensitivityTable);
+            else sensitivity.appendChild(next);
+            sensitivityTable = next;
         }
-        draw(); return root;
+        paint(state);
+
+        return {
+            root: root,
+            update: function (st) { paint(st || state); }
+        };
     };
 })();

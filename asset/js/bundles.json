@@ -62,6 +62,9 @@
     ],
     "embed-height": [
       "iwac-embed-height.js"
+    ],
+    "embed-gallery": [
+      "iwac-embed-gallery.js"
     ]
   },
   "panels": {
@@ -81,6 +84,7 @@
   },
   "blocks": {
     "article-dashboard": [
+      "charts/article-dashboard/i18n.js",
       "charts/article-dashboard/network.js",
       "charts/article-dashboard/further-reading.js",
       "charts/article-dashboard/map.js",
@@ -97,6 +101,7 @@
       "charts/collection-overview/recent-additions.js",
       "charts/collection-overview/entities.js",
       "charts/collection-overview/languages.js",
+      "charts/collection-overview/growth-bar.js",
       "charts/collection-overview/growth.js",
       "charts/collection-overview/types-over-time.js",
       "charts/collection-overview/gantt.js",
@@ -106,6 +111,7 @@
       "charts/collection-overview.js"
     ],
     "compare-newspapers": [
+      "charts/compare-newspapers/i18n.js",
       "charts/compare-newspapers/helpers.js",
       "charts/compare-newspapers/picker.js",
       "charts/compare-newspapers/metrics.js",
@@ -119,6 +125,7 @@
       "charts/compare-newspapers.js"
     ],
     "distinctive-vocabulary": [
+      "charts/distinctive-vocabulary/i18n.js",
       "charts/distinctive-vocabulary.js"
     ],
     "entity-dashboard": {
@@ -181,6 +188,7 @@
       "charts/lexical-metrics.js"
     ],
     "minimal-item-dashboard": [
+      "charts/minimal-item-dashboard/i18n.js",
       "charts/minimal-item-dashboard.js"
     ],
     "on-this-day": [
@@ -213,18 +221,22 @@
       "charts/press-reprints.js"
     ],
     "publication-dashboard": [
+      "charts/publication-dashboard/i18n.js",
       "charts/publication-dashboard.js"
     ],
     "reference-dashboard": [
+      "charts/reference-dashboard/i18n.js",
       "charts/reference-dashboard.js"
     ],
     "references-overview": [
       "charts/references-overview/i18n.js",
+      "charts/references-overview/collaboration-network.js",
       "charts/references-overview.js"
     ],
     "scary-terms": [
       "charts/scary-terms/i18n.js",
       "charts/scary-terms/helpers.js",
+      "charts/scary-terms/bars.js",
       "charts/scary-terms/trends.js",
       "charts/scary-terms/wordcloud.js",
       "charts/scary-terms/map.js",
@@ -237,6 +249,7 @@
     ],
     "sentiment-atlas": [
       "charts/sentiment-atlas/i18n.js",
+      "charts/sentiment-atlas/diverging-bar.js",
       "charts/sentiment-atlas.js"
     ],
     "spatial-exploration": [
@@ -250,6 +263,7 @@
       "charts/term-trends.js"
     ],
     "topic-explorer": [
+      "charts/topic-explorer/i18n.js",
       "charts/topic-explorer.js"
     ]
   }

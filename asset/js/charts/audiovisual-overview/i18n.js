@@ -18,7 +18,6 @@
     }
 
     ns.addTranslations('en', {
-        'Loading audiovisual overview':   'Loading audiovisual overview',
 
         'av.items':                       'Recordings',
         'av.runtime':                     'Total runtime',
@@ -61,6 +60,7 @@
         'av.timeline_other':              'Other sources',
         'av.timeline_partial':            '{year} is incomplete — the collection runs to {date}.',
         'av.timeline_undated':            '{count} recordings carry no publication date and are not shown.',
+        'av.timeline_undated_one':        '{count} recording carries no publication date and is not shown.',
 
         // The honest home for the thin fields. A 99%-populated `language`
         // column charted on its own would read as a finding about the
@@ -79,12 +79,9 @@
 
         'av.recent_title':                'Most recent',
         'av.recent_desc':                 'The newest recordings in the collection.',
-        'av.recent_watch':                'Watch',
-        'av.recent_open':                 'Open in the collection'
     });
 
     ns.addTranslations('fr', {
-        'Loading audiovisual overview':   'Chargement de l’aperçu audiovisuel',
 
         'av.items':                       'Enregistrements',
         'av.runtime':                     'Durée totale',
@@ -119,6 +116,7 @@
         'av.timeline_other':              'Autres sources',
         'av.timeline_partial':            'L’année {year} est incomplète — la collection s’arrête au {date}.',
         'av.timeline_undated':            '{count} enregistrements sans date de publication ne sont pas représentés.',
+        'av.timeline_undated_one':        '{count} enregistrement sans date de publication n’est pas représenté.',
 
         'av.coverage_title':              'Informations disponibles dans le catalogue',
         'av.coverage_desc':               'Part des notices d’enregistrement dont chaque champ du catalogue est renseigné. Un champ rempli indique une information disponible, sans en évaluer l’exactitude ou la précision. Un champ vide n’établit pas que le contenu correspondant est absent de l’enregistrement.',
@@ -133,7 +131,8 @@
 
         'av.recent_title':                'Les plus récents',
         'av.recent_desc':                 'Les enregistrements les plus récents de la collection.',
-        'av.recent_watch':                'Regarder',
-        'av.recent_open':                 'Ouvrir dans la collection'
+        // One item's running time, as a table column. Distinct from
+        // 'av.runtime' ("Total runtime"), which labels a SUM.
+        'Duration':                       'Durée',
     });
 })();

@@ -1,9 +1,14 @@
 /**
  * IWAC Visualizations — Laïcité block: translations (issue #14).
  *
- * Registered at parse time, before the orchestrator loads. French values use
- * \uXXXX escapes for every non-ASCII character, matching the convention in
- * every other block's i18n file.
+ * Registered at parse time, before the orchestrator loads. Values are
+ * UTF-8; the older French entries still carry \uXXXX escapes for their
+ * accents. The two spellings are the same string at runtime, so neither is
+ * wrong — but new entries are written in plain UTF-8.
+ *
+ * A key whose count varies has a `_one` variant beside it: `t()` picks it
+ * when `count` is a NUMBER (French "0 ligne" is singular too). Pass the raw
+ * number — a pre-formatted string switches the plural off.
  *
  * The block label is "Laïcité" in both locales deliberately: it is the term
  * of art in the anglophone literature too, and the collection's own authority
@@ -33,7 +38,6 @@
         "laicite.research_strict": "Context-filtered",
         "laicite.research_broad_": "Broad candidates",
         "laicite.research_outlet": "Outlet",
-        "laicite.research_year": "Year",
         "laicite.research_period": "Period",
         "laicite.research_decade": "By decade",
         "laicite.research_eligible": "Available texts",
@@ -49,6 +53,7 @@
         'laicite.research_screen': 'Model-assisted screen ({date})',
         'laicite.research_screen_note': 'A language model ({model}) read {judged} of the {total} dossier records against a written rule and judged {relevant} of them — {percent}% of those screened — substantively about laïcité or religion–state relations.',
         'laicite.research_screen_pending': '{count} dossier records have not been screened yet.',
+        'laicite.research_screen_pending_one': '{count} dossier record has not been screened yet.',
         'laicite.research_screen_routes': 'By route into the dossier',
         'laicite.research_screen_subsets': 'By corpus',
         'laicite.research_screen_route': 'Route',
@@ -102,7 +107,6 @@
             'laicite.frame_note.concurrence': 'Terms associated with radicalism, counted within dossier items. Their presence alongside laïcité suggests passages to compare; it does not classify the people or organisations discussed.',
             'laicite.frame_note.secularisme': 'Vocabulary of secularism and secularisation. Low counts describe the selected terms and available fields, not the absence of these concepts from public debate.',
             'laicite.frame_note.laicite': 'Core vocabulary concerning laïcité and the secular state. Matches help select the dossier; their meaning depends on the passage.',
-        'Loading laïcité dossier': 'Loading laïcité dossier',
         'laicite.title': 'Laïcité in the IWAC collection',
         "laicite.description": "How do sources describe relations between religion and the state? Start with what the collection makes observable, then read the sources and compare patterns.",
 
@@ -111,15 +115,13 @@
         'laicite.view_trends': 'Timeline',
         'laicite.view_documents': 'Archives',
         'laicite.view_concordance': 'Concordance',
+        'laicite.view_group': 'Approach',
 
         // Overview / KPIs
         'laicite.kpi_members': 'Items in the dossier',
         'laicite.kpi_tagged': 'Tagged “Laïcité”',
         'laicite.kpi_said': 'Match core vocabulary',
-        'laicite.kpi_occurrences': 'Occurrences',
-        'laicite.kpi_countries': 'Countries',
         'laicite.kpi_span': 'Year span',
-        'laicite.kpi_newspapers': 'Newspapers',
         'laicite.authority_link': 'Authority record',
         'laicite.overview_desc': 'An item enters the dossier if it has the catalogue subject tag “Laïcité” or matches the selected vocabulary in its title or available full text. AI summaries, abstracts and tables of contents are excluded from vocabulary analysis. No full text is substituted with a description. The categories below compare tags with these source-text matches.',
 
@@ -132,6 +134,7 @@
         'laicite.routes_title': 'How records joined the dossier',
         'laicite.routes_note': 'A record joins by the curated “Laïcité” tag, by the core vocabulary, or by both. One core match is enough, so these routes differ in how much evidence stands behind them.',
         'laicite.routes_title_hit': '{count} of these carry a core term in the title.',
+        'laicite.routes_title_hit_one': '{count} of these carries a core term in the title.',
 
         // Subsets
         'laicite.subset_articles': 'Press articles',
@@ -149,11 +152,9 @@
         'laicite.subset_gloss_references': 'Scholarly works, dated by their own publication year.',
         'laicite.subset_table_title': 'By corpus',
         'laicite.subset_table_note': 'Source types differ in length, language and purpose. A reference is dated by its publication year, which may be much later than the period it studies. Compare each group with these differences in mind.',
-        'laicite.col_corpus': 'Corpus',
         'laicite.col_members': 'In dossier',
         'laicite.col_tagged': 'Tagged',
         'laicite.col_said': 'Core vocabulary match',
-        'laicite.col_occurrences': 'Occurrences',
         'laicite.col_readable': 'Readable',
         'laicite.col_span': 'Span',
         'laicite.no_sum_note': 'Use the breakdown by source type when interpreting totals: a monograph, a periodical issue and a newspaper article are different units of evidence.',
@@ -161,24 +162,19 @@
         // Rights
         'laicite.rights_title': 'What can be quoted here',
         'laicite.rights_body': 'Counts include title and full-text matches. Full-text extracts appear only when that text is public; title matches remain readable. Each extract identifies its source field.',
-        'laicite.rights_readable': '{quotable} of {total} occurrences are readable here',
 
         // Frames
         "laicite.frames_title": "Vocabulary categories",
         'laicite.frames_desc': 'The search vocabulary is grouped into interpretive categories, called frames. The core categories select items for the dossier; the other categories describe vocabulary within those items. A detected word is a prompt for interpretation, not proof that the source makes the corresponding argument.',
         'laicite.frame_share': '{percent}% of items',
         'laicite.membership_note': 'Membership frame',
-        'laicite.empty_frame_note': 'This category remains visible when few matches are found. Low counts describe the selected vocabulary and available texts; they do not establish the absence of the concept from public debate.',
 
         // Timeline
         'laicite.trends_chart_title': 'Laïcité over time',
-        'laicite.trends_country_chart_title': 'Laïcité over time — {country}',
-        'laicite.occurrences': 'Occurrences',
         'laicite.show_events': 'Show historical events',
         'laicite.scope_global': 'All countries',
         'laicite.scope_subset': 'Corpus',
         "laicite.trends_desc": "Choose a source type, country, field and measure. The default shows the percentage of available press full texts containing core vocabulary, with sparse years left blank. Open the annual counts to inspect the denominator. Scholarship is shown only when explicitly selected.",
-        'Historical events': 'Historical events',
         'Source document': 'source document',
         'Record': 'record',
 
@@ -187,10 +183,9 @@
         'laicite.documents_desc': 'Archival documents selected by the catalogue tag or core vocabulary, including statutes, minutes, reports and petitions. Open a record to examine its date, authorship and text.',
         'laicite.documents_empty': 'No archival documents matched.',
         'laicite.doc_pages': '{count} pages',
-        'laicite.doc_words': '{count} words',
+        'laicite.doc_pages_one': '{count} page',
         'laicite.doc_tagged': 'Tagged “Laïcité”',
         'laicite.doc_full_text': 'Full text public',
-        'laicite.doc_read': 'Read the record',
         'laicite.doc_ai_description': 'AI-generated description',
         'laicite.route_tag_text': 'Tag and vocabulary',
         'laicite.route_text_multi': 'Vocabulary, two or more mentions',
@@ -201,11 +196,12 @@
         'laicite.route_hint': 'How this record joined the dossier: by the curated “Laïcité” tag, by the core vocabulary, or by both.',
 
         // Concordance
-        'laicite.concordance_title': 'Terms in context (concordance)',
         'laicite.concordance_desc': 'Passages from titles and available public full text containing the selected vocabulary. Descriptive fields are excluded. Matches identify words to examine, not necessarily a relevant argument: read the surrounding passage and the linked source. Badges mark lines from records that joined the dossier on a single mention, or on a match inside a bibliography.',
         'laicite.concordance_search': 'Search within the lines',
         'laicite.concordance_count': '{count} lines',
+        'laicite.concordance_count_one': '{count} line',
         'laicite.concordance_withheld': '{count} further occurrences are not readable here because the item’s full text is not public.',
+        'laicite.concordance_withheld_one': '{count} further occurrence is not readable here because the item’s full text is not public.',
         'laicite.concordance_loading': 'Loading concordance',
         'laicite.concordance_empty': 'No lines match these filters.',
         'concordance.tagged_hint': 'This item also carries the curated “Laïcité” subject tag.',
@@ -216,9 +212,8 @@
         'laicite.kwic_strict': 'Hide records with a single incidental mention',
         'laicite.kwic_strict_hint': 'Hides records admitted by a single core-vocabulary match, and scholarship whose only matches sit in a bibliography. Records carrying the curated tag, or two or more matches, stay.',
         'laicite.concordance_strict_hidden': '{count} records hidden by the strict filter.',
-        'tagged': 'tagged',
+        'laicite.concordance_strict_hidden_one': '{count} record hidden by the strict filter.',
         'laicite.filter_frame': 'Frame',
-        'laicite.filter_country': 'Country',
         'laicite.filter_all': 'All',
 
         // --- Phase 2: corpus linguistics ---
@@ -229,6 +224,7 @@
         'laicite.collocates_empty': 'No nearby words meet the statistical and frequency thresholds for this selection.',
         'laicite.collocates_method': 'Search window: {window} word units (tokens) on each side; each term must occur in at least {docs} distinct documents.',
         'laicite.collocate_stats': 'effect {lr} · {count} occurrences · {docs} documents',
+        'laicite.collocate_stats_one': 'effect {lr} · {count} occurrence · {docs} documents',
         'laicite.is_name': 'name',
         'laicite.is_name_hint': 'This word belongs to a person, place, organisation or event catalogued in the IWAC index. Such words are flagged rather than removed, because who gets named is part of what this panel shows.',
         'laicite.scope_slice': 'Selection',
@@ -291,8 +287,10 @@
         'laicite.circulation_decade_title': 'Candidate matches by decade',
         'laicite.circulation_decade_desc': 'Articles involved in candidate pairs, grouped by decade. Compare this count with the dossier timeline, then inspect the matched texts before drawing conclusions about circulation or the number of independent contributions to a debate.',
         'laicite.circulation_decade_tooltip': '{count} articles with candidate matches',
+        'laicite.circulation_decade_tooltip_one': '{count} article with candidate matches',
         'laicite.circulation_links_title': 'Newspapers with similar articles',
         'laicite.circulation_pairs_n': '{count} candidate pairs',
+        'laicite.circulation_pairs_n_one': '{count} candidate pair',
         'laicite.circulation_pairs_title': 'Candidate article pairs',
         'laicite.circulation_pairs_desc': 'Showing {listed} of {total} pairs, most similar first. Both sides are linked so the judgement can be checked rather than taken on trust.',
         'laicite.circulation_similarity': 'Similarity score: {value}%',
@@ -313,18 +311,15 @@
         'laicite.bylines_top_title': 'The bylines themselves',
         'laicite.bylines_top_desc': 'Bylines signing at least {min} articles in the dossier, by article count. Hover for the years covered and the outlets each one wrote for.',
         'laicite.bylines_count': '{count} dossier articles',
+        'laicite.bylines_count_one': '{count} dossier article',
         'laicite.semantic_title': 'Articles grouped by text similarity',
         'laicite.semantic_desc': 'Each point is an article arranged using an AI representation of its full text. UMAP reduces these representations to a two-dimensional map. Nearby points suggest texts to compare, but do not establish a shared argument. Colours show the chosen category. Overlapping colours may suggest questions for close reading; they do not validate or invalidate the vocabulary categories. Axes and distances have no precise historical scale, and positions cannot be compared with other maps.',
         'laicite.semantic_coverage': 'The map includes {embedded} of the dossier’s {total} newspaper articles with usable AI text representations. Periodical issues, archival documents and scholarship are outside this view’s scope.',
         'laicite.semantic_by_frame': 'Frame',
-        'laicite.semantic_by_country': 'Country',
-        'laicite.semantic_by_decade': 'Decade',
         'laicite.semantic_unframed': 'No secondary frame',
         'laicite.semantic_empty': 'The semantic map is not available for this dossier.',
         'laicite.semantic_empty_umap': 'The semantic map needs the umap-learn package, which was not installed when this data was built.',
         'laicite.semantic_empty_few': 'Too few dossier articles carry a text vector to project a meaningful map.',
-        'laicite.filter_type': 'Type',
-        'laicite.filter_model': 'Model',
 
         'laicite.actors_title': 'People, organisations and events indexed in the dossier',
         'laicite.actors_desc': 'Catalogue entries for people, organisations and events associated with dossier items, counted once per item. Rows show their recorded appearances over time. Inclusion does not establish that a person spoke, participated in a debate or held a particular position.',
@@ -372,19 +367,17 @@
         'laicite.map_desc': 'Places tagged on the dossier’s items, sized by how many items name them. Filter by frame or by country; the two filters are alternatives and cannot be combined.',
         'laicite.map_method': '{places} geocoded places, each tagged on at least {min} items.',
         'laicite.map_items': '{count} items',
+        'laicite.map_items_one': '{count} item',
         'laicite.map_top_frames': 'Most frequent frames',
         'laicite.map_places_list': 'Places as a list',
-        'laicite.map_place': 'Place',
 
         'laicite.references_title': 'What has been written about it',
         'laicite.references_desc': 'Scholarly works selected by the catalogue tag or core vocabulary in their titles and available full text. Abstracts provide reading context only. A match does not necessarily mean that laïcité is the main subject, and it may sit in a reference list rather than in the argument — works whose only matches do are marked.',
         'laicite.references_count': '{count} works',
+        'laicite.references_count_one': '{count} work',
         'laicite.references_empty': 'No works match this filter.',
         'laicite.references_axis': 'Works',
         'laicite.references_year_axis': 'Year of publication',
-        'laicite.references_by_type': 'Type',
-        'laicite.references_by_language': 'Language',
-        'laicite.references_by_country': 'Country',
 
         // Method notes. Each also exists as English prose inside its bundle,
         // for anyone reading the generated JSON directly; the panels render
@@ -423,7 +416,6 @@
         "laicite.research_strict": "Avec filtre contextuel",
         "laicite.research_broad_": "Candidats sans filtre contextuel",
         "laicite.research_outlet": "Titre de presse",
-        "laicite.research_year": "Année",
         "laicite.research_period": "Période",
         "laicite.research_decade": "Par décennie",
         "laicite.research_eligible": "Textes disponibles",
@@ -439,6 +431,7 @@
         'laicite.research_screen': 'Contr\u00f4le assist\u00e9 par mod\u00e8le ({date})',
         'laicite.research_screen_note': 'Un mod\u00e8le de langue ({model}) a lu {judged} des {total} notices du dossier selon une r\u00e8gle \u00e9crite et en a jug\u00e9 {relevant} \u2014 {percent}\u00a0% des notices contr\u00f4l\u00e9es \u2014 substantiellement consacr\u00e9es \u00e0 la la\u00efcit\u00e9 ou aux relations entre religion et \u00c9tat.',
         'laicite.research_screen_pending': '{count} notices du dossier n\u2019ont pas encore \u00e9t\u00e9 contr\u00f4l\u00e9es.',
+        'laicite.research_screen_pending_one': '{count} notice du dossier n’a pas encore été contrôlée.',
         'laicite.research_screen_routes': 'Par voie d\u2019entr\u00e9e dans le dossier',
         'laicite.research_screen_subsets': 'Par corpus',
         'laicite.research_screen_route': 'Voie d\u2019entr\u00e9e',
@@ -492,7 +485,6 @@
             'laicite.frame_note.concurrence': 'Termes associés au radicalisme, comptés dans les documents du dossier. Leur présence aux côtés de la laïcité suggère des passages à comparer, sans classer les personnes ou organisations évoquées.',
             'laicite.frame_note.secularisme': 'Vocabulaire du sécularisme et de la sécularisation. Les faibles nombres décrivent les termes sélectionnés et les champs disponibles, sans établir l’absence de ces concepts dans le débat public.',
             'laicite.frame_note.laicite': 'Vocabulaire central de la laïcité et de l’État laïque. Les correspondances contribuent à sélectionner le dossier ; leur sens dépend du passage.',
-        'Loading laïcité dossier': 'Chargement du dossier laïcité',
         'laicite.title': 'La laïcité dans la collection IWAC',
         "laicite.description": "Comment les sources décrivent-elles les rapports entre religion et État ? Examinez d’abord ce que la collection permet d’observer, puis lisez les sources et comparez les tendances.",
 
@@ -500,14 +492,12 @@
         'laicite.view_trends': 'Chronologie',
         'laicite.view_documents': 'Archives',
         'laicite.view_concordance': 'Concordance',
+        'laicite.view_group': 'Approche',
 
         'laicite.kpi_members': 'Documents du dossier',
         'laicite.kpi_tagged': 'Indexés « Laïcité »',
         'laicite.kpi_said': 'Correspondances avec le vocabulaire central',
-        'laicite.kpi_occurrences': 'Occurrences',
-        'laicite.kpi_countries': 'Pays',
         'laicite.kpi_span': 'Période',
-        'laicite.kpi_newspapers': 'Journaux',
         'laicite.authority_link': 'Notice d’autorité',
         'laicite.overview_desc': 'Un document entre dans le dossier s’il porte le mot-clé « Laïcité » ou si le vocabulaire retenu apparaît dans son titre ou son texte intégral disponible. Les résumés, descriptions IA et tables des matières sont exclus de l’analyse lexicale. Une description ne remplace jamais un texte intégral manquant. Les catégories ci-dessous comparent l’indexation à ces correspondances dans les sources.',
 
@@ -519,6 +509,7 @@
         'laicite.routes_title': 'Comment les notices sont entr\u00e9es dans le dossier',
         'laicite.routes_note': 'Une notice entre par le mot-cl\u00e9 index\u00e9 \u00ab\u00a0La\u00efcit\u00e9\u00a0\u00bb, par le vocabulaire central, ou par les deux. Une seule correspondance suffit\u00a0: ces voies d\u2019entr\u00e9e diff\u00e8rent donc par la quantit\u00e9 d\u2019indices qui les soutient.',
         'laicite.routes_title_hit': '{count} d\u2019entre elles portent un terme central dans le titre.',
+        'laicite.routes_title_hit_one': '{count} d’entre elles porte un terme central dans le titre.',
 
         'laicite.subset_articles': 'Articles de presse',
         'laicite.subset_publications': 'Périodiques islamiques',
@@ -530,28 +521,22 @@
         'laicite.subset_gloss_references': 'Travaux scientifiques, datés selon leur année de publication.',
         'laicite.subset_table_title': 'Par corpus',
         'laicite.subset_table_note': 'Les types de sources diffèrent par leur longueur, leur langue et leur fonction. Une référence est datée selon son année de publication, parfois bien postérieure à la période étudiée. Tenez compte de ces différences pour comparer les groupes.',
-        'laicite.col_corpus': 'Corpus',
         'laicite.col_members': 'Au dossier',
         'laicite.col_tagged': 'Indexés',
         'laicite.col_said': 'Correspondance lexicale centrale',
-        'laicite.col_occurrences': 'Occurrences',
         'laicite.col_readable': 'Lisibles',
         'laicite.col_span': 'Période',
         'laicite.no_sum_note': 'Appuyez-vous sur la répartition par type de source pour interpréter les totaux : une monographie, un numéro de périodique et un article de presse constituent des unités d’analyse différentes.',
 
         'laicite.rights_title': 'Ce qui peut être cité ici',
         'laicite.rights_body': 'Les nombres incluent les correspondances dans les titres et les textes intégraux. Les extraits du texte intégral ne sont affichés que si celui-ci est public ; les correspondances dans les titres restent lisibles. Chaque extrait indique son champ source.',
-        'laicite.rights_readable': '{quotable} occurrences sur {total} sont lisibles ici',
 
         "laicite.frames_title": "Catégories lexicales",
         'laicite.frames_desc': 'Le vocabulaire de recherche est regroupé en catégories interprétatives, appelées cadres. Les catégories centrales sélectionnent les documents du dossier ; les autres décrivent le vocabulaire de ces documents. Un mot repéré invite à l’interprétation, sans prouver que la source développe l’argument correspondant.',
         'laicite.frame_share': '{percent} % des documents',
         'laicite.membership_note': 'Cadre d’appartenance',
-        'laicite.empty_frame_note': 'Cette catégorie reste visible lorsque peu de correspondances sont trouvées. Les faibles nombres décrivent le vocabulaire sélectionné et les textes disponibles ; ils n’établissent pas l’absence du concept dans le débat public.',
 
         'laicite.trends_chart_title': 'La laïcité dans le temps',
-        'laicite.trends_country_chart_title': 'La laïcité dans le temps — {country}',
-        'laicite.occurrences': 'Occurrences',
         'laicite.show_events': 'Afficher les événements historiques',
         'laicite.scope_global': 'Tous les pays',
         'laicite.scope_subset': 'Corpus',
@@ -564,10 +549,9 @@
         'laicite.documents_desc': 'Documents d’archives sélectionnés par le mot-clé du catalogue ou le vocabulaire central, notamment statuts, procès-verbaux, rapports et pétitions. Ouvrez une notice pour examiner sa date, son auteur et son texte.',
         'laicite.documents_empty': 'Aucun document d’archives ne correspond.',
         'laicite.doc_pages': '{count} pages',
-        'laicite.doc_words': '{count} mots',
+        'laicite.doc_pages_one': '{count} page',
         'laicite.doc_tagged': 'Indexé « Laïcité »',
         'laicite.doc_full_text': 'Texte intégral public',
-        'laicite.doc_read': 'Consulter la notice',
         'laicite.doc_ai_description': 'Description générée par IA',
         'laicite.route_tag_text': 'Mot-cl\u00e9 et vocabulaire',
         'laicite.route_text_multi': 'Vocabulaire, deux mentions ou plus',
@@ -577,11 +561,12 @@
         'laicite.route_title_hit_hint': 'Un terme central figure dans le titre de cette notice.',
         'laicite.route_hint': 'Comment cette notice est entr\u00e9e dans le dossier\u00a0: par le mot-cl\u00e9 index\u00e9 \u00ab\u00a0La\u00efcit\u00e9\u00a0\u00bb, par le vocabulaire central, ou par les deux.',
 
-        'laicite.concordance_title': 'Termes en contexte (concordance)',
         'laicite.concordance_desc': 'Passages des titres et du texte intégral public contenant le vocabulaire retenu. Les champs descriptifs sont exclus. Une correspondance désigne des mots à examiner, sans garantir la pertinence d’un argument : lisez le passage et la source liée. Des pastilles signalent les lignes issues de notices entrées sur une seule mention, ou sur une correspondance située dans une bibliographie.',
         'laicite.concordance_search': 'Rechercher dans les lignes',
         'laicite.concordance_count': '{count} lignes',
+        'laicite.concordance_count_one': '{count} ligne',
         'laicite.concordance_withheld': '{count} autres occurrences ne sont pas lisibles ici car le texte intégral du document n’est pas public.',
+        'laicite.concordance_withheld_one': '{count} autre occurrence n’est pas lisible ici car le texte intégral du document n’est pas public.',
         'laicite.concordance_loading': 'Chargement de la concordance',
         'laicite.concordance_empty': 'Aucune ligne ne correspond à ces filtres.',
         'concordance.tagged_hint': 'Ce document porte aussi le mot-clé indexé « Laïcité ».',
@@ -592,9 +577,8 @@
         'laicite.kwic_strict': 'Masquer les documents \u00e0 mention unique',
         'laicite.kwic_strict_hint': 'Masque les notices admises sur une seule correspondance du vocabulaire central, ainsi que les travaux dont les seules correspondances figurent dans une bibliographie. Les notices index\u00e9es, ou comptant au moins deux correspondances, restent affich\u00e9es.',
         'laicite.concordance_strict_hidden': '{count} documents masqu\u00e9s par le filtre strict.',
-        'tagged': 'indexé',
+        'laicite.concordance_strict_hidden_one': '{count} document masqué par le filtre strict.',
         'laicite.filter_frame': 'Cadre',
-        'laicite.filter_country': 'Pays',
         'laicite.filter_all': 'Tous',
 
         // --- Phase 2 ---
@@ -605,6 +589,7 @@
         'laicite.collocates_empty': 'Aucun mot voisin ne satisfait les seuils statistiques et de fréquence pour cette sélection.',
         'laicite.collocates_method': 'Fenêtre de recherche : {window} unités de mots (tokens) de chaque côté ; chaque terme doit apparaître dans au moins {docs} documents distincts.',
         'laicite.collocate_stats': 'effet {lr} · {count} occurrences · {docs} documents',
+        'laicite.collocate_stats_one': 'effet {lr} · {count} occurrence · {docs} documents',
         'laicite.is_name': 'nom',
         'laicite.is_name_hint': 'Ce mot appartient \u00e0 une personne, un lieu, une organisation ou un \u00e9v\u00e9nement r\u00e9pertori\u00e9 dans l\u2019index IWAC. Ces mots sont signal\u00e9s plut\u00f4t que supprim\u00e9s, car savoir qui est nomm\u00e9 fait partie de ce que montre ce panneau.',
         'laicite.scope_slice': 'Sélection',
@@ -667,8 +652,10 @@
         'laicite.circulation_decade_title': 'Correspondances candidates par décennie',
         'laicite.circulation_decade_desc': 'Articles impliqués dans des paires candidates, regroupés par décennie. Comparez ce nombre à la chronologie du dossier, puis examinez les textes rapprochés avant de conclure sur leur circulation ou sur le nombre de contributions indépendantes à un débat.',
         'laicite.circulation_decade_tooltip': '{count} articles avec des correspondances candidates',
+        'laicite.circulation_decade_tooltip_one': '{count} article avec des correspondances candidates',
         'laicite.circulation_links_title': 'Journaux aux articles similaires',
         'laicite.circulation_pairs_n': '{count} paires candidates',
+        'laicite.circulation_pairs_n_one': '{count} paire candidate',
         'laicite.circulation_pairs_title': 'Paires d’articles candidates',
         'laicite.circulation_pairs_desc': '{listed} paires affichées sur {total}, des plus similaires aux moins. Les deux côtés sont liés afin que le jugement puisse être vérifié plutôt que cru sur parole.',
         'laicite.circulation_similarity': 'Score de similarité : {value} %',
@@ -689,18 +676,15 @@
         'laicite.bylines_top_title': 'Les signatures elles-mêmes',
         'laicite.bylines_top_desc': 'Signatures ayant signé au moins {min} articles du dossier, par nombre d’articles. Survoler pour connaître les années couvertes et les titres pour lesquels chacune a écrit.',
         'laicite.bylines_count': '{count} articles du dossier',
+        'laicite.bylines_count_one': '{count} article du dossier',
         'laicite.semantic_title': 'Articles regroupés selon leur similarité textuelle',
         'laicite.semantic_desc': 'Chaque point correspond à un article disposé selon une représentation de son texte intégral produite par IA. La méthode UMAP réduit ces représentations à une carte en deux dimensions. Les points voisins suggèrent des textes à comparer, sans établir un argument commun. Les couleurs indiquent la catégorie choisie. Leur mélange peut suggérer des questions de lecture, sans valider ni invalider les catégories lexicales. Les axes et les distances n’ont pas d’échelle historique précise ; les positions ne sont pas comparables à celles d’autres cartes.',
         'laicite.semantic_coverage': 'La carte comprend {embedded} articles de presse sur les {total} du dossier disposant de représentations textuelles exploitables produites par IA. Les numéros de périodiques, documents d’archives et travaux scientifiques ne sont pas inclus dans cette vue.',
         'laicite.semantic_by_frame': 'Cadre',
-        'laicite.semantic_by_country': 'Pays',
-        'laicite.semantic_by_decade': 'Décennie',
         'laicite.semantic_unframed': 'Aucun cadre secondaire',
         'laicite.semantic_empty': 'La carte sémantique n’est pas disponible pour ce dossier.',
         'laicite.semantic_empty_umap': 'La carte sémantique requiert le paquet umap-learn au moment de la génération ; il n’était pas installé lors de la construction de ces données.',
         'laicite.semantic_empty_few': 'Trop peu d’articles du dossier portent un vecteur de texte pour projeter une carte significative.',
-        'laicite.filter_type': 'Type',
-        'laicite.filter_model': 'Mod\u00e8le',
 
         'laicite.actors_title': 'Personnes, organisations et événements indexés dans le dossier',
         'laicite.actors_desc': 'Entrées du catalogue concernant les personnes, organisations et événements associés aux documents du dossier, comptées une fois par document. Les lignes montrent leurs apparitions enregistrées au fil du temps. Une présence n’établit pas qu’une personne a pris la parole, participé à un débat ou défendu une position particulière.',
@@ -748,19 +732,17 @@
         'laicite.map_desc': 'Les lieux index\u00e9s sur les documents du dossier, dimensionn\u00e9s selon le nombre de documents qui les nomment. Filtrez par cadre ou par pays ; les deux filtres sont des alternatives et ne se combinent pas.',
         'laicite.map_method': '{places} lieux g\u00e9ocod\u00e9s, chacun index\u00e9 sur au moins {min} documents.',
         'laicite.map_items': '{count} documents',
+        'laicite.map_items_one': '{count} document',
         'laicite.map_top_frames': 'Cadres les plus fr\u00e9quents',
         'laicite.map_places_list': 'Les lieux en liste',
-        'laicite.map_place': 'Lieu',
 
         'laicite.references_title': 'Ce qui en a \u00e9t\u00e9 \u00e9crit',
         'laicite.references_desc': 'Travaux scientifiques sélectionnés par le mot-clé du catalogue ou le vocabulaire central dans leurs titres et textes intégraux disponibles. Les résumés servent uniquement de contexte de lecture. Une correspondance ne signifie pas nécessairement que la laïcité est le sujet principal, et elle peut figurer dans une liste de références plutôt que dans le propos — les travaux dont c’est le seul cas sont signalés.',
         'laicite.references_count': '{count} travaux',
+        'laicite.references_count_one': '{count} travail',
         'laicite.references_empty': 'Aucun travail ne correspond \u00e0 ce filtre.',
         'laicite.references_axis': 'Travaux',
         'laicite.references_year_axis': 'Ann\u00e9e de publication',
-        'laicite.references_by_type': 'Type',
-        'laicite.references_by_language': 'Langue',
-        'laicite.references_by_country': 'Pays',
 
         // Notes méthodologiques
         'laicite.collocates_reference': 'Le reste des m\u00eames documents. Un cooccurrent est un mot qui se tient pr\u00e8s du terme plus souvent qu\u2019il ne le fait ailleurs dans des textes portant d\u00e9j\u00e0 sur le sujet.',

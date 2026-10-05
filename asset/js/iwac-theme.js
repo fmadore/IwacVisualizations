@@ -655,6 +655,43 @@
     };
 
     /**
+     * IWAC index Type → series palette slot, FIXED, for every block that
+     * colours an entity by its type.
+     *
+     * Building the mapping in order of first appearance makes a colour depend
+     * on which types one payload happens to carry, so Personnes could come out
+     * slate on one entity page and green on the next — and the Entity Networks
+     * block, which coloured by its payload's own type order, disagreed with
+     * every item-page network about all five of them. One table, read here,
+     * keeps a type the same colour on every page. The order is also the
+     * legend order; `center` is the ego network's own node.
+     */
+    ns.ENTITY_TYPE_SLOTS = [
+        'center',
+        'Personnes',
+        'Organisations',
+        'Lieux',
+        'Sujets',
+        'Événements',
+        'article'
+    ];
+
+    /** The palette slot of one raw IWAC entity type, or -1 when unknown. */
+    ns.entityTypeSlot = function (type) {
+        return ns.ENTITY_TYPE_SLOTS.indexOf(type);
+    };
+
+    /**
+     * Current theme colour for one raw IWAC entity type. Read at call time,
+     * never cached by the caller, so a light/dark toggle reaches it. An
+     * unrecognised type takes the first slot after the known ones.
+     */
+    ns.getEntityTypeColor = function (type) {
+        var slot = ns.entityTypeSlot(type);
+        return ns.getSeriesColor(slot >= 0 ? slot : ns.ENTITY_TYPE_SLOTS.length);
+    };
+
+    /**
      * The basemap endpoints — the ONE place these URLs live.
      *
      * They used to be three copies: here, in `P.setMapTheme` (which

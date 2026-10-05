@@ -43,22 +43,11 @@
 
     function resolveSurface() {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return P.normalizeColorForMapLibre(tokens.surface || '#fdfdfd');
+        return P.normalizeColorForMapLibre(tokens.surface);
     }
 
     function resolveAdminRamp() {
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var stops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean).map(P.normalizeColorForMapLibre);
-        if (stops.length < 2) {
-            stops = [resolveSurface(), P.mapColor('--primary')];
-        }
-        return stops;
+        return ns.heatmapRamp(P.normalizeColorForMapLibre);
     }
 
     function quantile(sortedValues, q) {
@@ -194,7 +183,7 @@
         var adminLevel = 'regions';
         var adminScale = 'quantile';
 
-        var modeLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Map mode'));
+        var modeLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Map mode'));
         var modeSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         [
             ['bubbles', P.t('Place bubbles')],
@@ -208,7 +197,7 @@
         modeLabel.appendChild(modeSelect);
         toolbar.appendChild(modeLabel);
 
-        var focusLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Country focus'));
+        var focusLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Country focus'));
         var focusSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         focusLabel.appendChild(focusSelect);
         var worldOpt = P.el('option', null, P.t('Whole world'));
@@ -224,12 +213,12 @@
         });
         toolbar.appendChild(focusLabel);
 
-        var adminLevelLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Admin level'));
+        var adminLevelLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Admin level'));
         var adminLevelSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         adminLevelLabel.appendChild(adminLevelSelect);
         toolbar.appendChild(adminLevelLabel);
 
-        var adminScaleLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Scale'));
+        var adminScaleLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Scale'));
         var adminScaleSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         [
             ['quantile', P.t('Quantile')],
@@ -607,7 +596,7 @@
             header.appendChild(P.el('strong', 'iwac-vis-map-popup__title', place.name));
             var subtitle = [];
             if (place.country) subtitle.push(place.country);
-            subtitle.push(P.t('mentions_count', { count: P.formatNumber(place.count) }));
+            subtitle.push(P.t('mentions_count', { count: place.count }));
             header.appendChild(P.el('div', 'iwac-vis-map-popup__subtitle', subtitle.join(' · ')));
             node.appendChild(header);
 
@@ -628,7 +617,7 @@
                 var extra = place.articles.length - HOVER_ITEMS;
                 node.appendChild(P.el('div', 'iwac-vis-map-popup__more',
                     extra > 0
-                        ? P.t('more_items_click', { count: P.formatNumber(extra) })
+                        ? P.t('more_items_click', { count: extra })
                         : P.t('Click for details')));
             } else {
                 node.appendChild(P.el('div', 'iwac-vis-map-popup__more', P.t('Click for details')));
@@ -669,7 +658,7 @@
                 titleHref: ctx.siteBase ? P.itemUrl(ctx.siteBase, place.id) : null,
                 subtitleLines: [
                     (place.country ? place.country + ' · ' : '') +
-                        P.t('mentions_count', { count: P.formatNumber(place.count) })
+                        P.t('mentions_count', { count: place.count })
                 ],
                 articles: articles,
                 siteBase: ctx.siteBase
@@ -828,8 +817,8 @@
                     ? [
                         country,
                         P.t(adminLevel === 'prefectures' ? 'Prefectures' : 'Regions'),
-                        P.t('admin_units_count', { count: P.formatNumber(units) }),
-                        P.t('items_count', { count: P.formatNumber(total) })
+                        P.t('admin_units_count', { count: units }),
+                        P.t('items_count', { count: total })
                     ].join(' · ')
                     : P.t('No administrative data');
                 return;
@@ -842,7 +831,7 @@
                 status.textContent = P.t('Loading');
                 return;
             }
-            var bits = [P.t('places_count', { count: P.formatNumber(visible.length) })];
+            var bits = [P.t('places_count', { count: visible.length })];
             if (sel && sel.status === 'ready') bits.unshift(sel.label);
             status.textContent = bits.join(' · ');
             if (visible.length === 0 && sel && sel.status === 'ready') {

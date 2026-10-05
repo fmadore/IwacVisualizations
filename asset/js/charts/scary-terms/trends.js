@@ -79,12 +79,12 @@
     /**
      * `<details>` fallback listing every visible event as plain text.
      * Delegates to the shared implementation, keeping this block's
-     * summary label and class name.
+     * summary label; the shell is the core `.iwac-vis-details`.
      */
     S.buildEventsDetails = function (events, country) {
         return P.buildTimelineEventsDetails(events, country, {
             summaryKey: 'scary.events_list',
-            className: 'iwac-vis-scary-details'
+            className: 'iwac-vis-details'
         });
     };
 })();

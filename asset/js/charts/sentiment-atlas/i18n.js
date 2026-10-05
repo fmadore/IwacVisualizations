@@ -19,10 +19,6 @@
     }
 
         ns.addTranslations('en', {
-            'Loading sentiment atlas':          'Loading sentiment atlas',
-            'Polarity':                         'Polarity',
-            'Centrality':                       'Centrality',
-            'Subjectivity':                     'Subjectivity',
             'sentiment.rated_by':               'Rated by {model}',
             'sentiment.ai_note':                'Each AI model assessed the articles independently. Polarity describes the tone towards Islam and Muslims; centrality describes their prominence in the article; subjectivity describes the model’s assessment of factual or opinion-based language. These ratings support exploration and need checking against the texts. Model agreement is not a measure of accuracy.',
             'sentiment.sec_time':               'Ratings over time',
@@ -43,6 +39,7 @@
             'sentiment.sort_polarity':          'Most positive first',
             'sentiment.sort_volume':            'Most articles first',
             'sentiment.rated_n':                '{count} rated articles',
+            'sentiment.rated_n_one':            '{count} rated article',
             'sentiment.subjectivity_title':     'Subjectivity trend',
             'sentiment.subjectivity_desc':      'Average of the available subjectivity ratings for each publication year and model. Categories are coded from 1 (very objective) to 5 (very subjective); averaging assumes equal steps between them. Models disagree substantially on this measure, so small differences and apparent trends require particular caution.',
             'sentiment.correlation_title':      'Polarity against subjectivity',
@@ -67,13 +64,13 @@
             'sentiment.agreement_desc':         'The share of articles rated by both models where the two assign the same polarity label, with the full label-by-label table for the selected pair.',
             'sentiment.na_note':                '{count} articles rated “Not applicable” by this model are excluded from the polarity stacks.',
             'sentiment.co_rated':               '{count} co-rated articles',
+            'sentiment.co_rated_one':           '{count} co-rated article',
             'sentiment.pct_value':              '{pct}%',
             'sentiment.subj_tooltip':           '{value} (n = {count})',
             'sentiment.matrix_caption':         'Rows: {a} · Columns: {b}',
             'sentiment.pair_cell':              '{a}: {la} · {b}: {lb} — {count} articles'
         });
         ns.addTranslations('fr', {
-            'Loading sentiment atlas':          'Chargement de l’atlas des sentiments',
             'sentiment.rated_by':               'Évalués par {model}',
             'sentiment.ai_note':                'Chaque modèle d’IA a évalué les articles séparément. La polarité décrit le ton envers l’islam et les musulmans ; la centralité, la place qui leur est accordée ; la subjectivité, l’appréciation par le modèle d’un langage factuel ou fondé sur des opinions. Ces évaluations facilitent l’exploration et doivent être confrontées aux textes. L’accord entre modèles ne mesure pas leur exactitude.',
             'sentiment.sec_time':               'Évaluations au fil du temps',
@@ -94,6 +91,7 @@
             'sentiment.sort_polarity':          'Du plus positif',
             'sentiment.sort_volume':            'Du plus fourni',
             'sentiment.rated_n':                '{count} articles notés',
+            'sentiment.rated_n_one':            '{count} article noté',
             'sentiment.subjectivity_title':     'Tendance de la subjectivité',
             'sentiment.subjectivity_desc':      'Moyenne des évaluations de subjectivité disponibles pour chaque année de publication et chaque modèle. Les catégories sont codées de 1 (très objectif) à 5 (très subjectif) ; la moyenne suppose des écarts égaux entre elles. Les modèles divergent fortement sur cette mesure : les petits écarts et les tendances apparentes demandent donc une prudence particulière.',
             'sentiment.correlation_title':      'Polarité et subjectivité',
@@ -118,9 +116,11 @@
             'sentiment.agreement_desc':         'Part des articles co-évalués où deux modèles attribuent exactement la même polarité, avec le tableau croisé complet des étiquettes pour la paire sélectionnée.',
             'sentiment.na_note':                '{count} articles évalués « Non applicable » par ce modèle sont exclus des barres de polarité.',
             'sentiment.co_rated':               '{count} articles co-évalués',
+            'sentiment.co_rated_one':           '{count} article co-évalué',
             'sentiment.pct_value':              '{pct} %',
             'sentiment.subj_tooltip':           '{value} (n = {count})',
             'sentiment.matrix_caption':         'Lignes : {a} · Colonnes : {b}',
-            'sentiment.pair_cell':              '{a} : {la} · {b} : {lb} — {count} articles'
+            'sentiment.pair_cell':              '{a} : {la} · {b} : {lb} — {count} articles',
+            'Model comparison':        'Comparaison des mod\u00e8les',
         });
 })();

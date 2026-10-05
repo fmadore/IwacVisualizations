@@ -66,6 +66,44 @@
         return String(label == null ? '' : label) + (ns.locale === 'fr' ? ' :' : ':');
     };
 
+    /**
+     * The module's sequential count ramp, `--iwac-vis-heatmap-0..4`
+     * (iwac-core.css), as colours a canvas renderer can parse.
+     *
+     * The stops are `color-mix(in oklab, var(--primary), var(--surface))`
+     * expressions, which ECharts' and MapLibre's colour parsers both reject,
+     * so each goes through `ns.resolveCssVar`'s offscreen probe. When fewer
+     * than two resolve (no stylesheet yet, an embed without the module CSS)
+     * the ramp degrades to the theme's own surface → primary pair, which
+     * `getChartTokens()` always fills.
+     *
+     * Five copies of this block — three ECharts heatmaps and two choropleths
+     * — each with its own idea of the fallback, are what this replaces. It
+     * lives here, in `shared.core`, because its callers span the charts, map
+     * and layout bundles and a block bundle.
+     *
+     * @param {function(string):string} [map]  applied to every stop — pass
+     *   `P.normalizeColorForMapLibre` for a MapLibre paint expression
+     * @returns {string[]}
+     */
+    var HEATMAP_STOPS = [
+        '--iwac-vis-heatmap-0',
+        '--iwac-vis-heatmap-1',
+        '--iwac-vis-heatmap-2',
+        '--iwac-vis-heatmap-3',
+        '--iwac-vis-heatmap-4'
+    ];
+
+    ns.heatmapRamp = function (map) {
+        var resolve = ns.resolveCssVar || function () { return ''; };
+        var stops = HEATMAP_STOPS.map(function (name) { return resolve(name); }).filter(Boolean);
+        if (stops.length < 2) {
+            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+            stops = [tokens.surface, tokens.primary].filter(Boolean);
+        }
+        return typeof map === 'function' ? stops.map(map) : stops;
+    };
+
     /* ----------------------------------------------------------------- */
     /*  DOM helpers                                                       */
     /* ----------------------------------------------------------------- */
@@ -123,6 +161,22 @@
     /* ----------------------------------------------------------------- */
 
     /**
+     * In-flight requests, by resolved URL.
+     *
+     * Two blocks can want the same bundle on one page — item-set-dashboard
+     * and compare-newspapers both fetch `compare-newspapers/index.json`, and
+     * every `.iwac-vis-minimal-item` container on an item page fetches
+     * `template-summary.json` — and each was issuing its own request. Two
+     * panels wrote private memos to work around it; this retires both.
+     *
+     * Only the IN-FLIGHT promise is shared: the entry is dropped when it
+     * settles, so this is request de-duplication and not a response cache.
+     * A caller that wants a fresh read after a data sync still gets one, and
+     * a failure is not remembered.
+     */
+    var inFlight = {};
+
+    /**
      * Shared JSON fetch for module data files — the single fetch path
      * every orchestrator / panel should use instead of bare fetch().
      *
@@ -141,22 +195,6 @@
      *   (default `P.FETCH_TIMEOUT_MS`; 0 disables the bound).
      * @returns {Promise<any>} parsed JSON body
      */
-    /**
-     * In-flight requests, by resolved URL.
-     *
-     * Two blocks can want the same bundle on one page — item-set-dashboard
-     * and compare-newspapers both fetch `compare-newspapers/index.json`, and
-     * every `.iwac-vis-minimal-item` container on an item page fetches
-     * `template-summary.json` — and each was issuing its own request. Two
-     * panels wrote private memos to work around it; this retires both.
-     *
-     * Only the IN-FLIGHT promise is shared: the entry is dropped when it
-     * settles, so this is request de-duplication and not a response cache.
-     * A caller that wants a fresh read after a data sync still gets one, and
-     * a failure is not remembered.
-     */
-    var inFlight = {};
-
     P.fetchJSON = function (url, opts) {
         var u = url;
         var root = document.querySelector && document.querySelector('.iwac-vis-block[data-generation]');
@@ -377,7 +415,7 @@
         var shown = hours < 10
             ? Math.round(hours * 10) / 10
             : Math.round(hours);
-        return P.t('duration_hours', { count: P.formatNumber(shown) });
+        return P.t('duration_hours', { count: shown });
     };
 
     /**

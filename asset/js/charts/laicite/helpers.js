@@ -46,6 +46,98 @@
         return Math.round((n / d) * 1000) / 10;
     };
 
+    function numberLocale() {
+        return ns.locale === 'fr' ? 'fr-FR' : 'en-US';
+    }
+
+    /**
+     * A percentage (0–100, as `L.pct` returns it) written the way the page's
+     * locale writes one: "12.5%" in English, "12,5 %" in French. Every
+     * `toFixed(1) + '%'` in this block printed the English form on the
+     * French site. `digits` is fixed, not a maximum, so a column of shares
+     * lines up. null / NaN render as an em dash, never as "NaN%".
+     *
+     * @param {number|null} value
+     * @param {number} [digits=1]
+     * @returns {string}
+     */
+    L.formatPercent = function (value, digits) {
+        if (value == null || !isFinite(value)) return '—';
+        var d = digits == null ? 1 : digits;
+        try {
+            return new Intl.NumberFormat(numberLocale(), {
+                style: 'percent', minimumFractionDigits: d, maximumFractionDigits: d
+            }).format(value / 100);
+        } catch (e) {
+            return value.toFixed(d) + '%';
+        }
+    };
+
+    /**
+     * A decimal in the page's locale, for a placeholder whose template
+     * carries its own sign ("{percent}%" in English, "{percent} %" in
+     * French) — the template owns the spacing, this owns the comma. Prose,
+     * not a column: `digits` is a maximum, so 40 reads "40", not "40.0".
+     *
+     * @param {number|null} value
+     * @param {number} [digits=1]
+     * @returns {string}
+     */
+    L.formatDecimal = function (value, digits) {
+        if (value == null || !isFinite(value)) return '—';
+        var d = digits == null ? 1 : digits;
+        try {
+            return new Intl.NumberFormat(numberLocale(), {
+                maximumFractionDigits: d
+            }).format(value);
+        } catch (e) {
+            return String(Math.round(value * Math.pow(10, d)) / Math.pow(10, d));
+        }
+    };
+
+    /**
+     * Phone media for the block's charts whose axes are arrays — two value
+     * axes, or the seasonality view's two grids — or whose value axes are
+     * named at their ends under a legend. R.valueChartMedia writes ONE grid
+     * and ONE yAxis, which ECharts merges into the first of each only, and
+     * it moves the top edge and the name gap for a rotated, centred axis
+     * name; on these charts that lifted an end-placed name into the legend.
+     * So the same phone moves, element-wise and horizontal only: narrower
+     * gutters and the small axis type. (Custom for the reason the growth
+     * chart in chart-options-bar.js gives.) Seven charts in this block
+     * used to pass `R.withMedia(option, {})`, which withMedia ignores, so
+     * nothing about them changed on a phone; the four whose axes fit the
+     * shared presets take R.valueChartMedia / R.labelMedia, three take this.
+     *
+     * @param {Object} opts
+     * @param {Object|Array<Object>} opts.grid  phone gutters, per grid
+     * @param {number} [opts.xAxes=1]
+     * @param {number} [opts.yAxes=1]
+     * @returns {Array<Object>}  for R.withMedia
+     */
+    L.phoneMedia = function (opts) {
+        opts = opts || {};
+        var R = ns.responsive;
+        var small = P.AXIS_FONT_SM;
+        function axes(n, make) {
+            var out = [];
+            for (var i = 0; i < (n || 1); i++) out.push(make());
+            return out;
+        }
+        return [{
+            query: { maxWidth: R && R.BP ? R.BP.sm : 640 },
+            option: {
+                grid: opts.grid,
+                xAxis: axes(opts.xAxes, function () {
+                    return { axisLabel: { fontSize: small } };
+                }),
+                yAxis: axes(opts.yAxes, function () {
+                    return { nameTextStyle: { fontSize: small }, axisLabel: { fontSize: small } };
+                })
+            }
+        }];
+    };
+
     /**
      * The KPI row. Deliberately reports the dossier's own totals and the
      * year span, and keeps `tagged` and `said` side by side rather than
@@ -62,7 +154,7 @@
             { value: totals.members || 0, labelKey: 'laicite.kpi_members', featured: true },
             { value: totals.tagged || 0, labelKey: 'laicite.kpi_tagged' },
             { value: totals.said || 0, labelKey: 'laicite.kpi_said' },
-            { value: totals.countries || 0, labelKey: 'laicite.kpi_countries' },
+            { value: totals.countries || 0, labelKey: 'Countries' },
             { value: span.length === 2 ? span[0] + '–' + span[1] : '—',
               labelKey: 'laicite.kpi_span', text: true }
         ];
@@ -82,7 +174,7 @@
         var wrap = P.el('p', 'iwac-vis-laicite-authority');
         var a = P.el('a', 'iwac-vis-laicite-authority-link',
             P.t('laicite.authority_link') + ' — ' + (authority.subject_label || ''));
-        a.href = siteBase + '/item/' + authority.subject_o_id;
+        a.href = P.itemUrl(siteBase, authority.subject_o_id);
         wrap.appendChild(a);
         return wrap;
     };

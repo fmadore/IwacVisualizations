@@ -29,7 +29,6 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Loading press reprints':  'Loading press reprints',
             'reprints.title':          'Possible press reprints and shared copy',
             'reprints.description':    'Pairs of articles from different newspapers with highly similar AI representations of their full texts. These matches may identify agency dispatches, shared communiqués or reprints, but can also reflect similar subject matter. The software compares text representations, not identical wording. Read both articles before concluding that a text was copied or identifying a source.',
             'reprints.card_pairs':     'Candidate article pairs',
@@ -51,7 +50,6 @@
             'reprints.truncated':      'Showing the {n} highest-scoring pairs. Additional pairs above the matching threshold are omitted from this view.'
         });
         ns.addTranslations('fr', {
-            'Loading press reprints':  'Chargement des reprises de presse',
             'reprints.title':          'Reprises de presse et textes communs possibles',
             'reprints.description':    'Paires d’articles de journaux différents dont les représentations des textes intégraux produites par IA sont très similaires. Ces rapprochements peuvent signaler des dépêches d’agence, des communiqués communs ou des reprises, mais aussi des sujets proches. Le logiciel compare des représentations textuelles, sans vérifier que les formulations sont identiques. Lisez les deux articles avant de conclure à une reprise ou d’en identifier la source.',
             'reprints.card_pairs':     'Paires d’articles candidates',
@@ -130,7 +128,7 @@
         }
 
         var chart = ns.registerChart(panel.chart, function (el, chart) {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+            var tokens = ns.getChartTokens();
             var nodes = papers.map(function (p) {
                 return {
                     id: p.name,
@@ -148,7 +146,7 @@
                     value: l[2],
                     lineStyle: {
                         width: 1 + (l[2] / maxLink) * 6,
-                        color: tokens.border || '#d4d6da',
+                        color: tokens.border,
                         curveness: 0.15
                     }
                 };
@@ -188,12 +186,10 @@
         });
 
         // Shared graph chrome (zoom / reset / PNG download / fullscreen);
-        // no legend toggle — this graph has no legend — and no
-        // click-through: nodes are newspapers, not linkable items.
+        // no click-through: nodes are newspapers, not linkable items.
         if (chart) {
             P.buildGraphPanelToolbar(panel, chart, {
-                downloadName: 'iwac-press-reprints-network.png',
-                legendToggle: false
+                downloadName: 'iwac-press-reprints-network.png'
             });
         }
     }

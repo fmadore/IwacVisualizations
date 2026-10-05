@@ -22,8 +22,13 @@
         'network_select_hint':       'Click a point to see the entries sharing the most items with it; click the background to clear the selection.',
         'network_links_note':        'A line joins two entries recorded together on at least {count} items.',
         'cooccurrence_title':        'Co-occur in {count} items',
+        'cooccurrence_title_one':    'Co-occur in {count} item',
         'more_links_count':          '+{count} more links',
+        'more_links_count_one':      '+{count} more link',
         'links_count':               '{count} links',
+        'links_count_one':           '{count} link',
+        'network_stats_entities':    '{nodes} entities · {links} links',
+        'network_stats_places':      '{nodes} places · {links} links',
     });
 
     ns.addTranslations('fr', {
@@ -34,11 +39,22 @@
         'network_select_hint':       'Cliquez sur un point pour voir les entrées partageant le plus de documents avec lui ; cliquez sur le fond pour effacer la sélection.',
         'network_links_note':        'Une ligne relie deux entrées associées à au moins {count} documents communs.',
         'Strongest co-occurrences':  'Cooccurrences les plus fortes',
-        'cooccurrence_title':        'Cooccurrence dans {count} \u00e9l\u00e9ments',
+        'cooccurrence_title':        'Cooccurrence dans {count} documents',
+        'cooccurrence_title_one':    'Cooccurrence dans {count} document',
         'more_links_count':          '+{count} liens suppl\u00e9mentaires',
+        'more_links_count_one':      '+{count} lien suppl\u00e9mentaire',
         'links_count':               '{count} liens',
+        'links_count_one':           '{count} lien',
+        'network_stats_entities':    '{nodes} entités · {links} liens',
+        'network_stats_places':      '{nodes} lieux · {links} liens',
         'Min. link strength':        'Force min. des liens',
         'All links':                 'Tous les liens',
         'Find in network':           'Chercher dans le r\u00e9seau',
+        'Network of entries recorded on the same items':
+            'R\u00e9seau des entr\u00e9es associ\u00e9es aux m\u00eames documents',
+        'Network of places recorded on the same items':
+            'R\u00e9seau des lieux associ\u00e9s aux m\u00eames documents',
+        'Entry':                     'Entr\u00e9e',
+        'Links':                     'Liens',
     });
 })();

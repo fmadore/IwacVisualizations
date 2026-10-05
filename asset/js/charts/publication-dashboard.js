@@ -126,7 +126,7 @@
                 values:    run.values,
                 highlight: run.highlight,
                 caption:   (run.newspaper ? run.newspaper + ' — ' : '')
-                    + P.t('publications_count', { count: P.formatNumber(run.total || 0) })
+                    + P.t('publications_count', { count: run.total || 0 })
             } : null;
             return {
                 wordcloud:          data.wordcloud || [],

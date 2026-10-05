@@ -177,7 +177,7 @@
                     source: sourceId,
                     radius: P.countRadius('count', maxCount, 6, 28),
                     sortKey: 'count',
-                    stroke: P.normalizeColorForMapLibre(tokens.surface || '#ffffff'),
+                    stroke: P.normalizeColorForMapLibre(tokens.surface),
                     opacity: [0.7, 1],
                     strokeWidth: [1.5, 3]
                 }));
@@ -188,7 +188,7 @@
             var props = feature.properties || {};
             var location = locations[Number(props.locationIndex)] || {};
             var subtitle = [];
-            subtitle.push(P.t('references_count', { count: P.formatNumber(location.count || 0) }));
+            subtitle.push(P.t('references_count', { count: location.count || 0 }));
             if (location.earliestYear && location.latestYear) {
                 subtitle.push(String(location.earliestYear) + '–' + String(location.latestYear));
             }
@@ -317,7 +317,7 @@
                     var topic = list[p.dataIndex] || {};
                     var lines = ['<strong>' + P.escapeHtml(topic.label || '') + '</strong>'];
                     lines.push(P.t('references_topic_tooltip', {
-                        count: P.formatNumber(topic.count || 0),
+                        count: topic.count || 0,
                         pct:   Math.round((topic.share || 0) * 100)
                     }));
                     (topic.items || []).slice(0, 5).forEach(function (item) {
@@ -581,7 +581,7 @@
                     ? P.t('references_topics_title_lang', { language: language })
                     : P.t('Scholarly topics'),
                 P.t('references_topics_desc', {
-                    count:  P.formatNumber(model.n_docs || 0),
+                    count:  model.n_docs || 0,
                     topics: P.formatNumber(model.n_topics || 0)
                 })
             );
@@ -866,10 +866,6 @@
         warnLabel:      'IWACVis references overview',
         requireECharts: true,
         dataFile:       'references-overview.json',
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) loadingLabel.textContent = P.t('Loading references overview') + '\u2026';
-        },
         render:         render
     });
 

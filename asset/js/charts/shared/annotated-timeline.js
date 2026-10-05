@@ -141,11 +141,11 @@
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var resolve = ns.resolveCssVar || function () { return ''; };
-        var mutedResolved   = resolve('--muted') || tokens.muted || '#767880';
-        var borderResolved  = resolve('--border') || tokens.border || '#d4d6da';
-        var surfaceResolved = resolve('--surface-raised') || tokens.surfaceRaised
-            || tokens.surface || '#fafaf9';
-        var primaryResolved = resolve('--primary') || tokens.primary || '#e64a19';
+        // getChartTokens() fills every key from the theme's own fallbacks.
+        var mutedResolved   = resolve('--muted') || tokens.muted;
+        var borderResolved  = resolve('--border') || tokens.border;
+        var surfaceResolved = resolve('--surface-raised') || tokens.surfaceRaised;
+        var primaryResolved = resolve('--primary') || tokens.primary;
 
         var chartSeries = names.map(function (name) {
             return {

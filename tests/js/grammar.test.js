@@ -30,6 +30,9 @@ const PANELS = read('asset', 'js', 'charts', 'shared', 'panels.js');
 const CONTROLS = read('asset', 'js', 'charts', 'shared', 'panels-controls.js');
 const PANELS_MAP = read('asset', 'js', 'charts', 'shared', 'panels-map.js');
 const CHART_OPTIONS = read('asset', 'js', 'charts', 'shared', 'chart-options.js');
+// The newspaper-coverage wording of the disclosure is the Collection
+// Overview's own, so it lives in that block's dictionary.
+const COLLECTION_I18N = read('asset', 'js', 'charts', 'collection-overview', 'i18n.js');
 
 class FakeElement {
     constructor(tag) {
@@ -86,6 +89,7 @@ function loadModules(options = {}) {
     // that the strings they render exist in both languages and interpolate the
     // numbers they claim to.
     vm.runInContext(I18N, context, { filename: 'iwac-i18n.js' });
+    vm.runInContext(COLLECTION_I18N, context, { filename: 'collection-overview/i18n.js' });
     vm.runInContext(PANELS, context, { filename: 'panels.js' });
     vm.runInContext(CONTROLS, context, { filename: 'panels-controls.js' });
     vm.runInContext(PANELS_MAP, context, { filename: 'panels-map.js' });
@@ -187,7 +191,6 @@ test('a windowed chart states the window and offers a way out', () => {
         total: 82,
         noteKey: 'gantt_window_note',
         allKey: 'gantt_window_all',
-        showAllKey: 'gantt_show_all',
         showTopKey: 'gantt_show_top',
         onToggle: (expanded) => toggles.push(expanded),
     });
@@ -210,7 +213,7 @@ test('the disclosure and the chart descriptions are French on the French site', 
     const { P, context } = loadModules({ locale: 'fr' });
     const d = P.buildWindowDisclosure({
         windowSize: 20, total: 82,
-        noteKey: 'gantt_window_note', showAllKey: 'gantt_show_all', onToggle() {},
+        noteKey: 'gantt_window_note', onToggle() {},
     });
     const [text, button] = d.root.children;
     assert.match(text.textContent, /journaux/, 'the count fell back to English');

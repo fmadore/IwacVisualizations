@@ -78,44 +78,14 @@
     margin: 0;
 }
 
-.iwac-vis-spatial-picker__item {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-2, 0.5rem);
-    width: 100%;
-    padding: 0.25rem 0.4rem;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm, 0.375rem);
-    font-family: inherit;
-    font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #13161c);
-    text-align: left;
-    cursor: pointer;
-    transition:
-        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
-}
-
-.iwac-vis-spatial-picker__item:hover {
-    background: var(--surface-raised, #faf8f6);
-}
-
-.iwac-vis-spatial-picker__item:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
-    outline-offset: 1px;
-}
-
-.iwac-vis-spatial-picker__item--active {
+/*  The row itself — layout, hover, focus and the count — is the shared
+ *  `.iwac-vis-list-item` (iwac-core.css), which the picker's buttons carry.
+ *  Only the picker's own selected state lives here; it holds on hover,
+ *  where the shared row's `:hover` would otherwise out-rank it. */
+.iwac-vis-spatial-picker__item--active,
+.iwac-vis-spatial-picker__item--active:hover {
     background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
     border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
-}
-
-.iwac-vis-spatial-picker__item-count {
-    flex: 0 0 auto;
-    color: var(--muted, #66696e);
-    font-size: var(--text-xs, 0.8125rem);
-    font-variant-numeric: tabular-nums;
 }
 
 .iwac-vis-spatial-picker__selection {
@@ -153,14 +123,7 @@
 /*  Map toolbar (country focus + status line)                            */
 /* =================================================================== */
 
-.iwac-vis-spatial-toolbar__label {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2, 0.5rem);
-    font-size: var(--text-sm, 0.9375rem);
-    font-weight: 500;
-    color: var(--ink-light, #3f4349);
-}
+/*  Toolbar labels are the shared `.iwac-vis-toolbar__label` (iwac-core.css). */
 
 .iwac-vis-spatial-toolbar__select {
     max-width: min(14rem, 100vw);

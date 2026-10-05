@@ -42,15 +42,13 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Items': 'Items',
-            'Items per year': 'Items per year',
-            'Top subjects': 'Top subjects',
-            'Most frequent words': 'Most frequent words',
-            'desc_item_set_corpus': 'These charts describe the items represented in the available data for this collection. Coverage depends on which material has been collected and catalogued.'
+            'desc_item_set_tags': 'The 15 most frequent catalogue tags in this collection. Counts refer to tagged items, not word occurrences; an item can have several tags.',
+            'desc_item_set_timeline': 'Items by recorded publication year. Gaps can reflect missing holdings or dates rather than an interruption in publication.',
         });
         ns.addTranslations('fr', {
-            'Items per year': 'Éléments par année',
-            'desc_item_set_corpus': 'Ces graphiques décrivent les documents représentés dans les données disponibles pour cette collection. La couverture dépend des documents collectés et catalogués.'
+            'Items per year': 'Documents par année',
+            'desc_item_set_tags': 'Les 15 mots-clés du catalogue les plus fréquents dans cette collection. Les nombres portent sur les documents indexés, et non sur les occurrences de mots ; un document peut porter plusieurs mots-clés.',
+            'desc_item_set_timeline': 'Documents par année de publication enregistrée. Les lacunes peuvent refléter des documents ou des dates manquants plutôt qu’une interruption de publication.',
         });
     }
 

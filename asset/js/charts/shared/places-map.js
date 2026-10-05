@@ -88,7 +88,7 @@
                 // the Sahel — the same treatment as every IWAC bubble map.
                 radius: P.countRadius('count', max, 3, 24),
                 color: activeColor(),
-                stroke: P.normalizeColorForMapLibre(tokens.surface || '#ffffff'),
+                stroke: P.normalizeColorForMapLibre(tokens.surface),
                 opacity: [0.7, 0.95],
                 strokeWidth: [1, 2]
             });
@@ -178,7 +178,7 @@
         if (!ranked.length) return null;
         ranked.sort(function (a, b) { return b.count - a.count; });
 
-        var details = P.el('details', 'iwac-vis-places-details');
+        var details = P.el('details', 'iwac-vis-details');
         details.appendChild(P.el('summary', null, cfg.summary));
         var table = P.el('table', 'iwac-vis-table');
         var thead = P.el('thead');

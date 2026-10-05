@@ -551,7 +551,7 @@
         head.appendChild(P.el(
             'span',
             'iwac-vis-topic-card__count',
-            P.t('articles_count', { count: P.formatNumber(topic.article_count) })
+            P.t('articles_count', { count: topic.article_count })
         ));
         card.appendChild(head);
 

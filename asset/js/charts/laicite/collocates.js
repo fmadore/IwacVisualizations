@@ -57,7 +57,7 @@
     }
 
     /**
-     * @param {Object} cfg {bundle, implicit, metadata, state, siteBase}
+     * @param {Object} cfg {bundle, implicit, state}
      */
     L.buildCollocates = function (cfg) {
         var bundle = cfg.bundle;
@@ -155,8 +155,8 @@
 
             var meta = P.el('p', 'iwac-vis-laicite-collocate-meta');
             meta.textContent = P.t('laicite.collocate_stats', {
-                lr: (row.log_ratio || 0).toFixed(2),
-                count: P.formatNumber(row.count || 0),
+                lr: L.formatDecimal(row.log_ratio || 0, 2),
+                count: row.count || 0,
                 docs: P.formatNumber(row.documents || 0)
             });
             li.appendChild(meta);

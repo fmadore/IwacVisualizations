@@ -24,6 +24,11 @@
  * the table, read by the calendar-heatmap renderer and the dashboards'
  * year × month panel as well as by On This Day. Both of those used to carry
  * private duplicates.
+ *
+ * The same two grids label their Gregorian rows too, so the short Gregorian
+ * month table lives here beside the lunar one (`MONTHS_SHORT`), and
+ * `monthLabels(calendar)` hands either grid its twelve rows in the page
+ * locale. Each grid used to keep its own Gregorian copy.
  */
 (function () {
     'use strict';
@@ -38,6 +43,30 @@
              'Joumada I', 'Joumada II', 'Rajab', 'Chaabane',
              'Ramadan', 'Chawwal', 'Dhou al-qiʻda', 'Dhou al-hijja']
     };
+
+    /**
+     * Gregorian month abbreviations, for the same month grids. Axis
+     * furniture: always needed as a complete ordered set and never reused
+     * outside a grid, so kept here rather than in the i18n dictionary.
+     */
+    var MONTHS_SHORT = {
+        en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
+             'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
+    };
+
+    /**
+     * The twelve row labels of a month grid, in the page locale.
+     *
+     * @param {string} [calendar]  'hijri' for the lunar months; anything
+     *   else for the Gregorian abbreviations
+     * @returns {string[]}
+     */
+    function monthLabels(calendar) {
+        var table = calendar === 'hijri' ? MONTHS : MONTHS_SHORT;
+        return table[ns.locale === 'fr' ? 'fr' : 'en'] || table.en;
+    }
 
     // `undefined` = not yet probed, `false` = this engine cannot do it.
     var formatter;
@@ -114,10 +143,12 @@
     }
 
     ns.hijri = {
-        MONTHS:    MONTHS,
-        available: available,
-        parts:     parts,
-        monthName: monthName,
-        format:    format
+        MONTHS:       MONTHS,
+        MONTHS_SHORT: MONTHS_SHORT,
+        monthLabels:  monthLabels,
+        available:    available,
+        parts:        parts,
+        monthName:    monthName,
+        format:       format
     };
 })();

@@ -225,10 +225,6 @@
         warnLabel:      'IWACVis lexical metrics',
         requireECharts: true,
         dataFile:       'lexical-metrics.json',
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) loadingLabel.textContent = P.t('Loading press language metrics') + '…';
-        },
         render:         render
     });
 })();

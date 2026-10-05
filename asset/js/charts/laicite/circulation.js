@@ -33,8 +33,6 @@
     var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
-    function pct(n, d) { return d ? (n / d) * 100 : 0; }
-
     /**
      * Duplication per decade, as a share of that decade's scanned
      * articles rather than a count.
@@ -54,9 +52,9 @@
         var palette = (ns.getPalette && ns.getPalette()) || [];
         var R = ns.responsive;
         var option = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 56, top: 24, bottom: 44 })
-                : { left: 56, right: 24, top: 24, bottom: 44, containLabel: true },
+            // 64px left: the rotated axis name needs the gutter, and
+            // R.valueChartMedia narrows it on a phone.
+            grid: C._grid({ left: 64, top: 24, bottom: 44 }),
             tooltip: {
                 trigger: 'axis',
                 confine: true,
@@ -66,24 +64,22 @@
                     var p = params[0];
                     return C.itemTooltip(p.axisValue,
                         P.t('laicite.circulation_decade_tooltip', {
-                            count: P.formatNumber(byDecade[p.axisValue] || 0)
+                            count: byDecade[p.axisValue] || 0
                         }));
                 }
             },
             xAxis: { type: 'category', data: decades },
-            yAxis: {
-                type: 'value',
-                name: P.t('laicite.circulation_axis'),
-                nameLocation: 'end',
-                nameGap: 12
-            },
+            yAxis: Object.assign({ type: 'value' },
+                C._valueAxisName(P.t('laicite.circulation_axis'))),
             series: [{
                 type: 'bar',
                 itemStyle: { color: palette[0] },
                 data: decades.map(function (d) { return byDecade[d] || 0; })
             }]
         };
-        return R && R.withMedia ? R.withMedia(option, {}) : option;
+        return R && R.withMedia
+            ? R.withMedia(option, R.valueChartMedia({ hasZoom: false }))
+            : option;
     }
 
     /** The outlet pairs that share copy most often. */
@@ -98,9 +94,7 @@
             li.appendChild(P.el('span', 'iwac-vis-laicite-circ-link-pair',
                 row[0] + ' ⇄ ' + row[1]));
             li.appendChild(P.el('span', 'iwac-vis-laicite-circ-link-n',
-                P.t('laicite.circulation_pairs_n', {
-                    count: P.formatNumber(row[2])
-                })));
+                P.t('laicite.circulation_pairs_n', { count: row[2] })));
             list.appendChild(li);
         });
         wrap.appendChild(list);
@@ -127,7 +121,7 @@
             var li = P.el('li', 'iwac-vis-laicite-circ-pair');
             li.appendChild(P.el('span', 'iwac-vis-laicite-circ-sim',
                 P.t('laicite.circulation_similarity', {
-                    value: (pair.similarity * 100).toFixed(1)
+                    value: L.formatDecimal(pair.similarity * 100)
                 })));
             ['a', 'b'].forEach(function (side) {
                 var item = pair[side] || {};
@@ -135,7 +129,7 @@
                 var title = item.title || '';
                 if (siteBase && item.o_id) {
                     var link = P.el('a', 'iwac-vis-laicite-circ-title', title);
-                    link.href = siteBase + '/item/' + item.o_id;
+                    link.href = P.itemUrl(siteBase, item.o_id);
                     row.appendChild(link);
                 } else {
                     row.appendChild(P.el('span', 'iwac-vis-laicite-circ-title', title));
@@ -153,7 +147,8 @@
                 evidence.appendChild(P.el('p', null, P.t('laicite.research_reuse_' + check.status)));
                 if (check.status === 'compared') {
                     evidence.appendChild(P.el('p', null, P.t('laicite.research_reuse_scores', {
-                        sequence: (100 * check.sequence_ratio).toFixed(1), grams: (100 * check.fivegram_jaccard).toFixed(1)
+                        sequence: L.formatDecimal(100 * check.sequence_ratio),
+                        grams: L.formatDecimal(100 * check.fivegram_jaccard)
                     })));
                     evidence.appendChild(P.el('blockquote', null, check.excerpt_a));
                     evidence.appendChild(P.el('blockquote', null, check.excerpt_b));
@@ -194,7 +189,7 @@
         panel.appendChild(P.buildSummaryCards([
             { value: reprinted, labelKey: 'laicite.circulation_kpi_items' },
             { value: scanned, labelKey: 'laicite.circulation_kpi_scanned' },
-            { value: pct(reprinted, scanned).toFixed(1) + '%', text: true,
+            { value: L.formatPercent(L.pct(reprinted, scanned)), text: true,
               labelKey: 'laicite.circulation_kpi_share' },
             { value: bundle.total_pairs || 0, labelKey: 'laicite.circulation_kpi_pairs' }
         ]));
@@ -204,7 +199,7 @@
         // it is a floor and never a census.
         panel.appendChild(P.el('p', 'iwac-vis-panel-desc iwac-vis-laicite-circ-note',
             P.t('laicite.circulation_note', {
-                threshold: ((bundle.threshold || 0) * 100).toFixed(0)
+                threshold: L.formatDecimal((bundle.threshold || 0) * 100, 0)
             })));
 
         if (!reprinted) {

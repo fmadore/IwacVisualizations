@@ -126,7 +126,7 @@
 
         function buildRow(row) {
             var id = row[0], label = row[1], count = row[2];
-            var btn = P.el('button', 'iwac-vis-spatial-picker__item');
+            var btn = P.el('button', 'iwac-vis-list-item iwac-vis-spatial-picker__item');
             btn.type = 'button';
             btn.setAttribute('role', 'option');
             btn.dataset.entityId = String(id);
@@ -134,7 +134,7 @@
             if (selected) btn.classList.add('iwac-vis-spatial-picker__item--active');
             btn.setAttribute('aria-selected', selected ? 'true' : 'false');
             btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-spatial-picker__item-name', label));
-            btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-count', P.formatNumber(count)));
+            btn.appendChild(P.el('span', 'iwac-vis-list-item__count', P.formatNumber(count)));
             btn.addEventListener('click', function () {
                 if (state.selection && state.selection.id === id) {
                     state.clearEntity();
@@ -174,14 +174,14 @@
             var s = sel.summary || {};
             var bits = [];
             if (s.total_mentions != null) {
-                bits.push(P.t('mentions_count', { count: P.formatNumber(s.total_mentions) }));
+                bits.push(P.t('mentions_count', { count: s.total_mentions }));
             }
             if (s.year_min && s.year_max) {
                 bits.push(s.year_min === s.year_max
                     ? String(s.year_min)
                     : s.year_min + '–' + s.year_max);
             }
-            bits.push(P.t('places_count', { count: P.formatNumber(sel.locations.length) }));
+            bits.push(P.t('places_count', { count: sel.locations.length }));
             selectionBox.appendChild(
                 P.el('p', 'iwac-vis-spatial-picker__summary', bits.join(' · ')));
 
@@ -215,10 +215,10 @@
             });
             places.slice(0, TOP_PLACES).forEach(function (p) {
                 var li = P.el('li');
-                var btn = P.el('button', 'iwac-vis-spatial-picker__item');
+                var btn = P.el('button', 'iwac-vis-list-item iwac-vis-spatial-picker__item');
                 btn.type = 'button';
                 btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-spatial-picker__item-name', p.name));
-                btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-count', P.formatNumber(p.count)));
+                btn.appendChild(P.el('span', 'iwac-vis-list-item__count', P.formatNumber(p.count)));
                 btn.addEventListener('click', function () { state.requestFlyTo(p); });
                 li.appendChild(btn);
                 placesList.appendChild(li);

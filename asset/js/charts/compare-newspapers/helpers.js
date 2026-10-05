@@ -29,19 +29,24 @@
     /*  (previously colorB was a hardcoded '#394f68' literal repeated in  */
     /*  five panels, so the charts stayed dark-blue in dark mode while    */
     /*  the CSS legend dots went light — a mismatch). Falls back to the   */
-    /*  literal when the block / theme isn't resolvable. One source of    */
-    /*  truth instead of five copy-pasted blocks.                         */
+    /*  theme's --secondary (which the property aliases) when the block   */
+    /*  isn't on the page. One source of truth instead of five copies.    */
+    /*                                                                    */
+    /*  The property arrives as whatever --secondary is written in —      */
+    /*  oklch() or color-mix() on the current theme — so it goes through  */
+    /*  resolveCssColor: ECharts cannot parse either form.                */
     /* ----------------------------------------------------------------- */
 
     function compareColors() {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var b = '#394f68';
+        var b = tokens.secondary;
         var block = document.querySelector('.iwac-vis-compare-newspapers');
         if (block && window.getComputedStyle) {
-            var vb = getComputedStyle(block).getPropertyValue('--iwac-vis-compare-color-b');
-            if (vb && vb.trim()) b = vb.trim();
+            var vb = getComputedStyle(block).getPropertyValue('--iwac-vis-compare-color-b').trim();
+            var resolved = vb && ns.resolveCssColor ? ns.resolveCssColor(vb) : vb;
+            if (resolved) b = resolved;
         }
-        return { a: tokens.primary || '#e64a19', b: b };
+        return { a: tokens.primary, b: b };
     }
 
     // One counter per block instance isn't worth the plumbing — a module-

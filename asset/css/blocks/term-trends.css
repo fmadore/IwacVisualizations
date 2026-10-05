@@ -28,77 +28,12 @@
     justify-content: space-between;
 }
 
-/* Search box + anchored suggestion dropdown */
+/* Search box: the dropdown is the shared `.iwac-vis-search`
+ * (iwac-core.css); only the box's share of the controls row is ours. */
 
 .iwac-vis-ngram-search {
-    position: relative;
     flex: 1 1 18rem;
     max-width: 28rem;
-}
-
-.iwac-vis-ngram-search__input {
-    width: 100%;
-}
-
-.iwac-vis-ngram-search__dropdown {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    right: 0;
-    z-index: var(--iwac-vis-z-overlay, 6);
-    max-height: 20rem;
-    overflow-y: auto;
-    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
-     *  that page is the HOST's, so reaching the end of a table used to
-     *  scroll the article the widget sits in. */
-    overscroll-behavior: contain;
-    background: var(--surface-raised, #faf8f6);
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
-    display: flex;
-    flex-direction: column;
-}
-
-.iwac-vis-ngram-search__item {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3, 0.75rem);
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    background: transparent;
-    border: none;
-    text-align: left;
-    font-family: inherit;
-    font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #13161c);
-    cursor: pointer;
-    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
-}
-
-.iwac-vis-ngram-search__item:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 8%, var(--surface-raised, #faf8f6));
-}
-
-.iwac-vis-ngram-search__item:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
-    outline-offset: -2px;
-}
-
-.iwac-vis-ngram-search__term {
-    font-weight: 600;
-}
-
-.iwac-vis-ngram-search__count {
-    color: var(--muted, #66696e);
-    font-size: var(--text-xs, 0.8125rem);
-    white-space: nowrap;
-}
-
-.iwac-vis-ngram-search__empty {
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    color: var(--muted, #66696e);
-    font-size: var(--text-sm, 0.9375rem);
 }
 
 /* Selected-term chips row */

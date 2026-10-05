@@ -49,7 +49,7 @@
         var lines = [
             '<strong>' + P.escapeHtml(entry.name) + '</strong>',
             P.t(measure === 'runtime' ? 'av.tip_runtime' : 'av.tip_items', {
-                count:    P.formatNumber(entry.items),
+                count:    entry.items,
                 duration: P.formatTotalDuration(entry.seconds)
             })
         ];

@@ -31,8 +31,6 @@
     var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
-    function pct(n, d) { return d ? (n / d) * 100 : 0; }
-
     /**
      * Signed share per decade — the coverage curve the ranking below has
      * to be read through.
@@ -51,9 +49,7 @@
         var decades = rows.map(function (r) { return r.decade; });
 
         var option = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 56, right: 56, top: 44, bottom: 44 })
-                : { left: 56, right: 56, top: 44, bottom: 44, containLabel: true },
+            grid: C._grid({ left: 56, right: 56, top: 44, bottom: 44 }),
             legend: { top: 4 },
             tooltip: {
                 trigger: 'axis',
@@ -66,7 +62,7 @@
                         P.t('laicite.bylines_decade_tooltip', {
                             signed: P.formatNumber(row.signed || 0),
                             articles: P.formatNumber(row.articles || 0),
-                            percent: pct(row.signed, row.articles).toFixed(0)
+                            percent: L.formatDecimal(L.pct(row.signed, row.articles), 0)
                         }));
                 }
             },
@@ -95,12 +91,14 @@
                     lineStyle: { width: 2 },
                     itemStyle: { color: palette[1] },
                     data: rows.map(function (r) {
-                        return Math.round(pct(r.signed, r.articles) * 10) / 10;
+                        return L.pct(r.signed, r.articles);
                     })
                 }
             ]
         };
-        return R && R.withMedia ? R.withMedia(option, {}) : option;
+        return R && R.withMedia
+            ? R.withMedia(option, L.phoneMedia({ grid: { left: 40, right: 40 }, yAxes: 2 }))
+            : option;
     }
 
     /** The ranking itself — bylines by dossier articles signed. */
@@ -111,9 +109,11 @@
         var palette = (ns.getPalette && ns.getPalette()) || [];
         var R = ns.responsive;
         var option = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 180, top: 16, bottom: 40 })
-                : { left: 180, right: 24, top: 16, bottom: 40, containLabel: true },
+            // A small gutter and a capped label, as the shared horizontal
+            // bars do. The grid contains its labels, so the 180px gutter
+            // this used to carry was blank space beside them — on a phone,
+            // half the chart.
+            grid: C._grid({ left: 8, top: 16, bottom: 40 }),
             tooltip: {
                 trigger: 'item',
                 confine: true,
@@ -125,9 +125,7 @@
                     var span = (row.first && row.last)
                         ? row.first + '–' + row.last : '';
                     var bits = [
-                        P.t('laicite.bylines_count', {
-                            count: P.formatNumber(row.count || 0)
-                        })
+                        P.t('laicite.bylines_count', { count: row.count || 0 })
                     ];
                     if (span) bits.push(span);
                     if (papers) bits.push(papers);
@@ -142,7 +140,7 @@
             yAxis: {
                 type: 'category',
                 data: top.map(function (r) { return r.name; }),
-                axisLabel: { fontSize: 11 }
+                axisLabel: { fontSize: 11, width: 180, overflow: 'truncate' }
             },
             series: [{
                 type: 'bar',
@@ -150,7 +148,9 @@
                 data: top.map(function (r) { return r.count || 0; })
             }]
         };
-        return R && R.withMedia ? R.withMedia(option, {}) : option;
+        return R && R.withMedia
+            ? R.withMedia(option, R.labelMedia({ smWidth: 110 }))
+            : option;
     }
 
     /**
@@ -178,7 +178,7 @@
         panel.appendChild(P.buildSummaryCards([
             { value: signed, labelKey: 'laicite.bylines_kpi_signed' },
             { value: articles, labelKey: 'laicite.bylines_kpi_articles' },
-            { value: pct(signed, articles).toFixed(0) + '%', text: true,
+            { value: L.formatPercent(L.pct(signed, articles), 0), text: true,
               labelKey: 'laicite.bylines_kpi_share' },
             { value: bundle.unique || 0, labelKey: 'laicite.bylines_kpi_unique' }
         ]));
@@ -186,13 +186,14 @@
             P.t('laicite.bylines_note')));
         root.appendChild(panel);
 
-        if (L.researchTable && (bundle.top || []).some(function (r) { return r.corpus_articles; })) {
+        if ((bundle.top || []).some(function (r) { return r.corpus_articles; })) {
             var normalized = P.el('details');
             normalized.appendChild(P.el('summary', null, P.t('laicite.research_bylines')));
             normalized.appendChild(P.el('p', null, P.t('laicite.research_bylines_note')));
             normalized.appendChild(L.researchTable([P.t('laicite.research_byline'), P.t('laicite.research_selected'),
                 P.t('laicite.research_records'), P.t('laicite.research_rate')], bundle.top.map(function (r) {
-                return [r.name, r.count, r.corpus_articles, r.dossier_share == null ? '—' : (100 * r.dossier_share).toFixed(1) + '%'];
+                return [r.name, r.count, r.corpus_articles,
+                    r.dossier_share == null ? '—' : L.formatPercent(100 * r.dossier_share)];
             })));
             root.appendChild(normalized);
         }

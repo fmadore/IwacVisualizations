@@ -216,7 +216,7 @@
      */
     P.buildGraphStyle = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var bg = P.normalizeColorForMapLibre(tokens.background || '#f7f7f6');
+        var bg = P.normalizeColorForMapLibre(tokens.background);
         return {
             version: 8,
             // The same font endpoint the positron/dark-matter basemaps
@@ -289,14 +289,23 @@
     /* ----------------------------------------------------------------- */
 
     // Where a token cannot be read (a render before the theme sheet is in,
-    // a test without a stylesheet) the theme's own light values stand in.
-    var TOKEN_FALLBACK = {
-        '--primary': '#ce4115',
-        '--ink':     '#2c2f37',
-        '--border':  '#d4d6da',
-        '--surface': '#fdfdfd',
-        '--muted':   '#66696e'
+    // a test without a stylesheet) the chart-token set stands in: it fills
+    // every key from the theme's own fallbacks, in the active mode — the
+    // literal table this replaced held stale light-only values from before
+    // the v2 palette, so a dark page fell back to light colours.
+    var TOKEN_KEY = {
+        '--primary': 'primary',
+        '--ink':     'ink',
+        '--border':  'border',
+        '--surface': 'surface',
+        '--muted':   'muted'
     };
+
+    function tokenFallback(varName) {
+        var key = TOKEN_KEY[varName];
+        if (!key || !ns.getChartTokens) return '';
+        return (ns.getChartTokens() || {})[key] || '';
+    }
 
     /**
      * A theme token as a MapLibre colour: the live custom property, or the
@@ -306,12 +315,12 @@
      * each carried an `ml / resolvePrimary / resolveInk` trio for this.
      *
      * @param {string} varName   e.g. '--primary'
-     * @param {string} [fallback]  default: the token's light value
+     * @param {string} [fallback]  default: the token's chart-token value
      * @returns {string}
      */
     P.mapColor = function (varName, fallback) {
         var resolved = ns.resolveCssVar && ns.resolveCssVar(varName);
-        return P.normalizeColorForMapLibre(resolved || fallback || TOKEN_FALLBACK[varName] || '');
+        return P.normalizeColorForMapLibre(resolved || fallback || tokenFallback(varName));
     };
 
     /** `hovered` under feature-state hover (P.attachFeatureStateHover), else `resting`. */
@@ -507,12 +516,9 @@
      *   Opt-in: ROADMAP §4 and §10 both list globe projection as "won't do".
      * @param {boolean} [config.navigation=true]  Show the NavigationControl
      * @param {boolean} [config.fullscreen=true]  Show MapLibre's native
-     *   FullscreenControl. Pass false where the panel toolbar already has one.
-     * @param {HTMLElement} [config.fullscreenContainer]  Element to expand
-     *   instead of the map container. Use it where the map is only half the
-     *   interface — a graph whose filters and selection sidebar are siblings,
-     *   not chrome — and pass the wrapper that holds all of it. Must contain
-     *   the map, or fullscreen would show a box with no canvas in it.
+     *   FullscreenControl. Pass false where the panel toolbar already has one,
+     *   or where the map is only part of the interface (the entity network
+     *   expands its whole layout through `P.addFullscreenButton`).
      * @param {string} [config.title]  What this map shows, in one phrase.
      *   Becomes MapLibre's `Map.Title` and the host's `aria-label`, so a
      *   screen reader announces the map rather than "application".
@@ -633,21 +639,12 @@
         // container, not the surrounding panel. That's intentional:
         // maps have their own zoom / pan controls and users want to
         // expand the basemap itself, not the chrome around it. Opt-out
-        // by passing `fullscreen: false`.
-        //
-        // `fullscreenContainer` overrides that target for the case the
-        // default gets wrong: a map that is not the whole interface. The
-        // entity network reads through its type chips, its min-strength
-        // select and the sidebar listing the selected node's links — expand
-        // the canvas alone and every one of them is left behind on the page,
-        // so fullscreen drops the reader into a graph they cannot filter,
-        // cannot search and cannot interrogate.
+        // by passing `fullscreen: false` — as a map that is only part of
+        // its interface must: one control per map cannot track a block-level
+        // fullscreen another map entered, so the entity network uses a
+        // single block toggle instead.
         if (config.fullscreen !== false && typeof maplibregl.FullscreenControl === 'function') {
-            var fsOpts = {};
-            if (config.fullscreenContainer instanceof HTMLElement) {
-                fsOpts.container = config.fullscreenContainer;
-            }
-            map.addControl(new maplibregl.FullscreenControl(fsOpts), 'top-right');
+            map.addControl(new maplibregl.FullscreenControl(), 'top-right');
         }
 
         // Run the caller's custom-layer setup on every style load so

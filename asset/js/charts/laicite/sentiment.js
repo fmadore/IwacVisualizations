@@ -28,8 +28,7 @@
 
     var ns = window.IWACVis;
     // chartOptions is a real dependency, not an optional one: the polarity
-    // ramp comes from it. The `ns.chartOptions && …` guards further down
-    // (on _grid / _valueAxisName) predate that and are now belt-and-braces.
+    // ramp and the grid / axis-name helpers come from it.
     if (!ns || !ns.panels || !ns.chartOptions || !ns.chartOptions.polarityPalette) {
         console.warn('IWACVis.laicite sentiment: missing panels or chartOptions.polarityPalette — check load order');
         return;
@@ -48,11 +47,6 @@
         return ((bundle || {}).models || []).slice();
     };
 
-    function readVar(name, fallback) {
-        var value = ns.resolveCssVar ? ns.resolveCssVar(name) : '';
-        return value || fallback;
-    }
-
     /**
      * Polarity label → colour, from the shared divergent ramp.
      *
@@ -69,7 +63,16 @@
         return C.polarityPalette();
     }
 
-    function pct(n, d) { return d ? (n / d) * 100 : 0; }
+    /**
+     * The whole-corpus reference series: the polarity ramp's neutral, so
+     * the baseline reads as the quiet one beside the dossier's accent. It
+     * used to be read here with its own hex fallback — a second
+     * declaration of a token the palette already resolves (and normalises
+     * for the canvas).
+     */
+    function baselineColor() {
+        return polarityColors()['Neutre'];
+    }
 
     function totalOf(dist) {
         return Object.keys(dist || {}).reduce(function (s, k) {
@@ -128,7 +131,7 @@
         // through a footnote they may never reach.
         var notice = buildAiNotice(bundle, data, model);
         panel.appendChild(notice);
-        var matched = L.buildMatchedSentiment ? L.buildMatchedSentiment(data) : P.el('div');
+        var matched = L.buildMatchedSentiment(data);
         panel.appendChild(matched);
 
         var comparison = buildPolarityComparison(data);
@@ -241,12 +244,10 @@
                 var nextNotice = buildAiNotice(bundle, d, m);
                 panel.replaceChild(nextNotice, notice);
                 notice = nextNotice;
-                if (L.buildMatchedSentiment) {
-                    var nextMatched = L.buildMatchedSentiment(d);
-                    nextMatched.open = matched.open;
-                    panel.replaceChild(nextMatched, matched);
-                    matched = nextMatched;
-                }
+                var nextMatched = L.buildMatchedSentiment(d);
+                nextMatched.open = matched.open;
+                panel.replaceChild(nextMatched, matched);
+                matched = nextMatched;
                 var nextComparison = buildPolarityComparison(d);
                 panel.replaceChild(nextComparison, comparison);
                 comparison = nextComparison;
@@ -269,7 +270,13 @@
     function buildAiNotice(bundle, data, model) {
         var box = P.el('div', 'iwac-vis-laicite-ai');
         var head = P.el('div', 'iwac-vis-laicite-ai-head');
-        head.appendChild(P.el('span', 'iwac-vis-laicite-ai-badge', '✦'));
+        // `-glyph`, not `-badge`: the archival dossier's quiet "AI-generated
+        // description" label is `.iwac-vis-laicite-ai-badge`, and with both
+        // on one class the context sheet (loaded last) blew that label up
+        // to this sparkle's size and accent.
+        var glyph = P.el('span', 'iwac-vis-laicite-ai-glyph', '✦');
+        glyph.setAttribute('aria-hidden', 'true');
+        head.appendChild(glyph);
         head.appendChild(P.el('span', 'iwac-vis-laicite-ai-title',
             P.t('laicite.ai_title')));
         box.appendChild(head);
@@ -284,7 +291,8 @@
             })));
         Object.keys(data.property_coverage || {}).forEach(function (key) {
             box.appendChild(P.el('p', null, P.t('laicite.research_' + key) + ': '
-                + data.property_coverage[key] + '/' + bundle.items));
+                + P.formatNumber(data.property_coverage[key] || 0) + '/'
+                + P.formatNumber(bundle.items || 0)));
         });
         return box;
     }
@@ -318,14 +326,14 @@
             POLARITY_ORDER.forEach(function (label) {
                 var n = row.dist[label] || 0;
                 if (!n) return;
-                var share = pct(n, total);
+                var share = L.pct(n, total);
                 var seg = P.el('span', 'iwac-vis-laicite-polarity-seg');
                 seg.style.width = share + '%';
                 seg.style.backgroundColor = colors[label];
                 seg.title = P.t(label) + ': ' + P.formatNumber(n)
-                    + ' (' + share.toFixed(1) + '%)';
+                    + ' (' + L.formatPercent(share) + ')';
                 bar.appendChild(seg);
-                readout.push(P.t(label) + ' ' + share.toFixed(0) + '%');
+                readout.push(P.t(label) + ' ' + L.formatPercent(share, 0));
             });
             bar.setAttribute('aria-label', P.t(row.key) + ' — ' + readout.join(', '));
             line.appendChild(bar);
@@ -360,16 +368,12 @@
         var levels = ['1', '2', '3', '4', '5'];
         var R = ns.responsive;
         var base_ = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 56, top: 44, bottom: 52 })
-                : { left: 56, right: 24, top: 44, bottom: 52, containLabel: true },
+            grid: C._grid({ left: 64, top: 44, bottom: 52 }),
             legend: { top: 4 },
             tooltip: {
                 trigger: 'axis',
                 confine: true,
-                valueFormatter: function (v) {
-                    return (v == null ? '—' : v.toFixed(1) + '%');
-                }
+                valueFormatter: function (v) { return L.formatPercent(v); }
             },
             xAxis: {
                 type: 'category',
@@ -379,29 +383,29 @@
                 nameGap: 30
             },
             yAxis: Object.assign({ type: 'value' },
-                (ns.chartOptions && ns.chartOptions._valueAxisName)
-                    ? ns.chartOptions._valueAxisName(P.t('laicite.share_percent'))
-                    : { name: P.t('laicite.share_percent') }),
+                C._valueAxisName(P.t('laicite.share_percent'))),
             series: [
                 {
                     name: P.t('laicite.polarity_row_dossier'),
                     type: 'bar',
                     itemStyle: { color: palette[0] },
                     data: levels.map(function (_, i) {
-                        return Math.round(pct(mine[i] || 0, mineTotal) * 10) / 10;
+                        return L.pct(mine[i] || 0, mineTotal);
                     })
                 },
                 {
                     name: P.t('laicite.polarity_row_corpus'),
                     type: 'bar',
-                    itemStyle: { color: readVar('--iwac-vis-sent-neutral', '#66696e') },
+                    itemStyle: { color: baselineColor() },
                     data: levels.map(function (_, i) {
-                        return Math.round(pct(base[i] || 0, baseTotal) * 10) / 10;
+                        return L.pct(base[i] || 0, baseTotal);
                     })
                 }
             ]
         };
-        return R && R.withMedia ? R.withMedia(base_, {}) : base_;
+        return R && R.withMedia
+            ? R.withMedia(base_, R.valueChartMedia({ hasZoom: false }))
+            : base_;
     }
 
     /* ----------------------------------------------------------------- */
@@ -442,7 +446,7 @@
         if (!rows.length) return P.emptyChartOption();
 
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        var muted = readVar('--iwac-vis-sent-neutral', '#66696e');
+        var muted = baselineColor();
         var levels = rows.map(function (r) { return String(r.level); });
 
         function pick(source, metric) {
@@ -494,9 +498,7 @@
 
         var R = ns.responsive;
         var option = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 56, right: 64, top: 56, bottom: 52 })
-                : { left: 56, right: 64, top: 56, bottom: 52, containLabel: true },
+            grid: C._grid({ left: 56, right: 64, top: 56, bottom: 52 }),
             legend: { type: 'scroll', top: 4 },
             tooltip: {
                 trigger: 'axis',
@@ -513,7 +515,7 @@
                             ? '—'
                             : P.t('laicite.register_value', {
                                 value: P.formatNumber(p.value),
-                                count: P.formatNumber(n)
+                                count: n
                             });
                         lines.push(p.marker + ' ' +
                             P.escapeHtml(p.seriesName) + ': ' + value);
@@ -537,7 +539,9 @@
             ],
             series: series
         };
-        return R && R.withMedia ? R.withMedia(option, {}) : option;
+        return R && R.withMedia
+            ? R.withMedia(option, L.phoneMedia({ grid: { left: 44, right: 48 }, yAxes: 2 }))
+            : option;
     }
 
     /**
@@ -562,7 +566,7 @@
                 itemStyle: { color: colors[label] },
                 emphasis: { focus: 'series' },
                 data: rows.map(function (dist, i) {
-                    return Math.round(pct((dist || {})[label] || 0, totals[i]) * 10) / 10;
+                    return L.pct((dist || {})[label] || 0, totals[i]);
                 })
             };
         });
@@ -572,28 +576,30 @@
             max: 100,
             axisLabel: C._percentAxisLabel()
         };
-        var catAxis = { type: 'category', data: categories };
+        // Outlet names are capped, as the shared horizontal bars cap
+        // theirs; the grid contains its labels, so the 140px gutter this
+        // used to carry was blank space beside them.
+        var catAxis = horizontal
+            ? { type: 'category', data: categories,
+                axisLabel: { width: 140, overflow: 'truncate' } }
+            : { type: 'category', data: categories };
         var R = ns.responsive;
         var base = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({
-                    left: horizontal ? 140 : 56, top: 44, bottom: 44
-                })
-                : { left: horizontal ? 140 : 56, right: 24, top: 44,
-                    bottom: 44, containLabel: true },
+            grid: C._grid({ left: horizontal ? 8 : 56, top: 44, bottom: 44 }),
             legend: { type: 'scroll', top: 4 },
             tooltip: {
                 trigger: 'axis',
                 confine: true,
                 axisPointer: { type: 'shadow' },
-                valueFormatter: function (v) {
-                    return (v == null ? '—' : v.toFixed(1) + '%');
-                }
+                valueFormatter: function (v) { return L.formatPercent(v); }
             },
             xAxis: horizontal ? valueAxis : catAxis,
             yAxis: horizontal ? catAxis : valueAxis,
             series: series
         };
-        return R && R.withMedia ? R.withMedia(base, {}) : base;
+        if (!R || !R.withMedia) return base;
+        return R.withMedia(base, horizontal
+            ? R.labelMedia({ smWidth: 110 })
+            : R.valueChartMedia({ hasZoom: false }));
     }
 })();

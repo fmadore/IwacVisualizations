@@ -33,7 +33,6 @@
         if (state.mapCountry) return (place.by_country || {})[state.mapCountry] || 0;
         return place.items || 0;
     }
-    L.laicitePlaceCount = placeCount;
 
     /** Countries the bundle can actually filter on. */
     L.placeCountries = function (bundle) {
@@ -121,18 +120,21 @@
     };
 
     function createMap(mapEl, bundle, cfg) {
-        var state = cfg.state;
         var frameColors = cfg.frameColors || {};
+        // `cfg.state`, read at call time: `update(state)` may hand in a new
+        // object, and a copy captured here would keep filtering by the old.
         return P.createFilteredPlacesMap(mapEl, {
             places: bundle.places || [],
             sourceId: SOURCE_ID,
             layerId: LAYER_ID,
-            count: function (place) { return placeCount(place, state); },
+            count: function (place) { return placeCount(place, cfg.state); },
             // The active frame's palette colour, or --primary for no frame.
-            color: function () { return state.mapFrame && frameColors[state.mapFrame]; },
+            color: function () {
+                return cfg.state.mapFrame && frameColors[cfg.state.mapFrame];
+            },
             siteBase: cfg.siteBase || '',
             popupLines: function (place, count) {
-                var lines = [P.t('laicite.map_items', { count: P.formatNumber(count) })];
+                var lines = [P.t('laicite.map_items', { count: count })];
                 var topFrames = Object.keys(place.by_frame || {})
                     .sort(function (a, b) {
                         return (place.by_frame[b] || 0) - (place.by_frame[a] || 0);
@@ -158,7 +160,7 @@
             places: bundle.places || [],
             count: function (p) { return placeCount(p, state); },
             summary: P.t('laicite.map_places_list'),
-            placeLabel: P.t('laicite.map_place'),
+            placeLabel: P.t('Place'),
             countLabel: P.t('laicite.items')
         });
     }

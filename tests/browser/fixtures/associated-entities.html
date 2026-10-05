@@ -78,17 +78,16 @@
          the person bundle would boot the whole dashboard around it. -->
     <script src="/asset/js/iwac-i18n.js"></script>
     <script src="/asset/js/charts/shared/panels.js"></script>
+    <script src="/asset/js/charts/shared/panels-controls.js"></script>
     <script>
         (function () {
             var ns = window.IWACVis;
             ns.getPalette = function () {
                 return ['#a33312', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574'];
             };
-            ns.entityGraph = {
-                colorForType: function (type) {
-                    var types = ['center', 'Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];
-                    return ns.getPalette()[Math.max(0, types.indexOf(type))];
-                }
+            ns.getEntityTypeColor = function (type) {
+                var types = ['center', 'Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];
+                return ns.getPalette()[Math.max(0, types.indexOf(type))];
             };
             ns.registerRenderer = function (_el, repaint) {
                 window.__fixtureThemeRepaint = repaint;

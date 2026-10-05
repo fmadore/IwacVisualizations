@@ -241,6 +241,7 @@ function loadGraph() {
     gate.P.normalizeColorForMapLibre = (c) => c;
     gate.ns.getChartTokens = () => ({});
     gate.ns.getPalette = () => ['#ce4115'];
+    gate.ns.getEntityTypeColor = (type) => 'slot:' + type;
 
     vm.runInContext(GRAPH_SOURCE, gate.context, { filename: 'entity-networks/graph.js' });
     return { gate, created, graph: gate.ns.entityNetworks.graph };
@@ -295,4 +296,43 @@ test('entity-networks graph still surfaces a genuine MapLibre failure', async ()
         host.classes().includes('iwac-vis-error'),
         'the error banner is reserved for an import that actually failed'
     );
+});
+
+/* ------------------------------------------------------------------ */
+/*  What the entity-networks graph hands MapLibre                       */
+/* ------------------------------------------------------------------ */
+
+test('entity-networks colours a node by its type NAME, not its payload index', async () => {
+    const { gate, created, graph } = loadGraph();
+    // A map whose style is loaded, so setData builds the layers at once.
+    const layers = {};
+    gate.P.createIwacMap = (container, config) => {
+        created.push({ container, config });
+        return Object.assign(fakeMap(), {
+            isStyleLoaded: () => true,
+            addSource() {},
+            addLayer(layer) { layers[layer.id] = layer; },
+            getLayer: (id) => layers[id] || null,
+            setFilter() {},
+            setPaintProperty() {},
+            fitBounds() {},
+        });
+    };
+    const controller = graph.create(gate.el(), { mode: 'abstract', onSelect() {} });
+    await gate.land({});
+
+    // The generator's own order — Lieux last — which is not the slot order.
+    const types = ['Personnes', 'Organisations', 'Événements', 'Sujets', 'Lieux'];
+    controller.setData(Object.assign({}, GLOBAL_DATA, { types }));
+
+    const color = layers['net-node-circles'].paint['circle-color'];
+    assert.equal(color[0], 'match');
+    types.forEach((type, idx) => {
+        const at = color.indexOf(idx, 2);
+        assert.equal(color[at + 1], 'slot:' + type, 'payload index ' + idx + ' is ' + type);
+    });
+
+    const config = created[0].config;
+    assert.equal(config.fullscreen, false, 'the block owns one fullscreen toggle; the map carries none');
+    assert.equal(typeof config.title, 'string', 'the canvas is named for a screen reader');
 });

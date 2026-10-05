@@ -19,10 +19,11 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     /**
-     * @param {Object} cfg {bundle, metadata, state, frameColors}
+     * @param {Object} cfg {bundle, metadata}
      * @returns {{root: HTMLElement, mount: function():void}} `mount` paints
      *          the ECharts panels once they are in the document.
      */
@@ -47,8 +48,7 @@
         root.appendChild(trend.panel);
         mounts.push(function () {
             ns.registerChart(trend.chart, function (el, instance) {
-                instance.setOption(rateSeriesOption(bundle, cfg),
-                    { notMerge: true });
+                instance.setOption(rateSeriesOption(bundle), { notMerge: true });
             });
         });
 
@@ -86,7 +86,7 @@
             head.appendChild(P.el('span', 'iwac-vis-laicite-rate-name',
                 L.subsetLabel(subset)));
             head.appendChild(P.el('span', 'iwac-vis-laicite-rate-value',
-                (v.per_10k == null ? '—' : v.per_10k.toFixed(1))));
+                L.formatDecimal(v.per_10k)));
             li.appendChild(head);
 
             var bar = P.el('div', 'iwac-vis-laicite-rate-bar');
@@ -117,7 +117,7 @@
 
     /** Rate per 10k words per year, one line per corpus — the view that
      *  actually tests "continuous vs crisis-driven". */
-    function rateSeriesOption(bundle, cfg) {
+    function rateSeriesOption(bundle) {
         var subsets = bundle.by_subset || {};
         var years = {};
         Object.keys(subsets).forEach(function (k) {
@@ -154,9 +154,7 @@
 
         var R = ns.responsive;
         var base = {
-            grid: (ns.chartOptions && ns.chartOptions._grid)
-                ? ns.chartOptions._grid({ left: 64, top: 48, bottom: 56 })
-                : { left: 64, right: 24, top: 48, bottom: 56, containLabel: true },
+            grid: C._grid({ left: 64, top: 48, bottom: 56 }),
             legend: { type: 'scroll', top: 4, itemWidth: 14, itemHeight: 3 },
             tooltip: { trigger: 'axis', confine: true },
             xAxis: {
@@ -168,15 +166,10 @@
                 nameGap: 28
             },
             yAxis: Object.assign({ type: 'value' },
-                (ns.chartOptions && ns.chartOptions._valueAxisName)
-                    ? ns.chartOptions._valueAxisName(P.t('laicite.per_10k'))
-                    : { name: P.t('laicite.per_10k') }),
-            dataZoom: (ns.chartOptions && ns.chartOptions._dataZoom)
-                ? ns.chartOptions._dataZoom(axis.length, { threshold: 30 })
-                : [],
+                C._valueAxisName(P.t('laicite.per_10k'))),
+            dataZoom: C._dataZoom(axis.length, { threshold: 30 }),
             series: series
         };
-        void cfg;
         return R && R.withMedia
             ? R.withMedia(base, R.valueChartMedia({ hasZoom: axis.length > 30 }))
             : base;
@@ -208,11 +201,6 @@
             panel: built.panel,
             mount: function () {
                 ns.registerChart(built.chart, function (el, instance) {
-                    var C = ns.chartOptions;
-                    if (!C || !C.heatmapMatrix) {
-                        instance.setOption(P.emptyChartOption(), { notMerge: true });
-                        return;
-                    }
                     instance.setOption(C.heatmapMatrix(
                         { xLabels: xLabels, yLabels: yLabels, cells: cells },
                         {
@@ -240,19 +228,22 @@
      * structurally cannot see Ramadan or the hajj. Showing both profiles
      * side by side is the only way to tell a calendar-bound rhythm from a
      * civil-calendar one.
+     *
+     * A month below the bundle's `minimum_cell` eligible documents (5 when
+     * the bundle does not say) is a gap, not a rate.
      */
-    L.seasonalityOption = function (bundle, subset, metadata) {
+    L.seasonalityOption = function (bundle, subset) {
         var data = ((bundle || {}).by_subset || {})[subset];
         if (!data) return P.emptyChartOption();
         var palette = (ns.getPalette && ns.getPalette()) || [];
         var months = P.t('laicite.months').split(',');
         var hijri = P.t('laicite.hijri_months').split(',');
-        void metadata;
+        var floor = bundle.minimum_cell || 5;
         var rates = function (calendar) {
             var exposure = data[calendar + '_exposure'];
             return (data[calendar] || []).map(function (n, i) {
                 if (!exposure) return n;
-                return exposure[i] >= 5 ? Math.round(10000 * n / exposure[i]) / 100 : null;
+                return exposure[i] >= floor ? Math.round(10000 * n / exposure[i]) / 100 : null;
             });
         };
 
@@ -291,6 +282,11 @@
                 }
             ]
         };
-        return R && R.withMedia ? R.withMedia(base, {}) : base;
+        return R && R.withMedia
+            ? R.withMedia(base, L.phoneMedia({
+                grid: [{ left: 40, right: 12 }, { left: 40, right: 12 }],
+                xAxes: 2, yAxes: 2
+            }))
+            : base;
     };
 })();

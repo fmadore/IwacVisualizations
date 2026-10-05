@@ -157,7 +157,7 @@
             }));
         }
         if (t.undated > 0) {
-            notes.push(P.t('av.timeline_undated', { count: P.formatNumber(t.undated) }));
+            notes.push(P.t('av.timeline_undated', { count: t.undated }));
         }
         if (notes.length) {
             panelEl.panel.appendChild(
@@ -235,12 +235,6 @@
         warnLabel:      'IWACVis audiovisual overview',
         requireECharts: true,
         dataFile:       'audiovisual-overview.json',
-        beforeLoad:     function (container) {
-            var loadingLabel = container.querySelector('.iwac-vis-loading span');
-            if (loadingLabel) {
-                loadingLabel.textContent = P.t('Loading audiovisual overview') + '…';
-            }
-        },
         render:         render
     });
 })();

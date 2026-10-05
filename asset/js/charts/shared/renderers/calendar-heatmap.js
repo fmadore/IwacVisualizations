@@ -75,32 +75,17 @@
     /*  Month labels                                                      */
     /* ----------------------------------------------------------------- */
     //
-    // Kept local rather than pushed through the i18n dictionary, matching
-    // `chartOptions.heatmap`'s existing treatment of Gregorian months:
-    // these are axis furniture, always needed as a complete ordered set,
-    // and never reused outside a month grid.
+    // Both calendars' twelve row labels come from `shared/hijri.js`, the
+    // module's one copy of each table. This renderer and
+    // `chartOptions.heatmap` each carried a Gregorian copy, and this one a
+    // Hijri copy too, until the dashboards' year × month panel became a third
+    // consumer and made the drift risk concrete. Transliterations there follow
+    // the forms used in the IWAC corpus's own francophone press rather than a
+    // strict academic scheme, so a reader moving between the archive and the
+    // chart sees the same words.
 
-    var GREGORIAN_MONTHS = {
-        en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
-             'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
-    };
-
-    // Hijri month names come from `shared/hijri.js`, which is the module's
-    // one copy of the table — this renderer carried a duplicate until the
-    // dashboards' year × month panel became a third consumer and made the
-    // drift risk concrete. Transliterations there follow the forms used in
-    // the IWAC corpus's own francophone press rather than a strict academic
-    // scheme, so a reader moving between the archive and the chart sees the
-    // same words.
-
-    function labelsFor(table) {
-        return table[ns.locale === 'fr' ? 'fr' : 'en'] || table.en;
-    }
-
-    function hijriMonths() {
-        return labelsFor((ns.hijri && ns.hijri.MONTHS) || {});
+    function monthLabels(calendar) {
+        return ns.hijri ? ns.hijri.monthLabels(calendar) : [];
     }
 
     /* ----------------------------------------------------------------- */
@@ -128,21 +113,6 @@
     /* ----------------------------------------------------------------- */
     /*  Shared theme plumbing                                             */
     /* ----------------------------------------------------------------- */
-
-    function heatStops(tokens) {
-        // resolveCssVar runs an offscreen probe: ECharts' colour parser
-        // does not understand color-mix(), which is what the tokens are.
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var stops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean);
-        if (stops.length < 2) stops = [tokens.surface, tokens.primary].filter(Boolean);
-        return stops;
-    }
 
     function deriveYears(cells) {
         var min = Infinity;
@@ -237,7 +207,7 @@
         if (!agg) return null;
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var months = hijri ? hijriMonths() : labelsFor(GREGORIAN_MONTHS);
+        var months = monthLabels(hijri ? 'hijri' : 'gregorian');
         var unitKey = opts.unitKey || 'mentions_count';
         var era = hijri ? ' ' + P.t('cal_hijri_era') : '';
 
@@ -250,7 +220,7 @@
                     var year = agg.years[p.data[0]];
                     var month = months[p.data[1]];
                     return '<strong>' + P.escapeHtml(month + ' ' + year + era) + '</strong><br>' +
-                        P.t(unitKey, { count: P.formatNumber(p.data[2]) });
+                        P.t(unitKey, { count: p.data[2] });
                 }
             },
             // Hijri month names are two to three times longer than "Jan",
@@ -284,7 +254,7 @@
                 itemHeight: 120,
                 itemWidth: 12,
                 textStyle: { color: tokens.inkLight, fontSize: P.AXIS_FONT_SM },
-                inRange: { color: heatStops(tokens) }
+                inRange: { color: ns.heatmapRamp() }
             },
             series: [{
                 type: 'heatmap',
@@ -292,7 +262,7 @@
                 label: { show: false },
                 emphasis: {
                     itemStyle: {
-                        borderColor: tokens.ink || '#2c2f37',
+                        borderColor: tokens.ink,
                         borderWidth: 2
                     }
                 }
@@ -328,7 +298,7 @@
         }
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var stops  = heatStops(tokens);
+        var stops  = ns.heatmapRamp();
 
         var calendars = years.map(function (yr, idx) {
             return {
@@ -338,7 +308,7 @@
                 cellSize: ['auto', cellSize],
                 range: String(yr),
                 itemStyle: {
-                    borderColor: tokens.surface || '#fff',
+                    borderColor: tokens.surface,
                     borderWidth: 1
                 },
                 splitLine: { show: false },
@@ -381,7 +351,7 @@
                 formatter: function (p) {
                     if (!p.data || !p.data[0]) return '';
                     return '<strong>' + P.escapeHtml(String(p.data[0])) + '</strong><br>' +
-                        P.t(unitKey, { count: P.formatNumber(p.data[1] || 0) });
+                        P.t(unitKey, { count: p.data[1] || 0 });
                 }
             },
             visualMap: {
@@ -438,7 +408,7 @@
             // without: unlabelled rows 1–12 would be a worse answer than
             // no facet. hijri.js is enqueued unconditionally, so this
             // only trips if the asset partial is bypassed.
-            if (v === 'hijri') return hijriCellsOf(data).length > 0 && hijriMonths().length === 12;
+            if (v === 'hijri') return hijriCellsOf(data).length > 0 && monthLabels('hijri').length === 12;
             return v === 'month' || v === 'day';
         });
         if (!views.length) views = ['month'];
@@ -471,7 +441,7 @@
             // quietly missing: a grid that drops cells in silence reads
             // as complete coverage when it isn't.
             if (skipped) {
-                base += ' ' + P.t('cal_skipped_note', { count: P.formatNumber(skipped) });
+                base += ' ' + P.t('cal_skipped_note', { count: skipped });
             }
             return base;
         }

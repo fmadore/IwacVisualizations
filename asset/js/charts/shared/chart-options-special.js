@@ -58,6 +58,47 @@
     var TEXT_CONTRAST_MIN = 4.5;
 
     /**
+     * The readable ink for text drawn ON a filled shape: whichever of the
+     * theme's two extremes — `--surface` (near-white in light, near-black in
+     * dark) and `--ink-strong` (its opposite in both) — wins on contrast
+     * against that shape's own colour.
+     *
+     * Picking between the two needs no light/dark branch and re-themes for
+     * free when the render callback re-runs. Memoised, because callers run it
+     * per label and shapes repeat hues.
+     *
+     * The treemap has done this per tile since v1.53; the segmented bar was
+     * still hardcoding `'#fff'`, which measures 3.15:1 on the palette's
+     * orange and worse on its light tints.
+     *
+     * Private: the segmented bar is its one caller.
+     *
+     * @param {string} background  the fill the text sits on
+     * @returns {string} a colour, or '' when tokens cannot be resolved
+     */
+    var _inkOnCache = {};
+    function inkOn(background) {
+        if (!background) return '';
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var knockout = tokens.surface;
+        var deepInk = tokens.inkStrong;
+        // The two extremes are theme-dependent, so they are part of the key:
+        // a theme swap misses the cache instead of serving the old answer.
+        var key = background + '|' + knockout + '|' + deepInk;
+        var hit = _inkOnCache[key];
+        if (hit !== undefined) return hit;
+        var bg = _rgb(background);
+        var koRgb = _rgb(knockout);
+        var deepRgb = _rgb(deepInk);
+        var picked = '';
+        if (bg && koRgb && deepRgb) {
+            picked = _contrast(deepRgb, bg) > _contrast(koRgb, bg) ? deepInk : knockout;
+        }
+        _inkOnCache[key] = picked;
+        return picked;
+    }
+
+    /**
      * The series-palette slots that may be used as TEXT on `backdrop`, in
      * palette order.
      *
@@ -79,45 +120,6 @@
      * @param {string} [ink]     fallback when no slot qualifies
      * @returns {Array<string>} at least one colour
      */
-    /**
-     * The readable ink for text drawn ON a filled shape: whichever of the
-     * theme's two extremes — `--surface` (near-white in light, near-black in
-     * dark) and `--ink-strong` (its opposite in both) — wins on contrast
-     * against that shape's own colour.
-     *
-     * Picking between the two needs no light/dark branch and re-themes for
-     * free when the render callback re-runs. Memoised, because callers run it
-     * per label and shapes repeat hues.
-     *
-     * The treemap has done this per tile since v1.53; the segmented bar was
-     * still hardcoding `'#fff'`, which measures 3.15:1 on the palette's
-     * orange and worse on its light tints.
-     *
-     * @param {string} background  the fill the text sits on
-     * @returns {string} a colour, or '' when tokens cannot be resolved
-     */
-    var _inkOnCache = {};
-    C.inkOn = function (background) {
-        if (!background) return '';
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var knockout = tokens.surface || '#fdfcfb';
-        var deepInk = tokens.inkStrong || '#05070c';
-        // The two extremes are theme-dependent, so they are part of the key:
-        // a theme swap misses the cache instead of serving the old answer.
-        var key = background + '|' + knockout + '|' + deepInk;
-        var hit = _inkOnCache[key];
-        if (hit !== undefined) return hit;
-        var bg = _rgb(background);
-        var koRgb = _rgb(knockout);
-        var deepRgb = _rgb(deepInk);
-        var picked = '';
-        if (bg && koRgb && deepRgb) {
-            picked = _contrast(deepRgb, bg) > _contrast(koRgb, bg) ? deepInk : knockout;
-        }
-        _inkOnCache[key] = picked;
-        return picked;
-    };
-
     C.readableInks = function (backdrop, ink) {
         var bg = _rgb(backdrop);
         var palette = (ns.getPalette && ns.getPalette()) || [];
@@ -125,7 +127,7 @@
             var rgb = _rgb(c);
             return rgb && _contrast(rgb, bg) >= TEXT_CONTRAST_MIN;
         }) : [];
-        return out.length ? out : [ink || (palette.length ? palette[0] : '#13161c')];
+        return out.length ? out : [ink || palette[0] || ((ns.getChartTokens && ns.getChartTokens()) || {}).ink];
     };
 
     /* ----------------------------------------------------------------- */
@@ -244,10 +246,10 @@
     C.treemap = function (tree, opts) {
         opts = opts || {};
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var surfaceColor  = tokens.surface       || '#fdfdfd';
+        var surfaceColor  = tokens.surface;
         var surfaceRaised = tokens.surfaceRaised  || surfaceColor;
-        var inkLight      = tokens.inkLight       || '#535862';
-        var borderColor   = tokens.border         || '#d4d6da';
+        var inkLight      = tokens.inkLight;
+        var borderColor   = tokens.border;
         var fontFamily    = tokens.fontFamily     || 'sans-serif';
 
         // Label ink is chosen PER TILE, from the two token-resolved extremes
@@ -263,8 +265,8 @@
         // dark) and `inkStrong` is its opposite in both — so picking whichever
         // wins on contrast needs no light/dark branch, and re-themes for free
         // when the render callback re-runs on toggle.
-        var knockout = tokens.surface   || '#fdfcfb';
-        var deepInk  = tokens.inkStrong || '#05070c';
+        var knockout = tokens.surface;
+        var deepInk  = tokens.inkStrong;
         var koRgb    = _rgb(knockout);
         var deepRgb  = _rgb(deepInk);
 
@@ -530,8 +532,17 @@
      * caller BEFORE invoking this builder.
      *
      * @param {Array<Object>} entries
-     *   Each: { name, country, type, year_min, year_max, total }
+     *   Each: { name, country?, countries?, type, year_min, year_max, total }.
+     *   A bar is coloured by `country` (its fixed palette slot) only when the
+     *   row HAS one — a newspaper, a located place. A row without one (an
+     *   index person, subject or event, which the index-overview generator
+     *   now ships with a `countries` list instead, or a place outside the
+     *   IWAC countries) is drawn in `opts.unassignedColor`, never in a slot
+     *   that means some country on the same page. `countries` is listed in
+     *   the tooltip.
      * @param {Object} [opts]
+     * @param {string} [opts.unassignedColor]  Fill for a row with no
+     *   `country`. Default: the theme's muted ink.
      * @param {number} [opts.windowSize=20]
      *   Rows the default view shows, and the hard cap on the zoom window.
      *   Above this the y-axis gets a slider — which is a SILENT truncation on
@@ -605,6 +616,7 @@
         var strokeColor = (tokens.border && echarts && echarts.color && echarts.color.modifyAlpha)
             ? echarts.color.modifyAlpha(tokens.border, 0.21)
             : 'rgba(0,0,0,0.13)';
+        var unassigned = opts.unassignedColor || tokens.muted;
 
         function renderItem(params, api) {
             var yIndex = api.value(0);
@@ -613,7 +625,7 @@
             var height = api.size([0, 1])[1] * 0.6;
             var width = Math.max(2, end[0] - start[0]);
             var entry = data[params.dataIndex] && data[params.dataIndex].entry;
-            var color = C._countryColor(entry && entry.country);
+            var color = (entry && entry.country) ? C._countryColor(entry.country) : unassigned;
             return {
                 type: 'rect',
                 shape: {
@@ -641,10 +653,21 @@
                         '<strong>' + esc(entry.name || '') + '</strong>',
                         (entry.year_min || '?') + ' \u2013 ' + (entry.year_max || '?')
                     ];
-                    if (entry.country) lines.push(esc(entry.country));
-                    if (entry.type)    lines.push(t('item_type_' + entry.type));
+                    if (entry.country) {
+                        lines.push(esc(entry.country));
+                    } else if (entry.countries && entry.countries.length) {
+                        lines.push(esc(entry.countries.join(', ')));
+                    }
+                    if (entry.type) {
+                        // A newspaper row carries an item type ('article'),
+                        // an index row its entity type ('Personnes'); a raw
+                        // key on the page is what either miss used to print.
+                        var typeLabel = P.translateKeyed('item_type_', entry.type);
+                        if (typeLabel === entry.type) typeLabel = P.translateKeyed('entity_type_', entry.type);
+                        lines.push(esc(typeLabel));
+                    }
                     if (entry.total != null) {
-                        lines.push(fmt(entry.total) + ' ' + t('items_count', { count: '' }).trim());
+                        lines.push(t('items_count', { count: Number(entry.total) || 0 }));
                     }
                     return lines.join('<br>');
                 }
@@ -1020,9 +1043,8 @@
         // re-init outside the standard theme scope. Setting color
         // explicitly here is defensive.
         var themeTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
-        var labelInk      = themeTokens.ink      || (isDark ? '#e7e4df' : '#2c2f37');
-        var labelInkLight = themeTokens.inkLight || (isDark ? '#b5b0aa' : '#535862');
+        var labelInk      = themeTokens.ink;
+        var labelInkLight = themeTokens.inkLight;
 
         var series = segments.map(function (seg) {
             return {
@@ -1041,7 +1063,7 @@
                     },
                     // Contrast-picked against this segment's own fill —
                     // '#fff' measured 3.15:1 on the palette's orange.
-                    color: C.inkOn(colors[seg.name] || fallback) || undefined,
+                    color: inkOn(colors[seg.name] || fallback) || undefined,
                     fontSize: 11,
                     fontWeight: 600
                 },
@@ -1157,43 +1179,16 @@
         var years = (data && data.years) || [];
         var cells = (data && data.cells) || [];
         var hijri = opts.calendar === 'hijri';
-        var monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        if (ns.locale === 'fr') {
-            monthLabels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
-                           'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
-        }
-        // Single copy of the lunar table lives in shared/hijri.js.
-        if (hijri && ns.hijri && ns.hijri.MONTHS) {
-            monthLabels = ns.hijri.MONTHS[ns.locale === 'fr' ? 'fr' : 'en']
-                || ns.hijri.MONTHS.en;
-        }
+        // Both calendars' row labels live in shared/hijri.js.
+        var monthLabels = ns.hijri.monthLabels(opts.calendar);
         var era = hijri ? ' ' + t('cal_hijri_era') : '';
         var max = 1;
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
-        // Theme-aware color ramp: the dedicated semantic palette is
-        // defined in iwac-core.css (--iwac-vis-heatmap-0..4)
-        // as `color-mix(in oklab, var(--primary), var(--surface))` stops
-        // so it tracks the IWAC theme's --primary and --surface tokens.
-        // We MUST resolve through ns.resolveCssVar (an offscreen probe)
-        // rather than getPropertyValue: ECharts' color parser does not
-        // understand CSS color-mix() and would fall back to grayscale.
+        // Theme-aware colour ramp (--iwac-vis-heatmap-0..4), resolved for
+        // ECharts' parser and degraded to surface → primary by the helper.
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var heatStops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean);
-        // Fallback ramp if CSS vars aren't resolvable (theme not loaded):
-        // still routed through the base tokens so no hex literals ever
-        // appear in this file.
-        if (heatStops.length < 2) {
-            heatStops = [tokens.surface || '', tokens.primary || ''].filter(Boolean);
-        }
+        var heatStops = ns.heatmapRamp();
 
         return {
             tooltip: {
@@ -1202,7 +1197,7 @@
                     var year = years[p.data[0]];
                     var month = monthLabels[p.data[1]];
                     return '<strong>' + esc(month + ' ' + year + era) + '</strong><br>' +
-                        t('mentions_count', { count: fmt(p.data[2]) });
+                        t('mentions_count', { count: p.data[2] });
                 }
             },
             // Hijri month names run two to three times longer than "Jan",
@@ -1250,7 +1245,7 @@
                 label: { show: false },
                 emphasis: {
                     itemStyle: {
-                        borderColor: tokens.ink || '#2c2f37',
+                        borderColor: tokens.ink,
                         borderWidth: 2
                     }
                 }
@@ -1395,21 +1390,9 @@
         var cells = (data && data.cells) || [];
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var heatStops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean);
-        if (heatStops.length < 2) {
-            heatStops = [
-                resolve('--surface') || tokens.surface,
-                resolve('--primary') || tokens.primary
-            ].filter(Boolean);
-        }
-        if (opts.ramp && opts.ramp.length >= 2) heatStops = opts.ramp.slice();
+        var heatStops = (opts.ramp && opts.ramp.length >= 2)
+            ? opts.ramp.slice()
+            : ns.heatmapRamp();
 
         var max = opts.visualMax;
         if (max == null) {
@@ -1419,9 +1402,6 @@
                 if (v > max) max = v;
             });
         }
-
-        var esc = (ns.panels && ns.panels.escapeHtml) || function (s) { return s; };
-        var fmt = ns.formatNumber || String;
 
         var grid = { left: 8, right: 24, top: 12, bottom: 64, containLabel: true };
         if (opts.grid) {
@@ -1440,19 +1420,19 @@
                         var v = p.value && p.value[2];
                         return v > 0 ? fmt(v) : '';
                     },
-                    color: tokens.ink || '#2c2f37',
+                    color: tokens.ink,
                     fontSize: 11
                 }
                 : { show: false },
             itemStyle: opts.cellBorder
                 ? {
-                    borderColor: resolve('--surface') || tokens.surface || '#fdfdfd',
+                    borderColor: tokens.surface,
                     borderWidth: 1
                 }
                 : undefined,
             emphasis: {
                 itemStyle: {
-                    borderColor: tokens.ink || '#2c2f37',
+                    borderColor: tokens.ink,
                     borderWidth: 2
                 }
             }

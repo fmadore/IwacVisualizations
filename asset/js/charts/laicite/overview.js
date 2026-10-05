@@ -42,7 +42,7 @@
         (metadata.video_items || []).forEach(function (video) {
             var row = P.el('li');
             var link = P.el('a', null, video.title);
-            link.href = siteBase + '/item/' + encodeURIComponent(video.o_id);
+            link.href = P.itemUrl(siteBase, video.o_id);
             row.appendChild(link);
             row.appendChild(P.el('span', null, ' — ' + P.t(video.has_transcript
                 ? 'laicite.video_transcript' : 'laicite.video_title_only')));
@@ -58,12 +58,16 @@
      * a real Venn with these ratios is unreadable, and the bands are also
      * clickable targets and screen-reader text, which circles are not.
      *
+     * Only the two bands with a text match are buttons that do something:
+     * "tagged, no core match" has no concordance lines by definition, so
+     * its band is rendered disabled. It used to be an enabled, focusable
+     * button whose handler returned at once — a keyboard dead end.
+     *
      * @param {Object} metadata
-     * @param {function(string):void} onSelect  called with 'tagged_only' |
-     *        'both' | 'said_only'
+     * @param {function(string):void} [onSelect]  called with 'both' |
+     *        'said_only'; without it every band is disabled
      */
     L.buildVenn = function (metadata, onSelect) {
-        var totals = metadata.totals || {};
         var subsets = metadata.subsets || {};
         var tagOnly = 0, both = 0, saidOnly = 0;
         L.SUBSETS.forEach(function (s) {
@@ -80,10 +84,11 @@
 
         var bar = P.el('div', 'iwac-vis-laicite-venn-bar');
         bar.setAttribute('role', 'group');
+        bar.setAttribute('aria-label', P.t('laicite.venn_title'));
         var cells = [
-            { key: 'tagged_only', n: tagOnly, labelKey: 'laicite.venn_tagged_only', cls: 'is-tagged' },
-            { key: 'both', n: both, labelKey: 'laicite.venn_both', cls: 'is-both' },
-            { key: 'said_only', n: saidOnly, labelKey: 'laicite.venn_said_only', cls: 'is-said' }
+            { key: 'tagged_only', n: tagOnly, labelKey: 'laicite.venn_tagged_only', cls: 'is-tagged', routes: false },
+            { key: 'both', n: both, labelKey: 'laicite.venn_both', cls: 'is-both', routes: true },
+            { key: 'said_only', n: saidOnly, labelKey: 'laicite.venn_said_only', cls: 'is-said', routes: true }
         ];
         cells.forEach(function (cell) {
             var seg = P.el('button', 'iwac-vis-laicite-venn-seg ' + cell.cls);
@@ -95,7 +100,7 @@
                 P.t(cell.labelKey)));
             seg.setAttribute('aria-label',
                 P.t(cell.labelKey) + ': ' + P.formatNumber(cell.n));
-            if (onSelect) {
+            if (onSelect && cell.routes) {
                 seg.addEventListener('click', function () { onSelect(cell.key); });
             } else {
                 seg.disabled = true;
@@ -105,7 +110,6 @@
         panel.appendChild(bar);
         var routes = buildRouteBreakdown(metadata);
         if (routes) panel.appendChild(routes);
-        void totals;
         return panel;
     };
 
@@ -134,8 +138,7 @@
         wrap.appendChild(row);
         if (routes.title_hit != null) {
             wrap.appendChild(P.el('p', 'iwac-vis-laicite-routes-note',
-                P.t('laicite.routes_title_hit',
-                    { count: P.formatNumber(routes.title_hit) })));
+                P.t('laicite.routes_title_hit', { count: routes.title_hit })));
         }
         wrap.appendChild(P.el('p', 'iwac-vis-laicite-routes-note',
             P.t('laicite.routes_note')));
@@ -156,8 +159,8 @@
         // meter. It still wears the shared table's element classes, its
         // ARIA roles and its card roles, so below `sm` it collapses into
         // the same labelled records every other table in the module does.
-        var COLS = ['laicite.col_corpus', 'laicite.col_members', 'laicite.col_tagged',
-            'laicite.col_said', 'laicite.col_occurrences', 'laicite.col_readable',
+        var COLS = ['laicite.scope_subset', 'laicite.col_members', 'laicite.col_tagged',
+            'laicite.col_said', 'Occurrences', 'laicite.col_readable',
             'laicite.col_span'];
 
         var table = P.el('table', 'iwac-vis-table iwac-vis-laicite-table');
@@ -208,7 +211,7 @@
             [['laicite.col_members', v.members],
                 ['laicite.col_tagged', v.tagged],
                 ['laicite.col_said', v.said],
-                ['laicite.col_occurrences', v.occurrences]
+                ['Occurrences', v.occurrences]
             ].forEach(function (pair) {
                 var td = cell(null, 'meta', pair[0]);
                 td.appendChild(document.createTextNode(P.formatNumber(pair[1] || 0)));
@@ -305,7 +308,8 @@
                 items += ((byS[s] || {}).items || {})[frame] || 0;
             });
             card.appendChild(P.el('p', 'iwac-vis-laicite-frame-share',
-                P.t('laicite.frame_share', { percent: L.pct(items, totalMembers) })));
+                P.t('laicite.frame_share',
+                    { percent: L.formatDecimal(L.pct(items, totalMembers)) })));
 
             var spec = (metadata.frames || {})[frame] || {};
             // Revised notes also apply to previously generated data bundles.

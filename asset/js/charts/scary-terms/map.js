@@ -53,7 +53,7 @@
             siteBase: opts.siteBase || '',
             popupLines: function (place, count) {
                 var topFamilies = Object.keys(place.by_family || {}).slice(0, 3);
-                var lines = [P.t('scary.matrix_articles', { count: P.formatNumber(count) })];
+                var lines = [P.t('scary.matrix_articles', { count: count })];
                 if (topFamilies.length) {
                     lines.push(P.t('scary.map_top_families') + ': ' + topFamilies.join(', '));
                 }

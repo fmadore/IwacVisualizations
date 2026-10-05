@@ -218,9 +218,9 @@
             // The place name itself is the relevant identifier.
             var subtitle = [];
             if (isAuth && props.frequency != null) {
-                subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.frequency)) }));
+                subtitle.push(P.t('mentions_count', { count: Number(props.frequency) }));
             } else if (!isAuth && props.count != null) {
-                subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.count)) }));
+                subtitle.push(P.t('mentions_count', { count: Number(props.count) }));
             }
 
             return {

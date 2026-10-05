@@ -116,7 +116,6 @@
             total: filtered().length,
             noteKey:     'gantt_window_note',
             allKey:      'gantt_window_all',
-            showAllKey:  'gantt_show_all',
             showTopKey:  'gantt_show_top',
             onToggle:    function () { rerender(); }
         });

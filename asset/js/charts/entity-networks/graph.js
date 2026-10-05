@@ -7,12 +7,14 @@
  * entity graph, real coordinates for the geographic place network), so
  * the client does zero layout work and pan/zoom over ~10k edges stays
  * GPU-bound. Symbol layers give label collision for free; popups,
- * fullscreen, download and light/dark theming ride the existing IWAC
- * map infrastructure.
+ * download and light/dark theming ride the existing IWAC map
+ * infrastructure. Fullscreen does not: the orchestrator expands the whole
+ * block layout from one toggle, so neither map carries MapLibre's own.
  *
  * Two modes:
  *   - 'abstract' — blank canvas style (P.buildGraphStyle), node color
- *     by entity type from the IWAC qualitative palette
+ *     by entity type, through the same type → slot table every IWAC
+ *     entity graph uses (`ns.getEntityTypeColor`)
  *   - 'geo'      — regular theme basemap, nodes at true coordinates
  *
  * `create()` gates on `P.whenMaplibre()` and always returns a controller:
@@ -57,11 +59,6 @@
         opts = opts || {};
         var mode = opts.mode === 'geo' ? 'geo' : 'abstract';
         var onSelect = opts.onSelect || function () {};
-        // What fullscreen expands. The orchestrator passes the whole
-        // layout — toolbar, graph and details sidebar — because a graph
-        // without its filters and its selection panel is not the same
-        // tool. Omitted, MapLibre expands the bare canvas.
-        var fullscreenContainer = opts.fullscreenContainer || null;
 
         var data = null;          // { nodes, edges, weightMin }
         var adjacency = [];       // node index → [{ j, w }]
@@ -81,25 +78,31 @@
         /*  Colors — resolved at every (re)build so theme swaps flow in     */
         /* --------------------------------------------------------------- */
 
+        // `getChartTokens()` fills every key from the theme's fallbacks, so
+        // none of these needs a literal of its own.
         function colors() {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var palette = (ns.getPalette && ns.getPalette()) || [];
+            var tokens = ns.getChartTokens();
             return {
-                palette: palette.map(ml),
-                primary: ml(tokens.primary || '#e64a19'),
-                ink: ml(tokens.ink || '#2c2f37'),
-                inkLight: ml(tokens.inkLight || '#535862'),
-                muted: ml(tokens.muted || '#767880'),
-                surface: ml(tokens.surface || '#fdfdfd'),
-                border: ml(tokens.border || '#d4d6da')
+                primary: ml(tokens.primary),
+                ink: ml(tokens.ink),
+                inkLight: ml(tokens.inkLight),
+                muted: ml(tokens.muted),
+                surface: ml(tokens.surface)
             };
         }
 
+        /**
+         * A node's colour by its entity type. The payload names its types in
+         * its own order (`data.types`, Personnes · Organisations · Événements
+         * · Sujets · Lieux), and colouring by that INDEX painted Lieux and
+         * Événements differently here from every item-page network. The
+         * index → type name → fixed slot lookup makes them agree.
+         */
         function nodeColorExpression(c) {
             if (mode === 'geo' || !data || !data.types) return c.primary;
             var expr = ['match', ['get', 'type']];
-            data.types.forEach(function (_t, idx) {
-                expr.push(idx, c.palette[idx % c.palette.length] || c.primary);
+            data.types.forEach(function (type, idx) {
+                expr.push(idx, ml(ns.getEntityTypeColor(type)));
             });
             expr.push(c.muted);
             return expr;
@@ -398,8 +401,9 @@
             if (data.types && node.type != null && data.types[node.type]) {
                 bits.push(P.t('entity_type_' + data.types[node.type]));
             }
-            bits.push(P.t('items_count', { count: P.formatNumber(node.count) }));
-            bits.push(P.t('links_count', { count: P.formatNumber(node.degree) }));
+            // Numbers, not formatNumber() strings — see details.js.
+            bits.push(P.t('items_count', { count: node.count }));
+            bits.push(P.t('links_count', { count: node.degree }));
             header.appendChild(P.el('div', 'iwac-vis-map-popup__subtitle', bits.join(' · ')));
             root.appendChild(header);
             root.appendChild(P.el('div', 'iwac-vis-map-popup__more', P.t('Click for details')));
@@ -440,7 +444,18 @@
         var mapConfig = {
             onStyleReady: addAll,
             navigation: true,
-            fullscreenContainer: fullscreenContainer
+            // One block-level toggle expands the whole layout — toolbar,
+            // graph and details sidebar — through `P.bindFullscreen`. A
+            // MapLibre control on each of the two maps targeted that same
+            // layout: the lazily built Places graph's offered "Enter
+            // fullscreen" while the block already was, and on an iPhone its
+            // pseudo-fullscreen fallback got none of the layout's rules.
+            fullscreen: false,
+            // Names the canvas for a screen reader, which otherwise reaches
+            // an interactive region it can only call "application".
+            title: mode === 'geo'
+                ? P.t('Network of places recorded on the same items')
+                : P.t('Network of entries recorded on the same items')
         };
         if (mode === 'abstract') {
             mapConfig.styleMode = 'graph';

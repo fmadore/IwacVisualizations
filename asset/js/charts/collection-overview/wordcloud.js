@@ -97,9 +97,9 @@
         }
 
         function updateMeta(fd) {
-            var articles = P.formatNumber(fd.total_articles || 0);
             var unique = P.formatNumber(fd.unique_words || 0);
-            meta.textContent = articles + ' articles \u00b7 ' + unique + ' ' + P.t('unique words');
+            meta.textContent = P.t('articles_count', { count: fd.total_articles || 0 })
+                + ' \u00b7 ' + unique + ' ' + P.t('unique words');
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {

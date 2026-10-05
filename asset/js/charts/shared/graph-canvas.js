@@ -6,7 +6,7 @@
  * Deliberately knows nothing about d3, simulations, Omeka or ECharts: hand
  * it a *scene* (visible nodes and links, plus the focus/label flags) and it
  * draws. That boundary is what lets one painter serve the live canvas AND
- * the 2× PNG export, and lets graph-force.js stay a controller.
+ * the PNG export, and lets graph-force.js stay a controller.
  *
  * Coordinates: nodes carry world-space `x`/`y`; screen = world · k + (x, y).
  * The transform lives here and the simulation never sees it, so panning and
@@ -22,9 +22,9 @@
  *
  * A scene is:
  *   { nodes, links,                  // already visibility-filtered
- *     categories, colorOf, haloOf,   // style hooks
+ *     categories, colorOf,           // style hook: category index → colour
  *     hoverId, focusId, selectedId, hoverLink, focusSet,
- *     showHalos, labelsAll, edgeLabels }
+ *     labelsAll, edgeLabels }
  */
 (function () {
     'use strict';
@@ -54,19 +54,21 @@
     /**
      * The painter's colour vocabulary, resolved from the live IWAC tokens.
      * Read fresh per paint: `ns.getChartTokens()` returns the last-refreshed
-     * token object, which dashboard-core rebuilds on every theme swap.
+     * token object, which dashboard-core rebuilds on every theme swap — and
+     * which fills every key from the theme's own fallbacks, so nothing here
+     * needs a literal of its own.
      */
     function theme() {
-        var k = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var k = ns.getChartTokens();
         return {
-            accent:        k.primary     || '#ce4115',
-            text:          k.ink         || '#13161c',
-            heading:       k.inkStrong   || k.ink || '#05070c',
-            textMuted:     k.muted       || '#66696e',
-            grid:          k.borderLight || '#e2e5e8',
-            border:        k.border      || '#ced1d6',
-            surface:       k.surface     || '#fdfcfb',
-            fontFamily:    k.fontFamily  || 'system-ui, sans-serif',
+            accent:        k.primary,
+            text:          k.ink,
+            heading:       k.inkStrong,
+            textMuted:     k.muted,
+            grid:          k.borderLight,
+            border:        k.border,
+            surface:       k.surface,
+            fontFamily:    k.fontFamily,
             fontSize:      12,
             fontSizeTitle: 13
         };
@@ -250,13 +252,9 @@
                 c.fillStyle = scene.colorOf(n.category);
                 c.fill();
 
-                var halo = (n.isCenter || !scene.showHalos) ? null : scene.haloOf(n);
                 if (n.isCenter) {
                     c.strokeStyle = T.text;
                     c.lineWidth = Math.max(2, 3 * Math.min(k, 1.4));
-                } else if (halo) {
-                    c.strokeStyle = halo;
-                    c.lineWidth = Math.max(1.5, 3 * Math.min(k, 1.2));
                 } else {
                     c.strokeStyle = T.border;
                     c.lineWidth = 1;
@@ -476,17 +474,23 @@
             render(ctx, scene, { w: W, h: H, scale: dpr, bg: null, allLabels: false, legend: false });
         }
 
-        /** PNG at 2× on the surface colour, with every label that fits + legend. */
-        function exportPng(scene) {
+        /**
+         * PNG on the surface colour, with every label that fits + legend, at
+         * `scale` × the on-screen size — the panel toolbar's `EXPORT_SCALE`
+         * when the export is composited with the panel's title, so the
+         * graph and its caption come out at one DPI.
+         */
+        function exportPng(scene, scale) {
+            scale = scale || 2;
             var out = document.createElement('canvas');
-            out.width = W * 2;
-            out.height = H * 2;
+            out.width = Math.round(W * scale);
+            out.height = Math.round(H * scale);
             // The export ignores the transient hover/focus emphasis: a saved
             // image should show the whole graph, not whatever the pointer
             // happened to be on.
             var flat = Object.assign({}, scene, { focusSet: null, hoverLink: null, hoverId: null });
             render(out.getContext('2d'), flat, {
-                w: W, h: H, scale: 2, bg: theme().surface, allLabels: true, legend: true
+                w: W, h: H, scale: scale, bg: theme().surface, allLabels: true, legend: true
             });
             return out.toDataURL('image/png');
         }

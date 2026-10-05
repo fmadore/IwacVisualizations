@@ -147,11 +147,10 @@
         ];
 
         if (duration.total_seconds > 0) {
-            var hours = duration.total_seconds / 3600;
+            // A SUM of runtimes: the shared aggregate format ("281 h"),
+            // not this card's own copy of it under two more keys.
             cards.push({
-                value: hours >= 1
-                    ? P.t('hours_count', { count: P.formatNumber(Math.round(hours)) })
-                    : P.t('minutes_count', { count: P.formatNumber(Math.round(duration.total_seconds / 60)) }),
+                value: P.formatTotalDuration(duration.total_seconds),
                 labelKey: 'Total runtime',
                 text: true
             });
@@ -245,10 +244,10 @@
                 highlight: pubYear,
                 caption:   scoped.scope
                     ? P.t('items_from_source', {
-                        count: P.formatNumber(slice.total || 0),
+                        count: slice.total || 0,
                         source: slice.label || scoped.channel
                     })
-                    : P.t('items_count', { count: P.formatNumber(slice.total || 0) })
+                    : P.t('items_count', { count: slice.total || 0 })
             };
 
             // Similar items — prefer the precomputed neighbours for this

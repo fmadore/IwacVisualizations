@@ -16,7 +16,8 @@
  * Payload version 4 adds sparse yearly counts under `over_time`. The third
  * view is simply omitted for older payloads.
  *
- * Depends on: panels.js, shared/entity-graph.js.
+ * Depends on: panels.js, panels-controls.js (P.buildSegmented), iwac-theme.js
+ * (ns.getEntityTypeColor), shared/entity-graph.js.
  */
 (function () {
     'use strict';
@@ -193,81 +194,45 @@
         return variants;
     }
 
+    /** Live theme colour for an entity type — read at call time, never kept. */
     function colorForType(type) {
-        var semantics = ns.entityGraph;
-        if (semantics && typeof semantics.colorForType === 'function') {
-            return semantics.colorForType(type);
-        }
-        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
-        var slot = TYPE_ORDER.indexOf(type) + 1;
-        return palette[Math.max(0, slot) % palette.length];
+        return ns.getEntityTypeColor(type);
     }
 
     /**
-     * A labelled control row. The wrapper exists only to carry the
-     * label↔group relationship: the CSS gives it `display: contents` so the
-     * eyebrow lands in the bar's label gutter and the choices in the column
-     * beside it, keeping every row on one aligned baseline.
+     * A labelled row of the controls bar: the gutter label, and the id a
+     * `P.buildSegmented` group names itself by. The wrapper carries only that
+     * relationship — the CSS gives it `display: contents` so the eyebrow lands
+     * in the bar's label gutter and the group in the column beside it,
+     * keeping every row on one aligned baseline.
      */
-    function choiceGroup(label, className) {
-        var root = P.el('div', 'iwac-vis-associated__control ' + className);
-        var labelEl = P.el('span', 'iwac-vis-associated__control-label', label);
-        var id = 'iwac-vis-associated-control-' + (++controlId);
-        labelEl.id = id;
-        var choices = P.el('div', 'iwac-vis-associated__choices');
-        choices.setAttribute('role', 'group');
-        choices.setAttribute('aria-labelledby', id);
+    function controlRow(label, className, labelClass) {
+        var root = P.el('div', className);
+        var labelEl = P.el('span', labelClass || 'iwac-vis-associated__control-label', label);
+        labelEl.id = 'iwac-vis-associated-control-' + (++controlId);
         root.appendChild(labelEl);
-        root.appendChild(choices);
-        return { root: root, choices: choices };
+        return { root: root, labelId: labelEl.id };
     }
 
     /**
-     * Same two-column row, but the second cell is a strip that holds MORE
-     * than one group: the gutter label names the first group, and any
-     * further group carries its own inline eyebrow (`labelledChoices`).
+     * One chip group: the shared segmented control (role=group, aria-pressed,
+     * arrow keys) wearing the shared facet chip. The three groups here used
+     * to be three hand-written factories toggling class and aria-pressed by
+     * hand, styled by a private copy of the facet chip.
      */
-    function fieldGroup(label, className) {
-        var root = P.el('div', 'iwac-vis-associated__control ' + className);
-        var labelEl = P.el('span', 'iwac-vis-associated__control-label', label);
-        var id = 'iwac-vis-associated-control-' + (++controlId);
-        labelEl.id = id;
-        var body = P.el('div', 'iwac-vis-associated__fields');
-        var choices = P.el('div', 'iwac-vis-associated__choices');
-        choices.setAttribute('role', 'group');
-        choices.setAttribute('aria-labelledby', id);
-        body.appendChild(choices);
-        root.appendChild(labelEl);
-        root.appendChild(body);
-        return { root: root, body: body, choices: choices };
-    }
-
-    /** An eyebrow-labelled chip group that rides inside a field strip. */
-    function labelledChoices(label, className) {
-        var root = P.el('div', 'iwac-vis-associated__field ' + className);
-        var labelEl = P.el('span', 'iwac-vis-associated__field-label', label);
-        var id = 'iwac-vis-associated-control-' + (++controlId);
-        labelEl.id = id;
-        var choices = P.el('div', 'iwac-vis-associated__choices');
-        choices.setAttribute('role', 'group');
-        choices.setAttribute('aria-labelledby', id);
-        root.appendChild(labelEl);
-        root.appendChild(choices);
-        return { root: root, choices: choices };
-    }
-
-    /** Marks a chip and reports the state to assistive tech in one place. */
-    function setPressed(button, on) {
-        button.classList.toggle('iwac-vis-associated__choice--active', on);
-        button.setAttribute('aria-pressed', String(on));
-    }
-
-    function choiceButton(label, onClick) {
-        var button = P.el('button', 'iwac-vis-associated__choice', label);
-        button.type = 'button';
-        button.setAttribute('aria-pressed', 'false');
-        button.addEventListener('click', onClick);
-        return button;
+    function chipGroup(name, labelId, options, active, onChange, btnClass) {
+        return P.buildSegmented({
+            name: 'associated-' + name,
+            labelledBy: labelId,
+            options: options,
+            active: active,
+            onChange: onChange,
+            classes: {
+                root: 'iwac-vis-associated__choices',
+                btn: 'iwac-vis-facets__btn' + (btnClass ? ' ' + btnClass : ''),
+                active: 'iwac-vis-facets__btn--active'
+            }
+        });
     }
 
     function svgEl(name, className) {
@@ -309,44 +274,49 @@
 
         var controls = P.el('div', 'iwac-vis-associated__controls');
 
-        var viewGroup = choiceGroup(P.t('View'), 'iwac-vis-associated__control--view');
-        var viewButtons = {};
+        var viewRow = controlRow(P.t('View'),
+            'iwac-vis-associated__control iwac-vis-associated__control--view');
         var viewOptions = [
             { key: 'network', label: P.t('Network view') },
             { key: 'list', label: P.t('Relational list') }
         ];
         if (hasTemporalView) viewOptions.push({ key: 'time', label: P.t('Over time') });
-        viewOptions.forEach(function (option) {
-            var button = choiceButton(option.label, function () {
-                if (activeView === option.key) return;
-                activeView = option.key;
-                apply(true);
-            });
-            button.dataset.view = option.key;
-            viewButtons[option.key] = button;
-            viewGroup.choices.appendChild(button);
+        var viewSeg = chipGroup('view', viewRow.labelId, viewOptions, activeView, function (key) {
+            activeView = key;
+            apply(true);
         });
-        controls.appendChild(viewGroup.root);
+        viewRow.root.appendChild(viewSeg.root);
+        controls.appendChild(viewRow.root);
 
-        var typeGroup = choiceGroup(P.t('Entity type'), 'iwac-vis-associated__control--type');
-        var typeButtons = {};
-        ['all'].concat(TYPE_ORDER).forEach(function (type) {
-            var label = type === 'all' ? P.t('All entities') : P.t('entity_type_' + type);
-            var button = choiceButton('', function () {
-                if (button.disabled || activeType === type) return;
-                activeType = type;
+        var typeRow = controlRow(P.t('Entity type'),
+            'iwac-vis-associated__control iwac-vis-associated__control--type');
+        var typeSeg = chipGroup('type', typeRow.labelId,
+            ['all'].concat(TYPE_ORDER).map(function (type) {
+                return {
+                    key: type,
+                    label: type === 'all' ? P.t('All entities') : P.t('entity_type_' + type)
+                };
+            }),
+            activeType,
+            function (key) {
+                activeType = key;
                 apply(true);
             });
+        // Each chip carries a swatch (for a real type) and its live count, so
+        // the label the segmented control wrote is re-laid as spans.
+        Object.keys(typeSeg.buttons).forEach(function (type) {
+            var button = typeSeg.buttons[type];
+            var label = button.textContent;
+            button.textContent = '';
             button.dataset.entityType = type;
             if (type !== 'all') {
                 button.appendChild(P.el('span', 'iwac-vis-associated__swatch'));
             }
-            button.appendChild(P.el('span', 'iwac-vis-associated__choice-label', label));
+            button.appendChild(P.el('span', null, label));
             button.appendChild(P.el('span', 'iwac-vis-associated__choice-count'));
-            typeButtons[type] = button;
-            typeGroup.choices.appendChild(button);
         });
-        controls.appendChild(typeGroup.root);
+        typeRow.root.appendChild(typeSeg.root);
+        controls.appendChild(typeRow.root);
 
         /*  Both sizing controls share the last row: the gutter label belongs
          *  to the top-N chips, and the period chips carry their own inline
@@ -358,39 +328,36 @@
          *  full-width, taller, a different face — so the row read as a form
          *  field stranded among toggles. Four fixed values and a pair are
          *  exactly what the chip groups above already express. */
-        var displayGroup = fieldGroup(P.t('Number shown'), 'iwac-vis-associated__control--display');
-
-        var limitButtons = {};
-        LIMITS.forEach(function (limit) {
-            var button = choiceButton(String(limit), function () {
-                if (viewLimits[activeView] === limit) return;
-                viewLimits[activeView] = limit;
+        var displayRow = controlRow(P.t('Number shown'),
+            'iwac-vis-associated__control iwac-vis-associated__control--display');
+        var fields = P.el('div', 'iwac-vis-associated__fields');
+        var limitSeg = chipGroup('limit', displayRow.labelId,
+            LIMITS.map(function (limit) { return { key: String(limit), label: String(limit) }; }),
+            String(viewLimits[activeView]),
+            function (key) {
+                viewLimits[activeView] = parseInt(key, 10);
                 apply(true);
-            });
-            button.classList.add('iwac-vis-associated__choice--num');
-            limitButtons[limit] = button;
-            displayGroup.choices.appendChild(button);
-        });
+            },
+            'iwac-vis-associated__choice--num');
+        fields.appendChild(limitSeg.root);
 
-        var period = labelledChoices(P.t('Period'), 'iwac-vis-associated__field--period');
-        var periodControl = period.root;
-        var periodButtons = {};
-        [
-            { value: 5, label: P.t('Five-year periods') },
-            { value: 10, label: P.t('Decades') }
-        ].forEach(function (option) {
-            var button = choiceButton(option.label, function () {
-                if (periodSize === option.value) return;
-                periodSize = option.value;
-                apply(true);
-            });
-            periodButtons[option.value] = button;
-            period.choices.appendChild(button);
+        var periodRow = controlRow(P.t('Period'),
+            'iwac-vis-associated__field iwac-vis-associated__field--period',
+            'iwac-vis-associated__field-label');
+        var periodControl = periodRow.root;
+        var periodSeg = chipGroup('period', periodRow.labelId, [
+            { key: '5', label: P.t('Five-year periods') },
+            { key: '10', label: P.t('Decades') }
+        ], String(periodSize), function (key) {
+            periodSize = parseInt(key, 10);
+            apply(true);
         });
+        periodControl.appendChild(periodSeg.root);
         periodControl.hidden = true;
-        displayGroup.body.appendChild(periodControl);
+        fields.appendChild(periodControl);
 
-        controls.appendChild(displayGroup.root);
+        displayRow.root.appendChild(fields);
+        controls.appendChild(displayRow.root);
         host.appendChild(controls);
 
         /* ---- Three views + one empty state --------------------------- */
@@ -421,12 +388,8 @@
             return unlimited ? graph : limitGraph(graph, viewLimits[activeView]);
         }
 
+        /** Swatches, list dots and matrix cells — every `[data-entity-type]`. */
         function paintTypes() {
-            Object.keys(typeButtons).forEach(function (type) {
-                if (type !== 'all') {
-                    typeButtons[type].style.setProperty('--iwac-vis-entity-color', colorForType(type));
-                }
-            });
             var rows = host.querySelectorAll('[data-entity-type]');
             for (var i = 0; i < rows.length; i++) {
                 rows[i].style.setProperty(
@@ -436,12 +399,13 @@
             }
         }
 
+        /**
+         * Reflect state the reader did not set directly: a facet (role) swap
+         * can empty the active type, and each view keeps its own top-N.
+         * `set()` is silent, so none of this re-enters `apply`.
+         */
         function refreshControls() {
-            Object.keys(viewButtons).forEach(function (key) {
-                var active = key === activeView;
-                viewButtons[key].classList.toggle('iwac-vis-associated__choice--active', active);
-                viewButtons[key].setAttribute('aria-pressed', String(active));
-            });
+            viewSeg.set(activeView);
 
             var currentRole = roleGraph();
             var counts = {};
@@ -450,23 +414,17 @@
             });
             if (activeType !== 'all' && counts[activeType] === 0) activeType = 'all';
 
-            Object.keys(typeButtons).forEach(function (type) {
-                var active = type === activeType;
-                var button = typeButtons[type];
+            Object.keys(typeSeg.buttons).forEach(function (type) {
+                var button = typeSeg.buttons[type];
                 var count = counts[type] || 0;
                 button.disabled = count === 0;
-                button.classList.toggle('iwac-vis-associated__choice--active', active);
-                button.setAttribute('aria-pressed', String(active));
                 button.querySelector('.iwac-vis-associated__choice-count').textContent =
                     ' ' + P.formatNumber(count);
             });
-            LIMITS.forEach(function (limit) {
-                setPressed(limitButtons[limit], viewLimits[activeView] === limit);
-            });
+            typeSeg.set(activeType);
+            limitSeg.set(String(viewLimits[activeView]));
             periodControl.hidden = activeView !== 'time';
-            Object.keys(periodButtons).forEach(function (value) {
-                setPressed(periodButtons[value], periodSize === parseInt(value, 10));
-            });
+            periodSeg.set(String(periodSize));
             paintTypes();
         }
 
@@ -522,7 +480,7 @@
                 title.setAttribute('aria-label',
                     (node.title || ('#' + node.o_id)) + ', ' +
                     P.t('entity_type_' + (node.type || 'Sujets')) + ', ' +
-                    P.t('mentions_count', { count: P.formatNumber(node.cooc || 0) }));
+                    P.t('mentions_count', { count: node.cooc || 0 }));
                 row.appendChild(title);
                 row.appendChild(P.el('span', 'iwac-vis-arc-list__type',
                     P.t('entity_type_' + (node.type || 'Sujets'))));
@@ -632,7 +590,7 @@
                     'span',
                     'iwac-vis-time-matrix__caveat',
                     P.t('Items without a readable year are omitted: {count}.', {
-                        count: P.formatNumber(matrix.undatedItems)
+                        count: matrix.undatedItems
                     })
                 ));
             }
@@ -685,7 +643,7 @@
                 name.setAttribute('aria-label',
                     (node.title || ('#' + node.o_id)) + ', ' +
                     P.t('entity_type_' + type) + ', ' +
-                    P.t('mentions_count', { count: P.formatNumber(node.cooc || 0) }));
+                    P.t('mentions_count', { count: node.cooc || 0 }));
                 entity.appendChild(name);
                 var mentions = P.el('span', 'iwac-vis-time-matrix__mentions',
                     P.formatNumber(node.cooc || 0));
@@ -704,8 +662,9 @@
                     cell.style.setProperty('--iwac-vis-time-opacity', String(opacity));
                     cell.classList.toggle('iwac-vis-time-matrix__cell--zero', count === 0);
                     cell.textContent = count ? P.formatNumber(count) : '\u2014';
+                    // A number, so "1 shared item" is singular in both languages.
                     cell.setAttribute('aria-label', P.t('shared_items_in_period', {
-                        count: P.formatNumber(count),
+                        count: count,
                         period: period.fullLabel
                     }));
                     tr.appendChild(cell);

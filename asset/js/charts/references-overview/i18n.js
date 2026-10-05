@@ -30,17 +30,18 @@
             'references.timeline_desc': 'Bibliographic works by publication year and type. Dates refer to the works themselves, not the historical periods they study. The chart reflects the bibliography assembled in IWAC.',
         'references_provenance_desc': 'Places of publication recorded on the references, shown wherever the place could be matched to map coordinates.',
         'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same reference.',
-        'Full-text coverage': 'Full-text coverage',
         'references_coverage_desc': 'How many references have their full text available as searchable text, by kind of publication.',
         'references_coverage_desc_full': 'Full text has been extracted for {withOcr} of {total} references ({pct}%): {words} words in all, and {median} in a typical reference. The topic panels below describe that digitised part of the bibliography rather than the whole of it. Each bar shows the digitised count for one kind of publication against its total. Of these references, {published} also have their text published on islam.zmo.de; the others feed the aggregate figures here without being readable in full.',
         'references_coverage_tooltip': '{withOcr} of {total} with full text ({pct}%)',
         'Semantic landscape of the literature': 'Scholarly works by text similarity',
         'references_landscape_desc': 'Each point is a reference with a usable AI representation of its full text. Nearby points suggest works with similar content. The two-dimensional layout is approximate, so read the works to assess their relationship. Drag to move, scroll to zoom, and click a point to open the reference.',
         'references_landscape_desc_full': 'The map includes {embedded} of {total} references ({pct}%) with usable AI representations of their full texts. UMAP arranges these representations in two dimensions to bring broadly similar texts together. Local neighbourhoods suggest works to compare; distances between groups and the axes have no precise interpretive scale. Coverage reflects the works obtained and digitised. Drag to move, scroll to zoom, and click a point to open the reference.',
-        'Scholarly topics': 'Scholarly topics',
         'references_topics_title_lang': 'Scholarly topics ({language})',
         'references_topics_desc': 'Themes found automatically in the full text of {count} references by a statistical model (LDA), which sorted them into {topics} topics. Each label lists the words most characteristic of its topic; the labels come from the model rather than from a cataloguer. Each language has its own model, so topic numbers cannot be compared between these panels. Hover over a bar for the references most typical of that topic.',
         'references_topic_tooltip': '{count} references ({pct}% of this model’s corpus). Most representative:',
+        'references_landscape_empty': 'No semantic map is available for this bibliography',
+        'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
+        'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
     });
 
     ns.addTranslations('fr', {
@@ -73,5 +74,15 @@
         'references_topics_desc': 'Thèmes dégagés automatiquement dans le texte intégral de {count} références par un modèle statistique (LDA), qui les a réparties en {topics} thèmes. Chaque libellé reprend les mots les plus caractéristiques de son thème ; ces libellés viennent du modèle plutôt que d’un catalogueur. Chaque langue a son propre modèle, si bien que les numéros de thèmes ne sont pas comparables d’un panneau à l’autre. Survolez une barre pour voir les références les plus représentatives du thème.',
         'references_topic_tooltip': '{count} références ({pct} % du corpus de ce modèle). Les plus représentatives :',
         'Author collaborations': 'Collaborations entre auteurs',
+        'Publishers': 'Éditeurs',
+        'No provenance locations available': 'Aucun lieu de provenance disponible',
+        'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
+        'references_landscape_empty': 'Aucune carte sémantique disponible pour cette bibliographie',
+        'references_landscape_empty_umap': 'La carte sémantique n’a pas été calculée, faute du paquet umap-learn lors de la construction de ces données',
+        'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour tracer une carte significative',
+        'Co-author':             'Co-auteur',
+        'Author / editor':       'Auteur / \u00e9diteur',
+        'Shared references':     'R\u00e9f\u00e9rences communes',
+        'References':                 'Références',
     });
 })();

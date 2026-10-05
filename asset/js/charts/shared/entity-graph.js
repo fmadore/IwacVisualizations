@@ -17,6 +17,11 @@
  * `kind` is optional: dashboards precomputed before v1.28 carry ego edges
  * only and no `kind` field, and must keep rendering.
  *
+ * Colours come from `ns.getEntityTypeColor` / `ns.ENTITY_TYPE_SLOTS`
+ * (iwac-theme.js), the one type → slot table every block reads, so a type is
+ * the same colour here, in Entity Networks and in the associated-entities
+ * list and matrix.
+ *
  * Depends on: panels.js, iwac-theme.js, graph-panel.js.
  */
 (function () {
@@ -31,34 +36,6 @@
 
     var t = P.t;
     var fmt = P.formatNumber;
-
-    /**
-     * Type → palette slot, FIXED.
-     *
-     * Building categories in order of first appearance — what the ECharts
-     * builder did — makes a colour depend on which types a given item happens
-     * to have, so Personnes could come out slate on one entity page and green
-     * on the next. The slots below reproduce the colours that mapping produced
-     * for a full graph, so nothing visibly changes; they just stop moving.
-     * Order here is also the legend's order.
-     */
-    var TYPE_SLOTS = [
-        'center',
-        'Personnes',
-        'Organisations',
-        'Lieux',
-        'Sujets',
-        'Événements',
-        'article'
-    ];
-
-    /** Current theme-aware colour for one raw IWAC entity type. */
-    function colorForType(type) {
-        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
-        var slot = TYPE_SLOTS.indexOf(type);
-        if (slot < 0) slot = TYPE_SLOTS.length;
-        return palette[slot % palette.length];
-    }
 
     /** Node radius in px (diameter), from its distinctiveness score. */
     function sizeOf(node, maxScore) {
@@ -85,7 +62,7 @@
         opts = opts || {};
         var variants = opts.variants || {};
         var siteBase = (ctx && ctx.siteBase) || '';
-        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
+        var TYPE_SLOTS = ns.ENTITY_TYPE_SLOTS;
 
         /* ---- Vocabulary present across every variant ------------------ */
 
@@ -104,8 +81,9 @@
             });
         });
 
-        // Fixed slot order, filtered to what this item actually has. Anything
-        // unrecognised lands after the known types, still deterministically.
+        // Fixed slot order — also the legend's order — filtered to what this
+        // item actually has. Anything unrecognised lands after the known
+        // types, still deterministically.
         var catTypes = TYPE_SLOTS.filter(function (type) { return typesPresent[type]; });
         Object.keys(typesPresent).sort().forEach(function (type) {
             if (catTypes.indexOf(type) < 0) catTypes.push(type);
@@ -118,10 +96,11 @@
             return { name: t('entity_type_' + type), type: type };
         });
 
+        // Read at paint time, not copied at mount: a copy is what a theme
+        // toggle used to leave behind on the old palette.
         function slotColor(i) {
-            var type = catTypes[i];
-            var slot = TYPE_SLOTS.indexOf(type);
-            return palette[(slot >= 0 ? slot : TYPE_SLOTS.length + i) % palette.length];
+            var slot = ns.entityTypeSlot(catTypes[i]);
+            return ns.getSeriesColor(slot >= 0 ? slot : TYPE_SLOTS.length + i);
         }
 
         var nodes = order.map(function (id) {
@@ -249,10 +228,6 @@
         });
         if (!mounted) return null;
 
-        mounted.graph.onTheme(function () {
-            palette = (ns.getPalette && ns.getPalette()) || palette;
-        });
-
         return {
             graph: mounted.graph,
             show: function (key, warm) {
@@ -271,11 +246,5 @@
                 mounted.setGraph({ nodes: [], links: [] }, true);
             }
         };
-    };
-
-    ns.entityGraph = {
-        TYPE_SLOTS: TYPE_SLOTS,
-        sizeOf: sizeOf,
-        colorForType: colorForType
     };
 })();

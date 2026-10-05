@@ -74,8 +74,10 @@
             return {
                 title: loc.name,
                 titleHref: siteBase ? P.itemUrl(siteBase, loc.o_id) : null,
+                // t() with a numeric count: "1 mention", not a hand-built
+                // "1 mentions" glued from a capitalised column header.
                 subtitleLines: [
-                    P.formatNumber(Number(loc.count || 0)) + ' ' + P.t('Mentions').toLowerCase()
+                    P.t('mentions_count', { count: Number(loc.count || 0) })
                 ],
                 articles: loc.articles || [],
                 siteBase: siteBase

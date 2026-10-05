@@ -155,7 +155,7 @@
             if (!source) return null;
 
             var subtitle = [];
-            subtitle.push(P.t('items_count', { count: P.formatNumber(source.count || 0) }));
+            subtitle.push(P.t('items_count', { count: source.count || 0 }));
             if (source.countries && source.countries.length) {
                 subtitle.push(source.countries.slice(0, 4).join(', ') +
                     (source.countries.length > 4 ? ' +' + (source.countries.length - 4) : ''));

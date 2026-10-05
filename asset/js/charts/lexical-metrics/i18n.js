@@ -14,7 +14,6 @@
     }
 
         ns.addTranslations('en', {
-            'Loading press language metrics': 'Loading press language metrics',
             'lexical.mean_readability':       'Average readability (Flesch)',
             'lexical.mean_richness':          'Average vocabulary diversity',
             'lexical.mean_words':             'Average words per article',
@@ -32,7 +31,6 @@
             'lexical.axis_richness':          'MATTR'
         });
         ns.addTranslations('fr', {
-            'Loading press language metrics': 'Chargement des indicateurs de langue',
             'lexical.mean_readability':       'Lisibilité moyenne (Flesch)',
             'lexical.mean_richness':          'Diversité moyenne du vocabulaire',
             'lexical.mean_words':             'Mots par article (moyenne)',

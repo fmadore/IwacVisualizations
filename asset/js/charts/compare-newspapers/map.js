@@ -333,6 +333,12 @@
             // A−B uses the same scaling on both sides (max abs diff)
             // so the saturation between an A-heavy country and a
             // B-heavy country reads as comparable strength.
+            //
+            // A place's `country` is the IWAC country it LIES IN, or null
+            // for a place outside the six (a Mecca, a Paris) — older data
+            // carried the first country whose press mentioned it, which
+            // filed a Paris tag under Côte d'Ivoire. A null place has no
+            // area to shade, so it stays a bubble and adds to no country.
             if (map && typeof P.attachChoroplethToggle === 'function') {
                 var aCounts = {};
                 var bCounts = {};
@@ -364,7 +370,7 @@
                     mode: 'diverging',
                     negColor: colorB,
                     posColor: colorA,
-                    neutralColor: tokens.surface || '#fdfdfd'
+                    neutralColor: tokens.surface
                 };
 
                 var choropleth = P.attachChoroplethToggle(map, {
@@ -396,13 +402,13 @@
                 function CompareSelectorCtrl() {}
                 CompareSelectorCtrl.prototype.onAdd = function () {
                     var c = document.createElement('div');
-                    c.className = 'maplibregl-ctrl maplibregl-ctrl-group iwac-compare-choropleth-ctrl';
+                    c.className = 'maplibregl-ctrl maplibregl-ctrl-group iwac-vis-compare-choropleth-ctrl';
                     this._buttons = {};
                     var self = this;
                     selectorModes.forEach(function (m) {
                         var b = document.createElement('button');
                         b.type = 'button';
-                        b.className = 'iwac-compare-choropleth-ctrl__btn';
+                        b.className = 'iwac-vis-compare-choropleth-ctrl__btn';
                         b.dataset.mode = m.key;
                         b.title = m.title;
                         b.setAttribute('aria-label', m.title);
@@ -428,7 +434,7 @@
                     for (var k in this._buttons) {
                         if (!this._buttons.hasOwnProperty(k)) continue;
                         var on = (k === key);
-                        this._buttons[k].classList.toggle('iwac-compare-choropleth-ctrl__btn--active', on);
+                        this._buttons[k].classList.toggle('iwac-vis-compare-choropleth-ctrl__btn--active', on);
                         this._buttons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
                     }
                 };

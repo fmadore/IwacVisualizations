@@ -14,14 +14,22 @@
  *     that is neither the pixels nor a one-sentence description; on a
  *     map it is the first route to the places that needs no pointer.
  *   - an optional Fullscreen toggle that uses the Fullscreen API on
- *     the panel element itself.
+ *     the panel element itself (`P.bindFullscreen`, which every
+ *     fullscreen toggle in the module goes through, falls back to a
+ *     class-only overlay where the API is missing — an iPhone).
+ *
+ * The icon-button builder, the download trigger, the composited PNG
+ * export and the fullscreen binding are public (`P.iconButton`,
+ * `P.triggerDownload`, `P.downloadPanelImage`, `P.bindFullscreen`) so the
+ * graph toolbars, which carry their own button column, export and expand
+ * exactly the way every other panel does instead of keeping a copy each.
  *
  * The toolbar is auto-attached from both `dashboard-core.registerChart`
  * (ECharts) and `dashboard-core.registerMap` (MapLibre) the first time
  * a chart or map registers under a panel; subsequent registrations
  * (e.g. sentiment's three segmented bars) re-use the same toolbar and
  * silently skip. Panels that ship their own toolbar (the network panel
- * has a graph-toolbar with zoom/legend/fullscreen) mark the chart host
+ * has a graph-toolbar with zoom/download/fullscreen) mark the chart host
  * with `.iwac-vis-graph-host` and set `data-iwac-no-panel-toolbar="1"`
  * on the panel to opt out of auto-wiring.
  *
@@ -41,11 +49,14 @@
     }
 
     var TOOLBAR_CLASS = 'iwac-vis-panel-toolbar';
-    var BTN_CLASS = 'iwac-vis-btn iwac-vis-panel-toolbar__btn';
+    var BTN_CLASS = 'iwac-vis-panel-toolbar__btn';
     // Device-pixel ratio of the PNG export and of the chrome composited
     // around it — the two must agree or the title renders at a different
     // DPI than the chart.
     var EXPORT_SCALE = 3;
+    // Public so a renderer that rasterises itself (the canvas force graph)
+    // can hand `downloadPanelImage` a raster at the DPI the chrome expects.
+    P.EXPORT_SCALE = EXPORT_SCALE;
 
     // How long to wait for MapLibre's next `render` before forcing one.
     // Only reached when no frame arrives at all — a hidden tab, where
@@ -69,7 +80,6 @@
     function echartsDataUrl(el) {
         var live = ns.getLiveChart ? ns.getLiveChart(el) : null;
         if (!live || !live.getDataURL) return null;
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         try {
             // 3× is the cheapest print-quality win available to a canvas
             // renderer: a 900px panel comes out at 2700px, enough for a
@@ -78,7 +88,7 @@
             return live.getDataURL({
                 type: 'png',
                 pixelRatio: EXPORT_SCALE,
-                backgroundColor: tokens.surface || '#ffffff'
+                backgroundColor: ns.getChartTokens().surface
             });
         } catch (e) {
             console.error('IWACVis.panel-toolbar: getDataURL failed', e);
@@ -225,10 +235,10 @@
 
     /**
      * Promise<string|null> — composite a self-describing PNG with the
-     * panel title, optional description, the chart raster, and a footer
-     * showing the export date and IWAC attribution. Resolves to null
-     * when the inner image can't be obtained, in which case the caller
-     * falls back to `resolveDataUrl()`.
+     * panel title, optional description, the chart raster `inner`, and a
+     * footer showing the export date and IWAC attribution. Resolves to
+     * null when it cannot, in which case the caller keeps the bare raster
+     * (`P.downloadPanelImage`).
      *
      * Why we wait on `document.fonts.load` first: canvas2d's `font`
      * property accepts any string but silently uses a fallback if the
@@ -236,20 +246,14 @@
      * during the first interaction with a fresh page would render in
      * Times New Roman instead of Public Sans.
      */
-    function buildCompositeUrl(panelEl, chartEl) {
-        return resolveDataUrl(chartEl).then(function (inner) {
-            return compositeFrom(panelEl, inner);
-        });
-    }
-
-    /** The drawing half of buildCompositeUrl, once the raster is in hand. */
     function compositeFrom(panelEl, inner) {
         return new Promise(function (resolve) {
             if (!inner) { resolve(null); return; }
 
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var fontStack = tokens.fontFamily ||
-                '"Public Sans", system-ui, -apple-system, sans-serif';
+            // `getChartTokens()` fills every key from the theme's own
+            // fallback palette, so no colour below needs a literal of its own.
+            var tokens = ns.getChartTokens();
+            var fontStack = tokens.fontFamily;
 
             // Match the chart's pixelRatio export so text and chrome
             // render at the same DPI as the chart raster.
@@ -310,14 +314,14 @@
 
                     // Background — surface token so the export blends
                     // with the surrounding theme rather than the page bg.
-                    c.fillStyle = tokens.surface || '#ffffff';
+                    c.fillStyle = tokens.surface;
                     c.fillRect(0, 0, W, H);
 
                     // Header
                     if (title) {
                         c.textBaseline = 'top';
                         c.textAlign = 'left';
-                        c.fillStyle = tokens.ink || '#1a1a1a';
+                        c.fillStyle = tokens.ink;
                         c.font = '600 ' + titlePx + 'px ' + fontStack;
                         c.fillText(
                             truncateForCanvas(c, title, W - 2 * pad),
@@ -325,7 +329,7 @@
                         );
 
                         if (subLines.length) {
-                            c.fillStyle = tokens.inkLight || '#535862';
+                            c.fillStyle = tokens.inkLight;
                             c.font = '400 ' + subPx + 'px ' + fontStack;
                             for (var i = 0; i < subLines.length; i++) {
                                 c.fillText(
@@ -336,7 +340,7 @@
                             }
                         }
 
-                        c.strokeStyle = tokens.border || '#d4d6da';
+                        c.strokeStyle = tokens.border;
                         c.lineWidth = 1;
                         c.beginPath();
                         c.moveTo(pad, headerH - sepGap / 2);
@@ -350,7 +354,7 @@
 
                     // Footer — date left, attribution right
                     c.textBaseline = 'top';
-                    c.fillStyle = tokens.muted || '#767880';
+                    c.fillStyle = tokens.muted;
                     c.font = '400 ' + footerPx + 'px ' + fontStack;
                     var footerY = headerH + imgH + Math.round(10 * SCALE);
                     var date = new Date().toISOString().slice(0, 10);
@@ -378,6 +382,10 @@
     /*  Download trigger                                                  */
     /* ----------------------------------------------------------------- */
 
+    /**
+     * Hand the browser a URL to save under `filename`. Public: the graph
+     * toolbars used to build their own throwaway anchor, twice.
+     */
     function triggerDownload(dataUrl, filename) {
         if (!dataUrl) return;
         var link = document.createElement('a');
@@ -388,6 +396,7 @@
         link.click();
         document.body.removeChild(link);
     }
+    P.triggerDownload = triggerDownload;
 
     /** Filesystem-safe filename stem from the panel's h4 title. */
     function filenameFromPanel(panelEl) {
@@ -400,19 +409,168 @@
             .substring(0, 80) || 'iwac-chart';
     }
 
+    /**
+     * Composite `raster` with its panel's title, description, export date
+     * and attribution, and download it — the bare raster when compositing
+     * fails (a tainted canvas, a font that will not load).
+     *
+     * The one export path: the panel toolbar's Download button and both
+     * graph toolbars go through it, so a saved network is as self-describing
+     * as a saved bar chart: the graphs used to save a headless 2× canvas
+     * while every other panel saved a captioned 3× figure.
+     *
+     * @param {HTMLElement} panelEl  the `.iwac-vis-panel` whose text frames it
+     * @param {string|Promise<(string|null)>|null} raster  PNG data URL,
+     *   ideally rendered at `P.EXPORT_SCALE` so it matches the chrome's DPI
+     * @param {string} [filename]  default: a stem of the panel title + `.png`
+     * @returns {Promise<void>}
+     */
+    P.downloadPanelImage = function (panelEl, raster, filename) {
+        var name = filename || (filenameFromPanel(panelEl) + '.png');
+        return Promise.resolve(raster)
+            .then(function (inner) {
+                if (!inner) return null;
+                return compositeFrom(panelEl, inner).then(
+                    function (composite) { return composite || inner; },
+                    function (err) {
+                        console.error('IWACVis.panel-toolbar: composite failed', err);
+                        return inner;
+                    }
+                );
+            })
+            .then(function (dataUrl) {
+                if (dataUrl) triggerDownload(dataUrl, name);
+            });
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Toolbar plumbing                                                  */
     /* ----------------------------------------------------------------- */
 
-    /** Build a standard icon button that inherits `.iwac-vis-btn` styling. */
-    function buildBtn(glyph, titleText, onClick) {
-        var b = P.el('button', BTN_CLASS, glyph);
+    /**
+     * A toolbar icon button: the shared `.iwac-vis-btn` skin, the glyph as
+     * its face, the label as both its accessible name and its tooltip.
+     *
+     * One builder for the three toolbars that each wrote this function —
+     * the panel toolbar, the canvas force graph's column and the ECharts
+     * graphs' column differ only in the geometry class.
+     *
+     * @param {string} glyph
+     * @param {string} label
+     * @param {function(Event):void} [onClick]
+     * @param {string} [className='iwac-vis-panel-toolbar__btn']
+     * @returns {HTMLButtonElement}
+     */
+    P.iconButton = function (glyph, label, onClick, className) {
+        var b = P.el('button', 'iwac-vis-btn ' + (className || BTN_CLASS), glyph);
         b.type = 'button';
-        b.setAttribute('aria-label', titleText);
-        b.title = titleText;
-        b.addEventListener('click', onClick);
+        b.setAttribute('aria-label', label);
+        b.title = label;
+        if (typeof onClick === 'function') b.addEventListener('click', onClick);
         return b;
-    }
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Fullscreen                                                        */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Make `button` toggle `target` in and out of fullscreen.
+     *
+     * Every fullscreen control in the module binds through here: the panel
+     * toolbar's, both graph toolbars' and the Entity Networks layout's.
+     * There were three hand-written copies of the toggle and of its
+     * self-cleaning `fullscreenchange` listener, and none of them had an
+     * answer for an iPhone, where Safari offers no element fullscreen at
+     * all: the button did nothing.
+     *
+     *   - `aria-pressed` on the button mirrors the state, and the pressed
+     *     style keys on it, so the visual and the announced state cannot
+     *     disagree.
+     *   - `stateClass` on the target mirrors it too — one CSS hook for
+     *     native fullscreen and the fallback alike.
+     *   - Without the Fullscreen API (or when the request is refused) the
+     *     state class alone is the overlay: `.iwac-vis-panel--fullscreen`
+     *     is already styled exactly like `:fullscreen`. Escape leaves it and
+     *     focus comes back to the toggle, as it would from a dialog.
+     *   - The `fullscreenchange` listener removes itself once the target has
+     *     left the document, instead of one detached closure per panel ever
+     *     built on the page.
+     *
+     * @param {HTMLButtonElement} button
+     * @param {HTMLElement} target   what expands — a panel, or a whole layout
+     * @param {Object} [opts]
+     * @param {function(boolean):void} [opts.onChange]  called a beat after
+     *   every change, once the browser has applied the new size — resize
+     *   the chart or map here
+     * @param {string} [opts.stateClass='iwac-vis-panel--fullscreen']
+     * @returns {{isFullscreen: function():boolean}}
+     */
+    P.bindFullscreen = function (button, target, opts) {
+        opts = opts || {};
+        var stateClass = opts.stateClass || 'iwac-vis-panel--fullscreen';
+        var overlay = false;
+
+        function isFull() {
+            return overlay || document.fullscreenElement === target;
+        }
+
+        function sync() {
+            var full = isFull();
+            target.classList.toggle(stateClass, full);
+            button.setAttribute('aria-pressed', full ? 'true' : 'false');
+            if (typeof opts.onChange === 'function') {
+                setTimeout(function () { opts.onChange(full); }, 50);
+            }
+        }
+
+        // Only the overlay needs this: in native fullscreen the browser owns
+        // Escape. A control inside the target that has something of its own
+        // to dismiss first (a graph selection, an open dropdown) stops the
+        // event before it gets here.
+        function onKey(e) {
+            if (!document.body.contains(target)) { setOverlay(false); return; }
+            if (e.key !== 'Escape' || e.defaultPrevented) return;
+            setOverlay(false);
+            try { button.focus({ preventScroll: true }); } catch (err) { /* gone */ }
+        }
+
+        function setOverlay(on) {
+            if (overlay === on) return;
+            overlay = on;
+            if (on) document.addEventListener('keydown', onKey);
+            else document.removeEventListener('keydown', onKey);
+            sync();
+        }
+
+        button.setAttribute('aria-pressed', 'false');
+        button.addEventListener('click', function () {
+            if (overlay) { setOverlay(false); return; }
+            if (document.fullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen();
+                return;
+            }
+            if (document.fullscreenEnabled && typeof target.requestFullscreen === 'function') {
+                var request = target.requestFullscreen();
+                if (request && typeof request.catch === 'function') {
+                    request.catch(function () { setOverlay(true); });
+                }
+                return;
+            }
+            setOverlay(true);
+        });
+
+        var onChange = function () {
+            if (!document.body.contains(target)) {
+                document.removeEventListener('fullscreenchange', onChange);
+                return;
+            }
+            sync();
+        };
+        document.addEventListener('fullscreenchange', onChange);
+
+        return { isFullscreen: isFull };
+    };
 
     /** Find or lazily create the toolbar container inside a panel. */
     function ensureToolbar(panelEl) {
@@ -432,28 +590,21 @@
     /**
      * Public helper: add a Download button to the toolbar for the given
      * chart container. Idempotent — calling it a second time on the
-     * same panel is a no-op (the toolbar already has a download button).
+     * same panel is a no-op (the toolbar already has a download button),
+     * which is what lets a panel holding several charts (sentiment's three
+     * bars) register each of them without moving the export target.
      */
     P.addDownloadButton = function (panelEl, chartEl) {
         if (!panelEl || !chartEl) return null;
         var bar = ensureToolbar(panelEl);
         if (bar.querySelector('.iwac-vis-panel-toolbar__btn--download')) return bar;
-        var btn = buildBtn('⭳', P.t('Download chart'), function () {
+        bar._iwacDownloadTarget = chartEl;
+        var btn = P.iconButton('⭳', P.t('Download chart'), function () {
             if (btn.disabled) return;
             btn.disabled = true;
             btn.classList.add('iwac-vis-panel-toolbar__btn--busy');
-            buildCompositeUrl(panelEl, chartEl)
-                .then(function (composite) {
-                    if (composite) return composite;
-                    return resolveDataUrl(chartEl);
-                })
-                .catch(function (err) {
-                    console.error('IWACVis.panel-toolbar: download failed', err);
-                    return resolveDataUrl(chartEl);
-                })
-                .then(function (dataUrl) {
-                    if (dataUrl) triggerDownload(dataUrl, filenameFromPanel(panelEl) + '.png');
-                })
+            // Read at click time: `P.setDownloadTarget` may have moved it.
+            P.downloadPanelImage(panelEl, resolveDataUrl(bar._iwacDownloadTarget))
                 .then(function () {
                     btn.disabled = false;
                     btn.classList.remove('iwac-vis-panel-toolbar__btn--busy');
@@ -465,13 +616,35 @@
     };
 
     /**
-     * Public helper: add a Fullscreen toggle to the toolbar. The panel
-     * element itself enters native fullscreen via the Fullscreen API;
-     * the `.iwac-vis-panel--fullscreen` class is toggled for the layout
-     * adjustments already defined in iwac-core.css.
+     * Point a panel's Download button at another chart or map container —
+     * for a panel that swaps which of its renderers is visible (Entity
+     * Networks' Entities / Places graphs). Updates the button in place, so
+     * the toolbar keeps its order; adds the button if there is none yet.
      *
      * @param {HTMLElement} panelEl
-     * @param {{ onResize?: function(boolean): void }} [opts]
+     * @param {HTMLElement} chartEl
+     */
+    P.setDownloadTarget = function (panelEl, chartEl) {
+        if (!panelEl || !chartEl) return;
+        var bar = panelEl.querySelector(':scope > .' + TOOLBAR_CLASS);
+        if (bar && bar.querySelector('.iwac-vis-panel-toolbar__btn--download')) {
+            bar._iwacDownloadTarget = chartEl;
+            return;
+        }
+        P.addDownloadButton(panelEl, chartEl);
+    };
+
+    /**
+     * Public helper: add a Fullscreen toggle to the toolbar, bound through
+     * `P.bindFullscreen`. By default the panel itself expands and takes the
+     * `.iwac-vis-panel--fullscreen` class iwac-core.css lays out.
+     *
+     * @param {HTMLElement} panelEl
+     * @param {Object} [opts]
+     * @param {function(boolean):void} [opts.onResize]  after every change
+     * @param {HTMLElement} [opts.target=panelEl]  expand this instead — a
+     *   layout that holds the panel and the controls that read it
+     * @param {string} [opts.stateClass]  see `P.bindFullscreen`
      */
     P.addFullscreenButton = function (panelEl, opts) {
         if (!panelEl) return null;
@@ -479,33 +652,13 @@
         var bar = ensureToolbar(panelEl);
         if (bar.querySelector('.iwac-vis-panel-toolbar__btn--fullscreen')) return bar;
 
-        var btn = buildBtn('⛶', P.t('Toggle fullscreen'), function () {
-            if (!document.fullscreenElement) {
-                if (panelEl.requestFullscreen) panelEl.requestFullscreen();
-            } else if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        });
+        var btn = P.iconButton('⛶', P.t('Toggle fullscreen'));
         btn.classList.add('iwac-vis-panel-toolbar__btn--fullscreen');
         bar.appendChild(btn);
-
-        // Self-cleaning: a panel that leaves the document (a view switch, a
-        // rebuilt results area) takes its listener with it on the next
-        // fullscreen change, instead of stacking one detached closure per
-        // panel ever built on the page.
-        var onChange = function () {
-            if (!document.body.contains(panelEl)) {
-                document.removeEventListener('fullscreenchange', onChange);
-                return;
-            }
-            var isFull = (document.fullscreenElement === panelEl);
-            panelEl.classList.toggle('iwac-vis-panel--fullscreen', isFull);
-            btn.classList.toggle('iwac-vis-panel-toolbar__btn--pressed', isFull);
-            if (typeof opts.onResize === 'function') {
-                setTimeout(function () { opts.onResize(isFull); }, 50);
-            }
-        };
-        document.addEventListener('fullscreenchange', onChange);
+        P.bindFullscreen(btn, opts.target || panelEl, {
+            stateClass: opts.stateClass,
+            onChange: opts.onResize
+        });
         return bar;
     };
 
@@ -657,11 +810,12 @@
         panelEl.appendChild(tableHost);
 
         var open = false;
-        var tableBtn = buildBtn('▤', P.t('View as table'), function () {
+        var tableBtn = P.iconButton('▤', P.t('View as table'), function () {
             open = !open;
             tableHost.hidden = !open;
+            // The pressed look keys on aria-expanded (iwac-core.css), so it
+            // cannot drift from what a screen reader is told.
             tableBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-            tableBtn.classList.toggle('iwac-vis-panel-toolbar__btn--pressed', open);
             var label = open ? P.t('Hide table') : P.t('View as table');
             tableBtn.setAttribute('aria-label', label);
             tableBtn.title = label;
@@ -673,7 +827,7 @@
         tableBtn.setAttribute('aria-controls', tableHost.id);
         bar.appendChild(tableBtn);
 
-        var csvBtn = buildBtn('CSV', P.t('Download CSV'), function () {
+        var csvBtn = P.iconButton('CSV', P.t('Download CSV'), function () {
             downloadCsv(panelEl, chartEl);
         });
         csvBtn.classList.add('iwac-vis-panel-toolbar__btn--csv');

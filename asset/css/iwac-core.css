@@ -515,7 +515,10 @@
     box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
 }
 
-.iwac-vis-graph-toolbar__btn--pressed {
+/*  Pressed (a toggle that is on, fullscreen) keys on `aria-pressed`, the
+ *  state a screen reader is told — so the two cannot disagree, which a
+ *  separately toggled `--pressed` class could. */
+.iwac-vis-graph-toolbar__btn[aria-pressed="true"] {
     background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
     border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
     color: var(--primary, #ce4115);
@@ -678,9 +681,10 @@
  *  the shared `.iwac-vis-btn` class so they inherit every theme-token
  *  hover, focus, and transition — only geometry is overridden here.
  *
- *  The network / chord panels ship their own `.iwac-vis-graph-toolbar`
- *  (zoom / legend / fullscreen) in blocks/person-dashboard.css and
- *  opt out of auto-attach via the `.iwac-vis-graph-host` marker class.
+ *  The graph panels ship their own `.iwac-vis-graph-toolbar` (zoom /
+ *  reset / download / fullscreen, styled above in this file) and opt out
+ *  of auto-attach via the `.iwac-vis-graph-host` marker class. Both bars
+ *  build their buttons with `P.iconButton`.
  * ------------------------------------------------------------------- */
 
 .iwac-vis-panel-toolbar {
@@ -702,7 +706,11 @@
     box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
 }
 
-.iwac-vis-panel-toolbar__btn--pressed {
+/*  On: fullscreen (`aria-pressed`) or the table disclosure open
+ *  (`aria-expanded`) — keyed on the announced state, as the graph
+ *  toolbar's toggles are. */
+.iwac-vis-panel-toolbar__btn[aria-pressed="true"],
+.iwac-vis-panel-toolbar__btn[aria-expanded="true"] {
     background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
     border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
     color: var(--primary, #ce4115);
@@ -755,12 +763,17 @@
 /* -------------------------------------------------------------------
  *  Panel fullscreen overlay
  *
- *  Applied when the user toggles fullscreen via the panel toolbar's
- *  button. The panel wrapper escapes its parent grid and covers the
- *  viewport; the chart / graph / chord host fills the remaining
- *  space after padding and toolbar. Also applied by the browser
- *  automatically via the :fullscreen pseudo-class so native Esc / F11
- *  transitions stay in sync without JS having to intervene.
+ *  Applied when the user toggles fullscreen via a panel or graph
+ *  toolbar button (`P.bindFullscreen`). The panel wrapper escapes its
+ *  parent grid and covers the viewport; the chart / graph / chord host
+ *  fills the remaining space after padding and toolbar. Also applied by
+ *  the browser automatically via the :fullscreen pseudo-class so native
+ *  Esc / F11 transitions stay in sync without JS having to intervene.
+ *
+ *  The class alone is also the whole overlay where there is no element
+ *  fullscreen to ask for — Safari on an iPhone — which is why it carries
+ *  every declaration itself rather than relying on the UA's :fullscreen
+ *  sheet for the fixed positioning.
  * ------------------------------------------------------------------- */
 
 .iwac-vis-panel--fullscreen,
@@ -859,7 +872,7 @@
     text-decoration: underline;
     text-underline-offset: 0.15em;
     text-decoration-thickness: 1px;
-    transition: color 150ms ease;
+    transition: color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-cross-block:hover,
@@ -1228,9 +1241,7 @@
 }
 
 .iwac-vis-tab,
-.iwac-vis-pagination__btn,
-.iwac-vis-facets__btn,
-.iwac-vis-facets__sub-btn {
+.iwac-vis-pagination__btn {
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     background: transparent;
     color: var(--muted, #66696e);
@@ -1247,9 +1258,7 @@
 }
 
 .iwac-vis-tab:hover,
-.iwac-vis-pagination__btn:hover:not(:disabled),
-.iwac-vis-facets__btn:hover,
-.iwac-vis-facets__sub-btn:hover {
+.iwac-vis-pagination__btn:hover:not(:disabled) {
     background: var(--surface-raised, #faf8f6);
     color: var(--ink, #13161c);
 }
@@ -1263,11 +1272,7 @@
 }
 
 .iwac-vis-tab--active,
-.iwac-vis-tab--active:hover,
-.iwac-vis-facets__btn--active,
-.iwac-vis-facets__btn--active:hover,
-.iwac-vis-facets__sub-btn--active,
-.iwac-vis-facets__sub-btn--active:hover {
+.iwac-vis-tab--active:hover {
     background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
     color: var(--ink, #13161c);
     border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
@@ -1319,13 +1324,19 @@
 /* -------------------------------------------------------------------
  *  Facet chips — clean segmented-control treatment
  *
- *  The shared chip rule above renders tabs / facets / pagination as
- *  transparent-until-hover chips. For FACET controls specifically we want
- *  a crisper, self-evidently tappable pill at rest, with the brand color
- *  reserved for the selected state only (border + weight + a restrained
- *  10% tint) — never the heavy primary wash that read as "salmon" before.
- *  Matches the theme's "primary = state, not decoration" rule. Scoped to
- *  facet selectors so tabs + pagination keep their own look.
+ *  The chip rule above renders tabs + pagination as transparent-until-hover
+ *  chips. FACET controls get a crisper, self-evidently tappable pill at
+ *  rest, with the brand color reserved for the selected state only
+ *  (border + weight + a restrained 10% tint) — never the heavy primary
+ *  wash that read as "salmon" before. Matches the theme's "primary =
+ *  state, not decoration" rule.
+ *
+ *  Declared ONCE, here. Facets used to sit in the tab/pagination group as
+ *  well, with conflicting values, and this later `:hover` (0,2,0) then
+ *  beat that group's `--active:hover`: hovering the selected facet dropped
+ *  its primary tint. The active rule now carries its own `:hover` and
+ *  comes after the hover rule, so the selected state holds under the
+ *  pointer.
  *
  *  `.iwac-vis-facets__label` is the static eyebrow that single-facet bars
  *  now render in place of a dead, permanently-active button.
@@ -1346,9 +1357,19 @@
 
 .iwac-vis-facets__btn,
 .iwac-vis-facets__sub-btn {
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     background: var(--surface, #fdfcfb);
-    border-color: var(--border, #ced1d6);
     color: var(--ink-light, #3f4349);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        color            var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-facets__btn:hover,
@@ -1359,11 +1380,25 @@
 }
 
 .iwac-vis-facets__btn--active,
-.iwac-vis-facets__sub-btn--active {
+.iwac-vis-facets__btn--active:hover,
+.iwac-vis-facets__sub-btn--active,
+.iwac-vis-facets__sub-btn--active:hover {
     background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
     border-color: color-mix(in oklab, var(--primary, #ce4115) 55%, var(--border, #ced1d6));
     color: var(--ink-strong, #05070c);
     font-weight: 600;
+}
+
+/*  A choice with nothing behind it under the current filters (an entity
+ *  type absent for the selected role). It keeps its resting surface on
+ *  hover, so the pointer is not invited to try it. */
+.iwac-vis-facets__btn:disabled,
+.iwac-vis-facets__btn:disabled:hover {
+    background: var(--surface, #fdfcfb);
+    border-color: var(--border, #ced1d6);
+    color: var(--ink-light, #3f4349);
+    opacity: 0.42;
+    cursor: not-allowed;
 }
 
 
@@ -1555,6 +1590,27 @@ select.iwac-vis-control:hover {
     align-items: center;
     gap: var(--space-2, 0.5rem);
     flex: 0 0 auto;
+    max-width: 100%;
+    min-width: 0;
+}
+
+/*  A select sized by its longest option ("Islamic periodicals · 1990",
+ *  an outlet name) is wider than a phone, and a flex item will not shrink
+ *  below its content unless told to — so the row scrolled sideways. Below
+ *  `sm` the label stacks over a full-width select. The laïcité dossier
+ *  carried this under its own prefix; nothing about it is laïcité's. */
+.iwac-vis-select-group > .iwac-vis-control {
+    max-width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 599px) { /* sm */
+    .iwac-vis-select-group {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
 }
 
 .iwac-vis-select-label {
@@ -1919,14 +1975,14 @@ select.iwac-vis-control:hover {
 
 /* Category colour from the theme's single-source --type-* map (IWAC-theme
    docs/DESIGN-SYSTEM.md §3); hex is the degraded-mode fallback. Keeps this in
-   lockstep with IwacSearch's result chips — the mapping lives in the theme, so
-   the document-badge fallback can no longer drift from IwacSearch's, as it
-   previously had. */
+   lockstep with IwacSearch's result chips — the mapping lives in the theme.
+   Only the two types a badge is still drawn for: On This Day's articles and
+   periodical issues. The document / audio-visual / reference variants went
+   when the recent-additions table dropped its type column. The audiovisual
+   overview's source badges (youtube / deposited / unknown) keep the neutral
+   muted dot on purpose: where a recording came from is not an item type. */
 .iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--type-article, #ce4115); }
 .iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--type-publication, #394f68); }
-.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--type-document, #d66800); }
-.iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--type-audiovisual, #037ac0); }
-.iwac-vis-badge--reference   { --iwac-vis-badge-dot: var(--type-reference, #66696e); }
 
 
 /* =================================================================== */
@@ -2054,16 +2110,18 @@ select.iwac-vis-control:hover {
     white-space: nowrap;
 }
 
-/*  The ranked places list under a filtered map (P.buildRankedPlacesDetails)
- *  — the data path for screen readers and for a browser without WebGL. */
-.iwac-vis-places-details {
+/*  A `<details>` data fallback under a chart or a map — the ranked places
+ *  list (P.buildRankedPlacesDetails), Scary Terms' word and event lists:
+ *  the data path for screen readers and for a browser without WebGL. The
+ *  places list and Scary Terms each carried this rule byte for byte. */
+.iwac-vis-details {
     border-top: 1px solid var(--border-light, #e2e5e8);
     padding-top: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #3f4349);
 }
 
-.iwac-vis-places-details > summary {
+.iwac-vis-details > summary {
     cursor: pointer;
     font-weight: 600;
     color: var(--muted, #66696e);
@@ -2072,14 +2130,37 @@ select.iwac-vis-control:hover {
     letter-spacing: var(--tracking-wide, 0.04em);
 }
 
-.iwac-vis-places-details > summary:focus-visible {
+.iwac-vis-details > summary:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
-.iwac-vis-places-details > .iwac-vis-table {
+.iwac-vis-details > .iwac-vis-table {
     margin-top: var(--space-2, 0.5rem);
     font-variant-numeric: tabular-nums;
+}
+
+/*  A labelled checkbox in a control row ("Show events"). Scary Terms and
+ *  the laïcité dossier each declared it under their own prefix. */
+.iwac-vis-check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-light, #3f4349);
+    cursor: pointer;
+}
+
+.iwac-vis-check input {
+    accent-color: var(--primary, #ce4115);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.iwac-vis-check input:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 2px;
 }
 
 
@@ -2197,7 +2278,10 @@ select.iwac-vis-control:hover {
     text-decoration: none;
     color: inherit;
     overflow: hidden;
-    transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+    transition:
+        border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        box-shadow   var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        transform    var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
     position: relative;
 }
 
@@ -2394,13 +2478,17 @@ select.iwac-vis-control:hover {
     .iwac-vis-graph-host--force > .iwac-vis-graph-stage {
         min-height: 22rem;
     }
-    .iwac-vis-panel--fullscreen > .iwac-vis-graph-host--force > .iwac-vis-graph-stage,
-    .iwac-vis-panel:fullscreen > .iwac-vis-graph-host--force > .iwac-vis-graph-stage {
+    /*  A DESCENDANT of the fullscreen panel, not its child: the associated-
+     *  entities graph host sits one level down, inside the three-view
+     *  controller, and a child combinator never reached it. */
+    .iwac-vis-panel--fullscreen .iwac-vis-graph-host--force > .iwac-vis-graph-stage,
+    .iwac-vis-panel:fullscreen .iwac-vis-graph-host--force > .iwac-vis-graph-stage {
         min-height: 0;
     }
     /*  The desktop pill is a 26px mouse target; a thumb gets the theme's
-     *  40px control. */
-    .iwac-vis-graph-host--force > .iwac-vis-graph-legend > .iwac-vis-graph-legend__item {
+     *  40px control — in a graph legend and in Entity Networks' type row
+     *  alike. */
+    .iwac-vis-type-chip {
         min-height: var(--size-control-md, 2.5rem);
     }
     /*  The card spans the stage. With the toolbar gone from the overlay
@@ -2484,7 +2572,16 @@ select.iwac-vis-control:hover {
     flex: 0 0 auto;
 }
 
-.iwac-vis-graph-legend__item {
+/*  `.iwac-vis-type-chip` — one pressable chip per category, its swatch in
+ *  the category's colour. The graph legend here and Entity Networks' type
+ *  filter used to be two copies of this control with two different "off"
+ *  states; this is the one control, with the legend's.
+ *
+ *  The colour arrives as `--iwac-vis-entity-color`, a custom property the
+ *  JS writes from the live palette (and rewrites on a theme swap). An
+ *  inline `background` would beat every selector, which is why the networks
+ *  chip once needed an `!important` to grey its own swatch when off. */
+.iwac-vis-type-chip {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -2503,28 +2600,33 @@ select.iwac-vis-control:hover {
         opacity var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-.iwac-vis-graph-legend__item:hover {
+.iwac-vis-type-chip:hover {
     border-color: var(--border-strong, #aeb1b7);
     background: var(--surface-raised, #faf8f6);
 }
 
-.iwac-vis-graph-legend__item:focus-visible {
+.iwac-vis-type-chip:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
-/*  Hidden category: dimmed and struck through, so "off" is legible
- *  without relying on the opacity difference alone. */
-.iwac-vis-graph-legend__item--off {
+/*  Hidden category: dimmed, struck through and its swatch greyed, so "off"
+ *  is legible without relying on the opacity difference alone. */
+.iwac-vis-type-chip--off {
     opacity: 0.5;
     text-decoration: line-through;
 }
 
-.iwac-vis-graph-legend__swatch {
+.iwac-vis-type-chip__swatch {
     width: 0.625rem;
     height: 0.625rem;
     border-radius: var(--radius-full, 9999px);
     flex: 0 0 auto;
+    background: var(--iwac-vis-entity-color, var(--primary, #ce4115));
+}
+
+.iwac-vis-type-chip--off .iwac-vis-type-chip__swatch {
+    background: var(--muted, #66696e);
 }
 
 /* ---- Selection card ------------------------------------------------ */
@@ -2705,4 +2807,104 @@ select.iwac-vis-control:hover {
         max-width: none;
         max-height: 50%;
     }
+}
+
+
+/* =================================================================== */
+/*  Search dropdown, list rows, toolbar labels (shared)                 */
+/* =================================================================== */
+
+/*  `P.buildSearchDropdown`'s own skin. Term Trends and Entity Networks
+ *  each restyled the one widget under a class family of their own — a
+ *  dozen identical declarations and two slightly different dropdowns. A
+ *  caller now adds a block hook to the root only for the widget's place
+ *  in its row. */
+.iwac-vis-search {
+    position: relative;
+}
+
+.iwac-vis-search__input {
+    width: 100%;
+}
+
+.iwac-vis-search__results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: var(--iwac-vis-z-overlay, 6);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    max-height: 18rem;
+    padding: var(--space-1, 0.25rem);
+    overflow-y: auto;
+    /*  Stop the scroll chaining to the page behind (C2). Inside an embed
+     *  that page is the HOST's, so reaching the end of a list used to
+     *  scroll the article the widget sits in. */
+    overscroll-behavior: contain;
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
+}
+
+.iwac-vis-search__empty {
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    color: var(--muted, #66696e);
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+/*  `.iwac-vis-list-item` — a full-width button row: a name that truncates
+ *  (`.iwac-vis-list__name`) and a tabular count. The search results, the
+ *  Entity Networks sidebar's co-occurrence list and the spatial picker's
+ *  entity and place lists are one row, which three sheets each wrote out. */
+.iwac-vis-list-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2, 0.5rem);
+    width: 100%;
+    padding: 0.25rem 0.4rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm, 0.375rem);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #13161c);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-list-item:hover {
+    background: var(--surface-raised, #faf8f6);
+}
+
+/*  Drawn inside the row: every one of these lists scrolls, and an outline
+ *  set outside the row is cut off by the scroller's edge on the first and
+ *  last items — the search results' focus used to change the background
+ *  and nothing else. */
+.iwac-vis-list-item:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: -2px;
+}
+
+.iwac-vis-list-item__count {
+    flex: 0 0 auto;
+    color: var(--muted, #66696e);
+    font-size: var(--text-xs, 0.8125rem);
+    font-variant-numeric: tabular-nums;
+}
+
+/*  A label that wraps its own control in a toolbar row ("Min. link
+ *  strength", "Country focus"). */
+.iwac-vis-toolbar__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
+    color: var(--ink-light, #3f4349);
 }

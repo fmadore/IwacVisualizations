@@ -42,8 +42,8 @@
     var FACETS = ['frame', 'country', 'decade'];
     var FACET_LABEL_KEY = {
         frame:   'laicite.semantic_by_frame',
-        country: 'laicite.semantic_by_country',
-        decade:  'laicite.semantic_by_decade'
+        country: 'Country',
+        decade:  'Decade'
     };
 
     function hasPoints(bundle) {
@@ -134,8 +134,15 @@
     }
 
     /**
-     * @param {Object} cfg {bundle, metadata, state, frameColors, siteBase}
-     * @returns {{root: HTMLElement, mount: function():void}}
+     * @param {Object} cfg {bundle, metadata, state, frameColors, siteBase,
+     *        onFacet}
+     *        `onFacet(facet)` puts the colour-by choice into the block
+     *        store (`semanticFacet`); the store's redraw comes back through
+     *        `update`, which repaints the one chart. It used to write
+     *        `cfg.state.semanticFacet` straight onto the store's state,
+     *        behind the store's back — no subscriber heard it.
+     * @returns {{root: HTMLElement, mount: function():void,
+     *            update: function(Object):void}}
      */
     L.buildSemantic = function (cfg) {
         var bundle = cfg.bundle;
@@ -162,9 +169,10 @@
                 : (meta.reason === 'too_few_embeddings' || meta.reason === 'too_few_items')
                     ? 'laicite.semantic_empty_few'
                     : 'laicite.semantic_empty';
-            panel.chart.appendChild(P.buildEmptyState(P.t(key)));
+            // buildEmptyState takes the KEY and translates it itself.
+            panel.chart.appendChild(P.buildEmptyState(key));
             root.appendChild(panel.panel);
-            return { root: root, mount: function () {} };
+            return { root: root, mount: function () {}, update: function () {} };
         }
 
         function frameLabel(frame) {
@@ -176,6 +184,15 @@
         var active = facets.indexOf(cfg.state && cfg.state.semanticFacet) !== -1
             ? cfg.state.semanticFacet
             : facets[0];
+
+        /** Repaint the live chart for a facet. `true` — each facet is a
+         *  different series set, so a merged update would leave the
+         *  previous one behind. */
+        function repaint(facet) {
+            active = facet;
+            var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
+            if (live) live.setOption(option(bundle, active, frameLabel, cfg.frameColors), true);
+        }
 
         if (facets.length > 1 && P.buildFacetButtons) {
             var subFacets = {};
@@ -191,15 +208,8 @@
                 onChange: function (evt) {
                     var f = evt.subFacet || facets[0];
                     if (facets.indexOf(f) === -1) f = facets[0];
-                    active = f;
-                    if (cfg.state) cfg.state.semanticFacet = f;
-                    var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
-                    // `true` — each facet is a different series set, so a
-                    // merged update would leave the previous one behind.
-                    if (live) {
-                        live.setOption(
-                            option(bundle, active, frameLabel, cfg.frameColors), true);
-                    }
+                    if (cfg.onFacet) cfg.onFacet(f);
+                    else repaint(f);
                 }
             });
             panel.panel.insertBefore(bar.root, panel.chart);
@@ -218,6 +228,12 @@
                     var i = params.data && params.data[2];
                     return i == null ? null : bundle.points.o_id[i];
                 });
+            },
+            update: function (state) {
+                if (state) cfg.state = state;
+                var f = cfg.state && cfg.state.semanticFacet;
+                if (facets.indexOf(f) === -1) f = facets[0];
+                if (f !== active) repaint(f);
             }
         };
     };

@@ -8,8 +8,8 @@
  * first (it creates the namespace) and that all of them load before any block
  * controller.
  *
- * The per-item dashboard boot helper and the shared force-graph panel
- * chrome (toolbar + click-through) that graph panels hand off to.
+ * The page-block and per-item dashboard boot helpers, and the toolbar the
+ * ECharts graph panels hand off to.
  */
 (function () {
     'use strict';
@@ -23,6 +23,41 @@
 
     /** Where every precomputed bundle lives, under the site base path. */
     P.DATA_BASE = '/files/iwac-visualizations/';
+
+    /**
+     * Once the DOM is ready, hand every `opts.selector` container to
+     * `initOne` as it scrolls into view — or skip the lot, with a warning,
+     * when the block needs ECharts and it is absent.
+     *
+     * The shared epilogue of `bootBlock` and `bootPerItemDashboard`, which
+     * each carried a byte-identical copy of it.
+     *
+     * @param {{selector: string, requireECharts?: boolean}} opts
+     * @param {string} label  console prefix
+     * @param {function(HTMLElement):void} initOne
+     */
+    function eachContainerOnView(opts, label, initOne) {
+        function run() {
+            if (opts.requireECharts !== false && typeof echarts === 'undefined') {
+                console.warn(label + ': ECharts not loaded');
+                return;
+            }
+            var containers = document.querySelectorAll(opts.selector);
+            for (var i = 0; i < containers.length; i++) {
+                (function (container) {
+                    var lazy = window.IWACVisLazy;
+                    if (lazy && lazy.whenVisible) lazy.whenVisible(container, function () { initOne(container); });
+                    else initOne(container);
+                })(containers[i]);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', run);
+        } else {
+            run();
+        }
+    }
 
     /**
      * Boot a page block: wait for the DOM (and ECharts), find every matching
@@ -117,26 +152,7 @@
             attempt(false);
         }
 
-        function run() {
-            if (opts.requireECharts !== false && typeof echarts === 'undefined') {
-                console.warn(label + ': ECharts not loaded');
-                return;
-            }
-            var containers = document.querySelectorAll(opts.selector);
-            for (var i = 0; i < containers.length; i++) {
-                (function (container) {
-                    var lazy = window.IWACVisLazy;
-                    if (lazy && lazy.whenVisible) lazy.whenVisible(container, function () { initOne(container); });
-                    else initOne(container);
-                })(containers[i]);
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', run);
-        } else {
-            run();
-        }
+        eachContainerOnView(opts, label, initOne);
     };
 
     /**
@@ -309,56 +325,30 @@
             attempt();
         }
 
-        function run() {
-            if (opts.requireECharts !== false && typeof echarts === 'undefined') {
-                console.warn(label + ': ECharts not loaded');
-                return;
-            }
-            var containers = document.querySelectorAll(opts.selector);
-            for (var i = 0; i < containers.length; i++) {
-                (function (container) {
-                    var lazy = window.IWACVisLazy;
-                    if (lazy && lazy.whenVisible) lazy.whenVisible(container, function () { initOne(container); });
-                    else initOne(container);
-                })(containers[i]);
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', run);
-        } else {
-            run();
-        }
+        eachContainerOnView(opts, label, initOne);
     };
 
     /* ----------------------------------------------------------------- */
-    /*  Force-graph panel chrome (toolbar + click-through)                */
+    /*  ECharts graph panel toolbar                                       */
     /* ----------------------------------------------------------------- */
 
     /**
-     * Build the shared 6-button toolbar for a force-graph panel (zoom in /
-     * out / reset / legend toggle / PNG download / fullscreen) and mount
-     * it beside `panelEl.chart`. Owns the legend-visibility state so the panel's
-     * `buildFullOption` can read it back via the returned `isLegendVisible()`.
-     *
-     * Buttons compose `.iwac-vis-btn .iwac-vis-graph-toolbar__btn` so they
-     * inherit the shared border/background/focus tokens (no hex literals).
-     * Legend + fullscreen use merge-mode `setOption` so the force layout
-     * never restarts.
+     * Build the shared toolbar for an ECharts `graph` panel (zoom in / out /
+     * reset / PNG download / fullscreen) and mount it beside `panelEl.chart`.
+     * The canvas force graphs carry their own (graph-panel.js); the two share
+     * the button builder, the export and the fullscreen binding with the
+     * panel toolbar, so the families look and behave the same.
      *
      * @param {{panel: HTMLElement, chart: HTMLElement}} panelEl
      * @param {ECharts} chart  the registered chart instance
      * @param {Object} [opts]
-     * @param {string} [opts.downloadName='iwac-chart.png']  PNG filename
-     * @param {boolean} [opts.legendToggle=true]  pass false for graphs
-     *   without a legend (the button would only shift the series bounds)
-     * @returns {{el: HTMLElement, isLegendVisible: function():boolean}}
+     * @param {string} [opts.downloadName]  PNG filename; default a stem of the
+     *   panel title, like every other panel's download
+     * @returns {{el: HTMLElement}}
      */
     P.buildGraphPanelToolbar = function (panelEl, chart, opts) {
         opts = opts || {};
         var ZOOM = 1.4;
-        var legendVisible = true;
-        var isFullscreen = false;
 
         // graphRoam silently no-ops unless the dispatch carries pixel
         // originX/originY — always anchor on the chart's geometric centre.
@@ -370,88 +360,42 @@
                 originY: chart.getHeight() / 2
             });
         }
+
+        var bar = P.el('div', 'iwac-vis-graph-toolbar');
         function btn(label, title, onClick) {
-            var b = P.el('button', 'iwac-vis-btn iwac-vis-graph-toolbar__btn', label);
-            b.type = 'button';
-            b.setAttribute('aria-label', title);
-            b.title = title;
-            b.addEventListener('click', onClick);
+            var b = P.iconButton(label, title, onClick, 'iwac-vis-graph-toolbar__btn');
+            bar.appendChild(b);
             return b;
         }
 
-        var bar = P.el('div', 'iwac-vis-graph-toolbar');
-
-        bar.appendChild(btn('+', P.t('Zoom in'), function () {
+        btn('+', P.t('Zoom in'), function () {
             if (!chart.isDisposed()) dispatchZoom(ZOOM);
-        }));
-        bar.appendChild(btn('−', P.t('Zoom out'), function () {
+        });
+        btn('−', P.t('Zoom out'), function () {
             if (!chart.isDisposed()) dispatchZoom(1 / ZOOM);
-        }));
-        bar.appendChild(btn('↺', P.t('Reset view'), function () {
+        });
+        btn('↺', P.t('Reset view'), function () {
             if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
-        }));
-
-        if (opts.legendToggle !== false) {
-            var legendBtn = btn('▤', P.t('Toggle legend'), function () {
-                if (chart.isDisposed()) return;
-                legendVisible = !legendVisible;
-                chart.setOption({
-                    legend: [{ show: legendVisible }],
-                    series: [{ bottom: legendVisible ? 56 : 16 }]
-                });
-                legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
-            });
-            bar.appendChild(legendBtn);
-        }
+        });
 
         // Look the live instance up through ns.getLiveChart so we never
         // call getDataURL on an instance disposed by a panel teardown.
-        bar.appendChild(btn('⭳', P.t('Download chart'), function () {
+        btn('⭳', P.t('Download chart'), function () {
             var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
             if (!live) return;
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var dataUrl = live.getDataURL({
+            P.downloadPanelImage(panelEl.panel, live.getDataURL({
                 type: 'png',
-                pixelRatio: 2,
-                backgroundColor: tokens.surface || '#ffffff'
-            });
-            if (!dataUrl) return;
-            var a = document.createElement('a');
-            a.download = opts.downloadName || 'iwac-chart.png';
-            a.href = dataUrl;
-            a.rel = 'noopener';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }));
-
-        var fullBtn = btn('⛶', P.t('Toggle fullscreen'), function () {
-            var host = panelEl.panel;
-            if (!host) return;
-            if (!document.fullscreenElement) {
-                if (host.requestFullscreen) host.requestFullscreen();
-            } else if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
+                pixelRatio: P.EXPORT_SCALE,
+                backgroundColor: ns.getChartTokens().surface
+            }), opts.downloadName);
         });
-        bar.appendChild(fullBtn);
 
-        // Self-cleaning (same rule as panel-toolbar.js): once the panel has
-        // left the document the listener removes itself rather than holding
-        // a detached panel and a disposed chart for the life of the page.
-        var onFullscreenChange = function () {
-            var host = panelEl.panel;
-            if (!host || !document.body.contains(host)) {
-                document.removeEventListener('fullscreenchange', onFullscreenChange);
-                return;
-            }
-            isFullscreen = (document.fullscreenElement === host);
-            host.classList.toggle('iwac-vis-panel--fullscreen', isFullscreen);
-            fullBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', isFullscreen);
-            // Give the browser a frame to apply the new size.
-            setTimeout(function () { if (!chart.isDisposed()) chart.resize(); }, 50);
-        };
-        document.addEventListener('fullscreenchange', onFullscreenChange);
+        var fullBtn = btn('⛶', P.t('Toggle fullscreen'));
+        if (panelEl.panel) {
+            P.bindFullscreen(fullBtn, panelEl.panel, {
+                onChange: function () { if (!chart.isDisposed()) chart.resize(); }
+            });
+        }
 
         // The bar lives BESIDE the chart host, not inside it, in a zero-height
         // anchor inserted just before the host. Inside the host it had no
@@ -470,6 +414,6 @@
             host.appendChild(bar);
         }
 
-        return { el: bar, isLegendVisible: function () { return legendVisible; } };
+        return { el: bar };
     };
 })();

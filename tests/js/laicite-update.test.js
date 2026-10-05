@@ -31,7 +31,11 @@ const ROOT = join(__dirname, '..', '..');
 
 const SOURCES = [
     'asset/js/charts/shared/concordance.js',
+    // The evidence tables are P.buildTable now, so the real one is loaded:
+    // what is under test is that they come out as shared tables.
+    'asset/js/charts/shared/table.js',
     'asset/js/charts/laicite/helpers.js',
+    'asset/js/charts/laicite/overview.js',
     'asset/js/charts/laicite/actors.js',
     'asset/js/charts/laicite/references.js',
     'asset/js/charts/laicite/concordance.js',
@@ -155,6 +159,18 @@ function loadLaicite() {
         },
         fetchJSON() { return Promise.resolve(null); },
         formatDate(value) { return String(value); },
+        itemUrl(siteBase, id) { return (siteBase || '') + '/item/' + id; },
+        // A select group whose `control` answers `.value`, which is all
+        // the coverage table reads and writes.
+        buildSelectControl(cfg) {
+            const group = P.el('div', 'iwac-vis-select-group');
+            group.control = P.el('select');
+            group.control.value = cfg.current || '';
+            group.control.attrs['data-iwac-control'] = cfg.name;
+            group.cfg = cfg;
+            group.appendChild(group.control);
+            return group;
+        },
     };
 
     const ns = {
@@ -182,6 +198,15 @@ function loadLaicite() {
         console: { warn() {}, error() {} },
         window: { IWACVis: ns, innerWidth: 1280, setTimeout() {} },
         setTimeout(fn) { return fn ? 0 : 0; },
+        // shared/table.js writes cell text as text nodes.
+        document: {
+            createElement: makeElement,
+            createTextNode(text) {
+                const node = makeElement('#text');
+                node.textContent = String(text);
+                return node;
+            },
+        },
     };
     context.window.window = context.window;
     vm.createContext(context);
@@ -481,15 +506,17 @@ test('the concordance summary states how many records the strict filter hid', as
     await new Promise((resolve) => setImmediate(resolve));
 
     const open = textOf(view.host);
-    assert.ok(open.includes('laicite.concordance_count:{"count":"6"}'));
+    // A NUMBER, not P.formatNumber's string: t() picks the plural only
+    // for a numeric count, so a pre-formatted one printed "1 lines".
+    assert.ok(open.includes('laicite.concordance_count:{"count":6}'));
     assert.ok(!open.includes('laicite.concordance_strict_hidden'),
         'the hidden line showed while the strict filter was off');
 
     state.kwicStrict = true;
     view.render();
     const strict = textOf(view.host);
-    assert.ok(strict.includes('laicite.concordance_count:{"count":"4"}'));
-    assert.ok(strict.includes('laicite.concordance_strict_hidden:{"count":"2"}'),
+    assert.ok(strict.includes('laicite.concordance_count:{"count":4}'));
+    assert.ok(strict.includes('laicite.concordance_strict_hidden:{"count":2}'),
         'the summary must say what the strict filter is costing');
 });
 
@@ -551,10 +578,10 @@ test('the model-assisted screen renders from the data, with its own coverage', (
 
     assert.ok(text.includes('"model":"claude-sonnet-5"'), 'the rater is not named');
     assert.ok(text.includes('"judged":"1200"') && text.includes('"total":"1244"'));
-    assert.ok(text.includes('"percent":87'),
+    assert.ok(text.includes('"percent":"87"'),
         'the headline share must be computed, never carried in the copy');
     // 1244 - 1200: records the screen has not reached yet.
-    assert.ok(text.includes('laicite.research_screen_pending:{"count":"44"}'),
+    assert.ok(text.includes('laicite.research_screen_pending:{"count":44}'),
         'unscreened records were silently folded into the screened total');
     assert.ok(text.includes('"rule":"a1b2c3d"'), 'the rule version is not stated');
     assert.ok(text.includes('laicite.route_tag_only'), 'the route breakdown is missing');
@@ -576,4 +603,159 @@ test('a fully screened dossier says nothing about unscreened records', () => {
     const full = { ...AUDIT_SCREEN, members_judged: 1244, members_total: 1244 };
     const text = textOf(L.buildAuditScreen({ audit_screen: full }));
     assert.ok(!text.includes('laicite.research_screen_pending'));
+});
+
+/* ------------------------------------------------------------------ */
+/*  The evidence tables                                                */
+/* ------------------------------------------------------------------ */
+
+// `L.researchTable` used to be a hand-built <table> with no ARIA roles, no
+// card roles (so no phone record layout — its `data-label` attributes
+// matched no CSS) and every cell written through `String(v)`, so counts
+// printed unformatted on the French site. It is a wrapper over the shared
+// P.buildTable now; these tests hold it to that.
+
+/** Every element carrying `cls` in its class list. */
+function byClass(root, cls) {
+    return walk(root).filter((n) => (` ${n.className || ''} `).includes(` ${cls} `));
+}
+
+/** Body rows of the first table under `root`, as arrays of cell text. */
+function bodyRows(root) {
+    const tbody = walk(root).find((n) => n.tagName === 'TBODY');
+    return tbody.children.map((tr) => tr.children.map((td) => textOf(td)));
+}
+
+test('an evidence table is a shared table: roles, card roles, formatted numbers', () => {
+    const { L, P } = loadLaicite();
+    P.formatNumber = (n) => `#${n}`;            // proves the formatter ran
+    const root = L.researchTable(['Year', 'Matches', 'Share'], [
+        ['1995', 12345, '12.5%'],
+        ['1996', 7, '—'],
+    ]);
+    const table = walk(root).find((n) => n.tagName === 'TABLE');
+    assert.equal(table.getAttribute('role'), 'table', 'no table role: the record layout would strip it');
+    assert.ok(root.className.includes('iwac-vis-table-wrapper--cards'),
+        'without the cards wrapper the table scrolls sideways on a phone');
+    assert.deepEqual(bodyRows(root)[0].map((t) => t.replace('Matches', '').replace('Share', '').trim()),
+        ['1995', '#12345', '12.5%'],
+        'a year must not go through the number formatter ("1,995"); a count must');
+    const first = walk(root).find((n) => n.tagName === 'TD');
+    assert.ok(first.className.includes('iwac-vis-table__cell--card-title'),
+        'the first column is the record headline in the phone layout');
+});
+
+test('a number in a mixed column is still formatted', () => {
+    const { L, P } = loadLaicite();
+    P.formatNumber = (n) => `#${n}`;
+    const root = L.researchTable(['Name', 'Rate'], [['A', 3], ['B', '—']]);
+    const cells = bodyRows(root).map((r) => r[1].replace('Rate', '').trim());
+    assert.deepEqual(cells, ['#3', '—']);
+});
+
+const RESEARCH = {
+    minimum_cell: 5,
+    cells: [
+        { subset: 'articles', country: '', year: 1995, records: 10, title_available: 10,
+          fulltext_available: 4, public_fulltext: 2, selected: 3, fulltext_matches: 2,
+          title_matches: 1, union_matches: 2, broad_union_matches: 3, legacy_only: 0 },
+        { subset: 'articles', country: '', year: 2005, records: 10, title_available: 10,
+          fulltext_available: 6, public_fulltext: 5, selected: 1, fulltext_matches: 1,
+          title_matches: 0, union_matches: 1, broad_union_matches: 1, legacy_only: 0 },
+        { subset: 'articles', country: 'Togo', year: 1995, records: 4, title_available: 4,
+          fulltext_available: 4, public_fulltext: 4, selected: 2, fulltext_matches: 2,
+          title_matches: 0, union_matches: 2, broad_union_matches: 2, legacy_only: 0 },
+    ],
+};
+
+/** A store stand-in: patch() applies and records, as P.createStore would. */
+function fakeStore(state) {
+    const patches = [];
+    return {
+        state, patches,
+        patch(changes) { patches.push(changes); Object.assign(state, changes); },
+    };
+}
+
+test('the coverage table draws the themed meter, never a native <meter>', () => {
+    const { L } = loadLaicite();
+    const built = L.buildResearch(RESEARCH, {}, fakeStore({ trendsCountry: null, coveragePeriod: '' }));
+    assert.equal(walk(built.root).filter((n) => n.tagName === 'METER').length, 0,
+        'a native meter paints in the browser colours and ignores dark mode');
+    const fills = byClass(built.root, 'iwac-vis-laicite-meter-fill');
+    assert.equal(fills.length, 1, 'one corpus row, one meter');
+    // 4 + 6 of 20 records carry full text.
+    assert.equal(fills[0].style.width, '50%');
+    assert.ok(textOf(built.root).includes('50.0%'), 'the share is printed beside the meter');
+});
+
+test('the coverage pickers are block state, and a repaint keeps what the reader opened', () => {
+    const { L } = loadLaicite();
+    const state = { trendsCountry: null, coveragePeriod: '' };
+    const store = fakeStore(state);
+    const built = L.buildResearch(RESEARCH, { audit_screen: { members_judged: 1, relevant: 1 } }, store);
+
+    const details = walk(built.root).filter((n) => n.tagName === 'DETAILS');
+    assert.equal(details.length, 2, 'the sensitivity check and the screen');
+    details.forEach((d) => { d.open = true; });
+
+    const [country, period] = walk(built.root).filter((n) => n.cfg);
+    country.cfg.onChange('Togo');
+    period.cfg.onChange('decade');
+    // Through JSON: the patches were built inside the vm context, whose
+    // Object.prototype is not this realm's.
+    assert.deepEqual(JSON.parse(JSON.stringify(store.patches)),
+        [{ trendsCountry: 'Togo' }, { coveragePeriod: 'decade' }],
+        'the pickers must dispatch through the store, as the trends country does');
+
+    built.update(state);
+    const after = walk(built.root).filter((n) => n.tagName === 'DETAILS');
+    assert.equal(after[0], details[0], 'the sensitivity <details> was rebuilt and folded shut');
+    assert.equal(after[1], details[1], 'the screen was rebuilt and folded shut');
+    assert.ok(after.every((d) => d.open));
+    assert.equal(country.control.value, 'Togo');
+    assert.equal(period.control.value, 'decade');
+    // Togo has one 1990s cell: one row, labelled by corpus and decade.
+    assert.deepEqual(bodyRows(built.root).map((r) => r[0]), ['laicite.subset_articles · 1990']);
+});
+
+test('a country the research cells do not split by reads as all countries', () => {
+    const { L } = loadLaicite();
+    const built = L.buildResearch(RESEARCH, {}, fakeStore({ trendsCountry: 'Niger', coveragePeriod: '' }));
+    const select = walk(built.root).find((n) => n.cfg && n.cfg.name === 'laicite-coverage-country');
+    assert.equal(select.control.value, '');
+    assert.deepEqual(bodyRows(built.root).map((r) => r[0]), ['laicite.subset_articles'],
+        'an unknown country emptied the table under a select showing "All"');
+});
+
+test('the seasonality evidence lists every month with its denominator', () => {
+    const { L, P } = loadLaicite();
+    // The month names are a comma list in the catalogue; the stub t()
+    // echoes keys, so give it twelve names to split.
+    const t = P.t;
+    P.t = (key, vars) => (/months$/.test(key) ? 'a,b,c,d,e,f,g,h,i,j,k,l' : t(key, vars));
+    assert.equal(L.buildSeasonalityEvidence({ gregorian: [1] }), null,
+        'a bundle without exposure arrays has no denominator to show');
+    const months = (n) => Array.from({ length: 12 }, (_, i) => i + n);
+    const evidence = L.buildSeasonalityEvidence({
+        gregorian: months(0), hijri: months(1),
+        gregorian_exposure: months(10), hijri_exposure: months(20),
+    });
+    const tables = walk(evidence).filter((n) => n.tagName === 'TABLE');
+    assert.equal(tables.length, 2, 'one table per calendar');
+    const tbody = walk(tables[1]).find((n) => n.tagName === 'TBODY');
+    assert.equal(tbody.children.length, 12);
+    assert.ok(textOf(tbody.children[0]).includes('20'), 'the lunar exposure is missing');
+});
+
+test('the Venn disables the band that has no concordance lines, and names its group', () => {
+    const { L } = loadLaicite();
+    const venn = L.buildVenn({ subsets: { articles: { tagged_only: 3, tagged_and_said: 5, said_only: 2 } } },
+        () => {});
+    const bar = byClass(venn, 'iwac-vis-laicite-venn-bar')[0];
+    assert.equal(bar.getAttribute('role'), 'group');
+    assert.ok(bar.getAttribute('aria-label'), 'a role=group with no name announces nothing');
+    const segs = byClass(venn, 'iwac-vis-laicite-venn-seg');
+    assert.deepEqual(segs.map((s) => !!s.disabled), [true, false, false],
+        '"tagged, no core match" was a focusable button that did nothing');
 });

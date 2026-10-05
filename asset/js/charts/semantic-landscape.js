@@ -234,7 +234,7 @@
 
         var count = ((data.points || {}).o_id || []).length;
         var caption = P.el('p', 'iwac-vis-overview-subtitle',
-            P.t(cfg.countKey, { count: P.formatNumber(count) }));
+            P.t(cfg.countKey, { count: count }));
         panel.panel.insertBefore(caption, panel.chart);
 
         // Only offer the facets this variant supports (publications

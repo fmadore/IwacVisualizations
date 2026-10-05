@@ -85,7 +85,7 @@
                         '<strong>' + P.escapeHtml(d.title || '') + '</strong>',
                         P.t(TYPE_I18N[d.type] || d.type || ''),
                         (d.first_year || '?') + ' \u2013 ' + (d.last_year || '?'),
-                        P.t('mentions_count', { count: P.formatNumber(d.frequency || 0) })
+                        P.t('mentions_count', { count: d.frequency || 0 })
                     ];
                     return lines.join('<br>');
                 }

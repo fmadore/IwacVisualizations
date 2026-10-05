@@ -19,13 +19,6 @@
  *  numbers (effect size, raw count, document spread, name flag) and a
  *  bar chart would show one while hiding the rest. */
 
-.iwac-vis-laicite-collocates,
-.iwac-vis-laicite-corpora {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5, 1.25rem);
-}
-
 /*  Two dozen outlet rows need more than the shared 320px floor, or the
  *  y-axis labels overprint each other into an unreadable band. */
 .iwac-vis-laicite-fingerprints > .iwac-vis-chart {
@@ -49,13 +42,6 @@
     .iwac-vis-laicite-collocate-list { grid-template-columns: repeat(3, 1fr); }
 }
 
-.iwac-vis-laicite-collocate {
-    padding: var(--space-3, 0.75rem);
-    background: var(--surface, #fdfcfb);
-    border: 1px solid var(--border-light, #e2e5e8);
-    border-radius: var(--radius-sm, 0.375rem);
-}
-
 .iwac-vis-laicite-collocate-head {
     display: flex;
     align-items: center;
@@ -76,25 +62,9 @@
     background: transparent;
 }
 
-.iwac-vis-laicite-collocate-bar {
-    height: var(--accent-line-md, 3px);
+.iwac-vis-laicite-collocate-bar,
+.iwac-vis-laicite-rate-bar {
     margin: var(--space-2, 0.5rem) 0 var(--space-1, 0.25rem);
-    background: var(--surface-sunken, #f4f1ef);
-    border-radius: var(--radius-full, 9999px);
-    overflow: hidden;
-}
-
-.iwac-vis-laicite-collocate-fill {
-    display: block;
-    height: 100%;
-    background: var(--primary, #ce4115);
-}
-
-.iwac-vis-laicite-collocate-meta {
-    margin: 0;
-    font-size: var(--text-xs, 0.8125rem);
-    font-variant-numeric: tabular-nums;
-    color: var(--ink-subtle, #5a5e63);
 }
 
 /*  Method note. A keyness panel that does not state what it scored
@@ -106,7 +76,8 @@
     border-top: 1px solid var(--border-light, #e2e5e8);
 }
 
-.iwac-vis-laicite-method p {
+.iwac-vis-laicite-method p,
+.iwac-vis-laicite-season-note p {
     margin: 0 0 var(--space-2, 0.5rem);
     max-width: var(--measure-base, 52.5rem);
     font-size: var(--text-xs, 0.8125rem);
@@ -164,15 +135,6 @@
  *  "appears in exactly one document". */
 .iwac-vis-laicite-spread {
     margin-top: var(--space-4, 1rem);
-}
-
-.iwac-vis-laicite-spread-title {
-    margin: 0 0 var(--space-2, 0.5rem);
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--ink-subtle, #5a5e63);
 }
 
 .iwac-vis-laicite-spread-bars {
@@ -248,27 +210,6 @@
     color: var(--ink-strong, #05070c);
 }
 
-.iwac-vis-laicite-rate-bar {
-    height: var(--accent-line-md, 3px);
-    margin: var(--space-2, 0.5rem) 0 var(--space-1, 0.25rem);
-    background: var(--surface-sunken, #f4f1ef);
-    border-radius: var(--radius-full, 9999px);
-    overflow: hidden;
-}
-
-.iwac-vis-laicite-rate-fill {
-    display: block;
-    height: 100%;
-    background: var(--primary, #ce4115);
-}
-
-.iwac-vis-laicite-rate-meta {
-    margin: 0;
-    font-size: var(--text-xs, 0.8125rem);
-    font-variant-numeric: tabular-nums;
-    color: var(--ink-subtle, #5a5e63);
-}
-
 /*  Interpretive caveat sits with the number it qualifies rather than in a
  *  footnote: density is easy to over-read as attention. */
 .iwac-vis-laicite-caveat {
@@ -288,14 +229,6 @@
 
 .iwac-vis-laicite-season-note {
     margin-top: var(--space-3, 0.75rem);
-}
-
-.iwac-vis-laicite-season-note p {
-    margin: 0 0 var(--space-2, 0.5rem);
-    max-width: var(--measure-base, 52.5rem);
-    font-size: var(--text-xs, 0.8125rem);
-    line-height: 1.55;
-    color: var(--ink-subtle, #5a5e63);
 }
 
 .iwac-vis-laicite-season-coverage {

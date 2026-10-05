@@ -1,11 +1,20 @@
 /**
  * IWAC Visualizations — Laïcité block: Timeline view (issue #14, view 2).
  *
- * One line per argumentative frame across the year axis, with the curated
- * event annotations from laicite-events.json. The chart itself is
+ * One series across the year axis — the share of available texts
+ * matching the core vocabulary, or the matching documents, or the raw
+ * occurrences — for one corpus, country, outlet, searched field and
+ * matching rule at a time, built from `trends.research` (the per corpus ×
+ * country × outlet × year cells). The curated event annotations from
+ * laicite-events.json ride on top. The chart itself is
  * `shared/annotated-timeline.js`, shared with the Scary Terms block; this
- * file supplies the scope resolution (global / country / corpus) and the
- * labels.
+ * file supplies the series, the title and the labels.
+ *
+ * It used to draw one line per argumentative frame from the bundle's
+ * `global` / `by_country` / `by_subset` frame series, scoped by EITHER a
+ * country OR a corpus. The research series replaced that, and the corpus
+ * always has a value now, so the frame-series path could no longer be
+ * reached — a bundle without `research` gets the block's empty state.
  *
  * The axis opens on `focus_range` rather than the full span: a handful of
  * `references` predate the press corpus by decades (earliest 1922), so the
@@ -24,42 +33,22 @@
     var L = ns.laicite = ns.laicite || {};
 
     /**
-     * Resolve the active series for the current scope.
-     *
-     * @param {Object} trends   the trends bundle
-     * @param {Object} state    {trendsCountry, trendsSubset}
-     */
-    L.resolveTrendsSeries = function (trends, state) {
-        if (trends && trends.research && L.researchSeries) return L.researchSeries(trends.research, state);
-        if (!trends || !trends.years || !trends.years.length) return null;
-        var series = trends.global;
-        if (state.trendsSubset) {
-            series = (trends.by_subset || {})[state.trendsSubset] || {};
-        } else if (state.trendsCountry) {
-            series = (trends.by_country || {})[state.trendsCountry] || {};
-        }
-        return {
-            years: trends.years,
-            frames: trends.families || [],
-            series: series || {}
-        };
-    };
-
-    /**
      * Build the timeline option.
      *
      * @param {Object} cfg {trends, metadata, events, state, frameColors, compact}
      */
     L.buildTrendsOption = function (cfg) {
-        var resolved = L.resolveTrendsSeries(cfg.trends, cfg.state);
-        if (!resolved) return P.emptyChartOption();
+        var research = cfg.trends && cfg.trends.research;
+        if (!research) return P.emptyChartOption();
+        var resolved = L.researchSeries(research, cfg.state);
+        if (!resolved.years.length) return P.emptyChartOption();
         var metadata = cfg.metadata || {};
         return P.buildAnnotatedTimeline({
             years: resolved.years,
             seriesNames: resolved.frames,
             series: resolved.series,
             colors: cfg.frameColors,
-            labelFor: function (frame) { return resolved.label || L.frameLabel(metadata, frame); },
+            labelFor: function () { return resolved.label; },
             events: cfg.state.trendsSubset === 'references' ? null : cfg.events,
             showEvents: cfg.state.showEvents,
             country: cfg.state.trendsCountry,
@@ -76,23 +65,17 @@
             // read in full and carry their links.
             numberedEvents: true,
             compact: cfg.compact,
-            valueAxisLabel: resolved.label || P.t('laicite.occurrences'),
+            valueAxisLabel: resolved.label,
             focusRange: metadata.focus_range
         });
     };
 
+    /** The chart title names every facet the series is cut by. */
     L.trendsTitle = function (state) {
-        if (state.trendsSubset) {
-            return P.t('laicite.trends_chart_title') + ' — '
-                + [L.subsetLabel(state.trendsSubset), state.trendsCountry, state.trendsOutlet,
-                    P.t('laicite.research_' + (state.trendsField || 'fulltext')),
-                    P.t('laicite.research_' + (state.trendsPrecision || 'strict'))].filter(Boolean).join(' · ');
-        }
-        if (state.trendsCountry) {
-            return P.t('laicite.trends_country_chart_title',
-                { country: state.trendsCountry });
-        }
-        return P.t('laicite.trends_chart_title');
+        return P.t('laicite.trends_chart_title') + ' — '
+            + [L.subsetLabel(state.trendsSubset || 'articles'), state.trendsCountry, state.trendsOutlet,
+                P.t('laicite.research_' + (state.trendsField || 'fulltext')),
+                P.t('laicite.research_' + (state.trendsPrecision || 'strict'))].filter(Boolean).join(' · ');
     };
 
     /**

@@ -43,7 +43,6 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Loading on this day': 'Loading on this day',
             'otd.title':      'On this day',
             'otd.desc':       'Articles and periodical issues with a full publication date matching {date}, across the collection’s years.',
             'otd.desc_h':     'Items published on {date} in the converted Islamic (Hijri) calendar, across the collection’s years. Converted dates may differ from local lunar observations.',

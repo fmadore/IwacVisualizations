@@ -36,7 +36,6 @@
 
     if (ns.addTranslations) {
         ns.addTranslations('en', {
-            'Loading term trends':   'Loading term trends',
             'ngram.title':           'Term trends',
             'ngram.description':     'Number or share of each year’s articles containing a selected word. Only dated articles with usable processed text enter the calculation, and repeated uses count once per article. Search among the {n} most frequent dictionary forms: “terroriste” and “terroristes” count together. Changes reflect the collected texts and may also be affected by text-recognition errors.',
             'ngram.search':          'Search a term…',
@@ -51,10 +50,10 @@
             'ngram.tip_share':       '{pct} % of {total} articles',
             'ngram.tip_count':       '{count} of {total} articles',
             'ngram.empty':           'Search for a term above to chart it.',
-            'ngram.in_articles':     'in {count} articles'
+            'ngram.in_articles':     'in {count} articles',
+            'ngram.in_articles_one': 'in {count} article'
         });
         ns.addTranslations('fr', {
-            'Loading term trends':   'Chargement des tendances lexicales',
             'ngram.title':           'Tendances lexicales',
             'ngram.description':     'Nombre ou part des articles de chaque année contenant un mot sélectionné. Le calcul porte sur les articles datés dont le texte traité est exploitable ; les répétitions comptent une seule fois par article. La recherche couvre les {n} formes de dictionnaire les plus fréquentes : « terroriste » et « terroristes » sont comptés ensemble. Les variations reflètent les textes collectés et peuvent aussi subir l’effet des erreurs de reconnaissance.',
             'ngram.search':          'Rechercher un terme…',
@@ -69,7 +68,8 @@
             'ngram.tip_share':       '{pct} % de {total} articles',
             'ngram.tip_count':       '{count} articles sur {total}',
             'ngram.empty':           'Recherchez un terme ci-dessus pour le tracer.',
-            'ngram.in_articles':     'dans {count} articles'
+            'ngram.in_articles':     'dans {count} articles',
+            'ngram.in_articles_one': 'dans {count} article'
         });
     }
 
@@ -137,15 +137,9 @@
         var search = P.buildSearchDropdown({
             placeholder: P.t('ngram.search'),
             emptyText: P.t('ngram.no_matches'),
-            classes: {
-                root:     'iwac-vis-ngram-search',
-                input:    'iwac-vis-ngram-search__input',
-                dropdown: 'iwac-vis-ngram-search__dropdown',
-                item:     'iwac-vis-ngram-search__item',
-                name:     'iwac-vis-ngram-search__term',
-                count:    'iwac-vis-ngram-search__count',
-                empty:    'iwac-vis-ngram-search__empty'
-            },
+            // The shared `.iwac-vis-search` skin, plus a hook for the box's
+            // share of the controls row.
+            classes: { root: 'iwac-vis-search iwac-vis-ngram-search' },
             getMatches: function (query) {
                 query = query.toLowerCase();
                 // Prefix matches first, then substring matches; the index
@@ -164,8 +158,8 @@
                     .map(function (pair) {
                         return {
                             label: pair[0],
-                            detail: P.t('ngram.in_articles',
-                                { count: P.formatNumber(pair[1]) })
+                            // A number, so t() picks "1 article" itself.
+                            detail: P.t('ngram.in_articles', { count: pair[1] })
                         };
                     });
             },
@@ -316,7 +310,7 @@
                                     ? P.t('ngram.tip_share', {
                                         pct: p.value, total: P.formatNumber(total) })
                                     : P.t('ngram.tip_count', {
-                                        count: P.formatNumber(p.value),
+                                        count: p.value || 0,
                                         total: P.formatNumber(total) }));
                         }
                     })

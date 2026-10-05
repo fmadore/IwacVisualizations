@@ -161,7 +161,6 @@
         var rows = actors.slice(0, HEATMAP_ROWS);
         if (rows.length < 2) return null;
         var C = ns.chartOptions;
-        if (!C || !C.heatmapMatrix) return P.emptyChartOption();
 
         var yLabels = rows.map(function (a) { return a.name; });
         var cells = [];
@@ -205,7 +204,7 @@
             var name;
             if (siteBase && actor.o_id) {
                 name = P.el('a', 'iwac-vis-laicite-actor-name', actor.name);
-                name.href = siteBase + '/item/' + actor.o_id;
+                name.href = P.itemUrl(siteBase, actor.o_id);
             } else {
                 name = P.el('span', 'iwac-vis-laicite-actor-name', actor.name);
             }

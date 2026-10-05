@@ -83,19 +83,7 @@
     }
 
     function resolveRamp() {
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var stops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean).map(ml);
-        if (stops.length < 2) {
-            var t = (ns.getChartTokens && ns.getChartTokens()) || {};
-            stops = [t.surface || '#fdfdfd', t.primary || '#e64a19'].map(ml);
-        }
-        return stops;
+        return ns.heatmapRamp(ml);
     }
 
     /**
@@ -107,7 +95,7 @@
     function buildAccentRamp(accentColor) {
         var t = (ns.getChartTokens && ns.getChartTokens()) || {};
         return [
-            ml(t.surface || '#fdfdfd'),
+            ml(t.surface),
             ml(accentColor)
         ];
     }
@@ -142,7 +130,7 @@
                 mode: 'diverging',
                 stops: [
                     { value: -maxAbs, color: ml(paintConfig.negColor) },
-                    { value: 0, color: ml(paintConfig.neutralColor || t.surface || '#fdfdfd') },
+                    { value: 0, color: ml(paintConfig.neutralColor || t.surface) },
                     { value: maxAbs, color: ml(paintConfig.posColor) }
                 ]
             };
@@ -301,7 +289,7 @@
 
     function strokeColor() {
         var t = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return ml(t.border || '#d4d6da');
+        return ml(t.border);
     }
 
     /* ----------------------------------------------------------------- */

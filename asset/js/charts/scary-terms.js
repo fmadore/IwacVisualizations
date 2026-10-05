@@ -338,7 +338,7 @@
                     ? P.t('scary.matrix_country_chart_title', { country: matrixCountry })
                     : P.t('scary.matrix_chart_title');
                 topBadge.textContent = slice && slice.total_articles
-                    ? P.t('scary.matrix_articles', { count: P.formatNumber(slice.total_articles) })
+                    ? P.t('scary.matrix_articles', { count: slice.total_articles })
                     : '';
             } else if (state.view === 'trends') {
                 option = drawTrends();
@@ -455,7 +455,7 @@
             }
             var slice = SH.wordcloudSlice(wordcloudData, state.wcFacet, state.wcSub);
             topBadge.textContent = slice.total_articles
-                ? P.t('scary.matrix_articles', { count: P.formatNumber(slice.total_articles) })
+                ? P.t('scary.matrix_articles', { count: slice.total_articles })
                 : '';
             if (!slice.data || !slice.data.length) {
                 return P.emptyChartOption();
@@ -591,7 +591,7 @@
                         return P.t('scary.matrix_pair_tooltip', {
                             a: terms[p.value[0]],
                             b: terms[p.value[1]],
-                            count: P.formatNumber(p.value[2] || 0)
+                            count: p.value[2] || 0
                         });
                     }
                 }

@@ -228,7 +228,7 @@
                     var subtitle = [];
                     if (f.properties.country) subtitle.push(f.properties.country);
                     subtitle.push(P.t('mentions_count', {
-                        count: P.formatNumber(Number(f.properties.count))
+                        count: Number(f.properties.count)
                     }));
                     return { title: f.properties.name, subtitleLines: subtitle };
                 }

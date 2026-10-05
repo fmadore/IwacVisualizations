@@ -54,15 +54,81 @@
     L.VIEW_KEYS = VIEWS.map(function (v) { return v.key; });
 
     /**
+     * The four country keys are ONE choice (S4). Each view spells its empty
+     * value differently — the timeline (and the coverage table, which reads
+     * the same research cells) uses null, the three select-driven views use
+     * '' — and they used to move independently, so a reader who picked Togo
+     * on the timeline had to pick it again on the map, the arenas and the
+     * concordance.
+     */
+    L.COUNTRY_KEYS = ['trendsCountry', 'kwicCountry', 'arenaCountry', 'mapCountry'];
+
+    /**
+     * The block store's reducer: every cross-field rule, once. Six change
+     * handlers used to apply these by hand, each a little differently.
+     *
+     *   - a new timeline corpus clears the outlet — outlets belong to one
+     *     corpus — unless the same patch sets the outlet too, which is what
+     *     a URL naming both does on load;
+     *   - a collocate scope resets its slice;
+     *   - a concordance corpus clears its country, whose list follows the
+     *     corpus;
+     *   - a map frame and a map country clear each other: the bundle splits
+     *     by one or the other, never both;
+     *   - whichever country key the reader touched wins for all four, but
+     *     only for a country the dossier actually holds — an unknown value
+     *     would narrow the other views to nothing.
+     *
+     * Pure, and exported so the rules can be tested without a DOM.
+     *
+     * @param {Array<string>} knownCountries  `metadata.countries`
+     * @returns {function(Object, Array<string>): Object}  for
+     *          `P.createStore(state, { reduce })`
+     */
+    L.laiciteReducer = function (knownCountries) {
+        var known = (knownCountries || []).slice();
+        return function (st, changed) {
+            var extra = {};
+            var has = function (k) { return changed.indexOf(k) !== -1; };
+            if (has('trendsSubset') && !has('trendsOutlet')) extra.trendsOutlet = '';
+            if (has('colScope')) extra.colSlice = null;
+            if (has('kwicSubset')) extra.kwicCountry = '';
+            if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
+            if (has('mapCountry') && st.mapCountry) extra.mapFrame = '';
+
+            var moved = null;
+            for (var i = 0; i < L.COUNTRY_KEYS.length; i++) {
+                if (has(L.COUNTRY_KEYS[i])) { moved = L.COUNTRY_KEYS[i]; break; }
+            }
+            if (moved) {
+                var value = st[moved] || '';
+                if (!value || known.indexOf(value) !== -1) {
+                    L.COUNTRY_KEYS.forEach(function (k) {
+                        if (k === moved) return;
+                        // null for the timeline, '' for the selects.
+                        extra[k] = k === 'trendsCountry' ? (value || null) : value;
+                    });
+                }
+            }
+            return extra;
+        };
+    };
+
+    /**
      * @param {Object} ctx
      * @param {HTMLElement} ctx.controlsEl
      * @param {Object} ctx.store            the orchestrator's P.createStore
      * @param {Object} ctx.metadata
-     * @param {Array<string>} ctx.countries
-     * @param {Array<string>} ctx.trendsCountries
+     * @param {Array<string>} ctx.trendsCountries  the research cells' countries
+     * @param {Object} [ctx.research]       `trends.research`, for the outlets
      * @param {function():Array<string>} ctx.getConcordanceSubsets
      * @param {function(string):Array<string>} ctx.getConcordanceCountries
      * @param {HTMLElement} [ctx.trailing]  persistent end-of-row element
+     *
+     * …plus one `get*` per lazy bundle (collocate slices, season subsets,
+     * actor types, arena countries, sentiment models, place countries,
+     * reference types): those options exist only once the bundle has
+     * arrived, so the row asks for them at mount time.
      */
     L.createControls = function (ctx) {
         var store = ctx.store;
@@ -90,9 +156,12 @@
                 return VIEWS.filter(function (v) { return groups[groupFor(view)].indexOf(v.key) !== -1; })
                     .map(function (v) { return { value: v.key, label: P.t(v.labelKey) }; });
             }
+            // The group and the select are two controls, so two handles
+            // and two names: both used to answer to "laicite-view" and to
+            // the block title, which named neither.
             toggle = P.buildSegmented({
-                name: 'laicite-view',
-                ariaLabel: P.t('laicite.title'),
+                name: 'laicite-view-group',
+                ariaLabel: P.t('laicite.view_group'),
                 options: Object.keys(groups).map(function (key) {
                     return { key: key, label: P.t('laicite.research_' + key) };
                 }),
@@ -106,7 +175,7 @@
             });
             row.appendChild(toggle.root);
             var views = P.buildSelectControl({
-                name: 'laicite-view', idPrefix: 'laicite-view', label: P.t('laicite.title'),
+                name: 'laicite-view', idPrefix: 'laicite-view', label: P.t('View'),
                 options: viewOptions(state.view), current: state.view,
                 onChange: function (value) { store.patch({ view: value }); }
             });
@@ -139,18 +208,18 @@
                 } else if (state.view === 'collocates') {
                     mountCollocateControls();
                 } else if (state.view === 'actors') {
-                    mountSimple('actorType', 'laicite-actor-type', P.t('laicite.filter_type'),
+                    mountSimple('actorType', 'laicite-actor-type', P.t('Type'),
                         withAll(ctx.getActorTypes() || [], P.t('laicite.filter_all'),
                             function (t) { return P.t('laicite.actor_type_' + t); }));
                 } else if (state.view === 'arenas') {
-                    mountSimple('arenaCountry', 'laicite-arena-country', P.t('laicite.filter_country'),
+                    mountSimple('arenaCountry', 'laicite-arena-country', P.t('Country'),
                         withAll(ctx.getArenaCountries() || [], P.t('laicite.scope_global')));
                 } else if (state.view === 'sentiment') {
                     mountSentimentControls();
                 } else if (state.view === 'map') {
                     mountMapControls();
                 } else if (state.view === 'references') {
-                    mountSimple('refType', 'laicite-ref-type', P.t('laicite.filter_type'),
+                    mountSimple('refType', 'laicite-ref-type', P.t('Type'),
                         withAll(ctx.getReferenceTypes() || [], P.t('laicite.filter_all')));
                 }
 
@@ -218,8 +287,10 @@
             // of controls entirely — so BOTH sets are built here and the
             // axis decides which is hidden. Switching the axis then keeps the
             // axis select under the reader's focus instead of rebuilding it.
+            // Labelled "Axis", not "Years": naming the select after one of
+            // its own options read as a statement of the current value.
             live.trendsAxis = select('trendsAxis', {
-                label: P.t('laicite.axis_years'),
+                label: P.t('Axis'),
                 options: [
                     { value: 'years', label: P.t('laicite.axis_years') },
                     { value: 'seasons', label: P.t('laicite.axis_seasons') }
@@ -247,12 +318,12 @@
                 slot.appendChild(live.seasonSubset);
             }
 
-            // Country scope. Selecting a corpus clears it and vice versa —
-            // the two scopes are alternatives, not a matrix (the store's
-            // reducer applies that rule), and offering both at once would
-            // imply per-country-per-corpus series the bundle does not carry.
+            // Country and corpus combine: the research cells are per
+            // corpus × country, so every pairing is a real series. The
+            // country is also the coverage table's and, through the
+            // reducer, the map's, the arenas' and the concordance's.
             live.trendsCountry = select('trendsCountry', {
-                label: P.t('laicite.filter_country'),
+                label: P.t('Country'),
                 options: [{ value: '', label: P.t('laicite.scope_global') }]
                     .concat((ctx.trendsCountries || []).map(function (c) {
                         return { value: c, label: c };
@@ -267,8 +338,7 @@
                 options: L.SUBSETS.map(function (s) {
                         return { value: s, label: L.subsetLabel(s) };
                     }),
-                idPrefix: 'laicite-trends-subset',
-                nullable: true
+                idPrefix: 'laicite-trends-subset'
             });
             slot.appendChild(live.trendsSubset);
 
@@ -285,18 +355,22 @@
                 });
                 slot.appendChild(live[spec[0]]);
             });
+            // The outlets of the selected corpus only; a corpus change
+            // repopulates the list in place (see the sync below).
+            function outletOptions() {
+                return [{ value: '', label: P.t('laicite.filter_all') }].concat(
+                    L.researchOutlets(ctx.research, state.trendsSubset).map(function (v) {
+                        return { value: v, label: v };
+                    }));
+            }
             live.trendsOutlet = select('trendsOutlet', {
                 label: P.t('laicite.research_outlet'),
-                options: [{ value: '', label: P.t('laicite.filter_all') }].concat(
-                    Array.from(new Set(((ctx.research || {}).cells || []).filter(function (r) {
-                        return r.subset === state.trendsSubset && r.outlet;
-                    }).map(function (r) { return r.outlet; }))).sort().map(function (v) {
-                        return { value: v, label: v };
-                    })), idPrefix: 'laicite-trends-outlet'
+                options: outletOptions(),
+                idPrefix: 'laicite-trends-outlet'
             });
             slot.appendChild(live.trendsOutlet);
 
-            var evtWrap = P.el('label', 'iwac-vis-laicite-check');
+            var evtWrap = P.el('label', 'iwac-vis-check');
             var cb = P.el('input');
             cb.type = 'checkbox';
             cb.checked = !!state.showEvents;
@@ -318,12 +392,7 @@
                         live[k].hidden = seasons;
                     });
                     evtWrap.hidden = seasons;
-                    live.trendsOutlet.setOptions([{ value: '', label: P.t('laicite.filter_all') }].concat(
-                        Array.from(new Set(((ctx.research || {}).cells || []).filter(function (r) {
-                            return r.subset === state.trendsSubset && r.outlet;
-                        }).map(function (r) { return r.outlet; }))).sort().map(function (v) {
-                            return { value: v, label: v };
-                        })), state.trendsOutlet || '');
+                    live.trendsOutlet.setOptions(outletOptions(), state.trendsOutlet || '');
                 }
             };
         }
@@ -375,7 +444,7 @@
                 store.patch({ sentModel: models[0] }, { silent: true });
             }
             live.sentModel = select('sentModel', {
-                label: P.t('laicite.filter_model'),
+                label: P.t('Model'),
                 // Shared label table, not a `laicite.model_*` msgid per
                 // model: these are proper nouns, so the block's en and fr
                 // catalogs held byte-identical copies of the same three
@@ -408,7 +477,7 @@
             var countries = withAll(ctx.getPlaceCountries() || [], P.t('laicite.scope_global'));
             if (countries.length) {
                 live.mapCountry = select('mapCountry', {
-                    label: P.t('laicite.filter_country'),
+                    label: P.t('Country'),
                     options: countries,
                     idPrefix: 'laicite-map-country'
                 });
@@ -451,7 +520,7 @@
             }
             var countries = countryOptions();
             live.kwicCountry = select('kwicCountry', {
-                label: P.t('laicite.filter_country'),
+                label: P.t('Country'),
                 options: countries,
                 idPrefix: 'laicite-kwic-country',
                 sync: function () {
@@ -484,7 +553,7 @@
             // tightening of the dossier. Off by default: a single-mention
             // record is still a record, and hiding it by default would make
             // the dossier smaller than the methodology says it is.
-            var strictWrap = P.el('label', 'iwac-vis-laicite-check');
+            var strictWrap = P.el('label', 'iwac-vis-check');
             var strict = P.el('input');
             strict.type = 'checkbox';
             strict.checked = !!state.kwicStrict;

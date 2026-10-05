@@ -101,13 +101,15 @@
      * Create the concordance controller.
      *
      * @param {Object} cfg
-     * @param {HTMLElement} cfg.host
+     * @param {HTMLElement} [cfg.host]  defaults to a fresh element
      * @param {Object} cfg.index      laicite-concordance.json
      * @param {Object} cfg.metadata
      * @param {string} cfg.dataBase
      * @param {string} cfg.siteBase
      * @param {Object} cfg.state      shared block state
-     * @param {function():void} cfg.onChange  re-render request (controls row)
+     * @param {function():void} [cfg.onLoaded]  a corpus bundle settled
+     *        (loaded or failed) — the controls row re-syncs, since the
+     *        country facet's options come from the loaded corpus
      */
     L.createConcordance = function (cfg) {
         // The controller owns its host element so the orchestrator can mount
@@ -171,22 +173,20 @@
 
             var summary = P.el('div', 'iwac-vis-laicite-kwic-summary');
             summary.appendChild(P.el('p', 'iwac-vis-laicite-kwic-count',
-                P.t('laicite.concordance_count',
-                    { count: P.formatNumber(rows.length) })));
+                P.t('laicite.concordance_count', { count: rows.length })));
             // What the strict filter is costing, stated rather than left for
             // the reader to infer from a shorter list.
             if (filtered.hiddenRecords) {
                 summary.appendChild(P.el('p', 'iwac-vis-laicite-kwic-hidden',
                     P.t('laicite.concordance_strict_hidden',
-                        { count: P.formatNumber(filtered.hiddenRecords) })));
+                        { count: filtered.hiddenRecords })));
             }
             // The honest denominator. Withheld occurrences are a rights fact
             // about the sources, not a gap in the pipeline, and hiding them
             // would let the panel imply the corpus is fully quotable.
             if (counts.withheld) {
                 summary.appendChild(P.el('p', 'iwac-vis-laicite-kwic-withheld',
-                    P.t('laicite.concordance_withheld',
-                        { count: P.formatNumber(counts.withheld) })));
+                    P.t('laicite.concordance_withheld', { count: counts.withheld })));
             }
             host.appendChild(summary);
 

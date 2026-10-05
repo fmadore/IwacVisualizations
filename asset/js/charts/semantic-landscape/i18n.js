@@ -16,19 +16,14 @@
     }
 
         ns.addTranslations('en', {
-            'Loading semantic landscape': 'Loading semantic landscape',
             'Semantic landscape': 'Articles by text similarity',
             'desc_semantic_landscape': 'Each point is an article with a usable AI representation of its full text. UMAP, a method for arranging these representations in two dimensions, places broadly similar texts near one another. Nearby points are leads for comparison; distances and gaps are not precise measures of similarity. The axes have no historical or geographical meaning. Labels indicate concentrations of major topics. Drag to move, scroll to zoom, and click a point to open the article.',
-            'Topic': 'Topic',
-            'Other': 'Other',
-            'Unknown year': 'Unknown year',
             'landscape_points': '{count} articles placed',
             'Periodicals semantic landscape': 'Periodical issues by contents-list similarity',
             'desc_periodicals_landscape': 'Each point is a periodical issue with a usable AI representation of its table of contents. UMAP arranges these representations in two dimensions to bring broadly similar contents lists together. Nearby points suggest issues to compare; distances are approximate and the axes have no historical or geographical meaning. The comparison uses contents lists, so it may miss differences within the articles themselves. Drag to move, scroll to zoom, and click a point to open the issue.',
             'landscape_points_issues': '{count} issues placed'
         });
         ns.addTranslations('fr', {
-            'Loading semantic landscape': 'Chargement du paysage sémantique',
             'Semantic landscape': 'Articles selon leur similarité textuelle',
             'desc_semantic_landscape': 'Chaque point correspond à un article dont le texte intégral dispose d’une représentation exploitable produite par IA. La méthode UMAP dispose ces représentations en deux dimensions et rapproche les textes globalement similaires. Les voisinages donnent des pistes de comparaison ; les distances et les espaces vides ne mesurent pas précisément la similarité. Les axes n’ont aucun sens historique ou géographique. Les libellés situent les concentrations des principaux thèmes. Faites glisser pour vous déplacer, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir l’article.',
             'Unknown year': 'Année inconnue',

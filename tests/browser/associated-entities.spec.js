@@ -32,9 +32,11 @@ test('compares ranked entities across five-year periods or decades', async ({ pa
     await expect(page.locator('.iwac-vis-time-matrix__table tbody tr')).toHaveCount(10);
     await expect(page.locator('.iwac-vis-time-matrix__period-head')).toHaveCount(7);
     await expect(page.locator('.iwac-vis-time-matrix__caveat')).toContainText('2');
+    // The first cell holds a single item: the count reaches t() as a number,
+    // so the label is singular — it used to read "1 shared items".
     await expect(page.locator('.iwac-vis-time-matrix__cell').first()).toHaveAttribute(
         'aria-label',
-        /shared items, 1990–1994/
+        /^1 shared item, 1990–1994$/
     );
 
     await period.getByRole('button', { name: 'Decades' }).click();

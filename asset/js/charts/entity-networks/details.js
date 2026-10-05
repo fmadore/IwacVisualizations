@@ -66,8 +66,10 @@
             var bits = [];
             var tl = typeLabel(types, node.type);
             if (tl) bits.push(tl);
-            bits.push(P.t('items_count', { count: P.formatNumber(node.count) }));
-            bits.push(P.t('links_count', { count: P.formatNumber(node.degree) }));
+            // Numbers, not formatNumber() strings: t() formats a numeric
+            // count itself, and only a number selects "1 link" over "1 links".
+            bits.push(P.t('items_count', { count: node.count }));
+            bits.push(P.t('links_count', { count: node.degree }));
             header.appendChild(P.el('div', 'iwac-vis-networks-details__meta', bits.join(' · ')));
             root.appendChild(header);
 
@@ -77,13 +79,11 @@
             var list = P.el('ul', 'iwac-vis-networks-details__list');
             selection.neighbors.slice(0, NEIGHBOR_CAP).forEach(function (nb) {
                 var li = P.el('li');
-                var btn = P.el('button', 'iwac-vis-networks-details__item');
+                var btn = P.el('button', 'iwac-vis-list-item iwac-vis-networks-details__item');
                 btn.type = 'button';
-                btn.title = P.t('cooccurrence_title', {
-                    count: P.formatNumber(nb.weight)
-                });
-                btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-networks-details__item-name', nb.node.label));
-                btn.appendChild(P.el('span', 'iwac-vis-networks-details__item-count',
+                btn.title = P.t('cooccurrence_title', { count: nb.weight });
+                btn.appendChild(P.el('span', 'iwac-vis-list__name', nb.node.label));
+                btn.appendChild(P.el('span', 'iwac-vis-list-item__count',
                     P.formatNumber(nb.weight)));
                 btn.addEventListener('click', function () { onJump(nb.index); });
                 li.appendChild(btn);
@@ -94,7 +94,7 @@
             if (selection.neighbors.length > NEIGHBOR_CAP) {
                 root.appendChild(P.el('p', 'iwac-vis-muted iwac-vis-networks-details__note',
                     P.t('more_links_count', {
-                        count: P.formatNumber(selection.neighbors.length - NEIGHBOR_CAP)
+                        count: selection.neighbors.length - NEIGHBOR_CAP
                     })));
             }
         }

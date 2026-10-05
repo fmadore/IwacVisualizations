@@ -32,7 +32,12 @@
     <script src="/asset/js/dist/shared-core.min.js"></script>
     <script src="/asset/js/dist/shared-charts.min.js"></script>
     <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <!-- The collection-overview pieces this page exercises, in their bundle
+         order: the block's own dictionary (the linked-filter label) and the
+         growth bar builder, which lives with the one block that draws it. -->
+    <script src="/asset/js/charts/collection-overview/i18n.js"></script>
     <script src="/asset/js/charts/collection-overview/languages.js"></script>
+    <script src="/asset/js/charts/collection-overview/growth-bar.js"></script>
     <script>
         window.themeReady = fetch('/tokens.json').then(function (response) { return response.json(); }).then(function (tokens) {
             var theme = new URLSearchParams(location.search).get('theme') || 'light';
