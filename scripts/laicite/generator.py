@@ -119,6 +119,12 @@ class LaiciteGenerator(
         self.logger = logging.getLogger(__name__)
 
         self.scans: List[ItemScan] = []
+        #: Set once scan_all has run. Not inferred from `scans`: an empty
+        #: dossier is a finished scan, and a second pass would append every
+        #: coverage record again.
+        self._scanned = False
+        #: build_research()'s result, built once — trends embeds it.
+        self._research: Optional[Dict[str, Any]] = None
         self.texts: Dict[Tuple[str, str], Dict[str, str]] = {}
         self.subset_totals: Dict[str, int] = {}
         self.subset_public: Dict[str, int] = {}
@@ -135,18 +141,16 @@ class LaiciteGenerator(
     def write_all(self) -> None:
         self.scan_all()
 
-        save_json(self.build_research(), self.output_dir / "laicite-research.json", minify=True)
-
+        # The coverage cells (build_research) ship inside laicite-trends.json
+        # under `research`, the only place the client reads them; there is
+        # no standalone laicite-research.json any more, and no
+        # laicite-countries.json either — the block stopped fetching it.
         metadata = self.build_metadata()
         save_json(metadata, self.output_dir / "laicite-metadata.json",
                   minify=self.minify)
 
         documents = self.build_documents()
         save_json(documents, self.output_dir / "laicite-documents.json",
-                  minify=self.minify)
-
-        countries = self.build_countries()
-        save_json(countries, self.output_dir / "laicite-countries.json",
                   minify=self.minify)
 
         # Data-heavy bundles are always minified regardless of --minify:

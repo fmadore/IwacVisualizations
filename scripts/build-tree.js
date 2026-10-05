@@ -27,8 +27,10 @@
 'use strict';
 
 const { execFileSync } = require('child_process');
-const { readFileSync, writeFileSync, existsSync } = require('fs');
+const { writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
+const { readText } = require('./lib/fs');
+const { printFailure } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const TARGET = join(ROOT, 'ARCHITECTURE.md');
@@ -52,6 +54,7 @@ const SUMMARIZE = {
     'tests/js/': 'node:test units',
     'tests/browser/': 'Playwright specs',
     'scripts/laicite/': 'one module per bundle, mirroring asset/js/charts/laicite/',
+    'scripts/lib/': 'file walk, bundle manifest and failure report the guards share',
 };
 
 /**
@@ -195,7 +198,9 @@ function tree() {
 
 function main() {
     const check = process.argv.includes('--check');
-    const current = readFileSync(TARGET, 'utf8');
+    // LF-normalised: the block below is generated with `\n`, so a CRLF
+    // checkout of the doc would otherwise never compare equal to it.
+    const current = readText(TARGET);
     const start = current.indexOf(BEGIN);
     const stop = current.indexOf(END);
     if (start === -1 || stop === -1) {
@@ -205,10 +210,13 @@ function main() {
 
     const { block, orphans } = tree();
     if (orphans.length) {
-        console.error('✗ tree guard: annotation(s) for path(s) that are not tracked:\n');
-        for (const p of orphans) console.error(`  ${p}`);
-        console.error('\n  Update ANNOTATIONS in scripts/build-tree.js — an annotation'
-            + '\n  for a file that no longer exists is the drift this script prevents.\n');
+        printFailure(
+            'tree guard: annotation(s) for path(s) that are not tracked:',
+            orphans,
+            '\n  Update ANNOTATIONS in scripts/build-tree.js — an annotation'
+            + '\n  for a file that no longer exists is the drift this script prevents.\n',
+            { leadingBlank: false }
+        );
         return 1;
     }
 

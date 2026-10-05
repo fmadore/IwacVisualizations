@@ -62,16 +62,20 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
+from iwac_stats import build_timeline_series
 from iwac_utils import (
     add_standard_args,
     parse_standard_args,
     aggregate_prevalence,
     canonicalize_country_field,
+    clean_str,
     clean_values,
     create_metadata_block,
+    dominant,
     extract_year,
     find_column,
     is_unknown,
+    lda_topic_id,
     load_dataset_safe,
     parse_pipe_separated,
     parse_top_words,
@@ -114,16 +118,6 @@ TOPIC_ITEMS = 10
 TOPIC_ITEMS_PER_PERIODICAL = 3
 
 
-def _str_or_none(value: Any) -> Optional[str]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    s = str(value).strip()
-    return s or None
-
-
-# Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
-
-
 def _column_sum(df: pd.DataFrame, column: str) -> int:
     """Robust integer sum over a numeric column (NaN-safe)."""
     if column not in df.columns:
@@ -143,7 +137,7 @@ def compute_summary(rows: pd.DataFrame) -> Dict[str, Any]:
     year_max: Optional[int] = None
 
     for _, row in rows.iterrows():
-        name = _str_or_none(row.get("newspaper"))
+        name = clean_str(row.get("newspaper"))
         if name and not is_unknown(name):
             periodicals.add(name)
         for c in clean_values(parse_pipe_separated(row.get("country"))):
@@ -180,8 +174,8 @@ def compute_runs(rows: pd.DataFrame) -> List[Dict[str, Any]]:
     per: Dict[str, Dict[str, Any]] = {}
 
     for _, row in rows.iterrows():
-        name = _str_or_none(row.get("newspaper"))
-        if name is None or is_unknown(name):
+        name = clean_str(row.get("newspaper"))
+        if is_unknown(name):
             continue
         rec = per.setdefault(name, {
             "total": 0,
@@ -204,7 +198,7 @@ def compute_runs(rows: pd.DataFrame) -> List[Dict[str, Any]]:
             # year axis — log it instead of shipping a broken bar.
             logger.warning("  periodical %r has no parseable pub_date; skipped from runs", name)
             continue
-        country = rec["countries"].most_common(1)[0][0] if rec["countries"] else ""
+        country = dominant(rec["countries"], "")
         runs.append({
             "name":     name,
             "country":  country,
@@ -229,8 +223,8 @@ def compute_holdings(rows: pd.DataFrame, runs: List[Dict[str, Any]]) -> Dict[str
     """
     counts: Counter = Counter()
     for _, row in rows.iterrows():
-        name = _str_or_none(row.get("newspaper"))
-        if name is None or is_unknown(name):
+        name = clean_str(row.get("newspaper"))
+        if is_unknown(name):
             continue
         year = extract_year(row.get("pub_date"))
         if year is None:
@@ -257,38 +251,20 @@ def compute_holdings(rows: pd.DataFrame, runs: List[Dict[str, Any]]) -> Dict[str
 def compute_issues_per_year(rows: pd.DataFrame) -> Dict[str, Any]:
     """Per-year × country matrix shaped to feed C.timeline directly.
 
-    Countries are ordered by total issue count (descending) so the stack
-    order is stable and the biggest contributor sits at the bottom.
-    Issues without a resolvable country or year are skipped, matching the
-    collection-overview timeline convention.
+    Countries are ordered by total issue count (descending, first-seen on a
+    tie) so the stack order is stable and the biggest contributor sits at
+    the bottom. Issues without a resolvable country or year are skipped,
+    matching the collection-overview timeline convention. The loop is
+    ``iwac_stats.build_timeline_series``; this only says which pairs.
     """
-    by_year_country: Dict[int, Counter] = defaultdict(Counter)
-    country_totals: Counter = Counter()
-    seen_years: set = set()
-
+    pairs = []
     for _, row in rows.iterrows():
         year = extract_year(row.get("pub_date"))
         if year is None:
             continue
         for country in clean_values(parse_pipe_separated(row.get("country"))):
-            by_year_country[year][country] += 1
-            country_totals[country] += 1
-            seen_years.add(year)
-
-    if not seen_years:
-        return {"years": [], "countries": [], "series": {}}
-
-    years = sorted(seen_years)
-    countries_sorted = [c for c, _ in country_totals.most_common()]
-    series: Dict[str, List[int]] = {}
-    for country in countries_sorted:
-        series[country] = [int(by_year_country[y].get(country, 0)) for y in years]
-
-    return {
-        "years":     years,
-        "countries": countries_sorted,
-        "series":    series,
-    }
+            pairs.append((year, country))
+    return build_timeline_series(pairs, order="most_common")
 
 
 def compute_wordcloud(
@@ -328,34 +304,16 @@ def compute_wordcloud(
 #  LDA topics
 # ---------------------------------------------------------------------------
 
-def _topic_id(value: Any) -> Optional[int]:
-    """Dominant topic id as an int, or None when the issue is unmodelled.
-
-    ``lda_topic_id`` is float64 on every modelled subset (nulls force the
-    widening). On ``publications`` an unmodelled issue is **null**, not
-    ``-1`` — the ``references`` convention rather than the ``articles``
-    one — but ``-1`` is rejected here too, so a change of upstream
-    convention degrades to "uncovered" instead of inventing topic -1.
-    """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    try:
-        topic_id = int(float(value))
-    except (TypeError, ValueError):
-        return None
-    return topic_id if topic_id >= 0 else None
-
-
 def _issue_record(row: pd.Series) -> Dict[str, Any]:
     """The fields a representative-issue card needs, and nothing more."""
     return {
-        "o_id":      _str_or_none(row.get("o:id")),
-        "title":     _str_or_none(row.get("title")),
-        "newspaper": _str_or_none(row.get("newspaper")),
-        "issue":     _str_or_none(row.get("issue")),
-        "date":      (_str_or_none(row.get("pub_date")) or "")[:10],
+        "o_id":      clean_str(row.get("o:id")) or None,
+        "title":     clean_str(row.get("title")) or None,
+        "newspaper": clean_str(row.get("newspaper")) or None,
+        "issue":     clean_str(row.get("issue")) or None,
+        "date":      clean_str(row.get("pub_date"))[:10],
         "year":      extract_year(row.get("pub_date")),
-        "thumbnail": _str_or_none(row.get("thumbnail")),
+        "thumbnail": clean_str(row.get("thumbnail")) or None,
     }
 
 
@@ -489,14 +447,17 @@ def compute_topics(
             continue
 
         modelled += 1
-        name = _str_or_none(row.get("lda_model_name"))
+        name = clean_str(row.get("lda_model_name"))
         if name:
             model_names[name] += 1
 
-        dominant_id = _topic_id(row.get("lda_topic_id"))
+        # Null, not -1, marks an unmodelled issue here; lda_topic_id also
+        # rejects -1, so a change of upstream convention degrades to
+        # "uncovered" instead of inventing topic -1.
+        dominant_id = lda_topic_id(row.get("lda_topic_id"))
         if dominant_id is not None:
             dominant[dominant_id] += 1
-            label = _str_or_none(row.get("lda_topic_label"))
+            label = clean_str(row.get("lda_topic_label"))
             if label and dominant_id not in labels:
                 labels[dominant_id] = label
         prob = row.get("lda_topic_prob")

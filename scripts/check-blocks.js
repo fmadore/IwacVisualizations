@@ -15,7 +15,8 @@
  *      shapes: a row with a `shell` array declares its whole asset
  *      declaration in the registry and renders through `_generic`, and a row
  *      without one keeps `view/common/block-layout/<slug>.phtml` — which the
- *      two blocks that do more than declare still do. A block with neither,
+ *      one block that does more than declare (`on-this-day`) still does; the
+ *      other twenty are registry shells. A block with neither,
  *      or with both, is a 500 on every embed of it (exactly the v1.21
  *      `press-reprints-detector` bug);
  *   4. a per-slug template's `embedSlug` (when it declares one) equals the
@@ -28,19 +29,31 @@
  * so a block cannot be added to one place and forgotten in the others.
  *
  * Since v1.62.0 the JavaScript is loaded as bundles named in
- * `asset/js/bundles.json` — by a registry `shell` for most page blocks, by a
- * template for the two logic-bearing ones and the resource-page blocks. So,
+ * `asset/js/bundles.json` — by a registry `shell` for the twenty generic page
+ * blocks, by a template for `on-this-day` and the resource-page blocks. So,
  * additionally:
  *   6. every `bundle` a shell or a template names exists in the manifest;
  *   7. every `blocks` entry in the manifest is named by at least one of them
  *      — a bundle nothing loads is dead weight the build keeps emitting.
  *
+ * And the asset declaration inside each shell (2026-10):
+ *   8. `blockCss` sits INSIDE `assets` — the shell forwards only `assets` to
+ *      the asset partial, so a `blockCss` one level up is silently dropped
+ *      (Periodicals Overview shipped without its stylesheet that way) — and
+ *      every sheet it names exists as `asset/css/blocks/<name>.css`;
+ *   9. every `needs` flag is one `AssetPlan::FLAGS` lists. A misspelt flag
+ *      loads nothing and says nothing; AssetPlan now throws on it at render
+ *      time, and this moves that failure to the build.
+ *
  * Usage: node scripts/check-blocks.js
  * Exit code 1 on any inconsistency (with the offending slug), else 0.
  */
-const { readdirSync, readFileSync, existsSync } = require('fs');
+const { readdirSync, existsSync } = require('fs');
 const { spawnSync } = require('child_process');
 const { join } = require('path');
+const { readText } = require('./lib/fs');
+const { MANIFEST_PATH, loadManifest } = require('./lib/manifest');
+const { fail: failAndExit } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const REGISTRY = join(ROOT, 'src', 'Site', 'BlockRegistry.php');
@@ -51,7 +64,8 @@ const RESOURCE_TEMPLATE_DIRS = [
     join(ROOT, 'view', 'common', 'resource-page-block-layout'),
     join(ROOT, 'view', 'common', 'resource-page-block-layout', 'visualizations'),
 ];
-const MANIFEST = join(ROOT, 'asset', 'js', 'bundles.json');
+const ASSET_PLAN = join(ROOT, 'src', 'Site', 'AssetPlan.php');
+const BLOCK_CSS_DIR = join(ROOT, 'asset', 'css', 'blocks');
 
 const problems = [];
 const fail = (msg) => problems.push(msg);
@@ -101,13 +115,20 @@ function parseRegistryWithPhp() {
     const out = {};
     for (const [slug, row] of Object.entries(raw)) {
         const cls = String(row.class || '').split('\\').pop();
+        const shell = row.shell && typeof row.shell === 'object' ? row.shell : null;
+        const assets = shell && shell.assets && typeof shell.assets === 'object' ? shell.assets : {};
+        const needs = assets.needs || {};
         out[slug] = {
             invokable: row.invokable ?? null,
             class: cls || null,
             embeddable: row.embeddable !== false,
             shell: Boolean(row.shell),
-            bundle: (row.shell && row.shell.assets && row.shell.assets.bundle) || null,
-            declaresEmbedSlug: Boolean(row.shell && 'embedSlug' in row.shell),
+            bundle: assets.bundle || null,
+            declaresEmbedSlug: Boolean(shell && 'embedSlug' in shell),
+            blockCss: assets.blockCss === undefined ? [] : [].concat(assets.blockCss).map(String),
+            shellBlockCss: Boolean(shell && 'blockCss' in shell),
+            // A PHP list json_encodes to an array, a keyed array to an object.
+            needs: Array.isArray(needs) ? needs.map(String) : Object.keys(needs),
         };
     }
     return out;
@@ -115,7 +136,9 @@ function parseRegistryWithPhp() {
 
 /** The fallback: no PHP binary, so read the source. */
 function parseRegistryWithRegex() {
-    const src = readFileSync(REGISTRY, 'utf8');
+    // LF-normalised: every pattern below is anchored on `\n`, and a CRLF
+    // checkout used to make this reader find zero rows.
+    const src = readText(REGISTRY);
     const body = /const BLOCKS = \[([\s\S]*?)\n {4}\];/.exec(src);
     if (!body) {
         fail('BlockRegistry::BLOCKS not found or not in the expected shape');
@@ -134,6 +157,20 @@ function parseRegistryWithRegex() {
             return v ? (v[1] ?? v[2] ?? v[3]) : null;
         };
         const bundle = /'bundle'\s*=>\s*'([^']+)'/.exec(row);
+        // The shell's keys sit at 16 spaces, `assets`' at 20, a `needs` or a
+        // `blockCss` list's entries at 24. Whole-line comments are dropped
+        // first: a quote in a comment must not read as a sheet name.
+        const assets = /^ {16}'assets'\s*=>\s*\[\n([\s\S]*?)\n {16}\],$/m.exec(row);
+        const assetBody = assets ? assets[1].replace(/^\s*\/\/.*$/gm, '') : '';
+        const blockCss = [];
+        const cssOne = /^ {20}'blockCss'\s*=>\s*'([^']*)'/m.exec(assetBody);
+        const cssList = /^ {20}'blockCss'\s*=>\s*\[\n([\s\S]*?)\n {20}\],?$/m.exec(assetBody);
+        if (cssOne) blockCss.push(cssOne[1]);
+        if (cssList) for (const m of cssList[1].matchAll(/'([^']*)'/g)) blockCss.push(m[1]);
+        const needsBody = /^ {20}'needs'\s*=>\s*\[\n([\s\S]*?)\n {20}\],?$/m.exec(assetBody);
+        const needs = needsBody
+            ? [...needsBody[1].matchAll(/^ {24}'(\w+)'\s*=>/gm)].map((m) => m[1])
+            : [];
         out[slug] = {
             invokable: pick('invokable'),
             class: pick('class'),
@@ -143,6 +180,9 @@ function parseRegistryWithRegex() {
             shell: /^ {12}'shell'\s*=>\s*\[/m.test(row),
             bundle: bundle ? bundle[1] : null,
             declaresEmbedSlug: /'embedSlug'\s*=>/.test(row),
+            blockCss,
+            shellBlockCss: /^ {16}'blockCss'\s*=>/m.test(row),
+            needs,
         };
     }
     return out;
@@ -152,7 +192,7 @@ const registry = parseRegistry();
 const slugs = Object.keys(registry);
 if (!slugs.length) fail('BlockRegistry::BLOCKS parsed as empty');
 
-const configSrc = existsSync(CONFIG) ? readFileSync(CONFIG, 'utf8') : '';
+const configSrc = existsSync(CONFIG) ? readText(CONFIG) : '';
 const configBlock = /'block_layouts'\s*=>\s*\[[\s\S]*?'invokables'\s*=>\s*\[([\s\S]*?)\n {8}\]/.exec(configSrc);
 const configMap = {};
 if (configBlock) {
@@ -169,7 +209,7 @@ for (const [slug, row] of Object.entries(registry)) {
     if (!existsSync(classFile)) {
         fail(`${slug}: class file src/Site/BlockLayout/${row.class}.php is missing`);
     } else {
-        const declared = /const SLUG\s*=\s*'([a-z0-9-]+)'/.exec(readFileSync(classFile, 'utf8'));
+        const declared = /const SLUG\s*=\s*'([a-z0-9-]+)'/.exec(readText(classFile));
         if (!declared) {
             fail(`${slug}: ${row.class} does not declare a const SLUG`);
         } else if (declared[1] !== slug) {
@@ -189,8 +229,9 @@ for (const [slug, row] of Object.entries(registry)) {
     // 3-5. the block has somewhere to render, and agrees about the slug.
     //
     // Two shapes since H5: a row with a `shell` declares everything in the
-    // registry and renders through `_generic`; a row without one keeps its
-    // own template, which is for the two blocks that do more than declare.
+    // registry and renders through `_generic` (twenty blocks); a row without
+    // one keeps its own template, which is for the one block that does more
+    // than declare (`on-this-day`).
     if (row.shell) {
         if (!existsSync(join(TEMPLATE_DIR, '_generic.phtml'))) {
             fail(`${slug}: declares a shell but view/common/block-layout/_generic.phtml is missing`);
@@ -209,7 +250,7 @@ for (const [slug, row] of Object.entries(registry)) {
         fail(`${slug}: no registry shell and no view/common/block-layout/${slug}.phtml — nothing to render`);
         continue;
     }
-    const tpl = readFileSync(template, 'utf8');
+    const tpl = readText(template);
     const embed = /'embedSlug'\s*=>\s*'([a-z0-9-]+)'/.exec(tpl);
     if (row.embeddable && !embed) {
         fail(`${slug}: registry marks it embeddable but the template declares no embedSlug`);
@@ -236,10 +277,10 @@ for (const file of readdirSync(LAYOUT_DIR)) {
 
 // 6-7. Bundle manifest ↔ whoever names a bundle.
 //
-// Since H5 that is two places: the registry's `shell` arrays for the nineteen
-// generic blocks, and the templates for the two that keep their own plus the
-// resource-page ones.
-const manifest = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, 'utf8')) : null;
+// Since H5 that is two places: the registry's `shell` arrays for the twenty
+// generic blocks, and the templates for `on-this-day` plus the resource-page
+// ones.
+const manifest = loadManifest(MANIFEST_PATH, { optional: true });
 if (!manifest || !manifest.blocks) {
     fail('asset/js/bundles.json is missing or has no "blocks" — the shells load bundles from it');
 } else {
@@ -260,7 +301,7 @@ if (!manifest || !manifest.blocks) {
         }
     }
     for (const file of templateFiles) {
-        const src = readFileSync(file, 'utf8');
+        const src = readText(file);
         const rel = file.slice(ROOT.length + 1);
         if (/'(panels|orchestrator)'\s*=>/.test(src)) {
             fail(`${rel}: declares 'panels' / 'orchestrator' — since v1.62.0 a template names its bundle ('bundle' => …) and asset/js/bundles.json holds the file list`);
@@ -277,10 +318,61 @@ if (!manifest || !manifest.blocks) {
     }
 }
 
-if (problems.length) {
-    console.error(`\n✗ block registry guard: ${problems.length} problem(s)\n`);
-    for (const p of problems) console.error(`  ${p}`);
-    console.error('\nThe slug is the spine: registry key = class SLUG = template filename = embedSlug.\n');
-    process.exit(1);
+// 8-9. The asset declaration inside each shell.
+const flags = readAssetPlanFlags();
+for (const [slug, row] of Object.entries(registry)) {
+    if (row.shellBlockCss) {
+        fail(`${slug}: 'blockCss' sits on the shell, not inside 'assets' — _generic forwards only `
+            + "'assets' to the asset partial, so the sheet is silently never loaded "
+            + `(${registryLine(slug, '\n' + ' '.repeat(16) + "'blockCss'")})`);
+    }
+    for (const sheet of row.blockCss) {
+        if (!existsSync(join(BLOCK_CSS_DIR, `${sheet}.css`))) {
+            fail(`${slug}: blockCss '${sheet}' has no asset/css/blocks/${sheet}.css `
+                + `(${registryLine(slug, `'${sheet}'`)})`);
+        }
+    }
+    for (const flag of row.needs) {
+        if (!flags.has(flag)) {
+            fail(`${slug}: needs '${flag}' is not in AssetPlan::FLAGS (${[...flags].join(', ')}) — `
+                + `a misspelt flag loads nothing (${registryLine(slug, `'${flag}'`)})`);
+        }
+    }
 }
-console.log(`✓ block registry guard: ${slugs.length} blocks consistent, ${Object.keys((manifest && manifest.blocks) || {}).length} bundles named by a shell or a template`);
+
+/**
+ * `AssetPlan::FLAGS`, read from the source: `public const FLAGS = [ 'a', … ];`,
+ * a flat list of single-quoted strings by contract (its docblock says so).
+ */
+function readAssetPlanFlags() {
+    const src = existsSync(ASSET_PLAN) ? readText(ASSET_PLAN) : '';
+    const block = /public const FLAGS\s*=\s*\[([\s\S]*?)\];/.exec(src);
+    if (!block) {
+        fail('src/Site/AssetPlan.php: `public const FLAGS = [ … ];` not found — the needs check '
+            + 'has nothing to check against');
+        return new Set();
+    }
+    const list = new Set([...block[1].replace(/\/\/.*$/gm, '').matchAll(/'([^']+)'/g)].map((m) => m[1]));
+    if (!list.size) fail('src/Site/AssetPlan.php: AssetPlan::FLAGS parsed as empty');
+    return list;
+}
+
+/** `src/Site/BlockRegistry.php:<line>` of `needle` within the row of `slug`. */
+function registryLine(slug, needle) {
+    const src = readText(REGISTRY);
+    const start = src.indexOf(`'${slug}' => [`);
+    const found = start === -1 ? -1 : src.indexOf(needle, start);
+    // A needle that opens with its line break points at the line after it.
+    const at = found === -1 ? -1 : found + (needle.startsWith('\n') ? 1 : 0);
+    const line = at === -1 ? '?' : src.slice(0, at).split('\n').length;
+    return `src/Site/BlockRegistry.php:${line}`;
+}
+
+if (problems.length) {
+    failAndExit(
+        `block registry guard: ${problems.length} problem(s)`,
+        problems,
+        '\nThe slug is the spine: registry key = class SLUG = template filename = embedSlug.\n'
+    );
+}
+console.log(`✓ block registry guard: ${slugs.length} blocks consistent, ${Object.keys((manifest && manifest.blocks) || {}).length} bundles named by a shell or a template, every blockCss and needs flag resolves`);

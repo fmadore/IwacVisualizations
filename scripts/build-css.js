@@ -12,27 +12,15 @@
  *
  * Usage: node scripts/build-css.js
  */
-const { readdirSync, readFileSync, writeFileSync, statSync } = require('fs');
+const { readFileSync, writeFileSync } = require('fs');
 const { join, relative } = require('path');
 const csso = require('csso');
+const { sourceFiles } = require('./lib/fs');
 
 const ROOT = join(__dirname, '..');
 const SRC_DIR = join(ROOT, 'asset', 'css');
 
-function walk(dir, out = []) {
-    for (const entry of readdirSync(dir)) {
-        const p = join(dir, entry);
-        const st = statSync(p);
-        if (st.isDirectory()) {
-            walk(p, out);
-        } else if (p.endsWith('.css') && !p.endsWith('.min.css')) {
-            out.push(p);
-        }
-    }
-    return out;
-}
-
-const files = walk(SRC_DIR).sort();
+const files = sourceFiles(SRC_DIR, '.css').sort();
 let bytesIn = 0;
 let bytesOut = 0;
 for (const file of files) {

@@ -87,12 +87,12 @@ from iwac_utils import (
     POLARITE_ORDER,
     SENTIMENT_MODELS,
     canonicalize_country_field,
-    clean_float,
     clean_str,
     create_metadata_block,
     extract_year,
     is_unknown,
     iter_records,
+    lda_topic_id,
     load_dataset_safe,
     parse_pipe_separated,
     present_sentiment_models,
@@ -324,8 +324,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         subject_kw = _clean_keywords(row.get("subject"))
         spatial_kw = _clean_keywords(row.get("spatial"))
 
-        raw_topic = clean_float(row.get("lda_topic_id"))
-        topic_id = int(raw_topic) if raw_topic is not None and raw_topic >= 0 else None
+        topic_id = lda_topic_id(row.get("lda_topic_id"))
         if topic_id is not None:
             topic_articles[topic_id] += 1
             if topic_id not in topic_labels:

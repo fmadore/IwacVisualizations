@@ -107,12 +107,12 @@ from iwac_embeddings import build_normalized_matrix, top_k_cosine
 from iwac_utils import (
     add_standard_args,
     DATASET_ID,
-    canonical_country,
     clean_str,
     configure_logging,
     create_metadata_block,
     extract_year,
     find_column,
+    first_country,
     load_dataset_safe,
     parse_duration_seconds,
     save_json,
@@ -171,17 +171,6 @@ SUBSET_ITEM_TYPE: Dict[str, str] = {
 
 
 logger: Optional[logging.Logger] = None
-
-
-def first_country(value: Any) -> str:
-    """Canonical first IWAC country from a multi-value cell, or ''."""
-    s = clean_str(value)
-    if not s or s.lower() == "unknown":
-        return ""
-    head = s.split("|", 1)[0].strip()
-    if not head or head.lower() == "unknown":
-        return ""
-    return canonical_country(head)
 
 
 def slice_key(value: str) -> str:

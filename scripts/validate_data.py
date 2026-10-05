@@ -77,8 +77,8 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "periodicals-overview.json":      ("summary", "runs", "holdings"),
     "audiovisual-overview.json":      ("summary", "channels", "timeline"),
     "laicite-metadata.json":          ("subsets", "frames", "frame_order", "totals"),
-    "laicite-trends.json":            ("years", "families", "global"),
-    "laicite-research.json":          ("cells",),
+    "laicite-trends.json":            ("research",),
+    "laicite-seasonality.json":       ("by_subset", "minimum_cell"),
     "sentiment-atlas.json":           ("models", "years", "summary"),
     "semantic-landscape.json":        ("points", "topics"),
     "periodicals-landscape.json":     ("points",),
@@ -91,6 +91,32 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "template-summary.json":          (),
     "term-trends-index.json":         ("years", "terms", "totals"),
 }
+
+#: Keys one level down: bundle → {top-level key: keys that object must
+#: carry}. The top-level key is also listed in REQUIRED_KEYS; this says what
+#: the panel reads inside it. The laicite research cells moved INTO
+#: laicite-trends.json (the separate laicite-research.json is no longer
+#: written) and are now that bundle's only content: the timeline draws
+#: nothing without them, and suppresses a cell below ``minimum_cell``.
+NESTED_KEYS: Dict[str, Dict[str, Tuple[str, ...]]] = {
+    "laicite-trends.json": {"research": ("cells", "minimum_cell")},
+}
+
+#: Keys whose value is a NUMBER, not a container — the small-cell
+#: suppression threshold the laicite panels print beside a rate. Every other
+#: required key must be an object or an array.
+SCALAR_KEYS = ("minimum_cell",)
+
+
+def _shape_problem(where: str, key: str, value: Any) -> Optional[str]:
+    """Why ``value`` is the wrong shape for ``key``, or None."""
+    if key in SCALAR_KEYS:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            return f"{where} must be a number"
+        return None
+    if not isinstance(value, (dict, list)):
+        return f"{where} must be an object or array"
+    return None
 
 #: Bundles whose metadata is INLINE at the top level — `generated_at` beside
 #: the data rather than inside a `metadata` block. Four idioms coexist (P10);
@@ -138,14 +164,12 @@ REQUIRED_FILES = (
     "laicite-collocates.json",
     "laicite-concordance.json",
     "laicite-corpora.json",
-    "laicite-countries.json",
     "laicite-documents.json",
     "laicite-events.json",
     "laicite-implicit.json",
     "laicite-metadata.json",
     "laicite-places.json",
     "laicite-references.json",
-    "laicite-research.json",
     "laicite-seasonality.json",
     "laicite-semantic.json",
     "laicite-sentiment.json",
@@ -229,8 +253,21 @@ def check_payload(name: str, payload: Any) -> List[str]:
     for key in REQUIRED_KEYS.get(name, ()):
         if not isinstance(payload, dict) or key not in payload:
             problems.append(f"{name}: missing top-level {key!r}, which the block reads")
-        elif not isinstance(payload[key], (dict, list)):
-            problems.append(f"{name}: {key!r} must be an object or array")
+        else:
+            wrong = _shape_problem(f"{name}: {key!r}", key, payload[key])
+            if wrong:
+                problems.append(wrong)
+    for parent, keys in NESTED_KEYS.get(name, {}).items():
+        block = payload.get(parent) if isinstance(payload, dict) else None
+        if not isinstance(block, dict):
+            continue  # already reported above as a missing / wrong top-level key
+        for key in keys:
+            if key not in block:
+                problems.append(f"{name}: missing {parent}.{key!r}, which the block reads")
+            else:
+                wrong = _shape_problem(f"{name}: {parent}.{key!r}", key, block[key])
+                if wrong:
+                    problems.append(wrong)
     return problems
 
 
@@ -386,6 +423,29 @@ def self_test() -> List[str]:
     for label, payload in cases:
         if not check_payload("collection-overview.json", payload):
             failures.append(f"{label} was accepted")
+
+    # A nested contract: laicite-trends carries the research cells and the
+    # small-cell threshold they were suppressed at.
+    trends = {"generated_at": "2026-09-07T05:00:00Z",
+              "research": {"cells": [], "minimum_cell": 5}}
+    if check_payload("laicite-trends.json", trends):
+        failures.append("a well-formed laicite-trends payload was rejected")
+    for label, research in (("research without cells", {"minimum_cell": 5}),
+                            ("research.cells not an array", {"cells": 3, "minimum_cell": 5}),
+                            ("research without minimum_cell", {"cells": []}),
+                            ("a non-numeric minimum_cell", {"cells": [], "minimum_cell": "5"})):
+        if not check_payload("laicite-trends.json", {**trends, "research": research}):
+            failures.append(f"laicite-trends with {label} was accepted")
+    if not check_payload("laicite-trends.json",
+                         {k: v for k, v in trends.items() if k != "research"}):
+        failures.append("laicite-trends without research was accepted")
+
+    # A scalar top-level key: seasonality's threshold is a number.
+    seasonality = {"generated_at": "2026-09-07T05:00:00Z", "by_subset": {}, "minimum_cell": 5}
+    if check_payload("laicite-seasonality.json", seasonality):
+        failures.append("a well-formed laicite-seasonality payload was rejected")
+    if not check_payload("laicite-seasonality.json", {**seasonality, "minimum_cell": {}}):
+        failures.append("laicite-seasonality with an object minimum_cell was accepted")
 
     # `_meta` is the other spelling and must pass.
     if check_payload("entity-networks-global.json",

@@ -7,8 +7,7 @@ Generate the JSON bundles consumed by the IwacVisualizations "Laïcité" page
 block (GitHub issue #14) — a dossier on secularism in the IWAC corpus:
 
     asset/data/laicite-metadata.json      # KPIs, tag-vs-text Venn, rights split
-    asset/data/laicite-trends.json        # per-year series, global/country/frame
-    asset/data/laicite-countries.json     # per-country aggregates
+    asset/data/laicite-trends.json        # whole-collection coverage cells (`research`)
     asset/data/laicite-documents.json     # the archival dossier
     asset/data/laicite-concordance.json   # KWIC rows — RIGHTS-GATED (see below)
     asset/data/laicite-collocates.json    # log-likelihood collocates, sliced

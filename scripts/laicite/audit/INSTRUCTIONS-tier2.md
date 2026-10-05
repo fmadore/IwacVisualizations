@@ -39,12 +39,14 @@ Write a verdict file at the path given to you: a JSON array with one object
 per input record, same order, shaped exactly:
 
 ```json
-{"id": "6765", "subset": "articles", "relevant": "yes",
- "laicite_sense": "state", "note": ""}
+{"id": "6765", "subset": "articles", "run": "20261005T101500Z-a1b2c3",
+ "relevant": "yes", "laicite_sense": "state", "note": ""}
 ```
 
-Keep notes short and only where the verdict needs justification (English or
-French). Do not skip records. Do not read anything outside the batch file.
+Copy `run` from the input record **exactly**: a verdict whose `run` differs
+from the batch's is rejected. `relevant` must be one of the three strings
+above and `laicite_sense` one of the four. Keep notes short and only where
+the verdict needs justification (English or French). Do not skip records. Do not read anything outside the batch file.
 Do not modify the batch file. When finished, reply with one line: counts of
 records, `relevant=no`, `relevant=unassessable`, `laicite_sense=laity`, and
 the two or three clearest false members with title and id.

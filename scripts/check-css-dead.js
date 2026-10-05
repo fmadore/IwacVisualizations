@@ -30,8 +30,10 @@
  */
 'use strict';
 
-const { readdirSync, readFileSync, statSync } = require('fs');
+const { readFileSync } = require('fs');
 const { join, relative } = require('path');
+const { walkFiles } = require('./lib/fs');
+const { fail } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const CSS_DIR = join(ROOT, 'asset', 'css');
@@ -56,18 +58,11 @@ const COMPOSED_PREFIXES = [
     ['iwac-vis-sent-', 'sentiment panels compose per-model and per-axis names'],
     ['iwac-vis-embed-', 'the embed layout composes body classes in PHP'],
     ['iwac-vis-otd-clippings__plate--r', 'on-this-day/clippings.js:47 — `--r${ratio}`'],
-    ['iwac-vis-badge--', 'shared/table.js:227 — `--${value.toLowerCase()}`'],
 ];
 
-function walk(dir, out = []) {
-    let entries;
-    try { entries = readdirSync(dir); } catch (e) { return out; }
-    for (const name of entries) {
-        const path = join(dir, name);
-        if (statSync(path).isDirectory()) walk(path, out);
-        else out.push(path);
-    }
-    return out;
+/** Every file under `dir`; a directory that does not exist yields none. */
+function walk(dir) {
+    return walkFiles(dir, { tolerant: true });
 }
 
 /** Every `.iwac-vis-…` class a stylesheet declares, with where. */
@@ -115,14 +110,13 @@ for (const [cls, where] of declared) {
 }
 
 if (dead.length) {
-    console.error(`\n✗ dead-CSS guard: ${dead.length} class(es) styled but never built\n`);
-    for (const { cls, where } of dead) console.error(`  .${cls}  (${where})`);
-    console.error(
+    fail(
+        `dead-CSS guard: ${dead.length} class(es) styled but never built`,
+        dead.map(({ cls, where }) => `.${cls}  (${where})`),
         '\n  Nothing in asset/js, view/, src/ or tests/ writes these class names.'
         + '\n  Delete the rule, or — if the name is composed at runtime — add its'
         + '\n  stem to COMPOSED_PREFIXES in this file, with the file that builds it.\n'
     );
-    process.exit(1);
 }
 
 console.log(`✓ dead-CSS guard: ${declared.size} module classes, every one built somewhere`);

@@ -182,7 +182,13 @@ def main() -> int:
             for subset in iwac_utils.SUBSETS:
                 frame = iwac_utils.load_dataset_safe(subset, columns=["o:id", "OCR_is_public"], required=True)
                 ids = frame["o:id"].astype(str)
-                public = frame["OCR_is_public"].fillna(False).eq(True) if "OCR_is_public" in frame else None
+                # The one rule for the flag (iwac_utils.is_public_flag):
+                # a real boolean True, anything else — NaN, 1, "True" — is
+                # not a permission.
+                public = (
+                    frame["OCR_is_public"].map(iwac_utils.is_public_flag).astype(bool)
+                    if "OCR_is_public" in frame else None
+                )
                 sources[subset] = {"ids": ids.tolist(), "publicOcrIds": ids[public].tolist() if public is not None else []}
         for name in selected:
             logger.info("::group::generate_%s", name)

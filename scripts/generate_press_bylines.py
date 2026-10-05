@@ -14,7 +14,8 @@ journalists — the block labels them plainly as bylines, not people.
 
 Authority join: byline names are matched against the IWAC index's
 ``Personnes`` records (``Titre`` + ``Titre alternatif``, both sides
-normalized through ``normalize_location_name``) so the front-end can link
+normalized through ``normalize_location_name`` by the shared
+``build_entity_index``) so the front-end can link
 a byline to its authority page — 184 of the top 200 bylines resolve.
 
 Payload shape (top-level keys)
@@ -48,6 +49,7 @@ from typing import Any, Dict, Optional, Set
 
 from iwac_utils import (
     add_standard_args,
+    build_entity_index,
     clean_str,
     create_metadata_block,
     extract_year,
@@ -67,25 +69,10 @@ def build_personnes_lookup(repo_id: str) -> Dict[str, int]:
                            columns=["Type", "o:id", "Titre", "Titre alternatif"])
     if df is None or df.empty:
         raise RuntimeError("Could not load the index subset")
-    lookup: Dict[str, int] = {}
-
-    def col(name):
-        return df[name] if name in df.columns else [None] * len(df)
-
-    for type_raw, oid_raw, titre, alt_raw in zip(
-            col("Type"), col("o:id"), col("Titre"), col("Titre alternatif")):
-        if clean_str(type_raw) != "Personnes":
-            continue
-        try:
-            o_id = int(oid_raw)
-        except (TypeError, ValueError):
-            continue
-        names = [clean_str(titre)]
-        names.extend(parse_pipe_separated(alt_raw))
-        for name in names:
-            key = normalize_location_name(name)
-            if key:
-                lookup.setdefault(key, o_id)
+    # The shared join, persons only: the same keys every other block
+    # matches a name on.
+    entities, _, _ = build_entity_index(df, types=["Personnes"])
+    lookup = {key: info["o_id"] for key, info in entities.items()}
     logger.info("Personnes lookup: %d normalized names", len(lookup))
     return lookup
 

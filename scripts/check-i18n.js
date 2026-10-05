@@ -35,12 +35,31 @@
  * Neither parity gap is a live defect today; both are one careless edit away,
  * and the .po/.mo drift this repo actually had (see check-i18n-mo.js) is the
  * same shape — paired catalogues with nothing asserting they stay paired.
+ *
+ * THREE MORE RULES (2026-10)
+ * --------------------------
+ *   - No pre-formatted count: `t(key, { count: P.formatNumber(n) })` hands
+ *     t() a STRING, so its plural selection (`one` / `other`) never sees the
+ *     number and "1 articles" ships. Pass the number; t() formats it.
+ *   - No identity `en` entry (`'Count': 'Count'`): a key that is already
+ *     its English text needs no `en` entry — the fallback is the
+ *     translation — and the copy is a second place to edit when the wording
+ *     changes.
+ *   - A shared key used by exactly one block belongs in that block's
+ *     dictionary. iwac-i18n.js ships on every page; a string only one block
+ *     reads is weight on all the others. "Used" is any string literal equal
+ *     to the key in the bundle's sources (not only `t('…')` — a local map
+ *     handed to t() counts too), so the rule under-reports rather than
+ *     moving a key a shared file still reads.
  */
 'use strict';
 
-const { readFileSync, readdirSync, statSync } = require('fs');
+const { readFileSync } = require('fs');
 const { join, relative } = require('path');
 const vm = require('vm');
+const { sourceFiles, walkFiles, posixRelative } = require('./lib/fs');
+const { loadManifest, bundleSources } = require('./lib/manifest');
+const { printFailure } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const JS_ROOT = join(ROOT, 'asset', 'js');
@@ -51,13 +70,9 @@ const SHARED = join(JS_ROOT, 'iwac-i18n.js');
  *  dashboard') is exactly what an English visitor should see. */
 const IDENTIFIER = /^[a-z0-9]+(?:[._][a-z0-9]+)+$/;
 
-function walk(dir, out) {
-    for (const name of readdirSync(dir)) {
-        const path = join(dir, name);
-        if (statSync(path).isDirectory()) walk(path, out);
-        else if (name.endsWith('.js') && !name.endsWith('.min.js')) out.push(path);
-    }
-    return out;
+/** Every browser source under `dir` (the built `.min.js` files excluded). */
+function walk(dir) {
+    return sourceFiles(dir, '.js');
 }
 
 /** A quoted key literal, evaluated so '\u00e9' and 'é' compare equal. */
@@ -71,6 +86,23 @@ function parseKey(literal, where) {
 }
 
 const KEY_LINE = /^\s*((?:'(?:\\.|[^'\\])*')|(?:"(?:\\.|[^"\\])*"))\s*:/;
+
+/** A whole one-line `'key': 'value',` declaration — value literal in group 2. */
+const KEY_VALUE_LINE = /^\s*((?:'(?:\\.|[^'\\])*')|(?:"(?:\\.|[^"\\])*"))\s*:\s*((?:'(?:\\.|[^'\\])*')|(?:"(?:\\.|[^"\\])*"))\s*,?\s*(?:\/\/.*)?$/;
+
+/**
+ * `en` entries whose value is the key itself, found while a dictionary is
+ * read: { file, key, line }.
+ */
+const identities = [];
+function noteIdentity(file, locale, line, lineNo, where) {
+    if (locale !== 'en') return;
+    const m = KEY_VALUE_LINE.exec(line);
+    if (!m) return;
+    if (parseKey(m[1], where) === parseKey(m[2], where)) {
+        identities.push({ file, key: parseKey(m[1], where), line: lineNo });
+    }
+}
 
 /**
  * Read the shared dictionary's `en:` / `fr:` sections.
@@ -91,6 +123,7 @@ function readSharedDictionary() {
         const declaration = /^\s{12}((?:'(?:\\.|[^'\\])*')|(?:"(?:\\.|[^"\\])*"))\s*:/.exec(lines[i]);
         if (!declaration) continue;
         const key = parseKey(declaration[1], `${SHARED}:${i + 1}`);
+        noteIdentity('asset/js/iwac-i18n.js', locale, lines[i], i + 1, `${SHARED}:${i + 1}`);
         if (seen[locale].has(key)) {
             duplicates.push({ file: 'asset/js/iwac-i18n.js', locale, key, first: seen[locale].get(key), again: i + 1 });
         } else {
@@ -128,6 +161,7 @@ function readAddTranslations(path) {
         const declaration = KEY_LINE.exec(lines[i]);
         if (declaration && depth === 1) {
             const key = parseKey(declaration[1], `${label}:${i + 1}`);
+            noteIdentity(label, locale, lines[i], i + 1, `${label}:${i + 1}`);
             if (seen[locale].has(key)) {
                 duplicates.push({ file: label, locale, key, first: seen[locale].get(key), again: i + 1 });
             } else {
@@ -146,7 +180,7 @@ if (!shared.seen.en.size || !shared.seen.fr.size) {
     process.exit(1);
 }
 
-const blocks = walk(JS_ROOT, [])
+const blocks = walk(JS_ROOT)
     .filter((p) => p !== SHARED)
     .filter((p) => /addTranslations\s*\(/.test(readFileSync(p, 'utf8')))
     .map(readAddTranslations)
@@ -154,11 +188,11 @@ const blocks = walk(JS_ROOT, [])
 
 const duplicates = [...shared.duplicates, ...blocks.flatMap((b) => b.duplicates)];
 if (duplicates.length) {
-    console.error(`\n✗ i18n guard: ${duplicates.length} duplicate runtime key(s)\n`);
-    for (const d of duplicates) {
-        console.error(`  ${d.file} ${d.locale}.${JSON.stringify(d.key)}: lines ${d.first} and ${d.again}`);
-    }
-    console.error('\nDelete one declaration; JavaScript otherwise keeps the later value silently.\n');
+    printFailure(
+        `i18n guard: ${duplicates.length} duplicate runtime key(s)`,
+        duplicates.map((d) => `${d.file} ${d.locale}.${JSON.stringify(d.key)}: lines ${d.first} and ${d.again}`),
+        '\nDelete one declaration; JavaScript otherwise keeps the later value silently.\n'
+    );
     process.exit(1);
 }
 
@@ -233,13 +267,11 @@ for (const block of blocks) {
  * local `TYPE_I18N[…]` map, a label off the data — and no static pass can
  * follow those; a key already reachable is not made unreachable by this rule.
  */
-const bundles = JSON.parse(readFileSync(join(JS_ROOT, 'bundles.json'), 'utf8'));
+const bundles = loadManifest(join(JS_ROOT, 'bundles.json'));
 
+/** A bundle entry's sources: its own files, then its panel sets'. */
 function filesOf(spec) {
-    if (Array.isArray(spec)) return spec.slice();
-    const out = (spec.files || []).slice();
-    for (const use of spec.uses || []) out.push(...(bundles.panels[use] || []));
-    return out;
+    return bundleSources(bundles, spec);
 }
 
 /** shared + every dictionary the given files declare. */
@@ -300,6 +332,111 @@ if (unreachable.length) {
     process.exit(1);
 }
 
+/* ---------------------------------------------------------------------- */
+/*  Rule: no pre-formatted count                                          */
+/* ---------------------------------------------------------------------- */
+
+const PREFORMATTED_COUNT = /\bcount\s*:\s*(?:P\.|ns\.)?(?:formatNumber|fmt)\s*\(/;
+for (const path of walk(JS_ROOT)) {
+    const label = posixRelative(ROOT, path);
+    readFileSync(path, 'utf8').split(/\r?\n/).forEach((line, i) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('//') || trimmed.startsWith('*')) return;
+        const m = PREFORMATTED_COUNT.exec(line);
+        if (!m) return;
+        problems.push({
+            kind: 'counts formatted before t() sees them',
+            label, line: i + 1, key: trimmed,
+            why: 'a formatted string disables plural selection ("1 articles"); pass the '
+                + 'number as `count` — t() formats it.',
+        });
+    });
+}
+
+/* ---------------------------------------------------------------------- */
+/*  Rule: no identity en entry                                            */
+/* ---------------------------------------------------------------------- */
+
+for (const { file, key, line } of identities) {
+    problems.push({
+        kind: 'en entries identical to their key',
+        label: file, key, line,
+        why: 'the key IS the English text, so t() already falls back to it — delete the en entry.',
+    });
+}
+
+/* ---------------------------------------------------------------------- */
+/*  Rule: a shared key one block uses belongs in that block                */
+/* ---------------------------------------------------------------------- */
+
+/** The decoded value of a JS string literal body (no vm: thousands of them). */
+function unescapeLiteral(body) {
+    return body.replace(/\\(u\{[0-9a-fA-F]+\}|u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)/g, (m, esc) => {
+        if (esc[0] === 'u' && esc[1] === '{') return String.fromCodePoint(parseInt(esc.slice(2, -1), 16));
+        if (esc[0] === 'u' && esc.length === 5) return String.fromCharCode(parseInt(esc.slice(1), 16));
+        if (esc[0] === 'x' && esc.length === 3) return String.fromCharCode(parseInt(esc.slice(1), 16));
+        return { n: '\n', t: '\t', r: '\r', b: '\b', f: '\f', v: '\v', 0: '\0' }[esc] ?? esc;
+    });
+}
+
+const STRING_LITERAL = /'((?:\\.|[^'\\\n])*)'|"((?:\\.|[^"\\\n])*)"/g;
+const literalCache = new Map();
+/** Every string literal value in one file, as a Set. */
+function literalsOf(absPath) {
+    if (!literalCache.has(absPath)) {
+        const found = new Set();
+        let source = '';
+        try { source = readFileSync(absPath, 'utf8'); } catch (e) { /* missing: no uses */ }
+        for (const m of source.matchAll(STRING_LITERAL)) {
+            found.add(unescapeLiteral(m[1] !== undefined ? m[1] : m[2]));
+        }
+        literalCache.set(absPath, found);
+    }
+    return literalCache.get(absPath);
+}
+
+const sharedKeys = new Set([...shared.seen.en.keys(), ...shared.seen.fr.keys()]);
+const usedByShared = new Set();
+const usedByBlock = new Map(); // key -> Set of block bundle names
+for (const [group, entries] of Object.entries(bundles)) {
+    if (group.startsWith('$') || group === 'panels') continue;
+    for (const [name, spec] of Object.entries(entries)) {
+        for (const rel of filesOf(spec)) {
+            const abs = join(JS_ROOT, rel);
+            if (abs === SHARED) continue; // the dictionary declares, it does not use
+            for (const value of literalsOf(abs)) {
+                if (!sharedKeys.has(value)) continue;
+                if (group === 'shared') usedByShared.add(value);
+                else {
+                    if (!usedByBlock.has(value)) usedByBlock.set(value, new Set());
+                    usedByBlock.get(value).add(name);
+                }
+            }
+        }
+    }
+}
+// Templates and PHP may hand a key to the client (a data attribute, an inline
+// script): a literal there keeps the key shared.
+const usedByPhp = new Set();
+for (const dir of [join(ROOT, 'view'), join(ROOT, 'src')]) {
+    for (const path of walkFiles(dir, { tolerant: true, include: (p) => /\.(php|phtml)$/.test(p) })) {
+        for (const value of literalsOf(path)) if (sharedKeys.has(value)) usedByPhp.add(value);
+    }
+}
+for (const key of sharedKeys) {
+    const users = usedByBlock.get(key);
+    if (!users || users.size !== 1 || usedByShared.has(key) || usedByPhp.has(key)) continue;
+    const block = [...users][0];
+    problems.push({
+        kind: 'shared keys only one block uses',
+        label: 'asset/js/iwac-i18n.js',
+        key,
+        line: shared.seen.en.get(key) || shared.seen.fr.get(key),
+        why: `only blocks.${block} reads it — move it into that block's dictionary `
+            + '(the shared file ships on every page).',
+    });
+}
+
 if (problems.length) {
     console.error('\n✗ i18n guard: the dictionaries have drifted apart\n');
     const kinds = [...new Set(problems.map((p) => p.kind))];
@@ -319,5 +456,6 @@ if (problems.length) {
 console.log(
     `✓ i18n guard: ${merged.en.size} English + ${merged.fr.size} French keys across `
     + `${blocks.length + 1} dictionaries, no duplicates, no unreachable fallbacks, `
-    + 'no shadowing'
+    + 'no shadowing, no identity en entries, no pre-formatted counts, '
+    + 'no single-block keys in the shared file'
 );

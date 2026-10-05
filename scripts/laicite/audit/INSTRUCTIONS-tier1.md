@@ -10,9 +10,12 @@ about near the laïcité vocabulary.
 
 Each row in the batch has: `subset`, `id`, `title`, `year`, `outlet`, `frame`,
 `form` (the matched surface string), `field` (title or OCR), `near_core_hit`
-(within 80 tokens of a core laïcité hit — only these count in the arenas view),
-and `window` (about 500 characters each side; the match is wrapped in «»).
-Text is OCR: expect noise, broken accents, hyphenation.
+(the match starts within 80 words of the start of a core laïcité hit in the
+same field — only such occurrences feed the arenas view), `fp` and `run`
+(identifiers you copy back, see below), and `window` (about 500 characters
+each side; the match is wrapped in «», and the source text may contain
+guillemets of its own). Text is OCR: expect noise, broken accents,
+hyphenation.
 
 The frames and their intended sense:
 
@@ -49,12 +52,16 @@ Write a verdict file at the path given to you. It is a JSON array with one
 object per input row, **in the same order**, shaped exactly:
 
 ```json
-{"id": "6925", "form": "divorce", "field": "OCR", "window_index": 0,
+{"fp": "3f9c0a1b2d4e5f60", "run": "20261005T101500Z-a1b2c3", "id": "6925",
+ "form": "divorce", "field": "OCR",
  "sense_ok": true, "religion_state": true, "note": ""}
 ```
 
-`window_index` is the row's 0-based position in the batch file. Keep notes
-short and only where the verdict is not obvious (in English or French).
+Copy `fp` and `run` from the input row **exactly, character for character**:
+the verdict is matched to its row by `fp`, and a verdict whose `run` differs
+from the batch's is rejected. `sense_ok` and `religion_state` must be JSON
+booleans (`true` / `false`), never strings. Keep notes short and only where
+the verdict is not obvious (in English or French).
 Do not skip rows. Do not read anything outside the batch file. Do not modify
 the batch file. When finished, reply with one line: counts of rows,
 `sense_ok=false`, `religion_state=false`, and the two or three most striking

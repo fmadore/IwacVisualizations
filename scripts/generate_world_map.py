@@ -7,6 +7,11 @@ Generate ``asset/data/collection-map.json`` — unified sidecar with place
 markers (lat/lng from index subset where Type == 'Lieux') plus per-country
 totals faceted by item type.
 
+A marker's ``country`` is the IWAC country the place lies in, resolved by
+walking the index's ``Partie de`` chain (``iwac_utils.place_country_resolver``),
+or null for a place outside the six — never ``index.countries[0]``, which
+lists the countries whose press MENTIONS the place.
+
 Usage
 -----
     python3 scripts/generate_world_map.py
@@ -23,10 +28,12 @@ from iwac_utils import (
     canonical_country,
     add_standard_args,
     generate_timestamp,
+    is_unknown,
     load_dataset_safe,
     parse_coordinates,
     parse_pipe_separated,
     parse_standard_args,
+    place_country_resolver,
     save_json,
 )
 
@@ -38,6 +45,7 @@ def build_map(repo_id: str) -> Dict[str, Any]:
     index_df = load_dataset_safe("index", repo_id=repo_id)
     locations: List[Dict[str, Any]] = []
     if index_df is not None and not index_df.empty and "Type" in index_df.columns:
+        country_of = place_country_resolver(index_df)
         lieux = index_df[index_df["Type"] == "Lieux"]
         for idx in range(len(lieux)):
             title = str(lieux["Titre"].iat[idx] or "").strip() if "Titre" in lieux.columns else ""
@@ -58,13 +66,12 @@ def build_map(repo_id: str) -> Dict[str, Any]:
                 count = 0
             if count <= 0:
                 continue
-            countries_list = parse_pipe_separated(
-                lieux["countries"].iat[idx] if "countries" in lieux.columns else ""
-            )
-            country = countries_list[0] if countries_list else None
             locations.append({
                 "name": title,
-                "country": country,
+                # Where the place IS (the Partie de walk), or None outside the
+                # six countries. Not countries[0]: that column lists the
+                # countries whose press mentions the place.
+                "country": country_of(title),
                 "lat": coords[0],
                 "lng": coords[1],
                 "count": count,
@@ -89,7 +96,7 @@ def build_map(repo_id: str) -> Dict[str, Any]:
                 # Canonicalise: the raw cell carries "Benin", "Bénin" and
                 # "benin", which counted as three countries here (P16).
                 country = canonical_country(country.strip())
-                if country and country.lower() != "unknown":
+                if not is_unknown(country):
                     country_totals[country][type_key] += 1
                     country_totals[country]["total"] += 1
 

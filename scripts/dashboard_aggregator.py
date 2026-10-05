@@ -74,9 +74,10 @@ from iwac_utils import (
     extract_month_num,
     extract_year,
     find_column,
+    first_country,
     iter_records,
+    lda_topic_id,
     load_dataset_safe,
-    normalize_country,
     normalize_location_name,
     parse_pipe_separated,
     present_sentiment_models,
@@ -117,9 +118,11 @@ SPATIAL_FIELDS = {
     "references":   "spatial",
 }
 
-# Sentiment + LDA columns only exist on the articles subset. Items
-# from publications/references contribute to mention counts but are
-# silently skipped by the sentiment / topics / heatmap aggregators.
+# Sentiment columns only exist on the articles subset, and the Topics panel
+# reads the articles' LDA model only (publications and references carry
+# lda_* columns from unrelated models). Items from publications/references
+# contribute to mention counts but are skipped by the sentiment / topics /
+# heatmap aggregators.
 #
 # SENTIMENT_MODELS holds the canonical model ids the emitted JSON keys on,
 # which are also the HF column prefixes; resolve_sentiment_columns checks
@@ -423,10 +426,19 @@ class DashboardAggregator:
             else:
                 newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
 
-            # Sentiment + LDA columns only exist on the articles subset.
-            # On other subsets these resolve to None and the
-            # corresponding aggregators silently skip the item.
-            lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
+            # Sentiment + the Topics panel read the articles subset ONLY.
+            # publications and references carry lda_topic_label too, but
+            # from three other models (k=20 chunked; FR k=16 + EN k=8), so
+            # resolving the label on every subset ranked four unrelated
+            # numbering schemes in one bar chart. On other subsets these
+            # resolve to None and the corresponding aggregators skip the
+            # item. The topic id gates the label: -1 is the articles
+            # outlier bucket, not a topic.
+            is_articles = subset == "articles"
+            lda_label_col = (
+                find_column(df, ["lda_topic_label", "lda_topic"]) if is_articles else None
+            )
+            lda_id_col = find_column(df, ["lda_topic_id"]) if is_articles else None
             sentiment_cols: Dict[str, Dict[str, Optional[str]]] = (
                 resolve_sentiment_columns(df) if subset == "articles" else
                 {model: {} for model in SENTIMENT_MODELS}
@@ -447,9 +459,16 @@ class DashboardAggregator:
                     "subset": subset,
                     "title": str(row.get(title_col) or "").strip() if title_col else "",
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
-                    "country": self._first_country(row.get(country_col)) if country_col else "",
+                    "country": first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
-                    "lda_label": clean_str(row.get(lda_label_col)) if lda_label_col else "",
+                    "lda_label": (
+                        clean_str(row.get(lda_label_col))
+                        if lda_label_col and (
+                            lda_id_col is None
+                            or lda_topic_id(row.get(lda_id_col)) is not None
+                        )
+                        else ""
+                    ),
                     "hijri": read_hijri_month(row, hijri_cols),
                 }
                 for model in SENTIMENT_MODELS:
@@ -488,22 +507,6 @@ class DashboardAggregator:
                 self._register_item(item_key, roles, spatial_pairs)
 
         self._log_resolve_summary()
-
-    @staticmethod
-    def _first_country(value: Any) -> str:
-        """The FIRST country of a cell, or '' when that first one is unknown.
-
-        Deliberately not "the first known country": an item whose first
-        segment is a placeholder has no country here, whereas
-        generate_keyness.py's ``_first_country`` skips to the first known
-        segment. The two answer different questions (where is the item
-        filed / which corpus does it join), so keep them apart.
-        """
-        countries = normalize_country(value, return_list=True)
-        if isinstance(countries, list) and countries:
-            first = countries[0].strip()
-            return first if first and first.lower() != "unknown" else ""
-        return ""
 
     # ------------------------------------------------------------------
     # TF-IDF document frequency — computed once across all targets
@@ -685,9 +688,12 @@ class DashboardAggregator:
     def compute_topics(self, target_id: int) -> Dict[str, Any]:
         """Top LDA topic labels for items mentioning this target.
 
-        Articles are the only subset with LDA fields; publications and
-        references contribute to the mention count but not the topic
-        bar. Each item counts once toward exactly one label.
+        Articles only, outliers excluded: ``resolve_items`` reads the label
+        on the articles subset alone and only when ``lda_topic_id`` is a
+        real topic. Publications and references have topic models of
+        their own, unrelated to the articles' k=30 numbering, so they
+        contribute to the mention count but not the topic bar. Each item
+        counts once toward exactly one label.
         """
         by_role: Dict[str, Any] = {}
         for role, item_keys in self._role_slices(target_id):

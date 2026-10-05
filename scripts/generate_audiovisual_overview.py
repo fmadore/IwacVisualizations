@@ -76,6 +76,7 @@ from iwac_utils import (
     canonical_country,
     clean_str,
     create_metadata_block,
+    dominant,
     extract_year,
     find_column,
     load_dataset_safe,
@@ -202,8 +203,8 @@ def compute_channels(
         sources = entry.pop("_sources")
         years = entry.pop("_years")
         entry["median_seconds"] = int(median(runtimes)) if runtimes else 0
-        entry["country"] = countries.most_common(1)[0][0] if countries else ""
-        entry["source_type"] = sources.most_common(1)[0][0] if sources else ""
+        entry["country"] = dominant(countries, "")
+        entry["source_type"] = dominant(sources, "")
         entry["year_min"] = min(years) if years else None
         entry["year_max"] = max(years) if years else None
         out.append(entry)

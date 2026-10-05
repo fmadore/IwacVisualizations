@@ -23,13 +23,13 @@ const { readFileSync } = require('fs');
 const { join } = require('path');
 
 const { catalogueFromPo, charsetOf, describeKey, parseMo, parsePo } = require('./gettext');
+const { fail } = require('./lib/report');
 
 const LANGUAGE = join(__dirname, '..', 'language');
 const problems = [];
 
 function die(message) {
-    console.error(`\n✗ mo guard: ${message}\n`);
-    process.exit(1);
+    fail(`mo guard: ${message}`);
 }
 
 let source;

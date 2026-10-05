@@ -14,7 +14,8 @@ compact, covering:
       (articles + publications + documents + audiovisual + photographs)
     * content counts per country
     * content counts per language
-    * top N entities per ``index`` type, sorted by ``frequency``
+    * top N entities per ``index`` type, ranked by the items whose subject
+      or place fields carry them (``iwac_utils.compute_top_entities``)
     * source-origin map data for collection source/provenance points
 
 Follows the patterns from ``iwac-dashboard/scripts/generate_overview_stats.py``
@@ -49,7 +50,9 @@ from iwac_utils import (
     canonicalize_country_field,
     clean_int,
     clean_str,
+    compute_top_entities as compute_tagged_top_entities,
     create_metadata_block,
+    dominant,
     extract_year,
     find_column,
     is_unknown,
@@ -70,15 +73,8 @@ from iwac_utils import (
 CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images"]
 
 
-# Entity types in the ``index`` subset — keyed by the French label used in
-# the dataset. Order controls the tab order in the block.
-INDEX_TYPES = [
-    "Personnes",
-    "Organisations",
-    "Lieux",
-    "Sujets",
-    "\u00c9v\u00e9nements",  # Événements
-]
+# The entity types of ``top_entities`` and their order are
+# ``iwac_utils.ENTITY_TYPE_ORDER`` - one order for both overview blocks.
 
 # Subsets with a `newspaper` field (dcterms:publisher) — used for the
 # "newspaper coverage" panel.
@@ -544,8 +540,7 @@ def _scan_newspapers(
                 continue
             # `newspaper` is usually single-valued but allow pipe-separated
             for name in parse_pipe_separated(raw_name):
-                name = name.strip()
-                if not name or name.lower() == "unknown":
+                if is_unknown(name):
                     continue
                 entry = agg.setdefault((name, subset), {
                     "total": 0,
@@ -560,11 +555,9 @@ def _scan_newspapers(
                         entry["years"].add(year)
 
                 if countries is not None:
-                    raw_country = countries[idx]
-                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
-                        country_str = str(raw_country).strip()
-                        if country_str and country_str.lower() != "unknown":
-                            entry["countries"][country_str] += 1
+                    country_str = clean_str(countries[idx])
+                    if not is_unknown(country_str):
+                        entry["countries"][country_str] += 1
 
     return agg
 
@@ -599,10 +592,9 @@ def compute_newspaper_coverage(
         years = entry["years"]
         if not years:
             continue
-        most_common_country = entry["countries"].most_common(1)
         coverage.append({
             "name": name,
-            "country": most_common_country[0][0] if most_common_country else None,
+            "country": dominant(entry["countries"]),
             "type": type_key,
             "year_min": min(years),
             "year_max": max(years),
@@ -746,7 +738,6 @@ def compute_newspapers(
     top_entries: List[Dict[str, Any]] = []
     for name, entry in sorted_names[:top_n]:
         years = entry["years"]
-        most_common_country = entry["countries"].most_common(1)
         top_entries.append({
             "name": name,
             "total": int(entry["total"]),
@@ -754,7 +745,7 @@ def compute_newspapers(
             "publications": int(entry.get("publications", 0)),
             "year_min": min(years) if years else None,
             "year_max": max(years) if years else None,
-            "country": most_common_country[0][0] if most_common_country else None,
+            "country": dominant(entry["countries"]),
         })
 
     return {
@@ -1013,48 +1004,25 @@ def compute_treemap(
 
 
 def compute_top_entities(
-    index_df: Optional[pd.DataFrame],
+    dataframes: Dict[str, pd.DataFrame],
     top_n: int,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """
-    For each entity type in ``INDEX_TYPES``, return the top N entities by
-    ``frequency``. Each entry carries ``o_id``, ``title``, ``frequency``,
-    and ``countries`` so the block can link back to the authority page.
-    """
-    result: Dict[str, List[Dict[str, Any]]] = {t: [] for t in INDEX_TYPES}
-    if index_df is None or index_df.empty:
-        return result
-    if "Type" not in index_df.columns or "frequency" not in index_df.columns:
-        return result
+    Top N entities per index type, ranked by tagged items.
 
-    for entity_type in INDEX_TYPES:
-        subset = index_df[index_df["Type"] == entity_type].copy()
-        if subset.empty:
-            continue
-        subset["_freq"] = pd.to_numeric(subset["frequency"], errors="coerce").fillna(0)
-        subset = subset[subset["_freq"] > 0]
-        subset = subset.sort_values("_freq", ascending=False).head(top_n)
-        entries: List[Dict[str, Any]] = []
-        for _, row in subset.iterrows():
-            entry = {
-                "o_id": clean_int(row.get("o:id")),
-                "title": str(row.get("Titre") or "").strip(),
-                "frequency": int(row.get("_freq") or 0),
-            }
-            countries = parse_pipe_separated(row.get("countries"))
-            if countries:
-                entry["countries"] = countries
-            # Light provenance for the tooltip: first/last occurrence if present
-            first = row.get("first_occurrence")
-            last = row.get("last_occurrence")
-            if isinstance(first, str) and first.strip():
-                entry["first_occurrence"] = first.strip()
-            if isinstance(last, str) and last.strip():
-                entry["last_occurrence"] = last.strip()
-            if entry["title"]:
-                entries.append(entry)
-        result[entity_type] = entries
-    return result
+    The shared ``iwac_utils.compute_top_entities`` over every content
+    subset — the index overview's panel reads the same numbers. It used to
+    rank on ``index.frequency``, which counts every role an entity plays,
+    so a journalist ranked on their bylines. Each entry carries ``o_id``,
+    ``title``, ``frequency`` (items tagged), and the tagged items'
+    ``countries`` / first and last dates so the block can link back to the
+    authority page.
+    """
+    content = {
+        name: df for name, df in dataframes.items()
+        if name in CONTENT_SUBSETS or name == "references"
+    }
+    return compute_tagged_top_entities(dataframes.get("index"), content, top_n)
 
 
 def compute_summary(
@@ -1245,7 +1213,7 @@ def build_overview(
     newspapers_legacy = compute_newspapers(dataframes, top_n=15, year_min=year_min, year_max=year_max)
     sources_map = compute_sources_map(dataframes, dataframes.get("index"))
     # 50 entities per type (was 10) — enables client-side pagination
-    top_entities = compute_top_entities(dataframes.get("index"), top_n=50)
+    top_entities = compute_top_entities(dataframes, top_n=50)
     treemap = compute_treemap(dataframes)
     summary = compute_summary(
         subset_summaries, dataframes, timeline,

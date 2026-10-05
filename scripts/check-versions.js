@@ -14,6 +14,7 @@
 
 const { readFileSync } = require('fs');
 const { join } = require('path');
+const { fail } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
@@ -41,12 +42,11 @@ const missing = Object.entries(versions).filter(([, value]) => !value);
 const unique = new Set(Object.values(versions).filter(Boolean));
 
 if (missing.length || unique.size !== 1) {
-    console.error('\n✗ version guard: release versions disagree\n');
-    for (const [file, version] of Object.entries(versions)) {
-        console.error(`  ${file}: ${version || '(missing)'}`);
-    }
-    console.error('\nBump all six declarations together.\n');
-    process.exit(1);
+    fail(
+        'version guard: release versions disagree',
+        Object.entries(versions).map(([file, version]) => `${file}: ${version || '(missing)'}`),
+        '\nBump all six declarations together.\n'
+    );
 }
 
 console.log(`✓ version guard: ${pkg.version} in package, lock file, module.ini, CITATION.cff and the README citation`);

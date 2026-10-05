@@ -8,6 +8,7 @@ its frames. ``ScanMixin.scan_all`` fills the list once per run — every
 from __future__ import annotations
 
 import re
+from bisect import bisect_left
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -19,8 +20,11 @@ from iwac_utils import (
     SENTIMENT_MODELS,
     STOPWORDS,
     clean_float,
+    clean_int,
+    clean_str,
     extract_month_num,
     extract_year,
+    is_public_flag,
     iter_records,
     load_dataset_safe,
     normalize_country,
@@ -86,9 +90,29 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
     "audiovisual": [
         "o:id", "title", "country", "pub_date", "subject", "spatial",
         "language", "OCR", "OCR_is_public", "nb_mots", "iwac_url",
-        "source_type", "hijri_month", "URL",
+        "source_type", "hijri_month",
     ],
 }
+
+# The instrument version every bundle that reports one cites — the coverage
+# cells and the metadata KPIs describe the same scan, so they share it.
+# v4 (October 2026): one parse of each row's metadata (no "Unknown" country
+# cells, country-less articles never matched), the rights flag read fail-
+# closed, per-language collocates, every-frame-first per-item sampling.
+METHOD_VERSION = "source-text-v4"
+
+# Smallest eligible population a published rate may rest on. The coverage
+# cells, the arenas shares and the seasonality profile all ship it, and the
+# client omits any rate below it rather than drawing a percentage of three.
+MINIMUM_CELL = 5
+
+# "Near a core hit": an annotation-frame occurrence counts as context for
+# laïcité when its first token sits within this many alphabetic tokens of
+# the first token of a retained core hit in the SAME field. Defined once,
+# here, and carried on each Occurrence as `near_core`: the arenas view, the
+# scan's `nearby_frame_counts` and the audit's tier-1 extract all read that
+# flag, so the three can no longer disagree at the boundary.
+NEARBY_TOKENS = 80
 
 # Evidentiary status, not genre. Press articles, Islamic periodicals and
 # archival documents are all PRIMARY SOURCES — they differ in genre, not in
@@ -212,6 +236,50 @@ class Occurrence:
     start: int
     end: int
     quotable: bool          # False when the field is OCR and rights say no
+    #: Within ``NEARBY_TOKENS`` of a retained core hit in the same field. A
+    #: core hit is trivially near itself.
+    near_core: bool = False
+
+
+@dataclass
+class RowMeta:
+    """The metadata of one source row, parsed once.
+
+    Shared by the dossier scan (``ItemScan``) and the whole-population
+    coverage record (``ResearchMixin._observe_source``). They used to parse
+    the same row twice under different rules — one kept the ``"Unknown"``
+    country placeholder, the other dropped it; one de-duplicated bylines, the
+    other did not — and every disagreement surfaced as a figure that did not
+    reconcile with its neighbour.
+    """
+    o_id: str
+    title: str
+    iwac_url: str
+    newspaper: str
+    year: Optional[int]
+    month: Optional[int]
+    #: Stored Umm al-Qura month, 1–12, or None — never re-derived.
+    hijri_month: Optional[int]
+    #: Canonical country names; the ``"Unknown"`` placeholder is dropped,
+    #: so an empty list means the row names no country.
+    countries: List[str]
+    #: Byline names, pipe-split and de-duplicated in order.
+    authors: List[str]
+    #: Language labels, pipe-split.
+    languages: List[str]
+    #: ``OCR_is_public`` read through ``is_public_flag`` — fails closed.
+    ocr_public: bool
+
+
+@dataclass
+class RowScan:
+    """What one pass over one source row yields, member or not."""
+    #: The dossier record, or None when the row is not a member.
+    rec: Optional["ItemScan"]
+    meta: RowMeta
+    #: Every core-pattern candidate per field, BEFORE the laity/state
+    #: disambiguation — the coverage diagnostic's unvalidated "broad" count.
+    broad_hits: Counter = field(default_factory=Counter)
 
 
 @dataclass
@@ -261,6 +329,8 @@ class ItemScan:
     authors: List[str] = field(default_factory=list)
     #: Unfiltered word tokens in exactly the fields searched, for density.
     analyzed_words: int = 0
+    #: Annotation-frame occurrences flagged ``near_core``, per frame — what
+    #: the arenas view counts.
     nearby_frame_counts: Dict[str, int] = field(default_factory=dict)
     unresolved_hits: int = 0
     #: Which of ``MEMBERSHIP_ROUTES`` carried this item into the dossier —
@@ -285,7 +355,9 @@ class ScanMixin:
 
 
     def scan_all(self) -> List[ItemScan]:
-        if self.scans:
+        # A flag, not "is self.scans empty": an empty dossier is a finished
+        # scan too, and re-entering would re-append every coverage record.
+        if self._scanned:
             return self.scans
 
         tag_folded = fold_plain(self.lex.authority.get("subject_label", "Laïcité"))
@@ -303,10 +375,11 @@ class ScanMixin:
             self.subset_fulltext[subset] = int(
                 df["OCR"].fillna("").str.strip().ne("").sum()
             ) if "OCR" in df.columns else 0
-            if "OCR_is_public" in df.columns:
-                self.subset_public[subset] = int(df["OCR_is_public"].fillna(False).sum())
-            else:
-                self.subset_public[subset] = 0
+            # The same fail-closed reading the per-row gate uses: a missing
+            # flag is not a published one.
+            self.subset_public[subset] = int(
+                df["OCR_is_public"].map(is_public_flag).sum()
+            ) if "OCR_is_public" in df.columns else 0
             if subset == "articles":
                 self._sentiment_cols = resolve_sentiment_columns(df)
 
@@ -315,10 +388,10 @@ class ScanMixin:
             for row in iter_records(df):
                 if subset == "articles":
                     self._tally_baseline_sentiment(row)
-                rec = self._scan_row(row, subset, fields, tag_folded)
-                self._observe_source(row, subset, rec)
-                if rec is not None:
-                    self.scans.append(rec)
+                scanned = self._scan_row(row, subset, fields, tag_folded)
+                self._observe_source(row, subset, scanned)
+                if scanned.rec is not None:
+                    self.scans.append(scanned.rec)
                     members += 1
             self.logger.info(
                 f"  '{subset}': {members} dossier members "
@@ -326,26 +399,48 @@ class ScanMixin:
                 f"state-kept ambiguous: {self.state_by_subset[subset]})"
             )
 
+        self._scanned = True
         self.logger.info(f"Scan complete: {len(self.scans)} dossier members total")
         return self.scans
 
+    @staticmethod
+    def _row_meta(row: Any) -> RowMeta:
+        """Parse one row's metadata — the only place it is parsed."""
+        year = extract_year(row.get("pub_date"))
+        hijri = clean_int(row.get("hijri_month"))
+        countries = normalize_country(row.get("country"), return_list=True)
+        return RowMeta(
+            o_id=clean_str(row.get("o:id")),
+            title=clean_str(row.get("title")),
+            iwac_url=clean_str(row.get("iwac_url")),
+            newspaper=clean_str(row.get("newspaper")),
+            year=int(year) if year else None,
+            month=extract_month_num(row.get("pub_date")),
+            hijri_month=hijri if hijri is not None and 1 <= hijri <= 12 else None,
+            countries=[c for c in countries if c and c != "Unknown"],
+            authors=list(dict.fromkeys(parse_pipe_separated(row.get("author")))),
+            languages=parse_pipe_separated(row.get("language")),
+            ocr_public=is_public_flag(row.get("OCR_is_public")),
+        )
+
     def _scan_row(
         self,
-        row: pd.Series,
+        row: Any,
         subset: str,
         fields: List[Tuple[str, bool]],
         tag_folded: str,
-    ) -> Optional[ItemScan]:
+    ) -> RowScan:
+        meta = self._row_meta(row)
         subjects = parse_pipe_separated(row.get("subject"))
         is_tagged = any(fold_plain(s) == tag_folded for s in subjects)
-
-        ocr_public = bool(row.get("OCR_is_public")) if "OCR_is_public" in row else False
+        core_frames = set(self.lex.membership_frames)
 
         frame_counts: Dict[str, int] = defaultdict(int)
         occurrences: List[Occurrence] = []
         membership_hits = 0
         laity_demoted = 0
         unresolved_hits = 0
+        broad_hits: Counter = Counter()
         texts: Dict[str, str] = {}
         folded_texts: Dict[str, str] = {}
         # Token index of every membership-frame hit, per field, so the
@@ -369,11 +464,16 @@ class ScanMixin:
             tokens, token_at = self._tokenize_with_offsets(folded)
             field_tokens[column] = tokens
             positions[column] = token_at
-            quotable = is_public_column or ocr_public
+            quotable = is_public_column or meta.ocr_public
 
             for frame, pattern in self.lex.patterns.items():
+                is_core = frame in core_frames
                 ambiguous_forms = self.lex.ambiguous.get(frame, set())
                 for m in pattern.finditer(folded):
+                    if is_core:
+                        # Counted before disambiguation: the coverage
+                        # diagnostic's unvalidated candidate count.
+                        broad_hits[column] += 1
                     span = (m.start(), m.end())
                     # Categories are independent: "école laïque" supplies
                     # both membership and schooling evidence. Suppressing
@@ -397,16 +497,27 @@ class ScanMixin:
                         frame=frame, field=column,
                         start=span[0], end=span[1], quotable=quotable,
                     ))
-                    if frame in self.lex.membership_frames:
+                    if is_core:
                         membership_hits += 1
                         idx = token_at.get(m.start())
                         if idx is not None:
                             hit_token_idx[column].append(idx)
 
         if not is_tagged and membership_hits == 0:
-            return None
+            return RowScan(rec=None, meta=meta, broad_hits=broad_hits)
 
-        core = [o for o in occurrences if o.frame in self.lex.membership_frames]
+        # Proximity to a core hit, measured once and carried on the
+        # occurrence. Anchors are sorted per field so each test is a bisect
+        # rather than a pass over every core hit in a whole magazine.
+        anchors = {col: sorted(idx) for col, idx in hit_token_idx.items()}
+        for o in occurrences:
+            at = positions[o.field].get(o.start)
+            near = anchors.get(o.field) or []
+            if at is not None and near:
+                i = bisect_left(near, at - NEARBY_TOKENS)
+                o.near_core = i < len(near) and near[i] <= at + NEARBY_TOKENS
+
+        core = [o for o in occurrences if o.frame in core_frames]
         title_hit = any(o.field == "title" for o in core)
         route = membership_route(is_tagged, membership_hits)
 
@@ -427,69 +538,57 @@ class ScanMixin:
         window_tokens, rest_tokens = self._split_window_vocabulary(
             field_tokens, hit_token_idx)
 
-        countries = normalize_country(row.get("country"), return_list=True)
-        countries = [c for c in countries if c and c != "Unknown"]
-        year = extract_year(row.get("pub_date"))
-
         rec = ItemScan(
-            o_id=str(row.get("o:id") or ""),
+            o_id=meta.o_id,
             subset=subset,
-            title=str(row.get("title") or "").strip(),
-            iwac_url=str(row.get("iwac_url") or "").strip(),
-            year=int(year) if year else None,
-            countries=countries,
-            newspaper=str(row.get("newspaper") or "").strip(),
+            title=meta.title,
+            iwac_url=meta.iwac_url,
+            year=meta.year,
+            countries=meta.countries,
+            newspaper=meta.newspaper,
             subjects=subjects,
             spatial=parse_pipe_separated(row.get("spatial")),
             is_tagged=is_tagged,
-            ocr_public=ocr_public,
-            nb_mots=int(row.get("nb_mots") or 0),
+            ocr_public=meta.ocr_public,
+            nb_mots=clean_int(row.get("nb_mots")) or 0,
             membership_hits=membership_hits,
             frame_counts=dict(frame_counts),
             occurrences=occurrences,
             laity_demoted=laity_demoted,
             window_tokens=window_tokens,
             rest_tokens=rest_tokens,
-            month=extract_month_num(row.get("pub_date")),
-            hijri_month=(int(row["hijri_month"])
-                         if "hijri_month" in row and pd.notna(row.get("hijri_month"))
-                         else None),
+            month=meta.month,
+            hijri_month=meta.hijri_month,
             readability=clean_float(row.get("Lisibilite_OCR")),
             richness=clean_float(row.get("Richesse_Lexicale_OCR")),
-            authors=(parse_pipe_separated(row.get("author"))
-                     if subset == "articles" else []),
+            authors=meta.authors if subset == "articles" else [],
             analyzed_words=sum(len(tokens) for tokens in field_tokens.values()),
             unresolved_hits=unresolved_hits,
             membership_route=route,
             title_hit=title_hit,
             bib_only=bib_only,
-            nearby_frame_counts=dict(Counter(o.frame for o in occurrences
-                if o.frame not in self.lex.membership_frames and any(
-                    abs(positions[o.field].get(o.start, -10000) - anchor) <= 80
-                    for anchor in hit_token_idx.get(o.field, [])))),
+            nearby_frame_counts=dict(Counter(
+                o.frame for o in occurrences
+                if o.near_core and o.frame not in core_frames)),
         )
         if subset == "documents":
             rec.extra = {
-                "author": str(row.get("author") or "").strip(),
-                "type": str(row.get("type") or "").strip(),
-                "nb_pages": int(row.get("nb_pages") or 0),
-                "description": str(row.get("descriptionAI") or "").strip(),
-                "pub_date": str(row.get("pub_date") or "").strip(),
+                "author": clean_str(row.get("author")),
+                "type": clean_str(row.get("type")),
+                "nb_pages": clean_int(row.get("nb_pages")) or 0,
+                "description": clean_str(row.get("descriptionAI")),
+                "pub_date": clean_str(row.get("pub_date")),
             }
         elif subset == "references":
             rec.extra = {
-                "author": str(row.get("author") or "").strip(),
-                "resource_class": str(row.get("o:resource_class") or "").strip(),
-                "languages": parse_pipe_separated(row.get("language")),
-                "abstract": str(row.get("abstract") or "").strip(),
+                "author": clean_str(row.get("author")),
+                "resource_class": clean_str(row.get("o:resource_class")),
             }
         elif subset == "articles":
             rec.extra = {"sentiment": self._row_sentiment(row)}
-        elif subset == "audiovisual":
-            rec.extra = {"url": str(row.get("URL") or "").strip()}
-        rec.extra["languages"] = parse_pipe_separated(row.get("language"))
+        rec.extra["languages"] = meta.languages
         self.texts[(subset, rec.o_id)] = texts
-        return rec
+        return RowScan(rec=rec, meta=meta, broad_hits=broad_hits)
 
     def _row_sentiment(self, row: pd.Series) -> Dict[str, Any]:
         """Pull the per-model AI sentiment off one `articles` row.

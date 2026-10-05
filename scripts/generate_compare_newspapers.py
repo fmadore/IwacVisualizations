@@ -60,16 +60,21 @@ from iwac_utils import (
     add_standard_args,
     parse_standard_args,
     CENTRALITE_ORDER,
+    ENTITY_TYPE_ORDER,
     POLARITE_ORDER,
-    SENTIMENT_MODELS,
     STOPWORDS,
-    canonical_country,
+    build_entity_index,
     canonicalize_country_field,
     create_metadata_block,
+    dominant,
     extract_year,
+    find_column,
+    is_unknown,
     load_dataset_safe,
-    parse_coordinates,
+    normalize_location_name,
     parse_pipe_separated,
+    place_country_resolver,
+    present_sentiment_models,
     resolve_sentiment_columns,
     save_json,
     subjectivite_ordinal,
@@ -122,16 +127,15 @@ def discover_corpora(
         country_list: List[str] = []
         if has_country:
             country_list = [
-                c.strip() for c in parse_pipe_separated(df["country"].iat[idx])
-                if c and c.strip() and c.strip().lower() != "unknown"
+                c for c in parse_pipe_separated(df["country"].iat[idx])
+                if not is_unknown(c)
             ]
         for c in country_list:
             countries[c] += 1
 
         if has_paper:
             for name in parse_pipe_separated(df["newspaper"].iat[idx]):
-                name = name.strip()
-                if not name or name.lower() == "unknown":
+                if is_unknown(name):
                     continue
                 entry = newspapers.setdefault(name, {
                     "count": 0,
@@ -151,12 +155,11 @@ def discover_corpora(
     for name, entry in newspapers.items():
         if entry["count"] < min_count:
             continue
-        most_common = entry["countries"].most_common(1)
         newspaper_list.append({
             "name": name,
             "slug": slugify(name),
             "count": int(entry["count"]),
-            "country": most_common[0][0] if most_common else None,
+            "country": dominant(entry["countries"]),
         })
     newspaper_list.sort(key=lambda e: (-e["count"], e["name"]))
 
@@ -194,37 +197,14 @@ def _filter_corpus(
 
 
 def _count_pipe_field(series: pd.Series) -> Counter:
-    """Return a full Counter of every non-empty pipe-separated value."""
+    """Return a full Counter of every non-empty, known pipe-separated value."""
     counter: Counter = Counter()
     for value in series:
         for item in parse_pipe_separated(value):
-            item = item.strip()
-            if not item or item.lower() == "unknown":
+            if is_unknown(item):
                 continue
             counter[item] += 1
     return counter
-
-
-def _top_pipe_field(
-    series: pd.Series, top_n: int,
-    name_to_oid: Optional[Dict[str, int]] = None,
-) -> List[Dict[str, Any]]:
-    """Count pipe-separated values across a Series and return the top N.
-
-    When ``name_to_oid`` is supplied, enriches each entry with the
-    authority-record ``o_id`` so the client can link back to the
-    entity's page on the Omeka site.
-    """
-    counter = _count_pipe_field(series)
-    out: List[Dict[str, Any]] = []
-    for name, count in counter.most_common(top_n):
-        entry: Dict[str, Any] = {"name": name, "count": int(count)}
-        if name_to_oid is not None:
-            oid = name_to_oid.get(name)
-            if oid is not None:
-                entry["o_id"] = int(oid)
-        out.append(entry)
-    return out
 
 
 def build_index_lookups(
@@ -233,76 +213,45 @@ def build_index_lookups(
     """From the ``index`` authority subset, build lookups used by the
     compare-newspapers generator:
 
-      * ``subject_oid``  — subject/event/person/org name → o:id
-      * ``place_oid``    — place name → o:id
-      * ``place_coords`` — place name → (lat, lng) for places that carry
-        coordinates in the ``Coordonn\u00e9es`` column
+      * ``subject_oid``   — person / organisation / subject / event name → o:id
+      * ``place_oid``     — place name → o:id
+      * ``place_coords``  — place name → (lat, lng) for geocoded places
+      * ``place_country`` — place name → the IWAC country it lies in
 
-    Title and alternative titles are both indexed, so aliases like
-    "Cote d'Ivoire" still join to the canonical record.
+    Every key is ``normalize_location_name`` of a title or alias, through
+    ``iwac_utils.build_entity_index`` — the same join every other block
+    uses — so look a tag up with ``normalize_location_name(tag)``. (This
+    used to be a raw, case-sensitive map that also admitted authority
+    placeholders, so a tag could link here and not on the dashboards.)
+
+    ``place_country`` is the ``Partie de`` walk
+    (``iwac_utils.place_country_resolver``): places outside the six
+    countries have no entry. It used to be ``index.countries[0]`` — the
+    first country whose press MENTIONS the place — which put most of the
+    map's choropleth weight on Bénin whatever the place was.
     """
-    out = {"subject_oid": {}, "place_oid": {}, "place_coords": {}, "place_country": {}}
+    out: Dict[str, Dict[str, Any]] = {
+        "subject_oid": {}, "place_oid": {}, "place_coords": {}, "place_country": {},
+    }
     if index_df is None or index_df.empty:
         return out
-    if "Titre" not in index_df.columns or "Type" not in index_df.columns:
+    try:
+        subjects, _, _ = build_entity_index(
+            index_df, types=[t for t in ENTITY_TYPE_ORDER if t != "Lieux"],
+        )
+        places, _, coords = build_entity_index(index_df, types=["Lieux"])
+    except RuntimeError:
         return out
+    country_of = place_country_resolver(index_df)
 
-    oid_col = "o:id" if "o:id" in index_df.columns else None
-    alt_col = "Titre alternatif" if "Titre alternatif" in index_df.columns else None
-    coord_col = "Coordonn\u00e9es" if "Coordonn\u00e9es" in index_df.columns else None
-    country_col = "countries" if "countries" in index_df.columns else None
-
-    PLACE_TYPES = {"Lieux"}
-
-    for idx in range(len(index_df)):
-        title = str(index_df["Titre"].iat[idx] or "").strip()
-        if not title:
-            continue
-        entity_type = str(index_df["Type"].iat[idx] or "").strip()
-        oid: Optional[int] = None
-        if oid_col is not None:
-            raw_oid = index_df[oid_col].iat[idx]
-            if raw_oid is not None and not (isinstance(raw_oid, float) and pd.isna(raw_oid)):
-                try:
-                    oid = int(raw_oid)
-                except (TypeError, ValueError):
-                    oid = None
-
-        is_place = entity_type in PLACE_TYPES
-        aliases = [title]
-        if alt_col is not None:
-            alt_value = index_df[alt_col].iat[idx]
-            for alt in parse_pipe_separated(alt_value):
-                alt = alt.strip()
-                if alt:
-                    aliases.append(alt)
-
-        if is_place:
-            # Prefer the first occurrence for a given alias.
-            for alias in aliases:
-                out["place_oid"].setdefault(alias, oid)
-            if coord_col is not None:
-                coords = parse_coordinates(index_df[coord_col].iat[idx])
-                if coords is not None:
-                    for alias in aliases:
-                        out["place_coords"].setdefault(alias, coords)
-            if country_col is not None:
-                # The index's ``countries`` column is pipe-separated. For
-                # places it's typically a single canonical IWAC country
-                # (the geographic country of the place). When there are
-                # multiple, the first one is the primary association —
-                # matches what the existing generators rely on.
-                country_raw = index_df[country_col].iat[idx]
-                country_list = parse_pipe_separated(country_raw)
-                if country_list:
-                    canon = canonical_country(country_list[0])
-                    if canon:
-                        for alias in aliases:
-                            out["place_country"].setdefault(alias, canon)
-        else:
-            for alias in aliases:
-                out["subject_oid"].setdefault(alias, oid)
-
+    out["subject_oid"] = {key: info["o_id"] for key, info in subjects.items()}
+    for key, info in places.items():
+        out["place_oid"][key] = info["o_id"]
+        if info["o_id"] in coords:
+            out["place_coords"][key] = coords[info["o_id"]]
+        country = country_of(info["title"])
+        if country:
+            out["place_country"][key] = country
     return out
 
 
@@ -319,13 +268,10 @@ def _top_wordcloud(
     Returns a list of [word, count] pairs (ECharts wordcloud shape).
     """
     counter: Counter = Counter()
-    lemma_col = "lemma_nostop" if "lemma_nostop" in df.columns else None
+    lemma_col = find_column(df, ["lemma_nostop"])
     ocr_col = None
     if lemma_col is None:
-        for candidate in ("OCR", "ocr_text", "text", "content"):
-            if candidate in df.columns:
-                ocr_col = candidate
-                break
+        ocr_col = find_column(df, ["OCR", "ocr_text", "text", "content"])
     if lemma_col is None and ocr_col is None:
         return []
 
@@ -415,7 +361,7 @@ def compute_corpus(
         for n, c in counter.most_common(limit):
             entry: Dict[str, Any] = {"name": n, "count": int(c)}
             if name_to_oid is not None:
-                oid = name_to_oid.get(n)
+                oid = name_to_oid.get(normalize_location_name(n))
                 if oid is not None:
                     entry["o_id"] = int(oid)
             result.append(entry)
@@ -433,7 +379,8 @@ def compute_corpus(
     # but still appear as bubbles.
     geo_points: List[Dict[str, Any]] = []
     for place_name, count in spatial_counter.most_common():
-        coords = place_coords.get(place_name)
+        place_key = normalize_location_name(place_name)
+        coords = place_coords.get(place_key)
         if coords is None:
             continue
         lat, lng = coords
@@ -443,10 +390,11 @@ def compute_corpus(
             "lat": float(lat),
             "lng": float(lng),
         }
-        oid = place_oids.get(place_name)
+        oid = place_oids.get(place_key)
         if oid is not None:
             entry["o_id"] = int(oid)
-        country = place_country.get(place_name)
+        # The country the place lies in, or no key at all outside the six.
+        country = place_country.get(place_key)
         if country:
             entry["country"] = country
         geo_points.append(entry)
@@ -454,13 +402,7 @@ def compute_corpus(
     newspapers: List[Dict[str, Any]] = []
     if scope == "country" and "newspaper" in sub.columns:
         # Break down contents by newspaper for a country-scope corpus.
-        paper_counts: Counter = Counter()
-        for value in sub["newspaper"]:
-            for p in parse_pipe_separated(value):
-                p = p.strip()
-                if not p or p.lower() == "unknown":
-                    continue
-                paper_counts[p] += 1
+        paper_counts = _count_pipe_field(sub["newspaper"])
         newspapers = [
             {"name": nm, "count": int(count)}
             for nm, count in paper_counts.most_common(top_n)
@@ -469,15 +411,10 @@ def compute_corpus(
     top_country = None
     country_count = 0
     if scope == "newspaper" and "country" in sub.columns:
-        country_counter: Counter = Counter()
-        for value in sub["country"]:
-            for c in parse_pipe_separated(value):
-                c = c.strip()
-                if c and c.lower() != "unknown":
-                    country_counter[c] += 1
-        most = country_counter.most_common(1)
-        if most:
-            top_country, country_count = most[0][0], int(most[0][1])
+        country_counter = _count_pipe_field(sub["country"])
+        top_country = dominant(country_counter)
+        if top_country is not None:
+            country_count = int(country_counter[top_country])
 
     wordcloud = _top_wordcloud(sub, top_words, min_wordcloud_freq)
 
@@ -533,6 +470,19 @@ def compute_corpus(
 # (POLARITE_ORDER / CENTRALITE_ORDER are imported from iwac_utils.)
 
 
+def _labels(sub: pd.DataFrame, column: Optional[str]) -> pd.Series:
+    """A sentiment label column as stripped strings, ``""`` where unrated.
+
+    Unannotated and declined rows are ``""`` on the Hub, not null — but a
+    snapshot can still carry a real NaN, and ``astype(str)`` turns NaN into
+    the truthy string ``"nan"``, which counted every unrated article as
+    rated. Fill first, then cast.
+    """
+    if column is None:
+        return pd.Series("", index=sub.index, dtype=object)
+    return sub[column].fillna("").astype(str).str.strip()
+
+
 def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
     """Per-model sentiment breakdown for the articles in ``sub``.
 
@@ -551,68 +501,52 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
             "deepseek_v4_flash_0731": {...}
           }
         }
+
+    ``models`` holds only the raters the snapshot actually carries columns
+    for (``present_sentiment_models``), in roster order. ``rated`` counts
+    the articles at least one of them rated on ANY axis — polarité,
+    centralité or subjectivité — the same rule as the dashboards'
+    sentiment panel; it used to read polarité alone.
     """
     result: Dict[str, Any] = {"rated": 0, "models": {}}
-    rated_mask: Optional[pd.Series] = None
+    rated_mask = pd.Series(False, index=sub.index)
 
     # Canonical model ids double as the HF column prefixes and as the keys
     # the emitted JSON and the block JS read.
     resolved = resolve_sentiment_columns(sub)
 
-    for model in SENTIMENT_MODELS:
-        pol_col = resolved[model]["polarite"]
-        cen_col = resolved[model]["centralite"]
+    for model in present_sentiment_models(resolved):
+        pol = _labels(sub, resolved[model]["polarite"])
+        cen = _labels(sub, resolved[model]["centralite"])
         subj_col = resolved[model]["subjectivite"]
 
-        has_pol = pol_col is not None
-        has_cen = cen_col is not None
-        has_subj = subj_col is not None
-        if not (has_pol or has_cen or has_subj):
-            continue
+        pol_counter: Counter = Counter(pol[pol.ne("")])
+        cen_counter: Counter = Counter(cen[cen.ne("")])
 
-        pol_counter: Counter = Counter()
-        if has_pol:
-            for value in sub[pol_col]:
-                s = str(value).strip() if value is not None else ""
-                if not s or s.lower() == "nan":
-                    continue
-                pol_counter[s] += 1
-
-        cen_counter: Counter = Counter()
-        if has_cen:
-            for value in sub[cen_col]:
-                s = str(value).strip() if value is not None else ""
-                if not s or s.lower() == "nan":
-                    continue
-                cen_counter[s] += 1
-
+        # Subjectivité is a French label since generation 2, so
+        # pd.to_numeric would coerce the whole axis to NaN. Map each value
+        # onto its 1..5 ordinal instead. The bucket labels are the English
+        # source keys used in iwac-i18n.js (1="Very objective" … 5="Very
+        # subjective") so the JS can translate them the same way the
+        # person dashboard's sentiment panel does.
+        ordinals = (
+            [subjectivite_ordinal(value) for value in sub[subj_col]]
+            if subj_col is not None else [None] * len(sub)
+        )
+        levels = [level for level in ordinals if level is not None]
+        subj_n = len(levels)
         subj_avg: Optional[float] = None
-        subj_n = 0
         subj_buckets: List[Dict[str, Any]] = []
-        if has_subj:
-            # Subjectivité is a French label since generation 2, so
-            # pd.to_numeric would coerce the whole axis to NaN. Map each
-            # value onto its 1..5 ordinal instead. The bucket labels are
-            # the English source keys used in iwac-i18n.js
-            # (1="Very objective" … 5="Very subjective") so the JS can
-            # translate them the same way the person dashboard's
-            # sentiment panel does.
-            levels = [
-                level for level in
-                (subjectivite_ordinal(value) for value in sub[subj_col])
-                if level is not None
-            ]
-            subj_n = len(levels)
-            if subj_n:
-                subj_avg = sum(levels) / subj_n
-                bucket_counter = Counter(levels)
-                for score in range(1, 6):
-                    count = bucket_counter.get(score, 0)
-                    if count:
-                        subj_buckets.append({
-                            "label": str(score),
-                            "count": int(count),
-                        })
+        if subj_n:
+            subj_avg = sum(levels) / subj_n
+            bucket_counter = Counter(levels)
+            for score in range(1, 6):
+                count = bucket_counter.get(score, 0)
+                if count:
+                    subj_buckets.append({
+                        "label": str(score),
+                        "count": int(count),
+                    })
 
         def ordered(counter: Counter, order: Tuple[str, ...]) -> List[Dict[str, Any]]:
             seen = set()
@@ -635,14 +569,11 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
             "subjectivite_n": subj_n,
         }
 
-        # Any item rated by at least one model counts as "rated".
-        if has_pol:
-            m = sub[pol_col].astype(str).str.strip().replace("nan", "")
-            m = m.astype(bool)
-            rated_mask = m if rated_mask is None else (rated_mask | m)
+        # Rated by this model on any axis.
+        rated_subj = pd.Series([level is not None for level in ordinals], index=sub.index)
+        rated_mask = rated_mask | pol.ne("") | cen.ne("") | rated_subj
 
-    if rated_mask is not None:
-        result["rated"] = int(rated_mask.sum())
+    result["rated"] = int(rated_mask.sum())
     return result
 
 
@@ -717,7 +648,8 @@ def build_all(
             )
             corpus_count += 1
 
-        # Newspaper corpora
+        # Newspaper corpora. Same lookups as the country corpora: without
+        # them a newspaper's tags carried no o_id and its map had no points.
         for entry in discovered["newspapers"]:
             payload = compute_corpus(
                 df, subset, "newspaper", entry["name"],
@@ -725,6 +657,7 @@ def build_all(
                 top_words=top_words,
                 min_wordcloud_freq=min_wordcloud_freq,
                 year_min=year_min, year_max=year_max,
+                lookups=lookups,
             )
             if payload is None:
                 continue

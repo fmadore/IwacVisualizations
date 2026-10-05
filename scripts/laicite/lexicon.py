@@ -14,8 +14,9 @@ import unicodedata
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Set
 
-
-
+# Re-exported: ``fold_plain`` lived here until a second package needed it,
+# and every ``from laicite.lexicon import fold_plain`` keeps working.
+from iwac_utils import fold_plain
 
 LEXICON_PATH = Path(__file__).with_name("laicite_lexicon.json")
 
@@ -32,6 +33,35 @@ COLLOCATE_WINDOW = 5
 MIN_TOKEN_LEN = 4
 
 
+# Typography must not change retrieval: the curly and modifier apostrophes
+# fold onto the ASCII one, still one character for one, so the concordance
+# can quote the original spelling.
+_APOSTROPHES = "’‘ʼ"
+
+
+class _PreservingFold(dict):
+    """``str.translate`` table for ``fold_preserving``, filled on demand.
+
+    Each code point is folded once, the first time any text contains it, and
+    cached; after that a whole field folds in one C-level ``translate`` call
+    instead of a Python loop running an NFD normalisation per character —
+    which, over whole periodical issues, was the scan's hottest line.
+    """
+
+    def __missing__(self, code: int) -> str:
+        ch = chr(code)
+        if ch in _APOSTROPHES:
+            folded = "'"
+        else:
+            decomposed = unicodedata.normalize("NFD", ch)
+            folded = (decomposed[0] if decomposed else ch).lower()
+        self[code] = folded
+        return folded
+
+
+_PRESERVING_FOLD = _PreservingFold()
+
+
 def fold_preserving(text: str) -> str:
     """Lowercase + strip diacritics, mapping each input char to exactly one
     output char so offsets into the folded string index the original.
@@ -39,28 +69,10 @@ def fold_preserving(text: str) -> str:
     ``str.lower()`` plus a plain NFD-normalize-and-strip would be shorter,
     but NFD changes string length (``é`` → ``e`` + U+0301), and on
     already-decomposed input the strip changes it again. Character offsets
-    are what the concordance is built on, so the mapping has to be 1:1.
+    are what the concordance is built on, so the mapping has to be 1:1 —
+    hence one character at a time, through the cached table above.
     """
-    out: List[str] = []
-    for ch in text:
-        # Typography must not change retrieval; preserve the 1:1 offsets
-        # needed to quote the original spelling in the concordance.
-        if ch in "’‘ʼ":
-            ch = "'"
-        decomposed = unicodedata.normalize("NFD", ch)
-        base = decomposed[0] if decomposed else ch
-        out.append(base.lower())
-    return "".join(out)
-
-
-def fold_plain(text: str) -> str:
-    """Offset-agnostic fold, for lexicon terms and tag comparisons."""
-    if not isinstance(text, str):
-        return ""
-    return "".join(
-        c for c in unicodedata.normalize("NFD", text.lower())
-        if unicodedata.category(c) != "Mn"
-    )
+    return text.translate(_PRESERVING_FOLD)
 
 
 def _form_to_pattern(form: str) -> str:

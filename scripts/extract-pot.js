@@ -43,10 +43,11 @@
  */
 'use strict';
 
-const { readFileSync, readdirSync, statSync, writeFileSync } = require('fs');
-const { join, relative } = require('path');
+const { readFileSync, statSync, writeFileSync } = require('fs');
+const { join } = require('path');
 
 const { catalogueFromPo, parsePo } = require('./gettext');
+const { posixRelative, walkFiles } = require('./lib/fs');
 
 const ROOT = join(__dirname, '..');
 const LANGUAGE = join(ROOT, 'language');
@@ -60,22 +61,20 @@ const check = process.argv.includes('--check');
 /*  Source walk                                                              */
 /* ------------------------------------------------------------------------ */
 
-function walk(entry, out) {
-    const abs = join(ROOT, entry);
-    const stat = statSync(abs);
-    if (stat.isFile()) {
-        if (/\.(php|phtml)$/.test(entry)) out.push(entry);
-        return;
-    }
-    for (const name of readdirSync(abs).sort()) {
-        walk(join(entry, name), out);
-    }
-}
+const PHP_SOURCE = /\.(php|phtml)$/;
 
+/** Every PHP source under SOURCE_ROOTS, repo-relative, in sorted walk order. */
 function sourceFiles() {
     const files = [];
-    for (const root of SOURCE_ROOTS) walk(root, files);
-    return files.map((f) => relative(ROOT, join(ROOT, f)).split('\\').join('/'));
+    for (const root of SOURCE_ROOTS) {
+        const abs = join(ROOT, root);
+        if (statSync(abs).isFile()) {
+            if (PHP_SOURCE.test(root)) files.push(abs);
+            continue;
+        }
+        files.push(...walkFiles(abs, { sort: true, include: (path) => PHP_SOURCE.test(path) }));
+    }
+    return files.map((f) => posixRelative(ROOT, f));
 }
 
 /* ------------------------------------------------------------------------ */
@@ -238,16 +237,37 @@ const potIds = loadIds(POT, 'language/template.pot');
 const poEntries = parsePo(readFileSync(PO, 'utf8'), 'language/fr.po');
 const poIds = new Set(poEntries.map((e) => e.id).filter((id) => id !== ''));
 const poTranslated = catalogueFromPo(poEntries, 'language/fr.po');
+// Where each fr.po msgid sits, so a stale entry is reported as file:line.
+const poLine = (() => {
+    const lines = readFileSync(PO, 'utf8').split(/\r?\n/);
+    const at = new Map();
+    for (const entry of poEntries) {
+        if (entry.id === '' || at.has(entry.id)) continue;
+        // The opening of the msgid as the file writes it (escaped), found on
+        // its `msgid` line or on the first continuation line of a wrapped
+        // one, then walked back to the `msgid` keyword.
+        const head = JSON.stringify(entry.id).slice(1, 31);
+        let index = lines.findIndex((line) => (line.startsWith('msgid ') || line.startsWith('"'))
+            && line.includes(head));
+        while (index > 0 && !lines[index].startsWith('msgid ')) index--;
+        at.set(entry.id, index === -1 ? '?' : index + 1);
+    }
+    return at;
+})();
 
 const notInPot = [...strings.keys()].filter((id) => !potIds.has(id));
 const notInPo = [...strings.keys()].filter((id) => !poIds.has(id));
 const untranslated = [...strings.keys()].filter((id) => poIds.has(id) && !poTranslated.has(id));
 const stalePot = [...potIds].filter((id) => !strings.has(id));
+// The same drift one step further: a msgid fr.po still translates although
+// no source asks for it any more. Omeka never looks it up, and it hides the
+// fact that the string it replaced may now be missing its translation.
+const stalePo = [...poIds].filter((id) => !strings.has(id));
 
 const clip = (s) => JSON.stringify(s.length > 90 ? `${s.slice(0, 90)}…` : s);
 const where = (id) => strings.get(id).map((s) => `${s.file}:${s.line}`).join(', ');
 
-if (notInPot.length || notInPo.length || untranslated.length || stalePot.length) {
+if (notInPot.length || notInPo.length || untranslated.length || stalePot.length || stalePo.length) {
     console.error('\n✗ pot guard: the PHP sources and the catalogues disagree\n');
     const report = (heading, ids, detail) => {
         if (!ids.length) return;
@@ -260,9 +280,12 @@ if (notInPot.length || notInPo.length || untranslated.length || stalePot.length)
     report('in the sources but not in language/fr.po — French readers get English', notInPo, where);
     report('in fr.po but without a French translation', untranslated, where);
     report('in template.pot but no longer in any source', stalePot);
+    report('in language/fr.po but no longer in any source — a dead translation', stalePo,
+        (id) => `fr.po line ${poLine.get(id)}`);
     console.error('  Regenerate the template with: node scripts/extract-pot.js');
-    console.error('  then add the French for the new msgids to fr.po and run: npm run build:mo\n');
+    console.error('  then add the French for the new msgids to fr.po, delete the dead ones,');
+    console.error('  and run: npm run build:mo\n');
     process.exit(1);
 }
 
-console.log(`✓ pot guard: ${strings.size} source strings, all in template.pot and translated in fr.po`);
+console.log(`✓ pot guard: ${strings.size} source strings, all in template.pot and translated in fr.po, no dead fr.po entries`);

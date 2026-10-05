@@ -40,6 +40,16 @@ on:
       - "scripts/build-mo.js"
       - "scripts/build-tree.js"
       - "scripts/check-*.js"
+      # The guards' shared helpers (file walk, bundle manifest, failure
+      # report) — a change there changes every check that requires them.
+      - "scripts/lib/**"
+      # `lint:i18n-pot` is extract-pot.js --check, and `lint:versions` reads
+      # the version quoted in README.md's citation and in CITATION.cff; none
+      # of the three matched the patterns above, so a README-only or
+      # CITATION-only version edit never ran the guard that checks it.
+      - "scripts/extract-pot.js"
+      - "README.md"
+      - "CITATION.cff"
       # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
       # change to the doc — or to which files exist — can fail `npm run lint`.
       - "ARCHITECTURE.md"
@@ -74,6 +84,16 @@ on:
       - "scripts/build-mo.js"
       - "scripts/build-tree.js"
       - "scripts/check-*.js"
+      # The guards' shared helpers (file walk, bundle manifest, failure
+      # report) — a change there changes every check that requires them.
+      - "scripts/lib/**"
+      # `lint:i18n-pot` is extract-pot.js --check, and `lint:versions` reads
+      # the version quoted in README.md's citation and in CITATION.cff; none
+      # of the three matched the patterns above, so a README-only or
+      # CITATION-only version edit never ran the guard that checks it.
+      - "scripts/extract-pot.js"
+      - "README.md"
+      - "CITATION.cff"
       # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
       # change to the doc — or to which files exist — can fail `npm run lint`.
       - "ARCHITECTURE.md"

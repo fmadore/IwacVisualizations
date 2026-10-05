@@ -2,11 +2,13 @@
 """
 from __future__ import annotations
 
+import re
 from collections import Counter, defaultdict
+from difflib import SequenceMatcher
 from typing import Any, Dict, List, Optional, Set
 
 from iwac_embeddings import pairs_above_threshold
-from iwac_utils import generate_timestamp
+from iwac_utils import fold_plain, generate_timestamp
 
 from laicite.scan import ItemScan
 
@@ -85,7 +87,7 @@ class CirculationMixin:
                 "a": self._circulation_side(a),
                 "b": self._circulation_side(b),
                 "year_gap": self._year_gap(a, b),
-                "text_check": self._reuse_evidence(a, b),
+                "_scans": (a, b),
             })
 
         pairs.sort(key=lambda p: -p["similarity"])
@@ -119,6 +121,15 @@ class CirculationMixin:
         gaps = sorted(p["year_gap"] for p in pairs if p["year_gap"] is not None)
         median_gap = gaps[len(gaps) // 2] if gaps else None
 
+        # The text comparison ships only on a listed pair and is the costly
+        # step (a SequenceMatcher over two whole texts), so it runs after the
+        # display cut — never on the pairs that are only counted.
+        listed = pairs[:CIRCULATION_MAX_LISTED]
+        for p in listed:
+            p["text_check"] = self._reuse_evidence(*p["_scans"])
+        for p in pairs:
+            del p["_scans"]
+
         self.logger.info(
             "  circulation: %d cross-outlet pairs ≥ %.2f over %d embedded "
             "articles, touching %d items",
@@ -129,7 +140,7 @@ class CirculationMixin:
             "threshold": CIRCULATION_THRESHOLD,
             # The denominator every share on the panel is taken against.
             "scanned": len(scans),
-            "listed": min(len(pairs), CIRCULATION_MAX_LISTED),
+            "listed": len(listed),
             "total_pairs": len(pairs),
             "reprinted_items": len(reprinted),
             "median_year_gap": median_gap,
@@ -140,7 +151,7 @@ class CirculationMixin:
                                           key=lambda kv: (-kv[1], kv[0]))
             ],
             "links": links,
-            "pairs": pairs[:CIRCULATION_MAX_LISTED],
+            "pairs": listed,
         }
 
     @staticmethod
@@ -153,11 +164,12 @@ class CirculationMixin:
             "year": scan.year,
         }
 
-    def _reuse_evidence(self, a, b):
-        from difflib import SequenceMatcher
-        from laicite.lexicon import fold_plain
-        import re
-        # No excerpt or text-derived detail from withheld full text.
+    def _reuse_evidence(self, a: ItemScan, b: ItemScan) -> Dict[str, Any]:
+        """Word-level reuse evidence for one listed pair. RIGHTS-GATED.
+
+        Both full texts must be public: a withheld text yields neither an
+        excerpt nor any figure derived from its words.
+        """
         if not a.ocr_public or not b.ocr_public:
             return {"status": "not_public"}
         ta = self.texts.get((a.subset, a.o_id), {}).get("OCR", "")

@@ -66,9 +66,9 @@ from iwac_utils import (
     clean_str,
     configure_logging,
     find_column,
+    first_country,
     iter_records,
     load_dataset_safe,
-    normalize_country,
     normalize_location_name,
     parse_pipe_separated,
     save_json,
@@ -321,7 +321,7 @@ class ArticleDashboardGenerator:
                 "o_id":              article_id,
                 "title":             clean_str(row.get(title_col)) if title_col else "",
                 "pub_date":          clean_str(row.get(date_col))[:10] if date_col else "",
-                "country":           self._first_country(row.get(country_col)) if country_col else "",
+                "country":           first_country(row.get(country_col)) if country_col else "",
                 "newspaper":         clean_str(row.get(newspaper_col)) if newspaper_col else "",
                 "language":          clean_str(row.get(language_col)) if language_col else "",
                 "word_count":        self._coerce_int(row.get(nb_mots_col)) if nb_mots_col else None,
@@ -357,17 +357,6 @@ class ArticleDashboardGenerator:
             f"{len(self.article_entities)} carry at least one entity; "
             f"{len(self.entity_articles)} distinct entities observed"
         )
-
-    @staticmethod
-    def _first_country(value: Any) -> str:
-        """The FIRST country of a cell, or '' when that first one is unknown
-        (see dashboard_aggregator._first_country; generate_keyness.py's
-        differs on purpose)."""
-        countries = normalize_country(value, return_list=True)
-        if isinstance(countries, list) and countries:
-            first = countries[0].strip()
-            return first if first and first.lower() != "unknown" else ""
-        return ""
 
     @staticmethod
     def _coerce_int(value: Any) -> Optional[int]:

@@ -46,6 +46,7 @@
 
 const { readFileSync, existsSync } = require('fs');
 const { join } = require('path');
+const { printFailure } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const RECORD = join(ROOT, '.impeccable', 'design.json');
@@ -170,9 +171,9 @@ if (existsSync(DESIGN_MD)) {
 }
 
 if (problems.length) {
-    console.error(`\n✗ design-record guard: ${problems.length} disagreement(s)\n`);
-    for (const p of problems) console.error(`  ${p}`);
-    console.error(
+    printFailure(
+        `design-record guard: ${problems.length} disagreement(s)`,
+        problems,
         '\n  .impeccable/design.json and DESIGN.md describe the shipped CSS.'
         + '\n  Update the record to match the code, or the code to match the'
         + '\n  record — but not neither.\n'

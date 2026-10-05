@@ -17,6 +17,8 @@ sys.path.insert(0, str(SCRIPTS))
 
 import dashboard_aggregator  # noqa: E402
 import generate_collection_overview  # noqa: E402
+import generate_compare_newspapers  # noqa: E402
+import generate_index_overview  # noqa: E402
 import generate_periodicals_overview  # noqa: E402
 import generate_references_overview  # noqa: E402
 import generate_template_summary  # noqa: E402
@@ -380,9 +382,9 @@ class PeriodicalsTopicsTests(unittest.TestCase):
     def test_an_outlier_sentinel_would_degrade_to_uncovered(self) -> None:
         # If upstream ever switched publications to the articles convention,
         # -1 must read as "no topic" rather than becoming topic -1.
-        self.assertIsNone(generate_periodicals_overview._topic_id(-1.0))
-        self.assertIsNone(generate_periodicals_overview._topic_id(float("nan")))
-        self.assertEqual(generate_periodicals_overview._topic_id(14.0), 14)
+        self.assertIsNone(iwac_utils.lda_topic_id(-1.0))
+        self.assertIsNone(iwac_utils.lda_topic_id(float("nan")))
+        self.assertEqual(iwac_utils.lda_topic_id(14.0), 14)
 
     def test_representative_issues_rank_on_the_topics_own_share(self) -> None:
         out = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
@@ -1033,7 +1035,7 @@ class LaicitePackageTests(unittest.TestCase):
     def test_every_bundle_builder_survived_the_split(self) -> None:
         # One per JSON file write_all emits, plus the shared scan.
         expected = [
-            "scan_all", "build_metadata", "build_countries", "build_documents",
+            "scan_all", "build_metadata", "build_documents",
             "build_trends", "build_seasonality", "build_collocates",
             "build_implicit", "build_corpora", "build_actors", "build_arenas",
             "build_sentiment", "build_semantic", "build_bylines",
@@ -1175,3 +1177,264 @@ class ReferencesNetworkTests(unittest.TestCase):
         # there is no edge left to draw.
         self.assertEqual([n["id"] for n in out["nodes"]], ["A"])
         self.assertEqual(out["edges"], [])
+
+
+class SharedParserTests(unittest.TestCase):
+    """The parsers five, four and seven generators each carried a copy of."""
+
+    def test_first_country_files_a_placeholder_first_cell_under_none(self) -> None:
+        self.assertEqual(iwac_utils.first_country("benin|Togo"), "Bénin")
+        self.assertEqual(iwac_utils.first_country("Unknown|Togo"), "")
+        self.assertEqual(iwac_utils.first_country(np.nan), "")
+        self.assertEqual(iwac_utils.first_country("cote d'ivoire"), "Côte d'Ivoire")
+
+    def test_first_country_can_take_the_first_known_one(self) -> None:
+        # Keyness: an item joins the first REAL country it names.
+        self.assertEqual(iwac_utils.first_country("Unknown|togo", skip_unknown=True), "Togo")
+        self.assertEqual(iwac_utils.first_country("n/a|inconnu", skip_unknown=True), "")
+
+    def test_lda_topic_id_reads_float64_and_rejects_outliers(self) -> None:
+        self.assertEqual(iwac_utils.lda_topic_id(14.0), 14)
+        self.assertEqual(iwac_utils.lda_topic_id(np.float64(3.0)), 3)
+        self.assertEqual(iwac_utils.lda_topic_id("7"), 7)
+        for value in (-1.0, -2, None, np.nan, float("inf"), "nan", "", "x"):
+            self.assertIsNone(iwac_utils.lda_topic_id(value), value)
+
+    def test_dominant_breaks_ties_on_the_key_not_on_row_order(self) -> None:
+        from collections import Counter
+        self.assertEqual(iwac_utils.dominant(Counter({"Togo": 2, "Bénin": 2, "Niger": 1})), "Bénin")
+        self.assertEqual(iwac_utils.dominant(Counter({"Togo": 2, "Bénin": 2})),
+                         iwac_utils.dominant(Counter({"Bénin": 2, "Togo": 2})))
+        self.assertIsNone(iwac_utils.dominant(Counter()))
+        self.assertEqual(iwac_utils.dominant({"a": 0}, ""), "")
+        # A None key cannot make the comparison raise.
+        self.assertEqual(iwac_utils.dominant({None: 1, "Togo": 1}), None)
+
+    def test_name_keys_fold_case_accents_form_and_whitespace(self) -> None:
+        nfd = "Côte d'Ivoire"
+        self.assertEqual(
+            iwac_utils.normalize_location_name(f"  {nfd} "),
+            iwac_utils.normalize_location_name("côte   d'ivoire"),
+        )
+
+
+class EntityIndexJoinTests(unittest.TestCase):
+    """One lookup for every tag / byline / provenance join — four
+    hand-written copies used to normalise keys four ways."""
+
+    def index(self) -> pd.DataFrame:
+        return pd.DataFrame({
+            "o:id": [1, 2, 3, 4, 5],
+            "Titre": ["Abdoulaye Wade", "Cotonou", "Wade", "Placeholder", "Dakar"],
+            "Type": ["Personnes", "Lieux", "Lieux", iwac_utils.AUTHORITY_PLACEHOLDER_TYPE, "Lieux"],
+            # Person 1's alias "Wade" collides with place 3's title.
+            "Titre alternatif": ["Wade|A.  Wade", None, None, "Cotonou", None],
+            "Coordonnées": [None, "6.37, 2.39", "14.0, -17.0", None, None],
+        })
+
+    def test_a_title_is_never_shadowed_by_another_records_alias(self) -> None:
+        lookup, _, _ = iwac_utils.build_entity_index(self.index())
+        self.assertEqual(lookup["wade"]["o_id"], 3)
+        self.assertEqual(lookup["a. wade"]["o_id"], 1)
+
+    def test_types_restricts_the_join(self) -> None:
+        lookup, by_id, lieux = iwac_utils.build_entity_index(self.index(), types=["Lieux"])
+        self.assertEqual(sorted(by_id), [2, 3, 5])
+        self.assertNotIn("abdoulaye wade", lookup)
+        self.assertEqual(lieux, {2: (6.37, 2.39), 3: (14.0, -17.0)})
+
+    def test_aliases_can_be_left_out(self) -> None:
+        lookup, _, _ = iwac_utils.build_entity_index(self.index(), aliases=False)
+        self.assertNotIn("a. wade", lookup)
+
+    def test_compare_newspapers_joins_like_every_other_block(self) -> None:
+        lookups = generate_compare_newspapers.build_index_lookups(self.index())
+        key = iwac_utils.normalize_location_name
+        # Case and whitespace no longer decide whether a tag links.
+        self.assertEqual(lookups["subject_oid"][key("ABDOULAYE   wade")], 1)
+        self.assertEqual(lookups["place_oid"][key("cotonou")], 2)
+        self.assertEqual(lookups["place_coords"][key("Cotonou")], (6.37, 2.39))
+        # Placeholders are never entities.
+        self.assertNotIn(key("Placeholder"), lookups["subject_oid"])
+        # Dakar has no coordinate, so it links but does not map.
+        self.assertIn(key("Dakar"), lookups["place_oid"])
+        self.assertNotIn(key("Dakar"), lookups["place_coords"])
+
+
+class PlaceCountryTests(unittest.TestCase):
+    """A place's country is where it IS, never ``index.countries[0]``."""
+
+    def index(self) -> pd.DataFrame:
+        return pd.DataFrame({
+            "o:id": [1, 2, 3, 4, 5, 6, 7],
+            "Titre": ["Bénin", "Littoral", "Cotonou", "France", "Paris", "Loop A", "Loop B"],
+            "Type": ["Lieux"] * 7,
+            "Partie de": [None, "Bénin", "Littoral", None, "France", "Loop B", "Loop A"],
+            # What the old readers took: the press that MENTIONS the place.
+            "countries": ["Bénin", "Bénin", "Bénin", "Bénin|Togo", "Bénin|Togo", "Togo", "Togo"],
+            "Coordonnées": ["9, 2", "6.4, 2.4", "6.37, 2.39", "46, 2", "48.85, 2.35", None, None],
+        })
+
+    def test_the_partie_de_walk_finds_the_country(self) -> None:
+        country_of = iwac_utils.place_country_resolver(self.index())
+        self.assertEqual(country_of("Cotonou"), "Bénin")
+        self.assertEqual(country_of("  cotonou "), "Bénin")
+        self.assertEqual(country_of("Bénin"), "Bénin")
+
+    def test_a_place_outside_the_six_has_no_country(self) -> None:
+        country_of = iwac_utils.place_country_resolver(self.index())
+        # countries[0] would have said Bénin.
+        self.assertIsNone(country_of("Paris"))
+        self.assertIsNone(country_of("Loop A"))  # a cycle ends, it does not hang
+        self.assertIsNone(country_of("Nowhere"))
+        self.assertIsNone(country_of(""))
+
+    def test_compare_newspapers_place_country_uses_the_walk(self) -> None:
+        lookups = generate_compare_newspapers.build_index_lookups(self.index())
+        self.assertEqual(lookups["place_country"]["cotonou"], "Bénin")
+        self.assertNotIn("paris", lookups["place_country"])
+
+    def test_index_overview_places_and_gantt_follow_the_contract(self) -> None:
+        index_df = self.index().assign(
+            frequency=[5] * 7,
+            first_occurrence=["1990-01-01"] * 7,
+            last_occurrence=["2000-01-01"] * 7,
+        )
+        places = {p["title"]: p for p in generate_index_overview.compute_places(index_df)}
+        self.assertEqual(places["Cotonou"]["country"], "Bénin")
+        self.assertIsNone(places["Paris"]["country"])
+
+        people = pd.DataFrame({
+            "o:id": [9], "Titre": ["Someone"], "Type": ["Personnes"],
+            "countries": ["Togo|Bénin"], "frequency": [3],
+            "first_occurrence": ["1995"], "last_occurrence": ["1999"],
+        })
+        activity = generate_index_overview.compute_activity(
+            pd.concat([index_df, people], ignore_index=True), top_n=30)
+        lieux = {row["name"]: row for row in activity["Lieux"]}
+        self.assertEqual(lieux["Cotonou"]["country"], "Bénin")
+        self.assertIsNone(lieux["Paris"]["country"])
+        self.assertNotIn("countries", lieux["Paris"])
+        person = activity["Personnes"][0]
+        self.assertEqual(person["countries"], ["Togo", "Bénin"])
+        self.assertNotIn("country", person)
+
+
+class TopEntitiesTests(unittest.TestCase):
+    """Ranked by subject + place tag memberships, never ``index.frequency``."""
+
+    def index(self) -> pd.DataFrame:
+        return pd.DataFrame({
+            "o:id": [1, 2, 3, 4, 5],
+            "Titre": ["Journalist", "Islam", "Cotonou", "", "Islam et société"],
+            "Type": ["Personnes", "Sujets", "Lieux", "Sujets", "Sujets"],
+            # The journalist's byline-driven index count must not matter.
+            "frequency": [999, 1, 1, 50, 1],
+            "thumbnail": [None, "https://x/thumb.jpg", None, None, None],
+        })
+
+    def frames(self) -> dict:
+        return {
+            "articles": pd.DataFrame({
+                "subject": ["Islam|Islam", "Islam et société", "Islam", None],
+                "spatial": ["Cotonou", "Cotonou", None, "Cotonou"],
+                "author": ["Journalist"] * 4,
+                "pub_date": ["2001-05-02", "1999", "2010-01-01", ""],
+                "country": ["Bénin", "Bénin|Togo", "Togo", "Unknown"],
+            }),
+            "references": pd.DataFrame({
+                "subject": ["Journalist"],
+                "pub_date": ["1985"],
+                "country": [None],
+            }),
+        }
+
+    def test_counts_are_tag_memberships_deduplicated_per_item(self) -> None:
+        out = iwac_utils.compute_top_entities(self.index(), self.frames(), top_n=10)
+        self.assertEqual(list(out), list(iwac_utils.ENTITY_TYPE_ORDER))
+        subjects = {e["title"]: e for e in out["Sujets"]}
+        # Tagged twice on one item still counts once; "Islam et société"
+        # does not count toward "Islam" (whole value, never a substring).
+        self.assertEqual(subjects["Islam"]["frequency"], 2)
+        self.assertEqual(subjects["Islam et société"]["frequency"], 1)
+        self.assertEqual(out["Lieux"][0]["frequency"], 3)
+        # Bylines are not tags: only the reference that is ABOUT them counts.
+        self.assertEqual(out["Personnes"][0]["frequency"], 1)
+
+    def test_dates_and_countries_describe_the_tagged_items(self) -> None:
+        out = iwac_utils.compute_top_entities(self.index(), self.frames(), top_n=10)
+        islam = next(e for e in out["Sujets"] if e["title"] == "Islam")
+        self.assertEqual(islam["first_occurrence"], "2001-05-02")
+        self.assertEqual(islam["last_occurrence"], "2010-01-01")
+        self.assertEqual(islam["countries"], ["Bénin", "Togo"])
+        self.assertEqual(islam["thumbnail"], "https://x/thumb.jpg")
+        self.assertNotIn("countries", out["Personnes"][0])
+
+    def test_untitled_rows_never_take_a_top_n_slot(self) -> None:
+        out = iwac_utils.compute_top_entities(self.index(), self.frames(), top_n=2)
+        self.assertEqual([e["title"] for e in out["Sujets"]], ["Islam", "Islam et société"])
+
+    def test_both_overviews_read_the_same_numbers(self) -> None:
+        frames = {**self.frames(), "index": self.index()}
+        collection = generate_collection_overview.compute_top_entities(frames, top_n=10)
+        index_view = generate_index_overview.compute_top_entities(self.index(), frames, top_n=10)
+        self.assertEqual(collection, index_view)
+
+
+class DashboardTopicsTests(unittest.TestCase):
+    """The Topics panel reads the articles' LDA model only, outliers excluded."""
+
+    class TopicsAggregator(dashboard_aggregator.DashboardAggregator):
+        def _register_item(self, item_key, roles, spatial_pairs):
+            pass
+
+        def _log_resolve_summary(self):
+            pass
+
+        def _role_slices(self, _target_id):
+            yield "all", list(self.items_meta)
+
+    def test_publication_and_reference_topics_and_outliers_stay_out(self) -> None:
+        agg = self.TopicsAggregator(ROOT)
+        agg.content_dfs = {
+            "articles": pd.DataFrame({
+                "o:id": ["1", "2", "3"],
+                "lda_topic_id": [4.0, -1.0, 4.0],
+                "lda_topic_label": ["islam - mosquée", "outlier - bruit", "islam - mosquée"],
+                "country": ["Bénin", "Unknown|Togo", "togo"],
+            }),
+            "publications": pd.DataFrame({
+                "o:id": ["10"], "lda_topic_id": [4.0], "lda_topic_label": ["revue - numéro"],
+            }),
+            "references": pd.DataFrame({
+                "o:id": ["20"], "lda_topic_id": [4.0], "lda_topic_label": ["thèse - histoire"],
+            }),
+        }
+        agg.resolve_items()
+        topics = agg.compute_topics(1)["by_role"]["all"]
+        self.assertEqual(topics, [{"label": "islam - mosquée", "count": 2}])
+        # The shared first_country: a placeholder-first cell is filed under none.
+        self.assertEqual(agg.items_meta["articles:2"]["country"], "")
+        self.assertEqual(agg.items_meta["articles:3"]["country"], "Togo")
+
+
+class CompareNewspapersSentimentTests(unittest.TestCase):
+    """`rated` follows the dashboards' rule, and NaN is not a rating."""
+
+    def test_rated_counts_any_axis_and_never_a_missing_value(self) -> None:
+        model = iwac_utils.SENTIMENT_MODELS[0]
+        sub = pd.DataFrame({
+            f"{model}_polarite": ["Positif", "", np.nan, None],
+            f"{model}_centralite_islam_musulmans": ["", "Central", np.nan, ""],
+            f"{model}_subjectivite_score": ["", "", "Mixte", np.nan],
+        })
+        out = generate_compare_newspapers._compute_sentiment(sub)
+        # Rows 0-2 are rated on some axis; row 3 (NaN / None / "") is not.
+        self.assertEqual(out["rated"], 3)
+        self.assertEqual(list(out["models"]), [model])
+        self.assertEqual(out["models"][model]["polarite"], [{"label": "Positif", "count": 1}])
+        self.assertEqual(out["models"][model]["subjectivite_n"], 1)
+
+    def test_a_snapshot_without_rater_columns_publishes_no_model(self) -> None:
+        out = generate_compare_newspapers._compute_sentiment(pd.DataFrame({"x": [1]}))
+        self.assertEqual(out, {"rated": 0, "models": {}})

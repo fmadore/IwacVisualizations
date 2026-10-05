@@ -69,10 +69,17 @@ class CollocatesMixin:
             if not s.window_tokens:
                 continue
             distinct = set(s.window_tokens)
-            language = " | ".join(sorted(s.extra.get("languages", []))) or "Unknown"
-            language_windows[language].update(s.window_tokens)
-            language_rest[language].update(s.rest_tokens)
-            df["language:" + language].update(distinct)
+            # One slice per language, not per label combination: keyed on
+            # the joined label set, a bilingual issue made its own slice
+            # ("Anglais | Français") too small to test. A multilingual item
+            # joins each of its languages' slices — every slice is its own
+            # window-vs-rest test, so nothing is summed across them. An item
+            # with no language label is in no within-language slice.
+            for language in sorted({lang.strip() for lang in s.extra.get("languages", [])
+                                    if lang and lang.strip()}):
+                language_windows[language].update(s.window_tokens)
+                language_rest[language].update(s.rest_tokens)
+                df["language:" + language].update(distinct)
             pooled_window.update(s.window_tokens)
             pooled_rest.update(s.rest_tokens)
             by_subset[s.subset].update(s.window_tokens)
@@ -112,6 +119,18 @@ class CollocatesMixin:
             {"window": pooled_window, "rest": pooled_rest}, self.min_collocate_count)
         global_list = self._apply_df_floor(
             global_scored.get("window", []), df["window"])
+
+        # A language whose windows produced nothing that survives the floors
+        # is omitted rather than shipped as an empty list the picker would
+        # offer and then render blank.
+        by_language: Dict[str, List[Dict[str, Any]]] = {}
+        for lang in sorted(language_windows):
+            kept = self._apply_df_floor(
+                score({"window": language_windows[lang], "rest": language_rest[lang]},
+                      self.min_collocate_count).get("window", []),
+                df["language:" + lang])
+            if kept:
+                by_language[lang] = kept
 
         # Thin slices cannot support the corpus-wide min_count, so drop
         # slices too small to test rather than reporting noise from them.
@@ -173,10 +192,7 @@ class CollocatesMixin:
             "top_n": self.top_collocates,
             "min_document_frequency": self.min_document_frequency,
             "global": global_list,
-            "by_language": {lang: self._apply_df_floor(
-                score({"window": window, "rest": language_rest[lang]},
-                      self.min_collocate_count).get("window", []), df["language:" + lang])
-                for lang, window in language_windows.items()},
+            "by_language": by_language,
             "comparators": {"global": "windows_vs_rest_same_documents",
                             "by_language": "windows_vs_rest_same_language_documents",
                             "other_slices": "windows_vs_other_slices_windows"},

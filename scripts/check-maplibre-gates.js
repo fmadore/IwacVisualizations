@@ -82,8 +82,10 @@
  */
 'use strict';
 
-const { readFileSync, readdirSync, statSync } = require('fs');
+const { readFileSync } = require('fs');
 const { join, relative } = require('path');
+const { sourceFiles } = require('./lib/fs');
+const { fail } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const JS_ROOT = join(ROOT, 'asset', 'js');
@@ -181,13 +183,9 @@ function codeOnly(source) {
     return out;
 }
 
-function walk(dir, out) {
-    for (const name of readdirSync(dir)) {
-        const path = join(dir, name);
-        if (statSync(path).isDirectory()) walk(path, out);
-        else if (path.endsWith('.js') && !path.endsWith('.min.js')) out.push(path);
-    }
-    return out;
+/** Every browser source under `dir` (built `.min.js` files excluded). */
+function walk(dir) {
+    return sourceFiles(dir, '.js');
 }
 
 /**
@@ -304,10 +302,7 @@ function selfTest() {
 
 const seedFailures = selfTest();
 if (seedFailures.length) {
-    console.error('\n✗ maplibre gate guard: self-test failed — the guard cannot be trusted\n');
-    for (const f of seedFailures) console.error(`  ${f}`);
-    console.error('');
-    process.exit(1);
+    fail('maplibre gate guard: self-test failed — the guard cannot be trusted', seedFailures, '');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -316,7 +311,7 @@ if (process.argv.includes('--self-test')) {
 }
 
 const violations = [];
-for (const path of walk(JS_ROOT, [])) {
+for (const path of walk(JS_ROOT)) {
     const found = analyze(relative(ROOT, path).replaceAll('\\', '/'), readFileSync(path, 'utf8'));
     if (found) violations.push(found);
 }
@@ -325,7 +320,7 @@ const loaderProblems = checkLoaderAsymmetry();
 // M14: one source of truth for the basemap endpoints. Kept apart from the gate
 // violations because the two failures call for different fixes.
 const basemapProblems = checkBasemapOrigins();
-for (const path of walk(JS_ROOT, [])) {
+for (const path of walk(JS_ROOT)) {
     const label = relative(ROOT, path).replaceAll('\\', '/');
     if (label === BASEMAP_OWNER) continue;
     const hits = readFileSync(path, 'utf8').match(BASEMAP_HOST);

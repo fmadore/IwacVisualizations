@@ -20,12 +20,18 @@ Payload shape (top-level keys):
 
     metadata              — standard provenance block
     summary               — counts + time span + coverage stats
-    top_entities          — top N per type (C.entities-ready)
+    top_entities          — top N per type (C.entities-ready), ranked by
+                            subject + place tag memberships
+                            (iwac_utils.compute_top_entities)
     lifespan              — frequency × span scatter (per type)
     gender                — persons gender histogram
     places                — [{o_id, title, lat, lng, frequency, country}, ...]
+                            country = the IWAC country the place lies in
+                            (Partie de walk) or null
     place_mentions        — [{name, lat, lng, count}, ...]  (from dct:spatial on content items)
-    activity              — per-type gantt rows (top 30 each)
+    activity              — per-type gantt rows (top 30 each); a Lieux row
+                            carries the place's own ``country`` (or null),
+                            every other row the full ``countries`` list
     recent_additions      — newest authority records
     index_table           — slim list of ALL entities for the searchable table
                             (written to the sibling index-overview-table.json,
@@ -60,12 +66,16 @@ from iwac_utils import (
     parse_standard_args,
     canonicalize_country_field,
     clean_int,
+    clean_str,
+    compute_top_entities as compute_tagged_top_entities,
     create_metadata_block,
     extract_year,
+    find_column,
     load_dataset_safe,
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    place_country_resolver,
     save_json,
 )
 
@@ -84,13 +94,6 @@ INDEX_TYPES = [
 # authority pins from the index. ``images`` (photographs) carry spatial
 # place tags too, so a photographed place counts as a real mention.
 CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images", "references"]
-
-
-def _str_or_none(value: Any) -> Optional[str]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    s = str(value).strip()
-    return s or None
 
 
 def _entity_type_label(raw: Any) -> Optional[str]:
@@ -163,8 +166,8 @@ def compute_summary(
         freq = pd.to_numeric(row.get("frequency"), errors="coerce")
         if pd.notna(freq) and freq > 0:
             mentions += int(freq)
-        first_s = _str_or_none(row.get("first_occurrence"))
-        last_s = _str_or_none(row.get("last_occurrence"))
+        first_s = clean_str(row.get("first_occurrence"))
+        last_s = clean_str(row.get("last_occurrence"))
         first_y = extract_year(first_s) if first_s else None
         last_y = extract_year(last_s) if last_s else None
         if first_y is not None:
@@ -187,48 +190,18 @@ def compute_summary(
 
 def compute_top_entities(
     index_df: pd.DataFrame,
+    dataframes: Dict[str, pd.DataFrame],
     top_n: int,
-    type_labels: "Optional[pd.Series]" = None,
 ) -> Dict[str, List[Dict[str, Any]]]:
-    """Top N entities per type, sorted by frequency desc."""
-    result: Dict[str, List[Dict[str, Any]]] = {t: [] for t in INDEX_TYPES}
-    if index_df.empty:
-        return result
+    """Top N entities per type, ranked by subject + place tag memberships.
 
-    labels = _type_labels(index_df, type_labels)
-    for entity_type in INDEX_TYPES:
-        subset = index_df[labels == entity_type].copy()
-        if subset.empty:
-            continue
-        subset["_freq"] = pd.to_numeric(subset["frequency"], errors="coerce").fillna(0)
-        subset = subset[subset["_freq"] > 0]
-        subset = subset.sort_values("_freq", ascending=False).head(top_n)
-
-        entries: List[Dict[str, Any]] = []
-        for _, row in subset.iterrows():
-            title = _str_or_none(row.get("Titre"))
-            if not title:
-                continue
-            entry: Dict[str, Any] = {
-                "o_id": clean_int(row.get("o:id")),
-                "title": title,
-                "frequency": int(row.get("_freq") or 0),
-            }
-            countries = parse_pipe_separated(row.get("countries"))
-            if countries:
-                entry["countries"] = countries
-            first = _str_or_none(row.get("first_occurrence"))
-            last = _str_or_none(row.get("last_occurrence"))
-            if first:
-                entry["first_occurrence"] = first
-            if last:
-                entry["last_occurrence"] = last
-            thumb = _str_or_none(row.get("thumbnail"))
-            if thumb:
-                entry["thumbnail"] = thumb
-            entries.append(entry)
-        result[entity_type] = entries
-    return result
+    The shared ``iwac_utils.compute_top_entities`` — the collection
+    overview's panel reads the same numbers. Not ``index.frequency``, which
+    counts bylines and every other role while this panel's description
+    says its counts come from the catalogue's subject and place fields.
+    """
+    content = {name: df for name, df in dataframes.items() if name in CONTENT_SUBSETS}
+    return compute_tagged_top_entities(index_df, content, top_n)
 
 
 def compute_lifespan(
@@ -257,11 +230,11 @@ def compute_lifespan(
             freq = pd.to_numeric(row.get("frequency"), errors="coerce")
             if not pd.notna(freq) or freq <= 0:
                 continue
-            first_y = extract_year(_str_or_none(row.get("first_occurrence")))
-            last_y = extract_year(_str_or_none(row.get("last_occurrence")))
+            first_y = extract_year(clean_str(row.get("first_occurrence")))
+            last_y = extract_year(clean_str(row.get("last_occurrence")))
             if first_y is None or last_y is None:
                 continue
-            title = _str_or_none(row.get("Titre"))
+            title = clean_str(row.get("Titre"))
             if not title:
                 continue
             rows.append({
@@ -292,7 +265,7 @@ def compute_gender(
         return {}
     counts: Counter = Counter()
     for raw in persons["Genre"]:
-        s = _str_or_none(raw)
+        s = clean_str(raw)
         if not s:
             counts["Unknown"] += 1
             continue
@@ -315,19 +288,16 @@ def compute_places(
     if places.empty:
         return []
     rows: List[Dict[str, Any]] = []
-    coord_col = None
-    for candidate in ("Coordonn\u00e9es", "Coordonnees", "coordinates", "lat_lng"):
-        if candidate in places.columns:
-            coord_col = candidate
-            break
+    coord_col = find_column(places, ["Coordonn\u00e9es", "Coordonnees", "coordinates", "lat_lng"])
     if coord_col is None:
         return []
+    country_of = place_country_resolver(index_df)
     for _, row in places.iterrows():
         coord = parse_coordinates(row.get(coord_col))
         if coord is None:
             continue
         lat, lng = coord
-        title = _str_or_none(row.get("Titre"))
+        title = clean_str(row.get("Titre"))
         if not title:
             continue
         freq_val = pd.to_numeric(row.get("frequency"), errors="coerce")
@@ -338,12 +308,12 @@ def compute_places(
             "lng": lng,
             "frequency": int(freq_val) if pd.notna(freq_val) else 0,
         }
-        # Deliberately no `country` field: the `countries` column on a
+        # Where the place IS — the Partie de walk — or None outside the
+        # six countries. Never countries[0]: the `countries` column on a
         # Lieu authority lists the IWAC newspaper countries that mention
-        # it, not where the place is located. Picking countries[0] made
-        # every popup read "Bénin" because Beninese papers are the most
-        # numerous source. The popup builder shows place name + mention
-        # count instead.
+        # it, which made every popup read "Bénin" because Beninese papers
+        # are the most numerous source.
+        entry["country"] = country_of(title)
         rows.append(entry)
     # Sort by frequency desc so the map builds largest-on-top
     rows.sort(key=lambda r: -r["frequency"])
@@ -408,6 +378,7 @@ def compute_activity(
         return result
 
     labels = _type_labels(index_df, type_labels)
+    country_of = place_country_resolver(index_df)
     for entity_type in INDEX_TYPES:
         subset = index_df[labels == entity_type].copy()
         if subset.empty:
@@ -418,23 +389,31 @@ def compute_activity(
             freq = pd.to_numeric(row.get("frequency"), errors="coerce")
             if not pd.notna(freq) or freq <= 0:
                 continue
-            first_y = extract_year(_str_or_none(row.get("first_occurrence")))
-            last_y = extract_year(_str_or_none(row.get("last_occurrence")))
+            first_y = extract_year(clean_str(row.get("first_occurrence")))
+            last_y = extract_year(clean_str(row.get("last_occurrence")))
             if first_y is None or last_y is None:
                 continue
-            title = _str_or_none(row.get("Titre"))
+            title = clean_str(row.get("Titre"))
             if not title:
                 continue
-            countries = parse_pipe_separated(row.get("countries"))
-            rows.append({
+            entry: Dict[str, Any] = {
                 "o_id": clean_int(row.get("o:id")),
                 "name": title,
-                "country": countries[0] if countries else None,
                 "type": entity_type,
                 "year_min": int(first_y),
                 "year_max": int(last_y),
                 "total": int(freq),
-            })
+            }
+            if entity_type == "Lieux":
+                # A place has a location: the country it lies in, or None
+                # outside the six.
+                entry["country"] = country_of(title)
+            else:
+                # Anything else has only the countries whose press mention
+                # it — a list, never collapsed to its first (most-catalogued)
+                # member.
+                entry["countries"] = parse_pipe_separated(row.get("countries"))
+            rows.append(entry)
 
         rows.sort(key=lambda r: -r["total"])
         result[entity_type] = rows[:top_n]
@@ -450,13 +429,13 @@ def compute_recent_additions(
         return []
     rows: List[Dict[str, Any]] = []
     for _, row in index_df.iterrows():
-        added = _str_or_none(row.get("added_date"))
+        added = clean_str(row.get("added_date"))
         if not added:
             continue
         etype = _entity_type_label(row.get("Type"))
         if etype is None:
             continue
-        title = _str_or_none(row.get("Titre"))
+        title = clean_str(row.get("Titre"))
         if not title:
             continue
         rows.append({
@@ -464,7 +443,7 @@ def compute_recent_additions(
             "title": title,
             "type": etype,
             "added_date": added[:10],
-            "thumbnail": _str_or_none(row.get("thumbnail")),
+            "thumbnail": clean_str(row.get("thumbnail")) or None,
         })
     rows.sort(key=lambda r: (r["added_date"], r.get("o_id") or 0), reverse=True)
     return rows[:limit]
@@ -485,13 +464,13 @@ def compute_index_table(index_df: pd.DataFrame) -> List[Dict[str, Any]]:
         etype = _entity_type_label(row.get("Type"))
         if etype is None:
             continue
-        title = _str_or_none(row.get("Titre"))
+        title = clean_str(row.get("Titre"))
         if not title:
             continue
         freq = pd.to_numeric(row.get("frequency"), errors="coerce")
         countries = parse_pipe_separated(row.get("countries"))
-        first_y = extract_year(_str_or_none(row.get("first_occurrence")))
-        last_y = extract_year(_str_or_none(row.get("last_occurrence")))
+        first_y = extract_year(clean_str(row.get("first_occurrence")))
+        last_y = extract_year(clean_str(row.get("last_occurrence")))
         rows.append({
             "o_id": clean_int(row.get("o:id")),
             "title": title,
@@ -537,8 +516,8 @@ def build_index_overview(
         if df is not None:
             dataframes[subset] = df
 
-    logger.info("Computing top entities (top %d per type)", top_n)
-    top_entities = compute_top_entities(index_df, top_n=top_n, type_labels=type_labels)
+    logger.info("Computing top entities (top %d per type, by subject + place tags)", top_n)
+    top_entities = compute_top_entities(index_df, dataframes, top_n=top_n)
 
     logger.info("Computing lifespan scatter (top %d per type)", lifespan_n)
     lifespan = compute_lifespan(index_df, top_n=lifespan_n, type_labels=type_labels)

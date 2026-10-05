@@ -159,7 +159,16 @@ class NetworkAggregator(DashboardAggregator):
 
 
 def parse_pairs(raw: str) -> List[Tuple[str, str]]:
+    """``--pairs`` → distinct, unordered ``(type_a, type_b)`` pairs.
+
+    A pair is unordered — ``build_global_network`` walks a cross pair in
+    both directions into one canonical ``(min, max)`` edge — so each pair
+    is normalised to ``TYPE_ORDER`` order and kept once, in first-seen
+    order. Without that, ``personnes-organisations,organisations-personnes``
+    (or a pair named twice) counted every one of those edges twice.
+    """
     pairs: List[Tuple[str, str]] = []
+    seen = set()
     for chunk in raw.split(","):
         chunk = chunk.strip().lower()
         if not chunk:
@@ -169,10 +178,13 @@ def parse_pairs(raw: str) -> List[Tuple[str, str]]:
             raise ValueError(
                 f"Bad --pairs entry {chunk!r}; use slugs {sorted(TYPE_SLUGS)} as 'a-b'"
             )
-        a, b = TYPE_SLUGS[parts[0]], TYPE_SLUGS[parts[1]]
+        a, b = sorted((TYPE_SLUGS[parts[0]], TYPE_SLUGS[parts[1]]), key=TYPE_ORDER.index)
         # Same-type pairs are supported; build_global_network() walks
         # them as an unordered combination so no node self-loops and no
         # pair is counted twice.
+        if (a, b) in seen:
+            continue
+        seen.add((a, b))
         pairs.append((a, b))
     if not pairs:
         raise ValueError("--pairs resolved to an empty list")

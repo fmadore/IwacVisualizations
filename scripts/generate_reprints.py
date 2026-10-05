@@ -46,6 +46,7 @@ from iwac_utils import (
     canonicalize_country_field,
     add_standard_args,
     clean_str,
+    dominant,
     generate_timestamp,
     load_dataset_safe,
     parse_standard_args,
@@ -183,9 +184,7 @@ def generate(
             {
                 "name": n,
                 "pairs": int(c),
-                "country": (min(paper_country[n].items(),
-                                key=lambda kv: (-kv[1], kv[0]))[0]
-                            if paper_country[n] else None),
+                "country": dominant(paper_country[n]),
             }
             for n, c in sorted(paper_counts.items(),
                                key=lambda kv: (-kv[1], kv[0]))

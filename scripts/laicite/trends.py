@@ -1,17 +1,18 @@
-"""Per-year series and the Gregorian-vs-lunar month profile.
+"""The timeline's coverage cells and the Gregorian-vs-lunar month profile.
 
-``laicite-trends.json`` and ``laicite-seasonality.json``. Both are temporal
-facets, so both exclude ``references``: scholarship is dated by when the
-analysis was published, not by the period analysed.
+``laicite-trends.json`` and ``laicite-seasonality.json``. The seasonality
+profile excludes ``references``: scholarship is dated by when the analysis
+was published, not by the period analysed. The timeline's cells keep every
+subset and let the reader pick one source type at a time.
 """
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from iwac_utils import generate_timestamp
 
-from laicite.scan import SUBSET_FIELDS
+from laicite.scan import MINIMUM_CELL, SUBSET_FIELDS
 
 
 class TrendsMixin:
@@ -19,69 +20,22 @@ class TrendsMixin:
 
 
     def build_trends(self) -> Dict[str, Any]:
-        """Aligned per-year series: global, per country, per frame, per subset.
+        """The timeline's bundle: the whole-collection coverage cells.
 
-        Shaped to match ``scary-terms-trends.json`` so ``scary-terms/trends.js``
-        renders it unchanged (``years`` / ``families`` / ``global`` /
-        ``by_country``), with two additions this block needs: ``by_subset``
-        (press coverage and primary sources must never share a total without
-        saying so) and item counts alongside occurrence counts.
+        The timeline is drawn from ``research`` alone — matching records
+        over eligible records, per subset × year × country × outlet — and
+        nothing else. The per-year frame series this bundle used to carry
+        (``years`` / ``families`` / ``global`` / ``by_country`` /
+        ``by_subset`` / ``items``) were the shape of the frame-count chart
+        the research series replaced; no reader was left, so they are no
+        longer computed.
         """
-        scans = [s for s in self.scan_all() if s.subset != "references"]
-        frames = list(self.lex.frames.keys())
-        years_present = sorted({s.year for s in scans if s.year})
-        if not years_present:
-            return {"generated_at": generate_timestamp(), "years": [],
-                    "families": frames, "global": {}, "by_country": {}}
-        years = list(range(years_present[0], years_present[-1] + 1))
-        year_idx = {y: i for i, y in enumerate(years)}
-
-        def blank() -> Dict[str, List[int]]:
-            return {f: [0] * len(years) for f in frames}
-
-        global_series = blank()
-        by_country: Dict[str, Dict[str, List[int]]] = {}
-        by_subset: Dict[str, Dict[str, List[int]]] = {}
-        items_global = [0] * len(years)
-        items_by_country: Dict[str, List[int]] = {}
-        country_totals: Counter = Counter()
-
-        for s in scans:
-            if s.year is None or s.year not in year_idx:
-                continue
-            yi = year_idx[s.year]
-            items_global[yi] += 1
-            for frame, count in s.frame_counts.items():
-                global_series[frame][yi] += count
-            by_subset.setdefault(s.subset, blank())
-            for frame, count in s.frame_counts.items():
-                by_subset[s.subset][frame][yi] += count
-            for country in s.countries:
-                country_totals[country] += 1
-                by_country.setdefault(country, blank())
-                items_by_country.setdefault(country, [0] * len(years))
-                items_by_country[country][yi] += 1
-                for frame, count in s.frame_counts.items():
-                    by_country[country][frame][yi] += count
-
-        keep = {c for c, n in country_totals.items() if n >= self.min_country_items}
-        by_country = {c: v for c, v in sorted(by_country.items()) if c in keep}
-        items_by_country = {c: v for c, v in items_by_country.items() if c in keep}
-
-        self.logger.info(
-            f"Trends: {len(years)} years, {len(by_country)} countries, "
-            f"{len(by_subset)} subsets")
+        research = self.build_research()
+        self.logger.info(f"Trends: {len(research['cells'])} coverage cells")
         return {
-            # Every bundle says when it was made; this one and the scary
-            # temporal map were the two with no provenance at all (P10).
+            # Every bundle says when it was made (P10).
             "generated_at": generate_timestamp(),
-            "research": self.build_research(),
-            "years": years,
-            "families": frames,
-            "global": global_series,
-            "by_country": by_country,
-            "by_subset": by_subset,
-            "items": {"global": items_global, "by_country": items_by_country},
+            "research": research,
         }
 
     def build_seasonality(self) -> Dict[str, Any]:
@@ -128,6 +82,8 @@ class TrendsMixin:
         self.logger.info(f"  seasonality: {len(out)} corpora with dated items")
         return {
             "generated_at": generate_timestamp(),
+            # Months with fewer eligible records than this carry no rate.
+            "minimum_cell": MINIMUM_CELL,
             "note": (
                 "Lunar months are read from the dataset's precomputed "
                 "hijri_month (Umm al-Qura), never re-derived in the browser: "

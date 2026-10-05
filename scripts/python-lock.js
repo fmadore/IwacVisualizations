@@ -16,14 +16,22 @@ const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const { readText } = require('./lib/fs');
+
 const ROOT = path.resolve(__dirname, '..');
 const INPUT = path.join(__dirname, 'requirements.txt');
 const LOCK = path.join(__dirname, 'requirements.lock');
 const UV_VERSION = '0.12.1';
 const HASH_PREFIX = '# requirements-input-sha256: ';
 
+/**
+ * The hash of requirements.txt as TEXT, line endings folded to LF. Raw bytes
+ * made a CRLF checkout's hash differ from CI's for an identical file, so the
+ * lock read as stale on Windows and a refresh there wrote a hash CI rejected.
+ * An LF file hashes exactly as before.
+ */
 function inputHash() {
-    return crypto.createHash('sha256').update(fs.readFileSync(INPUT)).digest('hex');
+    return crypto.createHash('sha256').update(readText(INPUT), 'utf8').digest('hex');
 }
 
 function check() {

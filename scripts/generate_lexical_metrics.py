@@ -69,6 +69,7 @@ from iwac_utils import (
     clean_float,
     clean_str,
     create_metadata_block,
+    dominant,
     extract_year,
     is_unknown,
     iter_records,
@@ -199,7 +200,7 @@ def build_lexical_metrics(
         countries_counter = newspaper_countries.get(name)
         entry: Dict[str, Any] = {
             "name": name,
-            "country": countries_counter.most_common(1)[0][0] if countries_counter else "",
+            "country": dominant(countries_counter or {}, ""),
             "count": acc.count,
         }
         for key in METRICS:

@@ -30,8 +30,8 @@
 'use strict';
 
 const { spawnSync } = require('child_process');
-const fs = require('fs');
 const path = require('path');
+const { walkFiles } = require('./lib/fs');
 
 const SCRIPTS_DIR = path.join(__dirname);
 const ROOT = path.join(__dirname, '..');
@@ -66,17 +66,10 @@ function candidates() {
  * __pycache__ is skipped because .pyc is not .py.
  */
 function pythonFiles(dir = SCRIPTS_DIR) {
-    const out = [];
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-        const full = path.join(dir, entry.name);
-        if (entry.isDirectory()) {
-            if (entry.name === '__pycache__' || entry.name.startsWith('.')) continue;
-            out.push(...pythonFiles(full));
-        } else if (entry.name.endsWith('.py')) {
-            out.push(full);
-        }
-    }
-    return out.sort();
+    return walkFiles(dir, {
+        include: (_full, name) => name.endsWith('.py'),
+        skipDir: (_full, name) => name === '__pycache__' || name.startsWith('.'),
+    }).sort();
 }
 
 /** Does `<exe> -m <mod> --version` work? */
@@ -129,7 +122,7 @@ function run() {
 
     console.log(
         '• python lint SKIPPED: no interpreter with ruff or pyflakes found. '
-        + 'Install it with `pip install ruff==0.16.6` to catch unused imports '
+        + 'Install it with `pip install ruff==0.16.10` to catch unused imports '
         + 'and undefined names before CI does.'
     );
     return 0;

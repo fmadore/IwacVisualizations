@@ -69,6 +69,31 @@ class PairParsingTests(unittest.TestCase):
         # Subjects tag nearly every item; that pair would dominate the layout.
         self.assertNotIn(("Sujets", "Sujets"), pairs)
 
+    def test_a_pair_is_unordered_and_kept_once(self) -> None:
+        # Both spellings of one pair, and a repeat, are ONE pair: the walk
+        # folds a cross pair into a (min, max) edge, so listing it twice
+        # used to count every one of those edges twice.
+        pairs = networks.parse_pairs(
+            "personnes-organisations,organisations-personnes,"
+            "lieux-evenements,personnes-organisations"
+        )
+        self.assertEqual(
+            pairs,
+            [("Personnes", "Organisations"), ("Événements", "Lieux")],
+        )
+
+    def test_a_mirrored_pair_list_draws_the_same_weights(self) -> None:
+        items = {"a": {1, 10}, "b": {1, 10, 11}}
+        agg = FakeAggregator(items, ENTITIES)
+        with patch.object(networks, "compute_layout", stub_layout):
+            once = networks.build_global_network(
+                agg, networks.parse_pairs("personnes-organisations"), 1)
+            twice = networks.build_global_network(
+                agg, networks.parse_pairs(
+                    "personnes-organisations,organisations-personnes"), 1)
+        self.assertEqual(once["edges"], twice["edges"])
+        self.assertEqual(sorted({w for _a, _b, w in twice["edges"]}), [1, 2])
+
 
 def stub_layout(
     nodes: List[int],

@@ -85,13 +85,15 @@ from iwac_stats import build_timeline_series
 from iwac_utils import (
     add_standard_args,
     parse_standard_args,
+    build_entity_index,
     canonicalize_country_field,
     clean_known_str,
     clean_values,
     create_metadata_block,
     extract_year,
+    lda_topic_id,
     load_dataset_safe,
-    parse_coordinates,
+    normalize_location_name,
     parse_pipe_separated,
     save_json,
     top_n_pipe,
@@ -134,9 +136,8 @@ DEFAULT_LANDSCAPE_MIN_DIST = 0.15
 LANDSCAPE_MIN_POINTS = 30
 LANDSCAPE_TITLE_LEN = 70
 
-# LDA outlier bucket — excluded from the topic panel, as everywhere else
-# in the module.
-LDA_OUTLIER_ID = -1
+# The LDA outlier bucket (-1) is excluded from the topic panel, as
+# everywhere else in the module — iwac_utils.lda_topic_id rejects it.
 
 # `lda_model_name` → the language that model was trained and predicted on.
 # The upstream presets are `lda_model_references` (Français) and
@@ -159,21 +160,6 @@ def _clean_unique_list(values: List[str]) -> List[str]:
             seen.add(value)
             result.append(value)
     return result
-
-
-def _topic_id(value: Any) -> Optional[int]:
-    """``lda_topic_id`` cell → int topic id, or None.
-
-    The column is float64 (NaN where no topic was predicted), and ``-1``
-    is the outlier bucket rather than a topic — both are excluded.
-    """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    try:
-        topic_id = int(float(value))
-    except (TypeError, ValueError):
-        return None
-    return None if topic_id == LDA_OUTLIER_ID else topic_id
 
 
 def _topic_prob(value: Any) -> Optional[float]:
@@ -211,10 +197,6 @@ def _reference_title(row: pd.Series) -> str:
 def _first_pipe_value(row: pd.Series, field: str) -> str:
     values = _clean_unique_list(parse_pipe_separated(row.get(field)))
     return values[0] if values else ""
-
-
-def _lookup_key(value: Any) -> str:
-    return " ".join(str(value or "").strip().lower().split())
 
 
 def _subject_id(label: str) -> str:
@@ -353,7 +335,7 @@ def compute_fulltext_coverage(rows: pd.DataFrame) -> Dict[str, Any]:
     with_topic = 0
     if topic_ids is not None:
         for value in topic_ids:
-            topic_id = _topic_id(value)
+            topic_id = lda_topic_id(value)
             if topic_id is not None:
                 with_topic += 1
 
@@ -426,7 +408,7 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
     model_totals: Counter = Counter()
 
     for position, (_, row) in enumerate(rows.iterrows()):
-        topic_id = _topic_id(row.get("lda_topic_id"))
+        topic_id = lda_topic_id(row.get("lda_topic_id"))
         if topic_id is None:
             continue
         model_name = clean_known_str(row.get("lda_model_name")) if has_model_column else ""
@@ -762,35 +744,40 @@ def _empty_provenance_map(reason: str, source_field: Optional[str] = None) -> Di
 
 
 def build_coordinate_lookup(index_rows: Optional[pd.DataFrame]) -> Dict[str, Dict[str, Any]]:
+    """Normalized place title / alias → the geocoded ``Lieux`` record.
+
+    Through ``iwac_utils.build_entity_index`` (places only), so a
+    provenance label matches its authority exactly as a tag does in every
+    other block — NFC, case and whitespace folded on both sides
+    (``normalize_location_name``). Look a label up with that function.
+    This used to lowercase and collapse whitespace without NFC, admitted
+    authority placeholders, and let any type with a coordinate in.
+    """
     if index_rows is None or index_rows.empty:
+        return {}
+    try:
+        places, _, coords = build_entity_index(index_rows, types=["Lieux"])
+    except RuntimeError:
         return {}
 
     lookup: Dict[str, Dict[str, Any]] = {}
-    for _, row in index_rows.iterrows():
-        coordinates = parse_coordinates(row.get("Coordonnées"))
-        title = clean_known_str(row.get("Titre") or row.get("title") or row.get("o:title"))
-        if not coordinates or not title:
+    entries: Dict[int, Dict[str, Any]] = {}
+    for key, info in places.items():
+        o_id = info["o_id"]
+        if o_id not in coords:
             continue
-
-        lat, lng = coordinates
-        entry: Dict[str, Any] = {
-            "name": title,
-            "lat": float(lat),
-            "lng": float(lng),
-        }
-        o_id = clean_known_str(row.get("o:id"))
-        if o_id:
-            entry["o_id"] = o_id
-        entity_type = clean_known_str(row.get("Type"))
-        if entity_type:
-            entry["type"] = entity_type
-
-        labels = [title] + _clean_unique_list(parse_pipe_separated(row.get("Titre alternatif")))
-        for label in labels:
-            key = _lookup_key(label)
-            if key and key not in lookup:
-                lookup[key] = entry
-
+        entry = entries.get(o_id)
+        if entry is None:
+            lat, lng = coords[o_id]
+            entry = entries[o_id] = {
+                "name": info["title"],
+                "lat": float(lat),
+                "lng": float(lng),
+                # A string, as the payload has always carried it.
+                "o_id": str(o_id),
+                "type": info["type"],
+            }
+        lookup[key] = entry
     return lookup
 
 
@@ -823,7 +810,7 @@ def compute_provenance_map(
         matched_row = False
 
         for place in places:
-            match = coord_lookup.get(_lookup_key(place))
+            match = coord_lookup.get(normalize_location_name(place))
             if not match:
                 unmatched[place] += 1
                 continue

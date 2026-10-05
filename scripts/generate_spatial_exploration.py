@@ -51,6 +51,7 @@ from iwac_utils import (
     add_standard_args,
     parse_standard_args,
     IWAC_COUNTRIES,
+    build_partie_de_lookup,
     canonical_country,
     create_metadata_block,
     find_column,
@@ -58,6 +59,7 @@ from iwac_utils import (
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    resolve_focus_country,
     save_json,
 )
 
@@ -86,10 +88,6 @@ COUNTRY_FOCUS_ADMIN = {
     "Togo": {"slug": "togo", "levels": ["regions", "prefectures"]},
 }
 
-# ``Partie de`` chains are shallow (place → region → country) but guard
-# against cycles / malformed data anyway.
-MAX_PARTIE_DE_DEPTH = 6
-
 
 def _safe_int(value: Any) -> int:
     try:
@@ -98,33 +96,10 @@ def _safe_int(value: Any) -> int:
         return 0
 
 
-def resolve_focus_country(
-    title: str,
-    partie_de_by_key: Dict[str, str],
-    focus_set: Dict[str, str],
-) -> Optional[str]:
-    """Walk the ``Partie de`` chain until a focus country is reached.
-
-    ``partie_de_by_key`` maps a normalized index title to that entry's
-    raw ``Partie de`` value; ``focus_set`` maps normalized country
-    names to their canonical spelling. The location's own title counts
-    too (the six countries are themselves Lieux entries).
-    """
-    seen = set()
-    current = title
-    for _ in range(MAX_PARTIE_DE_DEPTH):
-        key = normalize_location_name(current)
-        if not key or key in seen:
-            return None
-        seen.add(key)
-        canon = focus_set.get(normalize_location_name(canonical_country(current)))
-        if canon:
-            return canon
-        parents = parse_pipe_separated(partie_de_by_key.get(key, ""))
-        if not parents:
-            return None
-        current = parents[0]
-    return None
+# The ``Partie de`` walk (``resolve_focus_country``) lives in iwac_utils now:
+# it is THE place -> country lookup, and three other generators that read
+# ``index.countries[0]`` for a place (the countries that MENTION it) moved
+# onto it.
 
 
 def build_locations_and_pickers(index_df) -> Dict[str, Any]:
@@ -133,18 +108,9 @@ def build_locations_and_pickers(index_df) -> Dict[str, Any]:
     type_col = find_column(index_df, ["Type"], required=True)
     coord_col = find_column(index_df, ["Coordonnées", "Coordonnees"])
     freq_col = find_column(index_df, ["frequency"])
-    partie_col = find_column(index_df, ["Partie de"])
 
     focus_set = {normalize_location_name(c): c for c in FOCUS_COUNTRIES}
-    partie_de_by_key: Dict[str, str] = {}
-    if partie_col:
-        for _, row in index_df.iterrows():
-            title = str(row.get(title_col) or "").strip()
-            if not title:
-                continue
-            partie_de_by_key.setdefault(
-                normalize_location_name(title), str(row.get(partie_col) or "")
-            )
+    partie_de_by_key = build_partie_de_lookup(index_df)
 
     pickers: Dict[str, List[List[Any]]] = {t: [] for t in ENTITY_TYPES}
     locations: List[List[Any]] = []

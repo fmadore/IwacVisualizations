@@ -18,11 +18,11 @@
 
 const { readFileSync, existsSync } = require('fs');
 const { join } = require('path');
+const { fail } = require('./lib/report');
 
 const path = process.argv[2] || join(__dirname, '..', 'test-results', 'report.json');
 if (!existsSync(path)) {
-    console.error(`✗ flake guard: no Playwright JSON report at ${path}`);
-    process.exit(1);
+    fail(`flake guard: no Playwright JSON report at ${path}`, [], undefined, { leadingBlank: false });
 }
 
 const report = JSON.parse(readFileSync(path, 'utf8'));
@@ -42,9 +42,10 @@ function visit(suite, trail) {
 for (const suite of report.suites || []) visit(suite, []);
 
 if (flaky.length) {
-    console.error(`\n✗ flake guard: ${flaky.length} of ${total} browser contracts passed only on retry\n`);
-    for (const name of flaky) console.error(`  ${name}`);
-    console.error('\nA test that needs a retry is intermittent; make it deterministic or report why it cannot be.\n');
-    process.exit(1);
+    fail(
+        `flake guard: ${flaky.length} of ${total} browser contracts passed only on retry`,
+        flaky,
+        '\nA test that needs a retry is intermittent; make it deterministic or report why it cannot be.\n'
+    );
 }
 console.log(`✓ flake guard: ${total} browser contracts passed first time`);

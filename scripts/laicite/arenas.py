@@ -7,6 +7,7 @@ from typing import Any, Dict, List
 
 from iwac_utils import generate_timestamp
 
+from laicite.scan import MINIMUM_CELL, NEARBY_TOKENS
 
 
 class ArenasMixin:
@@ -75,8 +76,10 @@ class ArenasMixin:
             f"{len(keep)} countries")
         return {
             "generated_at": generate_timestamp(),
-            "context_window": 80,
-            "minimum_cell": 5,
+            # The proximity rule behind `nearby_frame_counts`, read from the
+            # one constant the scan and the audit also use.
+            "context_window": NEARBY_TOKENS,
+            "minimum_cell": MINIMUM_CELL,
             "excluded_without_anchor": sum(1 for s in scans if s.subset != "references" and not s.said),
             "frames": frames,
             "decades": decades,
@@ -89,8 +92,8 @@ class ArenasMixin:
             "membership_excluded": excluded,
             "scope": (
                 "Primary sources with a core match, including YouTube. "
-                "Categories must occur within 80 tokens of a core match "
-                "in the same field. Scholarship and unanchored tag-only "
+                f"Categories must occur within {NEARBY_TOKENS} tokens of a "
+                "core match in the same field. Scholarship and unanchored tag-only "
                 "records are excluded. This is lexical context, not argument coding."
             ),
         }

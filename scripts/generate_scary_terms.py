@@ -59,13 +59,13 @@ import pandas as pd
 from iwac_utils import (
     DATASET_ID,
     add_standard_args,
+    build_entity_index,
     extract_year,
     generate_timestamp,
     iter_records,
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
-    parse_coordinates,
     parse_pipe_separated,
     parse_standard_args,
     save_json,
@@ -212,9 +212,14 @@ class ScaryTermsGenerator:
     #  Data loading / cleaning
     # ---------------------------------------------------------------------
 
+    # The only columns the scan and its aggregations read. Without the
+    # projection the 768-dim embedding and the raw OCR of every article were
+    # converted to Python objects for nothing.
+    ARTICLE_COLUMNS = ["pub_date", "country", "spatial", "lemma_text", "lemma_nostop"]
+
     def load(self) -> None:
         self.logger.info(f"Loading 'articles' subset from {self.repo_id}…")
-        df = load_dataset_safe("articles", repo_id=self.repo_id)
+        df = load_dataset_safe("articles", repo_id=self.repo_id, columns=self.ARTICLE_COLUMNS)
         if df is None:
             raise RuntimeError("Failed to load 'articles' subset")
 
@@ -651,29 +656,25 @@ class ScaryTermsGenerator:
             return {"generated_at": generate_timestamp(), "families": list(SCARY_TERMS.keys()),
                     "min_place_articles": self.min_place_articles, "places": []}
 
-        lieux = index_df[index_df["Type"] == "Lieux"]
+        # The shared places-only join (titles before aliases, so an alias
+        # never shadows another place's canonical title), restricted to the
+        # geocoded records.
+        lookup, _, coords = build_entity_index(index_df, types=["Lieux"])
         name_to_place: Dict[str, Dict[str, Any]] = {}
         places: Dict[int, Dict[str, Any]] = {}
-        for _, row in lieux.iterrows():
-            coords = parse_coordinates(row.get("Coordonnées"))
-            if coords is None:
+        for key, info in lookup.items():
+            o_id = info["o_id"]
+            if o_id not in coords:
                 continue
-            o_id = int(row["o:id"])
-            place = {
-                "o_id": o_id,
-                "name": str(row.get("Titre") or "").strip(),
-                "lat": coords[0],
-                "lng": coords[1],
-            }
-            if not place["name"]:
-                continue
-            places[o_id] = place
-            name_to_place[normalize_location_name(place["name"])] = place
-            for alt in parse_pipe_separated(row.get("Titre alternatif")):
-                key = normalize_location_name(alt)
-                # Never let an alias shadow another place's canonical title.
-                if key and key not in name_to_place:
-                    name_to_place[key] = place
+            place = places.get(o_id)
+            if place is None:
+                place = places[o_id] = {
+                    "o_id": o_id,
+                    "name": info["title"],
+                    "lat": coords[o_id][0],
+                    "lng": coords[o_id][1],
+                }
+            name_to_place[key] = place
 
         self.logger.info(f"Geocoded {len(places)} Lieux authority records")
 

@@ -33,33 +33,28 @@
  * Usage: node scripts/build-js.js
  */
 
-const { readdirSync, readFileSync, statSync, mkdirSync, rmSync, existsSync } = require('fs');
+const { statSync, mkdirSync, rmSync, existsSync } = require('fs');
 const { join, relative } = require('path');
 const esbuild = require('esbuild');
+const { sourceFiles, posixRelative } = require('./lib/fs');
+const { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets } = require('./lib/manifest');
+const { fail } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const SRC_DIR = join(ROOT, 'asset', 'js');
 const DIST_DIR = join(SRC_DIR, 'dist');
-const MANIFEST = join(SRC_DIR, 'bundles.json');
 
-function walk(dir, out = []) {
-    for (const entry of readdirSync(dir)) {
-        const p = join(dir, entry);
-        if (statSync(p).isDirectory()) {
-            if (p === DIST_DIR) continue;
-            walk(p, out);
-        } else if (p.endsWith('.js') && !p.endsWith('.min.js')) {
-            out.push(relative(SRC_DIR, p).split('\\').join('/'));
-        }
-    }
-    return out;
+/** Every bundleable source under asset/js/, as manifest-relative paths. */
+function walk() {
+    return sourceFiles(SRC_DIR, '.js', { skipDir: (p) => p === DIST_DIR })
+        .map((p) => posixRelative(SRC_DIR, p));
 }
 
 /** Validate the manifest against the tree; returns the list of bundles. */
 function readManifest() {
-    const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
+    const manifest = loadManifest(MANIFEST_PATH);
     const problems = [];
-    const sources = new Set(walk(SRC_DIR));
+    const sources = new Set(walk());
     const seen = new Map();
     const bundles = [];
 
@@ -84,8 +79,8 @@ function readManifest() {
         add(`panels/${name}`, join(DIST_DIR, 'panels', `${name}.min.js`), files);
     }
     for (const [name, entry] of Object.entries(manifest.blocks || {})) {
-        const files = Array.isArray(entry) ? entry : (entry && entry.files) || [];
-        const uses = Array.isArray(entry) ? [] : (entry && entry.uses) || [];
+        const files = ownFiles(entry);
+        const uses = usedPanelSets(entry);
         for (const u of uses) {
             if (!panelSets[u]) problems.push(`blocks.${name}: uses '${u}', which is not a panel set in "panels"`);
         }
@@ -103,10 +98,8 @@ function readManifest() {
         if (!seen.has(f)) problems.push(`${f} is in no bundle — add it to asset/js/bundles.json (or delete it)`);
     }
     if (problems.length) {
-        console.error(`\n✗ bundle manifest: ${problems.length} problem(s)\n`);
-        for (const p of problems) console.error(`  ${p}`);
-        console.error('\nThe load order lives in asset/js/bundles.json and nowhere else.\n');
-        process.exit(1);
+        fail(`bundle manifest: ${problems.length} problem(s)`, problems,
+            '\nThe load order lives in asset/js/bundles.json and nowhere else.\n');
     }
     return bundles;
 }

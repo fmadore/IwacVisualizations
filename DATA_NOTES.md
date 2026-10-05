@@ -53,13 +53,21 @@ a per-row `country` in place of the previous hardcoded `"Nigeria"`.
 - `country` single-value (6 countries: Burkina Faso, Bénin, Niger, Nigeria, Togo, Côte d'Ivoire)
 - `spatial` multi-value (pipe-separated, geographic focus)
 - `index` entries where `Type == "Lieux"` carry `Coordonnées` (lat/long) → MapLibre markers
-- `index.countries` already aggregated per entity
+- `index.countries` already aggregated per entity — the countries whose press
+  mentions it, never a place's location (use the `Partie de` walk for that)
 
 ### Entities (authority file)
 The `index` subset is **pre-aggregated** — each row already has:
-- `frequency` — total mentions across articles + publications + references
+- `frequency` — documents across articles + publications + references +
+  audiovisual that name the entity in ANY role (subject, spatial, author,
+  creator, publisher, editor), deduplicated per row. A journalist's figure is
+  mostly bylines. The overview blocks' top-entity panels therefore rank on
+  subject + spatial tag memberships instead (`iwac_utils.compute_top_entities`).
 - `first_occurrence` / `last_occurrence` — date range
-- `countries` — pipe-separated list where it appears
+- `countries` — pipe-separated list of the countries whose press MENTIONS the
+  entity. For a place this is **not** where the place is: `countries[0]` is
+  usually Bénin (the most-catalogued press) whatever the place. Resolve a
+  place's own country by walking `Partie de` (`iwac_utils.place_country_resolver`).
 - `Type` ∈ `{"Personnes", "Organisations", "Lieux", "Événements", "Sujets", "Notices d'autorité"}`
 - Person-specific: `Prénom`, `Nom`, `Genre`, `Naissance`
 - Place-specific: `Coordonnées`
@@ -101,7 +109,8 @@ The `index` subset is **pre-aggregated** — each row already has:
 
 ### Collection-level (site-wide page block)
 - Article count timeline by year, stacked by country
-- Top 20 persons / orgs / places / subjects (from `index`, sorted by `frequency`)
+- Top 20 persons / orgs / places / subjects (by subject + spatial tag
+  memberships — `index.frequency` also counts bylines)
 - Choropleth of the 6 countries + optional marker map from `Lieux` entries
 - Language distribution donut
 - Sentiment distribution (articles) — one model at a time, never averaged

@@ -100,14 +100,15 @@ from iwac_utils import (
     DATASET_ID,
     HIJRI_COLUMNS,
     aggregate_prevalence,
-    canonical_country,
     clean_float,
     clean_str,
     configure_logging,
     create_metadata_block,
     extract_year,
     find_column,
+    first_country,
     iter_records,
+    lda_topic_id,
     load_dataset_safe,
     parse_top_words,
     read_hijri_month,
@@ -124,24 +125,12 @@ DEFAULT_TOP_ARTICLES = 10
 # trim. Past 15 the horizontal bar chart becomes a wall of labels.
 MAX_DISTRIBUTION_BARS = 15
 
-# Outlier articles (lda_topic_id == -1) are excluded from per-topic
-# aggregations but counted in the metadata so the user can see the
-# size of the un-classified residual.
-OUTLIER_TOPIC_ID = -1
+# Outlier articles (lda_topic_id == -1, which iwac_utils.lda_topic_id
+# rejects) are excluded from per-topic aggregations but counted in the
+# metadata so the user can see the size of the un-classified residual.
 
 
 logger: Optional[logging.Logger] = None
-
-
-def first_country(value: Any) -> str:
-    """Return the canonical first country from a multi-value cell, or ''."""
-    s = clean_str(value)
-    if not s or s.lower() == 'unknown':
-        return ''
-    head = s.split('|', 1)[0].strip()
-    if not head or head.lower() == 'unknown':
-        return ''
-    return canonical_country(head)
 
 
 def extract_iso_day(value: Any) -> Optional[str]:
@@ -218,11 +207,13 @@ def aggregate_per_topic(
     all_newspapers = set()
 
     for row in iter_records(df):
-        raw_topic = clean_float(row.get(topic_id_col))
-        if raw_topic is None:
+        # A missing id is "never modelled"; a present one lda_topic_id
+        # rejects is the -1 outlier bucket (or a negative id, which would
+        # be an upstream convention change) — counted, not aggregated.
+        if clean_float(row.get(topic_id_col)) is None:
             continue
-        topic_id = int(raw_topic)
-        if topic_id == OUTLIER_TOPIC_ID:
+        topic_id = lda_topic_id(row.get(topic_id_col))
+        if topic_id is None:
             outlier_count += 1
             continue
 

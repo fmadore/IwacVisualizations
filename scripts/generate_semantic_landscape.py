@@ -53,6 +53,7 @@ from iwac_utils import (
     extract_year,
     find_column,
     iter_records,
+    lda_topic_id,
     load_dataset_safe,
     save_json,
 )
@@ -135,15 +136,8 @@ def main() -> int:
         if len(title) > args.max_title_len:
             title = title[: args.max_title_len - 1].rstrip() + "…"
 
-        topic_id = None
-        if topic_id_col is not None:
-            raw_topic = row.get(topic_id_col)
-            try:
-                topic_id = int(raw_topic)
-            except (TypeError, ValueError):
-                topic_id = None
-            if topic_id is not None and topic_id < 0:
-                topic_id = None  # -1 = LDA outlier
+        # None for the -1 outliers and unmodelled rows alike.
+        topic_id = lda_topic_id(row.get(topic_id_col)) if topic_id_col is not None else None
 
         vectors.append(vec)
         rows.append({

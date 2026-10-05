@@ -21,15 +21,22 @@ LEDGER_PATH = Path(__file__).with_name("audit_ledger.json")
 EMPTY_LEDGER: Dict[str, Any] = {"rules": {}, "members": {}, "occurrences": {}}
 
 
+def empty_ledger() -> Dict[str, Any]:
+    """A fresh empty ledger. Each call builds new section dicts: a shallow
+    copy of ``EMPTY_LEDGER`` would hand every caller the SAME nested dicts,
+    so one merge writing into an empty load would write into the next."""
+    return {key: {} for key in EMPTY_LEDGER}
+
+
 def load_ledger(path: Path = LEDGER_PATH) -> Dict[str, Any]:
     """The ledger, or an empty one when it is absent or unreadable."""
     try:
         with Path(path).open(encoding="utf-8") as fh:
             raw = json.load(fh)
     except (OSError, ValueError):
-        return dict(EMPTY_LEDGER)
+        return empty_ledger()
     if not isinstance(raw, dict):
-        return dict(EMPTY_LEDGER)
+        return empty_ledger()
     return {
         key: (raw.get(key) if isinstance(raw.get(key), dict) else {})
         for key in EMPTY_LEDGER

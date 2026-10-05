@@ -46,9 +46,13 @@ class ConcordanceMixin:
             cap = PER_ITEM_SNIPPET_CAP.get(s.subset)
             quotable = [o for o in s.occurrences if o.quotable and o.field in texts]
             if cap is not None and len(quotable) > cap:
-                # Spread the per-item sample across frames so a long item
-                # does not spend its whole budget on one repeated word.
-                quotable = self._sample_across(quotable, cap, key=lambda o: o.frame)
+                # Every frame the item touches gets a line before any frame
+                # gets a second one. A proportional quota would hand a long
+                # issue's whole budget to its one repeated word: 100
+                # `laicite` hits beside three `ecole` and one `separation`
+                # kept six `laicite` lines and nothing else.
+                quotable = self._sample_every_stratum(
+                    quotable, cap, key=lambda o: o.frame)
             for occ in quotable:
                 raw = texts[occ.field]
                 per_subset_rows[s.subset].append({
@@ -169,23 +173,73 @@ class ConcordanceMixin:
         return index, files
 
     def _sample_across(self, items: List[Any], cap: int, key) -> List[Any]:
-        """Proportional stratified sample using largest-remainder quotas."""
+        """Proportional stratified sample using largest-remainder quotas.
+
+        The subset-level cap: it preserves the decade × country distribution,
+        so a thin stratum may legitimately get nothing.
+        """
         if len(items) <= cap:
             return items
-        strata: Dict[Any, List[Any]] = defaultdict(list)
-        for it in items:
-            strata[key(it)].append(it)
-        for bucket in strata.values():
-            self.rng.shuffle(bucket)
-        out: List[Any] = []
+        strata = self._shuffled_strata(items, key)
         order = sorted(strata.keys(), key=lambda k: str(k))
-        quotas = {k: cap * len(strata[k]) // len(items) for k in order}
-        remainder = sorted(order, key=lambda k: -(cap * len(strata[k]) % len(items)))
-        for k in remainder[:cap - sum(quotas.values())]:
-            quotas[k] += 1
+        quotas = self._largest_remainder(
+            {k: len(strata[k]) for k in order}, cap, order)
+        out: List[Any] = []
         for k in order:
             out.extend(strata[k][:quotas[k]])
         return out
+
+    def _sample_every_stratum(self, items: List[Any], cap: int, key) -> List[Any]:
+        """One item per stratum first, then the rest by largest remainder.
+
+        The per-item cap. When there are more strata than slots, which strata
+        get one is decided by a seeded shuffle — reproducible, and not biased
+        towards whichever frame sorts first.
+        """
+        if len(items) <= cap:
+            return items
+        strata = self._shuffled_strata(items, key)
+        order = sorted(strata.keys(), key=lambda k: str(k))
+        self.rng.shuffle(order)
+        quotas = {k: 0 for k in order}
+        for k in order[:cap]:
+            quotas[k] = 1
+        left = cap - sum(quotas.values())
+        if left > 0:
+            spare = {k: len(strata[k]) - quotas[k] for k in order}
+            extra = self._largest_remainder(spare, left, order)
+            for k in order:
+                quotas[k] += extra[k]
+        out: List[Any] = []
+        for k in sorted(strata.keys(), key=lambda k: str(k)):
+            out.extend(strata[k][:quotas[k]])
+        return out
+
+    def _shuffled_strata(self, items: List[Any], key) -> Dict[Any, List[Any]]:
+        strata: Dict[Any, List[Any]] = defaultdict(list)
+        for it in items:
+            strata[key(it)].append(it)
+        for k in sorted(strata.keys(), key=lambda k: str(k)):
+            self.rng.shuffle(strata[k])
+        return strata
+
+    @staticmethod
+    def _largest_remainder(sizes: Dict[Any, int], seats: int, order: List[Any]
+                           ) -> Dict[Any, int]:
+        """Split ``seats`` across ``sizes`` proportionally (Hamilton's method).
+
+        Ties in the remainder go to the stratum earlier in ``order``. Never
+        allocates a stratum more than its size when ``seats`` does not exceed
+        the total.
+        """
+        total = sum(sizes.values())
+        if not total:
+            return {k: 0 for k in order}
+        quotas = {k: seats * sizes[k] // total for k in order}
+        by_remainder = sorted(order, key=lambda k: -(seats * sizes[k] % total))
+        for k in by_remainder[:seats - sum(quotas.values())]:
+            quotas[k] += 1
+        return quotas
 
     @staticmethod
     def _clean_snippet(text: str, side: str) -> str:

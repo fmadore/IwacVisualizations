@@ -1,9 +1,10 @@
-"""KPIs, the tag-vs-text split, and the per-country aggregates.
+"""KPIs, the tag-vs-text split and the rights split — ``laicite-metadata.json``.
 
-``laicite-metadata.json`` and ``laicite-countries.json``. The metadata bundle
-is where the two denominators live — items scanned vs items quotable, per
-subset — because the rights split is wildly uneven and one global percentage
-would imply an evenness that does not exist.
+The metadata bundle is where the two denominators live — items scanned vs
+items quotable, per subset — because the rights split is wildly uneven and
+one global percentage would imply an evenness that does not exist. (The
+per-country aggregates this module also wrote, ``laicite-countries.json``,
+had no reader left and were retired with method version v4.)
 """
 from __future__ import annotations
 
@@ -13,7 +14,7 @@ from typing import Any, Dict, List
 from iwac_utils import generate_timestamp
 
 from laicite.audit_ledger import load_ledger
-from laicite.scan import MEMBERSHIP_ROUTES, SUBSET_FIELDS
+from laicite.scan import MEMBERSHIP_ROUTES, METHOD_VERSION, SUBSET_FIELDS
 
 
 class OverviewMixin:
@@ -145,7 +146,7 @@ class OverviewMixin:
                 subset: [c for c, _ in fields]
                 for subset, fields in SUBSET_FIELDS.items()
             },
-            "method_version": "source-text-v3",
+            "method_version": METHOD_VERSION,
             "density_denominator": "alphabetic tokens in title and OCR",
             "video_items": [{
                 "o_id": s.o_id, "title": s.title, "url": s.iwac_url,
@@ -247,49 +248,3 @@ class OverviewMixin:
         if not dense:
             return [min(years), max(years)]
         return [dense[0], max(years)]
-
-    def build_countries(self) -> Dict[str, Any]:
-        """Per-country aggregates, split by subset and by frame."""
-        scans = self.scan_all()
-        out: Dict[str, Any] = {}
-        for s in scans:
-            for country in s.countries:
-                bucket = out.setdefault(country, {
-                    "items": 0,
-                    "tagged": 0,
-                    "occurrences": 0,
-                    "by_subset": defaultdict(int),
-                    "by_frame": defaultdict(int),
-                    "newspapers": Counter(),
-                    "years": Counter(),
-                })
-                bucket["items"] += 1
-                bucket["tagged"] += 1 if s.is_tagged else 0
-                bucket["occurrences"] += len(s.occurrences)
-                bucket["by_subset"][s.subset] += 1
-                for frame, count in s.frame_counts.items():
-                    bucket["by_frame"][frame] += count
-                if s.newspaper:
-                    bucket["newspapers"][s.newspaper] += 1
-                if s.year:
-                    bucket["years"][str(s.year)] += 1
-
-        result: Dict[str, Any] = {}
-        for country, bucket in sorted(out.items()):
-            if bucket["items"] < self.min_country_items:
-                continue
-            result[country] = {
-                "items": bucket["items"],
-                "tagged": bucket["tagged"],
-                "occurrences": bucket["occurrences"],
-                "by_subset": dict(bucket["by_subset"]),
-                "by_frame": dict(sorted(
-                    bucket["by_frame"].items(), key=lambda kv: -kv[1])),
-                "top_newspapers": bucket["newspapers"].most_common(12),
-                "by_year": dict(sorted(bucket["years"].items())),
-            }
-        return {
-            "generated_at": generate_timestamp(),
-            "min_country_items": self.min_country_items,
-            "countries": result,
-        }

@@ -53,7 +53,9 @@ from iwac_utils import (
     generate_timestamp,
     canonical_country,
     canonicalize_country_field,
+    clean_str,
     extract_year,
+    is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
@@ -82,34 +84,19 @@ PER_FACET_TOP = 30         # per-country / per-newspaper top keywords
 NEWSPAPER_FACET_LIMIT = None
 
 
-def _str_or_none(value: Any) -> Optional[str]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    s = str(value).strip()
-    return s or None
-
-
 def _pick_countries(value: Any) -> List[str]:
     """Return a list of canonical country names for a row, splitting
     multi-country cells so each country bucket gets its own count.
-    Empty / unknown values are dropped."""
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return []
-    parts = parse_pipe_separated(value)
-    out: List[str] = []
-    for p in parts:
-        s = p.strip()
-        if not s or s.lower() == "unknown":
-            continue
-        out.append(canonical_country(s))
-    return out
+    Empty / unknown values (``is_unknown``) are dropped."""
+    return [
+        canonical_country(p) for p in parse_pipe_separated(value)
+        if not is_unknown(p)
+    ]
 
 
 def _pick_newspaper(value: Any) -> Optional[str]:
-    s = _str_or_none(value)
-    if not s:
-        return None
-    if s.lower() == "unknown":
+    s = clean_str(value)
+    if is_unknown(s):
         return None
     # Newspaper is usually single-valued but guard against pipe lists
     parts = parse_pipe_separated(s)

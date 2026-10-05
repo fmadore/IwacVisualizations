@@ -96,7 +96,7 @@ jobs:
       # names, unused imports and redefinitions before the focused test
       # dependencies are installed below.
       - name: Install ruff
-        run: pip install ruff==0.16.6
+        run: pip install ruff==0.16.10
 
       # `datasets` is lazy-loaded at the network boundary; pinned numpy+pandas
       # wheels are enough to exercise and import the pure shared helpers.

@@ -4,8 +4,9 @@ For the Laïcité generator's source population, text fields, denominators and
 validation protocol, see [LAICITE_METHODOLOGY.md](../LAICITE_METHODOLOGY.md).
 It searches titles and original full text, including available YouTube
 transcripts; descriptions, abstracts and tables of contents are excluded from
-lexical counts. `laicite-research.json` retains aggregate coverage and sensitivity
-counts for the full population, including records without matches or transcripts.
+lexical counts. `laicite-trends.json` carries only `research`: aggregate coverage
+and sensitivity counts for the full population, including records without matches
+or transcripts, which is all the timeline draws.
 Run `python scripts/run_all.py --only laicite` from the repository root, then
 publish and sync the generated bundles through the normal data workflow.
 The optional `--validation-output` flag on `generate_laicite.py` creates a
@@ -30,6 +31,19 @@ a verdict file per batch; `merge` folds those verdicts into the ledger;
 ledger are never re-extracted, so a run after new records are ingested judges
 only the new material (`--include-stale` re-extracts records whose matched text
 has since changed).
+
+Every `extract` is a *run* with its own id (UTC timestamp plus a random tail),
+printed, stamped on the manifest and on every batch row. Batch names repeat
+from run to run, so `merge` never trusts a file name: a verdict must echo its
+row's `run` (and a tier-1 verdict its `fp`) or it is refused, and `merge`
+saves nothing when anything is refused. `extract` will not start while
+`verdicts/` still holds a previous run's files — merge them first, then pass
+`--archive-previous`, which moves that run's batches, verdicts and manifest
+under `<work-dir>/archive/<run>/`:
+
+```bash
+python scripts/audit_laicite.py extract --work-dir .test-tmp/laicite-audit --archive-previous
+```
 
 **The ledger, `laicite/audit_ledger.json`, is committed; the batches and the
 raw verdict files are not.** The ledger holds identifiers, verdicts, the date,
@@ -202,10 +216,14 @@ python3 scripts/generate_collection_overview.py --minify     # compact JSON
   stacked country bars if desired later.
 - `languages` parses `language` as pipe-separated, counted across all
   content subsets.
-- `top_entities` reads the `index` subset directly — its `frequency`,
-  `first_occurrence`, `last_occurrence`, `countries` fields are already
-  precomputed by the dataset curator (aggregated against articles +
-  publications + references), so no join is needed.
+- `top_entities` is `iwac_utils.compute_top_entities`, shared with the
+  index overview: `frequency` is the number of content items (all six
+  subsets) whose `subject` or `spatial` field carries the entry — whole-value
+  tag membership against `index.Titre`, one count per item — and
+  `first_occurrence` / `last_occurrence` / `countries` describe those same
+  tagged items. It is deliberately NOT the index's precomputed `frequency`,
+  which counts every role an entity plays (a journalist's is mostly bylines).
+  Entries keep the five types in `iwac_utils.ENTITY_TYPE_ORDER`.
 
 ### `generate_article_dashboards.py`
 
@@ -493,16 +511,20 @@ classic `"lat, lng"` form.
 | Function | What it does |
 |---|---|
 | `load_dataset_safe(config_name, repo_id, token)` | Fetch a HF subset as a pandas DataFrame. The heavyweight `datasets` client is imported only when this function is called; errors are logged and return `None`. |
-| `canonical_country(name)` | Apply IWAC display overrides on top of `str.title()` — handles apostrophes ("Côte d'Ivoire") and accents. Re-exported as `_canonical_country` for backwards compatibility. |
+| `canonical_country(name)` | Apply IWAC display overrides on top of `str.title()` — handles apostrophes ("Côte d'Ivoire") and accents. |
 | `canonicalize_country_field(value)` | `pandas.Series.apply()`-ready helper: maps a `country` cell to its canonical form, handling None/NaN, plain strings, and pipe-separated strings. Promoted from duplicates in 3 generators. |
 | `normalize_country(value, ...)` | Strip, title-case, handle `\|,;/` separators, `None` → `"Unknown"`. |
-| `normalize_location_name(name)` | Unicode NFC + lowercase + strip — used for matching against the `index` `Titre` column. |
+| `first_country(value, *, skip_unknown=False)` | Canonical first country of a pipe-separated cell, `""` when that first segment is a placeholder (the dashboards' "where is it filed"); `skip_unknown=True` takes the first KNOWN one instead (keyness's "which corpus does it join"). |
+| `normalize_location_name(name)` | Unicode NFC + lowercase + strip + internal whitespace collapsed — THE key every name → index join matches on, on both sides. |
+| `build_entity_index(df, *, types, aliases, keep_row, on_entity)` | The index subset as `(name → entity, id → entity, Lieux id → (lat, lng))`. Titles are registered before aliases (an alias never shadows another record's title); `types` restricts the join (`["Lieux"]` for a places-only map). Every tag / byline / provenance join goes through it — four hand-written lookups used to normalise keys four ways. |
+| `place_country_resolver(index_df)` | `country_of(place_title)` → the IWAC country the place lies IN, by walking `Partie de` (`resolve_focus_country`), or `None` outside the six. **Never use `index.countries[0]` for a place**: that column lists the countries whose press MENTIONS it. |
+| `compute_top_entities(index_df, frames, top_n)` | Top entities per type ranked by the content items whose `subject` / `spatial` fields carry them (whole-value tag membership, deduplicated per item) — not `index.frequency`, which counts bylines and every other role. Feeds both overview blocks' entity panels. |
+| `lda_topic_id(value)` | An `lda_topic_id` cell (float64) as an int topic id; `None` for NaN, garbage and every negative id (the articles' `-1` outliers). |
+| `dominant(counter, default=None)` | The most common key, ties broken by the smallest key — `most_common(1)` breaks ties on row order, so a newspaper's country could flip between regenerations. |
 | `extract_year(value, min_year, max_year)` | Pulls a 4-digit year from strings / datetimes / numbers with validation. |
-| `extract_month(value)` | `YYYY-MM` string. |
 | `extract_month_num(date_str)` | Pull a 1–12 month number out of an ISO-ish `YYYY-MM[-DD]` date. `None` for bare years or unparseable input. |
 | `parse_coordinates(value)` | `"lat, lng"` / `"lat lng"` / `(lat, lng)` tuple / `[lat, lng]` list → `(float, float)` with range validation. |
 | `parse_pipe_separated(value)` | Trimmed list from pipe-separated string or list. |
-| `parse_multi_value(value, separators)` | Like above but tries `\|;,/` in order. |
 | `clean_str(value)` | Strip-and-cast a DataFrame cell, treating NaN/None as `""`. |
 | `clean_float(value)` | Cast a DataFrame cell to float, or `None` for NaN / missing / garbage. |
 | `parse_duration_seconds(value)` | ISO 8601 (`PT2M34S`, `PT571M`), `HH:MM:SS` / `MM:SS`, or a bare number → whole **seconds**; `None` when unparseable. A bare number is read as seconds, deliberately: the earlier per-generator copy left units to a "median > 500 ⇒ seconds" guess, which reads a corpus of three-minute videos as three-hour ones. Know your column's unit and convert it yourself rather than routing a numeric through here. |

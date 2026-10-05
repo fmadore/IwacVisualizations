@@ -112,7 +112,6 @@ from __future__ import annotations
 import argparse
 import logging
 import re
-import unicodedata
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -123,6 +122,8 @@ from iwac_utils import (
     add_standard_args,
     clean_str,
     create_metadata_block,
+    fold_plain,
+    is_public_flag,
     load_dataset_safe,
     parse_standard_args,
     save_json,
@@ -206,14 +207,6 @@ def thumb_id(value: Any) -> str:
     return m.group(1).lower() if m else ""
 
 
-def _fold(text: str) -> str:
-    """Accent- and case-folded, for comparing an OCR head against a title."""
-    return "".join(
-        c for c in unicodedata.normalize("NFD", text.lower())
-        if unicodedata.category(c) != "Mn"
-    )
-
-
 def _opens_a_sentence(word: str) -> bool:
     """
     Could a sentence plausibly start on this word?
@@ -283,16 +276,19 @@ def excerpt(mode: str, ocr: Any, is_public: Any, title: str,
         summary = WS_RE.sub(" ", clean_str(contents)).strip()
         return _clip(summary) if len(summary) >= EXCERPT_MIN_CHARS else ""
 
-    if not bool(is_public):
+    # Fails CLOSED: only a real boolean True opens the text. `bool(nan)` is
+    # True, so the old `bool(is_public)` read a missing flag as public.
+    if not is_public_flag(is_public):
         return ""
     text = WS_RE.sub(" ", clean_str(ocr)).strip()
     if not text:
         return ""
 
     # The headline usually opens the OCR; showing it twice wastes both lines.
-    folded_title = _fold(title).strip()
+    # Accent- and case-folded, for comparing an OCR head against a title.
+    folded_title = fold_plain(title).strip()
     if folded_title and len(folded_title) > 8:
-        folded = _fold(text)
+        folded = fold_plain(text)
         if folded.startswith(folded_title):
             text = text[len(folded_title):]
 

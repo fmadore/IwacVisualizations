@@ -23,7 +23,7 @@ import argparse
 import logging
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 from iwac_utils import (
@@ -32,6 +32,7 @@ from iwac_utils import (
     generate_timestamp,
     canonical_country,
     extract_year,
+    find_column,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
@@ -57,11 +58,7 @@ def build_wordcloud(
     # which CI would have published as collection-wordcloud.json.
     df = load_dataset_safe("articles", repo_id=repo_id, required=True)
 
-    text_col: Optional[str] = None
-    for candidate in ("OCR", "ocr_text", "OCR_text", "text", "content"):
-        if candidate in df.columns:
-            text_col = candidate
-            break
+    text_col = find_column(df, ["OCR", "ocr_text", "OCR_text", "text", "content"])
     if text_col is None:
         raise RuntimeError(
             "No OCR text column found in the articles subset; refusing to write an empty wordcloud"

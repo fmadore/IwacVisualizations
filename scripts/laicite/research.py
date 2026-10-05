@@ -1,50 +1,55 @@
-"""Coverage and extraction sensitivity on every input row, including negatives."""
+"""Coverage and extraction sensitivity on every input row, including negatives.
+
+The cells ship inside ``laicite-trends.json`` under ``research`` — the
+timeline's shared filters are computed over them — and nowhere else.
+"""
 from collections import Counter, defaultdict
 
-from iwac_utils import extract_month_num, extract_year, normalize_country, parse_pipe_separated, generate_timestamp
+from iwac_utils import generate_timestamp
 from laicite.lexicon import fold_preserving
+from laicite.scan import METHOD_VERSION, MINIMUM_CELL
+
+# Descriptive fields that older versions of the instrument searched. They no
+# longer select or annotate anything; a core match found ONLY here is
+# reported as a sensitivity figure, never counted.
+LEGACY_DESCRIPTION_FIELDS = ("descriptionAI", "abstract", "tableOfContents")
 
 
 class ResearchMixin:
-    def _observe_source(self, row, subset, rec):
-        """Keep metadata and counts only; never export unavailable source text."""
-        texts = {f: row.get(f) if isinstance(row.get(f), str) else ""
-                 for f in ("title", "OCR")}
+    def _observe_source(self, row, subset, scanned):
+        """Keep metadata and counts only; never export unavailable source text.
+
+        ``scanned`` is the row's ``RowScan``: its metadata was parsed once,
+        and its title/OCR already folded and matched, by ``_scan_row`` — so
+        this record and the dossier's ``ItemScan`` read one row one way.
+        """
+        rec, meta = scanned.rec, scanned.meta
+        core = set(self.lex.membership_frames)
+        title, ocr = row.get("title"), row.get("OCR")
+        title_available = isinstance(title, str) and bool(title.strip())
+        fulltext_available = isinstance(ocr, str) and bool(ocr.strip())
         hits = Counter(o.field for o in rec.occurrences
-                       if o.frame in self.lex.membership_frames) if rec else Counter()
-        broad = {f: sum(len(list(self.lex.patterns[k].finditer(fold_preserving(t))))
-                        for k in self.lex.membership_frames) for f, t in texts.items()}
-        legacy = any(
-            p.search(fold_preserving(row.get(f)))
-            for f in ("descriptionAI", "abstract", "tableOfContents")
-            if isinstance(row.get(f), str)
-            for k, p in self.lex.patterns.items() if k in self.lex.membership_frames
-        )
-        year = extract_year(row.get("pub_date"))
-        hm = row.get("hijri_month")
-        try:
-            hm = int(hm)
-        except (ValueError, TypeError, OverflowError):
-            hm = None
+                       if o.frame in core) if rec else Counter()
         record = {
-            "id": str(row.get("o:id") or ""), "subset": subset,
-            "year": int(year) if year else None,
-            "countries": normalize_country(row.get("country"), return_list=True),
-            "outlet": str(row.get("newspaper") or ""),
-            "language": str(row.get("language") or ""),
-            "title_available": bool(texts["title"].strip()),
-            "fulltext_available": bool(texts["OCR"].strip()),
-            "public_fulltext": bool(texts["OCR"].strip()) and row.get("OCR_is_public") is True,
+            "id": meta.o_id, "subset": subset, "url": meta.iwac_url,
+            "year": meta.year,
+            "countries": meta.countries,
+            "outlet": meta.newspaper,
+            "languages": meta.languages,
+            "title_available": title_available,
+            "fulltext_available": fulltext_available,
+            "public_fulltext": fulltext_available and meta.ocr_public,
             "title_hits": hits["title"], "fulltext_hits": hits["OCR"],
-            "broad_title_hits": broad["title"], "broad_fulltext_hits": broad["OCR"],
+            "broad_title_hits": scanned.broad_hits["title"],
+            "broad_fulltext_hits": scanned.broad_hits["OCR"],
             "selected": rec is not None, "tagged": bool(rec and rec.is_tagged),
             # Membership strength, so the worklist can be coded route by
             # route. Empty for a row the dossier did not select.
             "route": rec.membership_route if rec else "",
-            "legacy_description_match": legacy,
-            "month": extract_month_num(row.get("pub_date")),
-            "hijri_month": hm if hm and 1 <= hm <= 12 else None,
-            "authors": sorted(set(parse_pipe_separated(row.get("author")))),
+            "legacy_description_match": self._legacy_description_match(row),
+            "month": meta.month,
+            "hijri_month": meta.hijri_month,
+            "authors": meta.authors,
         }
         self.source_records.append(record)
         if subset == "articles":
@@ -53,11 +58,31 @@ class ResearchMixin:
                 for c in cols.values() if c
             }))
 
+    def _legacy_description_match(self, row):
+        """Would a retired descriptive field have matched the core vocabulary?"""
+        patterns = [self.lex.patterns[k] for k in self.lex.membership_frames]
+        for f in LEGACY_DESCRIPTION_FIELDS:
+            value = row.get(f)
+            if not isinstance(value, str) or not value.strip():
+                continue
+            folded = fold_preserving(value)
+            if any(p.search(folded) for p in patterns):
+                return True
+        return False
+
     def build_research(self):
+        """The coverage cells, built once per run.
+
+        Cached: ``build_trends`` embeds them, and they are a pass over every
+        source row of every subset — no reason to make it twice.
+        """
+        if self._research is not None:
+            return self._research
         self.scan_all()
         groups = defaultdict(Counter)
         for r in self.source_records:
             # Explicit all-country row: multi-country items count once here.
+            # A row naming no country appears only in that row.
             for country in [""] + sorted(set(c for c in r["countries"] if c)):
                 key = (r["subset"], r["year"], country, r["outlet"])
                 c = groups[key]
@@ -74,13 +99,14 @@ class ResearchMixin:
                         r[prefix + "title_hits"] or r[prefix + "fulltext_hits"]))
                 c["legacy_only"] += int(r["legacy_description_match"] and not (
                     r["broad_title_hits"] or r["broad_fulltext_hits"] or r["tagged"]))
-        return {
+        self._research = {
             "generated_at": generate_timestamp(),
-            "method_version": "source-text-v3", "minimum_cell": 5,
+            "method_version": METHOD_VERSION, "minimum_cell": MINIMUM_CELL,
             "note": "Counts use every source row; no descriptions contribute to observed vocabulary. Broad matches are unvalidated candidates. Country totals overlap; all-country rows deduplicate items.",
             "cells": [dict(subset=k[0], year=k[1], country=k[2], outlet=k[3], **v)
                       for k, v in sorted(groups.items(), key=lambda kv: str(kv[0]))],
         }
+        return self._research
 
     def validation_sample(self, per_stratum=10):
         """Reproducible metadata-only worklist. Human judgements stay blank."""
@@ -92,13 +118,17 @@ class ResearchMixin:
             stratum = ("core_positive" if strict else "ambiguous_candidate" if broad
                        else "tag_only" if r["tagged"] else "apparent_negative")
             decade = (r["year"] // 10) * 10 if r["year"] else None
-            groups[(r["subset"], r["language"], decade, stratum)].append(r)
+            # One label per record, whatever order or spacing the catalogue
+            # wrote the languages in, so a multilingual record sits in one
+            # stratum rather than in whichever spelling it happened to carry.
+            language = " | ".join(sorted(set(r["languages"])))
+            groups[(r["subset"], language, decade, stratum)].append(r)
         rng = random.Random(20260912)
         result = []
         for key, rows in sorted(groups.items(), key=lambda kv: str(kv[0])):
             for r in rng.sample(rows, min(per_stratum, len(rows))):
                 result.append({
-                    "id": r["id"], "url": "https://islam.zmo.de/s/westafrica/item/" + r["id"],
+                    "id": r["id"], "url": r["url"],
                     "subset": key[0], "language": key[1], "decade": key[2],
                     "stratum": key[3], "route": r["route"],
                     "population": len(rows),

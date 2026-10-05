@@ -20,6 +20,7 @@ const { readFileSync, writeFileSync } = require('fs');
 const { join } = require('path');
 
 const { catalogueFromPo, compileMo, parseMo, parsePo } = require('./gettext');
+const { fail } = require('./lib/report');
 
 const LANGUAGE = join(__dirname, '..', 'language');
 const PO = join(LANGUAGE, 'fr.po');
@@ -29,13 +30,11 @@ let catalogue;
 try {
     catalogue = catalogueFromPo(parsePo(readFileSync(PO, 'utf8'), 'language/fr.po'), 'language/fr.po');
 } catch (error) {
-    console.error(`\n✗ mo build: ${error.message}\n`);
-    process.exit(1);
+    fail(`mo build: ${error.message}`);
 }
 
 if (!catalogue.has('')) {
-    console.error('\n✗ mo build: language/fr.po has no catalogue header (an entry with an empty msgid)\n');
-    process.exit(1);
+    fail('mo build: language/fr.po has no catalogue header (an entry with an empty msgid)');
 }
 
 const compiled = compileMo(catalogue);
@@ -45,13 +44,11 @@ const compiled = compileMo(catalogue);
 // silently, which is the exact failure this script is here to prevent.
 const { entries } = parseMo(compiled, '(compiled)');
 if (entries.length !== catalogue.size) {
-    console.error('\n✗ mo build: compiled catalogue does not read back — aborting without writing\n');
-    process.exit(1);
+    fail('mo build: compiled catalogue does not read back — aborting without writing');
 }
 for (const { key, value } of entries) {
     if (catalogue.get(key) !== value) {
-        console.error(`\n✗ mo build: entry ${JSON.stringify(key)} does not read back — aborting without writing\n`);
-        process.exit(1);
+        fail(`mo build: entry ${JSON.stringify(key)} does not read back — aborting without writing`);
     }
 }
 

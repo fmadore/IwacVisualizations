@@ -31,5 +31,15 @@ write('src/Sentiment/ModelRegistry.php', '<?php\ndeclare(strict_types=1);\nnames
     + '    public const INFO = ' + php(info) + ';\n}\n');
 const controls = 'asset/js/charts/shared/panels-controls.js';
 const original = fs.readFileSync(path.join(root, controls), 'utf8');
-write(controls, original.replace(/var SENTIMENT_MODEL_LABELS = \{[\s\S]*?\n {4}\};/,
+// The block must be FOUND, not just replaced: `String.replace` with a pattern
+// that no longer matches returns the input unchanged, and `--check` would
+// then compare the file with itself and pass while the labels drift.
+const LABELS_BLOCK = /var SENTIMENT_MODEL_LABELS = \{[\s\S]*?\r?\n {4}\};/;
+if (!LABELS_BLOCK.test(original)) {
+    throw new Error(
+        `${controls}: no \`var SENTIMENT_MODEL_LABELS = {…};\` block (closed by a 4-space-indented \`};\`) — `
+        + 'the generator cannot place the labels; update LABELS_BLOCK in scripts/build-model-registry.js'
+    );
+}
+write(controls, original.replace(LABELS_BLOCK,
     'var SENTIMENT_MODEL_LABELS = ' + JSON.stringify(labels, null, 4).replace(/\n/g, '\n    ') + ';'));

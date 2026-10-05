@@ -34,7 +34,7 @@ from __future__ import annotations
 
 import math
 from collections import Counter, defaultdict
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Sequence
 
 import numpy as np
 
@@ -390,20 +390,3 @@ def kleinberg_bursts(
         })
     return bursts
 
-
-def parse_multi_values(raw: Any, separator: str = "|") -> set:
-    """Deduplicated value set for one row's multi-value field.
-
-    Burst counts are over *documents*, so a row listing the same subject
-    twice must contribute once. Missing / NaN fields yield an empty set.
-    """
-    if raw is None:
-        return set()
-    if isinstance(raw, float) and math.isnan(raw):
-        return set()
-    return {part.strip() for part in str(raw).split(separator) if part.strip()}
-
-
-def normalize_optional(value: Optional[float]) -> Optional[float]:
-    """Round a float for JSON, passing None through unchanged."""
-    return None if value is None else round(float(value), 4)

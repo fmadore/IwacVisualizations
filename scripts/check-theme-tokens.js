@@ -96,13 +96,25 @@
  *      so a palette edit in the theme cannot land on one side of the contract.
  *      Light and dark are checked separately: they are equal in contract v1
  *      and the guard must not start passing by accident when they diverge.
+ *
+ * Rule added 2026-10 (stale chart fallbacks):
+ *  12. No hex literal as the fallback of a token read in chart JS —
+ *      `tokens.surface || '#fdfdfd'`, `readVar('--x', '#66696e')`. Rule 3
+ *      exempts JS from the hex check, and these slipped through it: three
+ *      dozen copies of the theme's colours, most already stale (`#fafaf9`,
+ *      `#fdfcfb` and `#fdfdfd` were all "the surface"), each a second home
+ *      for a value tokens.json owns. iwac-theme.js's FALLBACK_LIGHT/DARK are
+ *      the one sanctioned degraded mode, and rule 5 pins them; read a token
+ *      through `ns.getThemeTokens()`, which already falls back to them.
  * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
  *
  * Usage: node scripts/check-theme-tokens.js
  * Exit code 1 on any violation (with file:line + reason), else 0.
  */
-const { readdirSync, readFileSync, statSync, existsSync } = require('fs');
+const { readFileSync, existsSync } = require('fs');
 const { join, relative } = require('path');
+const { sourceFiles } = require('./lib/fs');
+const { fail } = require('./lib/report');
 
 const ROOT = join(__dirname, '..');
 const CSS_DIR = join(ROOT, 'asset', 'css');
@@ -110,16 +122,9 @@ const JS_DIR = join(ROOT, 'asset', 'js');
 const VIEW_DIR = join(ROOT, 'view');
 const TOKENS_PATH = join(ROOT, 'tokens.json');
 
-function walk(dir, exts, out = []) {
-    for (const entry of readdirSync(dir)) {
-        const p = join(dir, entry);
-        if (statSync(p).isDirectory()) {
-            walk(p, exts, out);
-        } else if (exts.some((e) => p.endsWith(e)) && !/\.min\.(css|js)$/.test(p)) {
-            out.push(p);
-        }
-    }
-    return out;
+/** Source files with one of `exts` under `dir` — built `.min.*` excluded. */
+function walk(dir, exts) {
+    return sourceFiles(dir, exts);
 }
 
 /**
@@ -647,6 +652,43 @@ function checkSeriesPalette(file) {
     }
 }
 
+/**
+ * Rule 12 — a token read in chart JS never falls back to a hex literal.
+ *
+ * Matched on the whole source, so a fallback wrapped onto the next line
+ * (`tokens.surface\n    || '#fdfdfd'`) is found too. Comments are blanked
+ * first — `/* … *​/` by blankComments, `//` to the end of the line here —
+ * so prose that quotes the old pattern does not trip it. iwac-theme.js's
+ * FALLBACK_LIGHT / FALLBACK_DARK blocks are the sanctioned degraded mode
+ * (rule 5) and are skipped.
+ */
+const STALE_FALLBACKS = [
+    [/\btokens\.\w+\s*\|\|\s*['"]#[0-9a-fA-F]{3,8}/g, 'a token read falls back to a hex literal'],
+    [/\breadVar\([^)]*,\s*['"]#[0-9a-fA-F]{3,8}/g, 'readVar() is given a hex fallback'],
+];
+function checkStaleHexFallbacks(file) {
+    const src = blankComments(readFileSync(file, 'utf8'))
+        .replace(/(^|[\s;{}(,])\/\/[^\n]*/g, (m, lead) => lead + m.slice(lead.length).replace(/[^\n]/g, ' '));
+    const exempt = [];
+    if (file.endsWith(join('asset', 'js', 'iwac-theme.js'))) {
+        for (const name of ['FALLBACK_LIGHT', 'FALLBACK_DARK']) {
+            const block = new RegExp(name + '\\s*=\\s*\\{[\\s\\S]*?\\}').exec(src);
+            if (block) exempt.push([block.index, block.index + block[0].length]);
+        }
+    }
+    for (const [pattern, what] of STALE_FALLBACKS) {
+        pattern.lastIndex = 0;
+        let m;
+        while ((m = pattern.exec(src)) !== null) {
+            if (exempt.some(([from, to]) => m.index >= from && m.index < to)) continue;
+            flag(file, lineOf(src, m.index),
+                `${what} — a stale copy of a theme colour; read it from ns.getThemeTokens() `
+                + '(which falls back to iwac-theme.js FALLBACK_LIGHT/DARK) and drop the literal',
+                m[0].replace(/\s+/g, ' '));
+        }
+    }
+}
+
 /** Hex literals of a `var NAME = [ … ];` array, in source order. */
 function readArray(src, name) {
     const m = new RegExp(name + '\\s*=\\s*\\[([\\s\\S]*?)\\]').exec(src);
@@ -683,19 +725,18 @@ cssFiles.forEach((f) => scan(f, { hexCheck: true }));
 jsFiles.forEach((f) => scan(f, { hexCheck: false }));
 jsFiles.forEach(checkFallbackObjects);
 jsFiles.forEach(checkSeriesPalette);
+jsFiles.forEach(checkStaleHexFallbacks);
 for (const [file, lines] of templateStyles) {
     scanLines(file, lines, { hexCheck: true });
 }
 
 if (violations.length) {
-    console.error(`\n✗ theme-token guard: ${violations.length} violation(s)\n`);
-    for (const v of violations) {
-        console.error(`  ${v.file}:${v.line}  ${v.msg}`);
-        console.error(`      ${v.snippet}`);
-    }
-    console.error('\nSee CLAUDE.md → "Match the IWAC theme" and IWAC-theme/docs/DESIGN-SYSTEM.md.');
-    console.error('Canonical values: tokens.json (regenerate with `npm run build:tokens` in IWAC-theme).\n');
-    process.exit(1);
+    fail(
+        `theme-token guard: ${violations.length} violation(s)`,
+        violations.map((v) => `${v.file}:${v.line}  ${v.msg}\n      ${v.snippet}`),
+        '\nSee CLAUDE.md → "Match the IWAC theme" and IWAC-theme/docs/DESIGN-SYSTEM.md.\n'
+        + 'Canonical values: tokens.json (regenerate with `npm run build:tokens` in IWAC-theme).\n'
+    );
 }
 
 console.log('✓ theme-token guard: no violations');

@@ -74,13 +74,12 @@ from iwac_stats import (
     contiguous_years,
     keyness_for_slices,
     kleinberg_bursts,
-    parse_multi_values,
 )
 from iwac_utils import (
     add_standard_args,
-    canonical_country,
     create_metadata_block,
     extract_year,
+    first_country,
     is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
@@ -186,21 +185,6 @@ DEFAULT_MIN_SUBJECT_TOTAL = 30
 DEFAULT_MAX_SUBJECTS = 40
 
 
-def _first_country(value: Any) -> str:
-    """Canonical first KNOWN country of a possibly pipe-separated cell, or ''.
-
-    Not the same rule as the dashboard generators' ``_first_country``,
-    which returns '' when the first segment is a placeholder: here an item
-    joins the corpus of the first real country named, there it is filed
-    under none. Both are deliberate; do not merge them.
-    """
-    for raw in parse_pipe_separated(value):
-        raw = raw.strip()
-        if raw and not is_unknown(raw):
-            return canonical_country(raw)
-    return ""
-
-
 def _decade_label(year: int) -> str:
     return f"{(year // 10) * 10}s"
 
@@ -234,7 +218,13 @@ def build_keyness(
         tokens = tokenize(df[text_col].iat[position])
         if not tokens:
             continue
-        country = _first_country(df["country"].iat[position]) if "country" in df.columns else ""
+        # The first KNOWN country: an item joins the corpus of the first
+        # real country it names (the dashboards file a placeholder-first
+        # item under none). Both rules live in iwac_utils.first_country.
+        country = (
+            first_country(df["country"].iat[position], skip_unknown=True)
+            if "country" in df.columns else ""
+        )
         year = extract_year(df["pub_date"].iat[position]) if "pub_date" in df.columns else None
 
         if country:
@@ -300,7 +290,7 @@ def build_bursts(
             continue
         docs_by_year[year] += 1
         # Deduplicated per document: r[t] counts documents, not repetitions.
-        for subject in parse_multi_values(df["subject"].iat[position]):
+        for subject in set(parse_pipe_separated(df["subject"].iat[position])):
             if is_unknown(subject):
                 continue
             subject_year[subject][year] += 1

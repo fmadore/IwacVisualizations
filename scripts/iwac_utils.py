@@ -10,12 +10,18 @@ Functions:
 - canonicalize_country_field: Apply canonical_country to a (possibly
   pipe-separated) DataFrame cell, preserving the original for None/NaN
 - normalize_country: Normalize country values (handles |, ,, ; separators)
+- first_country: The first (or first known) canonical country of a cell
 - extract_year: Extract year from various date formats
-- extract_month: Extract YYYY-MM from date values
 - extract_month_num: Pull the 1–12 month number out of a "YYYY-MM[-DD]" date
 - read_hijri_month: The row's stored (hijri_year, hijri_month), or None
 - parse_coordinates: Parse "lat, lng" or "lat lng" strings (or tuple/list)
-- normalize_location_name: Unicode NFC normalization for matching
+- normalize_location_name: The one name-matching key (NFC, case, whitespace)
+- build_entity_index: The index subset as name / id / coordinate lookups
+- place_country_resolver: Place title -> the IWAC country it lies in
+  (the ``Partie de`` walk), never the countries it is mentioned in
+- compute_top_entities: Entities ranked by subject + place tag memberships
+- lda_topic_id: An ``lda_topic_id`` cell as a topic id, or None
+- dominant: The most common key of a Counter, ties broken by key
 - parse_pipe_separated: Parse multivalue fields
 - tokenize: Word-cloud tokenizer (lowercase, strip punctuation, drop
   stopwords and short tokens)
@@ -43,6 +49,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import math
 import os
 import re
 import unicodedata
@@ -201,11 +208,6 @@ def canonical_country(name: str) -> str:
     return s.title()
 
 
-# Backwards-compatible alias — several generators still import the
-# underscored name. New code should use ``canonical_country``.
-_canonical_country = canonical_country
-
-
 def canonicalize_country_field(value: Any) -> Any:
     """Map a DataFrame country cell to its canonical form.
 
@@ -265,7 +267,7 @@ def normalize_country(
         return [unknown_value] if return_list else unknown_value
 
     if isinstance(value, (list, tuple)):
-        countries = [_canonical_country(c) for c in value if str(c).strip()]
+        countries = [canonical_country(c) for c in value if str(c).strip()]
         result = countries if countries else [unknown_value]
         return result if return_list else (result[0] if len(result) == 1 else ", ".join(result))
 
@@ -276,22 +278,58 @@ def normalize_country(
     # Handle multiple countries separated by common delimiters
     for sep in ["|", ";", ",", "/"]:
         if sep in country_str:
-            countries = [_canonical_country(c) for c in country_str.split(sep) if c.strip()]
+            countries = [canonical_country(c) for c in country_str.split(sep) if c.strip()]
             result = countries if countries else [unknown_value]
             return result if return_list else (result[0] if len(result) == 1 else ", ".join(result))
 
-    result = _canonical_country(country_str)
+    result = canonical_country(country_str)
     return [result] if return_list else result
+
+
+def first_country(value: Any, *, skip_unknown: bool = False) -> str:
+    """The canonical first country of a pipe-separated cell, or ``""``.
+
+    Two rules, both deliberate, which is why this is one function with a
+    switch rather than two copies that drift:
+
+    * default — the FIRST segment, or ``""`` when that first segment is a
+      placeholder (``is_unknown``). An item whose cell opens with
+      "Unknown" is filed under no country: the dashboards and the topic /
+      template summaries ask "where is this item filed".
+    * ``skip_unknown=True`` — the first KNOWN segment. Keyness asks "which
+      country corpus does this item join", and an item naming a real
+      country after a placeholder joins that country's.
+
+    Splits on ``|`` only — the dataset's one multi-value separator — and
+    canonicalises the answer (``canonical_country``), so "Benin" and
+    "Bénin" land in one bucket.
+    """
+    for segment in parse_pipe_separated(value):
+        if not is_unknown(segment):
+            return canonical_country(segment)
+        if not skip_unknown:
+            return ""
+    return ""
+
+
+_WHITESPACE_RUN = re.compile(r"\s+")
 
 
 def normalize_location_name(name: str) -> str:
     """
-    Normalize a location name for matching.
+    The one key every name-to-entity join matches on.
 
     Applies:
     - Unicode NFC normalization
     - Lowercase conversion
-    - Whitespace stripping
+    - Whitespace stripping, and every internal whitespace run collapsed to
+      one space
+
+    Both sides of a join must go through this, which is the point of it
+    being one function: four generators used to build their own index
+    lookups — one raw and case-sensitive, one lowercasing and collapsing
+    whitespace without NFC, two through this — so the same tag linked to
+    its authority record in one block and not in another.
 
     Args:
         name: Location name to normalize
@@ -304,10 +342,12 @@ def normalize_location_name(name: str) -> str:
         "abidjan"
         >>> normalize_location_name("Côte d'Ivoire")
         "côte d'ivoire"
+        >>> normalize_location_name("Abdoulaye   Wade")
+        "abdoulaye wade"
     """
     if not name:
         return ""
-    return unicodedata.normalize('NFC', str(name).strip().lower())
+    return _WHITESPACE_RUN.sub(" ", unicodedata.normalize('NFC', str(name).strip().lower()))
 
 
 # =============================================================================
@@ -315,17 +355,11 @@ def normalize_location_name(name: str) -> str:
 # =============================================================================
 
 FULL_DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
-"""Strict ISO full date (YYYY-MM-DD, anchored) with year/month/day groups."""
+"""Strict ISO full date (YYYY-MM-DD, anchored) with year/month/day groups.
 
-
-def is_full_date(value: Any) -> bool:
-    """True when a cell is a complete, day-precise ISO date.
-
-    Strict: rejects year-only / year-month values and anything with a
-    time suffix. (corpus-health's coverage metric deliberately keeps its
-    looser prefix match — see generate_corpus_health.py.)
-    """
-    return bool(FULL_DATE_RE.match(clean_str(value)))
+Strict: rejects year-only / year-month values and anything with a time
+suffix. (corpus-health's coverage metric deliberately keeps its looser
+prefix match — see generate_corpus_health.py.)"""
 
 
 # Nearly every date in this dataset is "YYYY", "YYYY-MM" or "YYYY-MM-DD".
@@ -493,57 +527,6 @@ def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
     if not (1 <= h_month <= 12 and h_year > 0):
         return None
     return h_year, h_month
-
-
-def extract_month(value: Any) -> Optional[str]:
-    """
-    Extract year-month (YYYY-MM) from various date formats.
-
-    Args:
-        value: Date value to extract month from
-
-    Returns:
-        String in "YYYY-MM" format, or None if extraction fails
-
-    Examples:
-        >>> extract_month("2023-05-15")
-        "2023-05"
-        >>> extract_month(datetime(2023, 5, 15))
-        "2023-05"
-    """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-
-    try:
-        # Handle datetime objects
-        if isinstance(value, (pd.Timestamp, datetime)):
-            return value.strftime('%Y-%m')
-
-        # Handle strings
-        if isinstance(value, str):
-            value = value.strip()
-            if not value:
-                return None
-
-            # Try parsing with pandas
-            dt = pd.to_datetime(value, errors='coerce')
-            if pd.notna(dt):
-                return dt.strftime('%Y-%m')
-
-        # Try generic conversion
-        dt = pd.to_datetime(value, errors='coerce')
-        if pd.notna(dt):
-            return dt.strftime('%Y-%m')
-
-    # Narrowed from a bare `except Exception`. What can actually be raised
-    # here is a bad value (ValueError), a type pandas will not take
-    # (TypeError), or an out-of-range timestamp (OverflowError) — a bare
-    # catch also swallowed a KeyboardInterrupt, or a bug in this function,
-    # and returned None as though the date were simply unparseable.
-    except (ValueError, TypeError, OverflowError):
-        pass
-
-    return None
 
 
 # =============================================================================
@@ -818,25 +801,53 @@ def top_n_pipe(rows: Any, field: str, n: Optional[int] = None) -> List[Dict[str,
     ]
 
 
+ENTITY_TYPE_ORDER: Tuple[str, ...] = (
+    "Personnes",
+    "Organisations",
+    "Lieux",
+    "Sujets",
+    "Événements",
+)
+"""The five explorable index ``Type`` values, in the module's default order.
+
+The order the shared entities panel (``shared/entities-panel.js``
+``DEFAULT_ORDER``) and the dashboards' type filter use. A payload keyed by
+type is emitted in this order so two generators feeding the same panel
+cannot disagree about it; a block that wants another tab order (the index
+overview puts places second) sets it on the client.
+"""
+
+
 def build_entity_index(
     df: Any,
     *,
+    types: Optional[Iterable[str]] = None,
+    aliases: bool = True,
     keep_row: bool = False,
     on_entity: Optional[Any] = None,
 ) -> Tuple[Dict[str, Dict[str, Any]], Dict[int, Dict[str, Any]], Dict[int, Tuple[float, float]]]:
     """The index subset as three lookups: name → entity, id → entity, Lieux coordinates.
 
-    The shared first step of every per-item dashboard generator (the
-    person / entity aggregator and the article generator each carried a
-    copy). A name key is the NFC-folded title (``normalize_location_name``)
-    and every ``Titre alternatif`` alias, first writer wins; authority
-    placeholders (``AUTHORITY_PLACEHOLDER_TYPE``) and rows without an id
-    or a title are skipped; a ``Lieux`` row with parseable coordinates is
-    recorded for the maps.
+    The one index lookup. Every generator that joins a tag, a byline or a
+    provenance label to its authority record goes through here, so they
+    all agree on which names match: four hand-written copies normalised
+    keys four ways (raw and case-sensitive, lowercase without NFC, …) and
+    the same tag linked in one block and not in the next.
+
+    A name key is ``normalize_location_name`` of the title and, with
+    ``aliases``, of every ``Titre alternatif``. **Titles are registered
+    before any alias**, so another record's alias can never shadow a
+    title; among titles, and among aliases, the first writer wins.
+    Authority placeholders (``AUTHORITY_PLACEHOLDER_TYPE``) and rows
+    without an id or a title are skipped; a ``Lieux`` row with parseable
+    coordinates is recorded for the maps.
+
+    ``types`` keeps only those ``Type`` values (a places-only join passes
+    ``{"Lieux"}`` so a person's alias cannot capture a place name).
 
     The index's ``countries`` column is "countries this entity has been
     MENTIONED in", not "country this place is located in", so no country
-    is recorded for a place.
+    is recorded for a place — see :func:`place_country_resolver`.
 
     ``keep_row`` keeps the DataFrame row on the info dict (the aggregator's
     header builders read more columns later); ``on_entity(info)`` is called
@@ -854,12 +865,16 @@ def build_entity_index(
         raise RuntimeError(
             f"index subset missing required columns: id={id_col}, title={title_col}, type={type_col}"
         )
-    alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
+    alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"]) if aliases else None
     coord_col = find_column(df, ["Coordonnées", "coordinates"])
+    wanted = (
+        {unicodedata.normalize("NFC", t) for t in types} if types is not None else None
+    )
 
     entity_lookup: Dict[str, Dict[str, Any]] = {}
     id_to_entity: Dict[int, Dict[str, Any]] = {}
     lieux: Dict[int, Tuple[float, float]] = {}
+    pending_aliases: List[Tuple[Any, Dict[str, Any]]] = []
 
     for _, row in df.iterrows():
         o_id = row.get(id_col)
@@ -868,11 +883,13 @@ def build_entity_index(
         except (TypeError, ValueError):
             continue
 
-        entity_type = str(row.get(type_col) or "").strip()
+        entity_type = unicodedata.normalize("NFC", clean_str(row.get(type_col)))
         if not entity_type or entity_type == AUTHORITY_PLACEHOLDER_TYPE:
             continue
+        if wanted is not None and entity_type not in wanted:
+            continue
 
-        title = str(row.get(title_col) or "").strip()
+        title = clean_str(row.get(title_col))
         if not title:
             continue
 
@@ -883,12 +900,8 @@ def build_entity_index(
         key = normalize_location_name(title)
         if key:
             entity_lookup.setdefault(key, info)
-
         if alt_col:
-            for alt in parse_pipe_separated(row.get(alt_col)):
-                alt_key = normalize_location_name(alt)
-                if alt_key and alt_key not in entity_lookup:
-                    entity_lookup[alt_key] = info
+            pending_aliases.append((row.get(alt_col), info))
 
         id_to_entity[o_id] = info
 
@@ -900,42 +913,273 @@ def build_entity_index(
         if on_entity is not None:
             on_entity(info)
 
+    # Second pass, so an alias only ever fills a key no title claimed.
+    for raw, info in pending_aliases:
+        for alt in parse_pipe_separated(raw):
+            alt_key = normalize_location_name(alt)
+            if alt_key and alt_key not in entity_lookup:
+                entity_lookup[alt_key] = info
+
     return entity_lookup, id_to_entity, lieux
 
 
-def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:
+# =============================================================================
+# Place → country (the ``Partie de`` walk)
+# =============================================================================
+
+# ``Partie de`` chains are shallow (place → region → country) but guard
+# against cycles / malformed data anyway.
+MAX_PARTIE_DE_DEPTH = 6
+
+
+def build_partie_de_lookup(index_df: Optional[pd.DataFrame]) -> Dict[str, str]:
+    """Normalized index title → that record's raw ``Partie de`` cell.
+
+    First writer wins; an index without the column gives an empty map, and
+    every place then resolves only if it is itself one of the countries.
     """
-    Parse multi-value field using multiple possible separators.
+    out: Dict[str, str] = {}
+    if index_df is None or index_df.empty:
+        return out
+    title_col = find_column(index_df, ["Titre", "dcterms:title"])
+    partie_col = find_column(index_df, ["Partie de"])
+    if not title_col or not partie_col:
+        return out
+    for title, parent in zip(index_df[title_col].tolist(), index_df[partie_col].tolist()):
+        title = clean_str(title)
+        if title:
+            out.setdefault(normalize_location_name(title), clean_str(parent))
+    return out
 
-    Args:
-        value: Value to parse
-        separators: String of separator characters to try
 
-    Returns:
-        List of trimmed strings
+def resolve_focus_country(
+    title: str,
+    partie_de_by_key: Dict[str, str],
+    focus_set: Optional[Dict[str, str]] = None,
+) -> Optional[str]:
+    """Walk the ``Partie de`` chain until a focus country is reached.
 
-    Examples:
-        >>> parse_multi_value("a|b|c")
-        ["a", "b", "c"]
-        >>> parse_multi_value("a,b,c")
-        ["a", "b", "c"]
+    ``partie_de_by_key`` is :func:`build_partie_de_lookup`'s map;
+    ``focus_set`` maps normalized country names to their canonical
+    spelling (default: :data:`IWAC_COUNTRIES`). The location's own title
+    counts too (the six countries are themselves Lieux entries). None when
+    the chain ends, loops or leaves the collection's countries — a place in
+    France has no IWAC country, and must not be given one.
     """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return []
+    if focus_set is None:
+        focus_set = {normalize_location_name(c): c for c in IWAC_COUNTRIES}
+    seen = set()
+    current = title
+    for _ in range(MAX_PARTIE_DE_DEPTH):
+        key = normalize_location_name(current)
+        if not key or key in seen:
+            return None
+        seen.add(key)
+        canon = focus_set.get(normalize_location_name(canonical_country(current)))
+        if canon:
+            return canon
+        parents = parse_pipe_separated(partie_de_by_key.get(key, ""))
+        if not parents:
+            return None
+        current = parents[0]
+    return None
 
-    if isinstance(value, (list, tuple)):
-        return [str(v).strip() for v in value if str(v).strip()]
 
-    value_str = str(value).strip()
-    if not value_str:
-        return []
+def place_country_resolver(
+    index_df: Optional[pd.DataFrame],
+    countries: Iterable[str] = IWAC_COUNTRIES,
+) -> Any:
+    """``country_of(place_title) -> Optional[str]`` over one index snapshot.
 
-    # Try each separator
-    for sep in separators:
-        if sep in value_str:
-            return [v.strip() for v in value_str.split(sep) if v.strip()]
+    THE place → country lookup. The index's ``countries`` column lists the
+    countries whose press MENTIONS an entity, so ``countries[0]`` of a place
+    is usually "Bénin" — the most-catalogued press — whatever the place is.
+    Three generators read it that way; the index overview had already
+    dropped it from its own map for exactly that reason. This resolves the
+    country the place is located IN, through ``Partie de``, or None when it
+    is not in (or under) one of ``countries``.
 
-    return [value_str]
+    Memoized per normalized title, so it is cheap to call per tag.
+    """
+    partie = build_partie_de_lookup(index_df)
+    focus = {normalize_location_name(c): c for c in countries}
+    cache: Dict[str, Optional[str]] = {}
+
+    def country_of(title: Any) -> Optional[str]:
+        text = clean_str(title)
+        key = normalize_location_name(text)
+        if not key:
+            return None
+        if key not in cache:
+            cache[key] = resolve_focus_country(text, partie, focus)
+        return cache[key]
+
+    return country_of
+
+
+# =============================================================================
+# Top entities by tag membership
+# =============================================================================
+
+TAG_FIELDS: Tuple[str, ...] = ("subject", "spatial")
+"""The catalogue fields an item is tagged with an index entry through."""
+
+
+def compute_top_entities(
+    index_df: Optional[pd.DataFrame],
+    frames: Any,
+    top_n: int,
+    *,
+    types: Iterable[str] = ENTITY_TYPE_ORDER,
+    fields: Iterable[str] = TAG_FIELDS,
+) -> Dict[str, List[Dict[str, Any]]]:
+    """Top ``top_n`` index entries per type, ranked by tagged items.
+
+    ``frequency`` is the number of content items whose ``subject`` or
+    ``spatial`` field names the entry — tag membership: each cell is
+    pipe-split and stripped, and a value matches an ``index.Titre`` as a
+    whole (``normalize_location_name`` on both sides), never as a
+    substring. An item counts once per entry however many of its fields
+    carry it.
+
+    Not ``index.frequency``: that column counts every role an entity plays
+    (``author``, ``creator``, ``publisher`` …), so a journalist ranked on
+    their bylines and a newspaper on what it printed, while both panels
+    reading this say the counts come from the catalogue's subject and
+    place fields. ``first_occurrence`` / ``last_occurrence`` / ``countries``
+    describe the same tagged items, so the tooltip and the bar agree.
+
+    ``frames`` is ``{subset: DataFrame}`` (or an iterable of frames); a
+    frame without any of ``fields`` contributes nothing. Rows with no
+    title never reach the ranking, so ``top_n`` is always ``top_n`` named
+    entries. Ties break on the title.
+
+    Returns ``{type: [{o_id, title, frequency, first_occurrence?,
+    last_occurrence?, countries?, thumbnail?}, …]}`` in ``types`` order.
+    """
+    type_order = list(types)
+    result: Dict[str, List[Dict[str, Any]]] = {t: [] for t in type_order}
+    if index_df is None or index_df.empty:
+        return result
+
+    lookup, by_id, _ = build_entity_index(
+        index_df, types=type_order, aliases=False, keep_row=True,
+    )
+    tag_fields = list(fields)
+    frame_list = list(frames.values()) if isinstance(frames, dict) else list(frames or [])
+
+    counts: Counter = Counter()
+    first: Dict[int, str] = {}
+    last: Dict[int, str] = {}
+    countries: Dict[int, Counter] = {}
+
+    for df in frame_list:
+        if df is None or df.empty:
+            continue
+        columns = [df[f].tolist() for f in tag_fields if f in df.columns]
+        if not columns:
+            continue
+        n = len(df)
+        dates = df["pub_date"].tolist() if "pub_date" in df.columns else [None] * n
+        cells = df["country"].tolist() if "country" in df.columns else [None] * n
+
+        for i in range(n):
+            matched = set()
+            for column in columns:
+                for tag in parse_pipe_separated(column[i]):
+                    info = lookup.get(normalize_location_name(tag))
+                    if info is not None:
+                        matched.add(info["o_id"])
+            if not matched:
+                continue
+            date = clean_str(dates[i])[:10]
+            dated = extract_year(date) is not None
+            item_countries = {
+                canonical_country(c) for c in clean_values(parse_pipe_separated(cells[i]))
+            }
+            for o_id in matched:
+                counts[o_id] += 1
+                if dated:
+                    if o_id not in first or date < first[o_id]:
+                        first[o_id] = date
+                    if o_id not in last or date > last[o_id]:
+                        last[o_id] = date
+                if item_countries:
+                    countries.setdefault(o_id, Counter()).update(item_countries)
+
+    for entity_type in type_order:
+        ranked = sorted(
+            (o_id for o_id in counts if by_id[o_id]["type"] == entity_type),
+            key=lambda o_id: (-counts[o_id], by_id[o_id]["title"]),
+        )[:top_n]
+        entries: List[Dict[str, Any]] = []
+        for o_id in ranked:
+            info = by_id[o_id]
+            entry: Dict[str, Any] = {
+                "o_id": o_id,
+                "title": info["title"],
+                "frequency": int(counts[o_id]),
+            }
+            if o_id in first:
+                entry["first_occurrence"] = first[o_id]
+                entry["last_occurrence"] = last[o_id]
+            if o_id in countries:
+                entry["countries"] = [
+                    c for c, _ in sorted(countries[o_id].items(), key=lambda kv: (-kv[1], kv[0]))
+                ]
+            thumb = clean_str(info["row"].get("thumbnail"))
+            if thumb:
+                entry["thumbnail"] = thumb
+            entries.append(entry)
+        result[entity_type] = entries
+    return result
+
+
+# =============================================================================
+# Small shared parsers
+# =============================================================================
+
+def lda_topic_id(value: Any) -> Optional[int]:
+    """An ``lda_topic_id`` cell as a topic id, or None.
+
+    The column is ``float64`` (nulls force the widening — on ``articles`` it
+    is never an int), so the cell goes through ``float`` first. None for
+    NaN / None / garbage and for every negative id: ``-1`` is the
+    ``articles`` outlier bucket, and the null-not-``-1`` convention of
+    ``publications`` / ``references`` means a negative id there is a change
+    of upstream convention that should degrade to "uncovered" rather than
+    invent topic -1. A caller that reports the outlier residual separately
+    tests for a present value first (``clean_float``) and then for None
+    here.
+
+    Read the topic id beside ``lda_model_name``: three subsets carry four
+    unrelated numbering schemes, so an id alone names no topic.
+    """
+    number = clean_float(value)
+    if number is None or not math.isfinite(number):
+        return None
+    topic = int(number)
+    return topic if topic >= 0 else None
+
+
+def dominant(counter: Any, default: Any = None) -> Any:
+    """The most common key of a Counter-like mapping, ties broken by key.
+
+    "Which country is this newspaper from" was ``most_common(1)`` in seven
+    places, and ``most_common`` breaks a tie on insertion order — the row
+    order of whatever snapshot was loaded — so a periodical split evenly
+    between two countries could change country from one regeneration to
+    the next. The smallest key (compared as a string, so a None key
+    cannot raise) wins a tie here, deterministically. Non-positive counts
+    are ignored; nothing left means ``default``.
+    """
+    best = None
+    for key, count in counter.items():
+        if count <= 0:
+            continue
+        if best is None or (-count, str(key)) < (-best[1], str(best[0])):
+            best = (key, count)
+    return default if best is None else best[0]
 
 
 # =============================================================================
@@ -1739,3 +1983,40 @@ def create_metadata_block(
         **extra_fields
     }
     return metadata
+
+
+# =============================================================================
+# Rights flag and accent folding (shared with the Laïcité package)
+# =============================================================================
+#
+# Appended rather than slotted in beside the parsers above: both started life
+# in ``scripts/laicite/`` and moved here once a second reader needed them.
+# ``laicite.lexicon`` re-exports ``fold_plain`` so its callers are unchanged.
+
+def is_public_flag(value: Any) -> bool:
+    """Is this ``OCR_is_public`` cell a published *yes*?
+
+    True only for a real boolean True — Python's or numpy's, which is not a
+    subclass of ``bool`` and so fails an ``is True`` test. Everything else is
+    False: NaN and None (a missing flag is not a permission), and strings or
+    integers, which the column never legitimately holds. The flag gates
+    whether private full text may be quoted, so it fails CLOSED: a plain
+    ``bool(value)`` would read NaN as public.
+    """
+    return bool(pd.api.types.is_bool(value) and value)
+
+
+def fold_plain(text: Any) -> str:
+    """Lowercase and strip combining marks — the offset-agnostic fold.
+
+    For lexicon terms, tag comparisons and fingerprints, where only the
+    folded string matters. NFD can change the length of the text, so this is
+    NOT the fold to cut quotations with; ``laicite.lexicon.fold_preserving``
+    keeps a 1:1 character mapping for that. Non-strings fold to ``""``.
+    """
+    if not isinstance(text, str):
+        return ""
+    return "".join(
+        c for c in unicodedata.normalize("NFD", text.lower())
+        if unicodedata.category(c) != "Mn"
+    )
