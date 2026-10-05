@@ -213,6 +213,16 @@
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js"
       },
+      "theme/ink-on-primary": {
+        "role": "theme-token",
+        "token": "--ink-on-primary",
+        "canonical": "#ffffff",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#0f0a05"
+        ]
+      },
       "theme/surface": {
         "role": "theme-token",
         "token": "--surface",
