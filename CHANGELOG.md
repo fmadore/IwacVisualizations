@@ -13,6 +13,57 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.75.0 — A seventh review: what the last month broke, and the guards that would have caught it (2026-10-05)
+
+A review of everything since the v1.68.1 refactoring close found more live faults than refactoring opportunities: the lint suite and every unit test passed over each of them, and all of them were still present in v1.74.0. This release fixes them and adds a guard for each class, so the suite now fails on the same mistake.
+
+**Broken in production**
+
+- The embed snippet gallery rendered no snippets. It loaded `js/charts/shared/embed.min.js`, a file the move to bundles deleted in v1.65.0, so the helper it builds every snippet through was never defined. The gallery now loads the site language's shared-core bundle plus its own `shared-embed-gallery` bundle; its former inline script is a file, with its two labels passed as `data-` attributes. `tests/js/assets.test.js` now fails on any literal `assetUrl()` target missing from disk.
+- The homepage banner's second row was frozen at the 28 August snapshot (81 newspapers against 85 today) and absent on fresh installs. Since v1.66.0 the sync publishes only under `generations/<sha>/`, while the IWAC theme reads the root `files/iwac-visualizations/collection-overview.json`. Each sync now copies the active generation's file to the root path atomically. That root file is a published cross-repository contract, documented in `Deployment::publishRootSnapshot()` and ARCHITECTURE.md. No theme release is needed.
+- Periodicals Overview's stylesheet never loaded: its `blockCss` sat beside the asset declaration instead of inside it. `AssetPlan::FLAGS` now names every asset flag, so an unknown one throws. `lint:blocks` and the PHP suite reject a misplaced `blockCss`, a missing sheet and a misspelt flag.
+- The Laïcité map came back blank after visiting another view. The guard that should spare the parked map checked `parked.places` while the map is stored as `parked.map`, so leaving the view destroyed it.
+- On item pages, switching between light and dark left graph legends and node colours on the previous palette. The entity graph's theme callback replaced the panel's instead of joining it, and the canvas repainted before either ran.
+- French pages switched their loading message to English as the script started. Six blocks overwrote the server-translated label with a JavaScript lookup that had no French entry.
+- Recovering an interrupted data sync left the dead job showing as running, so every later pull needed the recovery box ticked again. Recovery now marks that job as failed, with an end time and a line in its log.
+
+**Plurals, labels and accessibility**
+
+- "1 links", "1 lines", "1 records hidden", "1 documents en commun", "et 1 autres": 76 call sites passed a pre-formatted count to `t()`, which switches its plural selection off. They now pass the number, the missing `_one` variants exist in both languages, and `lint:i18n` rejects the old pattern.
+- One fullscreen helper, `P.bindFullscreen`, replaces three copies. It reports its state through `aria-pressed`, falls back to a class-only overlay closed by Esc where the Fullscreen API is missing (iPhone), and gives the Co-occurrence network a single block-level toggle. The network's two map controls had lost track of each other.
+- The associated-entities controls on person and entity pages are the shared segmented control and facet chip rather than a private copy; arrow keys now skip disabled chips. An active facet chip keeps its tint on hover. In fullscreen, the associated-entities network fits laptop-height screens.
+- Entity types have one colour site-wide: the Co-occurrence network coloured them by their order in its data, so "Personnes" was a different colour there than on every item page. Its type chips now repaint on a theme switch.
+- The Co-occurrence network's "View as table" and "Download CSV" now work, its maps have accessible names, and search results and list rows show an inset focus outline that scrolling lists no longer clip. Graph PNG exports carry the title, date and attribution at 3×, like every other panel.
+- Laïcité:
+  - Its controls are labelled "View" and "Axis" instead of the block title and one of the select's own options.
+  - Its evidence tables use the shared table, with locale formatting, the phone record layout and themed meters.
+  - Six of its charts now get their phone layout; their responsive rules had been no-ops.
+  - Coverage country, period and outlet are part of the URL.
+  - Its "AI-generated description" label renders as the quiet label it was meant to be.
+- Below the `sm` breakpoint, a labelled select stacks its label above a full-width control in every block.
+
+**Data corrections** (take effect with the next data build)
+
+- Person and entity dashboards' Topics panel counted labels from four unrelated topic models: articles, Islamic publications, and French and English references. It now reads articles only, without the outlier topic.
+- A place's country was taken from `index.countries[0]`, which lists where an entry is *mentioned*, so La Mecque or Paris were counted toward an IWAC country on the world map, in the newspaper comparison and on the index Gantt. Places now resolve through the catalogue's `Partie de` hierarchy, and places outside the six countries carry none. The Index Overview's places choropleth, empty until now, is filled.
+- "Most frequently indexed entries" ranked people by `index.frequency`, which counts bylines, while the panel said it counted subject and place fields. One shared ranking now counts items whose subject or place fields record the entry, in both overviews.
+- Newspaper comparison: tag lookups now ignore case and spacing like every other block, so newspaper corpora get linked entries and map points. "Rated" means rated on any sentiment axis, and a missing value no longer counts as rated.
+- Laïcité:
+  - A long item's concordance sample now keeps a line from each search-term group before sharing out the rest, where the dominant term used to take every slot.
+  - Country-less records no longer form an "Unknown" country or a matched-sentiment stratum, and a missing rights flag now withholds a snippet instead of publishing it.
+  - The research cells ship once, inside `laicite-trends.json`; the unread `laicite-research.json`, `laicite-countries.json` and legacy series are gone.
+  - The method version is now `source-text-v4`.
+- The data workflow now also rebuilds when the Laïcité lexicon, the audit ledger, the committed event sidecars or `asset/geo/` change; the e3130cef lexicon edit never triggered a rebuild. It runs ruff and the Python tests before generating.
+
+**Maintenance**
+
+- The single-block strings v1.73.0's move left behind followed it, and `lint:i18n` now fails on a shared key that one block alone reads, so the dictionary cannot drift back. Four single-block chart builders moved out of the shared charts bundle. Dead keys, identity entries and orphan `fr.po` entries are gone, and French says "documents" throughout.
+- About 45 hex fallbacks in chart code, every one unreachable and every one an old-theme colour, are removed. The heatmap ramp and month tables each have one home.
+- `scripts/lib/` holds the file walking, manifest reading and error reporting that the build and lint scripts each repeated. Those scripts now read text with LF line endings, so a CRLF checkout cannot pass a check vacuously. `lint:models --check` fails when its target block is missing.
+- The Laïcité relevance audit refuses to merge verdicts from an earlier run, matches tier-1 verdicts on their fingerprint, and saves nothing when any row fails validation. "Near a core term" is defined once, at 80 tokens.
+- PHP: the data-tree paths and the generation-id pattern each live in one place, and the work-directory sweep now covers checksum sidecars and release pointers. The checksum is fetched before the archive. A failed MapLibre import can be retried. The dead sentiment shims, the deprecated frame-ancestors helper and the collection-overview template are removed; that block is now a registry shell like the other nineteen, and only `on-this-day` and `iwac-timeline` keep templates of their own.
+- New guards: `lint:i18n` rejects pre-formatted counts, identity `en` entries and shared keys only one block uses; `lint:theme` rejects literal hex fallbacks in chart code (a module rule beside the shared engine); `lint:i18n-pot` rejects dead `fr.po` entries; `lint:blocks` checks asset flags and stylesheets.
+
 ### v1.74.0 — Native bilingual timelines (2026-10-01)
 
 - Add the IWAC Timeline page block with a server-rendered chronological reading view, authored narrative navigation, date axis with range lanes, keyboard and touch controls, stable event links, and complete no-JavaScript/print output.
