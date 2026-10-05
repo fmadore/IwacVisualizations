@@ -69,7 +69,7 @@ jobs:
               echo "::error file=$f::$out"
               fail=1
             fi
-          done < <(find src view config Module.php -type f \( -name '*.php' -o -name '*.phtml' \) -print0)
+          done < <(find bin src view config Module.php -type f \( -name '*.php' -o -name '*.phtml' \) -print0)
           exit $fail
 
       - name: PHP behavioral contracts
@@ -87,7 +87,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Python generator lock matches its input
         run: node scripts/python-lock.js --check

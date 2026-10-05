@@ -1,742 +1,114 @@
 #!/usr/bin/env node
 /**
- * Theme-token contract guard.
+ * Theme-token contract guard — `npm run lint:theme`.
  *
- * The IWAC module is built to consume the IWAC theme's design tokens
- * (IWAC-theme/docs/DESIGN-SYSTEM.md) rather than redefine them. This linter
- * fails the build when a source file drifts from that contract, so the
- * discipline the codebase already follows stays automatic as new blocks land.
- * It scans only hand-written sources (*.css / *.js, never the generated
- * *.min.* mirrors).
+ * The module is built to consume the IWAC theme's design tokens
+ * (IWAC-theme/docs/DESIGN-SYSTEM.md) rather than redefine them. The RULES live
+ * in `scripts/theme-token-guard.cjs`, a copy of
+ * IWAC-theme/scripts/lib/theme-token-guard.cjs that the theme's
+ * `npm run sync:tokens` writes beside tokens.json. Do not edit that copy —
+ * edit the theme's, re-sync, and both modules move with the contract.
  *
- * Rules (shape):
- *   1. No removed tokens — `--primary-hue` / `--primary-sat` were dropped
- *      in theme v2.0.0 (derive variants via color-mix from `--primary`).
- *   2. No `color-mix(in srgb …)` — sRGB mixing muddies mid-tones; the
- *      contract is `in oklab`.
- *   2b. No `color-mix(… black|white …)` — mix toward `--surface` or
- *      `--ink` instead. Black and white are the two colours in the
- *      palette that are NOT theme-relative, so a ramp built on them
- *      inverts when the surface goes dark: mixing toward black moves a
- *      swatch away from a white page but *toward* a near-black one.
- *      `--iwac-vis-sent-pos-strong` was derived that way until v1.50.0,
- *      which left the strongest grade on the polarité scale as the
- *      dimmest thing on the chart in dark mode (contrast 4.96 against
- *      8.28 for the grade below it). `--surface` and `--ink` both flip
- *      with the theme, so a mix toward either keeps its direction. A
- *      declaration inside an explicitly theme-pinned block already knows
- *      which way is up and opts out with `/* allow-absolute-mix *​/`.
- *   3. (CSS only) Every hex colour must sit in a `var(--token, #fallback)`
- *      fallback slot. Bare hex chrome is forbidden. Genuine exceptions
- *      (sanctioned data-series colours) opt out with a trailing
- *      `/​* allow-hex *​/` marker on the same line.
- *   3b. (CSS only, added 2026-08) The same rule for `rgb()` / `rgba()` /
- *      `hsl()` / `hsla()`. Rule 3 matched `#` and nothing else, so two of the
- *      three ways CSS spells a literal colour were simply outside the guard:
- *      `background: rgba(0, 0, 0, 0.78)` on the map popup scrim was bare
- *      chrome that does not flip with the theme, and it had passed every
- *      build. Shares rule 3's `var()`-fallback exemption — that is where the
- *      `--shadow-*` rgba() values legitimately live — and its `allow-hex`
- *      opt-out.
+ * This file used to BE the guard: a 701-line fork of IwacSearch's 621-line
+ * one. The forks had drifted (this one could not see a media query in rem, a
+ * declaration wrapped over several lines, or an `oklch()` literal), which is
+ * the drift the token contract exists to prevent, happening to the thing that
+ * enforces it. What stays here is only what is genuinely this module's:
  *
- * Rules (value) — only when `tokens.json` is present (synced from the theme
- * by IWAC-theme/scripts/build-tokens.js; the SINGLE SOURCE OF TRUTH):
- *   4. Every `var(--token, #hex)` fallback must EQUAL the token's canonical
- *      light value. A stale fallback (old brand orange, cream surface) is a
- *      competing variable even if it never paints a pixel.
- *   5. The runtime `FALLBACK_LIGHT` / `FALLBACK_DARK` objects (iwac-theme.js)
- *      must equal the canonical light / dark values.
- *   6. Every `var(--…)` must NAME a token that exists: one published in
- *      `tokens.json`'s `names` (the theme's full vocabulary), one this module
- *      declares itself, or one in the module-owned `--iwac-vis-` namespace.
- *      Rules 3-4 only ever checked hex *values*, so a reference to a token the
- *      theme never defined — or has since removed — passed cleanly while
- *      rendering from its fallback forever, silently decoupled from the scale
- *      it appeared to track. `--panel-border-color` sat here undetected that
- *      way until the theme published `names` (IWAC-theme 2.9.1).
- *
- *      The exemption is the DOCUMENTED prefix, `--iwac-vis-`, not the looser
- *      `--iwac-`: the module namespace is the one place a competing variable
- *      can legally live, so it should be exactly as wide as §4 of
- *      DESIGN-SYSTEM.md says it is. The loose form had already let
- *      `--iwac-compare-color-a/b` and `--iwac-otd-axis-gap` drift out of it.
- *
- * Rules added 2026-08 (design review F1 / F3 / F5) — the whole class of drift
- * that no guard could see, because every rule above is about colour:
- *   7. Non-colour fallbacks must equal `tokens.json`'s generated
- *      `values.light`: type steps, spacing, radii, control sizes,
- *      line-heights, font stacks, shadows, transitions. Several here were a
- *      generation behind, including a `--font-headings` fallback still naming
- *      the removed "Noto Serif" — in the one property whose quoting bug had
- *      already silently rendered ~30 declarations in the wrong face.
- *   8. A fallback may not itself contain `var()`. It only renders when the
- *      theme is absent, in which case the nested token is absent too.
- *   9. `font-size` must come from a `--text-*` token, not a literal. ~91
- *      literals ran a second, undeclared scale here on the 12/14/18px steps
- *      of a generic utility framework rather than the theme's 11/13/15/17/19.
- *      Extended 2026-08 to the math-function form: the rule was anchored to
- *      the colon, so it saw `font-size: 1.5rem` and not `font-size:
- *      clamp(1.5rem, 1.05rem + 0.7vw, 2rem)` — four inline fluid ramps that
- *      are exactly the second type scale rule 9 exists to forbid, and the
- *      more expensive kind, since a clamp encodes three numbers instead of
- *      one. Absolute lengths inside `var(--token, …)` are exempt: `--text-3xl`
- *      IS a clamp, and its fallback has to spell it out.
- *  10. Media-query widths must be one of the theme's published breakpoints.
- *      `blocks/laicite.css` reflowed at 640px under a `/* sm *​/` comment
- *      while the theme's `$sm` — and every other block on the page — is 600.
- *
- * Rule added 2026-08 (Phase-2 colour grammar):
- *  11. The categorical SERIES palette in iwac-theme.js must deep-equal
- *      `tokens.json`'s `series`. The scale was module-owned for the module's
- *      whole life — a 19-hex array literal published nowhere and asserted by
- *      nothing, with slot 0 a hardcoded twin of `--secondary` that had to be
- *      sliced back off at runtime. The theme now owns it (`--series-1 … -20`),
- *      so the arrays here are a degraded-mode fallback and nothing else; this
- *      rule pins them, the lead-slot count, and WHICH tokens hold the leads,
- *      so a palette edit in the theme cannot land on one side of the contract.
- *      Light and dark are checked separately: they are equal in contract v1
- *      and the guard must not start passing by accident when they diverge.
- *
- * Rule added 2026-10 (stale chart fallbacks):
- *  12. No hex literal as the fallback of a token read in chart JS —
- *      `tokens.surface || '#fdfdfd'`, `readVar('--x', '#66696e')`. Rule 3
- *      exempts JS from the hex check, and these slipped through it: three
- *      dozen copies of the theme's colours, most already stale (`#fafaf9`,
- *      `#fdfcfb` and `#fdfdfd` were all "the surface"), each a second home
- *      for a value tokens.json owns. iwac-theme.js's FALLBACK_LIGHT/DARK are
- *      the one sanctioned degraded mode, and rule 5 pins them; read a token
- *      through `ns.getThemeTokens()`, which already falls back to them.
- * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
- *
- * Usage: node scripts/check-theme-tokens.js
- * Exit code 1 on any violation (with file:line + reason), else 0.
+ *   - where the hand-written sources live: `asset/css` (never the *.min.css
+ *     mirrors), `asset/js` (never `dist/`), and the `<style>` blocks of the
+ *     `view/` templates — which matter MORE than most sheets, because the
+ *     embed routes ship without the theme's CSS and render from fallbacks;
+ *   - the generated embed token sheet, which is skipped here because
+ *     `npm run lint:embed-tokens` asserts it byte-for-byte against tokens.json;
+ *   - the namespace it owns: `--iwac-vis-`, exactly as DESIGN-SYSTEM.md §4
+ *     documents it. The looser `--iwac-` form had already let
+ *     `--iwac-compare-color-a/b` and `--iwac-otd-axis-gap` drift out of it;
+ *   - one rule about this module's chart JS, run before the shared engine:
+ *     a token read in chart code never falls back to a hex literal.
  */
-const { readFileSync, existsSync } = require('fs');
-const { join, relative } = require('path');
-const { sourceFiles } = require('./lib/fs');
-const { fail } = require('./lib/report');
+const { join } = require('path');
+const { cli, collectFiles } = require('./theme-token-guard.cjs');
 
 const ROOT = join(__dirname, '..');
-const CSS_DIR = join(ROOT, 'asset', 'css');
-const JS_DIR = join(ROOT, 'asset', 'js');
-const VIEW_DIR = join(ROOT, 'view');
-const TOKENS_PATH = join(ROOT, 'tokens.json');
-
-/** Source files with one of `exts` under `dir` — built `.min.*` excluded. */
-function walk(dir, exts) {
-    return sourceFiles(dir, exts);
-}
 
 /**
- * Blank out `/* … *\/` comment interiors, preserving every newline and the
- * overall character count so file:line references stay exact.
+ * Chart JS: no hex literal as the fallback of a token read —
+ * `tokens.surface || '#fdfdfd'`, `readVar('--x', '#66696e')`.
  *
- * Without this, prose that merely *discusses* a colour trips the hex rule —
- * `layout/embed.phtml`'s comment explaining the dark-mode accent shift
- * ("#e64a19 → #ec653f") is a documented example, and any comment naming a
- * removed token would fail rule 1 the same way. Comments are not CSS.
- */
-function blankComments(text) {
-    // `/* allow-hex */` and `/* allow-absolute-mix */` are themselves
-    // comments and ARE load-bearing — they are the opt-out markers rules 3,
-    // 4 and 2b look for. Leave those intact and blank the rest.
-    return text.replace(/\/\*[\s\S]*?\*\//g, (m) =>
-        /allow-hex|allow-absolute-mix/.test(m) ? m : m.replace(/[^\n]/g, ' '));
-}
-
-/** Normalise #rgb / #rgba / #rrggbb / #rrggbbaa → lowercase #rrggbb. */
-function normHex(hex) {
-    let h = hex.replace('#', '').toLowerCase();
-    if (h.length === 3 || h.length === 4) h = h.slice(0, 3).split('').map((c) => c + c).join('');
-    return '#' + h.slice(0, 6);
-}
-
-// Single source of truth: generated tokens.json. Absent → value checks skip
-// (shape checks still run), so the guard degrades gracefully if a checkout
-// hasn't synced tokens yet.
-let TOKENS = null;
-if (existsSync(TOKENS_PATH)) {
-    try {
-        TOKENS = JSON.parse(readFileSync(TOKENS_PATH, 'utf8'));
-    } catch (e) {
-        console.warn('  ! tokens.json present but unparseable — value checks skipped\n');
-    }
-} else {
-    console.warn('  ! tokens.json not found — value checks skipped (run `npm run build:tokens` in IWAC-theme)\n');
-}
-
-const REMOVED_TOKEN = /--primary-(hue|sat)\b/;
-const SRGB_MIX = /color-mix\(\s*in\s+srgb\b/i;
-// A literal black/white operand anywhere inside a color-mix(). Matched on
-// the whole line rather than by parsing the call: these are single-line
-// declarations, and a word-boundary hit on `black`/`white` outside a
-// color-mix is not a thing this codebase writes.
-const ABSOLUTE_MIX = /color-mix\([^;]*\b(?:black|white)\b/i;
-const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
-// Rule 3b — the other two ways to write a literal colour. Rule 3 has only
-// ever matched `#`, so `rgba(0, 0, 0, 0.78)` (iwac-core's map-popup scrim)
-// sat in the tree as bare chrome the guard could not see, and the whole
-// hsl() family was open. Same shape as the hex rule: legal inside a `var()`
-// fallback (that is where `--shadow-*`'s own rgba() lives), forbidden as
-// standalone chrome, opt out with `/* allow-hex */` where a value is
-// genuinely absolute.
-const FUNC_COLOR = /\b(?:rgba?|hsla?)\(/g;
-const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
-const VAR_USE = /var\(\s*(--[\w-]+)/g;
-const DECL = /(--[\w-]+)\s*:/g;
-const MEDIA_WIDTH = /\((min|max)-width\s*:\s*([\d.]+)px\)/g;
-// Absolute font-size literals only: em / % / unitless scale WITH whatever
-// token the cascade already set, so they don't fork the scale.
-//
-// Two forms, because a `font-size` does not have to be a bare literal to fork
-// the scale. `font-size: clamp(1.5rem, 1.05rem + 0.7vw, 2rem)` is a whole
-// second type ramp written inline, and the original rule — anchored to the
-// colon — saw none of them: four fluid steps ran beside the theme's own
-// `--text-3xl`/`--text-4xl` clamps, on the block heading, the section heading,
-// a compare-newspapers title and an OTD masthead. `--text-3xl` IS a clamp, so
-// the fix is not "no clamp" but "the clamp comes from a token": absolute
-// lengths inside a math function on a font-size are the violation.
-const ABS_FONT_SIZE = /font-size:\s*(-?[\d.]+(?:px|rem|pt))\s*(?:;|!|$)/i;
-const FONT_SIZE_DECL = /font-size:\s*([^;]+)/i;
-const ABS_LENGTH = /(?:^|[\s,(+\-*/])(-?[\d.]+(?:px|rem|pt))\b/;
-// Module-owned namespace: data-series colours and properties set at runtime.
-// Exactly the prefix DESIGN-SYSTEM.md §4 documents — see rule 6.
-const MODULE_PREFIX = /^--iwac-vis-/;
-
-/**
- * Every `var(--token, <fallback>)` on a line, fallback extracted by balancing
- * parens so a nested `var()` is captured whole rather than truncated.
- */
-function varFallbacks(line) {
-    const out = [];
-    for (let i = 0; (i = line.indexOf('var(', i)) !== -1;) {
-        let depth = 0, j = i + 3;
-        for (; j < line.length; j++) {
-            if (line[j] === '(') depth++;
-            else if (line[j] === ')') { depth--; if (depth === 0) break; }
-        }
-        if (j >= line.length) break; // spans lines — not our business
-        const inner = line.slice(i + 4, j);
-        const comma = inner.indexOf(',');
-        if (comma !== -1) out.push({ name: inner.slice(0, comma).trim(), fallback: inner.slice(comma + 1).trim() });
-        i = j + 1;
-    }
-    return out;
-}
-
-/**
- * Is the position after `before` inside the fallback slot of an open `var()`?
+ * The shared engine exempts JS from its hex rules (a canvas has no cascade,
+ * so chart code legitimately handles colour values), and these slipped
+ * through it: three dozen copies of the theme's colours, most already stale
+ * (`#e64a19` is the old brand orange; `#fafaf9`, `#fdfcfb` and `#fdfdfd`
+ * were all "the surface"), every one unreachable because
+ * `ns.getChartTokens()` already fills each key from iwac-theme.js's
+ * FALLBACK_LIGHT / FALLBACK_DARK — the one sanctioned degraded mode, which
+ * the engine pins to tokens.json and which this rule therefore skips.
  *
- * Not "does a comma immediately precede it": a fallback is a whole CSS value,
- * so `var(--panel-border, 1px solid #ced1d6)` puts the hex three tokens past
- * the comma. Requiring adjacency reported every composite fallback as bare
- * chrome — a standing incentive to write the nested-var() chains rule 8
- * forbids.
- */
-function isInVarFallback(before) {
-    let depth = 0, varDepth = -1, sawComma = false;
-    for (let i = 0; i < before.length; i++) {
-        if (before[i] === '(') {
-            if (before.slice(Math.max(0, i - 3), i) === 'var' && varDepth === -1) {
-                varDepth = depth; sawComma = false;
-            }
-            depth++;
-        } else if (before[i] === ')') {
-            depth--;
-            if (varDepth !== -1 && depth <= varDepth) varDepth = -1;
-        } else if (before[i] === ',' && varDepth !== -1 && depth === varDepth + 1) {
-            sawComma = true;
-        }
-    }
-    return varDepth !== -1 && sawComma;
-}
-
-/** Compare CSS values ignoring case, spacing, quote style and leading zeros. */
-function normValue(s) {
-    return s.trim().toLowerCase().replace(/'/g, '"').replace(/\s+/g, ' ')
-        .replace(/\s*,\s*/g, ',').replace(/(^|[\s,(])\.(\d)/g, '$10.$2');
-}
-
-/** The canonical value of a token, colour or otherwise, or undefined. */
-function canonicalOf(name) {
-    if (!TOKENS) return undefined;
-    return (TOKENS.light && TOKENS.light[name])
-        || (TOKENS.values && TOKENS.values.light && TOKENS.values.light[name]);
-}
-
-/**
- * Resolve a fallback expression the way CSS would if only the COARSER tokens
- * in it were defined: substitute each `var(--X, Y)` with X's canonical value,
- * or with Y when X is one the theme doesn't publish (module-owned).
- */
-function resolveFallbackExpr(expr) {
-    let out = '', i = 0;
-    while (i < expr.length) {
-        const at = expr.indexOf('var(', i);
-        if (at === -1) { out += expr.slice(i); break; }
-        out += expr.slice(i, at);
-        let depth = 0, j = at + 3;
-        for (; j < expr.length; j++) {
-            if (expr[j] === '(') depth++;
-            else if (expr[j] === ')') { depth--; if (depth === 0) break; }
-        }
-        if (j >= expr.length) { out += expr.slice(at); break; }
-        const inner = expr.slice(at + 4, j);
-        const comma = splitTopLevelComma(inner);
-        const tok = comma === -1 ? inner.trim() : inner.slice(0, comma).trim();
-        const rest = comma === -1 ? '' : inner.slice(comma + 1).trim();
-        const canon = canonicalOf(tok);
-        out += canon !== undefined ? canon : resolveFallbackExpr(rest);
-        i = j + 1;
-    }
-    return out;
-}
-
-/** Index of the first comma at paren depth 0, or -1. */
-function splitTopLevelComma(s) {
-    let depth = 0;
-    for (let i = 0; i < s.length; i++) {
-        if (s[i] === '(') depth++;
-        else if (s[i] === ')') depth--;
-        else if (s[i] === ',' && depth === 0) return i;
-    }
-    return -1;
-}
-
-/**
- * Rule 8 — a nested fallback chain must RESOLVE to the outer token's value.
- *
- * `var(--A, var(--B, lit))` is legitimate when B is a coarser token that
- * resolves to the same thing as A: a consumer holding only a partial token set
- * — a third-party Omeka theme that defines `--surface` but not `--panel-bg`,
- * or this module's own embed routes, which deliberately ship without the
- * compiled theme CSS — still lands on the right value instead of a frozen
- * literal. Flattening those chains is a real loss, not tidying, and the
- * browser tests catch it: the dashboard fixture defines `--surface` and no
- * `--panel-bg`, so a flattened panel background renders LIGHT in dark mode.
- *
- * A chain is a LIE when it resolves to something else. `var(--ink-strong,
- * var(--ink, …))` claims a headline ink degrades to a body ink;
- * `var(--panel-radius, var(--radius-lg, …))` claims an 8px panel degrades to a
- * 12px one. Those are the substitutions nobody meant.
- *
- * Resolving rather than comparing token-by-token also keeps COMPONENT
- * substitution legal: in `var(--focus-outline, 2px solid var(--focus-color,
- * #ce4115))` the inner token supplies one part of the composite, so its value
- * is correctly not equal to the outer's.
- */
-function checkFallbackChain(file, raw, n, name, fallback) {
-    const want = canonicalOf(name);
-    if (want === undefined) return; // module-owned, or a token we can't judge
-    const got = resolveFallbackExpr(fallback);
-    if (got.includes('var(')) return; // unresolvable — nothing to assert
-    if (normValue(got) !== normValue(want)) {
-        flag(file, n, `fallback chain for ${name} resolves to "${got.trim()}" ≠ canonical ${want} (tokens.json)`, raw);
-    }
-}
-
-/** Rules 7 + 8 — the non-colour half of the fallback contract. */
-function checkNonColourFallbacks(file, raw, n) {
-    if (!TOKENS || !TOKENS.values || !TOKENS.values.light || /allow-hex/.test(raw)) return;
-    for (const { name, fallback } of varFallbacks(raw)) {
-        if (fallback.includes('var(')) {
-            checkFallbackChain(file, raw, n, name, fallback);
-            continue;
-        }
-        if (fallback.startsWith('#')) continue; // rule 4 owns hex
-        const canon = TOKENS.values.light[name];
-        if (canon && normValue(fallback) !== normValue(canon)) {
-            flag(file, n, `fallback "${fallback}" for ${name} ≠ canonical ${canon} (tokens.json values.light)`, raw);
-        }
-    }
-}
-
-/**
- * Rule 9 — font-size comes from the published type scale.
- *
- * The bare-literal form and the math-function form are the same violation:
- * a size the theme did not publish. A declaration whose absolute lengths all
- * sit inside `var(--token, …)` fallbacks is fine — that IS the token, spelled
- * with its degraded-mode value, and `--text-3xl` is itself a clamp().
- */
-function checkTypeScale(file, raw, n) {
-    const bare = ABS_FONT_SIZE.exec(raw);
-    if (bare) {
-        flag(file, n, `font-size: ${bare[1]} — use a --text-* token (--text-2xs is the floor)`, raw);
-        return;
-    }
-    const decl = FONT_SIZE_DECL.exec(raw);
-    if (!decl) return;
-    const value = decl[1];
-    if (!/\b(?:clamp|calc|min|max)\(/.test(value)) return;
-    // Strip every var() fallback: what remains is what the author wrote
-    // outside the token vocabulary.
-    const outside = stripVarFallbacks(value);
-    const hit = ABS_LENGTH.exec(outside);
-    if (hit) {
-        flag(file, n,
-            `font-size math with the literal ${hit[1]} — a clamp()/calc() of absolute lengths is a second type scale; use a --text-* token`,
-            raw);
-    }
-}
-
-/** Blank out the contents of every `var(…)` call, parens balanced. */
-function stripVarFallbacks(expr) {
-    let out = '', i = 0;
-    while (i < expr.length) {
-        const at = expr.indexOf('var(', i);
-        if (at === -1) { out += expr.slice(i); break; }
-        out += expr.slice(i, at);
-        let depth = 0, j = at + 3;
-        for (; j < expr.length; j++) {
-            if (expr[j] === '(') depth++;
-            else if (expr[j] === ')') { depth--; if (depth === 0) break; }
-        }
-        if (j >= expr.length) break; // unbalanced — nothing more to judge
-        i = j + 1;
-    }
-    return out;
-}
-
-/**
- * Rule 10 — media-query widths are one of the theme's breakpoints.
- *
- * `@media` only. A `@container` query measures its own container, not the
- * viewport, so the viewport scale does not apply to it — on-this-day's
- * `@container iwac-otd (max-width: 900px)` is a legitimate 900px.
- */
-function checkBreakpoints(file, raw, n) {
-    if (!TOKENS || !TOKENS.breakpoints || !/@media\b/.test(raw)) return;
-    const bps = Object.values(TOKENS.breakpoints).map(parseFloat);
-    // `min-width` sits ON the breakpoint; `max-width` sits JUST BELOW it, so
-    // the two halves of a pair never both match. `max-width: 600px` alongside
-    // `min-width: 600px` means both rules fire in a 1px sliver at exactly
-    // 600px — which is how a "reflows at sm" pair quietly stops being one.
-    const minOk = new Set(bps);
-    const maxOk = new Set(bps.flatMap((v) => [v - 1, v - 0.02]));
-    const names = Object.entries(TOKENS.breakpoints).map(([k, v]) => `${k} ${v}`).join(', ');
-    MEDIA_WIDTH.lastIndex = 0;
-    let m;
-    while ((m = MEDIA_WIDTH.exec(raw)) !== null) {
-        const [, kind, px] = m;
-        const v = parseFloat(px);
-        if (kind === 'min' ? !minOk.has(v) : !maxOk.has(v)) {
-            const hint = kind === 'max' && minOk.has(v) ? ` — use ${v - 1}px so it doesn't overlap min-width: ${v}px` : '';
-            flag(file, n, `${kind}-width: ${px}px is not one of the theme's breakpoints (${names})${hint}`, raw);
-        }
-    }
-}
-
-const violations = [];
-function flag(file, line, msg, snippet) {
-    violations.push({ file: relative(ROOT, file), line, msg, snippet: snippet.trim() });
-}
-
-/** Rule 4: `var(--token, #hex)` fallbacks must equal canonical light value. */
-function checkVarFallbackValues(file, raw, n) {
-    if (!TOKENS || /allow-hex/.test(raw)) return;
-    let m;
-    VAR_FALLBACK.lastIndex = 0;
-    while ((m = VAR_FALLBACK.exec(raw)) !== null) {
-        const name = m[1];
-        const canon = TOKENS.light[name];
-        if (canon && normHex(m[2]) !== canon.toLowerCase()) {
-            flag(file, n, `fallback ${m[2]} for ${name} ≠ canonical light ${canon} (tokens.json)`, raw);
-        }
-    }
-}
-
-/**
- * Every custom property this module declares itself. Collected up front so
- * rule 6 can tell a module-owned property from a reference to a theme token
- * that does not exist.
- */
-const moduleOwned = new Set();
-function collectModuleOwned(files) {
-    for (const file of files) {
-        const src = readFileSync(file, 'utf8');
-        let m;
-        DECL.lastIndex = 0;
-        while ((m = DECL.exec(src)) !== null) moduleOwned.add(m[1]);
-    }
-}
-
-/**
- * Rule 6: every `var(--…)` must name a token that actually exists.
- *
- * Rules 3-4 check hex *values*; nothing checked the *names*, so a reference to
- * a token the theme never defined (or has since removed) passed cleanly while
- * rendering from its fallback forever — silently decoupled from the scale it
- * appears to track. `--panel-border-color` (deleted from the theme) and
- * `--space-2xs` (never existed) both lived here undetected for exactly that
- * reason. `names` in tokens.json is the theme's published vocabulary.
- */
-function checkVarNames(file, raw, n) {
-    if (!TOKENS || !Array.isArray(TOKENS.names)) return;
-    let m;
-    VAR_USE.lastIndex = 0;
-    while ((m = VAR_USE.exec(raw)) !== null) {
-        const name = m[1];
-        if (MODULE_PREFIX.test(name) || moduleOwned.has(name) || TOKENS.names.includes(name)) {
-            continue;
-        }
-        flag(file, n, `unknown token ${name} — not a theme token (tokens.json names), not module-owned (--iwac-*)`, raw);
-    }
-}
-
-/**
- * Extract the `<style>` regions of a .phtml template as [lineNumber, text]
- * pairs, so template CSS is linted with real file:line references.
- *
- * Templates are scanned for the same reason asset CSS is — but they matter
- * MORE than most sheets: the embed routes (`layout/embed.phtml` and friends)
- * deliberately ship without the compiled theme CSS, so every `var(--x, #hex)`
- * there renders FROM THE FALLBACK. A stale fallback in `asset/css` is a latent
- * competing variable; a stale fallback in an embed template is the colour a
- * visitor actually sees. Until this scan existed, 38 pre-v2.0.0 values sat in
- * those three files while the linter reported the tree clean.
- *
- * Only the `<style>` interiors are scanned: PHP string literals and HTML
- * attributes elsewhere in the file are not CSS, and a `#` in a URL fragment
- * or a colour name in prose would produce noise.
- */
-function templateStyleLines(file) {
-    const src = blankComments(readFileSync(file, 'utf8'));
-    const out = [];
-    const re = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
-    let m;
-    while ((m = re.exec(src)) !== null) {
-        const firstLine = src.slice(0, m.index).split('\n').length;
-        // +0 keeps the opening <style …> tag's own line out of the numbering:
-        // m[1] starts right after `>`, so its first line IS the <style> line.
-        m[1].split('\n').forEach((raw, i) => out.push([firstLine + i, raw]));
-    }
-    return out;
-}
-
-function scanLines(file, numbered, { hexCheck }) {
-    numbered.forEach(([n, raw]) => {
-        if (REMOVED_TOKEN.test(raw)) {
-            flag(file, n, 'removed token --primary-hue/--primary-sat (derive via color-mix from --primary)', raw);
-        }
-        if (SRGB_MIX.test(raw)) {
-            flag(file, n, 'color-mix(in srgb …) — use `in oklab`', raw);
-        }
-        // A whole-line `//` comment is prose, not a declaration — the
-        // blanking pass above only strips /* … */, so JS line comments that
-        // quote a token definition would otherwise report themselves.
-        if (ABSOLUTE_MIX.test(raw) && !/^\s*\/\//.test(raw) && !/allow-absolute-mix/.test(raw)) {
-            flag(file, n, 'color-mix toward literal black/white — mix toward --surface or --ink so the ramp survives dark mode (or mark /* allow-absolute-mix */ inside a theme-pinned block)', raw);
-        }
-        checkVarFallbackValues(file, raw, n);
-        checkVarNames(file, raw, n);
-        checkNonColourFallbacks(file, raw, n);
-        checkBreakpoints(file, raw, n);
-        if (hexCheck) checkTypeScale(file, raw, n);
-        if (!hexCheck || /allow-hex/.test(raw)) return;
-
-        let m;
-        HEX.lastIndex = 0;
-        let reported = false;
-        while ((m = HEX.exec(raw)) !== null) {
-            const before = raw.slice(0, m.index);
-            if (!isInVarFallback(before)) {
-                flag(file, n, 'bare hex outside a var() fallback (use a theme token, or mark /* allow-hex */)', raw);
-                reported = true;
-                break; // one report per line is enough
-            }
-        }
-        if (reported) return;
-
-        // Rule 3b — rgb() / rgba() / hsl() / hsla(). Colour has three
-        // spellings in CSS and the guard only ever knew one, so the rule that
-        // "bare chrome is forbidden" was enforced on `#000` and not on
-        // `rgba(0, 0, 0, 0.78)` — which is what the map popup's scrim was,
-        // sitting in iwac-core.css as a literal that does not flip with the
-        // theme and that no guard could see. The `color-mix` rules (2 / 2b)
-        // have the same reasoning applied to a different operator.
-        FUNC_COLOR.lastIndex = 0;
-        while ((m = FUNC_COLOR.exec(raw)) !== null) {
-            const before = raw.slice(0, m.index);
-            if (!isInVarFallback(before)) {
-                flag(file, n,
-                    `bare ${m[0].slice(0, -1)}() colour outside a var() fallback (use a theme token, color-mix from one, or mark /* allow-hex */)`,
-                    raw);
-                break;
-            }
-        }
-    });
-}
-
-function scan(file, opts) {
-    const numbered = blankComments(readFileSync(file, 'utf8'))
-        .split('\n').map((raw, i) => [i + 1, raw]);
-    scanLines(file, numbered, opts);
-}
-
-/** Rule 5: FALLBACK_LIGHT / FALLBACK_DARK objects must equal canonical values. */
-const camelToVar = (k) => '--' + k.replace(/([A-Z])/g, '-$1').toLowerCase();
-function checkFallbackObjects(file) {
-    if (!TOKENS) return;
-    const src = readFileSync(file, 'utf8');
-    for (const [objName, theme] of [['FALLBACK_LIGHT', 'light'], ['FALLBACK_DARK', 'dark']]) {
-        const block = new RegExp(objName + '\\s*=\\s*\\{([\\s\\S]*?)\\}').exec(src);
-        if (!block) continue;
-        const startLine = src.slice(0, block.index).split('\n').length;
-        const entryRe = /(\w+)\s*:\s*'(#[0-9a-fA-F]{3,8})'/g;
-        let e;
-        while ((e = entryRe.exec(block[1])) !== null) {
-            const name = camelToVar(e[1]);
-            const canon = TOKENS[theme] && TOKENS[theme][name];
-            if (canon && normHex(e[2]) !== canon.toLowerCase()) {
-                const line = startLine + block[1].slice(0, e.index).split('\n').length - 1;
-                flag(file, line, `${objName}.${e[1]} ${e[2]} ≠ canonical ${theme} ${canon} (${name})`, e[0]);
-            }
-        }
-    }
-}
-
-/**
- * Rule 11 — the series palette equals the published contract.
- *
- * Parsed out of the source rather than required in: iwac-theme.js is a browser
- * IIFE that touches `window`/`document` at load, and the arrays are the only
- * part of it this guard is about.
- */
-function checkSeriesPalette(file) {
-    if (!TOKENS || !TOKENS.series) return;
-    const series = TOKENS.series;
-    const src = readFileSync(file, 'utf8');
-    if (!/SERIES_LIGHT\s*=/.test(src)) return; // not the palette owner
-
-    const leadMatch = /SERIES_LEAD_SLOTS\s*=\s*(\d+)/.exec(src);
-    const lead = leadMatch ? Number(leadMatch[1]) : undefined;
-    if (lead !== series.leadSlots) {
-        flag(file, lineOf(src, leadMatch ? leadMatch.index : 0),
-            `SERIES_LEAD_SLOTS ${lead} ≠ tokens.json series.leadSlots ${series.leadSlots}`,
-            'SERIES_LEAD_SLOTS');
-    }
-
-    // The lead slots are read live from --primary / --secondary, so the
-    // contract's claim about WHICH tokens they are has to hold or the module
-    // is reading the wrong two variables.
-    const expectedLeads = (series.leads || []).join(', ');
-    if (expectedLeads !== '--primary, --secondary') {
-        flag(file, 1, `series.leads is now [${expectedLeads}] — buildPalette() reads --primary/--secondary; update it`, 'buildPalette');
-    }
-    (series.leads || []).forEach((token, i) => {
-        for (const [arr, theme] of [['SERIES_LIGHT', 'light'], ['SERIES_DARK', 'dark']]) {
-            const canon = TOKENS[theme] && TOKENS[theme][token];
-            const got = readArray(src, arr)[i];
-            if (canon && got && normHex(got) !== canon.toLowerCase()) {
-                flag(file, lineOf(src, src.indexOf(arr)),
-                    `${arr}[${i}] ${got} ≠ canonical ${theme} ${canon} (${token}, series lead slot)`, arr);
-            }
-        }
-    });
-
-    for (const [arr, theme] of [['SERIES_LIGHT', 'light'], ['SERIES_DARK', 'dark']]) {
-        const got = readArray(src, arr);
-        const want = series[theme] || [];
-        const line = lineOf(src, src.indexOf(arr));
-        if (got.length !== want.length) {
-            flag(file, line, `${arr} has ${got.length} slots, tokens.json series.${theme} has ${want.length}`, arr);
-            continue;
-        }
-        want.forEach((hex, i) => {
-            if (normHex(got[i]) !== hex.toLowerCase()) {
-                flag(file, line,
-                    `${arr}[${i}] ${got[i]} ≠ tokens.json series.${theme}[${i}] ${hex} (--series-${i + 1})`, arr);
-            }
-        });
-    }
-}
-
-/**
- * Rule 12 — a token read in chart JS never falls back to a hex literal.
- *
- * Matched on the whole source, so a fallback wrapped onto the next line
- * (`tokens.surface\n    || '#fdfdfd'`) is found too. Comments are blanked
- * first — `/* … *​/` by blankComments, `//` to the end of the line here —
- * so prose that quotes the old pattern does not trip it. iwac-theme.js's
- * FALLBACK_LIGHT / FALLBACK_DARK blocks are the sanctioned degraded mode
- * (rule 5) and are skipped.
+ * Matched on the whole source, so a fallback wrapped onto the next line is
+ * found too; comments are blanked first so prose quoting the old pattern
+ * does not trip it.
  */
 const STALE_FALLBACKS = [
     [/\btokens\.\w+\s*\|\|\s*['"]#[0-9a-fA-F]{3,8}/g, 'a token read falls back to a hex literal'],
     [/\breadVar\([^)]*,\s*['"]#[0-9a-fA-F]{3,8}/g, 'readVar() is given a hex fallback'],
 ];
-function checkStaleHexFallbacks(file) {
-    const src = blankComments(readFileSync(file, 'utf8'))
+
+/** Comments replaced by spaces, newlines kept, so offsets and lines still match. */
+function blankComments(src) {
+    return src
+        .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
         .replace(/(^|[\s;{}(,])\/\/[^\n]*/g, (m, lead) => lead + m.slice(lead.length).replace(/[^\n]/g, ' '));
-    const exempt = [];
-    if (file.endsWith(join('asset', 'js', 'iwac-theme.js'))) {
-        for (const name of ['FALLBACK_LIGHT', 'FALLBACK_DARK']) {
-            const block = new RegExp(name + '\\s*=\\s*\\{[\\s\\S]*?\\}').exec(src);
-            if (block) exempt.push([block.index, block.index + block[0].length]);
-        }
-    }
-    for (const [pattern, what] of STALE_FALLBACKS) {
-        pattern.lastIndex = 0;
-        let m;
-        while ((m = pattern.exec(src)) !== null) {
-            if (exempt.some(([from, to]) => m.index >= from && m.index < to)) continue;
-            flag(file, lineOf(src, m.index),
-                `${what} — a stale copy of a theme colour; read it from ns.getThemeTokens() `
-                + '(which falls back to iwac-theme.js FALLBACK_LIGHT/DARK) and drop the literal',
-                m[0].replace(/\s+/g, ' '));
-        }
-    }
 }
 
-/** Hex literals of a `var NAME = [ … ];` array, in source order. */
-function readArray(src, name) {
-    const m = new RegExp(name + '\\s*=\\s*\\[([\\s\\S]*?)\\]').exec(src);
-    if (!m) return [];
-    return (m[1].match(/#[0-9a-fA-F]{3,8}/g) || []);
-}
-
-/** 1-based line number of a source offset. */
 function lineOf(src, index) {
     return src.slice(0, Math.max(0, index)).split('\n').length;
 }
 
-const cssFiles = walk(CSS_DIR, ['.css']);
-const jsFiles = walk(JS_DIR, ['.js']);
-const viewFiles = walk(VIEW_DIR, ['.phtml']);
-// Templates carry CSS only inside <style>; pre-extract so both the
-// module-vocabulary collection and the scan see the same lines.
-const templateStyles = new Map(
-    viewFiles.map((f) => [f, templateStyleLines(f)]).filter(([, lines]) => lines.length)
-);
-
-// Rule 6 needs the module's own vocabulary before any file is scanned — a
-// property declared in one file is legitimately consumed from another.
-collectModuleOwned(cssFiles.concat(jsFiles));
-for (const lines of templateStyles.values()) {
-    for (const [, raw] of lines) {
-        DECL.lastIndex = 0;
-        let m;
-        while ((m = DECL.exec(raw)) !== null) moduleOwned.add(m[1]);
+function staleHexFallbacks() {
+    const files = collectFiles(ROOT, [['asset/js', ['.js']]],
+        (rel) => /\.min\.js$/.test(rel) || rel.startsWith('asset/js/dist/'));
+    const found = [];
+    for (const { rel, text } of files) {
+        const src = blankComments(text);
+        const exempt = [];
+        if (rel === 'asset/js/iwac-theme.js') {
+            for (const name of ['FALLBACK_LIGHT', 'FALLBACK_DARK']) {
+                const block = new RegExp(name + '\\s*=\\s*\\{[\\s\\S]*?\\}').exec(src);
+                if (block) exempt.push([block.index, block.index + block[0].length]);
+            }
+        }
+        for (const [pattern, what] of STALE_FALLBACKS) {
+            pattern.lastIndex = 0;
+            let m;
+            while ((m = pattern.exec(src)) !== null) {
+                if (exempt.some(([from, to]) => m.index >= from && m.index < to)) continue;
+                found.push(`  ${rel}:${lineOf(src, m.index)}  ${what} — read it from ns.getChartTokens() `
+                    + `(which falls back to FALLBACK_LIGHT/DARK) and drop the literal\n      ${m[0].replace(/\s+/g, ' ')}`);
+            }
+        }
     }
+    return found;
 }
 
-cssFiles.forEach((f) => scan(f, { hexCheck: true }));
-jsFiles.forEach((f) => scan(f, { hexCheck: false }));
-jsFiles.forEach(checkFallbackObjects);
-jsFiles.forEach(checkSeriesPalette);
-jsFiles.forEach(checkStaleHexFallbacks);
-for (const [file, lines] of templateStyles) {
-    scanLines(file, lines, { hexCheck: true });
+const stale = staleHexFallbacks();
+if (stale.length) {
+    console.error(`\n✗ theme-token guard: ${stale.length} hex fallback(s) in chart JS\n`);
+    console.error(stale.join('\n'));
+    console.error('\nSee CLAUDE.md → "Match the IWAC theme".\n');
+    process.exit(1);
 }
 
-if (violations.length) {
-    fail(
-        `theme-token guard: ${violations.length} violation(s)`,
-        violations.map((v) => `${v.file}:${v.line}  ${v.msg}\n      ${v.snippet}`),
-        '\nSee CLAUDE.md → "Match the IWAC theme" and IWAC-theme/docs/DESIGN-SYSTEM.md.\n'
-        + 'Canonical values: tokens.json (regenerate with `npm run build:tokens` in IWAC-theme).\n'
-    );
-}
-
-console.log('✓ theme-token guard: no violations');
+cli({
+    root: ROOT,
+    roots: [
+        ['asset/css', ['.css']],
+        ['asset/js', ['.js']],
+        ['view', ['.phtml']],
+    ],
+    skip: (rel) => /\.min\.(css|js)$/.test(rel)
+        || rel.startsWith('asset/js/dist/')
+        || rel === 'asset/css/iwac-embed-tokens.css',
+    ownPrefix: /^--iwac-vis-/,
+    docs: 'CLAUDE.md → "Match the IWAC theme"',
+});

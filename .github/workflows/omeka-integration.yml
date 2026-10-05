@@ -147,6 +147,11 @@ jobs:
           OMEKA_PATH: ${{ runner.temp }}/omeka-s
         run: php tests/integration/block_assets.php
 
+      - name: Native timeline editor, reading view and sanitation
+        env:
+          OMEKA_PATH: ${{ runner.temp }}/omeka-s
+        run: php tests/integration/timeline.php
+
       # PHPStan rides along on the checkout above rather than fetching its
       # own (Tier 8 / B2 (2)). It runs on the PRODUCTION leg only: the
       # analysis is about this module's code against the host's signatures,

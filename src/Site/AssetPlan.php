@@ -42,6 +42,49 @@ final class AssetPlan
         return $manifest;
     }
 
+    /**
+     * Bundles built once per locale, and the locales: `dist/locales.json`,
+     * written by scripts/build-js.js beside the bundles it describes. Such a
+     * bundle has no locale-neutral file — only `<name>.<locale>.min.js`.
+     *
+     * @return array{locales: string[], bundles: string[]}
+     */
+    public static function localized(): array
+    {
+        static $localized;
+        if ($localized === null) {
+            $path = __DIR__ . '/../../asset/js/dist/locales.json';
+            $data = is_file($path)
+                ? json_decode((string) file_get_contents($path), true, 16, JSON_THROW_ON_ERROR)
+                : [];
+            $localized = [
+                'locales' => array_values($data['locales'] ?? []),
+                'bundles' => array_values($data['bundles'] ?? []),
+            ];
+        }
+        return $localized;
+    }
+
+    /**
+     * The file (or, per locale, files) a planned bundle is served from,
+     * relative to `asset/`: a string, or `[locale => path]` for a bundle
+     * built per locale. The loader picks the page's locale from the map.
+     *
+     * @return string|array<string, string>
+     */
+    public static function bundlePath(string $name)
+    {
+        $localized = self::localized();
+        if (!in_array($name, $localized['bundles'], true)) {
+            return 'js/dist/' . $name . '.min.js';
+        }
+        $paths = [];
+        foreach ($localized['locales'] as $locale) {
+            $paths[$locale] = 'js/dist/' . $name . '.' . $locale . '.min.js';
+        }
+        return $paths;
+    }
+
     public static function bundles(array $needs, ?string $bundle): array
     {
         foreach (array_keys($needs) as $flag) {

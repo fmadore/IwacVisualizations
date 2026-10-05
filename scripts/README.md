@@ -1,5 +1,7 @@
 # IWAC Visualizations — precompute pipeline
 
+Native timelines: [authoring, data pipeline, editor and migration](../docs/TIMELINES.md).
+
 For the Laïcité generator's source population, text fields, denominators and
 validation protocol, see [LAICITE_METHODOLOGY.md](../LAICITE_METHODOLOGY.md).
 It searches titles and original full text, including available YouTube

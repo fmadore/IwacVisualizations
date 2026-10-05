@@ -31,6 +31,7 @@ on:
     branches: [main]
     paths:
       - "config/sentiment-models.json"
+      - "config/timelines.json"
       - ".github/workflows/regenerate-data.yml"
       - "scripts/**/*.py"
       - "scripts/*.json"
@@ -64,7 +65,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Set up Python
         uses: actions/setup-python@v7

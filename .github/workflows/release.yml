@@ -52,7 +52,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Resolve tag and version
@@ -115,7 +115,11 @@ jobs:
           # third of the documentation less than the one before it.
           for f in Module.php config/module.ini config/module.config.php \
                    asset/css/iwac-core.min.css asset/js/bundles.json \
-                   asset/js/dist/shared-core.min.js asset/js/dist/blocks/laicite.min.js \
+                   asset/js/dist/shared-core.en.min.js asset/js/dist/shared-core.fr.min.js \
+                   asset/js/dist/blocks/laicite.en.min.js asset/js/dist/blocks/laicite.fr.min.js \
+                   asset/js/dist/blocks/timeline.en.min.js asset/js/dist/blocks/timeline.fr.min.js \
+                   asset/css/blocks/iwac-timeline.min.css config/timelines.json \
+                   bin/migrate-timelines.php docs/TIMELINES.md \
                    language/fr.mo LICENSE README.md CHANGELOG.md ARCHITECTURE.md; do
             grep -qx "IwacVisualizations/$f" /tmp/list || { echo "::error::missing $f"; exit 1; }
           done

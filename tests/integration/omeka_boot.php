@@ -407,6 +407,11 @@ $galleryCurrentSite = new \Omeka\Mvc\Controller\Plugin\CurrentSite();
 $galleryCurrentSite->setSite($site);
 $galleryPlugins->setService('currentSite', $galleryCurrentSite);
 $galleryController->setPluginManager($galleryPlugins);
+// What Omeka's MvcListeners do for every /s/<site>/ route before the
+// controller runs: point the site-settings service at the site, so the
+// gallery's siteSetting('locale') can pick the page's shared-core variant.
+$services->get('Omeka\Settings\Site')->setTargetId($site->id());
+$services->get('ViewHelperManager')->get('currentSite')->setSite($site);
 $galleryEvent = new MvcEvent();
 $galleryEvent->setRouteMatch(new RouteMatch(['action' => 'index']));
 $galleryEvent->setViewModel(new \Laminas\View\Model\ViewModel());
@@ -447,7 +452,8 @@ try {
         ENT_QUOTES | ENT_HTML5,
         'UTF-8'
     );
-    foreach (['js/dist/shared-core.min.js', 'js/dist/shared-embed-gallery.min.js'] as $needed) {
+    // shared-core is built per locale; the fixture site's locale is en_US.
+    foreach (['js/dist/shared-core.en.min.js', 'js/dist/shared-embed-gallery.min.js'] as $needed) {
         checkIntegration(strpos($galleryScripts, $needed) !== false, "the embed gallery does not load {$needed}");
     }
     preg_match_all('~/modules/IwacVisualizations/asset/([^"?\s]+)~', $galleryScripts, $galleryAssets);

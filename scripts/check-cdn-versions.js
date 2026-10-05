@@ -185,7 +185,8 @@ async function run() {
             .join(' vs ');
         const message =
             `${pkg} is pinned at two different versions: ${detail}. ` +
-            'Every URL for one package must carry the same version.';
+            'Every URL for one package must carry the same version — and after a ' +
+            'bump, `npm run update:sri` rewrites the integrity block to match.';
         console.error(`✗ ${message}`);
         annotate('error', message, [...versions.values()][0][0]);
     }

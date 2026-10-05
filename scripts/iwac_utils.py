@@ -512,10 +512,11 @@ def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
     rows a day-precision extractor already drops.
 
     Goes through ``int()`` inside the guard rather than trusting the
-    column dtype: these are stored ``int64`` on most subsets but
-    ``float64`` on ``articles``, and pandas widens the rest to float on
-    read anyway because the partial dates leave nulls. ``int(nan)``
-    raises ``ValueError``, which is caught here.
+    column dtype. The pipeline stores them nullable ``int64``, but
+    revisions published before its canonical types had ``float64`` on
+    several subsets. Pandas widens them to float on read anyway wherever
+    a partial date leaves a null, and returns numpy ``int64`` where none
+    does. ``int(nan)`` raises ``ValueError``, which is caught here.
     """
     y_col, m_col = cols.get("hijri_year"), cols.get("hijri_month")
     if not y_col or not m_col:
@@ -1142,8 +1143,11 @@ def compute_top_entities(
 def lda_topic_id(value: Any) -> Optional[int]:
     """An ``lda_topic_id`` cell as a topic id, or None.
 
-    The column is ``float64`` (nulls force the widening — on ``articles`` it
-    is never an int), so the cell goes through ``float`` first. None for
+    The column is stored nullable ``int64`` (``float64`` on revisions before
+    the pipeline's canonical types) and reads as ``float64`` in pandas on
+    every modelled subset, because the nulls force the widening; a cell may
+    also arrive as ``pd.NA`` or a numpy scalar. So it goes through
+    ``float`` first, whichever dtype it came in. None for
     NaN / None / garbage and for every negative id: ``-1`` is the
     ``articles`` outlier bucket, and the null-not-``-1`` convention of
     ``publications`` / ``references`` means a negative id there is a change

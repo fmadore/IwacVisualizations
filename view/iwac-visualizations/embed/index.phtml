@@ -39,8 +39,17 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/blocks/embed-gallery.mi
 // per-file builds were replaced by bundles: that URL 404'd, and the gallery
 // rendered no snippets at all. `tests/js/assets.test.js` now fails on any
 // literal assetUrl() target that is not on disk.
+//
+// shared-core carries the dictionaries, so it is built once per locale. This
+// page has no on-view loader to choose a variant, so it takes the site
+// locale's server-side — the rule layout/embed.phtml uses for `<html lang>`.
+$coreBundle = \IwacVisualizations\Site\AssetPlan::bundlePath('shared-core');
+if (is_array($coreBundle)) {
+    $locale = substr((string) ($this->siteSetting('locale') ?: $this->setting('locale') ?: 'en'), 0, 2);
+    $coreBundle = $coreBundle[$locale] ?? $coreBundle['en'] ?? reset($coreBundle);
+}
 $this->headScript()->appendFile(
-    $this->assetUrl('js/dist/shared-core.min.js', 'IwacVisualizations'),
+    $this->assetUrl($coreBundle, 'IwacVisualizations'),
     'text/javascript',
     ['defer' => true]
 );

@@ -18,6 +18,11 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
+        'Lifespan × frequency': 'Years represented and recorded frequency',
+        'Spatial Coverage': 'Place tags',
+        'activity_window_note': 'Showing the {shown} most frequent of {total} entities.',
+        'activity_window_all': 'Showing all {total} entities.',
+        'Top frequent':              'Most frequent',
             'index.keywords_table_desc': 'Catalogue tags and their counts for the current filters. Select tags to compare their use over time.',
             'index.keywords_desc': 'Items carrying the selected subject or place tags, grouped by publication year. Each tag is counted once per item. Compare changes with the number and kinds of items available for each period.',
             'index.table_desc': 'Search the index entries and inspect their recorded frequency and dates. Open an entry to see its catalogue record.',
@@ -42,13 +47,18 @@
         // Was 'Spatial Coverage': one capital away from the unrelated
         // 'Spatial coverage' (places on an item's dashboard).
         'index.place_tags':          'Place tags',
-        'Lifespan × frequency': 'Years represented and recorded frequency',
-        'activity_window_note': 'Showing the {shown} most frequent of {total} entities.',
-        'activity_window_all': 'Showing all {total} entities.',
-        'Top frequent':              'Most frequent',
     });
 
     ns.addTranslations('fr', {
+        'activity_window_note': 'Affichage des {shown} entités les plus fréquentes sur {total}.',
+        'activity_window_all': 'Affichage des {total} entités.',
+        'Lifespan × frequency': 'Années représentées et fréquence enregistrée',
+        'Total entities':            'Entit\u00e9s au total',
+        'With coordinates':          'Avec coordonn\u00e9es',
+        'Spatial Coverage': 'Mots-clés de lieux',
+        'By newspaper':              'Par journal',
+        'Top frequent':              'Plus fr\u00e9quents',
+        'Compare':                   'Comparer',
             'index.keywords_table_desc': 'Mots-clés du catalogue et leurs nombres pour les filtres actifs. Sélectionnez des mots-clés pour comparer leur usage au fil du temps.',
             'index.keywords_desc': 'Documents portant les mots-clés de sujets ou de lieux sélectionnés, regroupés par année de publication. Chaque mot-clé est compté une fois par document. Comparez les variations au nombre et aux types de documents disponibles pour chaque période.',
             'index.table_desc': 'Recherchez les entrées de l’index et examinez leur fréquence et leurs dates enregistrées. Ouvrez une entrée pour consulter sa notice.',
@@ -96,15 +106,7 @@
         'Geographic attention over time': 'Attention g\u00e9ographique au fil du temps',
         'desc_geo_attention':        'L\u2019attention accord\u00e9e par la presse \u00e0 chaque pays au fil du temps, mesur\u00e9e par la fr\u00e9quence \u00e0 laquelle les articles ont \u00e9t\u00e9 catalogu\u00e9s comme le concernant. Faites glisser le curseur des ann\u00e9es ou lancez la lecture. L\u2019\u00e9chelle de couleurs est identique chaque ann\u00e9e, si bien qu\u2019un pays plus sombre signifie toujours une couverture plus forte, quelle que soit l\u2019ann\u00e9e affich\u00e9e.',
         'index.place_tags':          'Mots-clés de lieux',
-        'activity_window_note': 'Affichage des {shown} entités les plus fréquentes sur {total}.',
-        'activity_window_all': 'Affichage des {total} entités.',
-        'Lifespan × frequency': 'Années représentées et fréquence enregistrée',
-        'Total entities':            'Entit\u00e9s au total',
-        'With coordinates':          'Avec coordonn\u00e9es',
         'Frequency':                 'Fr\u00e9quence',
-        'By newspaper':              'Par journal',
-        'Top frequent':              'Plus fr\u00e9quents',
-        'Compare':                   'Comparer',
         'Play':                      'Lecture',
         'Pause':                     'Pause',
     });

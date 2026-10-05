@@ -3,6 +3,7 @@
 // Cross-platform entry point: Windows shells do not expand `*.test.js`, and
 // Node treats a directory argument as a module rather than discovering it.
 require('./i18n.test.js');
+require('./i18n-locales.test.js');
 require('./gettext.test.js');
 require('./panels.test.js');
 require('./tooltip.test.js');
@@ -12,6 +13,7 @@ require('./linked-facet.test.js');
 require('./maplibre.test.js');
 require('./maplibre-gate.test.js');
 require('./assets.test.js');
+require('./cdn-integrity.test.js');
 require('./grammar.test.js');
 require('./sentiment.test.js');
 require('./diverging-bar.test.js');
@@ -30,3 +32,4 @@ require('./laicite-update.test.js');
 require('./laicite-orchestrator.test.js');
 require('./responsive.test.js');
 require('./graph-chrome.test.js');
+require('./timeline.test.js');

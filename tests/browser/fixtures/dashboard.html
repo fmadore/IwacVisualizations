@@ -13,6 +13,7 @@
             --primary: #a33312;
             --ink: #171717;
             --muted: #606368;
+            --ink-subtle: #56595e;
             --surface: #fffdfb;
             --surface-raised: #f8f4f1;
             --border: #c9c4bf;
@@ -28,6 +29,7 @@
             --primary: #ff8a62;
             --ink: #f2eeeb;
             --muted: #c3bdb8;
+            --ink-subtle: #a9a39e;
             --surface: #1a1d21;
             --surface-raised: #101216;
             --border: #555b62;
@@ -79,6 +81,12 @@
     </main>
     <!-- The bundle every block loads, as production serves it (i18n, theme,
          dashboard-core, the panels family, the toolbar, embed). -->
-    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <!-- shared-core is built once per locale, and production serves the
+         variant matching <html lang>; written during parsing so the
+         scripts after it still run in order. -->
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.'
+            + (/^fr/i.test(document.documentElement.lang) ? 'fr' : 'en') + '.min.js"><\/script>');
+    </script>
 </body>
 </html>

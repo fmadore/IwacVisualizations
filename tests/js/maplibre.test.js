@@ -145,6 +145,30 @@ test('the popup patches addTo, and only addTo', () => {
     }
 });
 
+test('a reused popup is measured at the requested cap, not at its last width', () => {
+    // The hover read-outs keep one popup and swap its content. The measured
+    // width is fed back as `maxWidth`, so measuring inside it let the width
+    // only ever shrink: a short first label squeezed every longer one after.
+    const P = loadMaplibre();
+    const popup = P.createIwacPopup({ closeButton: false });
+    let natural = 150;
+    const px = (value) => parseFloat(value) || Infinity;
+    // CSS in miniature: the box is its content's natural width, capped.
+    const content = { getBoundingClientRect: () => ({ width: Math.min(natural, px(popup.options.maxWidth)) }) };
+    popup.getElement = () => ({ querySelector: () => content });
+
+    popup.setDOMContent({ html: 'Togo' }).addTo({});
+    assert.equal(popup.options.maxWidth, '150px');
+
+    natural = 260;
+    popup.setDOMContent({ html: "Côte d'Ivoire — 1 234 mentions" }).addTo({});
+    assert.equal(popup.options.maxWidth, '260px', 'the longer label gets its own width back');
+
+    natural = 400;
+    popup.addTo({});
+    assert.equal(popup.options.maxWidth, '320px', 'and never more than the cap the caller asked for');
+});
+
 test('the map host is a size container and the popup bounds are map-relative', () => {
     // The guarantees the deleted JS enforced, now expressed once in CSS:
     // half the map's height minus MapLibre's 10px tip (so one of the
@@ -280,4 +304,44 @@ test('a consumer that adds a source unguarded would throw once it survives a swa
         });
     }
     assert.deepEqual(unguarded, []);
+});
+
+test('a named map host gets a role, so its aria-label is not a prohibited attribute', () => {
+    // Anything createIwacMap asks of a map or a control is answered with a
+    // chainable no-op: this test is about what it does to the HOST element.
+    const inert = () => new Proxy(function () {}, {
+        get: (target, key) => (key === 'then' ? undefined : inert()),
+        apply: () => inert(),
+        construct: () => inert(),
+    });
+    const makeHost = (attrs = {}) => ({
+        attrs,
+        getAttribute(name) { return name in this.attrs ? this.attrs[name] : null; },
+        setAttribute(name, value) { this.attrs[name] = String(value); },
+    });
+    const context = {
+        HTMLElement: class {},
+        console: { warn() {}, error() {}, log() {} },
+        document: {
+            createElement: () => ({ getContext: () => null, style: {}, setAttribute() {}, appendChild() {} }),
+            getElementById: () => null,
+        },
+        maplibregl: new Proxy({ Popup: FakePopup }, {
+            get: (target, key) => (key in target ? target[key] : class { constructor() { return inert(); } }),
+        }),
+        window: { IWACVis: { panels: {}, getBasemapStyle: () => 'style.json', t: (k) => k } },
+    };
+    vm.createContext(context);
+    vm.runInContext(MAPLIBRE_SOURCE, context, { filename: 'maplibre.js' });
+    const P = context.window.IWACVis.panels;
+
+    const host = makeHost();
+    P.createIwacMap(host, { title: 'Places mentioned' });
+    assert.equal(host.attrs['aria-label'], 'Places mentioned');
+    assert.equal(host.attrs.role, 'group');
+
+    // A host that already names itself, or already has a role, is left alone.
+    const named = makeHost({ 'aria-label': 'Own name', role: 'region' });
+    P.createIwacMap(named, { title: 'Places mentioned' });
+    assert.deepEqual({ ...named.attrs }, { 'aria-label': 'Own name', role: 'region' });
 });

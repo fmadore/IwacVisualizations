@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC embed-route fixture</title>
+    <!-- What layout/embed.phtml renders: NO theme stylesheet, `data-theme`
+         stamped on <html> and <body> from ?theme=, the brand accent (when the
+         request carries one) as a style attribute on <html>, then the
+         generated token sheet, the module's core sheet and the embed sheet.
+         Unlike the other fixtures this one declares no palette of its own —
+         the point is what the module paints when the theme is absent. -->
+    <script>
+        (function () {
+            const params = new URLSearchParams(location.search);
+            const mode = params.get('theme') === 'dark' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', mode);
+            const primary = params.get('primary');
+            if (primary) document.documentElement.setAttribute('style', '--iwac-vis-embed-primary: ' + primary + ';');
+            window.__embedMode = mode;
+        })();
+    </script>
+    <link rel="stylesheet" href="/asset/css/iwac-embed-tokens.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-embed.min.css">
+</head>
+<body class="iwac-embed-body">
+    <script>document.body.setAttribute('data-theme', window.__embedMode);</script>
+    <section class="iwac-vis-block" data-embed-slug="collection-overview">
+        <div class="iwac-vis-panel">
+            <h4>Articles per year</h4>
+            <p class="fixture-text">Panel body text</p>
+        </div>
+    </section>
+    <footer class="iwac-embed-source"><a href="#">Source: IWAC</a></footer>
+    <script src="/asset/js/dist/shared-core.en.min.js"></script>
+    <script>
+        window.luminance = function (rgb) {
+            const [r, g, b] = rgb.map((c) => {
+                const s = c / 255;
+                return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+            });
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        };
+        window.rgbOf = function (value) {
+            const hex = /^#([0-9a-f]{6})$/i.exec(value.trim());
+            if (hex) return [0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16));
+            return value.match(/[\d.]+/g).slice(0, 3).map(Number);
+        };
+        window.contrast = function (a, b) {
+            const [hi, lo] = [window.luminance(window.rgbOf(a)), window.luminance(window.rgbOf(b))].sort((x, y) => y - x);
+            return (hi + 0.05) / (lo + 0.05);
+        };
+    </script>
+</body>
+</html>

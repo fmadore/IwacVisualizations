@@ -91,7 +91,7 @@
      * Only the three cooperative-gesture keys were translated, so on the
      * French site every control still announced itself in English to a
      * screen reader — "Zoom in", "Enter fullscreen", "Close popup". These
-     * are every key MapLibre 6.6 reads (verified against the pinned
+     * are every key MapLibre 6.11 reads (verified against the pinned
      * bundle's `defaultLocale`) minus the ones for controls this module
      * never adds: geolocate, scale, terrain, logo.
      */
@@ -665,7 +665,14 @@
         // reader reached an interactive canvas and could only call it
         // "application". MapLibre's own `Map.Title` names the canvas; this
         // names the container the reader tabs into.
+        //
+        // The name needs a role to attach to: `aria-label` on an element with
+        // no role (a bare <div>) is PROHIBITED in ARIA 1.2, and assistive
+        // technology may ignore it — which the name above existed to fix.
+        // `group` names the map and its controls together without adding one
+        // landmark per map to a page that can carry a dozen of them.
         if (el && config.title && !el.getAttribute('aria-label')) {
+            if (!el.getAttribute('role')) el.setAttribute('role', 'group');
             el.setAttribute('aria-label', config.title);
         }
         if (typeof ns.registerMap === 'function') {
@@ -734,10 +741,11 @@
         merged.className = className;
 
         var popup = new maplibregl.Popup(merged);
+        var requestedMaxWidth = merged.maxWidth;
         var originalAddTo = popup.addTo;
         popup.addTo = function (map) {
             var result = originalAddTo.call(popup, map);
-            syncAnchorWidth(popup);
+            syncAnchorWidth(popup, requestedMaxWidth);
             return result;
         };
         return popup;
@@ -745,16 +753,23 @@
 
     /**
      * Tell MapLibre the width its own stylesheet produced, so the anchor it
-     * picks is the one that actually fits. Re-entrant by construction: the
-     * measured width is already the cap, so setting it as `maxWidth` cannot
-     * change the measurement.
+     * picks is the one that actually fits.
+     *
+     * The cap the caller asked for is restored BEFORE measuring. The measured
+     * width becomes the popup's `maxWidth`, and a popup that is reused — the
+     * hover read-outs keep one and swap its content — would otherwise be
+     * measured inside the previous content's box: the width could only ever
+     * shrink, so a narrow first label squeezed every longer one after it.
+     * With the cap restored, the same content measures the same width every
+     * time, which keeps the sync re-entrant.
      */
-    function syncAnchorWidth(popup) {
+    function syncAnchorWidth(popup, requestedMaxWidth) {
         try {
             var el = popup.getElement && popup.getElement();
             if (!el) return;
             var content = el.querySelector('.maplibregl-popup-content');
             if (!content) return;
+            if (requestedMaxWidth) popup.setMaxWidth(requestedMaxWidth);
             var width = Math.ceil(content.getBoundingClientRect().width);
             if (width > 0) popup.setMaxWidth(width + 'px');
         } catch (e) { /* best effort: a wrong anchor is not worth throwing over */ }

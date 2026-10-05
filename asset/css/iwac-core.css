@@ -187,11 +187,19 @@
      *    popover  a thing that leaves the panel's flow entirely: the
      *             fullscreen panel, which must clear the site header.
      *
+     *  raised and overlay are local to the block, so they are this module's.
+     *  popover is not: it competes with the THEME's page chrome, so it is the
+     *  theme's `--z-modal` (300) — above the sticky masthead (--z-sticky 200),
+     *  level with the theme's own full-page overlays (menu drawer, maximized
+     *  Mirador), and below --z-tooltip (500), where the skip link and toasts
+     *  live. It used to be 1000, which stated no relationship to any of them
+     *  and put a fullscreen chart over the skip link.
+     *
      *  A block that needs a fourth layer is describing a fourth role and
      *  should name it here rather than reach for a bigger number. */
     --iwac-vis-z-raised: 5;
     --iwac-vis-z-overlay: 6;
-    --iwac-vis-z-popover: 1000;
+    --iwac-vis-z-popover: var(--z-modal, 300);
 }
 
 
@@ -245,9 +253,11 @@
  *  `.iwac-vis-block-header__title` are h3s DEEPER in the block, so they match
  *  it too, and it is what actually paints their size, weight, colour,
  *  tracking and margin today on six blocks (measured, not assumed — 19px/600
- *  ink, not the 24px/700 and 30px/600 ink-strong their own class rules
- *  declare). Narrowing the block rule hands those eleven headings a treatment
- *  no one has reviewed. That is its own change, not a side effect of this one.
+ *  ink). Their own class rules used to declare 24px/700 and 30px/600
+ *  ink-strong on top, which never rendered; v1.73.0 removed those dead
+ *  declarations so the sheet says what the page shows. Narrowing the block
+ *  rule — giving those eleven headings a larger treatment — is a design
+ *  change that needs its own review, not a side effect of this one.
  *
  *  Kept at one class of specificity (0,1,1) so a block sheet's own
  *  `.iwac-vis-<block>-panel > h2` rule, which loads after this file, still
@@ -781,7 +791,7 @@
     position: fixed;
     inset: 0;
     margin: 0;
-    z-index: var(--iwac-vis-z-popover, 1000);
+    z-index: var(--iwac-vis-z-popover, 300);
     padding: var(--space-5, 1.25rem);
     background: var(--surface, #fdfcfb);
     overflow: auto;
@@ -832,14 +842,16 @@
     gap: var(--space-2, 0.5rem);
 }
 
+/*  Only what actually paints. This h3 always sits inside `.iwac-vis-block`,
+ *  so `.iwac-vis-block h3` (0,1,1) out-ranks this class (0,1,0) on size,
+ *  weight, colour, tracking and margin — measured at 19px / 600 / --ink.
+ *  The rule used to also declare 30px / ink-strong / display tracking /
+ *  margin 0, none of which ever rendered; they are gone so the stylesheet
+ *  stops describing a heading nobody sees. Whether block titles SHOULD be
+ *  larger is a design change of its own (see the note on the block rule). */
 .iwac-vis-block-header__title {
-    margin: 0;
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
-    font-size: var(--text-2xl, 1.875rem);
-    font-weight: 600;
-    color: var(--ink-strong, #05070c);
     line-height: 1.15;
-    letter-spacing: var(--tracking-display, -0.01em);
 }
 
 /*  The block's own description and a section's (`.iwac-vis-section-desc`,
@@ -1997,13 +2009,13 @@ select.iwac-vis-control:hover {
     /*  A heading that wraps should break evenly rather than leave one
      *  word alone on the second line (C2). */
     text-wrap: balance;
-    margin: 0;
+    /*  As with `.iwac-vis-block-header__title`: the block's `h3` rule paints
+     *  size, weight, colour, tracking and margin (19px / 600 / --ink,
+     *  measured), so this rule declares only what renders. It used to ask for
+     *  24px at weight 700 — a Besley weight the theme does not even load
+     *  (500/600/800), which the token guard's font-weight rule now refuses. */
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
-    font-size: var(--text-xl, 1.5rem);
-    font-weight: 700;
-    color: var(--ink-strong, #05070c);
     line-height: 1.2;
-    letter-spacing: var(--tracking-display, -0.01em);
     /*  Newspaper section head: 2px ink rule ABOVE the title (matches the
      *  theme's h1.title grammar), no rule below. */
     padding-top: var(--space-2, 0.5rem);
@@ -2322,8 +2334,8 @@ select.iwac-vis-control:hover {
  *  shifting width from card to card. */
 .iwac-vis-similar-card__duration {
     position: absolute;
-    right: var(--space-xs, 0.25rem);
-    bottom: var(--space-xs, 0.25rem);
+    right: var(--space-1, 0.25rem);
+    bottom: var(--space-1, 0.25rem);
     padding: 0.125rem 0.3125rem;
     border-radius: var(--radius-sm, 0.375rem);
     background: rgba(0, 0, 0, 0.78); /* allow-hex */
@@ -2406,7 +2418,7 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-host--force {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
 }
 
 /*  `.iwac-vis-btn` sets `display: flex`, which OUTRANKS the UA's
@@ -2469,7 +2481,7 @@ select.iwac-vis-control:hover {
     }
     .iwac-vis-graph-toolbar-anchor {
         height: auto;
-        margin-bottom: var(--space-sm, 0.5rem);
+        margin-bottom: var(--space-2, 0.5rem);
     }
     /*  Two rows of chrome now share the host with the canvas, so the stage
      *  keeps a floor of its own and the host grows to fit, rather than the
@@ -2495,8 +2507,8 @@ select.iwac-vis-control:hover {
      *  there is nothing to its right to keep clear of, and a 17rem card on
      *  a phone was a column with a useless stripe of canvas beside it. */
     .iwac-vis-graph-host--force .iwac-vis-graph-card {
-        left: var(--space-sm, 0.5rem);
-        right: var(--space-sm, 0.5rem);
+        left: var(--space-2, 0.5rem);
+        right: var(--space-2, 0.5rem);
         width: auto;
         max-width: none;
         max-height: 70%;
@@ -2544,7 +2556,7 @@ select.iwac-vis-control:hover {
     position: absolute;
     z-index: var(--iwac-vis-z-overlay, 6);
     max-width: 17rem;
-    padding: var(--space-xs, 0.25rem) var(--space-sm, 0.5rem);
+    padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     background: var(--surface, #fdfcfb);
@@ -2568,7 +2580,7 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs, 0.25rem);
+    gap: var(--space-1, 0.25rem);
     flex: 0 0 auto;
 }
 
@@ -2636,18 +2648,18 @@ select.iwac-vis-control:hover {
  *  the right. */
 .iwac-vis-graph-card {
     position: absolute;
-    left: var(--space-sm, 0.5rem);
-    bottom: var(--space-sm, 0.5rem);
+    left: var(--space-2, 0.5rem);
+    bottom: var(--space-2, 0.5rem);
     z-index: var(--iwac-vis-z-raised, 5);
     width: 17rem;
-    max-width: calc(100% - var(--space-lg, 1.5rem));
+    max-width: calc(100% - var(--space-6, 1.5rem));
     max-height: 60%;
     overflow-y: auto;
     /*  Stop the scroll chaining to the page behind (C2). Inside an embed
      *  that page is the HOST's, so reaching the end of a table used to
      *  scroll the article the widget sits in. */
     overscroll-behavior: contain;
-    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     border: 1px solid var(--border, #ced1d6);
     /*  The one structural side-stripe here: it marks the card as belonging
      *  to the selected node, whose ring on the canvas is the same accent. */
@@ -2698,7 +2710,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-graph-card__kind {
-    margin: 0 0 var(--space-sm, 0.5rem);
+    margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
     letter-spacing: var(--tracking-wider, 0.08em);
     text-transform: uppercase;
@@ -2708,8 +2720,8 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-card__facts {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 0.1rem var(--space-sm, 0.5rem);
-    margin: 0 0 var(--space-sm, 0.5rem);
+    gap: 0.1rem var(--space-2, 0.5rem);
+    margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
 }
 
@@ -2738,7 +2750,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-graph-card__links {
-    margin: 0 0 var(--space-sm, 0.5rem);
+    margin: 0 0 var(--space-2, 0.5rem);
     padding: 0;
     list-style: none;
     font-size: var(--text-xs, 0.8125rem);
@@ -2747,7 +2759,7 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-card__links li {
     display: flex;
     justify-content: space-between;
-    gap: var(--space-sm, 0.5rem);
+    gap: var(--space-2, 0.5rem);
     padding: 0.1rem 0;
 }
 
@@ -2782,7 +2794,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-graph-card__more {
-    margin: 0 0 var(--space-sm, 0.5rem);
+    margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
 }
@@ -2800,9 +2812,9 @@ select.iwac-vis-control:hover {
     /*  Full width at the bottom on a phone: a 17rem card floating over a
      *  narrow stage hides more graph than it explains. */
     .iwac-vis-graph-card {
-        left: var(--space-xs, 0.25rem);
-        right: var(--space-xs, 0.25rem);
-        bottom: var(--space-xs, 0.25rem);
+        left: var(--space-1, 0.25rem);
+        right: var(--space-1, 0.25rem);
+        bottom: var(--space-1, 0.25rem);
         width: auto;
         max-width: none;
         max-height: 50%;

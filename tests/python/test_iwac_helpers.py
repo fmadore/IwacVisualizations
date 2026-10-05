@@ -1,6 +1,7 @@
 """Focused behavioral tests for the shared generator contracts."""
 from __future__ import annotations
 
+import json
 import math
 import sys
 import unittest
@@ -343,6 +344,65 @@ class TopicMixtureTests(unittest.TestCase):
         out = iwac_utils.aggregate_prevalence(df, self.COLUMNS, {})
         self.assertEqual(out["docs"], 1)
         self.assertAlmostEqual(out["series"][0]["mean"], 0.4)
+
+
+class CanonicalColumnTypeTests(unittest.TestCase):
+    """The readers must accept both sides of the 2026-09 type change.
+
+    The pipeline now stores counts, ids and dates as nullable ``int64`` and
+    embeddings as ``list<float32>``; earlier revisions had ``float64`` for
+    several of those integers and ``list<float64>`` for every embedding, and a
+    subset keeps the old types until its next push. ``datasets.to_pandas()``
+    widens an ``int64`` column to ``float64`` only when it holds a null, so a
+    null-free column now reaches the generators as numpy ``int64`` — which,
+    unlike ``float64``, ``json`` refuses. The frames below carry exactly the
+    dtypes that conversion produces (``pyarrow`` is not a test dependency).
+    """
+
+    def test_null_free_int64_hijri_cells_read_as_python_ints(self) -> None:
+        cols = {"hijri_year": "hy", "hijri_month": "hm"}
+        row = pd.DataFrame({
+            "hy": np.array([1445], dtype=np.int64),
+            "hm": np.array([9], dtype=np.int64),
+        }).iloc[0]
+        pair = iwac_utils.read_hijri_month(row, cols)
+        self.assertEqual(pair, (1445, 9))
+        self.assertTrue(all(type(v) is int for v in pair))
+
+    def test_topic_id_reader_takes_int64_and_float64_alike(self) -> None:
+        # One reader serves every generator (it replaced five local copies,
+        # two of them in the periodicals and references overviews).
+        reader = iwac_utils.lda_topic_id
+        for value in (np.int64(14), np.float64(14.0), np.float32(14.0), 14):
+            self.assertEqual(reader(value), 14)
+            self.assertIs(type(reader(value)), int)
+        self.assertIsNone(reader(np.int64(-1)))
+        self.assertIsNone(reader(np.float64("nan")))
+        self.assertIsNone(reader(pd.NA))
+
+    def test_an_int64_topic_column_still_yields_a_serialisable_bundle(self) -> None:
+        legacy = PeriodicalsTopicsTests._frame().iloc[:3].copy()
+        canonical = legacy.copy()
+        canonical["lda_topic_id"] = legacy["lda_topic_id"].astype(np.int64)
+        self.assertEqual(canonical["lda_topic_id"].dtype, np.int64)
+
+        out = generate_periodicals_overview.compute_topics(canonical, items_per_topic=5)
+        json.dumps(out)  # a leaked numpy int64 raises TypeError here
+        self.assertEqual(
+            out, generate_periodicals_overview.compute_topics(legacy, items_per_topic=5),
+        )
+
+    def test_float32_and_float64_embedding_cells_coerce_identically(self) -> None:
+        stored = np.asarray([0.1, -0.2, 0.3], dtype=np.float32)
+        current = iwac_embeddings.coerce_embedding(stored)
+        legacy = iwac_embeddings.coerce_embedding(stored.astype(np.float64))
+        self.assertEqual(current.dtype, np.float32)
+        np.testing.assert_array_equal(current, legacy)
+
+    def test_clean_int_unwraps_numpy_scalars(self) -> None:
+        self.assertIs(type(iwac_utils.clean_int(np.int64(7))), int)
+        self.assertEqual(iwac_utils.clean_int(np.float64(7.0)), 7)
+        self.assertIsNone(iwac_utils.clean_int(np.float64("nan")))
 
 
 class PeriodicalsTopicsTests(unittest.TestCase):

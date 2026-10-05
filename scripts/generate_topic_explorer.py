@@ -9,9 +9,12 @@ the IwacVisualizations ``topicExplorer`` page block.
 The IWAC ``articles`` subset carries a precomputed LDA-30 topic
 assignment per article in three columns (see ``DATA_NOTES.md``):
 
-    * ``lda_topic_id``    — float64; the most-likely topic index, or
-                             ``-1`` for "outlier" articles that didn't
-                             attach to any topic strongly.
+    * ``lda_topic_id``    — nullable int64 on the Hub (float64 before
+                             the pipeline's canonical types), float64 in
+                             pandas wherever a row is null; the
+                             most-likely topic index, or ``-1`` for
+                             "outlier" articles that didn't attach to any
+                             topic strongly.
     * ``lda_topic_prob``  — float64; the model's confidence in that
                              assignment (0..1).
     * ``lda_topic_label`` — string; the top words for the topic

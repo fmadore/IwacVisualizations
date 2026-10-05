@@ -1,21 +1,17 @@
 /**
- * IWAC Visualizations — Publication Dashboard translations
+ * IWAC Visualizations — publication dashboard block: translations.
  *
- * Strings only this block renders. They used to sit in the shared
- * `iwac-i18n.js`, which every block page loads whole — so a block-only
- * string there was bytes every OTHER page paid for and never used (S24).
+ * Moved out of the shared dictionary (asset/js/iwac-i18n.js), which ships in
+ * shared-core on every page carrying ANY block: these strings are read by this
+ * block alone, so they now travel in its own bundle — built once per locale,
+ * with the other locale's table emptied (scripts/i18n-strip.js).
  *
- * `check-i18n.js` proves the split is correct rather than assuming it: it
- * walks every `t('literal')` in each bundle and fails when a key is not
- * reachable from the shared dictionary plus the dictionaries that bundle
- * carries. Load order matters — this file is FIRST in the block's bundle,
- * so the strings exist before any panel asks for one.
+ * Registered at parse time, before the orchestrator loads.
  */
 (function () {
     'use strict';
-
     var ns = window.IWACVis;
-    if (!ns || !ns.addTranslations) return;
+    if (!ns || !ns.addTranslations) { return; }
 
     ns.addTranslations('en', {
         'desc_publication_run': 'Issues of this periodical per year. The dot marks this issue.',

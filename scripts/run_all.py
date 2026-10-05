@@ -58,6 +58,7 @@ from iwac_frames import FrameStore  # noqa: E402
 
 
 GENERATORS: List[str] = [
+    "timeline",
     "audiovisual_overview",
     "collection_overview",
     "wordcloud",

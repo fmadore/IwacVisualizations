@@ -18,6 +18,9 @@
     if (!ns || !ns.addTranslations) return;
 
     ns.addTranslations('en', {
+        'references_landscape_empty': 'No semantic map is available for this bibliography',
+        'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
+        'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
             'Reference provenance': 'Places of publication',
             'references.network_desc': 'Lines connect co-authors, or authors and editors, credited on the same references. More shared references produce stronger links. This network records bibliographic relationships, not all professional or personal connections.',
             'references.breakdown_desc': 'References grouped by associated country and publication type. Rectangle size indicates the number of references. A work associated with several countries can appear in more than one group.',
@@ -39,12 +42,15 @@
         'references_topics_title_lang': 'Scholarly topics ({language})',
         'references_topics_desc': 'Themes found automatically in the full text of {count} references by a statistical model (LDA), which sorted them into {topics} topics. Each label lists the words most characteristic of its topic; the labels come from the model rather than from a cataloguer. Each language has its own model, so topic numbers cannot be compared between these panels. Hover over a bar for the references most typical of that topic.',
         'references_topic_tooltip': '{count} references ({pct}% of this model’s corpus). Most representative:',
-        'references_landscape_empty': 'No semantic map is available for this bibliography',
-        'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
-        'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
     });
 
     ns.addTranslations('fr', {
+        'Publishers': 'Éditeurs',
+        'No provenance locations available': 'Aucun lieu de provenance disponible',
+        'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
+        'references_landscape_empty': 'Aucune carte sémantique disponible pour cette bibliographie',
+        'references_landscape_empty_umap': 'La carte sémantique n’a pas été calculée, faute du paquet umap-learn lors de la construction de ces données',
+        'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour tracer une carte significative',
             'references.network_desc': 'Les lignes relient les coauteurs, ou les auteurs et éditeurs, crédités sur les mêmes références. Plus les références communes sont nombreuses, plus les liens sont forts. Ce réseau décrit des relations bibliographiques, sans couvrir tous les liens professionnels ou personnels.',
             'references.breakdown_desc': 'Références regroupées par pays associé et par type de publication. La taille des rectangles indique leur nombre. Un travail associé à plusieurs pays peut apparaître dans plusieurs groupes.',
             'references.subjects_desc': 'Mots-clés de sujets les plus fréquents dans les références. Une référence peut porter plusieurs mots-clés ; le classement décrit l’indexation du catalogue.',
@@ -74,12 +80,6 @@
         'references_topics_desc': 'Thèmes dégagés automatiquement dans le texte intégral de {count} références par un modèle statistique (LDA), qui les a réparties en {topics} thèmes. Chaque libellé reprend les mots les plus caractéristiques de son thème ; ces libellés viennent du modèle plutôt que d’un catalogueur. Chaque langue a son propre modèle, si bien que les numéros de thèmes ne sont pas comparables d’un panneau à l’autre. Survolez une barre pour voir les références les plus représentatives du thème.',
         'references_topic_tooltip': '{count} références ({pct} % du corpus de ce modèle). Les plus représentatives :',
         'Author collaborations': 'Collaborations entre auteurs',
-        'Publishers': 'Éditeurs',
-        'No provenance locations available': 'Aucun lieu de provenance disponible',
-        'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
-        'references_landscape_empty': 'Aucune carte sémantique disponible pour cette bibliographie',
-        'references_landscape_empty_umap': 'La carte sémantique n’a pas été calculée, faute du paquet umap-learn lors de la construction de ces données',
-        'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour tracer une carte significative',
         'Co-author':             'Co-auteur',
         'Author / editor':       'Auteur / \u00e9diteur',
         'Shared references':     'R\u00e9f\u00e9rences communes',

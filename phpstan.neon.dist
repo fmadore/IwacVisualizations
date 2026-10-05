@@ -56,19 +56,10 @@ parameters:
         # View helpers, via PhpRenderer::__call.
         -
             identifier: method.notFound
-            message: '#PhpRenderer::(translate|formRow|partial|escapeHtml|url|assetUrl|blockThumbnail)#'
+            message: '#PhpRenderer::(iwacTimelineData|siteSetting|translate|formRow|partial|escapeHtml|url|assetUrl|blockThumbnail)#'
         # `MvcEvent::getRequest()` / `getResponse()` are typed to the Stdlib
         # interfaces; under HTTP they are always the Http\Request / Http\Response
         # that carry these. Omeka has no non-HTTP dispatch path.
         -
             identifier: method.notFound
             message: '#(Request|Response)Interface::(isPost|getHeaders|setStatusCode|getPost|getQuery)#'
-        # `embeddable` is the embed WHITELIST, and today every block is on it -
-        # so PHPStan correctly reports the guard as constant. The flag stays:
-        # it is how a block would be taken off the list, and `embeddable()`
-        # doubles as the directory-traversal guard for
-        # `common/block-layout/<slug>`. A security control is not dead code
-        # because it currently admits everything.
-        -
-            identifier: empty.offset
-            path: src/Site/BlockRegistry.php

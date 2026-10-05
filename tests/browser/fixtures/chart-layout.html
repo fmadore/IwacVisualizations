@@ -29,7 +29,8 @@
     <!-- Test-only npm dependency: no CDN request and no production hosting change. -->
     <script src="/node_modules/echarts/dist/echarts.min.js"></script>
     <script src="/node_modules/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
-    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <!-- shared-core is built once per locale; this fixture is English. -->
+    <script src="/asset/js/dist/shared-core.en.min.js"></script>
     <script src="/asset/js/dist/shared-charts.min.js"></script>
     <script src="/asset/js/dist/shared-ui.min.js"></script>
     <!-- The collection-overview pieces this page exercises, in their bundle

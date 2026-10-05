@@ -51,8 +51,23 @@ foreach (array_keys(AssetPlan::manifest()['blocks']) as $bundle) {
         'blockClass' => 'test-block',
     ]);
     $scripts = blockManifest($html, $bundle)['scripts'];
-    if (end($scripts) !== '/modules/IwacVisualizations/asset/js/dist/blocks/' . $bundle . '.min.js') {
+    // A bundle carrying translation dictionaries is built once per locale and
+    // listed as {locale: url}; the loader picks the page's language.
+    $base = '/modules/IwacVisualizations/asset/js/dist/blocks/' . $bundle;
+    $last = end($scripts);
+    $expected = is_array($last)
+        ? array_combine(array_keys($last), array_map(fn ($locale) => $base . '.' . $locale . '.min.js', array_keys($last)))
+        : $base . '.min.js';
+    if ($last !== $expected || (is_array($last) && array_keys($last) !== ['en', 'fr'])) {
         throw new \RuntimeException($bundle . ': missing orchestrator');
+    }
+    foreach ($scripts as $script) {
+        foreach ((array) $script as $url) {
+            $file = dirname(__DIR__, 2) . '/asset/' . substr($url, strlen('/modules/IwacVisualizations/asset/'));
+            if (strpos($url, '/modules/') === 0 && !is_file($file)) {
+                throw new \RuntimeException($bundle . ': manifest names ' . $url . ', which the build did not write');
+            }
+        }
     }
     $count++;
 }
@@ -67,15 +82,22 @@ $module = '/modules/IwacVisualizations/asset/';
 $rendered = 0;
 foreach (BlockRegistry::BLOCKS as $slug => $row) {
     $html = $view->partial(BlockRegistry::partialFor($slug), ['block' => null, 'slug' => $slug]);
-    $payload = blockManifest($html, $slug);
-    $scripts = $payload['scripts'];
+    if (empty($row['shell'])) {
+        // Its own template: an embeddable one must still carry its embed
+        // slug. The timeline is not embeddable, server-renders its reading
+        // view (or an "unavailable" note without data) and loads no chart
+        // bundle, so neither a slug nor a lazy-loader manifest is required.
+        if (!empty($row['embeddable']) && strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
+            throw new \RuntimeException($slug . ': no embed slug on its wrapper');
+        }
+        $rendered++;
+        continue;
+    }
     if (strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
         throw new \RuntimeException($slug . ': no embed slug on its wrapper');
     }
-    if (empty($row['shell'])) {
-        $rendered++;
-        continue;   // its own template: the embed slug and the manifest are what it shares
-    }
+    $payload = blockManifest($html, $slug);
+    $scripts = $payload['scripts'];
     $shell = $row['shell'];
     $assets = $shell['assets'];
     $needs = $assets['needs'] ?? [];
@@ -84,18 +106,25 @@ foreach (BlockRegistry::BLOCKS as $slug => $row) {
     if (strpos($decoded, 'class="iwac-vis-block ' . $shell['blockClass'] . '"') === false) {
         throw new \RuntimeException($slug . ': the wrapper lost its block class ' . $shell['blockClass']);
     }
+    // A localized bundle is a {locale: url} entry; compare it whole.
     $expected = [];
     foreach (AssetPlan::bundles($needs, $assets['bundle']) as $bundle) {
-        $expected[] = $module . 'js/dist/' . $bundle . '.min.js';
+        $path = AssetPlan::bundlePath($bundle);
+        $expected[] = is_array($path)
+            ? array_map(static fn($p) => $module . $p, $path)
+            : $module . $path;
     }
-    $moduleScripts = array_values(array_filter($scripts, static fn($s) => strpos($s, $module) === 0));
+    $moduleScripts = array_values(array_filter(
+        $scripts,
+        static fn($s) => strpos(is_array($s) ? (string) reset($s) : $s, $module) === 0
+    ));
     if ($moduleScripts !== $expected) {
         throw new \RuntimeException($slug . ': bundles ' . json_encode($moduleScripts) . ', expected ' . json_encode($expected));
     }
     if (!empty($needs['maplibre']) !== !empty($payload['mjs'])) {
         throw new \RuntimeException($slug . ': the MapLibre import does not follow its `maplibre` need');
     }
-    $hasWordcloud = (bool) array_filter($scripts, static fn($s) => strpos($s, 'echarts-wordcloud') !== false);
+    $hasWordcloud = (bool) array_filter($scripts, static fn($s) => is_string($s) && strpos($s, 'echarts-wordcloud') !== false);
     if (!empty($needs['wordcloud']) !== $hasWordcloud) {
         throw new \RuntimeException($slug . ': the word-cloud plugin does not follow its `wordcloud` need');
     }

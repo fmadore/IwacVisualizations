@@ -1,0 +1,36 @@
+name: Theme contract freshness
+
+# tokens.json and scripts/theme-token-guard.cjs are written into this repository
+# by IWAC-theme's `npm run sync:tokens`. Nothing else in this repository's CI
+# can tell a stale copy from a current one: every guard rule passes against
+# whatever contract it is handed, so a copy that was never re-synced checks
+# this module against an old contract and stays green.
+#
+# Once a week (and on demand) compare both files with IWAC-theme's master. A
+# copy AHEAD of master — synced from a theme change not merged yet — is
+# reported and passes; a copy BEHIND master, or different at the same theme
+# version, fails with the command that fixes it. The comparison itself lives
+# in the synced engine (`--against-theme-master`), so both modules run the
+# same check.
+
+on:
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    name: tokens.json and guard engine match IWAC-theme master
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - run: node scripts/check-theme-tokens.js --against-theme-master

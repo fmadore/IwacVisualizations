@@ -15,13 +15,12 @@
             --ink-strong: #090909;
             --ink-light: #45484d;
             --muted: #606368;
+            --ink-subtle: #56595e;
             --surface: #fffdfb;
             --surface-raised: #f8f4f1;
             --surface-sunken: #f4f0ed;
             --border: #c9c4bf;
             --border-light: #e6e1dc;
-            --space-xs: .25rem;
-            --space-sm: .5rem;
             --space-1: .25rem;
             --space-2: .5rem;
             --space-3: .75rem;
@@ -40,6 +39,7 @@
             --ink-strong: #f7f5f1;
             --ink-light: #b5b0aa;
             --muted: #aaa49f;
+            --ink-subtle: #a9a39e;
             --surface: #110c08;
             --surface-raised: #1a1510;
             --surface-sunken: #0c0805;
@@ -133,8 +133,19 @@
     <!-- The three bundles the block's template asks for, as production
          serves them: shared-core, shared-layout (with every renderer), and the
          block's own bundle with the orchestrator last. -->
-    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <!-- shared-core is built once per locale, and production serves the
+         variant matching <html lang>; written during parsing so the
+         scripts after it still run in order. -->
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.'
+            + (/^fr/i.test(document.documentElement.lang) ? 'fr' : 'en') + '.min.js"><\/script>');
+    </script>
     <script src="/asset/js/dist/shared-layout.min.js"></script>
-    <script src="/asset/js/dist/blocks/minimal-item-dashboard.min.js"></script>
+    <!-- The block bundle carries its own dictionary since v1.73.0, so it is
+         built per locale too. -->
+    <script>
+        document.write('<script src="/asset/js/dist/blocks/minimal-item-dashboard.'
+            + (/^fr/i.test(document.documentElement.lang) ? 'fr' : 'en') + '.min.js"><\/script>');
+    </script>
 </body>
 </html>

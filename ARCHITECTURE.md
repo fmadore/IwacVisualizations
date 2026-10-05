@@ -1,5 +1,7 @@
 # Architecture — IWAC Visualizations
 
+Native timelines: [authoring, data pipeline, editor and migration](docs/TIMELINES.md).
+
 How the module is put together: the file layout, how assets are declared and
 loaded, the two data paths and how generated data reaches the server, then the
 cross-cutting concerns — i18n, theme switching, mobile behaviour — and the
@@ -22,21 +24,24 @@ IwacVisualizations/
 │   │   ├── lint.yml
 │   │   ├── omeka-integration.yml
 │   │   ├── regenerate-data.yml
-│   │   └── release.yml
+│   │   ├── release.yml
+│   │   └── theme-contract.yml
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                    # 48 files — block-local sheets, layered over iwac-core.css
-│   │   ├── iwac-core.css              # Tokens, panel, chip controls, table, form controls
+│   │   ├── blocks/                      # 50 files — block-local sheets, layered over iwac-core.css
+│   │   ├── iwac-core.css                # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
+│   │   ├── iwac-embed-tokens.css
+│   │   ├── iwac-embed-tokens.min.css
 │   │   ├── iwac-embed.css
 │   │   ├── iwac-embed.min.css
-│   │   ├── iwac-maplibre.css          # MapLibre chrome + shared popup body styles
+│   │   ├── iwac-maplibre.css            # MapLibre chrome + shared popup body styles
 │   │   └── iwac-maplibre.min.css
 │   ├── data/
 │   │   ├── laicite-events.json
 │   │   └── scary-terms-events.json
-│   ├── geo/                           # 9 files — static map geometry, the only committed data
+│   ├── geo/                             # 9 files — static map geometry, the only committed data
 │   ├── img/
 │   │   └── ai-logos/
 │   │       ├── ChatGPT_logo.svg
@@ -46,23 +51,29 @@ IwacVisualizations/
 │   │       └── Qwen_logo.png
 │   └── js/
 │       ├── charts/
-│       │   ├── article-dashboard/     # 3 files — panel modules
-│       │   ├── audiovisual-overview/  # 3 files — panel modules
-│       │   ├── collection-overview/   # 10 files — panel modules
-│       │   ├── compare-newspapers/    # 10 files — panel modules
-│       │   ├── entity-networks/       # 3 files — panel modules
-│       │   ├── index-overview/        # 14 files — panel modules
-│       │   ├── laicite/               # 18 files — panel modules
-│       │   ├── lexical-metrics/       # 1 file — panel module
-│       │   ├── on-this-day/           # 4 files — panel modules
-│       │   ├── periodicals-overview/  # 2 files — panel modules
-│       │   ├── person-dashboard/      # 11 files — panel modules
-│       │   ├── references-overview/   # 1 file — panel module
-│       │   ├── scary-terms/           # 6 files — panel modules
-│       │   ├── semantic-landscape/    # 1 file — panel module
-│       │   ├── sentiment-atlas/       # 1 file — panel module
-│       │   ├── shared/                # 41 files — the reusable primitives every block draws on
-│       │   ├── spatial-exploration/   # 4 files — panel modules
+│       │   ├── article-dashboard/       # 4 files — panel modules
+│       │   ├── audiovisual-overview/    # 3 files — panel modules
+│       │   ├── collection-overview/     # 11 files — panel modules
+│       │   ├── compare-newspapers/      # 11 files — panel modules
+│       │   ├── distinctive-vocabulary/  # 1 file — panel module
+│       │   ├── entity-networks/         # 3 files — panel modules
+│       │   ├── index-overview/          # 14 files — panel modules
+│       │   ├── laicite/                 # 18 files — panel modules
+│       │   ├── lexical-metrics/         # 1 file — panel module
+│       │   ├── minimal-item-dashboard/  # 1 file — panel module
+│       │   ├── on-this-day/             # 4 files — panel modules
+│       │   ├── periodicals-overview/    # 2 files — panel modules
+│       │   ├── person-dashboard/        # 11 files — panel modules
+│       │   ├── publication-dashboard/   # 1 file — panel module
+│       │   ├── reference-dashboard/     # 1 file — panel module
+│       │   ├── references-overview/     # 2 files — panel modules
+│       │   ├── scary-terms/             # 7 files — panel modules
+│       │   ├── semantic-landscape/      # 1 file — panel module
+│       │   ├── sentiment-atlas/         # 2 files — panel modules
+│       │   ├── shared/                  # 41 files — the reusable primitives every block draws on
+│       │   ├── spatial-exploration/     # 4 files — panel modules
+│       │   ├── timeline/                # 4 files — panel modules
+│       │   ├── topic-explorer/          # 1 file — panel module
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
 │       │   ├── collection-overview.js
@@ -89,27 +100,41 @@ IwacVisualizations/
 │       │   ├── sentiment-atlas.js
 │       │   ├── spatial-exploration.js
 │       │   ├── term-trends.js
+│       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                      # 72 files — built by scripts/build-js.js from bundles.json; committed
-│       ├── bundles.json               # The load order: shared bundles, panel sets, one per block
-│       ├── dashboard-core.js          # IWACVis namespace, chart tracking, theme observer
+│       ├── dist/                        # 131 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
+│       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
+│       ├── iwac-embed-gallery.js
 │       ├── iwac-embed-height.js
-│       ├── iwac-i18n.js               # Locale detection + en/fr dictionary + t()
+│       ├── iwac-i18n.js                 # Locale detection + en/fr dictionary + t()
 │       ├── iwac-lazy.js
-│       └── iwac-theme.js              # ECharts theme from live CSS vars; owns BASEMAP
+│       └── iwac-theme.js                # ECharts theme from live CSS vars; owns BASEMAP
+├── bin/
+│   └── migrate-timelines.php
 ├── config/
-│   ├── module.config.php              # Block + resource-page-block invokables
-│   ├── module.ini                     # Module metadata; version drives the asset cache-bust
-│   └── sentiment-models.json
-├── language/                          # 4 files — template.pot + fr.po + the compiled fr.mo
+│   ├── module.config.php                # Block + resource-page-block invokables
+│   ├── module.ini                       # Module metadata; version drives the asset cache-bust
+│   ├── sentiment-models.json
+│   └── timelines.json
+├── docs/
+│   ├── images/
+│   │   ├── timeline-dark.png
+│   │   ├── timeline-light.png
+│   │   └── timeline-mobile.png
+│   └── TIMELINES.md
+├── language/                            # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
-│   ├── laicite/                       # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
+│   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
+│   ├── lib/                             # 3 files — file walk, bundle manifest and failure report the guards share
 │   ├── audit_laicite.py
 │   ├── build-css.js
-│   ├── build-js.js                    # esbuild bundler driven by asset/js/bundles.json
+│   ├── build-embed-tokens.js
+│   ├── build-js.js                      # esbuild bundler driven by asset/js/bundles.json
 │   ├── build-mo.js
 │   ├── build-model-registry.js
 │   ├── build-tree.js
+│   ├── cdn-integrity.js                 # SRI hashes for the CDN pins: --check / --update / --verify
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
 │   ├── check-css-dead.js
@@ -121,7 +146,7 @@ IwacVisualizations/
 │   ├── check-python.js
 │   ├── check-theme-tokens.js
 │   ├── check-versions.js
-│   ├── dashboard_aggregator.py        # Shared person/entity aggregation core
+│   ├── dashboard_aggregator.py          # Shared person/entity aggregation core
 │   ├── extract-pot.js
 │   ├── generate_article_dashboards.py
 │   ├── generate_audiovisual_overview.py
@@ -151,20 +176,24 @@ IwacVisualizations/
 │   ├── generate_spatial_exploration.py
 │   ├── generate_template_summary.py
 │   ├── generate_term_trends.py
+│   ├── generate_timeline.py
 │   ├── generate_topic_explorer.py
 │   ├── generate_wordcloud.py
 │   ├── generate_world_map.py
 │   ├── gettext.js
+│   ├── i18n-strip.js                    # Empties the other locale's dictionaries for per-locale bundles
 │   ├── iwac_embeddings.py
-│   ├── iwac_frames.py                 # The FrameStore run_all installs
+│   ├── iwac_frames.py                   # The FrameStore run_all installs
 │   ├── iwac_stats.py
-│   ├── iwac_utils.py                  # Shared generator helpers (self-contained)
+│   ├── iwac_timeline.py
+│   ├── iwac_utils.py                    # Shared generator helpers (self-contained)
 │   ├── org_cooccurrence_targets.json
 │   ├── python-lock.js
 │   ├── README.md
-│   ├── requirements.lock              # Hash-pinned; `npm run lint:python-lock` checks it
+│   ├── requirements.lock                # Hash-pinned; `npm run lint:python-lock` checks it
 │   ├── requirements.txt
-│   ├── run_all.py                     # Every generator in one process, sharing loaded subsets
+│   ├── run_all.py                       # Every generator in one process, sharing loaded subsets
+│   ├── theme-token-guard.cjs
 │   └── validate_data.py
 ├── src/
 │   ├── Controller/
@@ -176,7 +205,7 @@ IwacVisualizations/
 │   │   ├── Deployment.php
 │   │   └── Manifest.php
 │   ├── Job/
-│   │   └── SyncData.php               # Pure-PHP "Pull latest data" job (issue #7)
+│   │   └── SyncData.php                 # Pure-PHP "Pull latest data" job (issue #7)
 │   ├── Mvc/
 │   │   └── EmbedFramingListener.php
 │   ├── Sentiment/
@@ -185,34 +214,47 @@ IwacVisualizations/
 │   │   ├── Polarite.php
 │   │   └── Subjectivite.php
 │   ├── Service/
-│   │   └── Controller/
-│   │       └── Admin/
-│   │           └── DataControllerFactory.php
-│   └── Site/
-│       ├── BlockLayout/               # 22 files — one `const SLUG` each; BlockRegistry.php is the truth
-│       ├── ResourcePageBlockLayout/   # 3 files — template-ID dispatch + the item-set block
-│       ├── AssetPlan.php
-│       └── BlockRegistry.php          # THE single source of truth for every block
+│   │   ├── Controller/
+│   │   │   └── Admin/
+│   │   │       └── DataControllerFactory.php
+│   │   └── ViewHelper/
+│   │       └── TimelineDataFactory.php
+│   ├── Site/
+│   │   ├── BlockLayout/                 # 23 files — one `const SLUG` each; BlockRegistry.php is the truth
+│   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
+│   │   ├── AssetPlan.php
+│   │   └── BlockRegistry.php            # THE single source of truth for every block
+│   ├── Timeline/
+│   │   ├── Catalog.php
+│   │   └── Migration.php
+│   └── View/
+│       └── Helper/
+│           └── TimelineData.php
 ├── tests/
-│   ├── browser/                       # 18 files — Playwright specs
+│   ├── browser/                         # 24 files — Playwright specs
+│   ├── fixtures/
+│   │   └── timeline.json
 │   ├── integration/
 │   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
-│   │   └── sync_form.php
-│   ├── js/                            # 27 files — node:test units
+│   │   ├── sync_form.php
+│   │   └── timeline.php
+│   ├── js/                              # 32 files — node:test units
 │   ├── php/
 │   │   ├── run.php
-│   │   └── sync_data_archive.php
+│   │   ├── sync_data_archive.php
+│   │   └── timeline.php
 │   └── python/
 │       ├── requirements.txt
 │       ├── test_entity_networks.py
 │       ├── test_iwac_helpers.py
 │       ├── test_laicite_audit.py
 │       ├── test_laicite_methodology.py
-│       └── test_publication.py
+│       ├── test_publication.py
+│       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/              # 3 files — one per registered block, filename === slug
+│   │   ├── block-layout/                # 3 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml
@@ -222,8 +264,9 @@ IwacVisualizations/
 │   │   │   │   ├── publication.phtml
 │   │   │   │   └── reference.phtml
 │   │   │   └── item-set-dashboard.phtml
-│   │   ├── iwac-assets.phtml          # Shared asset-loader partial — declare needs here
-│   │   └── iwac-block-shell.phtml     # Shared block wrapper + loading scaffold
+│   │   ├── iwac-assets.phtml            # Shared asset-loader partial — declare needs here
+│   │   ├── iwac-block-shell.phtml       # Shared block wrapper + loading scaffold
+│   │   └── timeline-reading.phtml
 │   └── iwac-visualizations/
 │       ├── admin/
 │       │   └── data/
@@ -235,84 +278,74 @@ IwacVisualizations/
 │       └── layout/
 │           └── embed.phtml
 ├── .stylelintrc.json
-├── ARCHITECTURE.md                    # This file
-├── CHANGELOG.md                       # Version history
+├── ARCHITECTURE.md                      # This file
+├── CHANGELOG.md                         # Version history
 ├── CITATION.cff
 ├── CLAUDE.md
-├── DATA_NOTES.md                      # The Hugging Face dataset schema
+├── DATA_NOTES.md                        # The Hugging Face dataset schema
 ├── DESIGN.md
 ├── eslint.config.js
 ├── LAICITE_METHODOLOGY.md
 ├── LICENSE
-├── Module.php                         # Structural only — NO asset listeners (see docblock)
+├── Module.php                           # Structural only — NO asset listeners (see docblock)
 ├── package-lock.json
 ├── package.json
 ├── phpstan.neon.dist
 ├── playwright.config.js
 ├── PRODUCT.md
 ├── README.md
-├── ROADMAP.md                         # Consolidated maintenance status and decisions
+├── ROADMAP.md                           # Consolidated maintenance status and decisions
 ├── ruff.toml
-└── tokens.json                        # Synced from the IWAC theme; `npm run lint:theme` enforces it
+└── tokens.json                          # Synced from the IWAC theme; `npm run lint:theme` enforces it
 ```
 
 <!-- END GENERATED TREE -->
 
 ### Asset loading — shared partial
 
-`Module.php` is intentionally minimal and only wires `getConfig()`. Per the top-of-file docblock:
+`Module.php` attaches no asset listeners. Loading ECharts and MapLibre on every Item and ItemSet view once cost ~600 KB of unused JavaScript on every Article page, even when no Visualizations block was configured. A block declares what it needs, and only pages that render a block pay for it.
 
-> Every block partial in this module enqueues its own stylesheet, CDN libraries, and JS dependencies. We deliberately do NOT attach a controller listener that blanket-loads ECharts/MapLibre on every Item and ItemSet view — doing so cost ~600 KB of unused JavaScript on every Article page, even when no Visualizations block was configured.
-
-**As of v0.9.0, enqueueing is centralized in a single shared partial** (`view/common/iwac-assets.phtml`) that owns the stylesheet + CDN + JS stack. Templates only declare *what* they need and the partial handles the rest:
+**A page block declares its assets in its `BlockRegistry` row**, under `shell`, and renders through `view/common/block-layout/_generic.phtml`, which hands the row to `common/iwac-block-shell` → `common/iwac-assets`:
 
 ```php
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'collection-overview',        // optional: loads css/blocks/<name>.css
-    'needs' => [
-        'maplibre'     => true,                 // MapLibre CDN + iwac-maplibre.css + shared/maplibre + shared/map-popup
-        'wordcloud'    => true,                 // echarts-wordcloud CDN
-        'chartOptions' => true,                 // shared/chart-options
-        'facetButtons' => true,                 // shared/facet-buttons + shared/faceted-chart
-        'table'        => true,                 // shared/table (implicitly loads pagination)
-        'pagination'   => true,                 // shared/pagination
-        'layout'       => true,                 // shared/dashboard-layout (implied by any 'renderers')
-        'renderers'    => [                     // opt-in shared renderers under shared/renderers/
-            'calendar-heatmap',
-            'chord',
-            'radar-profile',
-            'sibling-sparkline',
-            'similar-items',
-            'sunburst',
-            'treemap',
+'collection-overview' => [
+    // invokable, class, label, description, embeddable …
+    'shell' => [
+        'assets' => [
+            'blockCss' => 'collection-overview',   // css/blocks/<name>.min.css; a list for several sheets
+            'needs' => [                           // AssetPlan::FLAGS — an unknown flag throws
+                'maplibre'     => true,            // MapLibre (ES module import) + shared-map + iwac-maplibre.css
+                'wordcloud'    => true,            // echarts-wordcloud CDN
+                'chartOptions' => true,            // shared-charts
+                'facetButtons' => true,            // any of these five: shared-ui
+                'table'        => true,
+                'pagination'   => true,
+            ],
+            'bundle' => 'collection-overview',     // blocks.<name> in asset/js/bundles.json
         ],
+        'blockClass' => 'iwac-vis-overview',
+        'loading'    => 'Loading collection overview', // @translate
     ],
-    'panels' => [                               // block-specific panel modules, in order
-        'collection-overview/recent-additions',
-        'collection-overview/growth',
-        'collection-overview/map',
-        // ...
-    ],
-    'orchestrator' => 'collection-overview',    // orchestrator loads LAST
-]);
+],
 ```
+
+The other flags are `timeline` and `concordance` (shared-ui), `layout` (shared-layout: the dashboard layout registry and every shared renderer), `d3` (the d3-force CDN modules + shared-d3) and `echarts`, the one that defaults on and is only ever passed as `false`. `BlockRegistry::partialFor($slug)` is the routing rule — `_generic` for a row with a `shell`, `common/block-layout/<slug>` for one without — and the block layouts, the embed view and the integration suite all call it. A row without a `shell` is for a block that does more than declare: today `on-this-day`, which reads its layout setting and builds a noscript slot, and `iwac-timeline`, which server-renders its whole reading view. Resource-page blocks (`view/common/resource-page-block-layout/**`) call `common/iwac-block-shell` with the same `assets` array directly.
 
 The partial:
 
-- always loads `iwac-core.css`, ECharts CDN, i18n, theme, dashboard-core, panels, panel-toolbar, responsive
-- loads optional primitives per `needs` (each is tiny and opt-in — `panels.js` alone is enough for blocks that don't render charts yet)
-- loads each panel module in the order given, then the orchestrator **last**
-- pins CDN versions at the top of the partial so bumping `@6` → `@7` is a one-line change
-- emits every URL through `$this->assetUrl($path, 'IwacVisualizations')` so Omeka's `?v=` cache-bust tracks `config/module.ini`
-- deduplicates via `headScript()` / `headLink()` — if two blocks appear on the same page, each asset is still enqueued only once
+- always loads `iwac-core.min.css`, the ECharts CDN build (unless `'echarts' => false`) and the `shared-core` bundle
+- turns `needs` into CDN libraries and the shared bundles in a fixed order (`Site\AssetPlan::bundles()`), then the block's panel sets and its own bundle, orchestrator last
+- pins CDN versions at the top of the partial, so an upgrade is a deliberate one-line bump
+- emits every URL through `$this->assetUrl($path, 'IwacVisualizations')`, so Omeka's `?v=` cache-bust tracks `config/module.ini`
+- hands the ordered list to the on-view loader (`iwac-lazy.js`) as inert JSON beside the block; `headLink()` / `headScript()` and the loader de-duplicate by URL, so two blocks on a page share every bundle they have in common
 
 Consequences for contributors:
 
-- **When adding a new block**, write the template body (markup + data attributes) and call `$this->partial('common/iwac-assets', [...])` at the top. Don't write raw `$this->headScript()` calls — that's what the partial is for.
-- **Name the bundle, not the files** — `'bundle' => '<name>'`; the block's panel modules and orchestrator are listed, in order, under `blocks.<name>` in `asset/js/bundles.json`, and `npm run lint:blocks` fails on a template that still lists `panels` or `orchestrator`.
+- **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable and the `shell`. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes, the templates and the bundle manifest stop agreeing, and `tests/php/run.php` fails on a `shell` or `assets` key that nothing reads (a `blockCss` one level too high is silently dropped — Periodicals Overview shipped without its stylesheet that way) and on a `blockCss` with no sheet on disk.
+- **Name the bundle, not the files** — `'bundle' => '<name>'`; the block's panel modules and orchestrator are listed, in order, under `blocks.<name>` in `asset/js/bundles.json`, and `npm run lint:blocks` fails on a template that still lists `panels` or `orchestrator`. Don't write raw `$this->headScript()` calls in a block template.
 - Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.
-- If you need a truly new shared primitive, add it to the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file, list it in the right shared bundle in `asset/js/bundles.json` (a new bundle also needs an opt-in flag in the partial), and document it in this README.
-- **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes and the templates stop agreeing.
+- A truly new shared primitive goes into the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file listed in the right shared bundle; a new shared bundle also needs a flag in `AssetPlan::FLAGS` and its group in `AssetPlan::bundles()`.
+- **No inline script or style.** The lazy-loader payload is `<script type="application/json">`, the embed page's height reporter and the `/iwac-embed` snippet gallery are their own bundles (`shared-embed-height`, `shared-embed-gallery`), so a host with `script-src 'self'` breaks nothing. `tests/js/assets.test.js` fails on any literal `assetUrl()` target that is not on disk — the gallery requested a deleted per-file `embed.min.js` for months after the bundling commit, and rendered no snippets.
 
 ### Load order (runtime)
 
@@ -366,11 +399,35 @@ PHP box:
    writes a versioned manifest containing per-file SHA-256 hashes.
 2. **Publish** — the workflow creates an immutable `data-build-<run>-<attempt>`
    release containing the archive and checksum, then updates `data/latest.json`.
-3. **Deliver** — SyncData resolves the pointer once, requires the checksum and
-   manifest, and publishes `generations/<manifest-sha256>/`. One Omeka setting
-   activates the directory. The permanent lock serializes workers; deployment
-   recovery preserves usable legacy backups. Retention keeps the previous and
-   all generations younger than 30 days. Logs appear in **Admin → Jobs**.
+3. **Deliver** — SyncData resolves the pointer once, fetches the checksum
+   sidecar *before* the archive (a release without a usable one fails before
+   the download), requires the manifest, and publishes
+   `generations/<manifest-sha256>/`. One Omeka setting activates the directory.
+   The permanent lock serializes workers; deployment recovery preserves usable
+   legacy backups only while no `generations/` exists, after which the work-dir
+   sweep removes them like any orphan. Retention keeps the previous and all
+   generations younger than 30 days. Logs appear in **Admin → Jobs**. The live
+   root, the work sibling (`iwac-visualizations.tmp/`) and the lock all derive
+   from `Data\Deployment::forStore()`, for the job and the admin controller
+   alike. "Retry an interrupted sync" on the admin page closes the stale job
+   (status `error`, an end time, a log line) before dispatching its replacement.
+
+**Published cross-repo contract — the root `collection-overview.json`.** The IWAC
+theme's homepage banner (`helper/BannerStats.php` in
+[IWAC-theme](https://github.com/fmadore/IWAC-theme)) reads
+`OMEKA_PATH/files/iwac-visualizations/collection-overview.json` — the store
+*root*, not a generation — for its `summary` figures (newspapers, references,
+words, pages…). After every successful activation, including a re-run of the
+same generation, SyncData copies the active generation's file there through a
+temporary file and a rename (`Deployment::publishRootSnapshot()`); a failure only
+warns, because the generation is already live. Between v1.66, which moved
+publication into `generations/`, and this copy, the root file froze at its last
+pre-generation snapshot (81 newspapers against 85 in the data) and fresh installs
+had none. Renaming, moving or no longer writing it hides banner cards with no
+error anywhere, so change it in both repositories together; the same goes for
+the `summary` keys the theme's `SUMMARY_KEYS` lists. Only this one file is
+mirrored — the rest of a legacy root tree is left for pages loaded before the
+upgrade.
 
 Each page carries `data-generation`; the shared fetcher resolves aggregate and
 sidecar requests into that immutable directory. Legacy pages retain their old
@@ -443,8 +500,9 @@ Full workflow documented in **`scripts/README.md`**.
 The Laïcité generator's population, field restrictions, denominators, comparison
 methods and validation protocol are documented in
 [LAICITE_METHODOLOGY.md](LAICITE_METHODOLOGY.md). Its `research.py` module builds
-`laicite-research.json` with whole-collection coverage and field-sensitivity
-cells, including records without matches or full text. Regenerate and sync
+whole-collection coverage and field-sensitivity cells, including records
+without matches or full text; they ship inside `laicite-trends.json` under
+`research`, not as a file of their own. Regenerate and sync
 these data alongside the other Laïcité bundles after a methodology update;
 installing the module archive alone does not refresh them.
 
@@ -547,6 +605,10 @@ The tree at the top of this file is **generated**. Edit
 the repository disagree, which is the drift that left the hand-written version
 naming 6 `BlockLayout` classes out of 21.
 
+**Bundles that carry translations are built once per locale.** A page is read in one language, so a bundle containing a dictionary — `shared-core` (the shared `iwac-i18n.js`) and every block with an `addTranslations` file — is written as `<name>.en.min.js` and `<name>.fr.min.js`, each with the other locale's tables emptied by `scripts/i18n-strip.js`, and listed in the generated `dist/locales.json`. `Site\AssetPlan::bundlePath()` hands the loader both URLs; the loader requests the one matching `<html lang>` and publishes its choice as `IWACVisLazy.locale`, which `iwac-i18n.js` adopts, so the language `t()` uses is always the one whose strings were fetched. Emptying the other tables changes nothing `t()` can observe — `lint:i18n` requires every `en` key to exist in `fr` — and `tests/js/i18n-locales.test.js` proves it for every key of all twenty-six dictionaries. Dictionaries must stay inline object literals (`ns.addTranslations('fr', { … })`); the build fails on a call it cannot strip.
+
+**A string lives in the dictionary of the only bundle that reads it.** The shared `iwac-i18n.js` ships in `shared-core` on every page carrying *any* block, so it holds only strings read by shared code, by templates, or by more than one block. A string one block alone reads goes in that block's `charts/<block>/i18n.js`, first in its bundle. Until v1.73.0 the shared dictionary also carried 146 single-block keys — about 27 KB of both locales' strings that every page downloaded for blocks it did not have; moving them took `shared-core` from 105 to 89 KB (French) and from 93 to 81 KB (English).
+
 `node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 
 A block is now three to seven script requests (the ECharts CDN, `shared-core`, the shared bundles it needs, its own) instead of about thirty-three; 155 sources → 34 bundles, ≈ 1.93 MB → 722 KB (−62.7%). Shared code never goes into a block bundle: the on-view loader de-duplicates by URL, so two blocks on one page share every bundle they have in common and each executes once, whereas a shared file inlined into two block bundles would execute twice.
@@ -584,6 +646,16 @@ npm run check:cdn
 ```
 
 It runs monthly on a schedule (a red run is the notification) and on pull requests that touch the partial, where it is advisory only — pinning behind `latest` is a legitimate choice. One thing stays fatal in both modes: the same package pinned at two different versions, which is what happens when the MapLibre JS URL gets bumped and the CSS one next to it does not.
+
+**Every pinned file also carries a Subresource Integrity hash** (since v1.72.0), in a generated `$cdnIntegrity` block of the same partial. The loader sets `integrity` and `crossorigin="anonymous"` on each CDN script, its `preload`, and the MapLibre sheet, so a browser refuses a file whose bytes differ from what was published. `import()` takes no `integrity`, so MapLibre's two main-thread modules are verified through `modulepreload` links that carry it, and the loader imports only once the entry's preload has settled — the import then resolves against the verified module rather than fetching again. MapLibre's worker is the one file outside this: it boots from a blob and imports its chunk in its own module graph. A version bump is therefore three steps:
+
+```bash
+# 1. edit the URL constants in view/common/iwac-assets.phtml
+npm run update:sri   # 2. rewrite the hashes from the npm tarballs (each verified against the registry's own sha512)
+npm run lint:sri     # 3. (also part of `npm run lint`) fails while the block and the pins disagree
+```
+
+The `CDN versions` workflow then runs `node scripts/cdn-integrity.js --verify`, which downloads every file from jsDelivr itself and fails on any hash that does not match — the one check against the bytes visitors are actually served.
 
 **Conventions for adding a new block:**
 

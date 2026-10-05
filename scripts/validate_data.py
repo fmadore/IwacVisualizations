@@ -90,6 +90,25 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "keyness.json":                   (),
     "template-summary.json":          (),
     "term-trends-index.json":         ("years", "terms", "totals"),
+    "timelines/index.json":          ("timelines",),
+}
+
+#: Nested figures a consumer OUTSIDE this module reads, keyed by
+#: (bundle, parent key) → (required keys, optional keys).
+#:
+#: IWAC-theme's helper/BannerStats.php reads these from collection-overview's
+#: `summary` for the homepage banner (its SUMMARY_KEYS). It is a
+#: cross-repository contract nothing asserted: a renamed key would silently
+#: drop a figure from the banner, with every check in both repositories green.
+#: `total_pages` is optional because the generator emits it only when the
+#: dataset carries a pages column — and the banner already tolerates that —
+#: but when it IS present it must be a number, like the rest.
+NESTED_FIGURES: Dict[Tuple[str, str], Tuple[Tuple[str, ...], Tuple[str, ...]]] = {
+    ("collection-overview.json", "summary"): (
+        ("newspapers", "references_count", "total_words", "unique_sources",
+         "document_types", "audiovisual_minutes", "languages"),
+        ("total_pages",),
+    ),
 }
 
 #: Keys one level down: bundle → {top-level key: keys that object must
@@ -268,6 +287,20 @@ def check_payload(name: str, payload: Any) -> List[str]:
                 wrong = _shape_problem(f"{name}: {parent}.{key!r}", key, block[key])
                 if wrong:
                     problems.append(wrong)
+
+    for (bundle, parent), (required, optional) in NESTED_FIGURES.items():
+        # A missing or malformed parent is already reported above.
+        if bundle != name or not isinstance(payload, dict) or not isinstance(payload.get(parent), dict):
+            continue
+        figures = payload[parent]
+        for key in required + optional:
+            if key not in figures:
+                if key in required:
+                    problems.append(f"{name}: {parent}.{key} is missing - IWAC-theme's BannerStats reads it")
+                continue
+            value = figures[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                problems.append(f"{name}: {parent}.{key} must be a number - IWAC-theme's BannerStats reads it")
     return problems
 
 
@@ -368,6 +401,40 @@ def write_manifest(data_dir: Path, provenance: Path) -> None:
     (data_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, sort_keys=True), encoding="utf-8")
 
 
+def check_timelines(data_dir: Path) -> List[str]:
+    """The catalogue and every bilingual exhibit must agree before publication."""
+    from iwac_timeline import IDENTIFIER, validate_timeline
+    errors = []
+    try:
+        index = read_json(data_dir / "timelines/index.json")
+        if index.get("schemaVersion") != 1 or not isinstance(index.get("timelines"), list) or not index["timelines"]:
+            raise ValueError("Invalid timeline catalogue")
+        expected = {"index.json"}
+        slugs = set()
+        for entry in index["timelines"]:
+            slug = entry["slug"]
+            if not IDENTIFIER.fullmatch(slug) or slug in slugs or not entry["locales"]:
+                raise ValueError("Invalid/duplicate catalogue entry")
+            slugs.add(slug)
+            for locale, detail in entry["locales"].items():
+                name = f"{slug}.{locale}.json"
+                if locale not in {"en", "fr"} or detail["file"] != name:
+                    raise ValueError("Invalid catalogue filename")
+                expected.add(name)
+                payload = read_json(data_dir / "timelines" / name)
+                validate_timeline(payload)
+                errors.extend(check_payload("timelines/" + name, payload))
+                if (payload["slug"] != slug or payload["locale"] != locale
+                        or len(payload["events"]) != detail["eventCount"]
+                        or payload["title"]["headline"] != detail["title"]):
+                    raise ValueError(f"Catalogue disagrees with {name}")
+        if {p.name for p in (data_dir / "timelines").glob("*.json")} != expected:
+            raise ValueError("Orphan timeline bundle")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        errors.append(f"timelines: {exc}")
+    return errors
+
+
 def validate(data_dir: Path) -> List[str]:
     problems: List[str] = []
     seen = set()
@@ -401,6 +468,7 @@ def validate(data_dir: Path) -> List[str]:
         elif not any(directory.rglob("*.json")):
             problems.append(f"{name}/: no JSON files")
 
+    problems.extend(check_timelines(data_dir))
     return problems
 
 
@@ -408,7 +476,10 @@ def self_test() -> List[str]:
     """Prove the checks can fail — the same contract check-*.js scripts keep."""
     failures: List[str] = []
 
-    good = {"metadata": {"generatedAt": "2026-09-07T05:00:00Z"}, "summary": {},
+    banner = {"newspapers": 41, "references_count": 1200, "total_words": 9_000_000,
+              "unique_sources": 88, "document_types": 7, "audiovisual_minutes": 1234,
+              "languages": 5}
+    good = {"metadata": {"generatedAt": "2026-09-07T05:00:00Z"}, "summary": banner,
             "timeline": {}, "countries": [], "treemap": {}}
     if check_payload("collection-overview.json", good):
         failures.append("a well-formed payload was rejected")
@@ -419,6 +490,10 @@ def self_test() -> List[str]:
         ("a +00:00 timestamp", {**good, "metadata": {"generatedAt": "2026-09-07T05:00:00+00:00"}}),
         ("no generatedAt", {**good, "metadata": {"totalRecords": 1}}),
         ("a missing required key", {k: v for k, v in good.items() if k != "timeline"}),
+        ("a banner figure the theme reads, missing",
+         {**good, "summary": {k: v for k, v in banner.items() if k != "total_words"}}),
+        ("a banner figure that is not a number", {**good, "summary": {**banner, "languages": "5"}}),
+        ("an optional banner figure of the wrong type", {**good, "summary": {**banner, "total_pages": None}}),
     ]
     for label, payload in cases:
         if not check_payload("collection-overview.json", payload):

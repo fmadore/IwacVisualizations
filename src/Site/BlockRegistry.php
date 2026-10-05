@@ -50,11 +50,17 @@ final class BlockRegistry
      * A row with no `shell` renders through its own template.
      *
      * `embeddable` gates the block from the snippet gallery and the
-     * `/iwac-embed/:block` route. Every block qualifies today (they are all
-     * zero-configuration and site-context-only); the flag exists so a future
-     * block that needs `$block` data cannot silently 500 the embed route.
+     * `/iwac-embed/:block` route. Configured blocks such as IWAC Timeline
+     * need `$block` data and must not appear in that zero-configuration route.
      */
     const BLOCKS = [
+        'iwac-timeline' => [
+            'invokable'   => 'timeline',
+            'class'       => BlockLayout\IwacTimeline::class,
+            'label'       => 'IWAC Timeline', // @translate
+            'description' => 'Present an illustrated historical narrative with a date axis and a complete reading view.', // @translate
+            'embeddable'  => false,
+        ],
         'audiovisual-overview' => [
             'invokable'   => 'audiovisualOverview',
             'class'       => BlockLayout\AudiovisualOverview::class,

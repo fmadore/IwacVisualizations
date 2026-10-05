@@ -18,6 +18,7 @@
  *   IWACVis.getPalette()         the ordered categorical series scale
  *   IWACVis.getSeriesColor(n)    one slot of that scale (wraps)
  *   IWACVis.getBasemapStyle()    MapLibre style URL matching current theme
+ *   IWACVis.resolveCssVar(name)  a custom property as legacy rgb(), '' if unset
  */
 (function () {
     'use strict';
@@ -45,6 +46,8 @@
         surface:       '#fdfcfb',  // oklch(99.2% 0.002 60)  near-white, not cream
         surfaceRaised: '#faf8f6',  // oklch(98.0% 0.003 60)
         background:    '#f7f5f3',  // oklch(97.0% 0.003 60)
+        // What a panel paints: --panel-bg aliases --surface in light…
+        panelBg:       '#fdfcfb',
         border:        '#ced1d6',  // oklch(86% 0.007 258) cool-neutral
         borderLight:   '#e2e5e8'   // oklch(92% 0.005 258)
     };
@@ -60,6 +63,11 @@
         surface:       '#110c08',  // oklch(16% 0.012 70)
         surfaceRaised: '#1a1510',  // oklch(20% 0.013 70)
         background:    '#080503',  // oklch(12% 0.012 75)
+        // …but --surface-raised in dark. The degraded-mode panel used to fall
+        // back to `surface` in both themes, so anything measuring contrast
+        // against the panel (the word cloud's knocked-out text) measured the
+        // wrong ground in dark mode. The guard pins both to tokens.json.
+        panelBg:       '#1a1510',
         border:        '#352f28',  // oklch(31% 0.015 70)
         borderLight:   '#26211a'   // oklch(25% 0.014 70)
     };
@@ -285,34 +293,49 @@
         var direct = _convertModernColor(trimmed);
         if (direct) return direct;
 
+        return probeColor(trimmed, true);
+    }
+
+    /**
+     * Compute `value` as a colour on the parked probe and return it as a
+     * legacy string: '' when the browser rejects it (guarded mode), the
+     * input unchanged when there is no probe to compute on.
+     *
+     * `guarded` is the two-sentinel invalid-value check. When `value` is NOT
+     * a colour the browser can parse, `style.color = value` is silently
+     * ignored and the probe keeps its previous value. A valid colour
+     * overrides BOTH sentinels to the same resolved rgb(); an invalid one
+     * leaves the two distinct sentinels untouched, and '' comes back so the
+     * CALLER's `|| fallback` fires — instead of the probe's default
+     * rgb(0,0,0), which is what made a single corrupted CSS var (an embed
+     * that mis-escaped `--primary` to `&#x23`) render every chart series
+     * solid black. A `var()` is accepted at parse time whatever it names, so
+     * `resolveCssVar` skips the check and pays one style read, not two.
+     */
+    function probeColor(value, guarded) {
         var probe = _getColorProbe();
-        if (!probe) return trimmed;
+        if (!probe) return value;
         try {
-            // Two-sentinel invalid-value guard. When `trimmed` is NOT a colour
-            // the browser can parse, `style.color = trimmed` is silently
-            // ignored and the probe keeps its previous value. A valid colour
-            // overrides BOTH sentinels to the same resolved rgb(); an invalid
-            // one leaves the two distinct sentinels untouched. In that case we
-            // return '' so the CALLER's `|| fallback` fires — instead of
-            // handing back the probe's default rgb(0,0,0), which is what made
-            // a single corrupted CSS var (e.g. an embed that mis-escaped
-            // `--primary` to `&#x23`) render every chart series solid black.
-            probe.style.color = 'rgb(1, 1, 1)';
-            probe.style.color = trimmed;
-            var r1 = getComputedStyle(probe).color;
-            probe.style.color = 'rgb(2, 2, 2)';
-            probe.style.color = trimmed;
-            var r2 = getComputedStyle(probe).color;
-            if (r1 !== r2) return '';           // unparseable — let caller fall back
-            var resolved = r1;
-            if (!resolved) return trimmed;
+            var resolved;
+            if (guarded) {
+                probe.style.color = 'rgb(1, 1, 1)';
+                probe.style.color = value;
+                resolved = getComputedStyle(probe).color;
+                probe.style.color = 'rgb(2, 2, 2)';
+                probe.style.color = value;
+                if (getComputedStyle(probe).color !== resolved) return '';   // unparseable
+            } else {
+                probe.style.color = value;
+                resolved = getComputedStyle(probe).color;
+            }
+            if (!resolved) return value;
             if (/^rgba?\(/i.test(resolved)) return resolved;
             // Modern Chromium can emit oklab() / oklch() / color(srgb)
             // for color-mix() / oklch() / hsl(modern syntax) inputs.
             var converted = _convertModernColor(resolved);
             return converted || resolved;
         } catch (e) {
-            return trimmed;
+            return value;
         }
     }
     // Exposed for callers that want to convert raw strings (not only
@@ -330,6 +353,35 @@
         return resolveCssColor(readVar(name));
     }
     ns.readColorVar = readColorVar;
+
+    /**
+     * Resolve a CSS custom property to a legacy `rgb()` / `rgba()`, or ''
+     * when it is unset, transparent or unresolvable.
+     *
+     * The module's own ramps (`--iwac-vis-heatmap-*`, `--iwac-vis-cent-*`,
+     * the model accents) are `color-mix(in oklab, var(--primary), …)`
+     * expressions, which `readColorVar` would read as raw source text. Here
+     * the browser computes the expression on the parked probe, in the body's
+     * cascade, and `resolveCssColor` converts whatever Level-4 form comes
+     * back. `transparent` is the fallback so an UNSET property is
+     * distinguishable from a set one, and answers ''.
+     *
+     * This used to be a second implementation in dashboard-core.js: its own
+     * probe appended to and removed from `<body>` on every call, and without
+     * the invalid-value guard `resolveCssColor` carries.
+     *
+     * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
+     * @returns {string}
+     */
+    ns.resolveCssVar = function (varName) {
+        if (typeof document === 'undefined' || !document.body) return '';
+        // The single-read path trusts `var(...)` to parse; a malformed name
+        // would not, and the probe would answer with its previous colour.
+        if (!/^--[A-Za-z0-9_-]+$/.test(String(varName))) return '';
+        var resolved = probeColor('var(' + varName + ', transparent)', false);
+        if (!resolved || /^var\(/i.test(resolved) || resolved === 'rgba(0, 0, 0, 0)') return '';
+        return resolved;
+    };
 
     /**
      * Apply an alpha to an already-resolved color string. Inputs are
@@ -401,7 +453,7 @@
             // --panel-bg to --surface in light but to --surface-raised in
             // dark, so anything measuring contrast against the panel (the word
             // cloud's knocked-out text) has to read this and not guess.
-            panelBg:       readColorVar('--panel-bg')       || fallback.surface,
+            panelBg:       readColorVar('--panel-bg')       || fallback.panelBg,
             background:    readColorVar('--background')     || fallback.background,
             border:        readColorVar('--border')         || fallback.border,
             borderLight:   readColorVar('--border-light')   || fallback.borderLight,

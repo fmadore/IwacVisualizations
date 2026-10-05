@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: config/module.config.php:54 view/iwac-visualizations/admin/data/index.phtml:20
+#: config/module.config.php:55 view/iwac-visualizations/admin/data/index.phtml:20
 msgid "IWAC Visualizations"
 msgstr ""
 
@@ -107,6 +107,46 @@ msgstr ""
 msgid "Very subjective"
 msgstr ""
 
+#: src/Site/BlockLayout/IwacTimeline.php:22
+msgid "Choose a timeline"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:30
+msgid "data unavailable"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:35
+msgid "Timeline"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:36
+msgid "Content language"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:37
+msgid "Site language"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:38
+msgid "Default view"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:39
+msgid "Narrative"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:39
+msgid "All events"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:40
+msgid "Opening event ID (optional)"
+msgstr ""
+
+#: src/Site/BlockLayout/IwacTimeline.php:43
+msgid "Pull the latest visualization data to make timelines available."
+msgstr ""
+
 #: src/Site/BlockLayout/OnThisDay.php:28
 msgid "Register — ruled rows, six documents"
 msgstr ""
@@ -127,247 +167,255 @@ msgstr ""
 msgid "Which layout the block opens on. Visitors can switch between all three; their choice is remembered."
 msgstr ""
 
+#: src/Site/BlockRegistry.php:60
+msgid "IWAC Timeline"
+msgstr ""
+
 #: src/Site/BlockRegistry.php:61
+msgid "Present an illustrated historical narrative with a date axis and a complete reading view."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:67
 msgid "Audiovisual Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:62
+#: src/Site/BlockRegistry.php:68
 msgid "Compare collected recordings by source, country, duration and publication year, and see which catalogue fields are available."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:76
+#: src/Site/BlockRegistry.php:82
 msgid "Loading audiovisual overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:82
+#: src/Site/BlockRegistry.php:88
 msgid "Collection Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:83
+#: src/Site/BlockRegistry.php:89
 msgid "Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:99
+#: src/Site/BlockRegistry.php:105
 msgid "Loading collection overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:105
+#: src/Site/BlockRegistry.php:111
 msgid "Compare Newspapers"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:106
+#: src/Site/BlockRegistry.php:112
 msgid "Compare two selections of newspaper articles or Islamic periodical issues by publication year, catalogue tags, vocabulary and available AI ratings. Choose a country or a single publication for each selection."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:124
+#: src/Site/BlockRegistry.php:130
 msgid "Loading newspaper comparison"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:130
+#: src/Site/BlockRegistry.php:136
 msgid "Distinctive Vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:131
+#: src/Site/BlockRegistry.php:137
 msgid "Find words used at higher relative rates in one country or decade than in the remaining newspaper articles. A second view identifies periods of increased use of subject tags. Statistical thresholds are explained alongside the charts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:144
+#: src/Site/BlockRegistry.php:150
 msgid "Loading distinctive vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:150
+#: src/Site/BlockRegistry.php:156
 msgid "Entity Networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:151
+#: src/Site/BlockRegistry.php:157
 msgid "Explore links between people, organisations, places, subjects and events recorded on the same items. Shared records indicate catalogue associations, which require interpretation through the sources."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:163
+#: src/Site/BlockRegistry.php:169
 msgid "Loading entity networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:169
+#: src/Site/BlockRegistry.php:175
 msgid "Index Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:170
+#: src/Site/BlockRegistry.php:176
 msgid "Explore the catalogue index and the use of subject and place tags over time. Counts describe recorded associations rather than word occurrences in the original texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:185
+#: src/Site/BlockRegistry.php:191
 msgid "Loading index overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:191
+#: src/Site/BlockRegistry.php:197
 msgid "Laïcité"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:192
+#: src/Site/BlockRegistry.php:198
 msgid "Explore a dossier selected through the Laïcité subject tag and vocabulary in titles and available full text, including YouTube transcripts. Compare source types, terms in context, associated entries and AI ratings. Descriptive fields are excluded from vocabulary counts; extracts follow each field’s public status."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:228
+#: src/Site/BlockRegistry.php:234
 msgid "Loading laïcité dossier"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:235
+#: src/Site/BlockRegistry.php:241
 msgid "Press Language"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:236
+#: src/Site/BlockRegistry.php:242
 msgid "Compare estimated reading ease, vocabulary diversity and article length over time and by newspaper. Measures use extracted text; the charts explain the scores and their limitations."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:246
+#: src/Site/BlockRegistry.php:252
 msgid "Loading press language metrics"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:252
+#: src/Site/BlockRegistry.php:258
 msgid "On This Day"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:253
+#: src/Site/BlockRegistry.php:259
 msgid "Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade and clipping layouts. Only records with suitable dates can appear."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:259
+#: src/Site/BlockRegistry.php:265
 msgid "Islamic Organisations Co-occurrence"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:260
+#: src/Site/BlockRegistry.php:266
 msgid "Compare pairs of words found near the names of selected Islamic organisations in newspaper articles. Darker cells indicate pairs found together in more articles."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:271
+#: src/Site/BlockRegistry.php:277
 msgid "Loading organisation co-occurrences"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:277
+#: src/Site/BlockRegistry.php:283
 msgid "Periodicals Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:278
+#: src/Site/BlockRegistry.php:284
 msgid "Explore Islamic periodical issues arranged by an AI comparison of their tables of contents. Nearby points suggest issues to compare; positions and distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:291 src/Site/BlockRegistry.php:418
+#: src/Site/BlockRegistry.php:297 src/Site/BlockRegistry.php:424
 msgid "Loading semantic landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:297
+#: src/Site/BlockRegistry.php:303
 msgid "Periodicals Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:298
+#: src/Site/BlockRegistry.php:304
 msgid "Explore Islamic periodical holdings by year, publication, country, language and catalogue subject, with vocabulary and statistically modelled themes. Gaps in the collection do not establish gaps in publication."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:310
+#: src/Site/BlockRegistry.php:316
 msgid "Loading periodicals overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:316
+#: src/Site/BlockRegistry.php:322
 msgid "Press Bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:317
+#: src/Site/BlockRegistry.php:323
 msgid "Explore recorded journalists and press agencies, the share of articles with a byline, and their representation over time. A missing byline may reflect incomplete cataloguing."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:328
+#: src/Site/BlockRegistry.php:334
 msgid "Loading press bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:334
+#: src/Site/BlockRegistry.php:340
 msgid "Press Reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:335
+#: src/Site/BlockRegistry.php:341
 msgid "Find articles from different newspapers with highly similar AI text representations. These candidate pairs may indicate shared dispatches, communiqués or reprints; read both articles before concluding that copying occurred."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:347
+#: src/Site/BlockRegistry.php:353
 msgid "Loading press reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:353
+#: src/Site/BlockRegistry.php:359
 msgid "References Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:354
+#: src/Site/BlockRegistry.php:360
 msgid "Explore the bibliography by publication date, type, language, associated country, author and subject. Additional views show authorship links, available full text, modelled themes and text similarity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:367
+#: src/Site/BlockRegistry.php:373
 msgid "Loading references overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:373
+#: src/Site/BlockRegistry.php:379
 msgid "Scary Terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:374
+#: src/Site/BlockRegistry.php:380
 msgid "Explore selected vocabulary associated with radicalism and extremism in newspaper articles: occurrences, trends, countries, term pairs, surrounding vocabulary and tagged places. Counts describe language use, not the extremism of the people discussed."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:397
+#: src/Site/BlockRegistry.php:403
 msgid "Loading scary terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:404
+#: src/Site/BlockRegistry.php:410
 msgid "Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:405
+#: src/Site/BlockRegistry.php:411
 msgid "Explore newspaper articles arranged by an AI comparison of their full texts, with colours for country, decade or modelled topic. Nearby points suggest texts to compare; distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:424
+#: src/Site/BlockRegistry.php:430
 msgid "Sentiment Atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:425
+#: src/Site/BlockRegistry.php:431
 msgid "Compare AI assessments of tone towards Islam and Muslims, their prominence in articles, and subjectivity. Views show changes over time, differences between sources and model agreement. Ratings require checking against the texts, especially for subjectivity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:436
+#: src/Site/BlockRegistry.php:442
 msgid "Loading sentiment atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:442
+#: src/Site/BlockRegistry.php:448
 msgid "Spatial Exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:443
+#: src/Site/BlockRegistry.php:449
 msgid "Map places linked through catalogue records, with filters for countries and associated people, organisations, subjects or events. Only places with coordinates appear; the map does not include every location mentioned in the texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:454
+#: src/Site/BlockRegistry.php:460
 msgid "Loading spatial exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:460
+#: src/Site/BlockRegistry.php:466
 msgid "Term Trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:461
+#: src/Site/BlockRegistry.php:467
 msgid "Compare the number or share of dated newspaper articles containing selected words. Search the frequent-word vocabulary and compare up to eight terms. Each word counts once per article, and only articles with usable processed text enter the calculation."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:472
+#: src/Site/BlockRegistry.php:478
 msgid "Loading term trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:478
+#: src/Site/BlockRegistry.php:484
 msgid "Topic Explorer"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:479
+#: src/Site/BlockRegistry.php:485
 msgid "Explore 30 themes identified in newspaper articles by a statistical topic model. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:500
+#: src/Site/BlockRegistry.php:506
 msgid "Loading Topic Explorer"
 msgstr ""
 
@@ -377,6 +425,10 @@ msgstr ""
 
 #: src/Site/ResourcePageBlockLayout/Visualizations.php:100 view/common/resource-page-block-layout/item-set-dashboard.phtml:32 view/common/resource-page-block-layout/visualizations/article.phtml:285 view/common/resource-page-block-layout/visualizations/entity.phtml:41 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:127 view/common/resource-page-block-layout/visualizations/person.phtml:39 view/common/resource-page-block-layout/visualizations/publication.phtml:30 view/common/resource-page-block-layout/visualizations/reference.phtml:42
 msgid "Visualisations"
+msgstr ""
+
+#: view/common/block-layout/iwac-timeline.phtml:4
+msgid "This timeline is temporarily unavailable."
 msgstr ""
 
 #: view/common/block-layout/on-this-day.phtml:53
@@ -391,11 +443,11 @@ msgstr ""
 msgid "Loading on this day"
 msgstr ""
 
-#: view/common/iwac-assets.phtml:255
+#: view/common/iwac-assets.phtml:345
 msgid "The visualization could not load."
 msgstr ""
 
-#: view/common/iwac-assets.phtml:256
+#: view/common/iwac-assets.phtml:346
 msgid "Retry"
 msgstr ""
 
@@ -441,6 +493,26 @@ msgstr ""
 
 #: view/common/resource-page-block-layout/visualizations/minimal-item.phtml:128 view/common/resource-page-block-layout/visualizations/publication.phtml:31 view/common/resource-page-block-layout/visualizations/reference.phtml:43
 msgid "Loading visualisations"
+msgstr ""
+
+#: view/common/timeline-reading.phtml:22
+msgid "Introduction"
+msgstr ""
+
+#: view/common/timeline-reading.phtml:39
+msgid "Link to this event"
+msgstr ""
+
+#: view/common/timeline-reading.phtml:45
+msgid "Source document"
+msgstr ""
+
+#: view/common/timeline-reading.phtml:48
+msgid "View location"
+msgstr ""
+
+#: view/common/timeline-reading.phtml:48
+msgid "Open linked media"
 msgstr ""
 
 #: view/iwac-visualizations/admin/data/index.phtml:25
@@ -515,27 +587,27 @@ msgstr ""
 msgid "No sites are available yet. Create a site before using iframe embeds."
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:59 view/iwac-visualizations/embed/index.phtml:86
+#: view/iwac-visualizations/embed/index.phtml:68 view/iwac-visualizations/embed/index.phtml:95
 msgid "Copy"
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:60
+#: view/iwac-visualizations/embed/index.phtml:69
 msgid "Copied!"
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:61
+#: view/iwac-visualizations/embed/index.phtml:70
 msgid "Embed IWAC visualisations"
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:62
+#: view/iwac-visualizations/embed/index.phtml:71
 msgid "Copy a snippet below to embed any visualisation on another website. Each iframe loads live from this site and resizes itself to fit."
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:91
+#: view/iwac-visualizations/embed/index.phtml:100
 msgid "Embed a single panel"
 msgstr ""
 
-#: view/iwac-visualizations/embed/index.phtml:97
+#: view/iwac-visualizations/embed/index.phtml:106
 msgid "Tip: embeds render in light mode by default; append <code>?theme=dark</code> for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour."
 msgstr ""
 

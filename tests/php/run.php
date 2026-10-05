@@ -403,7 +403,7 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 21, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 22, 'page-block registry count drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
@@ -471,7 +471,7 @@ namespace {
         }
     }
     check($shellRows === 20, "expected 20 generic blocks, found $shellRows");
-    check($ownTemplate === 1, "expected 1 block with its own template, found $ownTemplate");
+    check($ownTemplate === 2, "expected 2 blocks with their own template (on-this-day, iwac-timeline), found $ownTemplate");
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
         '_generic.phtml is missing — twenty blocks render through it');
     // The periodicals sheet, specifically: the row that lost it.
@@ -664,6 +664,8 @@ namespace {
             && $flagNames[1] === AssetPlan::FLAGS,
         'AssetPlan::FLAGS is no longer a flat list of single-quoted strings'
     );
+
+    require __DIR__ . '/timeline.php';
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");

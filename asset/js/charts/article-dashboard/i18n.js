@@ -1,21 +1,17 @@
 /**
- * IWAC Visualizations — Article Dashboard translations
+ * IWAC Visualizations — article dashboard block: translations.
  *
- * Strings only this block renders. They used to sit in the shared
- * `iwac-i18n.js`, which every block page loads whole — so a block-only
- * string there was bytes every OTHER page paid for and never used (S24).
+ * Moved out of the shared dictionary (asset/js/iwac-i18n.js), which ships in
+ * shared-core on every page carrying ANY block: these strings are read by this
+ * block alone, so they now travel in its own bundle — built once per locale,
+ * with the other locale's table emptied (scripts/i18n-strip.js).
  *
- * `check-i18n.js` proves the split is correct rather than assuming it: it
- * walks every `t('literal')` in each bundle and fails when a key is not
- * reachable from the shared dictionary plus the dictionaries that bundle
- * carries. Load order matters — this file is FIRST in the block's bundle,
- * so the strings exist before any panel asks for one.
+ * Registered at parse time, before the orchestrator loads.
  */
 (function () {
     'use strict';
-
     var ns = window.IWACVis;
-    if (!ns || !ns.addTranslations) return;
+    if (!ns || !ns.addTranslations) { return; }
 
     ns.addTranslations('en', {
         'Context network': 'This article’s catalogue connections',
@@ -30,12 +26,12 @@
         'desc_further_reading_content':
             'Articles ranked by an AI comparison of their full texts, including articles with no shared catalogue tags. The badge gives a similarity score expressed as a percentage, not the probability of a correct match. Read the articles to assess what they have in common.',
         'shares_n_entities':       '{count} shared tags',
-        'shares_n_entities_one':   '{count} shared tag',
         'No related articles':     'No articles with shared tags',
         'No entities tagged':      'No entities tagged on this article',
         'desc_article_spatial':         'Places recorded in this article’s catalogue tags and located through the IWAC place index. Each pin marks one tagged place; equal pin sizes do not indicate how often a place is named in the text. Click a pin to open its record.',
         'article_place_subtitle':       'Mentioned in this article',
         'No geocoded places':           'No places on this article could be located',
+        'shares_n_entities_one':   '{count} shared tag',
     });
 
     ns.addTranslations('fr', {
@@ -55,7 +51,6 @@
             'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA, y compris sans mots-clés communs dans le catalogue. Le badge indique un score de similarité exprimé en pourcentage, et non la probabilité d’un rapprochement correct. Lisez les articles pour évaluer leurs points communs.',
         'Shares':                  'Partage',
         'shares_n_entities':       '{count} balises partag\u00e9es',
-        'shares_n_entities_one':   '{count} balise partagée',
         'No related articles':     'Aucun article avec des balises communes',
         'No further reading found':'Aucun autre article \u00e0 sugg\u00e9rer',
         'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
@@ -66,5 +61,6 @@
         'desc_article_spatial':         'Lieux indiqués dans les mots-clés de la notice de cet article et localisés grâce à l’index IWAC. Chaque repère correspond à un lieu indexé ; leur taille identique n’indique pas sa fréquence dans le texte. Cliquez sur un repère pour ouvrir sa notice.',
         'article_place_subtitle':       'Mentionn\u00e9 dans cet article',
         'No geocoded places':           'Aucun lieu de cet article n\u2019a pu \u00eatre localis\u00e9',
+        'shares_n_entities_one':   '{count} balise partagée',
     });
 })();

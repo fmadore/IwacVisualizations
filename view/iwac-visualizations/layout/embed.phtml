@@ -81,6 +81,13 @@ if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escapeHtml($embedTitle) ?></title>
+    <?php
+    // The theme's tokens, light and dark, as generated literals: this route
+    // carries no theme stylesheet, so without them every var() rendered its
+    // light fallback — and `?theme=dark` put the charts' dark ink on light
+    // panels. Generated from tokens.json by `npm run build:embed-tokens`.
+    ?>
+    <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl('css/iwac-embed-tokens.min.css', 'IwacVisualizations')) ?>">
     <?= $this->headLink() ?>
     <?= $this->headStyle() ?>
     <?php

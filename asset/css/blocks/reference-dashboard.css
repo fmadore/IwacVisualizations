@@ -25,7 +25,7 @@
     letter-spacing: var(--tracking-wider, 0.08em);
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
-    margin-right: var(--space-sm, 0.5rem);
+    margin-right: var(--space-2, 0.5rem);
 }
 
 .iwac-vis-reference__topic-words {
@@ -38,8 +38,8 @@
 .iwac-vis-reference__reviews {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs, 0.25rem);
-    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    gap: var(--space-1, 0.25rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     border-radius: var(--radius-md, 0.5rem);
     background: color-mix(in oklab, var(--primary, #ce4115) 6%, var(--surface, #fdfcfb));
 }

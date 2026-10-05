@@ -1,0 +1,61 @@
+<?php
+use IwacVisualizations\Timeline\Catalog;
+
+$escape = $this->plugin('escapeHtml');
+$attr = $this->plugin('escapeHtmlAttr');
+$locale = $timeline['locale'];
+$events = $timeline['events'];
+usort($events, static function ($a, $b) {
+    return strcmp($a['start']['value'], $b['start']['value'])
+        ?: ($a['sourceOrder'] <=> $b['sourceOrder']);
+});
+$events = array_merge([$timeline['title']], $events);
+?>
+<section class="iwac-vis-timeline__reading" lang="<?= $attr($locale) ?>" aria-labelledby="<?= $attr($instance) ?>-title">
+    <header class="iwac-vis-timeline__header">
+        <h2 id="<?= $attr($instance) ?>-title"><?= $escape($timeline['title']['headline']) ?></h2>
+    </header>
+    <div class="iwac-vis-timeline__events">
+    <?php foreach ($events as $event):
+        $intro = $event['id'] === 'intro';
+        $date = Catalog::eventDate($event, $locale);
+        $headline = $intro ? $this->translate('Introduction') : ($event['headline'] ?: $date);
+        $eventAnchor = $instance . '-' . $event['id'];
+        $fragment = '#' . $eventAnchor;
+        $media = $event['media'];
+    ?>
+        <article class="iwac-vis-timeline__event" id="<?= $attr($eventAnchor) ?>"
+                 data-event-id="<?= $attr($event['id']) ?>" data-order="<?= $intro ? '-1' : (int) $event['sourceOrder'] ?>"
+                 data-start="<?= $attr($event['start']['value'] ?? '') ?>" data-end="<?= $attr($event['end']['value'] ?? '') ?>"
+                 data-date-label="<?= $attr($date) ?>" aria-labelledby="<?= $attr($eventAnchor) ?>-heading">
+            <div class="iwac-vis-timeline__copy">
+                <?php if (!$intro): ?>
+                <p class="iwac-vis-timeline__dateline">
+                    <time datetime="<?= $attr($event['start']['value']) ?>"><?= $escape($date) ?></time>
+                </p>
+                <?php endif; ?>
+                <h3 id="<?= $attr($eventAnchor) ?>-heading"><?= $escape($headline) ?></h3>
+                <div class="iwac-vis-timeline__prose"><?= $event['textHtml'] ?></div>
+                <a class="iwac-vis-timeline__permalink" href="<?= $attr($fragment) ?>" data-event-link="<?= $attr($event['id']) ?>"><?= $escape($this->translate('Link to this event')) ?></a>
+            </div>
+            <?php if ($media): ?>
+            <figure class="iwac-vis-timeline__media">
+                <?php if ($media['type'] === 'image'): ?>
+                <a href="<?= $attr($media['url']) ?>" class="iwac-vis-timeline__image-link">
+                    <img src="<?= $attr($media['url']) ?>" alt="<?= $attr($media['alt'] ?: $this->translate('Source document')) ?>" loading="lazy" decoding="async">
+                </a>
+                <?php else: ?>
+                <a href="<?= $attr($media['url']) ?>" class="iwac-vis-timeline__external"><?= $escape(($media['type'] === 'map' ? $this->translate('View location') : $this->translate('Open linked media'))) ?></a>
+                <?php endif; ?>
+                <?php if ($media['captionHtml'] || $media['creditHtml']): ?>
+                <figcaption>
+                    <?= $media['captionHtml'] ?>
+                    <?php if ($media['creditHtml']): ?><div class="iwac-vis-timeline__credit"><?= $media['creditHtml'] ?></div><?php endif; ?>
+                </figcaption>
+                <?php endif; ?>
+            </figure>
+            <?php endif; ?>
+        </article>
+    <?php endforeach; ?>
+    </div>
+</section>

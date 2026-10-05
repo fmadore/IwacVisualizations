@@ -2,7 +2,8 @@
 #
 # An Omeka S module is installed by unpacking a zip into `modules/`, so the
 # archive should carry only what the module needs at runtime: Module.php,
-# config/, src/, view/, asset/, language/. Everything below is development
+# config/, src/, view/, asset/, language/, and bin/ operator commands.
+# Everything below is development
 # tooling — the Python generators run in CI (issue #7), never on the server.
 #
 # Deliberately no `text`/`eol` attributes here: this repo has never had a
