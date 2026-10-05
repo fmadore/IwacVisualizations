@@ -10,11 +10,16 @@
  * CDN versions are pinned at the top of the file: single source of
  * truth for every IWAC block. Bump the three constants when upgrading.
  *
- * Usage:
+ * Usage — reached through `common/iwac-block-shell`'s `assets` array, which a
+ * page block declares in its `BlockRegistry` row and a resource-page template
+ * passes directly. The `needs` keys are `AssetPlan::FLAGS`; any other key
+ * throws, because a misspelt flag would otherwise load nothing and say so
+ * nowhere:
  *
  *     <?php echo $this->partial('common/iwac-assets', [
  *         'blockCss'     => 'collection-overview',
  *         'needs'        => [
+ *             'echarts'      => false,          // default ON; pass false to skip it
  *             'maplibre'     => true,           // shared-map bundle + MapLibre
  *             'wordcloud'    => true,           // the echarts-wordcloud plugin
  *             'd3'           => true,           // shared-d3 (canvas force graphs)

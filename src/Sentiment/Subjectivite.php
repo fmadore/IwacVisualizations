@@ -10,8 +10,8 @@ namespace IwacVisualizations\Sentiment;
  * Same shape and same reasoning as `Polarite`; see that file. The one
  * difference is that this axis's score was already carried alongside the
  * label in the old array (`['score' => 3, 'label' => 'Mixed']`), so
- * `Module::getSubjectiviteInfo()` still returns exactly that shape — see
- * `info()` below — and the article partial did not have to change.
+ * `info()` below still returns exactly that shape for `SentimentExtractor`,
+ * and the article partial did not have to change.
  */
 enum Subjectivite: int
 {

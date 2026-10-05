@@ -17,9 +17,10 @@ namespace IwacVisualizations\Site;
  *
  * Now the slug is the spine. It is simultaneously:
  *   - the key of this table,
- *   - the partial name (`common/block-layout/<slug>`),
- *   - the `data-embed-slug` a template emits,
- *   - the embed route segment (`/s/:site/iwac-embed/<slug>`).
+ *   - the `data-embed-slug` the block emits,
+ *   - the embed route segment (`/s/:site/iwac-embed/<slug>`),
+ *   - for the one block without a `shell` row, its partial name
+ *     (`common/block-layout/<slug>`) — see `partialFor()`.
  *
  * `scripts/check-blocks.js` (part of `npm run build`) asserts that the config
  * invokables, the `BlockLayout` subclasses, the templates and this table all
@@ -37,7 +38,16 @@ namespace IwacVisualizations\Site;
 final class BlockRegistry
 {
     /**
-     * slug => [invokable, class, label, description, embeddable].
+     * slug => [invokable, class, label, description, embeddable, shell].
+     *
+     * `shell` is the array `_generic` hands to `common/iwac-block-shell`:
+     * `assets` (forwarded to `common/iwac-assets` — `blockCss`, `needs`,
+     * `bundle`; a `needs` flag must be in `AssetPlan::FLAGS`), `blockClass`,
+     * `loading` and the shell's other optional variables. Only those keys
+     * reach anything: a `blockCss` one level too high is silently dropped,
+     * which is how Periodicals Overview shipped without its stylesheet.
+     * `tests/php/run.php` checks every key against what the partials read.
+     * A row with no `shell` renders through its own template.
      *
      * `embeddable` gates the block from the snippet gallery and the
      * `/iwac-embed/:block` route. Every block qualifies today (they are all
@@ -72,6 +82,22 @@ final class BlockRegistry
             'label'       => 'Collection Overview', // @translate
             'description' => 'Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries.', // @translate
             'embeddable'  => true,
+            'shell'       => [
+                'assets' => [
+                    'blockCss' => 'collection-overview',
+                    'needs' => [
+                        'maplibre'     => true,
+                        'wordcloud'    => true,
+                        'chartOptions' => true,
+                        'facetButtons' => true,
+                        'table'        => true,
+                        'pagination'   => true,
+                    ],
+                    'bundle' => 'collection-overview',
+                ],
+                'blockClass' => 'iwac-vis-overview',
+                'loading'    => 'Loading collection overview', // @translate
+            ],
         ],
         'compare-newspapers' => [
             'invokable'   => 'compareNewspapers',
@@ -273,13 +299,13 @@ final class BlockRegistry
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [
+                    'blockCss' => 'periodicals-overview',
                     'needs' => [
                         'chartOptions' => true,
                         'wordcloud'    => true,
                     ],
                     'bundle' => 'periodicals-overview',
                 ],
-                'blockCss'   => 'periodicals-overview',
                 'blockClass' => 'iwac-vis-periodicals-overview',
                 'loading'    => 'Loading periodicals overview', // @translate
             ],
@@ -489,15 +515,29 @@ final class BlockRegistry
         return self::BLOCKS[$slug] ?? null;
     }
 
-    /** Slug for a BlockLayout class, or null when it is not registered. */
-    public static function slugForClass(string $class): ?string
+    /**
+     * The partial a registered block renders through.
+     *
+     * A row with a `shell` declares its whole asset declaration here and
+     * renders through `_generic`; a row without one has its own
+     * `common/block-layout/<slug>.phtml`, because it does more than declare
+     * (today only `on-this-day`, which reads its layout setting). The block
+     * layouts, the embed view and the integration suite all ask this one
+     * method, so the routing rule cannot drift between them.
+     *
+     * Throws on an unknown slug rather than building a path from it: the
+     * slug reaches here from a URL on the embed route, and only registered
+     * slugs may name a partial.
+     */
+    public static function partialFor(string $slug): string
     {
-        foreach (self::BLOCKS as $slug => $row) {
-            if ($row['class'] === $class) {
-                return $slug;
-            }
+        $row = self::get($slug);
+        if ($row === null) {
+            throw new \InvalidArgumentException('Unknown IWAC block: ' . $slug);
         }
-        return null;
+        return empty($row['shell'])
+            ? 'common/block-layout/' . $slug
+            : 'common/block-layout/_generic';
     }
 
     /**

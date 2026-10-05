@@ -49,8 +49,7 @@ class OnThisDay extends AbstractIwacBlockLayout
         $select->setValueOptions($options);
         $select->setValue($this->layout($block));
 
-        return '<p>' . $view->translate($this->row()['description']) . '</p>'
-            . $view->formRow($select);
+        return parent::form($view, $site, $page, $block) . $view->formRow($select);
     }
 
     /**

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace IwacVisualizations\Site\ResourcePageBlockLayout;
 
-use IwacVisualizations\Module;
+use IwacVisualizations\Sentiment\Centralite;
+use IwacVisualizations\Sentiment\Polarite;
+use IwacVisualizations\Sentiment\Subjectivite;
 use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 
 /**
@@ -11,8 +13,8 @@ use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
  *
  * Reads the `iwac:<model><Axis>` vocabulary properties (linked-resource
  * values that point at items in the authority controlled vocabulary)
- * and resolves each to an English source label via the enum maps in
- * `IwacVisualizations\Module`. The return shape is consumed by
+ * and resolves each to an English source label and a scale position via
+ * the `IwacVisualizations\Sentiment` enums. The return shape is consumed by
  * `view/common/resource-page-block-layout/visualizations/article.phtml`
  * and rendered into the article dashboard's sentiment panel.
  *
@@ -35,7 +37,7 @@ class SentimentExtractor
      * `mistral_small_2603`, `deepseek_v4_flash_0731`, `gemma_4_31b_it`,
      * `qwen3_8_27b`.
      *
-     * A model appears here as soon as its corpus pass STARTS, not when it
+     * A model joins the registry as soon as its corpus pass STARTS, not when it
      * finishes. This class reads Omeka per item, so a partially-annotated
      * model simply has no lane on the articles it has not reached yet —
      * `fromItem` marks it unrated and the partial drops it. The
@@ -68,16 +70,18 @@ class SentimentExtractor
      * NOTE: the precomputed blocks cannot reach a PHP constant, so the JS
      * side has its own display-name table in
      * `asset/js/charts/shared/panels-controls.js`
-     * (`P.sentimentModelLabel`). That table is now the ONLY JS copy, and
-     * it is a label lookup rather than a model list: the panels take
-     * which models to show from their payload's own `models` field, so a
-     * rater-panel change no longer has to be mirrored into JS at all —
-     * only a display name for the new id, and even that degrades to a
-     * readable fallback if it is missed.
+     * (`P.sentimentModelLabel`), generated from the same JSON as the
+     * constants below. It is a label lookup rather than a model list: the
+     * panels take which models to show from their payload's own `models`
+     * field, and an id the table lacks degrades to a readable fallback.
      *
      * This class is different: it reads Omeka properties directly, so
      * MODELS here is a genuine list of which `iwac:` properties to look
-     * at and does have to be updated on a rater-panel change.
+     * at. Neither it nor MODEL_INFO is edited by hand: both alias
+     * `Sentiment\ModelRegistry`, which `scripts/build-model-registry.js`
+     * generates from `config/sentiment-models.json` (as it does the JS
+     * label table) — a rater-panel change is an edit to that JSON and a
+     * re-run, and `npm run lint:models` fails while the two disagree.
      */
     const MODEL_INFO = \IwacVisualizations\Sentiment\ModelRegistry::INFO;
 
@@ -118,9 +122,9 @@ class SentimentExtractor
             $cenResource = self::firstValueResource($item, "iwac:{$model}Centralite");
             $subItemId   = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
 
-            $polLabel = Module::getPolariteLabel($polResource ? $polResource->id() : null);
-            $cenLabel = Module::getCentraliteLabel($cenResource ? $cenResource->id() : null);
-            $subInfo  = Module::getSubjectiviteInfo($subItemId);
+            $polLabel = Polarite::fromItemId($polResource ? $polResource->id() : null)?->label();
+            $cenLabel = Centralite::fromItemId($cenResource ? $cenResource->id() : null)?->label();
+            $subInfo  = Subjectivite::fromItemId($subItemId)?->info();
 
             $out[$model] = [
                 // English source labels — feed into $view->translate()
@@ -142,8 +146,8 @@ class SentimentExtractor
                 // Ordinal position on each 1-5 scale: which stop the
                 // model's marker sits on, and the input to the panel's
                 // agree / nearly-agree / disagree verdict.
-                'polarite_numeric'      => Module::getPolariteNumeric($polLabel),
-                'centralite_numeric'    => Module::getCentraliteNumeric($cenLabel),
+                'polarite_numeric'      => Polarite::ordinalForLabel($polLabel),
+                'centralite_numeric'    => Centralite::ordinalForLabel($cenLabel),
 
                 // Free-text rationale written by each model per axis.
                 'polarite_justification'     => self::literalValue($item, "iwac:{$model}PolariteJustification"),

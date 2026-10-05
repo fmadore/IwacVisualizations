@@ -4,7 +4,7 @@
  *
  * The block-layout partials are zero-configuration: they read the current
  * site + base path (for the data-* hooks the JS orchestrators consume) and
- * never touch `$block`, so rendering one here produces the exact same
+ * never need `$block`, so rendering one here produces the exact same
  * markup, assets, and behaviour as on a normal site page. `$block => null`
  * is passed only to keep the partial's documented variable defined.
  *
@@ -13,13 +13,9 @@
  */
 use IwacVisualizations\Site\BlockRegistry;
 
-// Nineteen of the twenty-one blocks share `_generic`, which reads its whole
-// declaration out of the registry (H5); the two that do more than declare
-// keep their own template. The slug is passed either way — `_generic` needs
-// it to find its row, and the two specific templates ignore it.
-$row = BlockRegistry::get($slug);
-$partial = ($row !== null && !empty($row['shell']))
-    ? 'common/block-layout/_generic'
-    : 'common/block-layout/' . $slug;
-
-echo $this->partial($partial, ['block' => null, 'slug' => $slug]);
+// Twenty of the twenty-one blocks share `_generic`, which reads its whole
+// declaration out of the registry (H5); `on-this-day`, which does more than
+// declare, keeps its own template. `partialFor()` is the same routing rule the
+// block layouts use. The slug is passed either way — `_generic` needs it to
+// find its row, and the specific template ignores it.
+echo $this->partial(BlockRegistry::partialFor($slug), ['block' => null, 'slug' => $slug]);

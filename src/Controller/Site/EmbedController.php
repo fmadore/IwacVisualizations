@@ -40,8 +40,8 @@ class EmbedController extends AbstractActionController
      * every label, and the copy that drifted (v1.21's `press-reprints-detector`
      * slug, which 500'd every embed of that block).
      *
-     * The slug doubles as the `common/block-layout/<slug>` partial name, so
-     * this map is also the directory-traversal guard for the rendered partial.
+     * The slug selects the rendered partial (`BlockRegistry::partialFor()`),
+     * so this map is also the directory-traversal guard for it.
      */
     private static function blocks(): array
     {
@@ -67,9 +67,6 @@ class EmbedController extends AbstractActionController
     }
 
     /**
-     * Render one page block on a bare page for iframe embedding.
-     */
-    /**
      * Let a response be cached for five minutes.
      *
      * Embeds are public, read-only, and fetched by third-party pages that
@@ -85,6 +82,9 @@ class EmbedController extends AbstractActionController
             ->addHeaderLine('Cache-Control', 'public, max-age=300');
     }
 
+    /**
+     * Render one page block on a bare page for iframe embedding.
+     */
     public function blockAction()
     {
         $slug = (string) $this->params()->fromRoute('block', '');

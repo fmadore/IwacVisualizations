@@ -5,6 +5,7 @@ namespace IwacVisualizations\Job;
 
 use Omeka\Job\AbstractJob;
 use IwacVisualizations\Data\Deployment;
+use IwacVisualizations\Data\Manifest;
 use ZipArchive;
 
 /**
@@ -22,7 +23,7 @@ use ZipArchive;
 class SyncData extends AbstractJob
 {
     /** Subdirectory of the Omeka file store; web-served at {basePath}/files/iwac-visualizations/. */
-    const STORE_SUBDIR = 'iwac-visualizations';
+    const STORE_SUBDIR = Deployment::STORE_SUBDIR;
 
     /** Release asset filename produced by .github/workflows/regenerate-data.yml. */
     const ASSET_NAME = 'iwac-data.zip';
@@ -33,8 +34,19 @@ class SyncData extends AbstractJob
     /** Base for the repository's release downloads. */
     const RELEASE_BASE = 'https://github.com/fmadore/IwacVisualizations/releases/download/';
 
-    /** A generated entry that must be present — guards against a 404-HTML-as-zip / truncation. */
-    const MARKER_ENTRY = 'collection-overview.json';
+    /**
+     * The entry checked for before extraction — guards against a
+     * 404-HTML-as-zip or a truncation. The manifest, because nothing can be
+     * published without it: it names and hashes every other entry.
+     */
+    const MANIFEST_ENTRY = 'manifest.json';
+
+    /**
+     * The aggregate every archive must carry (`Manifest::validate()` refuses
+     * one without it), and the file the store root keeps a copy of for the
+     * theme banner (`Deployment::publishRootSnapshot()`).
+     */
+    const MARKER_ENTRY = Deployment::ROOT_SNAPSHOT;
 
     /** Generous extraction ceilings: the normal bundle is ~18k entries / ~120 MB. */
     const MAX_ARCHIVE_ENTRIES = 50000;
@@ -54,25 +66,21 @@ class SyncData extends AbstractJob
             throw new \RuntimeException('Required PHP extension "zip" is missing.');
         }
 
-        /** @var \Omeka\File\Store\Local $store */
-        $store     = $services->get('Omeka\File\Store');
-        $settings  = $services->get('Omeka\Settings');
-        $filesRoot = rtrim((string) $store->getLocalPath(''), '/\\');
-        if ($filesRoot === '' || !is_dir($filesRoot)) {
-            throw new \RuntimeException('Could not resolve the Omeka files directory.');
-        }
-
-        $liveDir  = $filesRoot . '/' . self::STORE_SUBDIR;
-        $workRoot = $liveDir . '.tmp';   // sibling of $liveDir ⇒ same filesystem ⇒ atomic rename()
+        $settings   = $services->get('Omeka\Settings');
+        // One instance for the whole run: the live root, its work sibling
+        // (same filesystem ⇒ atomic rename()) and the lock all derive from it,
+        // the same way the admin controller derives them.
+        $deployment = $this->deploymentFor($services->get('Omeka\File\Store'));
+        $workRoot   = $deployment->workDir();
         if (!is_dir($workRoot) && !@mkdir($workRoot, 0775, true) && !is_dir($workRoot)) {
             throw new \RuntimeException('Could not create work directory: ' . $workRoot);
         }
 
-        $jobId    = (int) $this->job->getId();
-        $lockPath = $workRoot . '/sync.lock';
-        $zipPath  = $workRoot . '/download-' . $jobId . '.zip';
-        $stageDir = $workRoot . '/stage-' . $jobId;
-
+        $jobId       = (int) $this->job->getId();
+        $lockPath    = $deployment->lockPath();
+        $zipPath     = $workRoot . '/download-' . $jobId . '.zip';
+        $sidecarPath = $zipPath . self::CHECKSUM_SUFFIX;
+        $stageDir    = $workRoot . '/stage-' . $jobId;
 
         // Concurrency guard: a non-blocking exclusive lock. The controller also
         // refuses to dispatch when a sync is running; this covers the residual race.
@@ -89,14 +97,14 @@ class SyncData extends AbstractJob
         $tag = trim((string) $this->getArg('tag', ''));
 
         try {
-            (new Deployment())->recover($liveDir, $workRoot);
+            $deployment->recover();
             // Sweep whatever a previous run left behind. The temp trees are
             // job-scoped and cleaned in a `finally`, which does not run on SIGKILL
             // or an OOM kill — and the cleanup only ever removed the CURRENT job's
             // siblings, so every hard-killed sync left roughly 18k files under
             // `files/iwac-visualizations.tmp/` forever. Safe to do here: the
             // exclusive lock above means no other sync is using them.
-            $swept = $this->sweepStaleWork($workRoot, $jobId, $logger);
+            $swept = $this->sweepStaleWork($deployment, $jobId, $logger);
             if ($swept > 0) {
                 $logger->info(sprintf(
                     'IWAC data sync: removed %d orphaned work director%s from an '
@@ -117,20 +125,23 @@ class SyncData extends AbstractJob
             // a server-side request primitive.
             $tag = $this->resolveTag($tag, $workRoot . '/release-' . $jobId . '.json', $logger);
             $url = self::releaseUrlForTag($tag);
-            $logger->info(sprintf('IWAC data sync: downloading %s', $url));
 
-            // 2. Stream the archive to a temp file (GitHub asset URLs 302 → CDN).
+            // 2. The checksum is mandatory and belongs to the resolved release.
+            // Fetched FIRST: it is a few bytes, and a release without a usable
+            // one should fail now, not after a several-hundred-megabyte download.
+            $expectedDigest = $this->fetchDigest($url . self::CHECKSUM_SUFFIX, $sidecarPath, $logger);
+
+            // 3. Stream the archive to a temp file (GitHub asset URLs 302 → CDN).
+            $logger->info(sprintf('IWAC data sync: downloading %s', $url));
             $this->download($url, $zipPath, $logger);
             $bytes = is_file($zipPath) ? (int) filesize($zipPath) : 0;
             if ($bytes <= 0) {
                 throw new \RuntimeException('Downloaded archive is empty.');
             }
             $logger->info(sprintf('IWAC data sync: downloaded %.1f MB.', $bytes / 1048576));
+            $this->verifyDigest($expectedDigest, $zipPath, $logger);
 
-            // The checksum is mandatory and belongs to the resolved release.
-            $this->verifyDigest($url . self::CHECKSUM_SUFFIX, $zipPath, $logger);
-
-            // 3. Verify + extract into a fresh staging dir (never the live dir).
+            // 4. Inspect + extract into a fresh staging dir (never the live dir).
             if ($this->shouldStop()) {
                 $logger->info('IWAC data sync: stop requested before extract — aborting.');
                 return;
@@ -140,9 +151,9 @@ class SyncData extends AbstractJob
                 throw new \RuntimeException('Downloaded file is not a valid ZIP archive.');
             }
             $count = $zip->numFiles;
-            if ($count < 1 || $zip->locateName(self::MARKER_ENTRY) === false) {
+            if ($count < 1 || $zip->locateName(self::MANIFEST_ENTRY) === false) {
                 $zip->close();
-                throw new \RuntimeException('Archive is missing the expected entry "' . self::MARKER_ENTRY . '".');
+                throw new \RuntimeException('Archive is missing the expected entry "' . self::MANIFEST_ENTRY . '".');
             }
             if ($count > self::MAX_ARCHIVE_ENTRIES) {
                 $zip->close();
@@ -206,7 +217,7 @@ class SyncData extends AbstractJob
                 ));
             }
 
-            $this->rrmdir($stageDir);
+            Deployment::removeTree($stageDir);
             if (!@mkdir($stageDir, 0775, true) && !is_dir($stageDir)) {
                 $zip->close();
                 throw new \RuntimeException('Could not create staging directory: ' . $stageDir);
@@ -219,18 +230,20 @@ class SyncData extends AbstractJob
             @unlink($zipPath);
             $logger->info(sprintf('IWAC data sync: extracted %d entries.', $count));
 
+            // 5. Validate and publish the content-addressed generation.
             if ($this->shouldStop()) {
                 $logger->info('IWAC data sync: stop requested before publication.');
                 return;
             }
-            $generation = hash_file('sha256', $stageDir . '/manifest.json');
+            $generation = hash_file('sha256', $stageDir . '/' . self::MANIFEST_ENTRY);
             if (!is_string($generation)) {
                 throw new \RuntimeException('Missing data manifest.');
             }
-            \IwacVisualizations\Data\Manifest::validate($stageDir);
-            (new Deployment())->promote($stageDir, $liveDir, $generation);
+            Manifest::validate($stageDir);
+            $deployment->promote($stageDir, $generation);
 
-            // 5. Record success for the admin status panel + the client cache-buster.
+            // 6. Activate: record success for the admin status panel + the
+            // client cache-buster. This setting IS the active-generation pointer.
             $previous = $settings->get(self::SETTING_LAST_SYNC);
             $settings->set(self::SETTING_LAST_SYNC, [
                 'generation' => $generation,
@@ -239,24 +252,47 @@ class SyncData extends AbstractJob
                 'bytes' => $bytes,
                 'tag'   => $tag !== '' ? $tag : 'data',
             ]);
+
+            // 7. Refresh the root collection-overview.json the IWAC theme's
+            // homepage banner reads — a cross-repo contract, see
+            // Deployment::publishRootSnapshot(). Also on the idempotent
+            // same-generation path, so a re-run repairs a stale or missing
+            // copy. Activation has already succeeded: a failure here costs the
+            // banner fresh figures, not the sync, so it warns and moves on.
             try {
-                (new Deployment())->prune($liveDir, [$generation, $previous['generation'] ?? ''], time());
+                $deployment->publishRootSnapshot($generation);
+            } catch (\Throwable $e) {
+                $logger->warn(
+                    'IWAC data sync: activated successfully; could not refresh the root '
+                    . self::MARKER_ENTRY . ' the theme banner reads: ' . $e->getMessage()
+                );
+            }
+
+            // 8. Retention.
+            try {
+                $deployment->prune([$generation, $previous['generation'] ?? ''], time());
             } catch (\Throwable $e) {
                 $logger->warn('IWAC data sync: activated successfully; retention cleanup failed: ' . $e->getMessage());
             }
             $logger->info('IWAC data sync: complete.');
         } finally {
-            $this->rrmdir($stageDir); // no-op once renamed into place
+            Deployment::removeTree($stageDir); // no-op once renamed into place
             if (is_file($zipPath)) {
                 @unlink($zipPath);
             }
-            if (is_file($zipPath . self::CHECKSUM_SUFFIX)) {
-                @unlink($zipPath . self::CHECKSUM_SUFFIX);
+            if (is_file($sidecarPath)) {
+                @unlink($sidecarPath);
             }
             flock($lock, LOCK_UN);
             fclose($lock);
             // Keep the lock inode: unlinking it permits competing locks.
         }
+    }
+
+    /** The data tree this job publishes into. A seam for the fixture tests. */
+    protected function deploymentFor($store): Deployment
+    {
+        return Deployment::forStore($store);
     }
 
     /**
@@ -312,15 +348,34 @@ class SyncData extends AbstractJob
         }
         try {
             $this->download(self::RELEASE_BASE . 'data/latest.json', $path, $logger);
-            $pointer = json_decode((string) file_get_contents($path), true, 16, JSON_THROW_ON_ERROR);
-            $resolved = $pointer['tag'] ?? '';
-            if (!is_string($resolved) || !preg_match('/^data-build-[0-9]+-[0-9]+$/D', $resolved)) {
-                throw new \RuntimeException('Invalid data release pointer.');
-            }
-            return $resolved;
+            return self::tagFromPointer((string) @file_get_contents($path));
         } finally {
             @unlink($path);
         }
+    }
+
+    /**
+     * The immutable `data-build-<run>-<attempt>` tag a `data/latest.json`
+     * pointer names, or a RuntimeException for anything else — malformed
+     * JSON, a missing key, or a tag outside the pattern the workflow writes.
+     *
+     * Pure, and separate from `resolveTag()`, because the fixture job
+     * replaces `resolveTag()` to stay off the network — which meant the
+     * parsing, the one part with a security boundary (the tag ends up in a
+     * download URL), never ran under test.
+     */
+    public static function tagFromPointer(string $json): string
+    {
+        try {
+            $pointer = json_decode($json, true, 16, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \RuntimeException('Invalid data release pointer.', 0, $e);
+        }
+        $resolved = is_array($pointer) ? ($pointer['tag'] ?? '') : '';
+        if (!is_string($resolved) || !preg_match('/^data-build-[0-9]+-[0-9]+$/D', $resolved)) {
+            throw new \RuntimeException('Invalid data release pointer.');
+        }
+        return $resolved;
     }
 
     /**
@@ -334,10 +389,14 @@ class SyncData extends AbstractJob
         return $type === 0 || $type === 0100000 || $type === 0040000;
     }
 
-    /** Require a matching checksum. Protected for fixture-based network tests. */
-    protected function verifyDigest(string $sidecarUrl, string $zipPath, $logger): void
+    /**
+     * The digest the release's checksum sidecar declares for the archive.
+     * Throws when the sidecar cannot be fetched or does not name this
+     * archive: an unverifiable archive is never installed. Protected for the
+     * fixture tests, which supply the fixture's own digest.
+     */
+    protected function fetchDigest(string $sidecarUrl, string $sidecarPath, $logger): string
     {
-        $sidecarPath = $zipPath . self::CHECKSUM_SUFFIX;
         try {
             $this->download($sidecarUrl, $sidecarPath, $logger);
         } catch (\RuntimeException $e) {
@@ -351,6 +410,12 @@ class SyncData extends AbstractJob
                 'The checksum sidecar is malformed; refusing to install an unverified archive.'
             );
         }
+        return $expected;
+    }
+
+    /** Require the downloaded archive to match the digest `fetchDigest()` returned. */
+    protected function verifyDigest(string $expected, string $zipPath, $logger): void
+    {
         $actual = hash_file('sha256', $zipPath);
         if (!is_string($actual) || !hash_equals($expected, strtolower($actual))) {
             throw new \RuntimeException(
@@ -362,7 +427,8 @@ class SyncData extends AbstractJob
 
     /**
      * Stream a URL to a destination file, retrying once on a transport
-     * failure.
+     * failure. The job's one network seam — protected so the fixture tests
+     * can replace it with a local copy.
      *
      * A 300 MB download over a CDN fails sometimes for reasons that have
      * nothing to do with the archive: a dropped connection, a timeout, a
@@ -372,7 +438,6 @@ class SyncData extends AbstractJob
      * not connect), 28 (timed out), 56 (receive error) — so an HTTP 404 or a
      * TLS failure still fails immediately, because those will fail again.
      */
-    /** The other network seam - see verifyDigest() above. */
     protected function download(string $url, string $dest, $logger): void
     {
         $transient = [7, 28, 56];   // CURLE_COULDNT_CONNECT / OPERATION_TIMEDOUT / RECV_ERROR
@@ -392,10 +457,15 @@ class SyncData extends AbstractJob
         $this->downloadOnce($url, $dest, $logger);
     }
 
-    /** curl errno of the most recent attempt, so `download()` can decide. */
-    private int $lastCurlErrno = 0;
+    /**
+     * curl errno of the most recent attempt, so `download()` can decide.
+     * Protected, with `downloadOnce()`, so the retry policy can be tested
+     * against scripted failures instead of a real flaky network.
+     */
+    protected int $lastCurlErrno = 0;
 
-    private function downloadOnce(string $url, string $dest, $logger): void
+    /** One transfer attempt; records its curl errno in `$lastCurlErrno`. */
+    protected function downloadOnce(string $url, string $dest, $logger): void
     {
         $this->lastCurlErrno = 0;
         if (function_exists('curl_init')) {
@@ -457,69 +527,64 @@ class SyncData extends AbstractJob
     }
 
     /**
+     * The work-directory entries a sync creates, by kind, with the suffixes
+     * each may carry. The sweep below recognises exactly these; anything
+     * else under the work root is not this job's to delete.
+     */
+    const WORK_ENTRY_SUFFIXES = [
+        'stage'    => [''],
+        'old'      => [''],
+        'download' => ['.zip', '.zip' . self::CHECKSUM_SUFFIX],
+        'release'  => ['.json'],
+    ];
+
+    /**
      * Remove work directories and downloads left by a run that never reached
      * its `finally` — a SIGKILL, an OOM kill, a fatal restart.
      *
      * Only entries matching the job-scoped names this class creates are
      * touched, and only ones belonging to a DIFFERENT job id than the current
-     * one; `$workRoot` is a sibling of the live tree and must never be swept
-     * indiscriminately. The exclusive lock held by the caller is what makes
-     * this safe: no other sync can be using them.
+     * one; the work root is a sibling of the live tree and must never be
+     * swept indiscriminately. The exclusive lock held by the caller is what
+     * makes this safe: no other sync can be using them.
+     *
+     * An `old-<id>` holding a `collection-overview.json` is the backup the
+     * legacy two-rename swap left, and `Deployment::recover()` can still
+     * restore it — but only while no `generations/` exists, since recovery
+     * stands down once one does. From then on it is unreachable, so it is
+     * swept like any other orphan rather than kept forever.
      *
      * @return int how many entries were removed
      */
-    private function sweepStaleWork(string $workRoot, int $jobId, $logger): int
+    private function sweepStaleWork(Deployment $deployment, int $jobId, $logger): int
     {
+        $workRoot = $deployment->workDir();
         $entries = @scandir($workRoot);
         if ($entries === false) {
             return 0;
         }
+        $recoverable = !is_dir($deployment->liveDir() . '/generations');
         $removed = 0;
         foreach ($entries as $entry) {
-            if ($entry === '.' || $entry === '..' || $entry === 'sync.lock') {
-                continue;
-            }
-            if (!preg_match('~^(stage|old|download)-(\d+)(\.zip)?$~', $entry, $m)) {
-                continue;
+            if (!preg_match('~^(stage|old|download|release)-(\d+)(.*)$~D', $entry, $m)
+                || !in_array($m[3], self::WORK_ENTRY_SUFFIXES[$m[1]], true)
+            ) {
+                continue;   // `.`, `..`, sync.lock, and anything not ours
             }
             if ((int) $m[2] === $jobId) {
                 continue;   // this run's own, cleaned by the finally below
             }
-            if ($m[1] === 'old' && is_file($workRoot . '/' . $entry . '/collection-overview.json')) {
-                continue; // A recoverable legacy backup is never an orphan.
-            }
             $path = $workRoot . '/' . $entry;
-            if (is_dir($path)) {
-                $this->rrmdir($path);
-            } else {
-                @unlink($path);
+            if ($m[1] === 'old' && $recoverable && is_file($path . '/' . self::MARKER_ENTRY)) {
+                continue;   // a legacy backup recover() could still restore
             }
-            if (!file_exists($path)) {
+            Deployment::removeTree($path);
+            if (!file_exists($path) && !is_link($path)) {
                 $removed++;
             } else {
                 $logger->warn('IWAC data sync: could not remove stale work entry ' . $path);
             }
         }
         return $removed;
-    }
-
-    /** Recursively remove a directory tree. No-op if it does not exist. */
-    private function rrmdir(string $dir): void
-    {
-        if (!is_dir($dir)) {
-            return;
-        }
-        $items = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($items as $item) {
-            if ($item->isDir()) {
-                @rmdir($item->getPathname());
-            } else {
-                @unlink($item->getPathname());
-            }
-        }
-        @rmdir($dir);
     }
 }

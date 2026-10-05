@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace IwacVisualizations\Controller\Admin;
 
+use IwacVisualizations\Data\Deployment;
 use IwacVisualizations\Job\SyncData;
 use Laminas\Form\Element;
 use Laminas\Form\Form;
@@ -23,12 +24,21 @@ class DataController extends AbstractActionController
     /** Job statuses that mean a sync is still active. */
     const ACTIVE_STATUSES = ['starting', 'in_progress', 'stopping'];
 
+    /** The three things a submitted sync form can lead to; see `syncDecision()`. */
+    const DECISION_DISPATCH = 'dispatch';
+    const DECISION_REFUSE = 'refuse';
+    const DECISION_RECOVER = 'recover';
+
     /** @var \Omeka\File\Store\StoreInterface */
     protected $store;
 
-    public function __construct($store)
+    /** @var \Doctrine\ORM\EntityManager|null */
+    protected $entityManager;
+
+    public function __construct($store, $entityManager = null)
     {
         $this->store = $store;
+        $this->entityManager = $entityManager;
     }
 
     public function indexAction()
@@ -47,6 +57,20 @@ class DataController extends AbstractActionController
     }
 
     /**
+     * The data tree, derived exactly as the sync job derives it — or null
+     * when the file store is not a local directory, in which case there is
+     * nothing on disk to read or to probe.
+     */
+    private function deployment(): ?Deployment
+    {
+        try {
+            return Deployment::forStore($this->store);
+        } catch (\RuntimeException $e) {
+            return null;
+        }
+    }
+
+    /**
      * Read the synced corpus-health.json (ROADMAP 9.10) from the file
      * store, if a data pull has delivered one. Returns the decoded
      * bundle or null — the view renders the meters only when present,
@@ -54,12 +78,12 @@ class DataController extends AbstractActionController
      */
     private function loadCorpusHealth(): ?array
     {
-        if (!$this->store || !method_exists($this->store, 'getLocalPath')) {
+        $deployment = $this->deployment();
+        if ($deployment === null) {
             return null;
         }
-        $path = rtrim((string) $this->store->getLocalPath(''), '/\\')
-            . '/' . SyncData::STORE_SUBDIR
-            . \IwacVisualizations\Data\Deployment::generationPath($this->settings()->get(SyncData::SETTING_LAST_SYNC))
+        $path = $deployment->liveDir()
+            . Deployment::generationPath($this->settings()->get(SyncData::SETTING_LAST_SYNC))
             . '/corpus-health.json';
         if (!is_readable($path)) {
             return null;
@@ -81,20 +105,25 @@ class DataController extends AbstractActionController
             return $this->redirect()->toRoute('admin/iwac-visualizations');
         }
 
-        // Refuse to start a second sync while one is active.
+        // Refuse to start a second sync while one is active — unless the
+        // admin asked to recover and no worker holds the lock, which means
+        // the "running" job is a record of a process that is gone.
         $running = $this->findRunningSync();
         $recover = (bool) $form->get('recover')->getValue();
-        $canRecover = false;
-        if ($running && $recover && $this->store && method_exists($this->store, 'getLocalPath')) {
-            $work = rtrim((string) $this->store->getLocalPath(''), '/\\')
-                . '/' . SyncData::STORE_SUBDIR . '.tmp';
-            $canRecover = !\IwacVisualizations\Data\Deployment::isLocked($work);
-        }
-        if ($running && !$canRecover) {
+        $deployment = ($running && $recover) ? $this->deployment() : null;
+        $decision = self::syncDecision(
+            $running !== null,
+            $recover,
+            $deployment !== null && !$deployment->isLocked()
+        );
+        if ($decision === self::DECISION_REFUSE) {
             $this->messenger()->addWarning('A data sync is already running.'); // @translate
             return $this->redirect()->toRoute('admin/id', [
                 'controller' => 'job', 'action' => 'show', 'id' => $running->id(),
             ]);
+        }
+        if ($decision === self::DECISION_RECOVER && $this->retireStaleSync((int) $running->id())) {
+            $this->messenger()->addWarning('The interrupted sync was marked as failed: no worker held the data lock.'); // @translate
         }
 
         $args = [];
@@ -109,6 +138,64 @@ class DataController extends AbstractActionController
         return $this->redirect()->toRoute('admin/id', [
             'controller' => 'job', 'action' => 'show', 'id' => $job->getId(),
         ]);
+    }
+
+    /**
+     * What a valid sync submission does.
+     *
+     *   - nothing running              → dispatch a new job;
+     *   - running, no recovery asked   → refuse, and point at the running job;
+     *   - running, recovery asked, but a worker holds the lock (or the lock
+     *     cannot be probed)            → refuse: the job is genuinely alive;
+     *   - running, recovery asked, lock free → recover: close the stale job,
+     *     then dispatch.
+     *
+     * Pure, so the table above is tested without a request or a database.
+     */
+    public static function syncDecision(bool $running, bool $recoverRequested, bool $lockFree): string
+    {
+        if (!$running) {
+            return self::DECISION_DISPATCH;
+        }
+        return ($recoverRequested && $lockFree) ? self::DECISION_RECOVER : self::DECISION_REFUSE;
+    }
+
+    /**
+     * Close a sync job whose worker is gone: status `error`, an end time, a
+     * line in its own log saying why.
+     *
+     * Recovery used to dispatch the replacement and leave the dead job's row
+     * as it was — `in_progress` or `stopping` — so `findRunningSync()` went
+     * on returning it, every later pull needed the recovery box again, and
+     * the admin page reported a sync running forever. Only a job still in an
+     * active status is touched; one that finished in the meantime is left as
+     * it ended.
+     *
+     * @return bool whether a job was closed
+     */
+    protected function retireStaleSync(int $jobId): bool
+    {
+        if (!$this->entityManager) {
+            return false;
+        }
+        $job = $this->entityManager->find(\Omeka\Entity\Job::class, $jobId);
+        if (!$job || !in_array($job->getStatus(), self::ACTIVE_STATUSES, true)) {
+            return false;
+        }
+        $previous = (string) $job->getStatus();
+        $job->setStatus(\Omeka\Entity\Job::STATUS_ERROR);
+        $job->setEnded(new \DateTime('now'));
+        $job->addLog(sprintf(
+            'IWAC data sync: marked as failed by an admin recovery — the job was "%s" but no worker held the data lock.',
+            $previous
+        ));
+        $this->entityManager->flush();
+        $this->logger()->warn(sprintf(
+            'IWAC data sync: job #%d was "%s" with no worker holding the data lock; marked as failed so a new sync could start.',
+            $jobId,
+            $previous
+        ));
+        return true;
     }
 
     /**

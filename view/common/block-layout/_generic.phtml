@@ -2,9 +2,9 @@
 /**
  * The block template every zero-configuration IWAC block renders through.
  *
- * **Why there is one file instead of nineteen.** Until v1.65.0 each block had
- * its own `<slug>.phtml`, and nineteen of the twenty-one were the same single
- * call to `common/iwac-block-shell` with a different literal array — the CSS
+ * **Why there is one file instead of twenty.** Until v1.65.0 each block had
+ * its own `<slug>.phtml`, and almost all of them were the same single call
+ * to `common/iwac-block-shell` with a different literal array — the CSS
  * sheet, the `needs` flags, the bundle name, the loading message. That put a
  * block's asset declaration in a different place from every other fact about
  * it: the label, the description, the embed slug and the embeddability all
@@ -12,10 +12,11 @@
  * the block layouts all read. "Which blocks load MapLibre?" was nineteen
  * files to open; it is one array now.
  *
- * `collection-overview` retains its dedicated asset template; `on-this-day`
- * has its own template to read its layout setting. A registry row
- * without a `shell` key gets its own template; `AbstractIwacBlockLayout`
- * routes on exactly that.
+ * Twenty of the twenty-one blocks render here. `on-this-day` keeps its own
+ * template because it does more than declare: it reads its layout setting
+ * and builds a server-rendered noscript slot. A registry row without a
+ * `shell` key gets its own template; `BlockRegistry::partialFor()` routes on
+ * exactly that, for the block layouts and the embed view alike.
  *
  * The loading message is a plain string in the registry, marked
  * `// @translate` and translated here, for the same reason `label` and
@@ -31,10 +32,9 @@ use IwacVisualizations\Site\BlockRegistry;
 
 $row = BlockRegistry::get($slug);
 if ($row === null || empty($row['shell'])) {
-    // Unreachable through either caller: the block layout only routes here
-    // when the row has a shell, and the embed controller validates the slug
-    // against the same registry. Rendering nothing beats rendering a
-    // half-built block.
+    // Unreachable through either caller: both route here through
+    // `BlockRegistry::partialFor()`, which only answers `_generic` for a row
+    // that has a shell. Rendering nothing beats rendering a half-built block.
     return;
 }
 

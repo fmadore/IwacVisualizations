@@ -147,7 +147,7 @@ if ($hasSentiment) {
 ?>
     <section class="iwac-vis-panel iwac-vis-panel--wide iwac-vis-article__sentiment"
              data-iwac-no-panel-toolbar="1">
-        <h4><?= $translate('AI sentiment') ?></h4>
+        <h4><?= $escapeHtml($translate('AI sentiment')) ?></h4>
         <p class="iwac-vis-panel-desc">
             <?= $escapeHtml(sprintf(
                 $translate('AI assessments produced independently by %s. Polarity describes the tone towards Islam and Muslims; centrality describes their prominence in the article; subjectivity describes factual or opinion-based language. These ratings need checking against the text. Subjectivity is particularly uncertain, and agreement between models does not establish accuracy.'),
@@ -230,7 +230,7 @@ if ($hasSentiment) {
 
                 <?php if ($justs): ?>
                 <details class="iwac-vis-sent-axis__why">
-                    <summary><?= $translate('Show reasoning') ?></summary>
+                    <summary><?= $escapeHtml($translate('Show reasoning')) ?></summary>
                     <div class="iwac-vis-sent-why">
                         <?php foreach ($justs as $model => $text): ?>
                         <div class="iwac-vis-sent-why__item">

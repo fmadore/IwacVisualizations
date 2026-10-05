@@ -118,8 +118,16 @@ foreach ($routeCases as $path => $expectedName) {
 }
 
 $renderer = $services->get('ViewRenderer');
-$resolved = $renderer->resolver()->resolve('common/block-layout/collection-overview', $renderer);
-checkIntegration(is_string($resolved) && is_file($resolved), 'module page-block template did not resolve');
+// Both shapes of block template: the registry-shell blocks' shared
+// `_generic`, and the one block that keeps its own.
+foreach (['collection-overview', 'on-this-day'] as $templateSlug) {
+    $templatePartial = BlockRegistry::partialFor($templateSlug);
+    $resolved = $renderer->resolver()->resolve($templatePartial, $renderer);
+    checkIntegration(
+        is_string($resolved) && is_file($resolved),
+        "module page-block template {$templatePartial} did not resolve"
+    );
+}
 
 // Hydrate the site/page/block rows seeded by CI through Omeka's real API and
 // render the registered layout. This reaches beyond service resolution into
@@ -374,19 +382,83 @@ foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
     $got = $dispatchEmbed(['block' => $slug], []);
     checkIntegration($got['status'] === 200, "registry block '{$slug}' is not dispatchable as an embed");
     // The partial the embed view will actually reach for. Since H5 that is
-    // `_generic` for the nineteen blocks whose registry row declares a
-    // shell, and a per-slug template for the two that do more than declare
-    // - the same rule as embed/block.phtml, asserted here because a block
-    // that resolves to nothing 500s every embed of it (v1.21).
-    $row = BlockRegistry::get($slug);
-    $partial = ($row !== null && !empty($row['shell']))
-        ? 'common/block-layout/_generic'
-        : 'common/block-layout/' . $slug;
+    // `_generic` for the twenty blocks whose registry row declares a shell,
+    // and a per-slug template for the one that does more than declare -
+    // `BlockRegistry::partialFor()`, the rule embed/block.phtml and the block
+    // layouts both call, asserted here because a block that resolves to
+    // nothing 500s every embed of it (v1.21).
+    $partial = BlockRegistry::partialFor($slug);
     $resolvedPartial = $renderer->resolver()->resolve($partial, $renderer);
     checkIntegration(
         is_string($resolvedPartial) && is_file($resolvedPartial),
         "embeddable block '{$slug}' has no {$partial} template"
     );
+}
+
+// 7. The snippet gallery: indexAction, dispatched and RENDERED. It was the
+// one action nothing exercised, and the one that broke - after the bundling
+// commit its helper script was a 404, `IWACVis.embed` never existed, and the
+// page rendered no snippets for months with no error anywhere. So beyond the
+// controller's decisions, every script the rendered page enqueues must be a
+// file the module ships, and none of it may be inline.
+$galleryController = $controllers->get('IwacVisualizations\Controller\Site\Embed');
+$galleryPlugins = new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager());
+$galleryCurrentSite = new \Omeka\Mvc\Controller\Plugin\CurrentSite();
+$galleryCurrentSite->setSite($site);
+$galleryPlugins->setService('currentSite', $galleryCurrentSite);
+$galleryController->setPluginManager($galleryPlugins);
+$galleryEvent = new MvcEvent();
+$galleryEvent->setRouteMatch(new RouteMatch(['action' => 'index']));
+$galleryEvent->setViewModel(new \Laminas\View\Model\ViewModel());
+$galleryController->setEvent($galleryEvent);
+$galleryResponse = new Response();
+$galleryView = $galleryController->dispatch(new Request(), $galleryResponse);
+checkIntegration($galleryResponse->getStatusCode() === 200, 'the embed gallery did not return 200');
+checkIntegration(
+    $galleryView->getTemplate() === 'iwac-visualizations/embed/index',
+    'the embed gallery rendered the wrong template: ' . var_export($galleryView->getTemplate(), true)
+);
+checkIntegration(
+    $galleryView->getVariable('blocks') === BlockRegistry::embeddable(),
+    'the embed gallery does not list exactly the embeddable registry blocks'
+);
+checkIntegration($galleryView->getVariable('siteSlug') === $site->slug(), 'the embed gallery lost its site slug');
+checkIntegration(
+    ($galleryEvent->getViewModel()->getVariable('isGallery')) === true,
+    'the embed gallery did not mark its layout as the gallery'
+);
+checkIntegration(
+    strpos((string) $galleryResponse->getHeaders()->get('Cache-Control')->getFieldValue(), 'max-age=300') !== false,
+    'the embed gallery was not marked cacheable'
+);
+try {
+    $galleryHtml = html_entity_decode($renderer->render($galleryView), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    checkIntegration(strpos($galleryHtml, '<script') === false,
+        'the embed gallery emits inline script, which a `script-src \'self\'` policy refuses');
+    checkIntegration(strpos($galleryHtml, 'data-label-copy=') !== false,
+        'the embed gallery lost the translated labels its script reads');
+    foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+        checkIntegration(strpos($galleryHtml, 'data-slug="' . $slug . '"') !== false,
+            "the embed gallery has no card for '{$slug}'");
+    }
+    // Attribute values are entity-escaped (`/` as `&#x2F;`); compare decoded.
+    $galleryScripts = html_entity_decode(
+        (string) $renderer->plugin('headScript')->toString(),
+        ENT_QUOTES | ENT_HTML5,
+        'UTF-8'
+    );
+    foreach (['js/dist/shared-core.min.js', 'js/dist/shared-embed-gallery.min.js'] as $needed) {
+        checkIntegration(strpos($galleryScripts, $needed) !== false, "the embed gallery does not load {$needed}");
+    }
+    preg_match_all('~/modules/IwacVisualizations/asset/([^"?\s]+)~', $galleryScripts, $galleryAssets);
+    foreach (array_unique($galleryAssets[1]) as $assetPath) {
+        checkIntegration(
+            is_file(dirname(__DIR__, 2) . '/asset/' . $assetPath),
+            "a page enqueues asset/{$assetPath}, which the module does not ship"
+        );
+    }
+} catch (\Throwable $e) {
+    checkIntegration(false, 'the embed gallery failed to render: ' . $e->getMessage());
 }
 
 // Exercise the real Laminas response headers around the embed framing policy.
@@ -424,6 +496,72 @@ checkIntegration(
     'embed response did not preserve and relax its existing CSP: '
         . json_encode($cspValues)
 );
+
+// ---------------------------------------------------------------------------
+// Stale-sync recovery, against the real job table.
+//
+// When the admin ticks "retry an interrupted sync" and no worker holds the
+// data lock, the controller dispatches a new job - and must also close the
+// dead one. It used to leave it `in_progress` / `stopping`, so
+// `findRunningSync()` returned it forever: every later pull needed the
+// recovery box again and the admin page reported a sync that never ended.
+// The decision table itself is pure and covered in tests/php/run.php; this
+// covers the write - through the controller the factory builds, so the
+// entity manager injection is part of what is tested.
+$entityManager = $services->get('Omeka\\EntityManager');
+$dataController = $controllers->get('IwacVisualizations\\Controller\\Admin\\Data');
+$retire = new ReflectionMethod($dataController, 'retireStaleSync');
+$staleJobs = [];
+$makeJob = function (string $status) use ($entityManager, &$staleJobs): int {
+    $job = new \Omeka\Entity\Job();
+    $job->setClass(\IwacVisualizations\Job\SyncData::class);
+    $job->setArgs([]);
+    $job->setStatus($status);
+    $entityManager->persist($job);
+    $entityManager->flush();
+    $staleJobs[] = $job;
+    return (int) $job->getId();
+};
+// Re-read from the database, not the identity map: the point is what was
+// flushed. Through the ORM rather than raw DBAL, whose fetch API differs
+// across the Omeka versions the matrix boots.
+$jobRow = function (int $id) use ($entityManager): array {
+    $job = $entityManager->find(\Omeka\Entity\Job::class, $id);
+    if (!$job) {
+        return [];
+    }
+    $entityManager->refresh($job);
+    return ['status' => $job->getStatus(), 'ended' => $job->getEnded(), 'log' => $job->getLog()];
+};
+try {
+    foreach (['in_progress', 'stopping', 'starting'] as $staleStatus) {
+        $staleId = $makeJob($staleStatus);
+        checkIntegration($retire->invoke($dataController, $staleId) === true,
+            "a stale '{$staleStatus}' sync was not retired");
+        $row = $jobRow($staleId);
+        checkIntegration(($row['status'] ?? null) === \Omeka\Entity\Job::STATUS_ERROR,
+            "a retired '{$staleStatus}' sync is still '" . ($row['status'] ?? 'missing') . "'");
+        checkIntegration(!empty($row['ended']), "a retired '{$staleStatus}' sync has no end time");
+        checkIntegration(strpos((string) ($row['log'] ?? ''), 'admin recovery') !== false,
+            "a retired '{$staleStatus}' sync does not say why in its own log");
+        checkIntegration($retire->invoke($dataController, $staleId) === false,
+            'retiring an already-retired sync did something');
+    }
+    // A job that finished between the page load and the submission is left
+    // exactly as it ended.
+    $finishedId = $makeJob(\Omeka\Entity\Job::STATUS_COMPLETED);
+    checkIntegration($retire->invoke($dataController, $finishedId) === false, 'a completed sync was retired');
+    checkIntegration(($jobRow($finishedId)['status'] ?? null) === \Omeka\Entity\Job::STATUS_COMPLETED,
+        'retiring rewrote a completed sync');
+    checkIntegration($retire->invoke($dataController, 999999999) === false, 'a missing job was "retired"');
+} catch (\Throwable $e) {
+    checkIntegration(false, 'stale-sync recovery threw: ' . $e->getMessage());
+} finally {
+    foreach ($staleJobs as $staleJob) {
+        $entityManager->remove($staleJob);
+    }
+    $entityManager->flush();
+}
 
 if ($failures) {
     fwrite(STDERR, "\nOmeka integration tests failed:\n");

@@ -121,11 +121,14 @@ namespace Omeka\Site\ResourcePageBlockLayout {
 }
 
 namespace {
+    use IwacVisualizations\Controller\Admin\DataController;
     use IwacVisualizations\Job\SyncData;
     use IwacVisualizations\Module;
+    use IwacVisualizations\Mvc\EmbedFramingListener;
     use IwacVisualizations\Sentiment\Centralite;
     use IwacVisualizations\Sentiment\Polarite;
     use IwacVisualizations\Sentiment\Subjectivite;
+    use IwacVisualizations\Site\AssetPlan;
     use IwacVisualizations\Site\BlockRegistry;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
@@ -143,6 +146,7 @@ namespace {
     require $root . '/Module.php';
     $coldModule = new \IwacVisualizations\Module();
     require $root . '/src/Site/BlockRegistry.php';
+    require $root . '/src/Site/AssetPlan.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
     require $root . '/src/Controller/Admin/DataController.php';
@@ -257,7 +261,7 @@ namespace {
     }
 
     // Controlled-vocabulary lookup and default metadata filtering.
-    check(Module::getPolariteLabel(78040) === 'Negative', 'polarity item mapping drifted');
+    check(Polarite::fromItemId(78040)?->label() === 'Negative', 'polarity item mapping drifted');
 
     // The three sentiment axes are enums (Tier 8 / H4). What matters is not
     // that a `match` compiles but that the closed set still holds the same
@@ -317,10 +321,16 @@ namespace {
         Subjectivite::fromItemId(78045)?->info() === ['score' => 3, 'label' => 'Mixed'],
         'the subjectivity info shape the article partial reads changed'
     );
-    check(Module::getCentraliteNumeric('Very central') === 5, 'centrality scale drifted');
-    check(Module::getPolariteNumeric('Not applicable') === 0, 'off-scale polarity drifted');
+    check(Centralite::ordinalForLabel('Very central') === 5, 'centrality scale drifted');
+    check(Polarite::ordinalForLabel('Not applicable') === 0, 'off-scale polarity drifted');
+    // The five `Module::get*` shims these used to go through are gone, as is
+    // the deprecated CSP alias, and nothing may call them back into existence.
+    foreach (['getCentraliteLabel', 'getPolariteLabel', 'getSubjectiviteInfo',
+        'getCentraliteNumeric', 'getPolariteNumeric', 'relaxFrameAncestorsPolicies'] as $gone) {
+        check(!method_exists(Module::class, $gone), "Module::$gone() is back; call the owning class");
+    }
 
-    $csp = Module::relaxFrameAncestorsPolicies([
+    $csp = EmbedFramingListener::relaxFrameAncestorsPolicies([
         "default-src 'self'; frame-ancestors 'self'; img-src data:",
         "script-src 'none', default-src https:; frame-ancestors https://slides.example",
     ]);
@@ -333,7 +343,7 @@ namespace {
         'every policy in a CSP policy list must relax frame-ancestors'
     );
     check(
-        Module::relaxFrameAncestorsPolicies([]) === ['frame-ancestors *'],
+        EmbedFramingListener::relaxFrameAncestorsPolicies([]) === ['frame-ancestors *'],
         'missing CSP did not receive a framing policy'
     );
 
@@ -398,10 +408,20 @@ namespace {
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
 
-    // H5: nineteen blocks declare their whole shell in the registry and
-    // render through `_generic`; the two that do more than declare keep
-    // their own template. Both halves are asserted, because a block with
+    // H5: twenty blocks declare their whole shell in the registry and
+    // render through `_generic`; `on-this-day`, which does more than declare,
+    // keeps its own template. Both halves are asserted, because a block with
     // NEITHER renders nothing and a block with BOTH renders the wrong one.
+    //
+    // The keys are checked too, against what the partials actually read: a
+    // key one level off is not an error anywhere, it is just never read.
+    // Periodicals Overview shipped for releases with `blockCss` beside
+    // `assets` instead of inside it, and so without its stylesheet.
+    $shellKeys = [   // view/common/iwac-block-shell.phtml
+        'assets', 'blockClass', 'heading', 'headingLevel', 'loading', 'loadingClass',
+        'prerendered', 'append', 'noscript', 'data', 'siteBase',
+    ];
+    $assetKeys = ['blockCss', 'needs', 'bundle'];   // view/common/iwac-assets.phtml
     $shellRows = 0;
     $ownTemplate = 0;
     foreach (BlockRegistry::slugs() as $slug) {
@@ -414,15 +434,62 @@ namespace {
                 "$slug: shell declares embedSlug, which _generic already supplies");
             check(isset($row['shell']['assets']['bundle']),
                 "$slug: shell names no bundle");
+            check(BlockRegistry::partialFor($slug) === 'common/block-layout/_generic',
+                "$slug: has a shell but does not route to _generic");
+            foreach (array_keys($row['shell']) as $key) {
+                check(in_array($key, $shellKeys, true),
+                    "$slug: shell key '$key' is read by nothing (iwac-block-shell does not know it)");
+            }
+            $assets = $row['shell']['assets'] ?? [];
+            foreach (array_keys($assets) as $key) {
+                check(in_array($key, $assetKeys, true),
+                    "$slug: assets key '$key' is read by nothing (iwac-assets does not know it)");
+            }
+            foreach (array_keys($assets['needs'] ?? []) as $flag) {
+                check(in_array($flag, AssetPlan::FLAGS, true),
+                    "$slug: needs flag '$flag' is not in AssetPlan::FLAGS");
+            }
+            foreach ((array) ($assets['blockCss'] ?? []) as $sheet) {
+                check(is_readable($root . '/asset/css/blocks/' . $sheet . '.css'),
+                    "$slug: blockCss '$sheet' has no asset/css/blocks/$sheet.css");
+                check(is_readable($root . '/asset/css/blocks/' . $sheet . '.min.css'),
+                    "$slug: blockCss '$sheet' has no committed asset/css/blocks/$sheet.min.css");
+            }
+            // Every rendering path must accept the declaration: an unknown
+            // flag or bundle throws at render time, on the live page.
+            try {
+                AssetPlan::bundles($assets['needs'] ?? [], $assets['bundle'] ?? null);
+                check(true, "$slug: asset plan accepted");
+            } catch (\RuntimeException $e) {
+                check(false, "$slug: asset plan refused: " . $e->getMessage());
+            }
         } else {
             $ownTemplate++;
             check(is_readable($tpl), "$slug: no registry shell and no $slug.phtml");
+            check(BlockRegistry::partialFor($slug) === 'common/block-layout/' . $slug,
+                "$slug: has no shell but does not route to its own template");
         }
     }
-    check($shellRows === 19, "expected 19 generic blocks, found $shellRows");
-    check($ownTemplate === 2, "expected 2 blocks with their own template, found $ownTemplate");
+    check($shellRows === 20, "expected 20 generic blocks, found $shellRows");
+    check($ownTemplate === 1, "expected 1 block with its own template, found $ownTemplate");
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
-        '_generic.phtml is missing — nineteen blocks render through it');
+        '_generic.phtml is missing — twenty blocks render through it');
+    // The periodicals sheet, specifically: the row that lost it.
+    check(
+        (BlockRegistry::get('periodicals-overview')['shell']['assets']['blockCss'] ?? null) === 'periodicals-overview',
+        'periodicals-overview no longer declares its stylesheet inside `assets`'
+    );
+    // partialFor() builds a view path from a slug that arrives in a URL on
+    // the embed route, so it must answer only for registered slugs.
+    foreach (['', 'not-a-block', '../config/database.ini', 'collection-overview/../x', '_generic'] as $stranger) {
+        try {
+            BlockRegistry::partialFor($stranger);
+            check(false, "partialFor() built a partial path for '$stranger'");
+        } catch (\InvalidArgumentException $e) {
+            check(true, 'unknown slug refused');
+        }
+    }
+    check(!method_exists(BlockRegistry::class, 'slugForClass'), 'BlockRegistry::slugForClass() is back with no caller');
 
     $visualizations = new Visualizations();
     $view = new PhpRenderer();
@@ -517,24 +584,86 @@ namespace {
     check(SyncData::expectedDigestFromSidecar('') === null, 'empty sidecar accepted');
 
     check(
-        in_array('stopping', \IwacVisualizations\Controller\Admin\DataController::ACTIVE_STATUSES, true),
+        in_array('stopping', DataController::ACTIVE_STATUSES, true),
         'a stopping sync is not treated as active'
     );
+    // The recovery decision. Only a sync that is running, that the admin
+    // asked to recover AND that no worker holds the lock for may be replaced;
+    // every other running case is refused.
+    foreach ([
+        [false, false, false, DataController::DECISION_DISPATCH],
+        [false, true,  true,  DataController::DECISION_DISPATCH],
+        [true,  false, true,  DataController::DECISION_REFUSE],
+        [true,  true,  false, DataController::DECISION_REFUSE],
+        [true,  false, false, DataController::DECISION_REFUSE],
+        [true,  true,  true,  DataController::DECISION_RECOVER],
+    ] as [$running, $asked, $lockFree, $expected]) {
+        check(
+            DataController::syncDecision($running, $asked, $lockFree) === $expected,
+            sprintf('sync decision (running=%d, recover=%d, lock free=%d) is not %s', $running, $asked, $lockFree, $expected)
+        );
+    }
+
+    // The release pointer: only the immutable tag shape the workflow writes
+    // survives, because the result is spliced into the download URL.
+    check(
+        SyncData::tagFromPointer('{"tag":"data-build-123-1"}') === 'data-build-123-1',
+        'a well-formed release pointer was rejected'
+    );
+    foreach ([
+        '',
+        'not json',
+        '[]',
+        '"data-build-1-1"',
+        '{"tag":5}',
+        '{"tag":""}',
+        '{"tag":"data"}',
+        '{"tag":"data-build-1-1/../../evil"}',
+        '{"tag":"data-build-1-1\\n"}',
+        '{"other":"data-build-1-1"}',
+    ] as $pointer) {
+        try {
+            SyncData::tagFromPointer($pointer);
+            check(false, 'release pointer accepted: ' . $pointer);
+        } catch (\RuntimeException $e) {
+            check(true, 'malformed release pointer refused');
+        }
+    }
 
     // SyncData::perform() against real ZIP fixtures. Kept in its own file:
     // it needs a dozen fakes and a temp-directory lifecycle, which would
     // dwarf the pure contracts above.
     require __DIR__ . '/sync_data_archive.php';
-    require_once __DIR__ . '/../../src/Site/AssetPlan.php';
-    check(\IwacVisualizations\Site\AssetPlan::bundles([], null) === ['shared-core'], 'minimal asset plan gained unnecessary libraries');
-    check(\IwacVisualizations\Site\AssetPlan::bundles(['table' => true, 'pagination' => true, 'maplibre' => true], null)
+    check(AssetPlan::bundles([], null) === ['shared-core'], 'minimal asset plan gained unnecessary libraries');
+    check(AssetPlan::bundles(['table' => true, 'pagination' => true, 'maplibre' => true], null)
         === ['shared-core', 'shared-ui', 'shared-map'], 'asset plan lost dependency ordering or deduplication');
+    check(AssetPlan::bundles(['echarts' => false, 'wordcloud' => true, 'd3' => true], null)
+        === ['shared-core', 'shared-d3'], 'the CDN-only flags changed which bundles load');
     try {
-        \IwacVisualizations\Site\AssetPlan::bundles([], 'unknown-bundle');
+        AssetPlan::bundles([], 'unknown-bundle');
         check(false, 'unknown bundle was accepted');
     } catch (\RuntimeException $e) {
         check(true, 'unknown bundle rejected');
     }
+    // An unknown flag is a typo or a removed flag, and either way the block
+    // would load without what it asked for. `renderers` is the removed one.
+    foreach (['renderers', 'mapLibre', 'chartoptions', 0] as $flag) {
+        try {
+            AssetPlan::bundles([$flag => true], null);
+            check(false, "unknown needs flag '$flag' was accepted");
+        } catch (\RuntimeException $e) {
+            check(true, 'unknown needs flag rejected');
+        }
+    }
+    // scripts/check-blocks.js reads FLAGS out of the source, so its literal
+    // shape is part of the contract: one flat list of single-quoted names.
+    $assetPlanSource = (string) file_get_contents($root . '/src/Site/AssetPlan.php');
+    check(
+        preg_match("~public const FLAGS = \[\s*((?:'[A-Za-z0-9]+',\s*)+)\];~", $assetPlanSource, $flagsMatch) === 1
+            && preg_match_all("~'([A-Za-z0-9]+)'~", $flagsMatch[1], $flagNames) === count(AssetPlan::FLAGS)
+            && $flagNames[1] === AssetPlan::FLAGS,
+        'AssetPlan::FLAGS is no longer a flat list of single-quoted strings'
+    );
 
     if ($failures) {
         fwrite(STDERR, "\nPHP behavioral tests failed:\n");

@@ -4,9 +4,6 @@ declare(strict_types=1);
 namespace IwacVisualizations;
 
 use IwacVisualizations\Mvc\EmbedFramingListener;
-use IwacVisualizations\Sentiment\Centralite;
-use IwacVisualizations\Sentiment\Polarite;
-use IwacVisualizations\Sentiment\Subjectivite;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
@@ -18,10 +15,11 @@ require_once __DIR__ . '/src/Sentiment/ModelRegistry.php';
 /**
  * IWAC Visualizations module.
  *
- * Asset loading: a block template declares WHAT it needs through
- * `view/common/iwac-assets.phtml` (stylesheets, CDN libraries, shared JS
- * modules, panels, orchestrator) and that partial emits them — templates
- * never call $this->headLink / headScript themselves. We deliberately do
+ * Asset loading: a block declares WHAT it needs — a stylesheet, `needs`
+ * flags (`Site\AssetPlan::FLAGS`) and the name of its JS bundle in
+ * `asset/js/bundles.json` — and `view/common/iwac-assets.phtml` turns that
+ * into CDN libraries plus the ordered bundle list. Templates never call
+ * $this->headLink / headScript themselves. We deliberately do
  * NOT attach a controller listener that blanket-loads ECharts/MapLibre on
  * every Item and ItemSet view — doing so cost ~600 KB of unused JavaScript
  * on every Article page, even when no Visualizations block was configured.
@@ -42,11 +40,14 @@ require_once __DIR__ . '/src/Sentiment/ModelRegistry.php';
  * their position on each scale.
  *
  * If you add a new block: register it in `IwacVisualizations\Site\BlockRegistry`
- * (slug, label, description), add a `BlockLayout` subclass declaring that
- * slug, wire the invokable in config/module.config.php, and model the
- * template on `view/common/block-layout/press-bylines.phtml` — a call to
- * `common/iwac-block-shell` with an `assets` array. `npm run lint:blocks`
- * checks those four sites still agree.
+ * (slug, label, description, and a `shell` row — the `assets` array plus the
+ * wrapper class and loading message — which renders through
+ * `view/common/block-layout/_generic.phtml`), add a `BlockLayout` subclass
+ * declaring that slug, wire the invokable in config/module.config.php, and
+ * list the bundle in `asset/js/bundles.json`. Only a block that needs custom
+ * markup gets its own `view/common/block-layout/<slug>.phtml` (and no
+ * `shell`), as `on-this-day` does. `npm run lint:blocks` checks those sites
+ * still agree.
  */
 class Module extends AbstractModule
 {
@@ -141,16 +142,6 @@ class Module extends AbstractModule
         (new EmbedFramingListener())($event);
     }
 
-    /**
-     * @deprecated Call `EmbedFramingListener::relaxFrameAncestorsPolicies()`.
-     *   Kept because `tests/php/run.php` covers the pure CSP composition
-     *   through this name.
-     */
-    public static function relaxFrameAncestorsPolicies(array $headerValues): array
-    {
-        return EmbedFramingListener::relaxFrameAncestorsPolicies($headerValues);
-    }
-
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
     {
         // Strip sentiment properties from the default metadata table on
@@ -196,44 +187,5 @@ class Module extends AbstractModule
             unset($values[$prop]);
         }
         $event->setParam('values', $values);
-    }
-
-    /**
-     * The three sentiment axes are enums now.
-     *
-     * `CENTRALITE_ITEMS` / `POLARITE_ITEMS` / `SUBJECTIVITE_ITEMS` mapped
-     * item id → label, and `CENTRALITE_VALUES` / `POLARITE_VALUES` mapped
-     * label → ordinal, with nothing but convention keeping the two key sets
-     * aligned. `src/Sentiment/{Polarite,Centralite,Subjectivite}.php` now
-     * own both, as `match` expressions over a closed set of cases, so a new
-     * vocabulary value cannot be added with a label and no ordinal
-     * (Tier 8 / H4). The `@translate` markers moved with the labels;
-     * `extract-pot.js` scans `src/`, so every msgid is unchanged.
-     *
-     * The five lookups below stay because `SentimentExtractor` and
-     * `view/.../article.phtml` call them statically, and threading a module
-     * instance into a view partial to reach an enum would be a worse trade
-     * than five one-line shims.
-     */
-
-    public static function getCentraliteLabel(?int $itemId): ?string
-    {
-        return Centralite::fromItemId($itemId)?->label();
-    }
-    public static function getPolariteLabel(?int $itemId): ?string
-    {
-        return Polarite::fromItemId($itemId)?->label();
-    }
-    public static function getSubjectiviteInfo(?int $itemId): ?array
-    {
-        return Subjectivite::fromItemId($itemId)?->info();
-    }
-    public static function getCentraliteNumeric(?string $label): int
-    {
-        return Centralite::ordinalForLabel($label);
-    }
-    public static function getPolariteNumeric(?string $label): int
-    {
-        return Polarite::ordinalForLabel($label);
     }
 }

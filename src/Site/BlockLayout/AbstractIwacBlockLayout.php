@@ -56,25 +56,27 @@ abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
     /**
      * The partial this block renders through.
      *
-     * Nineteen of twenty-one blocks are a single `iwac-block-shell` call with
-     * a different literal array, so that array moved into the registry beside
+     * Twenty of twenty-one blocks are a single `iwac-block-shell` call with
+     * a different literal array, so that array lives in the registry beside
      * the label and the description and they share `_generic` (H5). A row
-     * WITHOUT a `shell` key keeps its own template — `collection-overview`
-     * server-renders its summary from the snapshot, `on-this-day` reads a
-     * layout setting — and routing on the key's presence means adding logic
-     * to a block is adding a template, not editing this method.
+     * WITHOUT a `shell` key keeps its own template — today only
+     * `on-this-day`, which reads a layout setting — and routing on the key's
+     * presence means adding logic to a block is adding a template, not
+     * editing this method. The rule itself is `BlockRegistry::partialFor()`,
+     * shared with the embed view.
      */
     protected function templateViewScript(): string
     {
-        return empty($this->row()['shell'])
-            ? 'common/block-layout/' . static::SLUG
-            : 'common/block-layout/_generic';
+        // Throws for an unregistered slug, like row() — never a guessed path.
+        return BlockRegistry::partialFor(static::SLUG);
     }
 
     public function form(PhpRenderer $view, SiteRepresentation $site,
         ?SitePageRepresentation $page = null, ?SitePageBlockRepresentation $block = null)
     {
-        return '<p>' . $view->translate($this->row()['description']) . '</p>';
+        // Translated text is still text: a translator's `<` or `&` must not
+        // become markup in the admin page editor.
+        return '<p>' . $view->escapeHtml($view->translate($this->row()['description'])) . '</p>';
     }
 
     public function render(PhpRenderer $view, SitePageBlockRepresentation $block,

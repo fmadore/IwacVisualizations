@@ -39,12 +39,18 @@
 
     function mapModule(url) {
         if (S.mjsP) return;
-        S.mjs = url;
-        S.mjsP = import(S.mjs).then(function (m) {
+        var pending = import(url).then(function (m) {
             window.maplibregl = m;
             return m;
         });
-        S.mjsP.catch(function () { /* Map panels display their own error. */ });
+        S.mjsP = pending;
+        // Map panels already chained on `pending` display their own error.
+        // Forget a failed import rather than keeping it: a transient CDN
+        // failure would otherwise be final for the page, and neither Retry
+        // nor a second map block nearing the viewport could import again.
+        pending.catch(function () {
+            if (S.mjsP === pending) S.mjsP = null;
+        });
     }
 
     function showError(block) {

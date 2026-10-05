@@ -480,31 +480,6 @@
     }
 
     /**
-     * Repaint a chart without discarding what the reader has set on it.
-     *
-     * `setOption(option, true)` — notMerge — is the safe default and every
-     * facet, sort and term change used it, which is why adding a term to the
-     * Ngram viewer reset its 65-year window to 0–100 and why switching the
-     * sentiment model dropped every legend toggle. ECharts keeps legend
-     * selection and the dataZoom window across a MERGE, and `replaceMerge`
-     * lets the series list be replaced wholesale inside one — so when the
-     * new option has the same shape as the last one painted here, that is
-     * what this does. When it does not (the first paint, an empty-state
-     * title replacing a chart, a component appearing or vanishing), it falls
-     * back to a full rebuild, because a merge would leave the vanished
-     * component on screen.
-     *
-     * The builders write `start: 0, end: 100` into every dataZoom; on a
-     * merge those are dropped from the outgoing copy so the window the
-     * reader dragged is the one that survives.
-     *
-     * @param {echarts.ECharts} instance
-     * @param {Object} option  a fresh option (possibly `{baseOption, media}`)
-     * @param {{lazyUpdate?: boolean, replaceMerge?: Array<string>,
-     *          notMerge?: boolean}} [opts]
-     * @returns {boolean} true when the paint was a merge
-     */
-    /**
      * Re-measure every tracked chart and map.
      *
      * Each instance already has its own ResizeObserver, which covers a
@@ -533,6 +508,35 @@
         }
     };
 
+    /**
+     * Repaint a chart without discarding what the reader has set on it.
+     *
+     * `setOption(option, true)` — notMerge — is the safe default and every
+     * facet, sort and term change used it, which is why adding a term to the
+     * Ngram viewer reset its 65-year window to 0–100 and why switching the
+     * sentiment model dropped every legend toggle. ECharts keeps legend
+     * selection and the dataZoom window across a MERGE, and `replaceMerge`
+     * lets the series list be replaced wholesale inside one — so when the
+     * new option has the same shape as the last one painted here, that is
+     * what this does. When it does not (the first paint, an empty-state
+     * title replacing a chart, a component appearing or vanishing), it falls
+     * back to a full rebuild, because a merge would leave the vanished
+     * component on screen.
+     *
+     * The builders write `start: 0, end: 100` into every dataZoom; on a
+     * merge those are dropped from the outgoing copy so the window the
+     * reader dragged is the one that survives.
+     *
+     * A responsive `{baseOption, media}` option is never merged: ECharts
+     * applies media in separate passes, and a `replaceMerge` on a media pass
+     * without series removes the base series. A same-shape one is rebuilt
+     * with the reader's zoom window and legend selection carried over.
+     *
+     * @param {echarts.ECharts} instance
+     * @param {Object} option  a fresh option (possibly `{baseOption, media}`)
+     * @param {{lazyUpdate?: boolean, notMerge?: boolean}} [opts]
+     * @returns {boolean} true when the paint was a merge
+     */
     ns.repaint = function (instance, option, opts) {
         if (!instance || (instance.isDisposed && instance.isDisposed())) return false;
         opts = opts || {};
@@ -554,27 +558,16 @@
             instance.setOption(option, { notMerge: true, lazyUpdate: !!opts.lazyUpdate });
             return false;
         }
+        // Only a plain option reaches the merge: a wrapped one returned above.
         var out = option;
-        if (base.dataZoom) {
-            var trimmed = {};
-            for (var k in base) {
-                if (Object.prototype.hasOwnProperty.call(base, k)) trimmed[k] = base[k];
+        if (option.dataZoom) {
+            out = {};
+            for (var k in option) {
+                if (Object.prototype.hasOwnProperty.call(option, k)) out[k] = option[k];
             }
-            trimmed.dataZoom = withoutWindow(base.dataZoom);
-            if (wrapped) {
-                out = {};
-                for (var w in option) {
-                    if (Object.prototype.hasOwnProperty.call(option, w)) out[w] = option[w];
-                }
-                out.baseOption = trimmed;
-            } else {
-                out = trimmed;
-            }
+            out.dataZoom = withoutWindow(option.dataZoom);
         }
-        instance.setOption(out, {
-            replaceMerge: opts.replaceMerge || ['series'],
-            lazyUpdate: !!opts.lazyUpdate
-        });
+        instance.setOption(out, { replaceMerge: ['series'], lazyUpdate: !!opts.lazyUpdate });
         return true;
     };
 
