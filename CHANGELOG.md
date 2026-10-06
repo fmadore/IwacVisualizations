@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.75.1 — the data sync accepts per-locale timeline files (2026-10-06)
+
+Every "Pull latest data" run against the current data build failed with `Invalid manifest entry.` The build publishes each timeline once per language, as `timelines/<slug>.en.json` and `timelines/<slug>.fr.json`, and the manifest check in `Manifest::validate()` only allowed letters, digits, `_`, `-` and `/` before `.json`, so the dot before the locale was rejected. The check now accepts path segments joined by `/` or `.`. Empty segments, segments that start with a dot, and `..` are still rejected. The sync test's happy-path archive now includes a per-locale timeline file. The pattern also accepts all 23,721 entries in the live build's manifest.
+
 ### v1.75.0 — A seventh review: what the last month broke, and the guards that would have caught it (2026-10-05)
 
 A review of everything since the v1.68.1 refactoring close found more live faults than refactoring opportunities: the lint suite and every unit test passed over each of them, and all of them were still present in v1.74.0. This release fixes them and adds a guard for each class, so the suite now fails on the same mistake.

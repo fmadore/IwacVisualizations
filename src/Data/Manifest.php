@@ -26,7 +26,9 @@ final class Manifest
             throw new \RuntimeException('Missing or incompatible data manifest.');
         }
         foreach ($manifest['files'] as $path => $entry) {
-            if (!is_string($path) || !preg_match('~^[a-zA-Z0-9_/-]+\.json$~D', $path)
+            // Segments joined by `/` or `.`, so `timelines/hajj-burkina.fr.json`
+            // passes while an empty, dot-led or `..` segment cannot.
+            if (!is_string($path) || !preg_match('~^[a-zA-Z0-9_-]+(?:[./][a-zA-Z0-9_-]+)*\.json$~D', $path)
                 || str_contains($path, '..') || str_starts_with($path, '/')
                 || !is_array($entry) || !is_string($entry['sha256'] ?? null)
                 || !self::isDigest($entry['sha256'])

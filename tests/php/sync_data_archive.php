@@ -260,6 +260,9 @@ $syncRoots = [];
 $s = syncScenario('ok', [
     'collection-overview.json' => '{"summary":{"newspapers":42}}',
     'nested/dir/on-this-day.json' => '[1,2,3]',
+    // Per-locale timeline bundles carry a dot in the stem; v1.75.0's
+    // manifest pattern refused them and every sync of the real build failed.
+    'timelines/hajj-burkina.fr.json' => '{}',
 ]);
 $syncRoots[] = $s['root'];
 $err = syncRun($s['job']);
@@ -280,7 +283,11 @@ check(
     'a nested entry did not survive extraction'
 );
 check(
-    $s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['count'] === 3,
+    is_file($generationDir . '/timelines/hajj-burkina.fr.json'),
+    'a per-locale timeline bundle did not survive extraction'
+);
+check(
+    $s['services']->settings->get(SyncData::SETTING_LAST_SYNC)['count'] === 4,
     'the last-sync setting did not record the entry count'
 );
 check(
