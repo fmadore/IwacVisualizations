@@ -21,7 +21,7 @@ const { readText } = require('./lib/fs');
 const ROOT = path.resolve(__dirname, '..');
 const INPUT = path.join(__dirname, 'requirements.txt');
 const LOCK = path.join(__dirname, 'requirements.lock');
-const UV_VERSION = '0.12.1';
+const UV_VERSION = '0.12.23';
 const HASH_PREFIX = '# requirements-input-sha256: ';
 
 /**

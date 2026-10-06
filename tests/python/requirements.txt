@@ -7,7 +7,7 @@
 # lock resolves 2.4.6 — so the tests ran on a numpy the generators cannot use,
 # which is the one configuration a test suite must never be in.
 # `npm run lint:python-lock` fails when they disagree.
-numpy==2.4.6
-pandas==3.0.5
+numpy==2.5.3
+pandas==3.0.6
 pyflakes==3.4.0
 nh3==0.3.7
