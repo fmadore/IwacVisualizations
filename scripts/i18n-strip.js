@@ -59,7 +59,7 @@ function findDictionaries(source, filename) {
     try {
         ast = acorn.parse(source, { ecmaVersion: 'latest', sourceType: 'script' });
     } catch (err) {
-        throw new Error(`${filename}: cannot parse for locale stripping — ${err.message}`);
+        throw new Error(`${filename}: cannot parse for locale stripping — ${err.message}`, { cause: err });
     }
     const found = [];
     let calls = 0;

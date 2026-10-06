@@ -107,7 +107,7 @@ async function fetchBuffer(url, headers) {
         if (!res.ok) throw new Error(`${url} responded ${res.status}`);
         return Buffer.from(await res.arrayBuffer());
     } catch (err) {
-        if (err && err.name === 'AbortError') throw new Error(`${url} timed out after ${TIMEOUT_MS} ms`);
+        if (err && err.name === 'AbortError') throw new Error(`${url} timed out after ${TIMEOUT_MS} ms`, { cause: err });
         throw err;
     } finally {
         clearTimeout(timer);

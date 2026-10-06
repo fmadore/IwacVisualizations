@@ -909,10 +909,8 @@
      * cloud that re-shuffles its colours each time reads as a bug.
      *
      * @param {Array<[string, number]>} pairs
-     * @param {Object} [opts]
      */
-    C.wordcloud = function (pairs, opts) {
-        opts = opts || {};
+    C.wordcloud = function (pairs) {
         var data = (pairs || []).map(function (pair) {
             return { name: pair[0], value: pair[1] };
         });

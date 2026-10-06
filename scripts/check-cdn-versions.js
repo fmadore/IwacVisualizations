@@ -120,7 +120,7 @@ async function fetchLatest(pkg) {
         return body.version;
     } catch (err) {
         if (err && err.name === 'AbortError') {
-            throw new Error(`registry timed out after ${TIMEOUT_MS} ms`);
+            throw new Error(`registry timed out after ${TIMEOUT_MS} ms`, { cause: err });
         }
         throw err;
     } finally {

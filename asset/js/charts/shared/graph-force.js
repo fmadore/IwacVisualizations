@@ -576,7 +576,7 @@
             var order = keyboardOrder();
             if (!order.length) return;
             var idx = focusId ? order.findIndex(function (n) { return n.id === focusId; }) : -1;
-            var next = null;
+            var next;
 
             if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
                 next = order[(idx + (ev.key === 'ArrowRight' ? 1 : -1) + order.length) % order.length];

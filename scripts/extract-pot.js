@@ -196,7 +196,7 @@ function quote(text) {
 }
 
 function existingHeader() {
-    let raw = '';
+    let raw;
     try { raw = readFileSync(POT, 'utf8'); } catch (e) { raw = ''; }
     const m = /^msgid ""\nmsgstr ""\n((?:"[^\n]*"\n)+)/m.exec(raw);
     if (m) return m[1];
