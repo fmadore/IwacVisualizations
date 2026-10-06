@@ -114,7 +114,7 @@ class SyncData extends AbstractJob
                 ));
             }
 
-            if ($this->shouldStop()) {
+            if ($this->stopRequested()) {
                 $logger->info('IWAC data sync: stop requested before download — aborting.');
                 return;
             }
@@ -142,7 +142,7 @@ class SyncData extends AbstractJob
             $this->verifyDigest($expectedDigest, $zipPath, $logger);
 
             // 4. Inspect + extract into a fresh staging dir (never the live dir).
-            if ($this->shouldStop()) {
+            if ($this->stopRequested()) {
                 $logger->info('IWAC data sync: stop requested before extract — aborting.');
                 return;
             }
@@ -231,7 +231,7 @@ class SyncData extends AbstractJob
             $logger->info(sprintf('IWAC data sync: extracted %d entries.', $count));
 
             // 5. Validate and publish the content-addressed generation.
-            if ($this->shouldStop()) {
+            if ($this->stopRequested()) {
                 $logger->info('IWAC data sync: stop requested before publication.');
                 return;
             }
@@ -287,6 +287,22 @@ class SyncData extends AbstractJob
             fclose($lock);
             // Keep the lock inode: unlinking it permits competing locks.
         }
+    }
+
+    /**
+     * Whether an admin asked this job to stop.
+     *
+     * `shouldStop()` re-reads the job's status every call, so a second check
+     * after a long download or extraction can answer differently from the
+     * first. PHPStan cannot know that and remembers the earlier `false`
+     * across a stretch with no other call on `$this` — which is how the
+     * check before publication came to be reported as "always false".
+     *
+     * @phpstan-impure
+     */
+    protected function stopRequested(): bool
+    {
+        return $this->shouldStop();
     }
 
     /** The data tree this job publishes into. A seam for the fixture tests. */
