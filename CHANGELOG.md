@@ -13,6 +13,16 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.75.2 — MapLibre 6.12.0 and a dependency refresh (2026-10-06)
+
+Maps load **MapLibre GL 6.12.0** (from 6.11.2): features and bug fixes only, among them a GeoJSON source whose memory grew until the page crashed when `setData` outpaced the worker. The three jsDelivr files carry new SRI hashes, generated from the npm tarball and verified against the CDN. IwacSearch 3.21.1 moves to the same files and hashes, so a visitor still downloads MapLibre once for both modules. Deploy the two together. Checked on the live site with the new files swapped in: every map that renders on load renders the same in light and dark mode, with no console errors.
+
+**ESLint 10.** Its three new recommended rules found six things, none a behaviour change. `chartOptions.wordcloud` loses an `opts` parameter that nothing read or passed. Two dead initial assignments are gone, one in the force graph's keyboard handler and one in `extract-pot.js`. Three re-thrown timeout and parse errors in the build scripts now keep the original as `cause`. The `shared-charts` and `shared-d3` bundles are rebuilt; `@eslint/js` is now declared, because ESLint 10 no longer installs it.
+
+**Data generators.** The hashed Python lock is regenerated with uv 0.12.23. NumPy moves to 2.5.3 now that Numba 0.68 supports it, huggingface-hub to 2.1.1 and `datasets` to 5.1.0. The unit-test pins follow, and the data-regeneration workflow has run on the new lock.
+
+Also: the npm toolchain is updated (Playwright 1.63, esbuild 0.28.2, which builds byte-identical bundles, stylelint, acorn, globals). The pyflakes fallback moves to 4.0.2, and `tokens.json` carries the IWAC-theme 2.23.0 stamp.
+
 ### v1.75.1 — the data sync accepts per-locale timeline files (2026-10-06)
 
 Every "Pull latest data" run against the current data build failed with `Invalid manifest entry.` The build publishes each timeline once per language, as `timelines/<slug>.en.json` and `timelines/<slug>.fr.json`, and the manifest check in `Manifest::validate()` only allowed letters, digits, `_`, `-` and `/` before `.json`, so the dot before the locale was rejected. The check now accepts path segments joined by `/` or `.`. Empty segments, segments that start with a dot, and `..` are still rejected. The sync test's happy-path archive now includes a per-locale timeline file. The pattern also accepts all 23,721 entries in the live build's manifest.
