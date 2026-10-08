@@ -50,34 +50,72 @@
  *  Brand-accent override
  * ===================================================================
  *
- *  `--iwac-vis-embed-primary` / `--iwac-vis-embed-secondary` are set by a `style`
- *  attribute on <html> when the request carries an accent (?primary=, or the
- *  theme's own setting). Absent, these rules resolve to nothing and the
- *  token sheet's --primary / --secondary (iwac-embed-tokens.css) stand.
+ *  `--iwac-vis-embed-primary` / `--iwac-vis-embed-secondary` are set by a
+ *  `style` attribute on <html> when the request carries a brand SEED that
+ *  differs from the theme's stock one (?primary=, or the theme's own
+ *  setting — EmbedBrand::accents()). Absent, these rules resolve to nothing
+ *  and the token sheet's literals (iwac-embed-tokens.css), which are the
+ *  theme's derivation of its stock seeds, stand.
+ *
+ *  A seed is not a token. The theme derives its working colours from it
+ *  (abstracts/variables/_colors.scss) and these rules repeat that
+ *  derivation: light --primary is the seed 8 % toward black in oklab, hover
+ *  18 %, pressed 28 %; dark lightens 12 % / 22 % toward white and presses 4 %
+ *  toward black; --secondary is the seed itself in light and 30 % toward
+ *  white in dark. Until 2026-10 the light rule set --primary to the raw seed
+ *  (3.82:1 on the surface) and the dark rule lightened the secondary 14 %,
+ *  not the theme's 30 %.
+ *
+ *  The tokens composed from --primary / --secondary (focus, the lead series
+ *  slots, the article and publication type colours) are literals in the
+ *  token sheet, so they are re-composed here too, at BOTH levels: a custom
+ *  property holding a var() is substituted where it is declared, and the
+ *  dark rule re-declares --primary on <body>.
  *
  *  These are the module's only sanctioned re-declarations of theme tokens —
  *  a per-request override on a route that carries no theme — hence the
  *  `allow-override` markers the token guard requires. They outrank the token
  *  sheet on specificity (html[style*=…] beats :root; the dark pair beats
  *  [data-theme="dark"]), so load order does not matter.
+ *
+ *  Mixing toward black or white is normally banned (guard rule 2b) because
+ *  it inverts when the surface flips. Here it cannot flip: the mode is pinned
+ *  by data-theme on this route, each branch is one mode, and the direction is
+ *  the theme's own — so those lines opt out.
  * =================================================================== */
 
 :root:not([style*="--iwac-vis-embed-primary"]) { --iwac-vis-embed-primary: initial; }
 
-html[style*="--iwac-vis-embed-primary"] { --primary: var(--iwac-vis-embed-primary); } /* allow-override */
-html[style*="--iwac-vis-embed-secondary"] { --secondary: var(--iwac-vis-embed-secondary); } /* allow-override */
+html[style*="--iwac-vis-embed-primary"] {
+    --primary: color-mix(in oklab, var(--iwac-vis-embed-primary), black 8%); /* allow-absolute-mix allow-override */
+    --primary-hover: color-mix(in oklab, var(--iwac-vis-embed-primary), black 18%); /* allow-absolute-mix allow-override */
+    --primary-active: color-mix(in oklab, var(--iwac-vis-embed-primary), black 28%); /* allow-absolute-mix allow-override */
+    --focus-color: var(--primary); /* allow-override */
+    --focus-outline: 2px solid var(--focus-color); /* allow-override */
+    --focus-ring-color: color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
+    --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
+    --series-1: var(--primary); /* allow-override */
+    --type-article: var(--primary); /* allow-override */
+}
+html[style*="--iwac-vis-embed-secondary"] {
+    --secondary: var(--iwac-vis-embed-secondary); /* allow-override */
+    --series-2: var(--secondary); /* allow-override */
+    --type-publication: var(--secondary); /* allow-override */
+}
 
-/*  Match the theme's dark-mode habit of lightening the accent (e.g.
- *  #e64a19 -> #ec653f) rather than carrying the light value. The mode is
- *  always pinned via data-theme on this route (embeds default to light), so
- *  this is the only dark branch needed.
- *
- *  Mixing toward white is normally banned (guard rule 2b) because it inverts
- *  when the surface flips; here the surface cannot flip — the branch IS the
- *  dark one — so white is the correct direction and both lines opt out. */
 html[style*="--iwac-vis-embed-primary"] body[data-theme="dark"] {
     --primary: color-mix(in oklab, var(--iwac-vis-embed-primary), white 12%); /* allow-absolute-mix allow-override */
+    --primary-hover: color-mix(in oklab, var(--iwac-vis-embed-primary), white 22%); /* allow-absolute-mix allow-override */
+    --primary-active: color-mix(in oklab, var(--iwac-vis-embed-primary), black 4%); /* allow-absolute-mix allow-override */
+    --focus-color: var(--primary); /* allow-override */
+    --focus-outline: 2px solid var(--focus-color); /* allow-override */
+    --focus-ring-color: color-mix(in oklab, var(--primary) 35%, transparent); /* allow-override */
+    --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
+    --series-1: var(--primary); /* allow-override */
+    --type-article: var(--primary); /* allow-override */
 }
 html[style*="--iwac-vis-embed-secondary"] body[data-theme="dark"] {
-    --secondary: color-mix(in oklab, var(--iwac-vis-embed-secondary), white 14%); /* allow-absolute-mix allow-override */
+    --secondary: color-mix(in oklab, var(--iwac-vis-embed-secondary), white 30%); /* allow-absolute-mix allow-override */
+    --series-2: var(--secondary); /* allow-override */
+    --type-publication: var(--secondary); /* allow-override */
 }

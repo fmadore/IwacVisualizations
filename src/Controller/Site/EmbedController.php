@@ -28,7 +28,9 @@ use Laminas\View\Model\ViewModel;
  *
  * Query params honoured by blockAction (all optional):
  *   ?theme=light|dark   force the colour mode (default: light)
- *   ?primary=RRGGBB     override the brand accent (else module default)
+ *   ?primary=RRGGBB     a brand SEED to derive the accent from, as the theme
+ *                       derives its own (EmbedBrand); the theme's stock seed
+ *                       overrides nothing
  */
 class EmbedController extends AbstractActionController
 {
@@ -121,7 +123,9 @@ class EmbedController extends AbstractActionController
             $primary = '';
         }
 
-        $title = $blocks[$slug];
+        // The registry's labels are English source strings (`// @translate`);
+        // the French site's tab title read "Collection Overview".
+        $title = $this->translate($blocks[$slug]);
         if ($panel !== '') {
             $title .= ' — ' . $panel;
         }

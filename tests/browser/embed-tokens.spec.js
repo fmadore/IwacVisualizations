@@ -51,16 +51,44 @@ for (const theme of ['light', 'dark']) {
     });
 }
 
-test('the per-request brand accent outranks the token sheet in both modes', async ({ page }) => {
+/**
+ * A brand seed is derived the way the theme derives its own: the light
+ * primary is the seed 8 % toward black, the dark one 12 % toward white. The
+ * embed used to paint the raw seed, so a stock site's embeds carried #e64a19
+ * beside the canonical #ce4115. Each expectation is the browser's own
+ * computation of the theme's expression, read off a probe.
+ */
+async function resolved(page, expression) {
+    return page.evaluate((value) => {
+        const probe = document.createElement('span');
+        document.body.appendChild(probe);
+        probe.style.color = value;
+        const out = getComputedStyle(probe).color;
+        probe.remove();
+        return out;
+    }, expression);
+}
+
+test('a per-request brand seed is derived like the theme’s, in both modes', async ({ page }) => {
     await page.goto(`${FIXTURE}?theme=light&primary=%23123456`);
-    const light = await page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--primary').trim());
-    expect(light).toBe('#123456');
+    const light = await resolved(page, 'var(--primary)');
+    expect(light).toBe(await resolved(page, 'color-mix(in oklab, #123456, black 8%)'));
+    expect(light).not.toBe(await resolved(page, '#123456'));
+    // The tokens composed from it follow, rather than keep the stock orange.
+    expect(await resolved(page, 'var(--focus-color)')).toBe(light);
+    expect(await resolved(page, 'var(--type-article)')).toBe(light);
 
     await page.goto(`${FIXTURE}?theme=dark&primary=%23123456`);
-    const dark = await page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--primary').trim());
-    // Lightened for dark (iwac-embed.css), never the sheet's own dark primary.
-    expect(dark).not.toBe(canon('dark', '--primary'));
-    expect(dark).toContain('color-mix');
+    const dark = await resolved(page, 'var(--primary)');
+    expect(dark).toBe(await resolved(page, 'color-mix(in oklab, #123456, white 12%)'));
+    expect(await resolved(page, 'var(--focus-color)')).toBe(dark);
+});
+
+test('without a seed the embed paints the theme’s own primary, not the raw seed', async ({ page }) => {
+    for (const theme of ['light', 'dark']) {
+        await page.goto(`${FIXTURE}?theme=${theme}`);
+        expect(await resolved(page, 'var(--primary)')).toBe(hexToRgb(canon(theme, '--primary')));
+    }
 });
 
 test('the source footer reads against its own ground in dark mode', async ({ page }) => {

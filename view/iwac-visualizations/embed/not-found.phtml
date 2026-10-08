@@ -5,9 +5,14 @@
  * @var \Laminas\View\Renderer\PhpRenderer $this
  */
 $escapeHtml = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+// The page speaks the site's language, as the embed layout does; it was
+// stamped lang="en" over a French title and message.
+$locale = (string) ($this->siteSetting('locale') ?: $this->setting('locale') ?: 'en');
+$locale = substr($locale, 0, 2) ?: 'en';
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="<?= $escapeAttr($locale) ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

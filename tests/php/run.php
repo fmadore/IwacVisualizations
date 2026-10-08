@@ -130,6 +130,7 @@ namespace {
     use IwacVisualizations\Sentiment\Subjectivite;
     use IwacVisualizations\Site\AssetPlan;
     use IwacVisualizations\Site\BlockRegistry;
+    use IwacVisualizations\Site\EmbedBrand;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
     use Laminas\EventManager\Event;
@@ -147,6 +148,7 @@ namespace {
     $coldModule = new \IwacVisualizations\Module();
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/AssetPlan.php';
+    require $root . '/src/Site/EmbedBrand.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
     require $root . '/src/Controller/Admin/DataController.php';
@@ -664,6 +666,22 @@ namespace {
             && $flagNames[1] === AssetPlan::FLAGS,
         'AssetPlan::FLAGS is no longer a flat list of single-quoted strings'
     );
+
+    // V-03: an embed overrides the brand only when its seed differs from the
+    // theme's stock one, and always as a SEED (iwac-embed.css derives it).
+    $seeds = EmbedBrand::seeds();
+    check(($seeds['primary'] ?? '') === '#e64a19', 'config/theme-seeds.php lost the stock primary seed');
+    check(($seeds['secondary'] ?? '') === '#394f68', 'config/theme-seeds.php lost the stock secondary seed');
+    check(EmbedBrand::accents('', '#E64A19', '#394f68') === ['primary' => '', 'secondary' => ''],
+        'the stock seeds must not override the embed token sheet');
+    check(EmbedBrand::accents('', 'e64a19', '') === ['primary' => '', 'secondary' => ''],
+        'a bare stock seed must not override either');
+    check(EmbedBrand::accents('', '#123456', '#abc')['primary'] === '#123456', 'a tuned seed must override');
+    check(EmbedBrand::accents('', '#123456', '#abc')['secondary'] === '#aabbcc', 'a short secondary must expand');
+    check(EmbedBrand::accents('#0a0b0c', '#123456', '')['primary'] === '#0a0b0c', '?primary= must win over the setting');
+    check(EmbedBrand::accents('', 'red; color: x', '')['primary'] === '', 'a non-hex setting must be refused');
+    check(strpos(EmbedBrand::WEBFONT_URL, 'https://fonts.bunny.net/css?family=besley:') === 0,
+        "the embed webfont request is not the theme's");
 
     require __DIR__ . '/timeline.php';
 

@@ -38,3 +38,4 @@ require('./laicite-orchestrator.test.js');
 require('./responsive.test.js');
 require('./graph-chrome.test.js');
 require('./timeline.test.js');
+require('./embed-brand.test.js');

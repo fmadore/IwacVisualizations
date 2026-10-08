@@ -20,6 +20,8 @@
  * @var string|null $embedPanel    Panel slug for a single-panel embed, or ''
  * @var bool|null   $isGallery      True on the snippet-gallery page
  */
+use IwacVisualizations\Site\EmbedBrand;
+
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $escapeHtml = $this->plugin('escapeHtml');
 
@@ -46,18 +48,20 @@ $site        = $this->currentSite();
 $sourceUrl   = $site ? $site->siteUrl(null, true) : rtrim((string) $this->serverUrl(false), '/');
 $sourceLabel = $this->translate('Source') . ': ' . ($site ? $site->title() : 'Islam West Africa Collection');
 
-// Pull the live brand accent so the embed matches the site instead of the
-// module's generic fallback. `?primary=` (already validated upstream) wins;
-// otherwise read the IWAC theme's admin-set `primary_color` / `secondary_color`
-// settings. Without the compiled theme CSS on this bare route these tokens
-// would otherwise fall back to module defaults. Only accept clean hex.
-$hex = function ($v) {
-    $v = trim((string) $v);
-    return preg_match('/^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3}([0-9a-fA-F]{2})?)?$/', $v)
-        ? '#' . ltrim($v, '#') : '';
-};
-$primary   = $embedPrimary !== '' ? $embedPrimary : $hex($this->themeSetting('primary_color', ''));
-$secondary = $hex($this->themeSetting('secondary_color', ''));
+// The brand SEEDS this embed overrides. `?primary=` (already validated
+// upstream) wins over the IWAC theme's admin-set `primary_color`; both are
+// seeds, like the theme's own settings, and iwac-embed.css derives --primary
+// and its family from them with the theme's mixes. A value equal to the
+// theme's stock seed overrides nothing: the embed token sheet already carries
+// the theme's derivation of it. Handing the raw seed to --primary is what
+// painted every live embed #e64a19 beside a canonical #ce4115 (EmbedBrand).
+$accents   = EmbedBrand::accents(
+    $embedPrimary,
+    (string) $this->themeSetting('primary_color', ''),
+    (string) $this->themeSetting('secondary_color', '')
+);
+$primary   = $accents['primary'];
+$secondary = $accents['secondary'];
 ?>
 <!doctype html>
 <?php
@@ -81,6 +85,13 @@ if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escapeHtml($embedTitle) ?></title>
+    <?php
+    // The theme's webfonts — the same request its layout.phtml makes. This
+    // route carries no theme stylesheet, so without it every heading and
+    // chart label fell back to the system stack.
+    ?>
+    <link rel="preconnect" href="<?= $escapeAttr(EmbedBrand::WEBFONT_ORIGIN) ?>" crossorigin>
+    <link rel="stylesheet" href="<?= $escapeAttr(EmbedBrand::WEBFONT_URL) ?>">
     <?php
     // The theme's tokens, light and dark, as generated literals: this route
     // carries no theme stylesheet, so without them every var() rendered its
