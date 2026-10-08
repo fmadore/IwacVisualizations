@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased — review fixes (2026-10)
+
+Fixes from the 2026-10-08 review of the theme, IwacSearch and this module. Not yet released; the version stays 1.75.2 until the release commit.
+
+- The module's composed colour tokens follow the reader's light/dark toggle. The 21 tokens built from theme tokens (`--iwac-vis-sent-*`, `-cent-*`, `-subj-*`, `-heatmap-*`) were declared on `:root` only, and a custom property holding a `var()` is substituted where it is declared. The theme's manual toggle re-declares its tokens on `body[data-theme]`, so a reader on a light OS who chose dark got the light heatmap ramp on dark panels: the lowest bucket near-white and the scale reading inverted. They are now declared on `:root, body`; the literal-valued tokens stay on `:root`. A browser test flips the toggle against the OS scheme both ways and fails on the old sheet. (V-01)
+
 ### v1.75.2 — MapLibre 6.12.0 and a dependency refresh (2026-10-06)
 
 Maps load **MapLibre GL 6.12.0** (from 6.11.2): features and bug fixes only, among them a GeoJSON source whose memory grew until the page crashed when `setData` outpaced the worker. The three jsDelivr files carry new SRI hashes, generated from the npm tarball and verified against the CDN. IwacSearch 3.21.1 moves to the same files and hashes, so a visitor still downloads MapLibre once for both modules. Deploy the two together. Checked on the live site with the new files swapped in: every map that renders on load renders the same in light and dark mode, with no console errors.

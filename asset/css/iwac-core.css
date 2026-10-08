@@ -38,9 +38,22 @@
 /*  an IWAC theme variable (so dark mode + admin overrides flow through  */
 /*  automatically) with an inline fallback for when the theme isn't     */
 /*  installed. Read at runtime by chart panels via getComputedStyle.    */
+/*                                                                     */
+/*  WHERE THEY ARE DECLARED MATTERS. A custom property whose value    */
+/*  holds a var() is substituted on the element that DECLARES it, and */
+/*  the result is what descendants inherit. The theme's manual        */
+/*  light/dark toggle re-declares its tokens on body[data-theme]      */
+/*  (_colors.scss), so a composition declared on :root alone was      */
+/*  computed from the :root (OS-scheme) values and inherited, frozen, */
+/*  into the toggled body: a light-OS reader who chose dark got the   */
+/*  light heatmap ramp on dark panels, its lowest bucket near-white   */
+/*  and the scale reading inverted. Every token that references a     */
+/*  theme token is therefore declared on `:root, body`; the           */
+/*  literal-valued ones stay on :root.                                */
 /* =================================================================== */
 
-:root {
+:root,
+body {
     /* Sentiment polarité — divergent (positive → neutral → negative).
      * Maps to the IWAC theme's success/warning/error tokens when
      * available, otherwise to the colorblind-safe fallbacks the IWAC
@@ -95,6 +108,17 @@
     --iwac-vis-subj-4: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
     --iwac-vis-subj-5: var(--primary, #ce4115);
 
+    /* Heatmap — sequential 0..4, same --primary → --surface ramp as
+     * subjectivité so every sequential chart in the module lands on
+     * the same palette. Read by C.heatmap via getComputedStyle. */
+    --iwac-vis-heatmap-0: color-mix(in oklab, var(--primary, #ce4115)  8%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-1: color-mix(in oklab, var(--primary, #ce4115) 28%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-2: color-mix(in oklab, var(--primary, #ce4115) 50%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-3: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-4: var(--primary, #ce4115);
+}
+
+:root {
     /* AI model accents — five ROLE SLOTS, so the Sentiment Atlas's
      * subjectivity trend keeps visually distinct lines. Per-model
      * data-series accents (not theme chrome); each carries an allow-hex
@@ -131,15 +155,6 @@
     --iwac-vis-model-3: #f97316; /* allow-hex */
     --iwac-vis-model-4: #1f7ff0; /* allow-hex */
     --iwac-vis-model-5: #9333ea; /* allow-hex */
-
-    /* Heatmap — sequential 0..4, same --primary → --surface ramp as
-     * subjectivité so every sequential chart in the module lands on
-     * the same palette. Read by C.heatmap via getComputedStyle. */
-    --iwac-vis-heatmap-0: color-mix(in oklab, var(--primary, #ce4115)  8%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-1: color-mix(in oklab, var(--primary, #ce4115) 28%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-2: color-mix(in oklab, var(--primary, #ce4115) 50%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-3: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-4: var(--primary, #ce4115);
 
     /* (--iwac-vis-shadow-{subtle,soft,strong} removed in 1.48: they
      * re-derived from --ink exactly what the theme's --shadow-color,

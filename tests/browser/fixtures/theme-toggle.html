@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC theme-toggle fixture</title>
+    <!-- The module's core sheet and nothing else: theme-toggle.spec.js adds a
+         stand-in for the IWAC theme's colour cascade, built from tokens.json,
+         with the same three selectors _colors.scss uses — light on :root, dark
+         on :root under a dark OS preference, and both again on body[data-theme]
+         for the manual toggle. -->
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+</head>
+<body>
+    <section class="iwac-vis-block">
+        <div class="iwac-vis-panel">
+            <h4>Fixture panel</h4>
+            <div class="fixture-oracle" aria-hidden="true"></div>
+        </div>
+    </section>
+    <script src="/asset/js/dist/shared-core.en.min.js"></script>
+</body>
+</html>
