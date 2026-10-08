@@ -221,3 +221,44 @@ test('navigateOnClick sends the reader to the picked item, and wires nothing wit
     P.navigateOnClick(null, '/s/x', () => 1);
     assert.equal(handlers.length, 1, 'no site base or no chart: no handler at all');
 });
+
+/*
+ * Publication dates are calendar dates stored as midnight UTC. Formatted in
+ * the visitor's zone they fell back a day for everyone west of Greenwich, so
+ * these run the formatter as a New York visitor two ways: the whole suite
+ * sets TZ (index.test.js), and a stub makes the zone explicit, for an
+ * engine that ignores TZ.
+ */
+function loadPanelsWest(locale) {
+    const loaded = loadPanels({ locale });
+    vm.runInContext(`(function () {
+        var original = Date.prototype.toLocaleDateString;
+        Date.prototype.toLocaleDateString = function (loc, opts) {
+            var o = { timeZone: 'America/New_York' };
+            for (var k in (opts || {})) o[k] = opts[k];
+            return original.call(this, loc, o);
+        };
+    })();`, loaded.context);
+    return loaded.P;
+}
+
+test('a publication date keeps its day for a visitor west of UTC', () => {
+    assert.equal(loadPanelsWest('en').formatDate('1989-11-04'), 'Nov 4, 1989');
+    assert.equal(loadPanelsWest('fr').formatDate('1989-11-04'), '4 nov. 1989');
+    assert.equal(
+        loadPanelsWest('fr').formatDate('1989-11-04', { year: 'numeric', month: 'long', day: 'numeric' }),
+        '4 novembre 1989'
+    );
+    // A range date is not a date and passes through whole.
+    assert.equal(loadPanelsWest('en').formatDate('2009-05/2009-08'), '2009-05/2009-08');
+});
+
+test('the suite itself runs west of UTC, and the date still holds', () => {
+    // index.test.js sets TZ before anything loads; run alone, this file
+    // inherits the host zone and only the stub above guards the day.
+    if (process.env.TZ === 'America/New_York') {
+        assert.notEqual(new Date(Date.UTC(1989, 10, 4)).getTimezoneOffset(), 0,
+            'TZ was set but this engine ignored it');
+    }
+    assert.equal(loadPanels({ locale: 'en' }).P.formatDate('1989-11-04'), 'Nov 4, 1989');
+});

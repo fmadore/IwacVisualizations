@@ -372,20 +372,40 @@
      * failure it gracefully falls back to the first ten characters of
      * the input (the ISO date slice), so bad data never leaks through as
      * "Invalid Date".
+     *
+     * Always in UTC. A publication date is a calendar date, stored as a
+     * `YYYY-MM-DD` string that `Date` reads as midnight UTC; formatted in the
+     * visitor's own zone it fell back to the previous day for everyone west
+     * of Greenwich ("3 novembre 1989" for an article of 4 November, in New
+     * York), while the CSV exports, which read the UTC parts, kept the right
+     * day. A caller's own `timeZone` still wins.
      */
     P.formatDate = function (value, opts) {
         if (!value) return '';
-        var str = String(value).slice(0, 10);
-        var d = new Date(str);
-        // Unparseable input (e.g. the publications subset's range dates
-        // like "2009-05/2009-08") passes through verbatim — slicing it
-        // to 10 chars would cut mid-range ("2009-05/20").
-        if (isNaN(d.getTime())) return String(value);
+        var raw = String(value);
+        // Only a whole ISO date (optionally with a time) is a date here. A
+        // year-month reads "May 2009"; anything else — the publications
+        // subset's range dates like "2009-05/2009-08" — passes through
+        // verbatim. `Date` is not a validator: V8 reads the ten-character
+        // slice "2009-05/20" as a legacy date and printed "May 20, 2009".
+        if (/^\d{4}-\d{2}$/.test(raw)) {
+            return ns.formatYearMonth ? ns.formatYearMonth(raw) : raw;
+        }
+        var iso = /^(\d{4})-(\d{2})-(\d{2})(?:$|[T\s])/.exec(raw);
+        if (!iso) return raw;
+        var str = iso[1] + '-' + iso[2] + '-' + iso[3];
+        var d = new Date(Date.UTC(+iso[1], +iso[2] - 1, +iso[3]));
+        if (isNaN(d.getTime())) return raw;
+        var options = { year: 'numeric', month: 'short', day: 'numeric' };
+        if (opts) {
+            options = {};
+            for (var k in opts) {
+                if (Object.prototype.hasOwnProperty.call(opts, k)) options[k] = opts[k];
+            }
+        }
+        if (!options.timeZone) options.timeZone = 'UTC';
         try {
-            return d.toLocaleDateString(
-                ns.locale === 'fr' ? 'fr-FR' : 'en-US',
-                opts || { year: 'numeric', month: 'short', day: 'numeric' }
-            );
+            return d.toLocaleDateString(ns.locale === 'fr' ? 'fr-FR' : 'en-US', options);
         } catch (e) {
             return str;
         }

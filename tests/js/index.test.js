@@ -1,5 +1,10 @@
 'use strict';
 
+// Run the whole suite as a visitor west of Greenwich, so a date formatted in
+// the local zone instead of UTC shows up as the previous day (Node reads TZ
+// when it changes, on Windows too). panels.test.js asserts it took effect.
+process.env.TZ = 'America/New_York';
+
 // Cross-platform entry point: Windows shells do not expand `*.test.js`, and
 // Node treats a directory argument as a module rather than discovering it.
 require('./i18n.test.js');
