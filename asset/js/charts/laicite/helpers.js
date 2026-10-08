@@ -46,53 +46,20 @@
         return Math.round((n / d) * 1000) / 10;
     };
 
-    function numberLocale() {
-        return ns.locale === 'fr' ? 'fr-FR' : 'en-US';
-    }
-
     /**
-     * A percentage (0–100, as `L.pct` returns it) written the way the page's
-     * locale writes one: "12.5%" in English, "12,5 %" in French. Every
-     * `toFixed(1) + '%'` in this block printed the English form on the
-     * French site. `digits` is fixed, not a maximum, so a column of shares
-     * lines up. null / NaN render as an em dash, never as "NaN%".
-     *
-     * @param {number|null} value
-     * @param {number} [digits=1]
-     * @returns {string}
+     * A percentage (0–100, as `L.pct` returns it) and a decimal, in the
+     * page locale. These were this block's own Intl formatters, written when
+     * every `toFixed(1) + '%'` here printed the English form on the French
+     * site; they are now the module's (`P.formatPercent`, `P.formatDecimal`,
+     * iwac-i18n.js), which also apply the shared grouping rule, and these
+     * names stay as aliases for the block's call sites.
      */
     L.formatPercent = function (value, digits) {
-        if (value == null || !isFinite(value)) return '—';
-        var d = digits == null ? 1 : digits;
-        try {
-            return new Intl.NumberFormat(numberLocale(), {
-                style: 'percent', minimumFractionDigits: d, maximumFractionDigits: d
-            }).format(value / 100);
-        } catch (e) {
-            return value.toFixed(d) + '%';
-        }
+        return P.formatPercent(value, digits);
     };
 
-    /**
-     * A decimal in the page's locale, for a placeholder whose template
-     * carries its own sign ("{percent}%" in English, "{percent} %" in
-     * French) — the template owns the spacing, this owns the comma. Prose,
-     * not a column: `digits` is a maximum, so 40 reads "40", not "40.0".
-     *
-     * @param {number|null} value
-     * @param {number} [digits=1]
-     * @returns {string}
-     */
     L.formatDecimal = function (value, digits) {
-        if (value == null || !isFinite(value)) return '—';
-        var d = digits == null ? 1 : digits;
-        try {
-            return new Intl.NumberFormat(numberLocale(), {
-                maximumFractionDigits: d
-            }).format(value);
-        } catch (e) {
-            return String(Math.round(value * Math.pow(10, d)) / Math.pow(10, d));
-        }
+        return P.formatDecimal(value, digits);
     };
 
     /**

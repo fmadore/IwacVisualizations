@@ -25,10 +25,9 @@
  * year × month panel as well as by On This Day. Both of those used to carry
  * private duplicates.
  *
- * The same two grids label their Gregorian rows too, so the short Gregorian
- * month table lives here beside the lunar one (`MONTHS_SHORT`), and
- * `monthLabels(calendar)` hands either grid its twelve rows in the page
- * locale. Each grid used to keep its own Gregorian copy.
+ * The same two grids label their Gregorian rows too: `monthLabels(calendar)`
+ * hands either grid its twelve rows in the page locale, the Gregorian ones
+ * from the module's one month table (`IWACVis.monthNames`, iwac-i18n.js).
  */
 (function () {
     'use strict';
@@ -45,27 +44,19 @@
     };
 
     /**
-     * Gregorian month abbreviations, for the same month grids. Axis
-     * furniture: always needed as a complete ordered set and never reused
-     * outside a grid, so kept here rather than in the i18n dictionary.
-     */
-    var MONTHS_SHORT = {
-        en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        fr: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
-             'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
-    };
-
-    /**
-     * The twelve row labels of a month grid, in the page locale.
+     * The twelve row labels of a month grid, in the page locale: the lunar
+     * months, or the Gregorian abbreviations from the module's one month
+     * table (`IWACVis.monthNames`, iwac-i18n.js). This file kept its own
+     * Gregorian copy, capitalised "Fév" / "Déc" as French does not write
+     * them, beside a second in the Laïcité dictionary.
      *
      * @param {string} [calendar]  'hijri' for the lunar months; anything
      *   else for the Gregorian abbreviations
      * @returns {string[]}
      */
     function monthLabels(calendar) {
-        var table = calendar === 'hijri' ? MONTHS : MONTHS_SHORT;
-        return table[ns.locale === 'fr' ? 'fr' : 'en'] || table.en;
+        if (calendar !== 'hijri' && ns.monthNames) return ns.monthNames('short');
+        return MONTHS[ns.locale === 'fr' ? 'fr' : 'en'] || MONTHS.en;
     }
 
     // `undefined` = not yet probed, `false` = this engine cannot do it.
@@ -144,7 +135,6 @@
 
     ns.hijri = {
         MONTHS:       MONTHS,
-        MONTHS_SHORT: MONTHS_SHORT,
         monthLabels:  monthLabels,
         available:    available,
         parts:        parts,

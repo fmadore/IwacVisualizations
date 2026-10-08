@@ -477,7 +477,7 @@
                         row: function (p, i) {
                             var def = view.defs[p.seriesIndex];
                             return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
-                                + p.value + ' %' + view.rowSuffix(def, i);
+                                + P.formatPercent(p.value, 1) + view.rowSuffix(def, i);
                         }
                     })
                 },

@@ -64,7 +64,7 @@
         var pct = Math.round(score * 100);
         if (pct < 1)   pct = 1;
         if (pct > 99) pct = 99;
-        return pct + '%';
+        return P.formatPercent(pct, 0);
     }
 
     /** Normalize either generator output (`o_id`, `similarity`,

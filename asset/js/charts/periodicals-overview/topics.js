@@ -96,7 +96,7 @@
                         return !def || !def.values[i];
                     },
                     row: function (p) {
-                        return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — ' + p.value + ' %';
+                        return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — ' + P.formatPercent(p.value, 1);
                     },
                     // The per-year issue count is what makes a thin early
                     // year readable as thin rather than as a real signal.
@@ -191,7 +191,7 @@
                 label: {
                     show: true,
                     position: 'right',
-                    formatter: function (p) { return p.value + ' %'; }
+                    formatter: function (p) { return P.formatPercent(p.value, 1); }
                 }
             }]
         };

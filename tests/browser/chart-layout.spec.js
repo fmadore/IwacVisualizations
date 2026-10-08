@@ -15,7 +15,8 @@ for (const theme of ['light', 'dark']) {
         const columns = await page.getByRole('columnheader').allTextContents();
         const names = await page.evaluate(() => window.chart.getOption().series.map(series => series.name));
         expect(columns.slice(1)).toEqual(names);
-        await expect(page.getByRole('table')).toContainText('12,000');
+        // Grouped with U+202F on the English site too (iwac-i18n.js).
+        await expect(page.getByRole('table')).toContainText('12\u202F000');
     });
 
     test(`${theme} badges and slider retain contrast on the theme panel`, async ({ page }) => {
@@ -72,6 +73,23 @@ for (const theme of ['light', 'dark']) {
         expect(geometry.edges.every(width => width > 0)).toBe(true);
     });
 }
+
+test('value axes print the page locale’s numbers, not ECharts’ commas', async ({ page }) => {
+    // ECharts groups axis ticks with a comma in every language, so the
+    // French site read "6,000" — six, to a French reader — on every count
+    // axis. The theme-level formatter puts them on the module's rule.
+    for (const lang of ['fr', 'en']) {
+        await page.goto(`/tests/browser/fixtures/chart-layout.html?lang=${lang}`);
+        await page.evaluate(() => window.drawChart('timeline', 12));
+        const labels = await page.evaluate(() => window.chartLayout().labels.map((label) => label.text));
+        const ticks = labels.filter((text) => /^[\d\s\u202F\u00A0,.]+$/.test(text) && /\d{3}/.test(text) && !/^(19|20)\d\d$/.test(text));
+        expect(ticks.length, `${lang} value-axis ticks among ${JSON.stringify(labels)}`).toBeGreaterThan(0);
+        for (const tick of ticks) {
+            expect(tick, `${lang} tick`).not.toContain(',');
+            if (Number(tick.replace(/\D/g, '')) >= 1000) expect(tick, `${lang} tick`).toMatch(/^\d{1,3}(\u202F\d{3})+$/);
+        }
+    }
+});
 
 test('offline renderer matches the production ECharts version', () => {
     const assets = readFileSync(path.join(__dirname, '../../view/common/iwac-assets.phtml'), 'utf8');

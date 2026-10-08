@@ -210,8 +210,8 @@
                             xLabelRotate: 40,
                             tooltipFormatter: function (p) {
                                 return P.escapeHtml(yLabels[p.value[1]]) + '<br>'
-                                    + P.escapeHtml(xLabels[p.value[0]]) + ': <strong>'
-                                    + p.value[2] + '%</strong>';
+                                    + P.escapeHtml(P.labelColon(xLabels[p.value[0]])) + ' <strong>'
+                                    + P.formatPercent(p.value[2], 1) + '</strong>';
                             }
                         }
                     ), { notMerge: true });
@@ -236,8 +236,9 @@
         var data = ((bundle || {}).by_subset || {})[subset];
         if (!data) return P.emptyChartOption();
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        var months = P.t('laicite.months').split(',');
-        var hijri = P.t('laicite.hijri_months').split(',');
+        var months = ns.monthNames('short');
+        // The module's month tables (iwac-i18n.js, hijri.js), not a third copy.
+        var hijri = ns.hijri.monthLabels('hijri');
         var floor = bundle.minimum_cell || 5;
         var rates = function (calendar) {
             var exposure = data[calendar + '_exposure'];

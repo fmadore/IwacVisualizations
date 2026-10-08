@@ -208,7 +208,7 @@
             return {
                 // Pre-formatted: the shared number renderer would show a
                 // missing day gap as "0", which reads as same-day.
-                sim: (p.similarity != null) ? p.similarity.toFixed(3) : '',
+                sim: (p.similarity != null) ? P.formatNumber(p.similarity, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '',
                 gap: (p.day_gap != null) ? String(p.day_gap) : '—',
                 titleA: p.a.title || ('#' + p.a.o_id),
                 hrefA: ctx.siteBase ? ctx.siteBase + '/item/' + p.a.o_id : null,

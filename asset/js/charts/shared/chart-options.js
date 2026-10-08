@@ -144,14 +144,20 @@
     };
 
     /**
-     * A value-axis label in percent: "42 %", with the space French
-     * typography puts before the sign. The module keeps it in English
-     * too, so an axis reads the same on both sites — and so the three
-     * laïcité panels that wrote `'{value}%'` stop dropping it. Extra
-     * axisLabel properties (fontSize, …) are merged in.
+     * A value-axis label in percent, in the page locale: "42%" in English,
+     * "42 %" in French (U+202F before the sign), at most one decimal for a
+     * fractional tick. The three laïcité panels that wrote `'{value}%'`
+     * dropped the French space; this axis used to keep the French space in
+     * English too. Extra axisLabel properties (fontSize, …) are merged in.
      */
+    C._percentTick = function (v) {
+        return (typeof v === 'number' && isFinite(v) && ns.formatNumber)
+            ? ns.formatNumber(v / 100, { style: 'percent', maximumFractionDigits: 1 })
+            : v;
+    };
+
     C._percentAxisLabel = function (extra) {
-        var label = { formatter: function (v) { return v + ' %'; } };
+        var label = { formatter: function (v) { return C._percentTick(v); } };
         if (extra) {
             for (var k in extra) {
                 if (Object.prototype.hasOwnProperty.call(extra, k)) label[k] = extra[k];

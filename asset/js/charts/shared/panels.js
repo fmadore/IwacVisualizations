@@ -345,8 +345,24 @@
 
     P.t = function (key, params) { return ns.t(key, params); };
 
-    P.formatNumber = function (n) {
-        return ns.formatNumber ? ns.formatNumber(n) : String(n);
+    /*
+     * The number formatters live in iwac-i18n.js (one per repository, one
+     * rule — see there); these are the shortcuts block code calls. A count
+     * is `P.formatNumber`, a share on the 0–100 scale `P.formatPercent`, a
+     * ratio or score `P.formatDecimal`, a tight in-chart label
+     * `P.formatCompact`. Never `toFixed()` or `+ '%'` in display code.
+     */
+    P.formatNumber = function (n, options) {
+        return ns.formatNumber ? ns.formatNumber(n, options) : String(n);
+    };
+    P.formatDecimal = function (value, digits) {
+        return ns.formatDecimal ? ns.formatDecimal(value, digits) : String(value);
+    };
+    P.formatPercent = function (value, digits) {
+        return ns.formatPercent ? ns.formatPercent(value, digits) : String(value);
+    };
+    P.formatCompact = function (n) {
+        return ns.formatCompact ? ns.formatCompact(n) : String(n);
     };
 
     /**

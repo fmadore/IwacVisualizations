@@ -263,8 +263,6 @@
         'laicite.items': 'Items',
         "laicite.seasonality_desc": "Both calendars use the same documents with a Gregorian and stored Hijri month. Rates divide dossier documents by all eligible collection documents in that month; months with fewer than five records are omitted. Calendar conversion is not a locally observed religious date, and upload dates may differ from event dates. Missingness can still bias the pattern.",
         'laicite.seasonality_coverage': '{hijri} of {items} items carry a lunar date.',
-        'laicite.months': 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec',
-        'laicite.hijri_months': 'Muharram,Safar,Rabi I,Rabi II,Jumada I,Jumada II,Rajab,Shaban,Ramadan,Shawwal,Dhu al-Qida,Dhu al-Hijja',
 
         // --- Phase 3: context ---
         'laicite.view_actors': 'Actors',
@@ -629,8 +627,6 @@
         'laicite.items': 'Documents',
         "laicite.seasonality_desc": "Les deux calendriers utilisent les mêmes documents dotés d’un mois grégorien et d’un mois hégirien enregistré. Les taux divisent les documents du dossier par tous les documents admissibles du même mois ; les mois de moins de cinq notices sont masqués. Une conversion calendaire n’est pas une date religieuse observée localement, et la mise en ligne peut différer de l’événement. Les lacunes peuvent encore biaiser le profil.",
         'laicite.seasonality_coverage': '{hijri} documents sur {items} portent une date lunaire.',
-        'laicite.months': 'janv.,févr.,mars,avr.,mai,juin,juil.,août,sept.,oct.,nov.,déc.',
-        'laicite.hijri_months': 'Mouharram,Safar,Rabi I,Rabi II,Joumada I,Joumada II,Rajab,Chaabane,Ramadan,Chawwal,Dhou al-qi\u2019da,Dhou al-hijja',
 
         // --- Phase 3 ---
         'laicite.view_actors': 'Acteurs',

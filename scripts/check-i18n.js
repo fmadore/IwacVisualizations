@@ -354,6 +354,43 @@ for (const path of walk(JS_ROOT)) {
 }
 
 /* ---------------------------------------------------------------------- */
+/*  Rule: numbers go through the module's one formatter                   */
+/* ---------------------------------------------------------------------- */
+
+// `toFixed()` writes the English decimal point and `+ '%'` the English
+// percent on the French site, and neither applies the U+202F grouping rule
+// the theme, IwacSearch and this module share (iwac-i18n.js). Display code
+// calls P.formatNumber / formatDecimal / formatPercent / formatCompact.
+// A '%' glued to a CSS length (`style.width = x + '%'`, an ECharts `left`
+// or `radius`, a gradient stop) is layout, not text, and is let through by
+// what the line assigns to. A line that must keep either form says why with
+// `// allow-number-format: <reason>`.
+const NUMBER_FORMAT_EXEMPT = new Set([posixRelative(ROOT, SHARED)]);
+const TO_FIXED = /\.toFixed\s*\(/;
+const PERCENT_GLUE = /\+\s*['"]\s?%/;
+const CSS_CONTEXT = /\b(?:style\.|setProperty|width|height|left|right|top|bottom|radius|center|offset|stop\.color|position|margin|padding|flex|basis)\b/;
+for (const path of walk(JS_ROOT)) {
+    const label = posixRelative(ROOT, path);
+    if (NUMBER_FORMAT_EXEMPT.has(label)) continue;
+    readFileSync(path, 'utf8').split(/\r?\n/).forEach((line, i) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return;
+        if (/allow-number-format:/.test(line)) return;
+        const code = line.replace(/\/\/.*$/, '');
+        let why = null;
+        if (TO_FIXED.test(code)) {
+            why = 'toFixed() prints the English decimal point on the French site — use '
+                + 'P.formatDecimal / P.formatNumber (iwac-i18n.js).';
+        } else if (PERCENT_GLUE.test(code) && !CSS_CONTEXT.test(code)) {
+            why = "a bare '%' is the English percent on the French site — use P.formatPercent "
+                + '(or C._percentTick for an axis).';
+        }
+        if (!why) return;
+        problems.push({ kind: 'numbers formatted by hand', label, line: i + 1, key: trimmed, why });
+    });
+}
+
+/* ---------------------------------------------------------------------- */
 /*  Rule: no identity en entry                                            */
 /* ---------------------------------------------------------------------- */
 
@@ -456,6 +493,6 @@ if (problems.length) {
 console.log(
     `✓ i18n guard: ${merged.en.size} English + ${merged.fr.size} French keys across `
     + `${blocks.length + 1} dictionaries, no duplicates, no unreachable fallbacks, `
-    + 'no shadowing, no identity en entries, no pre-formatted counts, '
+    + 'no shadowing, no identity en entries, no pre-formatted counts, no hand-formatted numbers, '
     + 'no single-block keys in the shared file'
 );

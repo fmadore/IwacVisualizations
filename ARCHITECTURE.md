@@ -363,7 +363,7 @@ Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as
 
 | Helper | What it does |
 |---|---|
-| `P.t(key, params)` / `P.formatNumber(n)` / `P.formatDate(iso, opts)` | i18n shortcuts. `formatDate` is locale-aware (fr-FR / en-US) and gracefully falls back to the ISO date slice on parse failure. |
+| `P.t(key, params)` / `P.formatNumber(n)` / `P.formatDecimal(v, digits)` / `P.formatPercent(v, digits)` / `P.formatCompact(n)` / `P.formatDate(iso, opts)` | i18n shortcuts over `iwac-i18n.js`, the module's one number formatter: thousands grouped with U+202F in both locales, the decimal mark and percent spacing of the page locale (`12,5 %` / `12.5%`). `npm run lint:i18n` rejects `toFixed()` and a bare `+ '%'` in display code. `formatDate` falls back to the ISO date slice on parse failure. |
 | `P.buildLoadingState(key)` / `P.buildEmptyState(key)` / `P.buildErrorState(key)` | Consistent spinner / "No data available" / "Failed to load" banners. Default keys translate to the obvious messages. Each is a `role="status"` / `aria-live="polite"` live region, so a screen reader announces the state change a sighted reader takes in at a glance. |
 | `P.bootBlock({ selector, dataFile \| load, render, … })` | The page-block boot contract: DOM-ready + ECharts guard, container sweep, `ctx` from the block's data-\* attributes, bundle fetch under `P.DATA_BASE`, error banner (or `onError: 'remove'` for blocks that must vanish rather than show an error). Every page-block orchestrator ends in one call to this. |
 | `P.bootPerItemDashboard({ selector, classToken, dataDir, layout, … })` | The same contract for resource-page dashboards: fetch `<dataDir>/<itemId>.json`, swap the spinner for a `__body` wrapper, mount an optional header, dispatch the grid through `dashboardLayout.render`. |
@@ -450,6 +450,7 @@ Two layers:
 
 1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `msgfmt language/fr.po -o language/fr.mo` (or, without gettext installed: `python -c "import polib; polib.pofile('language/fr.po').save_as_mofile('language/fr.mo')"`). Current catalog is 58 entries, regenerated v1.6.1. See `language/README.md`.
 2. **JavaScript (`IWACVis.t()`)** — chart labels, tooltips, summary card labels, tab names, facet UI. Dictionary lives inline in `asset/js/iwac-i18n.js`. Locale is detected once at render time from `document.documentElement.lang` (populated by Omeka's Internationalisation module).
+3. **Numbers and calendar names** — `IWACVis.formatNumber` / `formatDecimal` / `formatPercent` / `formatCompact` and `monthNames` / `weekdayNames` / `formatYearMonth`, all in `iwac-i18n.js` and all keyed to the page locale, never the browser's. Value axes take the number rule at theme level (`iwac-theme.js`); ECharts' French locale (calendar month and day names) is registered from the same month table in `dashboard-core.js`.
 
 Language switching in IWAC is a full page navigation (the Internationalisation module links to equivalent URLs under each locale), so no runtime switch is needed — `IWACVis.t()` just reads the locale when the orchestrator fires.
 

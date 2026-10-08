@@ -308,7 +308,7 @@
                             return p.marker + ' ' + P.escapeHtml(p.seriesName) + ': '
                                 + (share
                                     ? P.t('ngram.tip_share', {
-                                        pct: p.value, total: P.formatNumber(total) })
+                                        pct: P.formatDecimal(p.value, 1), total: P.formatNumber(total) })
                                     : P.t('ngram.tip_count', {
                                         count: p.value || 0,
                                         total: P.formatNumber(total) }));

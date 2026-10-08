@@ -57,7 +57,7 @@
                     var term = terms[p.dataIndex] || {};
                     var lines = ['<strong>' + P.escapeHtml(term.token || '') + '</strong>'];
                     if (term.rate_ratio != null) {
-                        lines.push(P.t('keyness_tooltip_ratio', { ratio: term.rate_ratio }));
+                        lines.push(P.t('keyness_tooltip_ratio', { ratio: P.formatDecimal(term.rate_ratio, 2) }));
                     }
                     lines.push(P.t('keyness_tooltip_count', {
                         count: term.count || 0,
@@ -106,8 +106,8 @@
     function formatQ(q) {
         if (typeof q !== 'number' || !isFinite(q)) return '—';
         if (q === 0) return '< 1e-300';
-        if (q < 0.001) return '< 0.001';
-        return q.toFixed(3);
+        if (q < 0.001) return '< ' + P.formatDecimal(0.001, 3);
+        return P.formatNumber(q, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
     }
 
     function renderKeyness(root, data) {

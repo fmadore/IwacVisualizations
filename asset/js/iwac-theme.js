@@ -508,6 +508,23 @@
     }
     ns.prefersReducedMotion = prefersReducedMotion;
 
+    /**
+     * Value-axis tick labels in the page locale. ECharts' own axis formatter
+     * groups thousands with a comma in every language, so the French site
+     * read "6,000" — six, to a French reader — on every count axis while the
+     * tooltips, cards and tables beside it said "6 000". One theme-level
+     * formatter, resolved lazily because iwac-i18n.js is what defines it,
+     * puts every value and log axis on the module's number rule. A builder
+     * that sets its own `axisLabel.formatter` still wins: the percent axes
+     * (`C._percentAxisLabel`) and the Gantt's year axis, which must read
+     * "1961", not "1 961", keep theirs.
+     */
+    function axisNumber(value) {
+        return (typeof value === 'number' && isFinite(value) && ns.formatNumber)
+            ? ns.formatNumber(value)
+            : value;
+    }
+
     /** Build an ECharts theme object from the IWAC tokens. */
     function buildTheme(tokens, palette) {
         var tooltipBg = tokens.surface;
@@ -589,14 +606,14 @@
             valueAxis: {
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight },
+                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
             },
             logAxis: {
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight },
+                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } }
             },
             timeAxis: {

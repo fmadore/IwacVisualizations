@@ -134,8 +134,8 @@
             var badge = null;
             if (typeof n.similarity === 'number') {
                 var pct = Math.round(n.similarity * 1000) / 10;
-                badge = P.el('span', 'iwac-vis-article-card__sim', pct.toFixed(0) + '%');
-                badge.setAttribute('title', P.t('Similarity') + ': ' + pct.toFixed(1) + '%');
+                badge = P.el('span', 'iwac-vis-article-card__sim', P.formatPercent(pct, 0));
+                badge.setAttribute('title', P.labelColon(P.t('Similarity')) + ' ' + P.formatPercent(pct, 1));
             }
             gridHost.appendChild(buildCard(n, badge, siteBase));
         });
@@ -152,8 +152,8 @@
             var badge = null;
             if (typeof w.similarity === 'number') {
                 var pct = Math.round(w.similarity * 1000) / 10;
-                badge = P.el('span', 'iwac-vis-article-card__sim', pct.toFixed(0) + '%');
-                badge.setAttribute('title', P.t('Similarity') + ': ' + pct.toFixed(1) + '%');
+                badge = P.el('span', 'iwac-vis-article-card__sim', P.formatPercent(pct, 0));
+                badge.setAttribute('title', P.labelColon(P.t('Similarity')) + ' ' + P.formatPercent(pct, 1));
             }
             // Authors · type · year. The type arrives as the French
             // resource-class label the dataset stores, so it routes through

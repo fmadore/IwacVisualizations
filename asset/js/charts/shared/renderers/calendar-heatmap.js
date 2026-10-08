@@ -319,13 +319,15 @@
                     fontSize: 12,
                     fontWeight: 600
                 },
+                // No `nameMap`: the chart's own locale (FR registered by
+                // dashboard-core.js) names the days and months. The lower-case
+                // 'fr' this passed matched no registered locale, ECharts' look-up
+                // being case-sensitive, so French pages read English names.
                 dayLabel: {
-                    nameMap: ns.locale === 'fr' ? 'fr' : 'en',
                     color: tokens.muted,
                     fontSize: 9
                 },
                 monthLabel: {
-                    nameMap: ns.locale === 'fr' ? 'fr' : 'en',
                     color: tokens.inkLight,
                     fontSize: 10
                 }

@@ -66,7 +66,8 @@ test('a numeric count is written with the locale separator, so callers need not 
     // Pre-formatting handed t() a string and switched the plural off: the
     // context graph said "1 documents en commun" on every single-document
     // edge. Passing the number gets both the variant and the separator.
-    assert.equal(load('en').t('articles_count', { count: 1200 }), '1,200 articles');
+    // U+202F in both locales: the shared grouping rule (iwac-i18n.js).
+    assert.equal(load('en').t('articles_count', { count: 1200 }), '1 200 articles');
     assert.equal(load('fr').t('articles_count', { count: 1200 }).replace(/[\u202f\u00a0 ]/g, ' '), '1 200 articles');
     assert.equal(load('fr').t('shared_items_count', { count: 1 }), '1 document en commun');
     assert.equal(load('en').t('shared_items_count', { count: 1 }), '1 shared item');

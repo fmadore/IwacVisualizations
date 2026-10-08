@@ -339,16 +339,43 @@
      * Returns the ECharts instance. Caller is responsible for setOption().
      * Not normally called directly — prefer `ns.registerChart()`.
      */
+    /**
+     * ECharts' production build carries English and Chinese only, so the
+     * `locale: 'FR'` every French chart asked for fell back to English: the
+     * Topic Explorer calendar labelled its months "Jan", "Feb" on French
+     * pages. The French locale is registered here, once, from the module's
+     * own Intl-derived names (iwac-i18n.js); ECharts merges what it does not
+     * carry (aria templates the module overrides anyway) from English.
+     */
+    var frenchLocaleRegistered = false;
+    function registerFrenchLocale() {
+        if (frenchLocaleRegistered || typeof echarts.registerLocale !== 'function'
+                || !ns.monthNames || !ns.weekdayNames) {
+            return;
+        }
+        frenchLocaleRegistered = true;
+        echarts.registerLocale('FR', {
+            time: {
+                month: ns.monthNames('long'),
+                monthAbbr: ns.monthNames('short'),
+                dayOfWeek: ns.weekdayNames('long'),
+                dayOfWeekAbbr: ns.weekdayNames('short'),
+                // The calendar's one-letter day column.
+                dayOfWeekShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
+            },
+            legend: { selector: { all: 'Tout', inverse: 'Inverser' } }
+        });
+    }
+
     ns.initChart = function (el, initOpts) {
         if (typeof echarts === 'undefined') {
             console.warn('IWACVis: ECharts not loaded');
             return null;
         }
-        // `locale` changes nothing visible today — there is no toolbox, the
-        // aria label is set by registerChart, and no axis is `type: 'time'`
-        // — but it is the setting that decides how ECharts words anything it
-        // generates itself, and getting it from the site's language rather
-        // than from ECharts' default costs one argument.
+        // `locale` decides how ECharts words anything it generates itself —
+        // the calendar's month and day names above all — so it follows the
+        // site's language rather than ECharts' default.
+        if (ns.locale === 'fr') registerFrenchLocale();
         var opts = { locale: ns.locale === 'fr' ? 'FR' : 'EN' };
         if (initOpts) {
             for (var k in initOpts) {

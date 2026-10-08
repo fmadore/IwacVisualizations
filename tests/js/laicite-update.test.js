@@ -135,6 +135,16 @@ function loadLaicite() {
             return vars ? key + ':' + JSON.stringify(vars) : key;
         },
         formatNumber(n) { return String(n); },
+        // The module's formatters (iwac-i18n.js) on an English page, which
+        // is what the block's own L.formatPercent / L.formatDecimal printed.
+        formatPercent(v, d = 1) {
+            if (v == null || !isFinite(v)) return '—';
+            return new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: d, maximumFractionDigits: d }).format(v / 100);
+        },
+        formatDecimal(v, d = 1) {
+            if (v == null || !isFinite(v)) return '—';
+            return new Intl.NumberFormat('en-US', { maximumFractionDigits: d }).format(v);
+        },
         escapeHtml(s) { return String(s); },
         emptyChartOption() { return { __empty: true }; },
         buildNoDataState() { return P.el('div', 'iwac-vis-empty', 'no data'); },

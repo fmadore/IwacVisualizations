@@ -198,7 +198,7 @@
                 axisLabel: {
                     // Distance from the midpoint is a share of the row, so
                     // the left half is labelled unsigned, not negative.
-                    formatter: function (v) { return Math.abs(v) + ' %'; }
+                    formatter: function (v) { return C._percentTick(Math.abs(v)); }
                 },
                 splitLine: { show: true }
             },
@@ -324,8 +324,8 @@
                 lines.push(dot(colors[k]) + esc(labelFor(k))
                     + ' <strong>' + fmt(n) + '</strong>'
                     + ' <span style="opacity:.75">'
-                    + shares[i][k].toFixed(1).replace('.', ns.locale === 'fr' ? ',' : '.')
-                    + ' %</span>');
+                    + P.formatPercent(shares[i][k], 1)
+                    + '</span>');
             });
             return lines.join('<br>');
         };
@@ -361,7 +361,7 @@
                         axisLabel: {
                             fontSize: P.AXIS_FONT_SM,
                             formatter: function (v) {
-                                return v % 40 === 0 ? Math.abs(v) + ' %' : '';
+                                return v % 40 === 0 ? C._percentTick(Math.abs(v)) : '';
                             }
                         }
                     }

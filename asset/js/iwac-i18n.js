@@ -723,13 +723,220 @@
         return str;
     };
 
-    /** Format an integer according to the current locale (thousands separators). */
-    ns.formatNumber = function (n) {
-        if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
-            try { return new Intl.NumberFormat(ns.locale === 'fr' ? 'fr-FR' : 'en-US').format(n); }
-            catch (e) { /* fall through */ }
+    /* ----------------------------------------------------------------- */
+    /*  Numbers — the module's one formatter                              */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Every number this module prints goes through here, under one rule
+     * shared with the IWAC theme and IwacSearch:
+     *
+     *   - thousands are grouped with U+202F (narrow no-break space) in
+     *     EVERY locale — never a comma a French reader would take for a
+     *     decimal mark, and the theme's own counts already read "20 944";
+     *   - the decimal mark follows the PAGE locale (fr comma, en point),
+     *     never the browser's;
+     *   - a percent is "12,5 %" in French (U+202F before the sign) and
+     *     "12.5%" in English.
+     *
+     * Before this, the module grouped with the page locale ("7,649" on the
+     * English site), the theme with U+202F, and IwacSearch with the
+     * browser's locale — three policies on one page. Display code must not
+     * reach for `toFixed()` or a bare `+ '%'`; `npm run lint:i18n` fails on
+     * both outside this file.
+     */
+    var NNBSP = '\u202F';
+    ns.NNBSP = NNBSP;
+
+    function intlNumberLocale() {
+        return ns.locale === 'fr' ? 'fr-FR' : 'en-US';
+    }
+
+    var numberFormats = {};
+    function numberFormat(options) {
+        var key = intlNumberLocale() + '|' + JSON.stringify(options || {});
+        if (!Object.prototype.hasOwnProperty.call(numberFormats, key)) {
+            var made = null;
+            if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
+                try { made = new Intl.NumberFormat(intlNumberLocale(), options || undefined); }
+                catch (e) { made = null; }
+            }
+            numberFormats[key] = made;
         }
-        return String(n);
+        return numberFormats[key];
+    }
+
+    /** Group by hand, for an engine without Intl (or without formatToParts). */
+    function groupDigits(plain) {
+        var parts = String(plain).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, NNBSP);
+        return parts.join(ns.locale === 'fr' ? ',' : '.');
+    }
+
+    /**
+     * Format through Intl and apply the grouping rule, or return null when
+     * this engine cannot (the caller then groups by hand).
+     */
+    function render(value, options) {
+        var format = numberFormat(options);
+        if (!format || !format.formatToParts) return null;
+        var parts = format.formatToParts(value);
+        var out = '';
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+            if (part.type === 'group') {
+                out += NNBSP;
+            } else if (part.type === 'literal' && /^\s+$/.test(part.value)
+                    && parts[i + 1] && parts[i + 1].type === 'percentSign') {
+                // ICU writes U+00A0 before the French percent sign; the rule is U+202F.
+                out += NNBSP;
+            } else {
+                out += part.value;
+            }
+        }
+        return out;
+    }
+
+    function finite(n) {
+        if (n === null || n === undefined || n === '' || typeof n === 'boolean') return false;
+        return isFinite(Number(n));
+    }
+
+    /** Round to at most `digits` decimals and drop trailing zeros. */
+    function trimmed(value, digits) {
+        var p = Math.pow(10, digits);
+        return String(Math.round(value * p) / p);
+    }
+
+    /**
+     * A number in the page locale: "6 000", "0,25". Anything that is not a
+     * finite number passes through as a string, never as "NaN".
+     *
+     * @param {number} n
+     * @param {Object} [options]  Intl.NumberFormat options
+     * @returns {string}
+     */
+    ns.formatNumber = function (n, options) {
+        if (!finite(n)) return n == null ? '' : String(n);
+        var value = Number(n);
+        var out = render(value, options);
+        if (out !== null) return out;
+        var max = options && options.maximumFractionDigits;
+        return groupDigits(trimmed(value, max == null ? 3 : max));
+    };
+
+    /**
+     * A decimal for prose and placeholders: `digits` is a MAXIMUM, so 40
+     * reads "40" and 0.4567 reads "0,46" at 2. null / NaN read as an em dash.
+     *
+     * @param {number|null} value
+     * @param {number} [digits=1]
+     * @returns {string}
+     */
+    ns.formatDecimal = function (value, digits) {
+        if (!finite(value)) return '\u2014';
+        var d = digits == null ? 1 : digits;
+        var out = render(Number(value), { maximumFractionDigits: d });
+        return out !== null ? out : groupDigits(trimmed(Number(value), d));
+    };
+
+    /**
+     * A percentage given on the 0–100 scale: "12,5 %" / "12.5%". `digits` is
+     * FIXED, not a maximum, so a column of shares lines up. null / NaN read
+     * as an em dash, never "NaN%".
+     *
+     * @param {number|null} value  e.g. 12.5 for 12.5 %
+     * @param {number} [digits=1]
+     * @returns {string}
+     */
+    ns.formatPercent = function (value, digits) {
+        if (!finite(value)) return '\u2014';
+        var d = digits == null ? 1 : digits;
+        var out = render(Number(value) / 100, {
+            style: 'percent', minimumFractionDigits: d, maximumFractionDigits: d
+        });
+        if (out !== null) return out;
+        return groupDigits(Number(value).toFixed(d)) + (ns.locale === 'fr' ? NNBSP + '%' : '%');
+    };
+
+    /**
+     * A count abbreviated for a tight label: "4,8 k" / "4.8K", "48 M".
+     * Below a thousand it is the plain number. Tooltips and tables keep the
+     * exact figure.
+     *
+     * @param {number} n
+     * @returns {string}
+     */
+    ns.formatCompact = function (n) {
+        if (!finite(n)) return n == null ? '' : String(n);
+        var value = Number(n);
+        if (Math.abs(value) < 1000) return ns.formatNumber(value);
+        var out = render(value, { notation: 'compact', maximumFractionDigits: 1 });
+        if (out !== null) return out;
+        var abs = Math.abs(value);
+        var fr = ns.locale === 'fr';
+        var unit = abs >= 1e9 ? [1e9, fr ? 'Md' : 'B'] : abs >= 1e6 ? [1e6, 'M'] : [1e3, fr ? 'k' : 'K'];
+        return groupDigits(trimmed(value / unit[0], 1)) + (fr ? '\u00a0' : '') + unit[1];
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Calendar names — the module's one table                           */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Month and weekday names in the page locale, from Intl: "janv." /
+     * "Jan", "janvier" / "January". The module used to keep three month
+     * tables of its own — the month grids' (capitalised "Fév", which French
+     * does not write), the Laïcité dictionary's, and none at all for
+     * ECharts, whose French locale was never registered, so the Topic
+     * Explorer calendar printed English months on French pages. Computed in
+     * UTC so no visitor's time zone can shift a month or a weekday.
+     *
+     * @param {'short'|'long'} [width='short']
+     * @returns {string[]}  twelve names, January first
+     */
+    var calendarCache = {};
+    function calendarNames(kind, width) {
+        var w = width === 'long' ? 'long' : 'short';
+        var key = ns.locale + '|' + kind + '|' + w;
+        if (calendarCache[key]) return calendarCache[key];
+        var out = [];
+        try {
+            var opts = { timeZone: 'UTC' };
+            opts[kind] = w;
+            var format = new Intl.DateTimeFormat(ns.locale === 'fr' ? 'fr-FR' : 'en-US', opts);
+            // 2001-01-01 was a Monday; 2000-12-31 a Sunday, where ECharts
+            // starts its week.
+            for (var i = 0; i < (kind === 'month' ? 12 : 7); i++) {
+                out.push(format.format(kind === 'month'
+                    ? new Date(Date.UTC(2001, i, 1))
+                    : new Date(Date.UTC(2000, 11, 31 + i))));
+            }
+        } catch (e) {
+            out = kind === 'month'
+                ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        }
+        calendarCache[key] = out;
+        return out;
+    }
+
+    ns.monthNames = function (width) { return calendarNames('month', width).slice(); };
+
+    /** Weekday names, Sunday first (ECharts' order). */
+    ns.weekdayNames = function (width) { return calendarNames('weekday', width).slice(); };
+
+    /**
+     * A year-month key ("2024-05") as the page writes it: "May 2024" /
+     * "mai 2024". Anything else passes through unchanged.
+     *
+     * @param {string} key
+     * @returns {string}
+     */
+    ns.formatYearMonth = function (key) {
+        var m = /^(\d{4})-(\d{2})$/.exec(String(key == null ? '' : key));
+        if (!m || +m[2] < 1 || +m[2] > 12) return key == null ? '' : String(key);
+        return calendarNames('month', 'long')[+m[2] - 1] + ' ' + m[1];
     };
 
     /** Extend the dictionary at runtime (for strings added by individual charts). */

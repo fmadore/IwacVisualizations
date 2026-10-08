@@ -102,7 +102,7 @@
             tr.appendChild(P.el('td', null, P.formatNumber(pair[1])));
             if (total > 0) {
                 tr.appendChild(P.el('td', null,
-                    Math.round((pair[1] / total) * 100) + '%'));
+                    P.formatPercent((pair[1] / total) * 100, 0)));
             }
             tbody.appendChild(tr);
         });

@@ -325,7 +325,12 @@ function loadLocale(locale) {
     load(['asset/js/iwac-i18n.js'], context);
     const ns = context.window.IWACVis;
     ns.locale = locale;
-    ns.panels = { t: (k, v) => ns.t(k, v), formatNumber: (n) => ns.formatNumber(n) };
+    ns.panels = {
+        t: (k, v) => ns.t(k, v),
+        formatNumber: (n) => ns.formatNumber(n),
+        formatPercent: (v, d) => ns.formatPercent(v, d),
+        formatDecimal: (v, d) => ns.formatDecimal(v, d),
+    };
     load(['asset/js/charts/laicite/i18n.js', 'asset/js/charts/laicite/helpers.js'], context);
     return ns;
 }

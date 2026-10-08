@@ -85,7 +85,7 @@
                         if (!p) return '';
                         var i = p.dataIndex;
                         return C.itemTooltip(p.axisValue, [
-                            (p.value == null ? '—' : p.value + ' %'),
+                            (p.value == null ? '—' : P.formatPercent(p.value, 1)),
                             P.t('bylines.trend_tip', {
                                 signed: P.formatNumber(signed[i] || 0),
                                 total: P.formatNumber(total[i] || 0)

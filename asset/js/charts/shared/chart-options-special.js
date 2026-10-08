@@ -156,7 +156,7 @@
                 trigger: 'item',
                 formatter: function (p) {
                     return '<strong>' + esc(p.name) + '</strong><br>'
-                        + fmt(p.value) + ' (' + p.percent + '%)';
+                        + fmt(p.value) + ' (' + P.formatPercent(p.percent, 1) + ')';
                 }
             },
             legend: {
@@ -174,7 +174,7 @@
                 label: {
                     show: true,
                     formatter: function (p) {
-                        return p.percent >= 5 ? p.name + '\n' + p.percent + '%' : '';
+                        return p.percent >= 5 ? p.name + '\n' + P.formatPercent(p.percent, 1) : '';
                     }
                 },
                 emphasis: {
@@ -311,13 +311,11 @@
         // ink is decided once rather than per node.
         var headerKey = inkFor(surfaceColor);
 
-        // Abbreviate big counts for in-tile labels (4804 -> "4.8K"); the
-        // tooltip still carries the exact figure via `fmt`.
+        // Abbreviate big counts for in-tile labels (4804 -> "4.8K" / "4,8 k",
+        // in the page locale); the tooltip still carries the exact figure
+        // via `fmt`.
         function shortNum(n) {
-            n = Number(n) || 0;
-            if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
-            if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
-            return String(n);
+            return P.formatCompact(Number(n) || 0);
         }
 
         function sanitize(node, depth, depthRef) {
@@ -1064,7 +1062,7 @@
                     position: 'inside',
                     formatter: function (p) {
                         var pct = total > 0 ? Math.round((p.value / total) * 100) : 0;
-                        return pct + '%';
+                        return P.formatPercent(pct, 0);
                     },
                     // Contrast-picked against this segment's own fill —
                     // '#fff' measured 3.15:1 on the palette's orange.
@@ -1087,7 +1085,7 @@
                         var pct = total > 0 ? Math.round((p.value / total) * 100) : 0;
                         lines.push(
                             p.marker + ' ' + esc(p.seriesName) +
-                            ': <strong>' + fmt(p.value) + '</strong> (' + pct + '%)'
+                            ': <strong>' + fmt(p.value) + '</strong> (' + P.formatPercent(pct, 0) + ')'
                         );
                     });
                     return lines.join('<br>');

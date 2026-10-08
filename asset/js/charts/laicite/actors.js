@@ -182,9 +182,9 @@
                 cellBorder: true,
                 tooltipFormatter: function (p) {
                     return P.escapeHtml(yLabels[p.value[1]]) + '<br>'
-                        + P.escapeHtml(decades[p.value[0]]) + ': <strong>'
+                        + P.escapeHtml(P.labelColon(decades[p.value[0]])) + ' <strong>'
                         + P.formatNumber(p.value[3]) + '</strong> ('
-                        + p.value[2] + '%)';
+                        + P.formatPercent(p.value[2], 1) + ')';
                 }
             }
         );

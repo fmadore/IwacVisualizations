@@ -58,7 +58,7 @@ test('an older data bundle falls back to whole-subset context', async ({ page })
     await expect(page.locator('.iwac-vis-minimal-item__loading')).toHaveCount(0);
     await expect(page.getByRole('heading', { name: 'Activity over time' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Other items in this collection' })).toBeVisible();
-    await expect(page.locator('.iwac-vis-summary-card').first()).toContainText('1,146');
+    await expect(page.locator('.iwac-vis-summary-card').first()).toContainText('1 146');
     await expect(page.locator('.iwac-vis-similar-card')).toHaveCount(1);
 });
 
