@@ -1334,16 +1334,16 @@
                 // The point buckets only, so an overlay never grows a legend entry.
                 data: order.slice()
             },
-            tooltip: {
+            // The landscapes go fullscreen: keep the tooltip in the panel.
+            tooltip: C._inPanelTooltip({
                 trigger: 'item',
-                confine: true,
                 formatter: function (p) {
                     var i = p.data[2];
                     var bits = (opts.tooltipBits && opts.tooltipBits(i)) || [];
                     return '<strong>' + esc(titles[i] || '') + '</strong>'
                         + (bits.length ? '<br>' + esc(bits.join(' · ')) : '');
                 }
-            },
+            }),
             grid: { left: 8, right: 8, top: 8, bottom: 36 },
             xAxis: { type: 'value', scale: true, show: false },
             yAxis: { type: 'value', scale: true, show: false },

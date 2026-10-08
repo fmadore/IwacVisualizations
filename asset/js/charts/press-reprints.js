@@ -152,8 +152,8 @@
                 };
             });
             chart.setOption({
-                tooltip: {
-                    confine: true,
+                // The graph chrome makes this panel fullscreen-capable.
+                tooltip: C._inPanelTooltip({
                     formatter: function (p) {
                         if (p.dataType === 'edge') {
                             return P.t('reprints.network_tip', {
@@ -167,7 +167,7 @@
                             n: P.formatNumber(p.data.value || 0)
                         });
                     }
-                },
+                }),
                 series: [Object.assign(
                     // The shared frozen-force skeleton owns the circular
                     // seed + layoutAnimation:false pairing (load-bearing —

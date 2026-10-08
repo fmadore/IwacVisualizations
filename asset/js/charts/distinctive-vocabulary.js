@@ -51,6 +51,7 @@
         var terms = (slice && slice.terms) || [];
         return {
             grid: C._grid({ left: 8, top: 8, bottom: 40, right: 56 }),
+            // The theme's <body> tooltip: this panel has no fullscreen control.
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -259,7 +260,8 @@
             // The shared gantt's tooltip is written for coverage spans; a
             // burst needs its own numbers (strength, mentions inside the
             // burst vs the subject's whole run).
-            option.tooltip = {
+            // In-panel: the bursts panel has a fullscreen control.
+            option.tooltip = C._inPanelTooltip({
                 formatter: function (p) {
                     var row = rows[p.dataIndex] || {};
                     return [
@@ -274,7 +276,7 @@
                         P.t('bursts_tooltip_weight', { weight: row.weight })
                     ].join('<br>');
                 }
-            };
+            });
             chart.setOption(option, true);
         });
         if (P.addFullscreenButton) {

@@ -135,10 +135,8 @@
         }] : [];
 
         return {
-            tooltip: {
+            tooltip: C._inPanelTooltip({
                 trigger: 'item',
-                confine: true,
-                appendTo: function (chartEl) { return chartEl; },
                 formatter: function (p) {
                     if (p.dataType === 'node') {
                         var d = p.data || {};
@@ -158,7 +156,7 @@
                     }
                     return '';
                 }
-            },
+            }),
             legend: legend,
             series: [Object.assign(
                 C._forceGraphBase({

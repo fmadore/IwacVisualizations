@@ -70,3 +70,79 @@ test('the swatch matches ECharts own marker, and degrades to transparent', () =>
     assert.match(C.tooltipDot('#ce4115'), /background-color:#ce4115/);
     assert.match(C.tooltipDot(), /background-color:transparent/);
 });
+
+/*
+ * V-04. In native fullscreen only the fullscreen element and its descendants
+ * are drawn, so a tooltip appended to <body> (the theme's default, which
+ * escapes a small chart's clipping cell) vanishes behind the panel. Every
+ * chart in a panel with a fullscreen control keeps its tooltip in the chart
+ * through C._inPanelTooltip.
+ */
+function loadBuilders() {
+    const context = {
+        console,
+        document: { createElement: () => ({ setAttribute() {}, appendChild() {}, classList: { add() {} }, style: {} }) },
+        window: { IWACVis: { t: (k) => k, formatNumber: String, locale: 'en', getPalette: () => ['#111111', '#222222'], getChartTokens: () => ({}) } },
+    };
+    vm.createContext(context);
+    for (const file of [
+        ['charts', 'shared', 'panels.js'],
+        ['charts', 'shared', 'chart-options.js'],
+        ['charts', 'shared', 'chart-options-graph.js'],
+        ['charts', 'shared', 'chart-options-special.js'],
+        ['charts', 'references-overview', 'collaboration-network.js'],
+    ]) {
+        vm.runInContext(read(...file), context, { filename: file.join('/') });
+    }
+    return context.window.IWACVis.chartOptions;
+}
+
+function assertInPanel(tooltip, label) {
+    assert.ok(tooltip, `${label}: no tooltip`);
+    assert.equal(tooltip.confine, true, `${label}: tooltip not confined`);
+    const host = { id: 'chart' };
+    assert.equal(typeof tooltip.appendTo, 'function', `${label}: tooltip appended to <body>`);
+    assert.equal(tooltip.appendTo(host), host, `${label}: tooltip not appended to its chart`);
+}
+
+test('C._inPanelTooltip keeps a tooltip inside its chart', () => {
+    const C = loadBuilders();
+    const tip = C._inPanelTooltip({ trigger: 'item' });
+    assert.equal(tip.trigger, 'item');
+    assertInPanel(tip, '_inPanelTooltip');
+});
+
+test('the builders behind fullscreen-capable panels keep their tooltips in-panel', () => {
+    const C = loadBuilders();
+    assertInPanel(C.chord({ names: ['a', 'b'], matrix: [[0, 2], [2, 0]] }).tooltip, 'chord');
+    assertInPanel(C.collaborationNetwork({ nodes: [{ id: 'a' }, { id: 'b' }], edges: [] }).tooltip, 'collaboration network');
+    const landscape = C.landscape({ x: [0, 1], y: [0, 1], title: ['a', 'b'] }, { a: [0, 1] }, {});
+    assertInPanel(landscape.tooltip, 'semantic landscape');
+});
+
+test('a panel with a fullscreen control sets no <body> tooltip', () => {
+    // Source-level: every file that adds a fullscreen control writes its
+    // ECharts tooltips through C._inPanelTooltip. A tooltip in such a file
+    // that belongs to a panel WITHOUT the control says so on the line above.
+    const { readdirSync, statSync } = require('node:fs');
+    const files = [];
+    (function walk(dir) {
+        for (const name of readdirSync(dir)) {
+            const full = join(dir, name);
+            if (statSync(full).isDirectory()) { if (name !== 'dist') walk(full); }
+            else if (name.endsWith('.js')) files.push(full);
+        }
+    })(join(ROOT, 'asset', 'js', 'charts'));
+    const offenders = [];
+    for (const file of files) {
+        const src = readFileSync(file, 'utf8');
+        if (!/buildGraphPanelToolbar\(|addFullscreenButton\(/.test(src)) continue;
+        const lines = src.split(/\r?\n/);
+        lines.forEach((line, i) => {
+            if (!/\btooltip\s*[:=]\s*\{/.test(line)) return;
+            if (/no fullscreen control/.test(lines[i - 1] || '')) return;
+            offenders.push(`${file.slice(ROOT.length + 1)}:${i + 1}`);
+        });
+    }
+    assert.deepEqual(offenders, [], 'route these through C._inPanelTooltip');
+});

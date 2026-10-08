@@ -135,12 +135,9 @@
         }
 
         return {
-            tooltip: {
+            // In-panel, so it survives native fullscreen (C._inPanelTooltip).
+            tooltip: C._inPanelTooltip({
                 trigger: 'item',
-                // See the network tooltip above for why both options
-                // matter when the panel enters native fullscreen.
-                confine: true,
-                appendTo: function (chartEl) { return chartEl; },
                 formatter: function (p) {
                     if (p.dataType === 'node') {
                         return '<strong>' + esc(p.name || '') + '</strong><br>' +
@@ -153,7 +150,7 @@
                     }
                     return '';
                 }
-            },
+            }),
             series: [{
                 type: 'chord',
                 startAngle: 90,

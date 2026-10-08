@@ -264,6 +264,7 @@
         var list = (byType || []).filter(function (e) { return e && e.total > 0; });
         return {
             grid: C._grid ? C._grid({ left: 8, top: 8, bottom: 8, right: 48 }) : undefined,
+            // The theme's <body> tooltip: this panel has no fullscreen control.
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -311,6 +312,7 @@
         var list = topics || [];
         return {
             grid: C._grid ? C._grid({ left: 8, top: 8, bottom: 8, right: 40 }) : undefined,
+            // The theme's <body> tooltip: this panel has no fullscreen control.
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {

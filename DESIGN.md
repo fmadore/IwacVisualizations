@@ -307,7 +307,9 @@ Nothing *inside* a panel casts a shadow — tabs, chips, keys, window notes, tab
 summary cards are drawn with hairlines, tints and type. The one floating element is the
 chart tooltip, which carries its own 8px-radius drop shadow because it leaves the panel's
 box entirely (`appendTo: 'body'` to escape ancestor `overflow: hidden`, `confine: true` so
-it does not drift off a phone).
+it does not drift off a phone). A chart in a panel with a fullscreen control is the
+exception: native fullscreen draws only the fullscreen element, so a `<body>` tooltip
+vanishes behind it, and those charts keep theirs in the chart (`C._inPanelTooltip`).
 
 The panel border is written unrolled as `1px solid var(--border, …)`, not through the
 theme's composite `--panel-border` shorthand: a composite wrapping another `var()` can

@@ -150,6 +150,32 @@
      * dropped the French space; this axis used to keep the French space in
      * English too. Extra axisLabel properties (fontSize, …) are merged in.
      */
+    /**
+     * A tooltip that stays inside its chart, for a panel that can go native
+     * fullscreen.
+     *
+     * The theme's default (`iwac-theme.js`) appends every tooltip to <body>,
+     * which is what lets it escape a small chart's `overflow: hidden` grid
+     * cell. But in native fullscreen only the fullscreen element and its
+     * descendants are drawn — the top layer — so a tooltip living in <body>
+     * is rendered behind it and the panel loses its tooltips altogether.
+     * Appending to the chart element keeps the tooltip in the top layer, and
+     * `confine` keeps it inside the chart's box, which a fullscreen-capable
+     * panel is large enough to hold. Every chart in a panel with a fullscreen
+     * control routes its tooltip through here; `tests/js/tooltip.test.js`
+     * checks the builders and the panel sources.
+     *
+     * @param {Object} [tooltip]  the chart's own tooltip options
+     * @returns {Object} the same object, with `appendTo` and `confine` set
+     */
+    C._inPanelTooltip = function (tooltip) {
+        var out = tooltip || {};
+        out.confine = true;
+        out.appendTo = inPanel;
+        return out;
+    };
+    function inPanel(chartEl) { return chartEl; }
+
     C._percentTick = function (v) {
         return (typeof v === 'number' && isFinite(v) && ns.formatNumber)
             ? ns.formatNumber(v / 100, { style: 'percent', maximumFractionDigits: 1 })
