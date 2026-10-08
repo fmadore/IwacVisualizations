@@ -33,9 +33,19 @@ final class EmbedBrand
     public const WEBFONT_ORIGIN = 'https://fonts.bunny.net';
 
     /**
+     * The webfont request: tokens.json's `fontsUrl` when the synced contract
+     * carries it (copied into config/theme-seeds.php), else the constant.
+     */
+    public static function webfontUrl(): string
+    {
+        $url = self::seeds()['fontsUrl'] ?? '';
+        return is_string($url) && strpos($url, self::WEBFONT_ORIGIN . '/') === 0 ? $url : self::WEBFONT_URL;
+    }
+
+    /**
      * The theme's seeds, from the file `npm run build:embed-tokens` writes.
      *
-     * @return array{primary?: string, secondary?: string}
+     * @return array{primary?: string, secondary?: string, fontsUrl?: string}
      */
     public static function seeds(): array
     {

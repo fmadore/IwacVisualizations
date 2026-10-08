@@ -91,7 +91,7 @@ if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . 
     // chart label fell back to the system stack.
     ?>
     <link rel="preconnect" href="<?= $escapeAttr(EmbedBrand::WEBFONT_ORIGIN) ?>" crossorigin>
-    <link rel="stylesheet" href="<?= $escapeAttr(EmbedBrand::WEBFONT_URL) ?>">
+    <link rel="stylesheet" href="<?= $escapeAttr(EmbedBrand::webfontUrl()) ?>">
     <?php
     // The theme's tokens, light and dark, as generated literals: this route
     // carries no theme stylesheet, so without them every var() rendered its

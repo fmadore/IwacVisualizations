@@ -680,6 +680,8 @@ namespace {
     check(EmbedBrand::accents('', '#123456', '#abc')['secondary'] === '#aabbcc', 'a short secondary must expand');
     check(EmbedBrand::accents('#0a0b0c', '#123456', '')['primary'] === '#0a0b0c', '?primary= must win over the setting');
     check(EmbedBrand::accents('', 'red; color: x', '')['primary'] === '', 'a non-hex setting must be refused');
+    check(strpos(EmbedBrand::webfontUrl(), 'https://fonts.bunny.net/css?family=') === 0,
+        'the embed webfont request lost its origin');
     check(strpos(EmbedBrand::WEBFONT_URL, 'https://fonts.bunny.net/css?family=besley:') === 0,
         "the embed webfont request is not the theme's");
 

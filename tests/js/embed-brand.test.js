@@ -56,6 +56,9 @@ test('the embed loads exactly the faces and weights the theme loads', () => {
     }
     assert.equal(Object.keys(loaded).length, Object.keys(tokens.fonts).length,
         'the embed requests a family the theme does not load');
+    // Once the theme publishes its request verbatim (tokens.json `fontsUrl`),
+    // the constant must be that request.
+    if (tokens.fontsUrl) assert.equal(url, tokens.fontsUrl);
 });
 
 test('the embed derives its accent from a seed with the theme’s own mixes', () => {

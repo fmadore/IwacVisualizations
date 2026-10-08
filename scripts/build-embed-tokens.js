@@ -91,6 +91,11 @@ function renderSeeds(tokens) {
         'return [',
         `    'primary'   => '${hex('--primary-base')}',`,
         `    'secondary' => '${hex('--secondary-base')}',`,
+        // The theme's webfont request, once tokens.json publishes it (theme
+        // 2.24); until then EmbedBrand::WEBFONT_URL is the copy.
+        ...(typeof tokens.fontsUrl === 'string' && /^https:\/\/[^'\\]+$/.test(tokens.fontsUrl)
+            ? [`    'fontsUrl'  => '${tokens.fontsUrl}',`]
+            : []),
         '];',
         '',
     ].join('\n');
