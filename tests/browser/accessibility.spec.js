@@ -31,6 +31,7 @@ const FIXTURES = [
     'horizontal-bar-renderer',
     'map-popup',
     'minimal-item',
+    'on-this-day',
     'table-records',
 ];
 

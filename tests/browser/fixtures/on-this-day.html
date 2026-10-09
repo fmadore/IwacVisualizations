@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC On This Day fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        document.documentElement.lang = fixtureParams.get('lang') === 'fr' ? 'fr' : 'en';
+    </script>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/on-this-day.min.css">
+    <style>
+        body { margin: 0; padding: 1rem; background: var(--background); color: var(--ink); font-family: var(--font-body); }
+        main { max-width: 1180px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script>
+        // The theme's tokens for the requested mode, from tokens.json, set on
+        // <body> the way the theme's toggle declares them. Synchronous, so the
+        // block paints against them from its first frame.
+        (function () {
+            const theme = fixtureParams.get('theme') === 'dark' ? 'dark' : 'light';
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/tokens.json', false);
+            xhr.send();
+            const tokens = JSON.parse(xhr.responseText);
+            document.body.dataset.theme = theme;
+            const set = (map) => Object.keys(map || {}).forEach((k) => document.body.style.setProperty(k, map[k]));
+            set(tokens.values[theme]);
+            set(tokens[theme]);
+        })();
+
+        // Today's two day files, served from memory. Rows are
+        // [year, o_id, title, source, type, thumb, excerpt, hijriYear].
+        function rows(n, offset) {
+            const out = [];
+            for (let i = 0; i < n; i++) {
+                const year = 1965 + ((i * 7 + offset) % 60);
+                out.push([year, 5000 + i + offset, 'Article du ' + year + ' sur la vie associative',
+                    i % 2 ? 'Fraternité Matin' : 'Sidwaya', i % 5 === 4 ? 'p' : 'a', '',
+                    'Un extrait du texte de ' + year + '.', 1385 + (i % 60)]);
+            }
+            return out;
+        }
+        window.__fetched = [];
+        window.fetch = function (url) {
+            const u = String(url);
+            window.__fetched.push(u);
+            if (u.indexOf('/on-this-day/h/') !== -1) {
+                return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ items: rows(14, 3) }) });
+            }
+            if (u.indexOf('/on-this-day/') !== -1) {
+                return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ items: rows(24, 0) }) });
+            }
+            return Promise.reject(new Error('unexpected fetch: ' + u));
+        };
+    </script>
+    <main>
+        <!-- What block-layout/on-this-day.phtml renders through the shell. -->
+        <div class="iwac-vis-block iwac-vis-on-this-day"
+             data-base-path=""
+             data-site-base="/s/iwac"
+             data-embed-slug="on-this-day"
+             data-embed-base="/s/iwac"
+             data-layout="register">
+            <div class="iwac-vis-loading" role="status" aria-live="polite">
+                <div class="iwac-vis-spinner" aria-hidden="true"></div>
+                <span>Loading on this day&hellip;</span>
+            </div>
+        </div>
+    </main>
+    <!-- No ECharts: the template declares `'echarts' => false`, because the
+         almanac draws no chart. shared-core and the block bundle are built per
+         locale. -->
+    <script>
+        const fixtureLang = document.documentElement.lang === 'fr' ? 'fr' : 'en';
+        document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
+        document.write('<script src="/asset/js/dist/blocks/on-this-day.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+</body>
+</html>

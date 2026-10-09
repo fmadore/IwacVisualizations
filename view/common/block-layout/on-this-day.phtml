@@ -61,6 +61,10 @@ if ($browseUrl !== '') {
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'on-this-day',
+        // No chart library. The almanac is pure DOM, but `echarts` is the one
+        // need that defaults ON, so the homepage — where this is the only
+        // module block — downloaded ECharts (359 KB) and drew nothing with it.
+        'needs' => ['echarts' => false],
         // shared/hijri is no longer listed here: it became an unconditional
         // shared primitive in iwac-assets.phtml when the dashboards' year ×
         // month panel became its third consumer.
