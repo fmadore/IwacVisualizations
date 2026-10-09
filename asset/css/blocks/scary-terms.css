@@ -241,7 +241,17 @@
         0 0 0 1px color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
 }
 
-/* WebKit thumb */
+/* WebKit thumb
+ *
+ * One quiet thumb: the accent ring, a hairline shadow, a grabbing cursor
+ * while dragged. It used to grow 12 % and throw an accent halo on hover and
+ * another on focus — several effects on one control, and the focus one a
+ * box-shadow forced-colours mode drops; focus is the control's outline now
+ * (below). */
+
+.iwac-vis-scary-slider:active::-webkit-slider-thumb {
+    cursor: grabbing;
+}
 
 .iwac-vis-scary-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -251,27 +261,10 @@
     background: var(--surface, #fdfcfb);
     border: 3px solid var(--primary, #ce4115);
     border-radius: 50%;
-    box-shadow:
-        0 2px 6px var(--shadow-color),
-        0 0 0 0 color-mix(in oklab, var(--primary, #ce4115) 40%, transparent);
+    box-shadow: 0 1px 2px var(--shadow-color);
     cursor: grab;
-    transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-.iwac-vis-scary-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.12);
-    box-shadow:
-        0 3px 10px var(--shadow-color-strong),
-        0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
-}
-
-.iwac-vis-scary-slider:active::-webkit-slider-thumb {
-    cursor: grabbing;
-    transform: scale(1.08);
-    box-shadow:
-        0 3px 10px var(--shadow-color-strong),
-        0 0 0 8px color-mix(in oklab, var(--primary, #ce4115) 25%, transparent);
-}
 
 /*  A real outline round the whole control. The base rule used to set
  *  `outline: none` and leave focus to the thumb's box-shadow ring, which a
@@ -282,11 +275,6 @@
     outline-offset: 8px;
 }
 
-.iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
-    box-shadow:
-        0 3px 10px var(--shadow-color-strong),
-        0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 32%, transparent);
-}
 
 /* Firefox thumb (Gecko uses a different pseudo-element name, so every
  * rule has to be duplicated — combining selectors with comma drops the
@@ -298,25 +286,10 @@
     background: var(--surface, #fdfcfb);
     border: 3px solid var(--primary, #ce4115);
     border-radius: 50%;
-    box-shadow:
-        0 2px 6px var(--shadow-color),
-        0 0 0 0 color-mix(in oklab, var(--primary, #ce4115) 40%, transparent);
+    box-shadow: 0 1px 2px var(--shadow-color);
     cursor: grab;
-    transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-.iwac-vis-scary-slider::-moz-range-thumb:hover {
-    transform: scale(1.12);
-    box-shadow:
-        0 3px 10px var(--shadow-color-strong),
-        0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
-}
-
-.iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
-    box-shadow:
-        0 3px 10px var(--shadow-color-strong),
-        0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 32%, transparent);
-}
 
 /* Firefox also uses a dedicated track element — keep it transparent so
  * the gradient we applied to the <input> element shows through. */

@@ -48,19 +48,17 @@
     text-decoration: none;
     color: inherit;
     transition:
-        transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-article-card:hover,
 .iwac-vis-article-card:focus-visible {
+    /*  Flat inside the panel (DESIGN.md): a hairline in the accent and the
+     *  raised surface, no shadow and no lift. These cards floated 1-2px
+     *  with a drop shadow on hover, the one place the module spent
+     *  elevation inside a panel. */
     border-color: color-mix(in oklab, var(--primary, #ce4115) 45%, var(--border, #ced1d6));
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
-    /*  Restrained 2px lift — matches the IWAC theme's --lift-xs token
-     *  used on primary buttons / linked resource cards. Bigger lifts
-     *  feel dated (material-design era); 2px is the current editorial
-     *  convention for subtle interactive feedback. */
-    transform: translateY(var(--lift-xs, -0.125rem));
+    background: var(--surface-raised, #faf8f6);
     text-decoration: none;
 }
 
@@ -75,7 +73,9 @@
 .iwac-vis-article-card__thumb {
     position: relative;
     aspect-ratio: 4 / 3;
-    background: color-mix(in oklab, var(--primary, #ce4115) 6%, var(--surface, #fdfcfb));
+    /*  Neutral, like every other thumbnail well in the module: a primary wash
+     *  here turned a row of articles without scans into a row of pink blocks. */
+    background: var(--surface-sunken, #f4f1ef);
     overflow: hidden;
     /* Stacking context for the similarity / shared-entity badges */
     isolation: isolate;
