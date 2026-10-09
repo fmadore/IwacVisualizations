@@ -57,7 +57,7 @@ abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
     /**
      * The partial this block renders through.
      *
-     * Twenty of twenty-one blocks are a single `iwac-block-shell` call with
+     * Twenty of twenty-two blocks are a single `iwac-block-shell` call with
      * a different literal array, so that array lives in the registry beside
      * the label and the description and they share `_generic` (H5). A row
      * WITHOUT a `shell` key keeps its own template — today only

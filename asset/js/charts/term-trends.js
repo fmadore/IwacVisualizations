@@ -55,7 +55,7 @@
         });
         ns.addTranslations('fr', {
             'ngram.title':           'Tendances lexicales',
-            'ngram.description':     'Nombre ou part des articles de chaque année contenant un mot sélectionné. Le calcul porte sur les articles datés dont le texte traité est exploitable ; les répétitions comptent une seule fois par article. La recherche couvre les {n} formes de dictionnaire les plus fréquentes : « terroriste » et « terroristes » sont comptés ensemble. Les variations reflètent les textes collectés et peuvent aussi subir l’effet des erreurs de reconnaissance.',
+            'ngram.description':     'Nombre ou part des articles de chaque année contenant un mot sélectionné. Le calcul porte sur les articles datés dont le texte traité est exploitable\u202f; les répétitions comptent une seule fois par article. La recherche couvre les {n} formes de dictionnaire les plus fréquentes\u00a0: «\u00a0terroriste\u00a0» et «\u00a0terroristes\u00a0» sont comptés ensemble. Les variations reflètent les textes collectés et peuvent aussi subir l’effet des erreurs de reconnaissance.',
             'ngram.search':          'Rechercher un terme…',
             'ngram.no_matches':      'Aucun terme correspondant',
             'ngram.selected':        'Termes (jusqu’à {max})',
@@ -65,7 +65,7 @@
             'ngram.mode_count':      'Nombre d’articles',
             'ngram.axis_share':      '% des articles',
             'ngram.axis_count':      'Articles',
-            'ngram.tip_share':       '{pct} % de {total} articles',
+            'ngram.tip_share':       '{pct}\u202f% de {total} articles',
             'ngram.tip_count':       '{count} articles sur {total}',
             'ngram.empty':           'Recherchez un terme ci-dessus pour le tracer.',
             'ngram.in_articles':     'dans {count} articles',

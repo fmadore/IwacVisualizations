@@ -129,7 +129,8 @@
 
     /** "15 Safar 1448" — day-month-year in both locales; year optional. */
     function format(day, month, year) {
-        var out = day + ' ' + monthName(month);
+        // "1er Safar": French writes the first of the month as an ordinal.
+        var out = (ns.locale === 'fr' && Number(day) === 1 ? '1er' : day) + ' ' + monthName(month);
         return year ? out + ' ' + year : out;
     }
 

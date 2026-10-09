@@ -58,7 +58,7 @@
         'By similar content':      'Par contenu similaire',
         'In the scholarship':      'Dans la littérature',
         'No related scholarship':  'Aucun travail scientifique proche',
-        'desc_article_spatial':         'Lieux indiqués dans les mots-clés de la notice de cet article et localisés grâce à l’index IWAC. Chaque repère correspond à un lieu indexé ; leur taille identique n’indique pas sa fréquence dans le texte. Cliquez sur un repère pour ouvrir sa notice.',
+        'desc_article_spatial':         'Lieux indiqués dans les mots-clés de la notice de cet article et localisés grâce à l’index IWAC. Chaque repère correspond à un lieu indexé\u202f; leur taille identique n’indique pas sa fréquence dans le texte. Cliquez sur un repère pour ouvrir sa notice.',
         'article_place_subtitle':       'Mentionn\u00e9 dans cet article',
         'No geocoded places':           'Aucun lieu de cet article n\u2019a pu \u00eatre localis\u00e9',
         'shares_n_entities_one':   '{count} balise partagée',

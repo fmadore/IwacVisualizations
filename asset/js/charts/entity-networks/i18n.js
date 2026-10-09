@@ -38,7 +38,7 @@
         'Co-occurrence network':     'R\u00e9seau de cooccurrences',
         'networks_description':      'Chaque point représente une personne, une organisation, un lieu, un sujet ou un événement du catalogue. Les lignes relient les entrées associées aux mêmes documents. La disposition aide à repérer des groupes de liens, mais les distances sont approximatives. Des notices communes ne suffisent pas à établir une relation sociale. Cliquez sur un point pour examiner ses liens.',
         'About this network':        '\u00c0 propos de ce r\u00e9seau',
-        'network_select_hint':       'Cliquez sur un point pour voir les entrées partageant le plus de documents avec lui ; cliquez sur le fond pour effacer la sélection.',
+        'network_select_hint':       'Cliquez sur un point pour voir les entrées partageant le plus de documents avec lui\u202f; cliquez sur le fond pour effacer la sélection.',
         'network_links_note':        'Une ligne relie deux entrées associées à au moins {count} documents communs.',
         'Strongest co-occurrences':  'Cooccurrences les plus fortes',
         'cooccurrence_title':        'Cooccurrence dans {count} documents',

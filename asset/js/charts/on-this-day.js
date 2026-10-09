@@ -67,7 +67,7 @@
             'otd.retry':      'Try again'
         });
         ns.addTranslations('fr', {
-            'Loading on this day': 'Chargement de « ce jour-là »',
+            'Loading on this day': 'Chargement de «\u00a0ce jour-là\u00a0»',
             'otd.title':      'Ce jour-là',
             'otd.desc':       'Articles et numéros de périodiques dont la date de publication complète correspond au {date}, au fil des années de la collection.',
             'otd.desc_h':     'Documents publiés le {date} selon le calendrier islamique (hégirien) converti, au fil des années de la collection. Les dates converties peuvent différer des observations lunaires locales.',

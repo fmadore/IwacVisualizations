@@ -58,7 +58,7 @@ components:
   authority in a repo whose whole contract is that it has none. Two things are
   recorded instead:
 
-    * `colors` — only the four values this module genuinely OWNS: the AI model
+    * `colors` — only the five values this module genuinely OWNS: the AI model
       role-slot accents, literal hexes carried under `/* allow-hex */` in
       asset/css/iwac-core.css. Every other module-owned colour
       (--iwac-vis-sent-*, -cent-*, -subj-*, -heatmap-*) is a DERIVATION from a

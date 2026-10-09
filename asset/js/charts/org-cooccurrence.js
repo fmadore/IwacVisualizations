@@ -45,7 +45,7 @@
         });
         ns.addTranslations('fr', {
             'orgcooc.title':        'Les organisations islamiques et les mots qui les entourent',
-            'orgcooc.description':  'Paires de mots trouvés près du nom de l’organisation sélectionnée dans les articles de presse. La recherche recueille les mots situés à environ {window} mots de part et d’autre de chaque nom repéré, puis compte chaque paire une fois par article. Les cellules foncées indiquent davantage d’articles communs ; la diagonale reste vide. Les mots peuvent entourer des mentions différentes dans un même article : la matrice aide donc à choisir des textes à examiner.',
+            'orgcooc.description':  'Paires de mots trouvés près du nom de l’organisation sélectionnée dans les articles de presse. La recherche recueille les mots situés à environ {window} mots de part et d’autre de chaque nom repéré, puis compte chaque paire une fois par article. Les cellules foncées indiquent davantage d’articles communs\u202f; la diagonale reste vide. Les mots peuvent entourer des mentions différentes dans un même article\u00a0: la matrice aide donc à choisir des textes à examiner.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Tri',
             'orgcooc.sort_freq':    'Fréquence',
@@ -56,7 +56,7 @@
             'orgcooc.card_span':     'Période couverte',
             'orgcooc.matrix_title':  'Mots apparaissant ensemble près de {org}',
             'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} articles partagés',
-            'orgcooc.term_total':    '{term} : dans {count} articles correspondants',
+            'orgcooc.term_total':    '{term}\u00a0: dans {count} articles correspondants',
             'orgcooc.view_record':   'Voir la notice d’autorité'
         });
     }

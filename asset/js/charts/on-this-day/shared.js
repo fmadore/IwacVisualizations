@@ -89,12 +89,21 @@
         return h ? pad2(h.month) + '-' + pad2(h.day) : null;
     }
 
+    /**
+     * French writes the first of the month as an ordinal, "1er janvier";
+     * Intl prints the cardinal, "1 janvier". Applied to a date string that
+     * starts with its day.
+     */
+    function frenchFirst(text, day) {
+        return (ns.locale === 'fr' && day === 1) ? String(text).replace(/^1(?!\d)/, '1er') : text;
+    }
+
     /** "29 juillet" / "29 July" — today, no year. */
     function gregToday() {
         try {
-            return today().toLocaleDateString(datelineLocale(), {
+            return frenchFirst(today().toLocaleDateString(datelineLocale(), {
                 day: 'numeric', month: 'long'
-            });
+            }), today().getDate());
         } catch (e) {
             return gregKey();
         }
@@ -103,9 +112,9 @@
     /** "29 juillet 2026" / "29 July 2026". */
     function gregTodayFull() {
         try {
-            return today().toLocaleDateString(datelineLocale(), {
+            return frenchFirst(today().toLocaleDateString(datelineLocale(), {
                 day: 'numeric', month: 'long', year: 'numeric'
-            });
+            }), today().getDate());
         } catch (e) {
             return gregToday();
         }
@@ -159,9 +168,9 @@
                     day: 'numeric', month: 'short', year: 'numeric'
                 });
             }
-            return datelineFormat.format(
+            return frenchFirst(datelineFormat.format(
                 new Date(year, parseInt(bits[0], 10) - 1, parseInt(bits[1], 10))
-            );
+            ), parseInt(bits[1], 10));
         } catch (e) {
             return bits[1] + '.' + bits[0] + '.' + year;
         }

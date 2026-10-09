@@ -47,7 +47,7 @@
         });
         ns.addTranslations('fr', {
             'Items per year': 'Documents par année',
-            'desc_item_set_tags': 'Les 15 mots-clés du catalogue les plus fréquents dans cette collection. Les nombres portent sur les documents indexés, et non sur les occurrences de mots ; un document peut porter plusieurs mots-clés.',
+            'desc_item_set_tags': 'Les 15 mots-clés du catalogue les plus fréquents dans cette collection. Les nombres portent sur les documents indexés, et non sur les occurrences de mots\u202f; un document peut porter plusieurs mots-clés.',
             'desc_item_set_timeline': 'Documents par année de publication enregistrée. Les lacunes peuvent refléter des documents ou des dates manquants plutôt qu’une interruption de publication.',
         });
     }

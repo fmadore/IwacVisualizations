@@ -93,7 +93,7 @@
     /**
      * Model id → accent SLOT. The single place a model id meets a colour.
      *
-     * The CSS tokens are `--iwac-vis-model-1..4`, named by position rather
+     * The CSS tokens are `--iwac-vis-model-1..5`, named by position rather
      * than by release: the token name used to be derived from the model id
      * itself (`'--iwac-vis-model-' + key.replace(/_/g, '-')`), so every
      * model upgrade renamed a design token and orphaned the rule that

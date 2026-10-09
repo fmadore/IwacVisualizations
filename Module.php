@@ -6,6 +6,7 @@ namespace IwacVisualizations;
 use IwacVisualizations\Mvc\EmbedFramingListener;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Mvc\MvcEvent;
 use Omeka\Module\AbstractModule;
 
@@ -83,6 +84,18 @@ class Module extends AbstractModule
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    /**
+     * Remove what the module writes to the database: the one setting, the
+     * active-generation pointer the data sync keeps. The module used to have
+     * no uninstall() at all, so the setting outlived it. The synced data under
+     * `files/iwac-visualizations/` is left for the admin to delete or keep —
+     * it is the site's content, and a reinstall can reuse it.
+     */
+    public function uninstall(ServiceLocatorInterface $services)
+    {
+        $services->get('Omeka\Settings')->delete('iwacvis_last_sync');
     }
 
     /**

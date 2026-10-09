@@ -249,9 +249,13 @@ class DataController extends AbstractActionController
             ],
         ]);
 
+        // An hour, not Laminas' 300-second default: the data page is where an
+        // admin reads the last run's log before pulling again, and five
+        // minutes of reading turned the click into a CSRF failure.
         $form->add([
             'type' => Element\Csrf::class,
             'name' => 'sync_token',
+            'options' => ['csrf_options' => ['timeout' => 3600]],
         ]);
 
         // The recovery checkbox is rendered only while a sync is running.

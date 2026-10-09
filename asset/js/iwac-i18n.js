@@ -308,7 +308,7 @@
             'Value': 'Valeur',
             'Category': 'Cat\u00e9gorie',
             'Place': 'Lieu',
-            'table_rows_capped': 'Les {shown} premi\u00e8res lignes sur {total} sont affich\u00e9es ; le CSV les contient toutes.',
+            'table_rows_capped': 'Les {shown} premi\u00e8res lignes sur {total} sont affich\u00e9es\u202f; le CSV les contient toutes.',
             'No data available': 'Aucune donn\u00e9e disponible',
             'Failed to load': 'Le chargement a \u00e9chou\u00e9',
             'Visualization data is not available yet.': 'Les donn\u00e9es de visualisation ne sont pas encore disponibles.',
@@ -338,7 +338,7 @@
             'Content by country': 'Contenu par pays',
             'Languages represented': 'Langues repr\u00e9sent\u00e9es',
             'Collection breakdown': 'R\u00e9partition de la collection',
-            'period_covered': 'P\u00e9riode couverte : {min} \u2013 {max}',
+            'period_covered': 'P\u00e9riode couverte\u00a0: {min} \u2013 {max}',
             'coverage_range': '{min} \u2013 {max}',
 
             // Cumulative runtime (see the English block)
@@ -352,13 +352,13 @@
             'window_show_top': 'Afficher les {shown} premi\u00e8res',
 
             // Chart text alternatives
-            'chart_aria_plain': '{title} : graphique.',
-            'chart_aria_single': '{title} : graphique de {count} valeurs.',
-            'chart_aria_single_one': '{title} : graphique de {count} valeur.',
-            'chart_aria_single_other': '{title} : graphique de {count} valeurs.',
-            'chart_aria_summary': '{title} : graphique de {series} s\u00e9ries et {count} valeurs.',
-            'chart_aria_summary_one': '{title} : graphique de {series} s\u00e9ries et {count} valeur.',
-            'chart_aria_summary_other': '{title} : graphique de {series} s\u00e9ries et {count} valeurs.',
+            'chart_aria_plain': '{title}\u00a0: graphique.',
+            'chart_aria_single': '{title}\u00a0: graphique de {count} valeurs.',
+            'chart_aria_single_one': '{title}\u00a0: graphique de {count} valeur.',
+            'chart_aria_single_other': '{title}\u00a0: graphique de {count} valeurs.',
+            'chart_aria_summary': '{title}\u00a0: graphique de {series} s\u00e9ries et {count} valeurs.',
+            'chart_aria_summary_one': '{title}\u00a0: graphique de {series} s\u00e9ries et {count} valeur.',
+            'chart_aria_summary_other': '{title}\u00a0: graphique de {series} s\u00e9ries et {count} valeurs.',
             'chart_aria_zoom': 'Placez le focus sur le graphique et utilisez les touches fl\u00e9ch\u00e9es pour d\u00e9placer la fen\u00eatre visible.',
             'Chart': 'Graphique',
             'Filters': 'Filtres',
@@ -489,23 +489,23 @@
             'desc_top_newspapers':         'Journaux et p\u00e9riodiques o\u00f9 cette personne appara\u00eet le plus souvent (top 15).',
             'desc_countries_covered':      'R\u00e9partition des mentions par pays de publication de la source.',
             'desc_associated_entities':    'Personnes, organisations, lieux, sujets et événements associés à cette personne dans le catalogue. Le classement TF-IDF donne plus de poids aux associations propres à cette personne et moins aux entrées fréquentes dans l’ensemble de la collection. Passez du réseau à la liste classée ou à la chronologie. Les liens reflètent des notices communes et demandent une interprétation à partir des sources.',
-            'desc_associated_locations':   'Lieux enregistrés sur les documents associés à cette personne comme créateur ou sujet. Ils proviennent des champs de lieux du catalogue et des mots-clés correspondants ; la carte ne retrace donc pas les déplacements de la personne.',
+            'desc_associated_locations':   'Lieux enregistrés sur les documents associés à cette personne comme créateur ou sujet. Ils proviennent des champs de lieux du catalogue et des mots-clés correspondants\u202f; la carte ne retrace donc pas les déplacements de la personne.',
 
             // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
             'desc_entity_mentions_timeline':    'Articles, numéros de périodiques et références liés à cette entrée dans le catalogue, par année et pays de publication. Ces nombres reflètent les documents collectés et indexés, sans compter chaque mention dans les textes originaux.',
             'desc_entity_top_newspapers':       'Journaux et p\u00e9riodiques o\u00f9 cette entit\u00e9 est nomm\u00e9e le plus souvent (top 15).',
             'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
             'desc_entity_associated_entities':  'Personnes, organisations, lieux, sujets et événements associés à cette entrée dans le catalogue. Le classement TF-IDF donne plus de poids aux associations propres à cette entrée et moins aux entrées fréquentes dans l’ensemble de la collection. Passez du réseau à la liste classée ou à la chronologie. Les liens reflètent des notices communes et demandent une interprétation à partir des sources.',
-            'desc_entity_associated_locations': 'Lieux enregistrés sur les documents associés à cette entrée. Ils proviennent des champs de lieux du catalogue et des mots-clés correspondants ; une notice commune n’établit pas un événement ou une activité dans ce lieu.',
+            'desc_entity_associated_locations': 'Lieux enregistrés sur les documents associés à cette entrée. Ils proviennent des champs de lieux du catalogue et des mots-clés correspondants\u202f; une notice commune n’établit pas un événement ou une activité dans ce lieu.',
 
             // New shared panels (person + entity)
             'Year × month heatmap': 'Documents enregistrés par année et mois',
             'Top LDA topics': 'Thèmes modélisés les plus fréquents',
             'AI sentiment':                'Sentiment IA',
             'Subject co-occurrence':       'Co-occurrence de sujets',
-            'desc_year_month_heatmap':     'Documents liés par année et mois de publication. Seuls les documents dont la date enregistrée comporte au moins une année et un mois sont inclus. Les cellules foncées indiquent davantage de documents ; les lacunes reflètent les notices datées disponibles et n’établissent pas une absence d’activité historique.',
+            'desc_year_month_heatmap':     'Documents liés par année et mois de publication. Seuls les documents dont la date enregistrée comporte au moins une année et un mois sont inclus. Les cellules foncées indiquent davantage de documents\u202f; les lacunes reflètent les notices datées disponibles et n’établissent pas une absence d’activité historique.',
             'desc_lda_topics':             'Les 12 thèmes modélisés les plus fréquents dans les articles liés à cette notice, classés par nombre d’articles. Le LDA est une méthode statistique qui regroupe les mots employés ensemble en thèmes. Ces thèmes modélisés diffèrent des mots-clés du catalogue. Les numéros de périodiques et les références sont exclus de ce panneau.',
-            'desc_ai_sentiment':           'Évaluations par IA des articles liés à cette notice. La polarité décrit le ton envers l’islam et les musulmans ; la centralité, la place qui leur est accordée. Ces évaluations portent sur l’article entier, et non sur la personne ou l’organisation sélectionnée. Choisissez un modèle pour comparer ses résultats. Les numéros de périodiques et les références ne sont pas évalués.',
+            'desc_ai_sentiment':           'Évaluations par IA des articles liés à cette notice. La polarité décrit le ton envers l’islam et les musulmans\u202f; la centralité, la place qui leur est accordée. Ces évaluations portent sur l’article entier, et non sur la personne ou l’organisation sélectionnée. Choisissez un modèle pour comparer ses résultats. Les numéros de périodiques et les références ne sont pas évalués.',
             'desc_subject_cooccurrence':   'Paires parmi les 15 personnes, organisations, lieux, sujets ou événements les plus fréquemment associés. Chaque valeur compte les documents dont la notice réunit les deux membres de la paire. Un document commun établit une association dans le catalogue, pas nécessairement une relation sociale.',
 
             // AI sentiment — axis labels. The model names are proper
@@ -630,7 +630,7 @@
             'Treemap':                  'Carte proportionnelle',
             'Untitled':                 'Sans titre',
             'No similar articles':      'Aucun article similaire',
-            'desc_calendar_heatmap':    'Documents selon leur date de publication. Les cellules foncées indiquent davantage de documents. Utilisez les commandes du calendrier pour comparer les périodes ; les dates manquantes ou incomplètes limitent la couverture.',
+            'desc_calendar_heatmap':    'Documents selon leur date de publication. Les cellules foncées indiquent davantage de documents. Utilisez les commandes du calendrier pour comparer les périodes\u202f; les dates manquantes ou incomplètes limitent la couverture.',
             'cal_view_month':           'Par mois',
             'cal_view_day':             'Par jour',
             'cal_view_hijri':           'Par mois h\u00e9girien',
@@ -642,11 +642,11 @@
             'cal_skipped_note_one':     '{count} n’a pas pu être convertie et n’est pas affichée.',
             'cal_hijri_coverage':       'Seule une date compl\u00e8te au jour pr\u00e8s se convertit en date lunaire\u00a0: cette grille couvre donc {shown} des {total} mentions qu\u2019affiche la vue gr\u00e9gorienne.',
             'desc_chord':               'Liens entre les entit\u00e9s les plus souvent mentionn\u00e9es dans cet ensemble, dispos\u00e9s en cercle. Plus le ruban est \u00e9pais, plus les deux entit\u00e9s sont mentionn\u00e9es ensemble. Seules les 30 entit\u00e9s les mieux reli\u00e9es sont trac\u00e9es, pour que le diagramme reste lisible.',
-            'desc_radar_profile':       'Comparez les mesures selon des axes distincts. Chaque axe a sa propre échelle : examinez les libellés et les valeurs sans interpréter la forme ou la surface globale comme un score combiné.',
+            'desc_radar_profile':       'Comparez les mesures selon des axes distincts. Chaque axe a sa propre échelle\u00a0: examinez les libellés et les valeurs sans interpréter la forme ou la surface globale comme un score combiné.',
             'desc_sibling_sparkline':   'Activité dans le temps de la collection parente, par exemple cet article dans la chronologie de son journal. Le point indique le document courant.',
             'desc_similar_items':       'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA. Les correspondances sous le seuil de similarité retenu sont masquées. La similarité suggère des pistes de lecture, sans établir un argument ou une source communs.',
             'desc_sunburst':            'D\u00e9composition par niveaux, en anneaux concentriques. Chaque anneau est un niveau et plus l\u2019arc est long, plus le nombre est \u00e9lev\u00e9.',
-            'desc_treemap':             'D\u00e9composition par niveaux, en rectangles imbriqu\u00e9s. Cliquez sur un rectangle pour l\u2019ouvrir ; le fil d\u2019Ariane en bas permet de remonter.',
+            'desc_treemap':             'D\u00e9composition par niveaux, en rectangles imbriqu\u00e9s. Cliquez sur un rectangle pour l\u2019ouvrir\u202f; le fil d\u2019Ariane en bas permet de remonter.',
 
             // Pickers and search (index overview, spatial exploration)
             'Clear selection':           'Effacer la s\u00e9lection',

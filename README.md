@@ -8,7 +8,7 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — twenty-one page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — twenty-two page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
@@ -320,7 +320,7 @@ Not yet released. For local development:
 
 1. Place this directory (or a clone of the repo) under your Omeka S `modules/` folder.
 2. If you plan to regenerate the minified JS bundles or the precomputed data:
-   - **Node 22** for the JS build/lint/browser tests: `npm install && npm run build`
+   - **Node 24.15+** for the JS build/lint/browser tests: `npm install && npm run build`
    - **Python 3.12** for the precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install -r scripts/requirements.txt` (the hash-pinned `requirements.lock` is compiled for the Linux runner and will not install elsewhere — see `scripts/README.md`)
 3. Regenerate data as needed (see [Precompute pipeline](#precompute-pipeline)).
 4. Activate the module in **Admin → Modules**.
@@ -331,7 +331,7 @@ The committed `asset/js/dist/` bundles and `.min.css` sheets mean a fresh clone 
 ### Requirements
 
 - **Omeka S 4.0+** (declared in `config/module.ini`; CI boots both the literal Omeka S 4.0.0 floor on PHP 8.1 and the production target, Omeka S 4.2.1 on PHP 8.5)
-- **Node 20+** — only needed when rebuilding minified JS bundles or running Playwright (dev/CI step)
+- **Node 24.15+** (`engines` in package.json; CI runs Node 24) — only needed when rebuilding minified JS bundles or running Playwright (dev/CI step)
 - **Python 3.12** — only needed when running the CI-equivalent Python precompute generators. Direct requirements live in `scripts/requirements.txt`; the workflow installs the hash-verified `scripts/requirements.lock`.
 - **Theme:** [IWAC theme](https://github.com/fmadore/IWAC-theme). The module works without it (CSS fallback values + ECharts theme fallback constants), but chart colors will look generic and the dark-mode toggle will only follow the OS preference.
 

@@ -49,7 +49,7 @@ test('translations interpolate parameters and fall back to the source key', () =
     assert.equal(ns.t('Download chart'), 'Télécharger le graphique');
     assert.equal(
         ns.t('period_covered', { min: 1950, max: 2024 }),
-        'Période couverte : 1950 – 2024'
+        'Période couverte\u00A0: 1950 – 2024'
     );
     assert.equal(ns.t('not_in_the_dictionary'), 'not_in_the_dictionary');
 });
@@ -66,7 +66,7 @@ test('block-specific catalogs can extend the active locale safely', () => {
  * percent spacing of the PAGE locale. These spell the separators out as
  * escapes so a lookalike space cannot pass.
  */
-const NNBSP = ' ';
+const NNBSP = '\u202F';
 
 test('counts group with a narrow no-break space in both locales', () => {
     const fr = loadI18n('fr-FR');

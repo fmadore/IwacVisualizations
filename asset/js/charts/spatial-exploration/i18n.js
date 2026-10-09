@@ -52,7 +52,7 @@
         'Quantile':                  'Quantile',
         'Linear':                    'Lin\u00e9aire',
         'Square root':               'Racine carr\u00e9e',
-        'spatial_map_description':   'Les bulles les plus grandes indiquent les lieux associés à davantage de documents par les mots-clés du catalogue. Seuls les lieux aux coordonnées connues peuvent être cartographiés. La carte reflète les notices de la collection : un lieu absent peut simplement manquer d’indexation ou de coordonnées. Survolez un lieu pour un aperçu ou cliquez pour voir les documents.',
+        'spatial_map_description':   'Les bulles les plus grandes indiquent les lieux associés à davantage de documents par les mots-clés du catalogue. Seuls les lieux aux coordonnées connues peuvent être cartographiés. La carte reflète les notices de la collection\u00a0: un lieu absent peut simplement manquer d’indexation ou de coordonnées. Survolez un lieu pour un aperçu ou cliquez pour voir les documents.',
         'admin_units_count':         '{count} unit\u00e9s',
         'admin_units_count_one':     '{count} unit\u00e9',
         'No administrative data':    'Aucune donn\u00e9e administrative',

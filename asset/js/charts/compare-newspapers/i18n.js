@@ -34,11 +34,11 @@
     });
 
     ns.addTranslations('fr', {
-        'compare.overlap_desc': 'Mots-clés présents dans les deux sélections ou dans une seule des listes fournies. Chaque colonne montre ses entrées les plus fréquentes ; les nombres communs sont indiqués dans l’ordre A / B. Les listes sources sont limitées : l’absence d’un mot-clé dans une liste n’établit pas son absence de la sélection entière.',
+        'compare.overlap_desc': 'Mots-clés présents dans les deux sélections ou dans une seule des listes fournies. Chaque colonne montre ses entrées les plus fréquentes\u202f; les nombres communs sont indiqués dans l’ordre A / B. Les listes sources sont limitées\u00a0: l’absence d’un mot-clé dans une liste n’établit pas son absence de la sélection entière.',
         'compare.newspapers_desc': 'Nombre de documents collectés par journal ou périodique dans chaque sélection. Cette vue décrit les collections IWAC, et non toute la production d’un titre.',
-        'compare.words_desc': 'Mots fréquents dans le texte disponible de chaque sélection, après retrait des mots grammaticaux courants. La taille des mots est ajustée séparément dans chaque nuage ; utilisez les nombres pour comparer les fréquences.',
+        'compare.words_desc': 'Mots fréquents dans le texte disponible de chaque sélection, après retrait des mots grammaticaux courants. La taille des mots est ajustée séparément dans chaque nuage\u202f; utilisez les nombres pour comparer les fréquences.',
         'compare.subjects_desc': 'Les 15 sujets du catalogue aux nombres cumulés les plus élevés dans les deux sélections. Les barres comptent les documents indexés, et non les répétitions de mots. Une sélection plus grande peut produire des nombres plus élevés sans consacrer une part supérieure de sa couverture à un sujet.',
-        'compare.timeline_desc': 'Documents de chaque sélection par année de publication. Il s’agit de nombres : le volume et la période couverte par chaque sélection affectent la comparaison. Un article et un numéro de périodique constituent des unités différentes.',
+        'compare.timeline_desc': 'Documents de chaque sélection par année de publication. Il s’agit de nombres\u00a0: le volume et la période couverte par chaque sélection affectent la comparaison. Un article et un numéro de périodique constituent des unités différentes.',
         'Corpus A':                      'Corpus A',
         'Corpus B':                      'Corpus B',
         'Newspaper articles':            'Articles de presse',

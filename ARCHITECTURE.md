@@ -451,7 +451,8 @@ yet” state instead of a 404 error.
 
 Two layers:
 
-1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `msgfmt language/fr.po -o language/fr.mo` (or, without gettext installed: `python -c "import polib; polib.pofile('language/fr.po').save_as_mofile('language/fr.mo')"`). Current catalog is 58 entries, regenerated v1.6.1. See `language/README.md`.
+1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `npm run build:mo` (the repository's own po/mo codec, `scripts/gettext.js`; no `msgfmt` needed). `npm run lint:i18n-mo` fails while `fr.mo` disagrees with `fr.po`, and `npm run lint:i18n-pot` while a source string is missing from it. See `language/README.md`.
+   French typography is part of the translation: a no-break space (U+00A0) before `:` and inside « », a narrow one (U+202F) before `;`, `!`, `?` and `%`, in the PHP catalogue and the JavaScript dictionaries alike.
 2. **JavaScript (`IWACVis.t()`)** — chart labels, tooltips, summary card labels, tab names, facet UI. Dictionary lives inline in `asset/js/iwac-i18n.js`. Locale is detected once at render time from `document.documentElement.lang` (populated by Omeka's Internationalisation module).
 3. **Numbers and calendar names** — `IWACVis.formatNumber` / `formatDecimal` / `formatPercent` / `formatCompact` and `monthNames` / `weekdayNames` / `formatYearMonth`, all in `iwac-i18n.js` and all keyed to the page locale, never the browser's. Value axes take the number rule at theme level (`iwac-theme.js`); ECharts' French locale (calendar month and day names) is registered from the same month table in `dashboard-core.js`.
 

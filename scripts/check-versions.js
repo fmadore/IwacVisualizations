@@ -49,4 +49,23 @@ if (missing.length || unique.size !== 1) {
     );
 }
 
-console.log(`✓ version guard: ${pkg.version} in package, lock file, module.ini, CITATION.cff and the README citation`);
+// CITATION.cff's `date-released` is the date the cited version shipped, and
+// nothing checked it: a release that bumped `version` and forgot the date
+// told every citation the wrong day. The CHANGELOG heading of that version
+// carries the date the release was written down with — `### vX.Y.Z — … (YYYY-MM-DD)`.
+const changelog = readFileSync(join(ROOT, 'CHANGELOG.md'), 'utf8');
+const escaped = pkg.version.replace(/[.]/g, '\\.');
+const heading = new RegExp('^### v' + escaped + ' .*\\((\\d{4}-\\d{2}-\\d{2})\\)\\s*$', 'm').exec(changelog);
+const dateMatch = /^date-released:\s*"?(\d{4}-\d{2}-\d{2})"?\s*$/m.exec(cff);
+if (!heading || !dateMatch || heading[1] !== dateMatch[1]) {
+    fail(
+        'version guard: CITATION.cff date-released disagrees with the CHANGELOG',
+        [
+            `CITATION.cff date-released: ${dateMatch ? dateMatch[1] : '(missing)'}`,
+            `CHANGELOG.md v${pkg.version}: ${heading ? heading[1] : '(no dated heading)'}`,
+        ],
+        '\nSet date-released to the day the release is cut.\n'
+    );
+}
+
+console.log(`✓ version guard: ${pkg.version} in package, lock file, module.ini, CITATION.cff and the README citation; released ${dateMatch[1]}`);

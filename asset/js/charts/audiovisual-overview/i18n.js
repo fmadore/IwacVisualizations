@@ -112,7 +112,7 @@
         'av.bucket_gt1h':                 'Plus d’1 h',
 
         'av.timeline_title':              'Publications par année',
-        'av.timeline_desc':               'Enregistrements collectés par année de publication et par source. Cette chronologie suit les dates de publication, et non d’ajout à IWAC ; les variations reflètent aussi les choix de collecte.',
+        'av.timeline_desc':               'Enregistrements collectés par année de publication et par source. Cette chronologie suit les dates de publication, et non d’ajout à IWAC\u202f; les variations reflètent aussi les choix de collecte.',
         'av.timeline_other':              'Autres sources',
         'av.timeline_partial':            'L’année {year} est incomplète — la collection s’arrête au {date}.',
         'av.timeline_undated':            '{count} enregistrements sans date de publication ne sont pas représentés.',
@@ -127,7 +127,7 @@
         'av.coverage_language':           'Langue',
         'av.coverage_creator':            'Créateur',
         'av.coverage_subject':            'Sujet',
-        'av.coverage_tip':                '{present} enregistrements sur {total} ({percent} %)',
+        'av.coverage_tip':                '{present} enregistrements sur {total} ({percent}\u202f%)',
 
         'av.recent_title':                'Les plus récents',
         'av.recent_desc':                 'Les enregistrements les plus récents de la collection.',

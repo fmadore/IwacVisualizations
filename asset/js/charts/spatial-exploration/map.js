@@ -375,7 +375,7 @@
                 type: 'FeatureCollection',
                 features: (geo.features || []).map(function (feature) {
                     var props = feature.properties || {};
-                    var name = props.name || 'Unknown';
+                    var name = props.name || P.t('Unknown');
                     return {
                         type: 'Feature',
                         geometry: feature.geometry,

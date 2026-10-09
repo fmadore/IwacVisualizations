@@ -21,7 +21,7 @@
         'timeline_select': 'Aller à un événement',
         'timeline_intro': 'Introduction',
         'timeline_axis': 'Navigation chronologique',
-        'timeline_axis_hint': 'Les points indiquent les événements ; les lignes représentent les périodes. Faites défiler pour explorer la chronologie.',
+        'timeline_axis_hint': 'Les points indiquent les événements\u202f; les lignes représentent les périodes. Faites défiler pour explorer la chronologie.',
         'timeline_progress': 'Événement {current} sur {total}',
         'timeline_views': 'Vue de la chronologie'
     });

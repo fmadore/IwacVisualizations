@@ -190,11 +190,19 @@ $config = [
 
 // New registrations use a module-owned namespace. Stored page layouts keep
 // resolving through aliases, so an upgrade does not rewrite user content.
+//
+// Except `timeline`: the IWAC Timeline block shipped (v1.74.0) after the move
+// to `iwac-` names, so no stored layout carries the bare name — and Omeka's
+// own Timeline module registers a `timeline` block, which an alias here would
+// shadow on a site that runs both.
+$noLegacyAlias = ['timeline'];
 foreach (['block_layouts', 'resource_page_block_layouts'] as $manager) {
     foreach ($config[$manager]['invokables'] as $legacy => $class) {
         $name = 'iwac-' . $legacy;
         $config[$manager]['invokables'][$name] = $class;
-        $config[$manager]['aliases'][$legacy] = $name;
+        if (!in_array($legacy, $noLegacyAlias, true)) {
+            $config[$manager]['aliases'][$legacy] = $name;
+        }
         unset($config[$manager]['invokables'][$legacy]);
     }
 }
