@@ -16,6 +16,54 @@ final class Manifest
         return (bool) preg_match('/^[a-f0-9]{64}$/D', $value);
     }
 
+    /**
+     * A manifest path: segments joined by `/` or `.`, ending in `.json`, so
+     * `timelines/hajj-burkina.fr.json` passes while an empty, dot-led or
+     * `..` segment cannot.
+     */
+    public const PATH_PATTERN = '~^[a-zA-Z0-9_-]+(?:[./][a-zA-Z0-9_-]+)*\.json$~D';
+
+    /** A directory entry a `zip -r` archive carries: safe segments and a trailing slash. */
+    private const DIRECTORY_PATTERN = '~^[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*/$~D';
+
+    /**
+     * The archive entries the sync may extract, read from the manifest
+     * INSIDE the archive before anything touches the disk: the manifest
+     * itself and every file it lists. Throws when the manifest is missing or
+     * malformed.
+     *
+     * The sync used to extract everything into its staging directory —
+     * under `files/`, a publicly served tree — and only then hold the files
+     * to the manifest's `.json` allowlist (`validate()`), so a stray entry
+     * sat on the web for as long as the validation took (V-15).
+     *
+     * @return array<string, true>
+     */
+    public static function allowedEntries(string $manifestJson, string $manifestEntry): array
+    {
+        $manifest = json_decode($manifestJson, true);
+        if (!is_array($manifest) || !is_array($manifest['files'] ?? null) || !$manifest['files']) {
+            throw new \RuntimeException('Missing or incompatible data manifest.');
+        }
+        $allowed = [$manifestEntry => true];
+        foreach (array_keys($manifest['files']) as $path) {
+            if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path) || str_contains($path, '..')) {
+                throw new \RuntimeException('Invalid manifest entry.');
+            }
+            $allowed[$path] = true;
+        }
+        return $allowed;
+    }
+
+    /** Whether one archive entry may be extracted, given allowedEntries(). */
+    public static function mayExtract(string $name, array $allowed): bool
+    {
+        if (isset($allowed[$name])) {
+            return true;
+        }
+        return (bool) preg_match(self::DIRECTORY_PATTERN, $name);
+    }
+
     public static function validate(string $directory): array
     {
         $manifest = json_decode((string) @file_get_contents($directory . '/manifest.json'), true);
@@ -26,9 +74,7 @@ final class Manifest
             throw new \RuntimeException('Missing or incompatible data manifest.');
         }
         foreach ($manifest['files'] as $path => $entry) {
-            // Segments joined by `/` or `.`, so `timelines/hajj-burkina.fr.json`
-            // passes while an empty, dot-led or `..` segment cannot.
-            if (!is_string($path) || !preg_match('~^[a-zA-Z0-9_-]+(?:[./][a-zA-Z0-9_-]+)*\.json$~D', $path)
+            if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path)
                 || str_contains($path, '..') || str_starts_with($path, '/')
                 || !is_array($entry) || !is_string($entry['sha256'] ?? null)
                 || !self::isDigest($entry['sha256'])

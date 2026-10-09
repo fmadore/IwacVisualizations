@@ -685,6 +685,13 @@ namespace {
     check(strpos(EmbedBrand::WEBFONT_URL, 'https://fonts.bunny.net/css?family=besley:') === 0,
         "the embed webfont request is not the theme's");
 
+    // V-15: embeds carry Omeka's session cookie, so a shared cache must not
+    // keep them.
+    $embedSource = (string) file_get_contents($root . '/src/Controller/Site/EmbedController.php');
+    check(strpos($embedSource, "'Cache-Control', 'private, max-age=300'") !== false
+        && strpos($embedSource, "'public, max-age") === false,
+        'embed responses must be cacheable by the browser only (private)');
+
     require __DIR__ . '/timeline.php';
 
     if ($failures) {

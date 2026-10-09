@@ -420,11 +420,12 @@ check(
 // ---------------------------------------------------------------- symlink
 // A symlink is a Unix mode in the entry's external attributes, which
 // ZipArchive can set directly.
-$s = syncScenario('symlink', ['collection-overview.json' => '{}']);
+// Listed in the manifest, so the refusal tested is the symlink check and
+// not the manifest allowlist that now runs first.
+$s = syncScenario('symlink', ['collection-overview.json' => '{}', 'link.json' => '/etc/passwd']);
 $syncRoots[] = $s['root'];
 $zip = new \ZipArchive();
 $zip->open($s['fixture']);
-$zip->addFromString('link.json', '/etc/passwd');
 $zip->setExternalAttributesName(
     'link.json',
     \ZipArchive::OPSYS_UNIX,
@@ -664,6 +665,24 @@ if (function_exists('symlink')
 $bad = syncScenario('manifest', ['collection-overview.json' => '{}', 'extra.php' => '<?php exit;']);
 $syncRoots[] = $bad['root'];
 check(syncRun($bad['job']) !== '', 'an executable archive entry passed manifest validation');
+
+// V-15: an entry the manifest does not list is refused BEFORE extraction,
+// so it never lands in the publicly served work tree, even briefly.
+$s = syncScenario('unlisted', ['collection-overview.json' => '{}']);
+$syncRoots[] = $s['root'];
+$zip = new \ZipArchive();
+$zip->open($s['fixture']);
+$zip->addFromString('shell.php', '<?php echo 1;');
+$zip->close();
+$err = syncRun($s['job']);
+check(strpos($err, 'not listed in its manifest') !== false,
+    'an unlisted archive entry was not refused before extraction: ' . ($err ?: '(it succeeded)'));
+check(!is_dir($s['workDir'] . '/stage-7'), 'an unlisted entry still produced a staging tree');
+check(!is_file($s['workDir'] . '/stage-7/shell.php'), 'an unlisted entry was extracted');
+// The work root denies the web whatever happened to the run.
+check(is_file($s['workDir'] . '/.htaccess')
+    && strpos((string) file_get_contents($s['workDir'] . '/.htaccess'), 'Require all denied') !== false,
+    'the data work directory is not denied to the web');
 
 // Repeat imports preserve the same immutable directory, while retention keeps
 // both recent readers and the immediately previous generation.

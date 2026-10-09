@@ -75,6 +75,9 @@ class SyncData extends AbstractJob
         if (!is_dir($workRoot) && !@mkdir($workRoot, 0775, true) && !is_dir($workRoot)) {
             throw new \RuntimeException('Could not create work directory: ' . $workRoot);
         }
+        // The work root sits beside the live tree under `files/`, which the
+        // web server serves: downloads and staging trees must not be.
+        $deployment->protectWorkDir();
 
         $jobId       = (int) $this->job->getId();
         $lockPath    = $deployment->lockPath();
@@ -163,6 +166,19 @@ class SyncData extends AbstractJob
                     self::MAX_ARCHIVE_ENTRIES
                 ));
             }
+            // The allowlist, BEFORE extraction: the manifest inside the
+            // archive names every file it may contain, and anything else is
+            // refused here rather than unpacked into `files/` and refused
+            // afterwards by Manifest::validate() (V-15).
+            try {
+                $allowed = Manifest::allowedEntries(
+                    (string) $zip->getFromName(self::MANIFEST_ENTRY),
+                    self::MANIFEST_ENTRY
+                );
+            } catch (\RuntimeException $e) {
+                $zip->close();
+                throw $e;
+            }
             // Zip-slip guard: refuse any entry whose path could escape the
             // staging dir (absolute, drive-letter, backslash, or `..`
             // segments), any Unix special file/symlink, or an implausibly
@@ -175,6 +191,10 @@ class SyncData extends AbstractJob
                 if (!self::isSafeArchiveEntryPath($name)) {
                     $zip->close();
                     throw new \RuntimeException('Archive contains an unsafe entry path: ' . $name);
+                }
+                if (!Manifest::mayExtract($name, $allowed)) {
+                    $zip->close();
+                    throw new \RuntimeException('Archive entry is not listed in its manifest: ' . $name);
                 }
 
                 $stat = $zip->statIndex($i);

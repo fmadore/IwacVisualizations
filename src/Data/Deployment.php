@@ -60,6 +60,34 @@ class Deployment
         return $this->live . '.tmp';
     }
 
+    /**
+     * Deny web access to the work root. It lives under `files/`, which the
+     * web server serves, and holds the downloaded archive and the staging
+     * tree before either is verified. An Apache server (the live one) obeys
+     * this `.htaccess`; on another server the same denial belongs in its
+     * configuration. Written once, left in place: the stale-work sweep only
+     * removes the job-scoped entries it recognises.
+     */
+    public function protectWorkDir(): void
+    {
+        $file = $this->workDir() . '/.htaccess';
+        if (is_file($file)) {
+            return;
+        }
+        @file_put_contents($file, implode("\n", [
+            '# Written by the IwacVisualizations data sync. This directory holds downloads',
+            '# and staging trees before they are verified; nothing in it is for the web.',
+            '<IfModule mod_authz_core.c>',
+            '    Require all denied',
+            '</IfModule>',
+            '<IfModule !mod_authz_core.c>',
+            '    Order allow,deny',
+            '    Deny from all',
+            '</IfModule>',
+            '',
+        ]));
+    }
+
     /** The permanent lock inode the job holds and the recovery control probes. */
     public function lockPath(): string
     {

@@ -69,19 +69,23 @@ class EmbedController extends AbstractActionController
     }
 
     /**
-     * Let a response be cached for five minutes.
+     * Let a response be cached for five minutes — by the viewer's browser.
      *
-     * Embeds are public, read-only, and fetched by third-party pages that
-     * this module does not control — a slide deck, a project site, a lecture
-     * page. Without a `Cache-Control` header every one of those hits Omeka's
-     * full bootstrap on every view. Five minutes is short enough that a data
-     * sync shows up promptly and long enough to absorb a page that embeds
-     * several panels of the same block.
+     * Embeds are read-only and fetched by third-party pages this module does
+     * not control — a slide deck, a project site, a lecture page. Without a
+     * `Cache-Control` header every view of those hits Omeka's full bootstrap.
+     * Five minutes is short enough that a data sync shows up promptly and
+     * long enough to absorb a page that embeds several panels of one block.
+     *
+     * `private`, not `public`: Omeka starts a session on a site route, so
+     * these responses carry `Set-Cookie`, and `public` invited a shared cache
+     * (a proxy, a CDN) to store one visitor's session cookie and hand it to
+     * the next (V-15). The browser cache keeps the saving that matters.
      */
     private function cacheable(): void
     {
         $this->getResponse()->getHeaders()
-            ->addHeaderLine('Cache-Control', 'public, max-age=300');
+            ->addHeaderLine('Cache-Control', 'private, max-age=300');
     }
 
     /**
