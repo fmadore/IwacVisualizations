@@ -83,3 +83,18 @@ test('the block does not overflow a 375 px viewport', async ({ page }) => {
         document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(0);
 });
+
+test('the block heading opens its section the way the theme’s sections do', async ({ page }) => {
+    // X-12: on item pages "How to cite" and "Linked resources" open on a 2px
+    // ink rule; "Visualisations" is their peer, so it is an h2 on the same
+    // rule, and the panels under it step down to h3.
+    await page.goto(FIXTURE);
+    await expect(page.locator('.iwac-vis-minimal-item__loading')).toHaveCount(0);
+    const heading = await page.locator('.iwac-vis-block > h2').evaluate((h) => {
+        const s = getComputedStyle(h);
+        return { rule: s.borderTopWidth, style: s.borderTopStyle, weight: s.fontWeight };
+    });
+    expect(heading).toEqual({ rule: '2px', style: 'solid', weight: '800' });
+    await expect(page.locator('.iwac-vis-panel > h3').first()).toBeVisible();
+    await expect(page.locator('.iwac-vis-panel > h4')).toHaveCount(0);
+});

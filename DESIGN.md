@@ -236,7 +236,10 @@ chart code is how every chart on the site once rendered in Inter on a Public San
 **The Panel-Titles-Are-UI Rule.** Panel titles are sans-serif at `--text-base`/600 —
 they are labels above charts, not editorial headings. The serif treatment is reserved for
 the block-level section heading, which is what ties a block into the page's `h1`/`h2`
-rhythm. Heading *level* is an outline decision, not a style one: `buildPanel` emits `h4`
+rhythm: a block heading at `h2` (the item pages' "Visualisations", the item-set
+dashboard) is the theme's section-opener — a 2px `--ink-strong` rule, then Besley at
+`--text-lg` / 800 / `--tracking-display` — exactly as "How to cite" and "Linked resources"
+open beside it. Heading *level* is an outline decision, not a style one: `buildPanel` emits `h4`
 by default, `h3` under a block heading promoted to `h2`, `h2` for a block sitting directly
 under the page `h1` — and the level never changes the size.
 

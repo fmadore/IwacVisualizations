@@ -27,6 +27,32 @@
     height: auto;
 }
 
+/*  Primary-coloured TEXT in this block (the see-all toggle, the hover state
+ *  of every title) is --primary-hover: out of the panel box the almanac sits
+ *  on the page ground, where --primary measured under 4.5:1 (axe). */
+
+/*  Rule-opened, not boxed. The almanac opened on the section rule (the 2px
+ *  ink line over its masthead, below) AND sat in a panel card — two openers
+ *  for one section, where the theme's own sections ("How to cite", "Linked
+ *  resources") use the rule alone. Panels are the sanctioned box for a chart;
+ *  this block draws none, so the box goes and the rule stays. */
+.iwac-vis-otd-panel {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+/*  The panel toolbar (the copy-embed control) floats over a chart panel's top
+ *  corner. Here that corner is the section rule, and the control sat across
+ *  it; it closes the block instead, on its own line. */
+.iwac-vis-otd-panel > .iwac-vis-panel-toolbar {
+    position: static;
+    justify-content: flex-end;
+    margin-top: var(--space-3, 0.75rem);
+}
+
 /*  Responsive rules below key off the BLOCK's width, not the viewport's.
  *  A page block does not always get the whole page: dropped into a narrow
  *  column, a viewport-keyed layout keeps its five-across decade grid and
@@ -277,7 +303,7 @@
 }
 
 .iwac-vis-otd-register__row:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
     background: var(--surface-raised, #faf8f6);
 }
 
@@ -348,7 +374,7 @@
 }
 
 .iwac-vis-otd-decades__card:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
 }
 
 .iwac-vis-otd-decades__card:focus-visible {
@@ -427,7 +453,7 @@
 }
 
 .iwac-vis-otd-clippings__cut:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
 }
 
 .iwac-vis-otd-clippings__cut:focus-visible {
@@ -500,7 +526,7 @@
     font-weight: 600;
     letter-spacing: var(--tracking-wide, 0.04em);
     text-transform: uppercase;
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
     cursor: pointer;
 }
 
@@ -535,7 +561,7 @@
 }
 
 .iwac-vis-otd-index__row:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
     background: var(--surface-raised, #faf8f6);
 }
 

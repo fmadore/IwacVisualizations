@@ -197,7 +197,10 @@
     flex-wrap: wrap;
     gap: var(--space-2, 0.5rem);
 }
-.iwac-vis-sent-axis__title {
+/*  Two classes: the title is an <h4> under the panel's <h3> since the block
+ *  heading became the item page's section <h2>, and `.iwac-vis-block h4`
+ *  (0,1,1) would otherwise set it as a panel title. */
+.iwac-vis-sent-axis .iwac-vis-sent-axis__title {
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;

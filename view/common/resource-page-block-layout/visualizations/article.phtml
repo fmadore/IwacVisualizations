@@ -147,7 +147,7 @@ if ($hasSentiment) {
 ?>
     <section class="iwac-vis-panel iwac-vis-panel--wide iwac-vis-article__sentiment"
              data-iwac-no-panel-toolbar="1">
-        <h4><?= $escapeHtml($translate('AI sentiment')) ?></h4>
+        <h3><?= $escapeHtml($translate('AI sentiment')) ?></h3>
         <p class="iwac-vis-panel-desc">
             <?= $escapeHtml(sprintf(
                 $translate('AI assessments produced independently by %s. Polarity describes the tone towards Islam and Muslims; centrality describes their prominence in the article; subjectivity describes factual or opinion-based language. These ratings need checking against the text. Subjectivity is particularly uncertain, and agreement between models does not establish accuracy.'),
@@ -179,7 +179,7 @@ if ($hasSentiment) {
             ?>
             <section class="iwac-vis-sent-axis">
                 <header class="iwac-vis-sent-axis__head">
-                    <h5 class="iwac-vis-sent-axis__title"><?= $escapeHtml($axis['title']) ?></h5>
+                    <h4 class="iwac-vis-sent-axis__title"><?= $escapeHtml($axis['title']) ?></h4>
                     <?php if ($v): ?>
                     <p class="iwac-vis-sent-axis__verdict iwac-vis-sent-axis__verdict--<?= $escapeAttr($v[0]) ?>">
                         <?= $escapeHtml($v[1]) ?>
@@ -283,6 +283,9 @@ echo $this->partial('common/iwac-block-shell', [
     ],
     'blockClass'   => 'iwac-vis-article',
     'heading'      => $this->translate('Visualisations'),
+    // A section of the item page, beside the theme's "How to cite" and
+    // "Linked resources": the same h2 and the same 2px section rule.
+    'headingLevel' => 'h2',
     'loading'      => $this->translate('Loading dashboard'),
     'loadingClass' => 'iwac-vis-article__loading',
     'data'         => ['item-id' => $resource->id()],

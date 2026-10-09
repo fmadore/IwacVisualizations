@@ -252,6 +252,26 @@ body {
     word-break: break-word;
 }
 
+/*  A block heading at h2 is a SECTION of the page — the item pages'
+ *  "Visualisations", the item-set dashboard — and opens the way the theme's
+ *  sections do ("How to cite", "Linked resources"): the newspaper
+ *  section-opener, a 2px --ink-strong rule, then the heading in the display
+ *  face at --text-lg / 800 / --tracking-display (IWAC-theme DESIGN-SYSTEM.md
+ *  §2c, its `section-head` mixin). It used to be the quiet sans label the h3
+ *  block heading is, one rule-less heading among ruled ones. 800, not 700:
+ *  Besley loads 500/600/800. */
+.iwac-vis-block > h2 {
+    margin: 0 0 var(--space-4, 1rem);
+    padding-block-start: var(--space-4, 1rem);
+    border-block-start: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-size: var(--text-lg, 1.1875rem);
+    font-weight: 800;
+    line-height: var(--line-height-tight, 1.25);
+    letter-spacing: var(--tracking-display, -0.01em);
+    color: var(--ink-strong, #05070c);
+}
+
 /*  A panel title, at whichever heading level the outline needs. `buildPanel`
  *  emits <h4> by default, <h3> under a block heading promoted to <h2>
  *  (item-set pages — `P.panelHeadingLevel`), and <h2> for a page block that
