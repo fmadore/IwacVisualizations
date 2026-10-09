@@ -209,29 +209,44 @@ a.iwac-vis-laicite-circ-title:focus-visible {
     color: var(--ink-subtle, #5a5e63);
 }
 
+/*  The view groups (Understand / Read / Compare) switch between sections of
+ *  the block, so they are the RULED tab of the controls grammar (IWAC-theme
+ *  DESIGN-SYSTEM.md §2c): ink text on the page ground, the active group in
+ *  --ink-strong over a 2px --primary underline, no box and no fill. They were
+ *  filled-primary pills with --surface text — the loud fill the theme
+ *  reserves for a submit, and in dark mode light text on a lightened
+ *  primary. */
+.iwac-vis-laicite-views {
+    gap: var(--space-4, 1rem);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+}
+
 .iwac-vis-laicite-view-btn {
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    padding: var(--space-2, 0.5rem) 0;
     min-height: var(--size-control-md, 2.5rem);
     font: inherit;
     font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
     color: var(--ink-light, #3f4349);
     background: transparent;
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border: 0;
+    border-bottom: var(--accent-line-sm, 2px) solid transparent;
+    border-radius: 0;
+    margin-bottom: -1px;
     cursor: pointer;
-    transition: background-color var(--transition-fast), color var(--transition-fast),
-                border-color var(--transition-fast);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .iwac-vis-laicite-view-btn:hover {
-    background: var(--surface-sunken, #f4f1ef);
     color: var(--ink-strong, #05070c);
+    border-bottom-color: var(--border-strong, #aeb1b7);
 }
 
-.iwac-vis-laicite-view-btn.is-active {
-    color: var(--surface, #fdfcfb);
-    background: var(--primary, #ce4115);
-    border-color: var(--primary, #ce4115);
+.iwac-vis-laicite-view-btn.is-active,
+.iwac-vis-laicite-view-btn.is-active:hover {
+    color: var(--ink-strong, #05070c);
+    font-weight: 600;
+    border-bottom-color: var(--primary, #ce4115);
 }
 
 /*  The "Show events" and "strict" checkboxes wear the shared
@@ -270,15 +285,17 @@ a.iwac-vis-laicite-circ-title:focus-visible {
     letter-spacing: 0.06em;
     color: var(--ink-light, #3f4349);
     background: var(--surface-sunken, #f4f1ef);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: var(--radius-sm, 0.375rem);
     white-space: nowrap;
 }
 
+/*  Primary-coloured TEXT is --primary-hover on a light wash: --primary on the
+ *  25 % wash these chips had measured 3.36:1 at --text-2xs (light). At 12 %
+ *  the hover tone reads 5.18:1 light and 6.27:1 dark. */
 .iwac-vis-laicite-chip.is-membership,
 .iwac-vis-laicite-chip.is-tagged {
-    color: var(--primary, #ce4115);
-    background: color-mix(in oklab, var(--primary, #ce4115)
-                var(--accent-mix-subtle, 25%), var(--surface, #fdfcfb));
+    color: var(--primary-hover, #b03710);
+    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb));
 }
 
 /*  Chips whose text is a proper name, a corpus label or a figure rather

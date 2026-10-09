@@ -1273,7 +1273,7 @@ body {
     background: transparent;
     color: var(--muted, #66696e);
     border: 1px solid transparent;
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-sm, 0.375rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
@@ -1298,11 +1298,29 @@ body {
     outline-offset: 2px;
 }
 
+/*  Controls grammar (IWAC-theme DESIGN-SYSTEM.md §2c). A `.iwac-vis-tab`
+ *  group switches a view INSIDE a panel — a chart mode, an entity type — so
+ *  it is the outlined chip: hairline border and ink text at rest, the
+ *  facet chip's primary border + wash when on, `--radius-sm`. It used to be
+ *  transparent until hovered, with its own 12 % wash on --surface-raised,
+ *  so the module drew one switch three ways. A page-level tab set is the
+ *  ruled tab instead (the Laïcité view groups); neither is ever filled. */
+.iwac-vis-tab {
+    background: var(--surface, #fdfcfb);
+    color: var(--ink-light, #3f4349);
+    border-color: var(--border, #ced1d6);
+}
+
+.iwac-vis-tab:hover {
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 35%, var(--border, #ced1d6));
+}
+
 .iwac-vis-tab--active,
 .iwac-vis-tab--active:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
-    color: var(--ink, #13161c);
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
+    background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
+    color: var(--ink-strong, #05070c);
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 55%, var(--border, #ced1d6));
+    font-weight: 600;
 }
 
 .iwac-vis-pagination__btn:disabled {
@@ -1388,7 +1406,7 @@ body {
     background: var(--surface, #fdfcfb);
     color: var(--ink-light, #3f4349);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-sm, 0.375rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
@@ -1540,7 +1558,8 @@ body {
     align-items: center;
     gap: 0.25rem;
     padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-full, 9999px);
+    /*  A control, so the chip radius: --radius-full is for dots. */
+    border-radius: var(--radius-sm, 0.375rem);
     border: 1px solid color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
     background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb));
     color: var(--ink, #13161c);
@@ -2096,7 +2115,7 @@ select.iwac-vis-control:hover {
     margin-block: var(--space-2, 0.5rem);
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: var(--radius-sm, 0.375rem);
     background: var(--surface-raised, #faf8f6);
     width: fit-content;
     font-size: var(--text-sm, 0.9375rem);
@@ -2614,7 +2633,7 @@ select.iwac-vis-control:hover {
     gap: 0.35rem;
     padding: 0.2rem 0.6rem;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: var(--radius-sm, 0.375rem);
     background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     font-family: inherit;

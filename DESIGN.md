@@ -22,17 +22,17 @@ components:
     backgroundColor: "var(--surface-raised, #faf8f6)"
     textColor: "var(--ink, #13161c)"
   tab:
-    backgroundColor: "transparent"
-    textColor: "var(--muted, #66696e)"
-    rounded: "var(--radius-md, 0.5rem)"
+    backgroundColor: "var(--surface, #fdfcfb)"
+    textColor: "var(--ink-light, #3f4349)"
+    rounded: "var(--radius-sm, 0.375rem)"
     padding: "var(--space-1, 0.25rem) var(--space-3, 0.75rem)"
   tab-active:
-    backgroundColor: "color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6))"
-    textColor: "var(--ink, #13161c)"
+    backgroundColor: "color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb))"
+    textColor: "var(--ink-strong, #05070c)"
   chip:
     backgroundColor: "color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb))"
     textColor: "var(--ink, #13161c)"
-    rounded: "var(--radius-full, 9999px)"
+    rounded: "var(--radius-sm, 0.375rem)"
     padding: "0.2rem 0.6rem"
   control:
     backgroundColor: "var(--surface, #fdfcfb)"
@@ -329,8 +329,9 @@ per the theme.
 
 ## Shapes
 
-Rectilinear, borrowed whole from the theme: `--radius-md` on panels, buttons, tabs and
-form controls; `--radius-full` reserved for chips and circular icon controls. The one
+Rectilinear, borrowed whole from the theme: `--radius-md` on panels, buttons and form
+controls; `--radius-sm` on every switch and chip (the controls grammar, IWAC-theme
+DESIGN-SYSTEM.md §2c); `--radius-full` for dots and swatches only, never a control. The one
 shape the module authors itself is the **2px corner on a data mark** — the key swatch is
 drawn at 2px specifically to match the corner the Gantt's `renderItem` draws on each bar,
 so the legend and the chart are visibly the same object.
@@ -376,18 +377,24 @@ nothing in a data panel is the page's call to action.
 
 ### Tab Group
 
-A flex row over a `--border-light` hairline. Tabs are transparent with `--muted` text at
-weight 500; hover goes `--surface-raised` + `--ink`; the active tab takes a 12% primary
-wash on `--surface-raised` with a 40% primary border — a tint and a border, never a filled
-orange. State is announced with **`aria-pressed`**, not `aria-selected`: these are toggle
-buttons in a labelled group, not an ARIA tablist with tabpanels, and claiming the tablist
-pattern without its structure is worse than not claiming it.
+Two kinds of switch, after the theme's controls grammar. A `.iwac-vis-tab` group switches a
+view **inside** a panel, so it is the outlined chip: `--surface` ground, 1px `--border`,
+`--ink-light` text at weight 500, `--radius-sm`; hover tints the border 35% primary; the
+active tab takes the facet chip's state — a 10% primary wash, a 55% primary border,
+`--ink-strong` text at 600. A group that switches between **sections** of a block (the
+Laïcité view groups) is the ruled tab instead: ink text on the page ground, the active one
+in `--ink-strong` over a 2px `--primary` underline, no box. Neither is ever filled. State is
+announced with **`aria-pressed`**, not `aria-selected`: these are toggle buttons in a
+labelled group, not an ARIA tablist with tabpanels, and claiming the tablist pattern
+without its structure is worse than not claiming it.
 
 ### Facet Chips
 
-`--radius-full` pills at `--text-xs`, 12% primary on `--surface`, bordered 40% primary,
-deepening to 22% / 60% on hover, `aria-pressed` for on/off. Used where a filter is a set
-membership rather than a single choice.
+Outlined chips at `--radius-sm`: the same resting and active states as the in-panel tab,
+`aria-pressed` for on/off. Used where a filter is a set membership rather than a single
+choice. The removable selection chip (`.iwac-vis-chip`, 12% primary on `--surface`,
+bordered 40% primary, deepening to 22% / 60% on hover), the entity type chip and the
+linked-filter indicator share the radius; they were `--radius-full` pills until 2026-10.
 
 ### Form Controls
 

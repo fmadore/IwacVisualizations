@@ -115,7 +115,10 @@
     color: var(--ink-light, #3f4349);
 }
 
-/*  Segmented control — the chip family from iwac-core.css, grouped. */
+/*  Segmented control — the chip family from iwac-core.css, grouped, at the
+ *  chip's own --radius-sm. It was a --radius-full pill until 2026-10: a
+ *  third switch shape on a page that already drew two (controls grammar,
+ *  IWAC-theme DESIGN-SYSTEM.md §2c). */
 .iwac-vis-otd-switch {
     display: flex;
     align-items: center;
@@ -126,16 +129,18 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-1, 0.25rem);
-    border-radius: var(--radius-full, 9999px);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     letter-spacing: var(--tracking-wide, 0.04em);
     text-transform: uppercase;
 }
 
+/*  The count beside each calendar. --muted itself, not ink at 70 %
+ *  opacity: the opacity took the muted figure to 4.19:1 on the homepage
+ *  (axe, both locales), and --muted already clears 4.5:1 on every surface. */
 .iwac-vis-otd-switch__hint {
     font-variant-numeric: tabular-nums;
-    opacity: 0.7;
+    color: var(--muted, #66696e);
 }
 
 
