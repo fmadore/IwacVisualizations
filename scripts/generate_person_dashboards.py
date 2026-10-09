@@ -43,7 +43,6 @@ from dashboard_aggregator import (
 from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
-    generate_timestamp,
     DATASET_ID,
     configure_logging,
     find_column,
@@ -245,9 +244,10 @@ class PersonDashboardGenerator(DashboardAggregator):
     def build_person_json(self, person_o_id: int) -> Dict[str, Any]:
         person_info = self.targets[person_o_id]
 
+        # No per-item `generated_at` (the manifest dates the build): see
+        # generate_article_dashboards.py.
         data: Dict[str, Any] = {
             "version": 4,
-            "generated_at": generate_timestamp(),
             "person": self._build_person_header(person_info),
         }
         data.update(self.compute_sections(person_o_id))

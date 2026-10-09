@@ -1073,7 +1073,11 @@ def compute_author_collaborations(
         degree[b] += 1
     keep = {n for n, d in degree.items() if d >= min_degree}
 
-    ranked = sorted(keep, key=lambda n: -node_records.get(n, 0))
+    # `keep` is a set, whose order follows the string hash seed: with only
+    # the record count as the key, ties kept that order, so three runs under
+    # three PYTHONHASHSEEDs published three different capped node sets.
+    # Degree, then the name, break the ties (V-16).
+    ranked = sorted(keep, key=lambda n: (-node_records.get(n, 0), -degree[n], n))
     dropped = 0
     if max_nodes and len(ranked) > max_nodes:
         dropped = len(ranked) - max_nodes
@@ -1112,7 +1116,7 @@ def compute_author_collaborations(
             "type":   edge_type,
         })
 
-    edges.sort(key=lambda e: -e["weight"])
+    edges.sort(key=lambda e: (-e["weight"], e["source"], e["target"]))
 
     return {"nodes": nodes, "edges": edges, "dropped_nodes": int(dropped)}
 

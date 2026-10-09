@@ -88,9 +88,29 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "press-reprints.json":            ("stats", "newspapers", "pairs"),
     "org-cooccurrence.json":          ("orgs", "matrices"),
     "keyness.json":                   (),
-    "template-summary.json":          (),
+    # It had no row, so a run where one subset failed to load — and the
+    # generator skipped it — published a summary the minimal-item dashboards
+    # read as "no such subset" (V-05). NESTED_KEYS names the three subsets.
+    "template-summary.json":          ("subsets",),
     "term-trends-index.json":         ("years", "terms", "totals"),
     "timelines/index.json":          ("timelines",),
+    # The Laïcité views, 2026-10 (V-16): the payload's main array or object,
+    # read off scripts/laicite/<view>.py and the last full build's output.
+    # Each carries `generated_at`. Rows added without a regeneration to prove
+    # them, so a wrong one fails the next data build loudly — the safe way.
+    "laicite-actors.json":            ("actors",),
+    "laicite-arenas.json":            ("global", "frames", "minimum_cell"),
+    "laicite-bylines.json":           ("by_decade", "top"),
+    "laicite-circulation.json":       ("pairs", "newspapers"),
+    "laicite-collocates.json":        ("global",),
+    "laicite-concordance.json":       ("by_subset", "totals"),
+    "laicite-corpora.json":           ("by_subset", "newspapers"),
+    "laicite-documents.json":         ("documents",),
+    "laicite-implicit.json":          ("terms",),
+    "laicite-places.json":            ("places",),
+    "laicite-references.json":        ("items",),
+    "laicite-semantic.json":          ("points",),
+    "laicite-sentiment.json":         ("by_model", "models"),
 }
 
 #: Nested figures a consumer OUTSIDE this module reads, keyed by
@@ -119,6 +139,9 @@ NESTED_FIGURES: Dict[Tuple[str, str], Tuple[Tuple[str, ...], Tuple[str, ...]]] =
 #: nothing without them, and suppresses a cell below ``minimum_cell``.
 NESTED_KEYS: Dict[str, Dict[str, Tuple[str, ...]]] = {
     "laicite-trends.json": {"research": ("cells", "minimum_cell")},
+    # generate_template_summary.SUBSETS, each of which the resource-page
+    # dashboards read for their context panels.
+    "template-summary.json": {"subsets": ("audiovisual", "documents", "images")},
 }
 
 #: Keys whose value is a NUMBER, not a container — the small-cell
@@ -301,6 +324,13 @@ def check_payload(name: str, payload: Any) -> List[str]:
             value = figures[key]
             if isinstance(value, bool) or not isinstance(value, (int, float)):
                 problems.append(f"{name}: {parent}.{key} must be a number - IWAC-theme's BannerStats reads it")
+            elif key in required and not value > 0:
+                # Zero is "a number", and it is what a figure reads when its
+                # subset failed to load: an audiovisual total of 0.0 passed
+                # this check and would have printed "0 minutes" on the
+                # homepage banner (V-05). Every banner figure is a count of
+                # something the collection has.
+                problems.append(f"{name}: {parent}.{key} is {value!r} - a banner figure must be positive")
     return problems
 
 
@@ -494,6 +524,8 @@ def self_test() -> List[str]:
          {**good, "summary": {k: v for k, v in banner.items() if k != "total_words"}}),
         ("a banner figure that is not a number", {**good, "summary": {**banner, "languages": "5"}}),
         ("an optional banner figure of the wrong type", {**good, "summary": {**banner, "total_pages": None}}),
+        ("a banner figure of zero (a subset that failed to load)",
+         {**good, "summary": {**banner, "audiovisual_minutes": 0.0}}),
     ]
     for label, payload in cases:
         if not check_payload("collection-overview.json", payload):
@@ -521,6 +553,15 @@ def self_test() -> List[str]:
         failures.append("a well-formed laicite-seasonality payload was rejected")
     if not check_payload("laicite-seasonality.json", {**seasonality, "minimum_cell": {}}):
         failures.append("laicite-seasonality with an object minimum_cell was accepted")
+
+    # The template summary must carry every subset the dashboards read.
+    summary_ok = {"metadata": {"generatedAt": "2026-09-07T05:00:00Z"},
+                  "subsets": {"audiovisual": {}, "documents": {}, "images": {}}}
+    if check_payload("template-summary.json", summary_ok):
+        failures.append("a well-formed template-summary payload was rejected")
+    if not check_payload("template-summary.json",
+                         {**summary_ok, "subsets": {"audiovisual": {}, "documents": {}}}):
+        failures.append("a template-summary missing a subset was accepted")
 
     # `_meta` is the other spelling and must pass.
     if check_payload("entity-networks-global.json",

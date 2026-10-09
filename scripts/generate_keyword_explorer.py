@@ -342,7 +342,10 @@ def build_metadata(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    add_standard_args(parser, minify_default=False)
+    # Minified by default: run_all passes no flags, so the default IS the
+    # published form, and pretty-printed the two bundles shipped at 3.09 and
+    # 2.56 MB (695 and 410 KB minified) to every Index Overview visit (V-16).
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--output-dir",
         default="asset/data",

@@ -59,7 +59,6 @@ from iwac_embeddings import build_normalized_matrix, coerce_embedding
 from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
-    generate_timestamp,
     DATASET_ID,
     build_entity_index,
     clean_float,
@@ -843,9 +842,11 @@ class ArticleDashboardGenerator:
             "thumbnail":        meta.get("thumbnail", ""),
         }
 
+        # No per-item `generated_at`: nothing reads it, and a stamp in each of
+        # ~17k fan-out files made every build differ from the last in every
+        # file, content unchanged. The build's time is the manifest's.
         payload = {
             "version":             2,
-            "generated_at":        generate_timestamp(),
             "article":             article_block,
             "entities":            entities,
             "spatial":             spatial,

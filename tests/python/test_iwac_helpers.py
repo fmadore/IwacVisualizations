@@ -946,6 +946,20 @@ class ExtractYearTests(unittest.TestCase):
         # A value pandas refuses is a missing date, not a crash.
         self.assertIsNone(iwac_utils.extract_year(object()))
 
+    def test_numpy_numbers_are_years_not_epoch_nanoseconds(self) -> None:
+        # V-16: np.int64 is not an `int`, fell through to pd.to_datetime,
+        # and came back as 1970. The pipeline's nullable int64 columns hand
+        # back exactly these cells.
+        self.assertEqual(iwac_utils.extract_year(np.int64(2020)), 2020)
+        self.assertEqual(iwac_utils.extract_year(np.int32(1987)), 1987)
+        self.assertEqual(iwac_utils.extract_year(np.float32(1999.0)), 1999)
+        self.assertEqual(iwac_utils.extract_year(np.float64(2004.0)), 2004)
+        self.assertIsNone(iwac_utils.extract_year(np.float32("nan")))
+        self.assertIsNone(iwac_utils.extract_year(np.int64(17)))
+        self.assertIsNone(iwac_utils.extract_year(float("inf")))
+        # A boolean is not a year either.
+        self.assertIsNone(iwac_utils.extract_year(True))
+
 
 class FrameStoreTests(unittest.TestCase):
     """P1: one frame per subset, widened on demand, with today's semantics.
@@ -1050,6 +1064,39 @@ class FrameStoreTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "is empty"):
             iwac_utils.load_dataset_safe("empty", required=True)
 
+    def test_a_failed_widening_keeps_the_narrow_frame(self) -> None:
+        # V-05: a widening that failed replaced the good narrow frame with a
+        # failure marker, so callers it already covered failed too.
+        real = iwac_utils._load_subset_frame
+
+        def flaky(config_name, repo_id=iwac_utils.DATASET_ID, token=None,
+                  columns=None, required=False):
+            if columns and "ocr" in columns:
+                self.calls.append((config_name, tuple(columns)))
+                return None
+            return real(config_name, repo_id=repo_id, token=token,
+                        columns=columns, required=required)
+
+        iwac_utils.load_dataset_safe("articles", columns=["o:id", "title"])
+        with patch.object(iwac_utils, "_load_subset_frame", flaky):
+            self.assertIsNone(
+                iwac_utils.load_dataset_safe("articles", columns=["o:id", "ocr"]))
+        again = iwac_utils.load_dataset_safe("articles", columns=["title"])
+        self.assertEqual(list(again["title"]), ["A", "B"])
+        self.assertEqual(self.calls, [
+            ("articles", ("o:id", "title")),
+            ("articles", ("o:id", "title", "ocr")),
+        ])
+
+    def test_strict_mode_makes_every_failed_load_fatal(self) -> None:
+        # V-05: `run_all --strict`, which CI passes, turns a skipped subset
+        # into a stopped run instead of an empty section.
+        previous = iwac_utils.set_strict_loads(True)
+        self.addCleanup(iwac_utils.set_strict_loads, previous)
+        with self.assertRaisesRegex(RuntimeError, "Required subset 'absent'"):
+            iwac_utils.load_dataset_safe("absent")
+        self.assertIsNotNone(iwac_utils.load_dataset_safe("articles"))
+
     def test_the_lru_bound_evicts_and_the_evicted_subset_reloads(self) -> None:
         iwac_utils.set_frame_store(iwac_frames.FrameStore(max_subsets=1))
         iwac_utils.load_dataset_safe("articles")
@@ -1063,6 +1110,39 @@ class FrameStoreTests(unittest.TestCase):
 
 class GeneratorRunnerTests(unittest.TestCase):
     """P1: the runner's list is the contract CI reads."""
+
+    def _run_with_main(self, main):
+        from types import SimpleNamespace
+        with patch("importlib.import_module", return_value=SimpleNamespace(main=main)):
+            run_all.run_one("fake", [])
+
+    def test_a_generator_that_returns_non_zero_stops_the_run(self) -> None:
+        # V-16: `main()`'s return value was discarded, so a generator that
+        # reported failure the way a script does was counted a success.
+        with self.assertRaisesRegex(RuntimeError, "status 1"):
+            self._run_with_main(lambda: 1)
+        with self.assertRaisesRegex(RuntimeError, "status 2"):
+            self._run_with_main(lambda: (_ for _ in ()).throw(SystemExit(2)))
+        self._run_with_main(lambda: None)
+        self._run_with_main(lambda: 0)
+
+    def test_strict_loads_are_switched_on_by_the_flag_and_restored(self) -> None:
+        self.assertFalse(iwac_utils.strict_loads())
+        previous = iwac_utils.set_strict_loads(True)
+        self.assertFalse(previous)
+        self.assertTrue(iwac_utils.strict_loads())
+        iwac_utils.set_strict_loads(previous)
+        self.assertFalse(iwac_utils.strict_loads())
+
+    def test_strict_mode_raises_from_the_unmemoized_loader_too(self) -> None:
+        with patch.object(iwac_utils, "_load_hf_dataset", side_effect=OSError("503")):
+            self.assertIsNone(iwac_utils._load_subset_frame("articles"))
+            previous = iwac_utils.set_strict_loads(True)
+            try:
+                with self.assertRaisesRegex(RuntimeError, "could not be loaded"):
+                    iwac_utils._load_subset_frame("articles")
+            finally:
+                iwac_utils.set_strict_loads(previous)
 
     def test_every_listed_generator_exists_and_exposes_main(self) -> None:
         import importlib
@@ -1498,3 +1578,24 @@ class CompareNewspapersSentimentTests(unittest.TestCase):
     def test_a_snapshot_without_rater_columns_publishes_no_model(self) -> None:
         out = generate_compare_newspapers._compute_sentiment(pd.DataFrame({"x": [1]}))
         self.assertEqual(out, {"rated": 0, "models": {}})
+
+
+class CollaborationNetworkDeterminismTests(unittest.TestCase):
+    """V-16: a capped graph must not depend on the string hash seed."""
+
+    def test_ties_are_broken_by_name_whatever_the_row_order(self) -> None:
+        rows = pd.DataFrame({
+            "author": ["Zed|Amy", "Bob|Cy", "Dee|Eve", "Fay|Gus"],
+            "editor": [None, None, None, None],
+        })
+        expected = None
+        for order in ([0, 1, 2, 3], [3, 2, 1, 0], [2, 0, 3, 1]):
+            got = generate_references_overview.compute_author_collaborations(
+                rows.iloc[order].reset_index(drop=True), min_degree=1, max_nodes=4)
+            names = [n["id"] for n in got["nodes"]]
+            if expected is None:
+                expected = names
+            self.assertEqual(names, expected)
+        # Every author has one record and one collaborator: all tied, so the
+        # cap keeps the alphabetically first four.
+        self.assertEqual(expected, ["Amy", "Bob", "Cy", "Dee"])

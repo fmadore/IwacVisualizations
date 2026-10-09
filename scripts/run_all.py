@@ -34,6 +34,7 @@ Usage::
     python scripts/run_all.py --skip article_dashboards --skip laicite
     python scripts/run_all.py --list              # names, in order
     python scripts/run_all.py --no-share          # one process, no memo
+    python scripts/run_all.py --strict            # what CI runs: a failed load is fatal
 """
 from __future__ import annotations
 
@@ -109,16 +110,27 @@ def module_name(name: str) -> str:
 
 
 def run_one(name: str, argv: Sequence[str]) -> None:
-    """Import a generator and call its ``main()`` under the given argv."""
+    """Import a generator and call its ``main()`` under the given argv.
+
+    A generator reports failure the way a script does — ``return 1`` from
+    ``main()``, or ``sys.exit(1)`` — and both used to be lost here: the
+    return value was discarded and a run that had "failed" carried on to the
+    next generator and, at the end, published (V-16). Either now raises.
+    """
     mod = importlib.import_module(module_name(name))
     if not hasattr(mod, "main"):
         raise RuntimeError(f"{module_name(name)}.py has no main() to call")
     saved = sys.argv
     sys.argv = [f"{module_name(name)}.py", *argv]
     try:
-        mod.main()
+        try:
+            code = mod.main()
+        except SystemExit as exc:
+            code = exc.code
     finally:
         sys.argv = saved
+    if code not in (None, 0):
+        raise RuntimeError(f"{module_name(name)}.main() exited with status {code!r}")
 
 
 def main() -> int:
@@ -136,6 +148,11 @@ def main() -> int:
                         metavar="N",
                         help="Subsets held at once, 0 for unbounded "
                              "(default: %(default)s)")
+    parser.add_argument("--strict", action="store_true",
+                        help="Make every subset load required: a subset that fails "
+                             "to load, or loads empty, stops the run instead of "
+                             "leaving a generator to write an empty section. CI "
+                             "passes this.")
     parser.add_argument("--continue-on-error", action="store_true",
                         help="Keep going after a failure and report at the end. "
                              "CI does NOT pass this: a partial build must never "
@@ -168,6 +185,7 @@ def main() -> int:
 
     store = None if args.no_share else FrameStore(max_subsets=args.max_subsets)
     previous = iwac_utils.set_frame_store(store)
+    previous_strict = iwac_utils.set_strict_loads(args.strict)
 
     # Only the complete, default-output run produces publication evidence.
     publication = selected == GENERATORS and not args.passthrough
@@ -215,6 +233,7 @@ def main() -> int:
                 logger.info("::endgroup::")
     finally:
         iwac_utils.set_frame_store(previous)
+        iwac_utils.set_strict_loads(previous_strict)
         if store is not None:
             s = store.stats()
             logger.info(

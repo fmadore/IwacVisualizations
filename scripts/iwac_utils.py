@@ -50,6 +50,7 @@ import argparse
 import json
 import logging
 import math
+import numbers
 import os
 import re
 import unicodedata
@@ -439,11 +440,19 @@ def extract_year(
                 if min_year <= year <= max_year:
                     return year
 
-        # Handle numeric values
-        elif isinstance(value, (int, float)):
-            year = int(value)
-            if min_year <= year <= max_year:
-                return year
+        # Handle numeric values — any real number, numpy's included.
+        # `isinstance(value, (int, float))` missed numpy.int64 (the dtype the
+        # pipeline's nullable int64 columns hand back cell by cell), which
+        # then fell through to pd.to_datetime below, which reads a bare
+        # integer as NANOSECONDS since the epoch: extract_year(np.int64(2020))
+        # returned 1970. A number is a year or nothing; it never reaches the
+        # datetime fallback.
+        elif isinstance(value, numbers.Real) and not isinstance(value, bool):
+            number = float(value)
+            if math.isnan(number) or math.isinf(number):
+                return None
+            year = int(number)
+            return year if min_year <= year <= max_year else None
 
         # Try generic datetime conversion
         dt = pd.to_datetime(value, errors='coerce')
@@ -1467,6 +1476,29 @@ def set_frame_store(store: Any) -> Any:
     return previous
 
 
+#: When True, a subset that fails to load (or loads empty) raises for EVERY
+#: caller, as though each had passed ``required=True``. ``run_all.py
+#: --strict`` (what CI runs) turns it on: a generator that tolerates a missing
+#: subset by writing an empty section is right for a hand run against a
+#: partial mirror and wrong for a publication build, where a transient 5xx on
+#: one subset used to produce an archive with seven empty sections that the
+#: validator accepted and the data job published (V-05).
+_STRICT_LOADS = False
+
+
+def set_strict_loads(on: bool) -> bool:
+    """Make every subset load ``required``; returns the previous setting."""
+    global _STRICT_LOADS
+    previous = _STRICT_LOADS
+    _STRICT_LOADS = bool(on)
+    return previous
+
+
+def strict_loads() -> bool:
+    """Whether a failed subset load is fatal for every caller."""
+    return _STRICT_LOADS
+
+
 def load_dataset_safe(
     config_name: str,
     repo_id: str = DATASET_ID,
@@ -1560,13 +1592,13 @@ def _load_subset_frame(
                 "environment variable (or run `hf auth login`) with a token "
                 "that can read the private mirror."
             )
-        if required:
+        if required or _STRICT_LOADS:
             raise RuntimeError(
                 f"Required subset '{config_name}' could not be loaded from {repo_id}: {e}"
             ) from e
         return None
 
-    if required and df.empty:
+    if (required or _STRICT_LOADS) and df.empty:
         raise RuntimeError(f"Required subset '{config_name}' from {repo_id} is empty.")
     return df
 

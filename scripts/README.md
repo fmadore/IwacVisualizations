@@ -120,6 +120,7 @@ pip install -r scripts/requirements.txt
 # Run a generator, or all of them in one process
 python3 scripts/generate_collection_overview.py
 python3 scripts/run_all.py
+python3 scripts/run_all.py --strict   # what CI runs: a subset that fails to load stops the run
 ```
 
 **Use `requirements.txt` locally, not the lock.** `scripts/requirements.lock`
@@ -602,7 +603,7 @@ Every generator supports the same baseline flags (normalized in v1.3.x):
 | `--repo` | Hugging Face dataset repo id. Defaults to `DATASET_ID`. Override to point at a fork or a dev mirror. |
 | `-v`, `--verbose` | Set log level to `DEBUG` (normally `INFO`). Prints per-subset load sizes and aggregation details. |
 | `--output` / `--output-dir` | Override the default asset/data target path. Single-bundle generators use `--output`; fan-out / multi-file generators use `--output-dir`. |
-| `--minify` / `--no-minify` | Compact vs. pretty-printed JSON (`argparse.BooleanOptionalAction`). Typically halves file size. **The defaults are deliberate and differ**: minified for the per-item fan-outs (`person`, `entity`, `article`, `publication`, `reference`), `wordcloud` and the `compare-newspapers` per-corpus bundles — thousands of files nobody reads by hand — and **pretty for the seven single-file bundles that get diffed when a number looks wrong**: `collection_overview`, `index_overview`, `keyword_explorer`, `audiovisual_overview`, `laicite`, `scary_terms`, `world_map`. CI passes no flag, so these are what ships; a bundle that grows past a few hundred KB should move to `minify_default=True` and lose its diffability deliberately rather than by accident. |
+| `--minify` / `--no-minify` | Compact vs. pretty-printed JSON (`argparse.BooleanOptionalAction`). Typically halves file size. **The defaults are deliberate and differ**: minified for the per-item fan-outs (`person`, `entity`, `article`, `publication`, `reference`), `wordcloud`, the `compare-newspapers` per-corpus bundles and `keyword_explorer` — thousands of files nobody reads by hand, and two bundles that shipped pretty at 3.09 and 2.56 MB (695 and 410 KB minified) until 2026-10 — and **pretty for the six single-file bundles that get diffed when a number looks wrong**: `collection_overview`, `index_overview`, `audiovisual_overview`, `laicite`, `scary_terms`, `world_map`. CI passes no flag, so these are what ships; a bundle that grows past a few hundred KB should move to `minify_default=True` and lose its diffability deliberately rather than by accident. |
 
 Block-specific extras (partial list):
 

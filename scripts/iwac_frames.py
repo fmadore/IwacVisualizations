@@ -218,8 +218,14 @@ class FrameStore:
         )
 
         if frame is None:
-            self._entries[key] = _Entry(None, None, failed=True)
-            self._touch(key)
+            # A failed WIDENING is not a failed subset. The narrow frame the
+            # entry already holds was loaded fine and still serves every
+            # caller whose columns it covers; replacing it with a failure
+            # marker made each of them fail too, for columns they never asked
+            # for (V-05). Only a first load that fails marks the subset dead.
+            if entry is None or entry.frame is None:
+                self._entries[key] = _Entry(None, None, failed=True)
+                self._touch(key)
             return self._fail(config_name, repo_id, required)
 
         self._entries[key] = _Entry(frame, want)
@@ -229,7 +235,8 @@ class FrameStore:
 
     @staticmethod
     def _fail(config_name: str, repo_id: str, required: bool) -> None:
-        if required:
+        import iwac_utils  # imported late, as in get()
+        if required or iwac_utils.strict_loads():
             raise RuntimeError(
                 f"Required subset '{config_name}' could not be loaded from {repo_id}"
             )

@@ -45,7 +45,7 @@ from dashboard_aggregator import (
     DEFAULT_MIN_COOCCURRENCE,
     DashboardAggregator,
 )
-from iwac_utils import expect_item_outputs, DATASET_ID, add_standard_args, configure_logging, generate_timestamp, save_json
+from iwac_utils import expect_item_outputs, DATASET_ID, add_standard_args, configure_logging, save_json
 
 # Index Type values that we treat as "non-person entities" for this
 # generator. Keys are the Type values from the IWAC index; values are
@@ -165,9 +165,10 @@ class EntityDashboardGenerator(DashboardAggregator):
 
     def build_entity_json(self, entity_o_id: int) -> Dict[str, Any]:
         info = self.targets[entity_o_id]
+        # No per-item `generated_at` (the manifest dates the build): see
+        # generate_article_dashboards.py.
         data: Dict[str, Any] = {
             "version": 4,
-            "generated_at": generate_timestamp(),
             "entity": {
                 "o_id": entity_o_id,
                 "title": info["title"],
