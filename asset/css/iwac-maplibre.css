@@ -127,7 +127,13 @@
     background: color-mix(in oklab, var(--primary, #ce4115) 14%, transparent);
     color: var(--ink, #13161c);
     border-color: var(--border, #ced1d6);
-    outline: none;
+}
+
+/*  The close control keeps a real outline: the focus state used to be the
+ *  hover state with `outline: none`, a tint and nothing more (X-10). */
+.iwac-vis-maplibre-popup .maplibregl-popup-close-button:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 1px;
 }
 
 /* Popup tip — colour the wedge to match the themed surface */

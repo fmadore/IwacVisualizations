@@ -221,7 +221,6 @@
     appearance: none;
     height: 10px;
     border-radius: var(--radius-full, 9999px);
-    outline: none;
     cursor: pointer;
     background: linear-gradient(
         to right,
@@ -272,6 +271,15 @@
     box-shadow:
         0 3px 10px var(--shadow-color-strong),
         0 0 0 8px color-mix(in oklab, var(--primary, #ce4115) 25%, transparent);
+}
+
+/*  A real outline round the whole control. The base rule used to set
+ *  `outline: none` and leave focus to the thumb's box-shadow ring, which a
+ *  forced-colours mode drops — so there it had no indicator at all (X-10).
+ *  The offset clears the 22px thumb that overhangs the 10px track. */
+.iwac-vis-scary-slider:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 8px;
 }
 
 .iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {

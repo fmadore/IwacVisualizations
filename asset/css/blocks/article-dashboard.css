@@ -62,7 +62,14 @@
      *  convention for subtle interactive feedback. */
     transform: translateY(var(--lift-xs, -0.125rem));
     text-decoration: none;
-    outline: none;
+}
+
+/*  Focus is not hover. This rule used to share the hover state and set
+ *  `outline: none`, so a keyboard reader saw only the hover tint — no
+ *  indicator a forced-colours mode keeps (X-10). */
+.iwac-vis-article-card:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 2px;
 }
 
 .iwac-vis-article-card__thumb {
