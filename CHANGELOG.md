@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased — the article page and the Sentiment Atlas under test (2026-10)
+
+Not yet released; the version stays 1.76.0 until the release commit.
+
+- The article map is titled for its article. Its slot borrowed the shared "Spatial coverage" key, which reads "Places associated with the items" ("Lieux associés aux documents") for the item-set dashboard; it now reads "Places associated with this article" / "Lieux associés à cet article", which also gives the map host the accessible name it lacked.
+- The French sentiment panel's description joins "par" and the rater list with an ordinary space. The typography sweep had put a narrow no-break space before the `%s` placeholder, taking it for a percent sign.
+- The article dashboards and the Sentiment Atlas render in browser fixtures, the last two blocks that never did. The article fixture builds the server-side sentiment panel with the template's loop and strings, runs the real canvas force graph (d3-force and its three modules join ECharts as test-only npm copies at the production pins) and the shared map helpers against a MapLibre stand-in; the atlas fixture reads a payload aggregated from synthetic rows with the generator's rules. Both specs check the boot without console errors in both themes, each panel's content and tables, the French render (U+202F grouping, UTC dates), the light/dark toggle repainting the entity-type colours and the composed ramps from the theme tokens, tooltips inside a fullscreen panel, and an axe scan in both themes. The fixture server sends SVG and PNG with their types.
+
 ### v1.76.0 — review fixes: one formatter, the controls grammar, gated releases (2026-10-09)
 
 Fixes from the 2026-10-08 review of the theme, IwacSearch and this module.
