@@ -83,10 +83,13 @@ function load(theme, init) {
                 getPalette: () => palette,
                 getChartTokens: () => ({
                     panelBg,
+                    primary: TOKENS[theme]['--primary'],
                     ink: TOKENS[theme]['--ink'],
                     inkStrong: TOKENS[theme]['--ink-strong'],
+                    inkLight: TOKENS[theme]['--ink-light'],
                     surface: TOKENS[theme]['--surface'],
                     border: TOKENS[theme]['--border'],
+                    fontFamily: '"Public Sans", sans-serif',
                 }),
                 getSeriesColor: (slot) => palette[
                     ((Number(slot) % palette.length) + palette.length) % palette.length
@@ -141,23 +144,42 @@ test('the qualifying sets differ between themes, so neither can be hardcoded', (
         'a cloud painted from one or two hues has lost the variety it exists for');
 });
 
-test('word colours are assigned by rank, not at random', () => {
-    const { C, panelBg } = load('light');
-    const pairs = Array.from({ length: 24 }, (_, i) => ['w' + i, 24 - i]);
-    const first = C.wordcloud(pairs);
-    const second = C.wordcloud(pairs);
-    const colours = (opt) => (opt.series[0].data || []).map((d) => d.textStyle.color);
-    // The render callback re-runs on every theme toggle and every resize. A
-    // cloud that reshuffles its colours each time reads as a bug, and the
-    // random pick this replaced did exactly that.
-    assert.deepEqual(colours(first), colours(second));
+for (const theme of ['light', 'dark']) {
+    test(`the cloud is one ink ramp by frequency, primary for the top few (${theme})`, () => {
+        // V-11: the cloud cycled five series hues word by word, which encoded
+        // nothing — size already carries frequency. Colour now says the same
+        // thing in the theme's inks, and every step clears the text floor.
+        const { C, panelBg } = load(theme);
+        const t = TOKENS[theme];
+        const pairs = Array.from({ length: 100 }, (_, i) => ['w' + i, 1000 - i * 7]);
+        // Shuffled input: the ramp follows the counts, not the order given.
+        const shuffled = pairs.slice().sort((a, b) => (a[0] < b[0] ? -1 : 1));
+        const option = C.wordcloud(shuffled);
+        const byWord = {};
+        for (const d of option.series[0].data) byWord[d.name] = d.textStyle.color;
+        const ranked = pairs.map(([w]) => byWord[w]);
+        assert.deepEqual(ranked.slice(0, 4), Array(4).fill(t['--primary']), 'the top words take the accent');
+        assert.equal(ranked[4], t['--ink-strong']);
+        assert.equal(ranked[99], t['--ink-light']);
+        const allowed = [t['--primary'], t['--ink-strong'], t['--ink'], t['--ink-light']];
+        for (const c of ranked) {
+            assert.ok(allowed.includes(c), `${c} is not on the ink ramp`);
+            assert.ok(contrast(parseColor(c), parseColor(panelBg)) >= 4.5, `${c} is under 4.5:1`);
+        }
+        // Emphasis never rises as frequency falls.
+        const weight = (c) => allowed.indexOf(c);
+        for (let i = 1; i < ranked.length; i++) assert.ok(weight(ranked[i]) >= weight(ranked[i - 1]));
+        // The render callback re-runs on every toggle and resize: same words, same inks.
+        assert.deepEqual(C.wordcloud(shuffled).series[0].data.map((d) => d.textStyle.color),
+            option.series[0].data.map((d) => d.textStyle.color));
+    });
+}
 
-    const inks = C.readableInks(panelBg, TOKENS.light['--ink']);
-    assert.deepEqual(colours(first).slice(0, inks.length), inks,
-        'the first N words walk the qualifying set in order');
-    for (const c of colours(first)) {
-        assert.ok(inks.includes(c), `${c} is not one of the qualifying slots`);
-    }
+test('the words lie flat and in the theme face', () => {
+    const { C } = load('light');
+    const series = C.wordcloud([['alpha', 3], ['beta', 2]]).series[0];
+    assert.deepEqual(Array.from(series.rotationRange), [0, 0]);
+    assert.equal(series.textStyle.fontFamily, '"Public Sans", sans-serif');
 });
 
 test('readableInks still answers when nothing qualifies', () => {

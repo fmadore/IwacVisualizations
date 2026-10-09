@@ -209,7 +209,11 @@ the live palette against the live `--panel-bg`, per theme, per call — never en
 Measured against the light panel 13 of 20 slots sit under 4.5:1; against the dark panel a
 different 5 do; there is no subset that works in both. A hardcoded list would be correct
 until the next palette edit and wrong silently thereafter. When nothing qualifies the
-code falls back to the ink token: monochrome-and-readable beats varied-and-not.
+code falls back to the ink token: monochrome-and-readable beats varied-and-not. (The
+word cloud, once the rule's main user, no longer paints with series slots at all: since
+2026-10 it is one ink ramp by frequency — `--primary` for the top few words, then
+`--ink-strong`, `--ink`, `--ink-light` — horizontal, in the body face, because five hues
+cycling word by word encoded nothing that size did not already say.)
 
 **The Live-Read Rule.** Chart colour is read through `getComputedStyle` and resolved to a
 legacy `rgb()` before it reaches the engine — never hardcoded, never handed over as

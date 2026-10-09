@@ -908,6 +908,36 @@
      *
      * @param {Array<[string, number]>} pairs
      */
+    /**
+     * The word cloud's colours, one per datum in rank order: `--primary` for
+     * the top few words (at most five, about one in twenty-five), then
+     * `--ink-strong`, `--ink` and `--ink-light` for the successive thirds of
+     * the rest. Ranked by value, ties by input order, so a re-render (every
+     * theme toggle and resize) paints the same words the same way.
+     *
+     * @param {Array<{name:string, value:number}>} data
+     * @param {Object} tokens  getChartTokens()
+     * @returns {string[]}
+     */
+    C.wordcloudInks = function (data, tokens) {
+        var t = tokens || {};
+        var n = (data || []).length;
+        var order = (data || []).map(function (d, i) { return i; });
+        order.sort(function (a, b) {
+            return ((Number(data[b].value) || 0) - (Number(data[a].value) || 0)) || (a - b);
+        });
+        var top = Math.max(1, Math.min(5, Math.round(n / 25)));
+        var steps = [t.inkStrong || t.ink, t.ink, t.inkLight || t.ink];
+        var rest = Math.max(1, n - top);
+        var out = new Array(n);
+        order.forEach(function (index, rank) {
+            out[index] = rank < top
+                ? (t.primary || t.ink)
+                : steps[Math.min(steps.length - 1, Math.floor(((rank - top) / rest) * steps.length))];
+        });
+        return out;
+    };
+
     C.wordcloud = function (pairs) {
         var data = (pairs || []).map(function (pair) {
             return { name: pair[0], value: pair[1] };
@@ -928,12 +958,20 @@
         }
 
         var wcTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var inks = C.readableInks(wcTokens.panelBg, wcTokens.ink);
+        // ONE ink ramp by frequency, --primary for the top few. The cloud used
+        // to cycle the readable series slots word by word — orange, slate,
+        // purple, tan, red — so five hues encoded nothing (size already
+        // carries frequency), the "random per-class colours" the theme's
+        // DESIGN-PHILOSOPHY rules out. Now colour repeats what size says, in
+        // the press-archive register: the few most frequent words in the
+        // accent, then the theme's inks stepping down by rank. Every step is
+        // a text token the theme keeps at AA on the panel in both themes.
+        var ramp = C.wordcloudInks(data, wcTokens);
         // Per-datum rather than a `textStyle.color` callback: echarts-wordcloud
         // resolves the datum's own textStyle, so this needs no assumption
         // about what the library passes a colour function.
         data.forEach(function (d, i) {
-            d.textStyle = { color: inks[i % inks.length] };
+            d.textStyle = { color: ramp[i] };
         });
 
         var base = {
@@ -958,14 +996,19 @@
                 right: null,
                 bottom: null,
                 sizeRange: fontRange(1.9),
-                rotationRange: [-45, 45],
-                rotationStep: 15,
+                // Horizontal only: tilted words were harder to read and
+                // carried no meaning.
+                rotationRange: [0, 0],
+                rotationStep: 0,
                 gridSize: grid,
                 drawOutOfBound: false,
                 shrinkToFit: true,
                 layoutAnimation: count <= 100,
+                // The theme's body face, read off the page like every other
+                // chart's (DESIGN.md, Charts-Inherit-The-Body-Face): this one
+                // still named the browser's generic 'sans-serif'.
                 textStyle: {
-                    fontFamily: 'sans-serif',
+                    fontFamily: wcTokens.fontFamily,
                     fontWeight: 'bold'
                 },
                 emphasis: {
