@@ -47,8 +47,11 @@ on:
   schedule:
     - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
 
+# Read-only by default. Only the publish job, which runs no third-party code,
+# holds `contents: write` (X-09): the generators, pip and npm run in a job
+# whose token cannot create a release or push a tag.
 permissions:
-  contents: write   # required for `gh release create` / `gh release upload`
+  contents: read
 
 # Never let two data builds publish to the same release at once.
 concurrency:
@@ -56,19 +59,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # The PHP/Python gate suite (lint.yml, called as a reusable workflow) on the
+  # tree this run publishes from: ruff, the Python contracts, the validator's
+  # self-test. It used to be two inline steps here; as a dependency of the
+  # generate job it still fails in minutes, before the HF download and the
+  # 30-minute run, and nothing can publish past it (X-06).
+  gates:
+    name: Gate — PHP and Python
+    uses: ./.github/workflows/lint.yml
+    permissions:
+      contents: read
+
   regenerate:
+    needs: gates
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
           cache: pip
@@ -79,21 +98,9 @@ jobs:
           node scripts/python-lock.js --check
           pip install --require-hashes -r scripts/requirements.lock
 
-      # Fail in seconds, before the HF download and the 30-minute run, on what
-      # lint.yml would also catch — and catch it HERE, because this workflow
-      # publishes: a push that only touches a sidecar never runs lint.yml, and
-      # the monthly schedule runs no other workflow at all. Same two steps as
-      # lint.yml's python job; neither needs the dataset (the tests exercise
-      # the pure helpers, and `datasets` is only imported at the network
-      # boundary).
-      - name: Install ruff
-        run: pip install ruff==0.16.10
-
-      - name: ruff over the Python
-        run: ruff check .
-
-      - name: Python behavioral contracts
-        run: python -m unittest discover -s tests/python -v
+      # ruff and the Python contracts ran in the `gates` job above, on this
+      # same tree — a push that only touches a sidecar never runs lint.yml on
+      # its own, and the monthly schedule runs no other workflow at all.
 
       # The dataset revision keys the Hugging Face cache: a run against an
       # unchanged dataset restores every parquet file instead of downloading
@@ -121,7 +128,7 @@ jobs:
       # Exact key, no restore-keys: the datasets cache is laid out per
       # revision, so an older revision's files are dead weight to a newer one.
       - name: Cache the Hugging Face download
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/huggingface
           key: hf-${{ runner.os }}-${{ steps.hf.outputs.sha }}
@@ -129,7 +136,7 @@ jobs:
       # numba JIT-compiles umap-learn on every cold run; the four UMAP
       # generators each paid it. This one CAN restore an older key.
       - name: Cache the numba JIT cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/numba
           key: numba-${{ runner.os }}-${{ hashFiles('scripts/requirements.lock') }}
@@ -157,11 +164,12 @@ jobs:
           # env var automatically. Fine-grained read-only token scoped to that
           # one dataset repo.
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_REVISION: ${{ steps.hf.outputs.sha }}
         run: |
           set -euo pipefail
           export NUMBA_CACHE_DIR="$HOME/.cache/numba"
-          export IWAC_DATASET_REVISION="${{ steps.hf.outputs.sha }}"
-          python scripts/run_all.py
+          export IWAC_DATASET_REVISION="$HF_REVISION"
+          python scripts/run_all.py --strict
 
       # A 90-minute job that fails leaves nothing behind but a red tick in a
       # tab nobody has open. The step summary is what a maintainer actually
@@ -205,15 +213,44 @@ jobs:
           echo "Archive size:"; ls -lh iwac-data.zip
           echo "Entry count:"; unzip -l iwac-data.zip | tail -1
 
+      # The archive leaves this job as an artifact; the job that can write a
+      # release never runs the generators, pip or npm.
+      - name: Hand the archive to the publish job
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: iwac-data
+          path: |
+            iwac-data.zip
+            iwac-data.zip.sha256
+          if-no-files-found: error
+          retention-days: 3
+
+  publish:
+    name: Publish the archive
+    needs: [gates, regenerate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write   # `gh release create` / `gh release upload`
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: iwac-data
+
+      # The digest travels with the archive; check it survived the hand-off.
+      - name: Verify the archive digest
+        run: sha256sum -c iwac-data.zip.sha256
+
       - name: Publish immutable release and activate pointer
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           REQUESTED_TAG: ${{ inputs.tag }}
+          RUN_TAG: data-build-${{ github.run_id }}-${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          TAG="data-build-${{ github.run_id }}-${{ github.run_attempt }}"
-          gh release create "$TAG" iwac-data.zip iwac-data.zip.sha256 \
-            --title "Precomputed data $TAG" --notes "Generated from $GITHUB_SHA" --latest=false
+          gh release create "$RUN_TAG" iwac-data.zip iwac-data.zip.sha256 \
+            --title "Precomputed data $RUN_TAG" --notes "Generated from $GITHUB_SHA" --latest=false
           # A versioned override is immutable too: existing tags fail, never clobber.
           if [ -n "$REQUESTED_TAG" ]; then
             gh release create "$REQUESTED_TAG" iwac-data.zip iwac-data.zip.sha256 \
@@ -221,7 +258,6 @@ jobs:
           else
             gh release view data >/dev/null 2>&1 || gh release create data \
               --title "Latest precomputed data" --notes "Pointer to an immutable build." --latest=false
-            export IWAC_RELEASE_TAG="$TAG"
-            python -c 'import json,os; open("latest.json","w").write(json.dumps({"tag":os.environ["IWAC_RELEASE_TAG"]}))'
+            printf '{"tag": "%s"}' "$RUN_TAG" > latest.json
             gh release upload data latest.json --clobber
           fi

@@ -9,110 +9,68 @@ name: Build check (JS/CSS)
 # MapLibre gates, i18n, versions) reports a problem — they run first inside
 # `npm run build`.
 #
-# Deliberately narrow triggers: data regeneration has its own workflow
-# (regenerate-data.yml); Python/PHP-only pushes don't need a node build.
+# TRIGGERS: everything except what provably cannot change a Node gate.
+# This used to be an allow-list of paths, and an allow-list fails open: it
+# omitted scripts/theme-token-guard.cjs, scripts/i18n-strip.js,
+# scripts/cdn-integrity.js and this file itself, so d7289889 — a commit that
+# changed only the guard engine — ran nothing at all. The ignore-list below
+# names only the generators' Python, their tests and lock, and prose no gate
+# reads; a new script or config file is covered the day it lands.
 #
-# `language/**` is in scope because the same `npm run build` runs the .po/.mo
-# guard, and a fr.po edit that forgets to recompile fr.mo touches nothing else
-# — that drift shipped once already (v1.48.1) with no CI path that could see
-# it.
+# It is also a reusable workflow (`workflow_call`): release.yml runs it on the
+# tagged tree and publishes nothing unless it passes. A reusable call ignores
+# the path filters, so the whole suite runs there.
 
 on:
   push:
     branches: [main]
-    paths:
-      - "config/sentiment-models.json"
-      - "scripts/build-model-registry.js"
-      - "asset/**"
-      - "language/**"
-      # view/ + src/ + the two config files: `npm run build` runs lint:theme
-      # (which scans <style> blocks in view/) and lint:blocks (registry ↔
-      # config ↔ classes ↔ templates). Without these paths a view-only or
-      # src-only PR skipped both and lint.yml never ran the npm gates.
-      - "view/**"
-      - "src/**"
-      - "Module.php"
-      - "config/module.config.php"
-      - "scripts/build-js.js"
-      - "scripts/build-css.js"
-      - "eslint.config.js"
-      - ".stylelintrc.json"
-      - "scripts/build-mo.js"
-      - "scripts/build-tree.js"
-      - "scripts/check-*.js"
-      # The guards' shared helpers (file walk, bundle manifest, failure
-      # report) — a change there changes every check that requires them.
-      - "scripts/lib/**"
-      # `lint:i18n-pot` is extract-pot.js --check, and `lint:versions` reads
-      # the version quoted in README.md's citation and in CITATION.cff; none
-      # of the three matched the patterns above, so a README-only or
-      # CITATION-only version edit never ran the guard that checks it.
-      - "scripts/extract-pot.js"
-      - "README.md"
-      - "CITATION.cff"
-      # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
-      # change to the doc — or to which files exist — can fail `npm run lint`.
-      - "ARCHITECTURE.md"
-      - "scripts/gettext.js"
-      - "tests/js/**"
-      - "tests/browser/**"
-      - "playwright.config.js"
-      - "config/module.ini"
-      - "tokens.json"
-      - "DESIGN.md"
-      - ".impeccable/**"
-      - "package.json"
-      - "package-lock.json"
+    paths-ignore:
+      - "scripts/**/*.py"
+      - "scripts/requirements.txt"
+      - "scripts/requirements.lock"
+      - "scripts/laicite/**"
+      - "scripts/*.json"
+      - "tests/python/**"
+      - "tests/php/**"
+      - "tests/integration/**"
+      - "ruff.toml"
+      - "phpstan.neon.dist"
+      - "CHANGELOG.md"
+      - "ROADMAP.md"
+      - "DATA_NOTES.md"
+      - "LAICITE_METHODOLOGY.md"
+      - "docs/**"
   pull_request:
-    paths:
-      - "config/sentiment-models.json"
-      - "scripts/build-model-registry.js"
-      - "asset/**"
-      - "language/**"
-      # view/ + src/ + the two config files: `npm run build` runs lint:theme
-      # (which scans <style> blocks in view/) and lint:blocks (registry ↔
-      # config ↔ classes ↔ templates). Without these paths a view-only or
-      # src-only PR skipped both and lint.yml never ran the npm gates.
-      - "view/**"
-      - "src/**"
-      - "Module.php"
-      - "config/module.config.php"
-      - "scripts/build-js.js"
-      - "scripts/build-css.js"
-      - "eslint.config.js"
-      - ".stylelintrc.json"
-      - "scripts/build-mo.js"
-      - "scripts/build-tree.js"
-      - "scripts/check-*.js"
-      # The guards' shared helpers (file walk, bundle manifest, failure
-      # report) — a change there changes every check that requires them.
-      - "scripts/lib/**"
-      # `lint:i18n-pot` is extract-pot.js --check, and `lint:versions` reads
-      # the version quoted in README.md's citation and in CITATION.cff; none
-      # of the three matched the patterns above, so a README-only or
-      # CITATION-only version edit never ran the guard that checks it.
-      - "scripts/extract-pot.js"
-      - "README.md"
-      - "CITATION.cff"
-      # `lint:tree` compares ARCHITECTURE.md against `git ls-files`, so a
-      # change to the doc — or to which files exist — can fail `npm run lint`.
-      - "ARCHITECTURE.md"
-      - "scripts/gettext.js"
-      - "tests/js/**"
-      - "tests/browser/**"
-      - "playwright.config.js"
-      - "config/module.ini"
-      - "tokens.json"
-      - "DESIGN.md"
-      - ".impeccable/**"
-      - "package.json"
-      - "package-lock.json"
+    paths-ignore:
+      - "scripts/**/*.py"
+      - "scripts/requirements.txt"
+      - "scripts/requirements.lock"
+      - "scripts/laicite/**"
+      - "scripts/*.json"
+      - "tests/python/**"
+      - "tests/php/**"
+      - "tests/integration/**"
+      - "ruff.toml"
+      - "phpstan.neon.dist"
+      - "CHANGELOG.md"
+      - "ROADMAP.md"
+      - "DATA_NOTES.md"
+      - "LAICITE_METHODOLOGY.md"
+      - "docs/**"
+  workflow_call:
+    inputs:
+      ref:
+        description: The commit or tag to check out; empty for the event's own ref.
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 concurrency:
-  group: build-check-${{ github.ref }}
+  # In a reusable call `github.workflow` is the CALLER's name, so a release's
+  # gate never shares a group with (and never cancels) a push-triggered run.
+  group: build-check-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -120,15 +78,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
 
       - name: Install pinned build tooling
         run: npm ci
+
+      # npm audit at high and above, minus the written exceptions in
+      # scripts/lib/audit-exceptions.js (X-07). Every dependency here is a dev
+      # dependency, so `--omit=dev` or a lower `--audit-level` would switch
+      # the gate off rather than narrow it.
+      - name: npm audit, minus the written exceptions
+        run: npm run check:audit
 
       - name: JavaScript behavioral contracts
         run: npm test
@@ -147,9 +115,16 @@ jobs:
       - name: Token guard + rebuild minified assets
         run: npm run build
 
-      - name: Committed .min files must match the sources
+      # `git diff --exit-code` sees only TRACKED files, so a new block sheet
+      # whose .min.css sibling was never committed passed here and 404'd in
+      # production. `git status` with untracked files sees both; test-results/
+      # and the other run outputs are gitignored.
+      - name: Committed built files must match the sources, none missing
         run: |
-          if ! git diff --exit-code; then
-            echo "::error::Built assets are stale — run 'npm run build' and commit asset/js/dist and the .min.css siblings."
+          changes=$(git status --porcelain --untracked-files=all)
+          if [ -n "$changes" ]; then
+            echo "$changes"
+            git --no-pager diff --stat
+            echo "::error::Built assets are stale or missing — run 'npm run build' and commit asset/js/dist, the .min.css siblings and any new output."
             exit 1
           fi

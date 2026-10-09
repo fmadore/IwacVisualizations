@@ -25,12 +25,19 @@ on:
       - "phpstan.neon.dist"
       - ".github/workflows/omeka-integration.yml"
   workflow_dispatch:
+  # release.yml runs the whole suite on the tagged tree before publishing.
+  workflow_call:
+    inputs:
+      ref:
+        description: The commit or tag to check out; empty for the event's own ref.
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 concurrency:
-  group: omeka-integration-${{ github.ref }}
+  group: omeka-integration-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -73,9 +80,12 @@ jobs:
           --health-retries=20
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: ${{ matrix.php_version }}
           extensions: intl, mbstring, pdo_mysql, xml, zip

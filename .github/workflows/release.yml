@@ -15,6 +15,27 @@ name: Release
 # is PHP + committed JS/CSS — so unlike IwacSearch's workflow there is no
 # vendor/ step.
 #
+# NOTHING SHIPS UNCHECKED, AND NO BUILD CODE RUNS WITH A WRITE TOKEN.
+# Until 2026-10 this workflow ran only lint:versions and the build: v1.75.0
+# was published from 6d5a6685 while PHPStan on that same commit was red. The
+# jobs are now:
+#
+#   gate-*   the push/PR suites, called as reusable workflows on the tagged
+#            tree — build-check (lint, unit, browser, audit, stale build),
+#            lint (php -l, PHP contracts, ruff, Python contracts),
+#            omeka-integration (both Omeka legs + PHPStan) and cdn-versions
+#            (the SRI hashes against jsDelivr). A reusable call ignores path
+#            filters, so every gate runs whatever the tag touched.
+#   build    read-only token, no persisted credentials: checks the tag is on
+#            the default branch and agrees with every version declaration,
+#            rebuilds, assembles and verifies the zip, uploads it as an
+#            artifact. `npm ci` and the build scripts run here, with nothing
+#            they could push with.
+#   publish  needs ALL of the above, holds `contents: write`, and only
+#            downloads that artifact and attaches it to the release.
+#
+# Actions are pinned to commit SHAs; Dependabot keeps the pins current.
+#
 # WRITING RELEASE NOTES: releases in this repo carry a descriptive title
 # ("v1.37.0 — Laïcité block, MapLibre 6, and a repo that says who owns it").
 # This workflow does not take that away. Publish the release first (UI or
@@ -32,48 +53,111 @@ on:
         required: true
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ github.ref }}-${{ inputs.tag }}
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Build and publish installable archive
+  gate-build:
+    name: Gate — build check
+    uses: ./.github/workflows/build-check.yml
+    with:
+      ref: ${{ inputs.tag || github.ref }}
+    permissions:
+      contents: read
+
+  gate-lint:
+    name: Gate — PHP and Python
+    uses: ./.github/workflows/lint.yml
+    with:
+      ref: ${{ inputs.tag || github.ref }}
+    permissions:
+      contents: read
+
+  gate-omeka:
+    name: Gate — Omeka integration and PHPStan
+    uses: ./.github/workflows/omeka-integration.yml
+    with:
+      ref: ${{ inputs.tag || github.ref }}
+    permissions:
+      contents: read
+
+  gate-cdn:
+    name: Gate — CDN integrity
+    uses: ./.github/workflows/cdn-versions.yml
+    with:
+      ref: ${{ inputs.tag || github.ref }}
+      warn_only: true
+    permissions:
+      contents: read
+
+  build:
+    name: Build and verify the installable archive
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
+      zip: ${{ steps.v.outputs.zip }}
 
     steps:
-      - uses: actions/checkout@v7
+      # fetch-depth 0 so the ancestry check below can see the default branch.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
 
+      # The tag arrives through env, never interpolated into the script: a
+      # workflow_dispatch input is free text, and `${{ … }}` inside `run:` is
+      # pasted into the shell before it parses.
       - name: Resolve tag and version
         id: v
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
-          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          TAG="${INPUT_TAG:-$GITHUB_REF_NAME}"
+          case "$TAG" in
+            v[0-9]*) ;;
+            *) echo "::error::'$TAG' is not a release tag (v<semver>)"; exit 1 ;;
+          esac
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
           echo "zip=IwacVisualizations-${TAG#v}.zip" >> "$GITHUB_OUTPUT"
 
-      # Four declarations carry the version (package.json, both places in
-      # package-lock.json, config/module.ini). check-versions.js already proves
-      # they agree with each other; all this adds is the one thing it cannot
-      # know — whether they agree with the tag being released. A tag that
-      # disagrees ships a module whose admin screen lies about its version.
-      # Runs before `npm ci` so a mismatch fails in seconds; the guard needs
-      # only Node built-ins.
-      - name: Version must match config/module.ini, package.json and the lock
+      # The gates prove the tree is green; this proves it is the tree everyone
+      # else has. A tag on a commit that never reached main (a local
+      # experiment, a branch nobody merged) would publish unreviewed code.
+      - name: The tagged commit must be on the default branch
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          HEAD_SHA=$(git rev-parse HEAD)
+          if ! git merge-base --is-ancestor "$HEAD_SHA" "origin/$DEFAULT_BRANCH"; then
+            echo "::error::$HEAD_SHA is not an ancestor of origin/$DEFAULT_BRANCH — merge it before tagging"
+            exit 1
+          fi
+
+      # check-versions.js proves the six version declarations agree with each
+      # other (package.json, both places in package-lock.json,
+      # config/module.ini, CITATION.cff and the README citation); this adds
+      # the one thing it cannot know — whether they agree with the tag being
+      # released. A tag that disagrees ships a module whose admin screen lies
+      # about its version. Runs before `npm ci` so a mismatch fails in
+      # seconds; the guard needs only Node built-ins.
+      - name: Version must match every declaration
+        env:
+          WANT: ${{ steps.v.outputs.version }}
         run: |
           npm run lint:versions
-          WANT="${{ steps.v.outputs.version }}"
           INI=$(sed -n 's/^version *= *"\(.*\)"/\1/p' config/module.ini)
           echo "tag=$WANT  config/module.ini=$INI"
           test "$INI" = "$WANT" || { echo "::error::config/module.ini says $INI, tag says $WANT"; exit 1; }
@@ -82,15 +166,15 @@ jobs:
 
       # asset/js/dist/ (the esbuild bundles + sourcemaps) and *.min.css are
       # committed, because the production server has no Node toolchain and
-      # the templates reference only those. A tag whose built assets are
-      # stale would ship stale CSS/JS to every install. Same guard
-      # build-check.yml runs on main, applied here to the exact tree being
-      # packaged.
+      # the templates reference only those. The gate ran this too; it runs
+      # again because the zip is assembled from THIS job's tree.
       - name: Committed build artifacts must be current
         run: |
           npm run build
-          if ! git diff --exit-code; then
-            echo "::error::built assets are stale at this tag — run 'npm run build', commit asset/js/dist and the .min.css siblings, and retag"
+          changes=$(git status --porcelain --untracked-files=all)
+          if [ -n "$changes" ]; then
+            echo "$changes"
+            echo "::error::built assets are stale or missing at this tag — run 'npm run build', commit asset/js/dist and the .min.css siblings, and retag"
             exit 1
           fi
 
@@ -99,11 +183,14 @@ jobs:
       # must extract to a directory of exactly that name or an in-place upgrade
       # orphans them.
       - name: Build installable archive
-        run: git archive --format=zip --prefix=IwacVisualizations/ -o "${{ steps.v.outputs.zip }}" HEAD
+        env:
+          ZIP: ${{ steps.v.outputs.zip }}
+        run: git archive --format=zip --prefix=IwacVisualizations/ -o "$ZIP" HEAD
 
       - name: Archive must be installable and free of dev tooling
+        env:
+          ZIP: ${{ steps.v.outputs.zip }}
         run: |
-          ZIP="${{ steps.v.outputs.zip }}"
           unzip -Z1 "$ZIP" > /tmp/list
 
           # Everything Omeka needs to load the module. language/fr.mo is in
@@ -113,7 +200,9 @@ jobs:
           # ARCHITECTURE.md are in it because they were parts of README.md
           # until v1.64.0 and a release that lost them would quietly ship a
           # third of the documentation less than the one before it.
-          for f in Module.php config/module.ini config/module.config.php \
+          # config/theme-seeds.php is what the embed route's brand override
+          # reads (EmbedBrand); without it every embed would override.
+          for f in Module.php config/module.ini config/module.config.php config/theme-seeds.php \
                    asset/css/iwac-core.min.css asset/js/bundles.json \
                    asset/js/dist/shared-core.en.min.js asset/js/dist/shared-core.fr.min.js \
                    asset/js/dist/blocks/laicite.en.min.js asset/js/dist/blocks/laicite.fr.min.js \
@@ -125,22 +214,47 @@ jobs:
           done
 
           # Nothing that only exists to develop it. Mirrors .gitattributes —
-          # this fails loudly if an export-ignore rule is ever dropped.
-          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|eslint\.config\.js$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
+          # this fails loudly if an export-ignore rule is ever dropped. Every
+          # name here is one .gitattributes actually ignores; it used to carry
+          # a REFACTORING.md this repository does not have, and missed the
+          # tool configs. DATA_NOTES.md (the generators' input schema) is
+          # development documentation and ignored; LAICITE_METHODOLOGY.md
+          # ships on purpose, because README.md links it as the Laïcité
+          # block's published method.
+          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|eslint\.config\.js$|phpstan\.neon\.dist$|ruff\.toml$|\.stylelintrc\.json$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|ROADMAP\.md$|DATA_NOTES\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
             echo "::error::development files leaked into the release archive — check .gitattributes export-ignore"
             exit 1
           fi
 
           echo "$(wc -l < /tmp/list) files, $(du -h "$ZIP" | cut -f1)"
 
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-archive
+          path: ${{ steps.v.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish the archive
+    needs: [gate-build, gate-lint, gate-omeka, gate-cdn, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-archive
+
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.build.outputs.tag }}
+          ZIP: ${{ needs.build.outputs.zip }}
         run: |
-          TAG="${{ steps.v.outputs.tag }}"
-          ZIP="${{ steps.v.outputs.zip }}"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$ZIP" --clobber
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" "$ZIP" --title "$TAG" --generate-notes
+            gh release create "$TAG" "$ZIP" --title "$TAG" --generate-notes --repo "$GITHUB_REPOSITORY"
           fi

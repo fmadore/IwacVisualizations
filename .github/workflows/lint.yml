@@ -8,6 +8,9 @@ name: Lint (PHP/Python)
 #
 # Deliberately narrow triggers, same principle as the other two workflows:
 # a CSS-only push should not spin up PHP and Python.
+#
+# Also a reusable workflow: release.yml and regenerate-data.yml call it on
+# the tree they publish, and a reusable call ignores the path filters.
 
 on:
   push:
@@ -39,12 +42,18 @@ on:
       - "tests/php/**"
       - "tests/python/**"
       - ".github/workflows/lint.yml"
+  workflow_call:
+    inputs:
+      ref:
+        description: The commit or tag to check out; empty for the event's own ref.
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 concurrency:
-  group: lint-${{ github.ref }}
+  group: lint-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -52,9 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           # Lower runtime exercised with the literal Omeka S 4.0.0 floor in
           # omeka-integration.yml (the exact production runtime is PHP 8.5).
@@ -79,13 +91,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
 

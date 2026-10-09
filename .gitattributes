@@ -25,6 +25,12 @@ package-lock.json   export-ignore
 tokens.json         export-ignore
 CLAUDE.md           export-ignore
 ROADMAP.md          export-ignore
+# The Hugging Face dataset schema the generators read. The generators
+# (scripts/) do not ship, so neither does their input's description; it is
+# the same audience as CLAUDE.md and scripts/README.md. LAICITE_METHODOLOGY.md
+# is different and DOES ship: README.md links it as the Laïcité block's
+# published method and limitations, for anyone reading the installed module.
+DATA_NOTES.md       export-ignore
 
 # The Impeccable artifact layer: the design-system record, the product
 # context it is written against, and the machine-readable sidecar the design

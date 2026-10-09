@@ -8,31 +8,55 @@ name: CDN versions
 # the live site from silently upgrading itself; this restores the other half,
 # a deliberate notification that something moved.
 #
-# Two triggers, two strictnesses:
+# Two strictnesses:
 #   - schedule / manual: strict. A red monthly run is the notification — GitHub
 #     emails the repo owner when a scheduled workflow fails.
-#   - pull_request touching the partial: --warn-only. Pinning to something
-#     older than `latest` is a legitimate choice, so drift annotates but never
-#     blocks the merge. Mismatched pins for one package (bumping the MapLibre
-#     JS URL and forgetting the CSS one) stay fatal in both modes — that is a
-#     shipped bug, not drift.
+#   - push to main, pull_request touching the partial, and the release gate
+#     (release.yml calls this as a reusable workflow): --warn-only. Pinning to
+#     something older than `latest` is a legitimate choice, so drift
+#     annotates but never blocks. Mismatched pins for one package (bumping the
+#     MapLibre JS URL and forgetting the CSS one) stay fatal in every mode —
+#     that is a shipped bug, not drift — and so does an SRI hash jsDelivr does
+#     not serve.
+#
+# The push and release triggers are new (2026-10): the v1.75.2 MapLibre
+# hashes were merged straight to main, and the hash check against the CDN
+# never ran on them — it ran on pull requests and once a month only.
 
 on:
   schedule:
     - cron: "0 6 1 * *"   # 06:00 UTC on the 1st — after regenerate-data's 04:00
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "view/common/iwac-assets.phtml"
+      - "scripts/check-cdn-versions.js"
+      - "scripts/cdn-integrity.js"
+      - ".github/workflows/cdn-versions.yml"
   pull_request:
     paths:
       - "view/common/iwac-assets.phtml"
       - "scripts/check-cdn-versions.js"
       - "scripts/cdn-integrity.js"
       - ".github/workflows/cdn-versions.yml"
+  workflow_call:
+    inputs:
+      ref:
+        description: The commit or tag to check out; empty for the event's own ref.
+        type: string
+        default: ""
+      # A caller's event is the caller's (a release dispatched by hand reads
+      # as workflow_dispatch here), so the strictness is an input instead.
+      warn_only:
+        type: boolean
+        default: true
 
 permissions:
   contents: read
 
 concurrency:
-  group: cdn-versions-${{ github.ref }}
+  group: cdn-versions-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -40,9 +64,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
 
@@ -51,7 +78,7 @@ jobs:
       - name: Compare pinned CDN versions against the npm registry
         run: >-
           node scripts/check-cdn-versions.js
-          ${{ github.event_name == 'pull_request' && '--warn-only' || '' }}
+          ${{ (inputs.warn_only || (github.event_name != 'schedule' && github.event_name != 'workflow_dispatch')) && '--warn-only' || '' }}
 
       # Fatal in both modes: a recorded hash that differs from what jsDelivr
       # serves is a library every browser will refuse to run. This is the one
