@@ -181,6 +181,12 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
 - **Resource type**: the theme's fixed `--type-*` map, rendered as a dot on an outlined
   badge, exactly as upstream. The pipeline's `image` key maps to `--type-photograph` —
   the theme names the token after what the thing is, the pipeline after its subset.
+- **Entity type**: the theme's `--type-entity-*` tokens (People, Places, Organisations,
+  Subjects, Events), the colours IwacSearch's result chips paint with, through
+  `IWACVis.getEntityTypeColor` for every network, legend chip and associated-entities row. A
+  related newspaper article in the article-context graph takes `--type-article`, its
+  resource-type colour; the ego node keeps the lead slot. Series slots are the fallback
+  for a page that does not define the tokens, never the encoding.
 
 ### Named Rules
 

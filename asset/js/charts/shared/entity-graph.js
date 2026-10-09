@@ -17,10 +17,11 @@
  * `kind` is optional: dashboards precomputed before v1.28 carry ego edges
  * only and no `kind` field, and must keep rendering.
  *
- * Colours come from `ns.getEntityTypeColor` / `ns.ENTITY_TYPE_SLOTS`
- * (iwac-theme.js), the one type → slot table every block reads, so a type is
- * the same colour here, in Entity Networks and in the associated-entities
- * list and matrix.
+ * Colours come from `ns.getEntityTypeColor` (iwac-theme.js): the theme's
+ * `--type-entity-*` tokens for the five index Types and `--type-article` for
+ * a related article, so a type is the same colour here, in Entity Networks,
+ * in the associated-entities list and matrix, and in IwacSearch's chips.
+ * `ns.ENTITY_TYPE_ORDER` is the legend order.
  *
  * Depends on: panels.js, iwac-theme.js, graph-panel.js.
  */
@@ -62,7 +63,7 @@
         opts = opts || {};
         var variants = opts.variants || {};
         var siteBase = (ctx && ctx.siteBase) || '';
-        var TYPE_SLOTS = ns.ENTITY_TYPE_SLOTS;
+        var TYPE_ORDER = ns.ENTITY_TYPE_ORDER;
 
         /* ---- Vocabulary present across every variant ------------------ */
 
@@ -81,10 +82,10 @@
             });
         });
 
-        // Fixed slot order — also the legend's order — filtered to what this
-        // item actually has. Anything unrecognised lands after the known
-        // types, still deterministically.
-        var catTypes = TYPE_SLOTS.filter(function (type) { return typesPresent[type]; });
+        // Fixed legend order, filtered to what this item actually has.
+        // Anything unrecognised lands after the known types, still
+        // deterministically.
+        var catTypes = TYPE_ORDER.filter(function (type) { return typesPresent[type]; });
         Object.keys(typesPresent).sort().forEach(function (type) {
             if (catTypes.indexOf(type) < 0) catTypes.push(type);
         });
@@ -96,11 +97,16 @@
             return { name: t('entity_type_' + type), type: type };
         });
 
+        // Unrecognised types are told apart by their rank among themselves.
+        var spareOf = {};
+        catTypes.forEach(function (type) {
+            if (TYPE_ORDER.indexOf(type) < 0) spareOf[type] = Object.keys(spareOf).length;
+        });
+
         // Read at paint time, not copied at mount: a copy is what a theme
         // toggle used to leave behind on the old palette.
-        function slotColor(i) {
-            var slot = ns.entityTypeSlot(catTypes[i]);
-            return ns.getSeriesColor(slot >= 0 ? slot : TYPE_SLOTS.length + i);
+        function typeColor(i) {
+            return ns.getEntityTypeColor(catTypes[i], spareOf[catTypes[i]]);
         }
 
         var nodes = order.map(function (id) {
@@ -216,7 +222,7 @@
             // The centre's id makes the layout reproducible per item without
             // making every item's graph the same shape.
             seed: parseInt(nodes[0].id, 10) || 1,
-            colorOf: slotColor,
+            colorOf: typeColor,
             tooltip: tooltip,
             cardRows: cardRows,
             categoryName: typeLabel,

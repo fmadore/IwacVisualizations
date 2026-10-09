@@ -17,6 +17,7 @@
  *   IWACVis.getChartTokens()     the token object actually used by the current theme
  *   IWACVis.getPalette()         the ordered categorical series scale
  *   IWACVis.getSeriesColor(n)    one slot of that scale (wraps)
+ *   IWACVis.getEntityTypeColor(t) an index Type's --type-entity-* colour
  *   IWACVis.getBasemapStyle()    MapLibre style URL matching current theme
  *   IWACVis.resolveCssVar(name)  a custom property as legacy rgb(), '' if unset
  */
@@ -732,18 +733,22 @@
     };
 
     /**
-     * IWAC index Type → series palette slot, FIXED, for every block that
-     * colours an entity by its type.
+     * IWAC index Type → the theme's published colour for it, for every block
+     * that colours an entity by its type.
      *
-     * Building the mapping in order of first appearance makes a colour depend
-     * on which types one payload happens to carry, so Personnes could come out
-     * slate on one entity page and green on the next — and the Entity Networks
-     * block, which coloured by its payload's own type order, disagreed with
-     * every item-page network about all five of them. One table, read here,
-     * keeps a type the same colour on every page. The order is also the
-     * legend order; `center` is the ego network's own node.
+     * The five index Types read `--type-entity-*`, the tokens IwacSearch's
+     * result chips and dots already paint with, so a person is the same
+     * colour in a search result and in a network one click away. A related
+     * newspaper article reads `--type-article`, its item-type colour (the
+     * badge dots, the types-over-time stack). These used to be series slots,
+     * a second mapping only this module knew: People came out slate here and
+     * blue in search, and the article-context legend set People and
+     * Newspaper article in two slates a reader could not tell apart.
+     *
+     * The order is the legend order. `center` is the ego network's own node;
+     * it has no type token and keeps the lead slot (--primary).
      */
-    ns.ENTITY_TYPE_SLOTS = [
+    ns.ENTITY_TYPE_ORDER = [
         'center',
         'Personnes',
         'Organisations',
@@ -753,19 +758,48 @@
         'article'
     ];
 
-    /** The palette slot of one raw IWAC entity type, or -1 when unknown. */
-    ns.entityTypeSlot = function (type) {
-        return ns.ENTITY_TYPE_SLOTS.indexOf(type);
+    var ENTITY_TYPE_TOKENS = {
+        Personnes:     '--type-entity-personnes',
+        Lieux:         '--type-entity-lieux',
+        Organisations: '--type-entity-organisations',
+        Sujets:        '--type-entity-sujets',
+        'Événements':  '--type-entity-evenements',
+        article:       '--type-article'
     };
+    ns.ENTITY_TYPE_TOKENS = ENTITY_TYPE_TOKENS;
 
     /**
-     * Current theme colour for one raw IWAC entity type. Read at call time,
-     * never cached by the caller, so a light/dark toggle reaches it. An
-     * unrecognised type takes the first slot after the known ones.
+     * Current theme colour for one raw IWAC entity type.
+     *
+     * Read from the body, like every other token here, and cached until the
+     * next `refreshThemes()`: the canvas graph asks once per node per frame,
+     * and a style read each time would be a few thousand a second. The
+     * refresh that a light/dark toggle runs drops the cache, so a repaint
+     * reads the new theme. Callers must not keep the value themselves.
+     *
+     * A token the page does not define (a theme older than the contract)
+     * degrades to the series slot at the type's legend position. A type this
+     * table does not know takes the first slot after the known ones, offset
+     * by `spare` so a caller with several unknown types can keep them apart.
+     *
+     * @param {string} type    raw type: 'Personnes', 'article', 'center', …
+     * @param {number} [spare] index among the caller's unknown types
+     * @returns {string}
      */
-    ns.getEntityTypeColor = function (type) {
-        var slot = ns.entityTypeSlot(type);
-        return ns.getSeriesColor(slot >= 0 ? slot : ns.ENTITY_TYPE_SLOTS.length);
+    ns.getEntityTypeColor = function (type, spare) {
+        var token = ENTITY_TYPE_TOKENS[type];
+        if (token) {
+            var cache = ns._currentEntityColors;
+            if (!cache) {
+                cache = {};
+                // Before <body> exists every read is '' — do not keep that.
+                if (document.body) ns._currentEntityColors = cache;
+            }
+            if (!(type in cache)) cache[type] = readColorVar(token) || '';
+            if (cache[type]) return cache[type];
+        }
+        var i = ns.ENTITY_TYPE_ORDER.indexOf(type);
+        return ns.getSeriesColor(i >= 0 ? i : ns.ENTITY_TYPE_ORDER.length + (Number(spare) || 0));
     };
 
     /**
@@ -812,6 +846,9 @@
      * that want to inspect / extend it).
      */
     ns.refreshThemes = function () {
+        // Dropped before the ECharts check: the entity colours paint canvas
+        // and MapLibre graphs too, on pages that may not load ECharts.
+        ns._currentEntityColors = null;
         if (typeof echarts === 'undefined') return null;
         var tokens = readTokens();
         ns._currentTokens = tokens;

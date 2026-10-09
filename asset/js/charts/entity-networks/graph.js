@@ -13,8 +13,8 @@
  *
  * Two modes:
  *   - 'abstract' — blank canvas style (P.buildGraphStyle), node color
- *     by entity type, through the same type → slot table every IWAC
- *     entity graph uses (`ns.getEntityTypeColor`)
+ *     by entity type, through the theme's `--type-entity-*` tokens every
+ *     IWAC entity graph reads (`ns.getEntityTypeColor`)
  *   - 'geo'      — regular theme basemap, nodes at true coordinates
  *
  * `create()` gates on `P.whenMaplibre()` and always returns a controller:
@@ -96,7 +96,7 @@
          * its own order (`data.types`, Personnes · Organisations · Événements
          * · Sujets · Lieux), and colouring by that INDEX painted Lieux and
          * Événements differently here from every item-page network. The
-         * index → type name → fixed slot lookup makes them agree.
+         * index → type name → type token lookup makes them agree.
          */
         function nodeColorExpression(c) {
             if (mode === 'geo' || !data || !data.types) return c.primary;

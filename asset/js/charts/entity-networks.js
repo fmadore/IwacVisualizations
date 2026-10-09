@@ -290,9 +290,9 @@
 
         // --- Type chips (abstract mode only) --------------------------
         // The shared `.iwac-vis-type-chip` — the item-page graphs' legend
-        // control — coloured through `--iwac-vis-entity-color` from the one
-        // type → slot table, so a type is the same colour here as on every
-        // item page. The colour is a custom property, not an inline
+        // control — coloured through `--iwac-vis-entity-color` from the
+        // theme's `--type-entity-*` tokens, so a type is the same colour here
+        // as on every item page and in IwacSearch. The colour is a custom property, not an inline
         // background, which is what lets the off state grey the swatch in
         // plain CSS; `paintChips` re-reads it on a theme swap.
         var enabledTypes = globalData.types.map(function (_t, i) { return i; });

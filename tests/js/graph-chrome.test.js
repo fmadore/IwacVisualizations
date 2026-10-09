@@ -181,38 +181,73 @@ test('the force graph no longer exports what nothing outside it used', () => {
 /*  One type → colour table, read live                                 */
 /* ------------------------------------------------------------------ */
 
-function loadTheme() {
-    const document = { body: null, addEventListener() {}, readyState: 'complete' };
+const TOKENS = JSON.parse(readFileSync(join(ROOT, 'tokens.json'), 'utf8'));
+const TYPE_TOKENS = {
+    Personnes: '--type-entity-personnes',
+    Lieux: '--type-entity-lieux',
+    Organisations: '--type-entity-organisations',
+    Sujets: '--type-entity-sujets',
+    'Événements': '--type-entity-evenements',
+    article: '--type-article',
+};
+
+/**
+ * iwac-theme.js in a bare context. With `vars`, the body's computed style
+ * answers those custom properties (mutable: assign the dark map to toggle);
+ * without, there is no body and no token resolves.
+ */
+function loadTheme(vars = null) {
+    const body = vars ? { getAttribute: () => null } : null;
+    const document = { body, addEventListener() {}, readyState: 'complete' };
     const context = {
         console: { warn() {}, error() {} },
         document,
         window: { IWACVis: {}, addEventListener() {}, matchMedia: () => ({ matches: false }) },
         setTimeout,
     };
+    if (vars) {
+        context.getComputedStyle = () => ({ getPropertyValue: (n) => vars[n] || '', fontFamily: '' });
+    }
     context.window.document = document;
     vm.createContext(context);
     vm.runInContext(read('iwac-theme.js'), context, { filename: 'iwac-theme.js' });
     return context;
 }
 
-test('entity types map to fixed palette slots, whatever order a payload lists them in', () => {
-    const context = loadTheme();
-    const ns = context.window.IWACVis;
+test('entity types take the theme\'s --type-entity-* colours, the ones IwacSearch\'s chips use', () => {
+    const vars = { ...TOKENS.light };
+    const ns = loadTheme(vars).window.IWACVis;
+    for (const [type, token] of Object.entries(TYPE_TOKENS)) {
+        assert.equal(ns.getEntityTypeColor(type), TOKENS.light[token], type);
+    }
+    // The article-context legend set these two in one slate.
+    assert.notEqual(ns.getEntityTypeColor('Personnes'), ns.getEntityTypeColor('article'));
+
+    // Cached for the per-frame painter; the refresh a toggle runs drops it.
+    Object.assign(vars, TOKENS.dark);
+    assert.equal(ns.getEntityTypeColor('Lieux'), TOKENS.light['--type-entity-lieux']);
+    ns.refreshThemes();
+    for (const [type, token] of Object.entries(TYPE_TOKENS)) {
+        assert.equal(ns.getEntityTypeColor(type), TOKENS.dark[token], type + ' (dark)');
+    }
+});
+
+test('without the tokens, entity types degrade to fixed palette slots', () => {
+    const ns = loadTheme().window.IWACVis;
     const palette = ns.getPalette();
-    assert.equal(ns.getEntityTypeColor('Personnes'), palette[1]);
-    assert.equal(ns.getEntityTypeColor('Organisations'), palette[2]);
-    assert.equal(ns.getEntityTypeColor('Lieux'), palette[3]);
-    assert.equal(ns.getEntityTypeColor('Sujets'), palette[4]);
-    assert.equal(ns.getEntityTypeColor('Événements'), palette[5]);
-    assert.equal(ns.getEntityTypeColor('Unheard of'), palette[ns.ENTITY_TYPE_SLOTS.length]);
+    const order = Array.from(ns.ENTITY_TYPE_ORDER);
+    order.forEach((type, i) => assert.equal(ns.getEntityTypeColor(type), palette[i], type));
+    assert.equal(ns.getEntityTypeColor('Unheard of'), palette[order.length]);
+    assert.equal(ns.getEntityTypeColor('Unheard of', 1), palette[order.length + 1]);
 
     // A theme swap replaces the cached palette; the lookup follows it.
     ns._currentPalette = palette.map((_c, i) => '#swapped' + i);
-    assert.equal(ns.getEntityTypeColor('Lieux'), '#swapped3');
+    assert.equal(ns.getEntityTypeColor('Lieux'), '#swapped' + order.indexOf('Lieux'));
 });
 
-test('an entity graph colours its categories from the live palette, not a mount-time copy', () => {
-    const context = loadTheme();
+test('an entity graph colours its categories from the live theme, not a mount-time copy', () => {
+    const vars = { ...TOKENS.light };
+    const context = loadTheme(vars);
     const ns = context.window.IWACVis;
     const document = makeDocument();
     context.document = document;
@@ -229,12 +264,23 @@ test('an entity graph colours its categories from the live palette, not a mount-
         variants: { all: { nodes: [
             { o_id: 1, title: 'Centre', type: 'center' },
             { o_id: 2, title: 'A place', type: 'Lieux' },
+            { o_id: 3, title: 'A person', type: 'Personnes' },
+            { o_id: 4, title: 'A related article', type: 'article' },
+            { o_id: 5, title: 'Odd one', type: 'Mystère' },
+            { o_id: 6, title: 'Odder one', type: 'Autre' },
         ], edges: [] } },
     });
-    const lieux = spec.categories.findIndex((c) => c.type === 'Lieux');
-    assert.equal(spec.colorOf(lieux), ns.getEntityTypeColor('Lieux'));
-    ns._currentPalette = ns.getPalette().map((_c, i) => '#swapped' + i);
-    assert.equal(spec.colorOf(lieux), '#swapped3');
+    const colorOf = (type) => spec.colorOf(spec.categories.findIndex((c) => c.type === type));
+    assert.equal(colorOf('Lieux'), TOKENS.light['--type-entity-lieux']);
+    assert.equal(colorOf('article'), TOKENS.light['--type-article']);
+    assert.notEqual(colorOf('Personnes'), colorOf('article'));
+    assert.equal(colorOf('center'), ns.getSeriesColor(0), 'the centre keeps the lead slot');
+    assert.notEqual(colorOf('Mystère'), colorOf('Autre'), 'unknown types stay apart');
+
+    Object.assign(vars, TOKENS.dark);
+    ns.refreshThemes();
+    assert.equal(colorOf('Lieux'), TOKENS.dark['--type-entity-lieux']);
+    assert.equal(colorOf('article'), TOKENS.dark['--type-article']);
     assert.equal(ns.entityGraph, undefined, 'the type table lives in iwac-theme.js now');
 });
 

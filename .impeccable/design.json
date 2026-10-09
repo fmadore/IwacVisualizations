@@ -795,13 +795,19 @@
         "owner": "IWAC-theme",
         "tokens": "--series-1 … --series-20",
         "consumption": "Read live from document.body. Slots 1-2 alias --primary / --secondary (admin-tunable seeds); slots 3-20 read live too. The hex arrays in asset/js/iwac-theme.js are degraded-mode fallbacks only and are deep-equalled against tokens.json's `series` by lint:theme rule 11 — light and dark separately, plus leadSlots and which tokens hold the leads.",
-        "grammar": "COUNTRY_MAP (charts/shared/chart-options.js): one country, one slot, for every chart. Benin 0, Burkina Faso 1, Cote d'Ivoire 2, Niger 3, Nigeria 4, Togo 5, Senegal 6; accented and unaccented spellings share a slot; unknown countries take the next free slot from 7 and keep it for the session. C._countryColor resolves the slot through IWACVis.getSeriesColor, which wraps."
+        "grammar": "COUNTRY_MAP (charts/shared/chart-options.js): one country, one slot, for every chart, measured rather than assigned in order. Benin 3, Burkina Faso 6, Cote d'Ivoire 2, Niger 7, Nigeria 4, Togo 14, Senegal 13 — off the two admin-tunable lead slots, every pair at least 40 degrees apart in OKLCH hue or 0.1 apart in lightness in both themes, each at 3:1 on the panel (tests/js/palette.test.js measures it against tokens.json). Accented and unaccented spellings share a slot; an unknown country takes the next slot the map does not use, from 8, and keeps it for the session. C._countryColor resolves the slot through IWACVis.getSeriesColor, which wraps."
       },
       {
         "name": "resource type",
         "owner": "IWAC-theme",
         "tokens": "--type-article, --type-publication, --type-document, --type-audiovisual, --type-reference, --type-photograph, --type-entity-*",
         "consumption": "Rendered as a dot on an outlined badge (.iwac-vis-badge--<type> sets --iwac-vis-badge-dot). Read at call time so a theme swap repaints without remounting the panel. The pipeline's `image` key maps to --type-photograph."
+      },
+      {
+        "name": "entity type",
+        "owner": "IWAC-theme",
+        "tokens": "--type-entity-personnes, --type-entity-lieux, --type-entity-organisations, --type-entity-sujets, --type-entity-evenements, --type-article",
+        "consumption": "IWACVis.getEntityTypeColor (asset/js/iwac-theme.js) maps the raw index Type to its --type-entity-* token, the colours IwacSearch's result chips use, for every entity network, legend chip and associated-entities row. A related article node takes --type-article; the ego node keeps the lead series slot. Read from document.body and cached until refreshThemes(), which a theme toggle runs, because the canvas graph asks per node per frame. Series slots are the degraded-mode fallback only."
       }
     ],
     "moduleLayoutTokens": [
