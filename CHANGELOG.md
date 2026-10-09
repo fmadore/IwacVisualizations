@@ -13,9 +13,9 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased — review fixes (2026-10)
+### v1.76.0 — review fixes: one formatter, the controls grammar, gated releases (2026-10-09)
 
-Fixes from the 2026-10-08 review of the theme, IwacSearch and this module. Not yet released; the version stays 1.75.2 until the release commit.
+Fixes from the 2026-10-08 review of the theme, IwacSearch and this module.
 
 - The module's composed colour tokens follow the reader's light/dark toggle. The 21 tokens built from theme tokens (`--iwac-vis-sent-*`, `-cent-*`, `-subj-*`, `-heatmap-*`) were declared on `:root` only, and a custom property holding a `var()` is substituted where it is declared. The theme's manual toggle re-declares its tokens on `body[data-theme]`, so a reader on a light OS who chose dark got the light heatmap ramp on dark panels: the lowest bucket near-white and the scale reading inverted. They are now declared on `:root, body`; the literal-valued tokens stay on `:root`. A browser test flips the toggle against the OS scheme both ways and fails on the old sheet. (V-01)
 - One number rule, shared with the theme and IwacSearch. Thousands are grouped with a narrow no-break space (U+202F) in both languages, so the English site no longer prints "7,649" beside the theme's "20 944", and the decimal mark and the percent follow the page: "12,5 %" in French, "12.5%" in English. `iwac-i18n.js` holds the one formatter (`formatNumber`, plus `formatDecimal`, `formatPercent` and `formatCompact`, promoted from the Laïcité block's own pair); `P.*` are the shortcuts. (X-02)
