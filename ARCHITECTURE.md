@@ -127,7 +127,7 @@ IwacVisualizations/
 ├── language/                            # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
-│   ├── lib/                             # 3 files — file walk, bundle manifest and failure report the guards share
+│   ├── lib/                             # 4 files — file walk, bundle manifest and failure report the guards share
 │   ├── audit_laicite.py
 │   ├── build-css.js
 │   ├── build-embed-tokens.js
@@ -136,6 +136,7 @@ IwacVisualizations/
 │   ├── build-model-registry.js
 │   ├── build-tree.js
 │   ├── cdn-integrity.js                 # SRI hashes for the CDN pins: --check / --update / --verify
+│   ├── check-audit.js
 │   ├── check-blocks.js
 │   ├── check-cdn-versions.js
 │   ├── check-css-dead.js
@@ -636,7 +637,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | Surface | Where | Watched by |
 | --- | --- | --- |
 | GitHub Actions | `.github/workflows/*.yml` | Dependabot (`.github/dependabot.yml`), monthly, grouped |
-| npm devDependencies | `package.json` — `esbuild`, `eslint`, `csso` | Nothing. Build-only; never served to visitors |
+| npm devDependencies | `package.json` — `esbuild`, `eslint`, `csso`, `stylelint`, `playwright` | Dependabot, monthly, grouped; `npm run check:audit` (in `Build check`) fails on any high or critical advisory not written into `scripts/lib/audit-exceptions.js` with its reason. Build-only; never served to visitors |
 | Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 

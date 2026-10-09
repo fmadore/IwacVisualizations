@@ -1,16 +1,20 @@
 version: 2
 
-# Scope note — this repo has four dependency surfaces and Dependabot is only
-# the right tool for one of them:
+# Scope note — this repo has four dependency surfaces and Dependabot is the
+# right tool for two of them:
 #
-#   1. GitHub Actions (below). Covered here. Small surface, low noise, and the
-#      only surface where a compromised dependency touches a secret.
-#   2. npm — `csso` + `terser`, both devDependencies. NOT covered: nothing here
-#      ships to visitors, so a vuln means an attacker who can already run the
-#      build. If you do enable it, note that a terser bump usually changes the
-#      committed .min output, so the PR will fail `Build check (JS/CSS)` on
-#      "minified assets are stale" until you run `npm run build` and commit the
-#      .min siblings — those PRs are never auto-mergeable.
+#   1. GitHub Actions (below). Covered. Small surface, low noise, and the only
+#      surface where a compromised dependency touches a secret. The actions
+#      are pinned to commit SHAs with the release in a trailing comment;
+#      Dependabot moves both together.
+#   2. npm (below) — dev tooling only (esbuild, csso, eslint, stylelint,
+#      playwright, …); nothing here ships to visitors. Covered since 2026-10,
+#      because nothing proposed the in-range source-map-js fix
+#      (GHSA-68fv-2mgg-jv7q) for weeks after IWAC-theme took it, while
+#      `npm run check:audit` (build-check.yml) now fails on exactly that kind
+#      of advisory. A bump that changes a build output (esbuild, csso) fails
+#      `Build check (JS/CSS)` on "built assets are stale" until `npm run build`
+#      is committed on the PR branch — those PRs are never auto-mergeable.
 #   3. pip — `scripts/requirements.txt` carries loose constraints and the
 #      exact, hash-verified pins live in `scripts/requirements.lock`, which
 #      `scripts/python-lock.js` regenerates (`npm run lock:python`) and CI
@@ -31,9 +35,7 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
-    # One grouped PR rather than four. The actions are pinned to major tags
-    # (@v7, @v6, @v2), so in practice this fires only on major releases —
-    # a couple of PRs a year.
+    # One grouped PR rather than one per action.
     groups:
       actions:
         patterns:
@@ -41,5 +43,21 @@ updates:
     open-pull-requests-limit: 3
     commit-message:
       prefix: ci
+    labels:
+      - dependencies
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+    # Security updates arrive as they are published regardless of this
+    # schedule; the monthly group is the routine refresh, one PR.
+    groups:
+      development-tooling:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: build
     labels:
       - dependencies

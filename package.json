@@ -43,7 +43,8 @@
     "lint:sri": "node scripts/cdn-integrity.js --check",
     "update:sri": "node scripts/cdn-integrity.js --update",
     "verify:sri": "node scripts/cdn-integrity.js --verify",
-    "lint:models": "node scripts/build-model-registry.js --check"
+    "lint:models": "node scripts/build-model-registry.js --check",
+    "check:audit": "node scripts/check-audit.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
