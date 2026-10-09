@@ -71,14 +71,30 @@ checkIntegration(
 );
 
 $blockLayouts = $services->get('Omeka\\BlockLayoutManager');
+// Blocks that deliberately get no bare legacy alias — mirrors $noLegacyAlias
+// in config/module.config.php. `timeline` shipped after the move to `iwac-`
+// names (no stored layout carries it), and Omeka's own Timeline module
+// registers a `timeline` block an alias would shadow. For these, what must
+// hold is that this module never claims the bare name.
+$noLegacyAlias = ['timeline'];
+$blockLayoutConfig = $services->get('Config')['block_layouts'] ?? [];
 foreach (BlockRegistry::BLOCKS as $slug => $definition) {
     $name = $definition['invokable'];
     $expectedClass = $definition['class'];
-    checkIntegration($blockLayouts->has($name), "page-block service missing: {$name}");
     checkIntegration($blockLayouts->has('iwac-' . $name), "prefixed page-block service missing: {$name}");
-    if ($blockLayouts->has($name)) {
+    if ($blockLayouts->has('iwac-' . $name)) {
         checkIntegration($blockLayouts->get('iwac-' . $name) instanceof $expectedClass,
             "prefixed service resolves the wrong class: {$name}");
+    }
+    if (in_array($name, $noLegacyAlias, true)) {
+        checkIntegration(
+            !isset($blockLayoutConfig['aliases'][$name]) && !isset($blockLayoutConfig['invokables'][$name]),
+            "the module must not register the bare `{$name}` block name (it would shadow Omeka's Timeline module)"
+        );
+        continue;
+    }
+    checkIntegration($blockLayouts->has($name), "page-block service missing: {$name}");
+    if ($blockLayouts->has($name)) {
         checkIntegration(
             $blockLayouts->get($name) instanceof $expectedClass,
             "page-block service resolves the wrong class: {$name}"
