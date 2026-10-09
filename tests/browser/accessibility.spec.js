@@ -33,6 +33,7 @@ const FIXTURES = [
     'map-popup',
     'minimal-item',
     'on-this-day',
+    'sentiment-atlas',
     'table-records',
 ];
 

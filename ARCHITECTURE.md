@@ -234,7 +234,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 33 files — Playwright specs
+│   ├── browser/                         # 36 files — Playwright specs
 │   ├── fixtures/
 │   │   └── timeline.json
 │   ├── integration/
