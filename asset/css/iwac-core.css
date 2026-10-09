@@ -135,26 +135,23 @@ body {
      * line there, and the accent colours keep their positions instead of
      * silently reordering when the panel is upgraded.
      *
-     * Slot 4's hue is deliberate: Gemma's own mark runs a gradient from a
-     * cyan-leaning blue to an indigo that is all but slot 2's. Taking the
-     * cyan end and darkening it buys ~20 degrees of hue and a clear step
-     * in lightness, which is what the subjectivity trend — the one chart
-     * that draws every model at once — needs to keep the two blues
-     * apart.
-     *
-     * Slot 5 is the same problem a second time, and resolved the same
-     * way. Qwen's mark is a flat indigo — hue 242 against slot 2's 230,
-     * at the same lightness, which is no separation at all on a line
-     * chart. Carrying the hue on to a true violet buys ~40 degrees from
-     * slot 2 and a clear step down in lightness, while staying inside
-     * the purple family the mark actually reads as. With five models the
-     * subjectivity trend now draws two blues, a violet, a green and an
-     * orange, and no two lines sit within 40 degrees of each other. */
-    --iwac-vis-model-1: #10a37f; /* allow-hex */
-    --iwac-vis-model-2: #4d6bfe; /* allow-hex */
-    --iwac-vis-model-3: #f97316; /* allow-hex */
-    --iwac-vis-model-4: #1f7ff0; /* allow-hex */
-    --iwac-vis-model-5: #9333ea; /* allow-hex */
+     * PICKED IN OKLCH, AND MEASURED (2026-10). The five were brand-mark
+     * hexes nudged by eye, and the measure found what the eye missed:
+     * slots 2 and 4 were two blues at ΔEok 0.059 (0.027 to a deuteranope),
+     * slot 5 sat 0.037 from slot 2 under deuteranopia, and the amber
+     * (slot 3) read 2.74:1 on the light panel. They are now five hues at
+     * least 45° apart — green 155°, blue 262°, burnt orange 45°, teal 200°,
+     * magenta 330°, each still the family its model's mark reads as — at
+     * the highest chroma the gamut gives between L 0.53 and 0.65, every one
+     * ≥ 3.2:1 on the light AND the dark panel, and no pair closer than
+     * ΔEok 0.14, or 0.095 under deuteranopia or protanopia.
+     * tests/js/palette.test.js measures all of it, so a re-pick that drifts
+     * fails the build. */
+    --iwac-vis-model-1: #00a05b; /* allow-hex */
+    --iwac-vis-model-2: #538bf5; /* allow-hex */
+    --iwac-vis-model-3: #af4700; /* allow-hex */
+    --iwac-vis-model-4: #007b80; /* allow-hex */
+    --iwac-vis-model-5: #c360bc; /* allow-hex */
 
     /* (--iwac-vis-shadow-{subtle,soft,strong} removed in 1.48: they
      * re-derived from --ink exactly what the theme's --shadow-color,

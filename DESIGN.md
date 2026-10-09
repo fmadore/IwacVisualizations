@@ -2,11 +2,11 @@
 name: IWAC Visualizations
 description: The data layer of the Research Broadsheet — ECharts and MapLibre panels that read the IWAC theme's tokens at runtime and encode data in the one colour namespace they own.
 colors:
-  model-1: "#10a37f"
-  model-2: "#4d6bfe"
-  model-3: "#f97316"
-  model-4: "#1f7ff0"
-  model-5: "#9333ea"
+  model-1: "#00a05b"
+  model-2: "#538bf5"
+  model-3: "#af4700"
+  model-4: "#007b80"
+  model-5: "#c360bc"
 components:
   panel:
     backgroundColor: "var(--panel-bg, var(--surface, #fdfcfb))"
@@ -142,14 +142,16 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
 - **Model slots 1–5** (`--iwac-vis-model-1..5`): five per-model data-series accents used
   where the Sentiment Atlas draws every annotator model at once. They are **role slots
   numbered by position, not by model id**; the id → slot map lives in `MODEL_SLOT`
-  (charts/sentiment-atlas.js) and nowhere else. Slot 4 is deliberately a darkened,
-  cyan-leaning blue rather than the model's own indigo, which was all but slot 2 — the
-  subjectivity trend needs ~20° of hue and a clear lightness step to keep two blues apart.
-  Slot 5 (v1.55.0) is the same fix against the same neighbour: the model's own mark is a
-  flat `#615ced`, hue 242 against slot 2's 230 at the same lightness, which is no
-  separation at all on that chart. The slot carries the hue on to a true violet at 271° —
-  41° from slot 2, a clear step down in lightness, still reading as the purple the mark
-  actually is. With five lines drawn, no two sit within 40° of each other.
+  (charts/sentiment-atlas.js) and nowhere else. Since 2026-10 they are picked in OKLCH and
+  measured, not nudged from the brand marks by eye: green 155°, blue 262°, burnt orange
+  45°, teal 200°, magenta 330° — at least 45° apart, each the family its model's mark reads
+  as — at the gamut's highest chroma between L 0.53 and 0.65, so every slot clears 3.2:1 on
+  the light and the dark panel, and no pair sits closer than ΔEok 0.14 (0.095 under
+  deuteranopia or protanopia). The previous set had two blues at ΔEok 0.059 (0.027 to a
+  deuteranope) and an amber at 2.74:1 on the light panel. `tests/js/palette.test.js`
+  measures all of it.
+- **Model logos** sit on a `--white` chip at a hairline radius, in both themes: the vendor
+  marks are fixed artwork, and the OpenAI mark is black, which vanished on the dark panel.
 
 ### Derived scales — sentiment
 

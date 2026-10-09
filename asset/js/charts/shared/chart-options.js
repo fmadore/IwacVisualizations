@@ -428,18 +428,28 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Country → palette slot. Slot N is `--series-(N+1)`; slots 0 and 1 are
-     * the theme's two admin-tunable leads (`--primary`, `--secondary`).
+     * Country → palette slot. Slot N is `--series-(N+1)`.
      *
-     * | Country        | Slot | Token        |
-     * |----------------|------|--------------|
-     * | Bénin          | 0    | --series-1   |
-     * | Burkina Faso   | 1    | --series-2   |
-     * | Côte d'Ivoire  | 2    | --series-3   |
-     * | Niger          | 3    | --series-4   |
-     * | Nigeria        | 4    | --series-5   |
-     * | Togo           | 5    | --series-6   |
-     * | Sénégal        | 6    | --series-7   |
+     * | Country        | Slot | Token        | Hue (OKLCH)              |
+     * |----------------|------|--------------|--------------------------|
+     * | Bénin          | 3    | --series-4   | red, 24°                 |
+     * | Burkina Faso   | 6    | --series-7   | blue, 236°               |
+     * | Côte d'Ivoire  | 2    | --series-3   | green, 164°              |
+     * | Niger          | 7    | --series-8   | brown, 76°               |
+     * | Nigeria        | 4    | --series-5   | purple, 312°             |
+     * | Togo           | 14   | --series-15  | lavender, 310°, lighter  |
+     * | Sénégal        | 13   | --series-14  | green, 161°, darker      |
+     *
+     * Measured, not assigned in order (2026-10). The map used to take slots
+     * 0–6 in turn, which put Bénin (--primary, 36°) beside Niger (red, 24°) at
+     * ΔEok 0.054, Burkina Faso (slate, 252°) beside Sénégal (blue, 236°) at
+     * 0.051, and Togo on a tan that read 2.17:1 on the light panel. No seven
+     * slots of the scale clear the bar with --primary among them, so the
+     * countries leave the two admin-tunable leads altogether — which also
+     * means a retuned brand seed can no longer move a country's colour. Every
+     * pair now sits ≥ 40° apart in hue, or ≥ 0.1 apart in lightness in BOTH
+     * themes (Nigeria/Togo, Côte d'Ivoire/Sénégal), and `tests/js/palette.test.js`
+     * measures the map against tokens.json, contrast included.
      *
      * Accented and unaccented spellings share a slot: the precomputed bundles
      * carry the raw `country` field, which is not consistently accented, and a
@@ -453,24 +463,31 @@
      * Bénin.
      */
     var COUNTRY_MAP = {
-        'Benin':            0,
-        'B\u00e9nin':       0,
-        'Burkina Faso':     1,
+        'Benin':            3,
+        'B\u00e9nin':       3,
+        'Burkina Faso':     6,
         "C\u00f4te d'Ivoire": 2,
         "Cote d'Ivoire":    2,
-        'Niger':            3,
+        'Niger':            7,
         'Nigeria':          4,
-        'Togo':             5,
-        'S\u00e9n\u00e9gal': 6,
-        'Senegal':          6
+        'Togo':             14,
+        'S\u00e9n\u00e9gal': 13,
+        'Senegal':          13
     };
-    var _dynamicIdx = 7;
+    C.COUNTRY_MAP = COUNTRY_MAP;
+    // An unexpected country takes the next slot the map does not use.
+    var _dynamicIdx = 8;
     var _dynamicMap = {};
+
+    var _mappedSlots = {};
+    Object.keys(COUNTRY_MAP).forEach(function (k) { _mappedSlots[COUNTRY_MAP[k]] = true; });
 
     /** The slot a country occupies, assigning one if it is unknown. */
     C._countrySlot = function (country) {
         if (COUNTRY_MAP[country] != null) return COUNTRY_MAP[country];
         if (_dynamicMap[country] != null) return _dynamicMap[country];
+        // Never a slot a known country holds: the map is not contiguous.
+        while (_mappedSlots[_dynamicIdx]) _dynamicIdx++;
         _dynamicMap[country] = _dynamicIdx++;
         return _dynamicMap[country];
     };

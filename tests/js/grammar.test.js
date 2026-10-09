@@ -121,20 +121,21 @@ test('country slots are fixed, shared, and independent of chart order', () => {
     const { C } = loadModules();
     const light = TOKENS.series.light;
 
-    // The published table in chart-options.js, asserted rather than described.
-    assert.equal(C._countrySlot('Bénin'), 0);
-    assert.equal(C._countrySlot('Burkina Faso'), 1);
+    // The published table in chart-options.js, asserted rather than described
+    // (tests/js/palette.test.js measures that its colours stay apart).
+    assert.equal(C._countrySlot('Bénin'), 3);
+    assert.equal(C._countrySlot('Burkina Faso'), 6);
     assert.equal(C._countrySlot("Côte d'Ivoire"), 2);
-    assert.equal(C._countrySlot('Niger'), 3);
+    assert.equal(C._countrySlot('Niger'), 7);
     assert.equal(C._countrySlot('Nigeria'), 4);
-    assert.equal(C._countrySlot('Togo'), 5);
-    assert.equal(C._countrySlot('Sénégal'), 6);
+    assert.equal(C._countrySlot('Togo'), 14);
+    assert.equal(C._countrySlot('Sénégal'), 13);
 
-    assert.equal(C._countryColor('Burkina Faso'), light[1]);
+    assert.equal(C._countryColor('Burkina Faso'), light[6]);
     // Asking in a different order must not move anything: the defect this
     // replaces was exactly a colour that depended on where a country sorted.
-    assert.equal(C._countryColor('Togo'), light[5]);
-    assert.equal(C._countryColor('Bénin'), light[0]);
+    assert.equal(C._countryColor('Togo'), light[14]);
+    assert.equal(C._countryColor('Bénin'), light[3]);
 });
 
 test('accented and unaccented spellings of one country share a colour', () => {
@@ -145,19 +146,24 @@ test('accented and unaccented spellings of one country share a colour', () => {
     }
 });
 
-test('an unknown country takes a free slot instead of colliding with Bénin', () => {
+test('an unknown country takes a free slot instead of colliding with a known one', () => {
     const { C } = loadModules();
     const unknown = C._countryColor('Ghana');
     assert.notEqual(unknown, C._countryColor('Bénin'));
     assert.equal(unknown, C._countryColor('Ghana'), 'and it must be stable within the page');
+    // The map is not contiguous: unknown countries skip the slots it holds.
+    const known = new Set(Object.values(C.COUNTRY_MAP));
+    for (const name of ['Ghana', 'Mali', 'Guinée', 'Cameroun', 'Tchad', 'Gabon', 'Liberia']) {
+        assert.ok(!known.has(C._countrySlot(name)), `${name} took a known country's slot`);
+    }
 });
 
 test('the dark scale flows through without a module change', () => {
     const { C } = loadModules({ theme: 'dark' });
     // Contract v1 diverges only in the two lead slots; the assertion is that
     // the module reads whatever the theme publishes, not that they differ.
-    assert.equal(C._countryColor('Bénin'), TOKENS.series.dark[0]);
-    assert.equal(C._countryColor('Burkina Faso'), TOKENS.series.dark[1]);
+    assert.equal(C._countryColor('Bénin'), TOKENS.series.dark[3]);
+    assert.equal(C._countryColor('Burkina Faso'), TOKENS.series.dark[6]);
 });
 
 test('item types are painted from the theme --type-* map, not the series scale', () => {
