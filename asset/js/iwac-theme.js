@@ -558,16 +558,24 @@
             },
             legend: {
                 textStyle: { color: tokens.inkLight },
-                inactiveColor: tokens.border
+                // --muted, not --border: a switched-off entry is still a
+                // label someone reads to switch it back on, and --border sat
+                // at 1.49:1 on the panel. --muted clears 4.5:1 in both themes
+                // and stays a clear step lighter than the live entries.
+                inactiveColor: tokens.muted
             },
             tooltip: {
                 backgroundColor: tooltipBg,
                 borderColor: tokens.border,
                 borderWidth: 1,
                 textStyle: { color: tokens.ink },
-                // Radius matches theme v2.0.0 --radius-md (8px, tightened
-                // from 12px in v1.x for an institutional register).
-                extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-radius: 8px;',
+                // The theme's own elevation and radius, by token: the tooltip
+                // is a DOM element in the page, so `var()` resolves in its
+                // cascade and follows the light/dark switch. A literal
+                // black-at-12 % shadow and an 8px radius stood in for them
+                // and the shadow vanished on the dark surface.
+                extraCssText: 'box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06)); '
+                    + 'border-radius: var(--radius-md, 0.5rem);',
                 // Prevent hover tooltips from being clipped by panels with
                 // `overflow: hidden` (recent-additions scrollbox, grid
                 // cells) or extending beyond the chart on narrow screens.

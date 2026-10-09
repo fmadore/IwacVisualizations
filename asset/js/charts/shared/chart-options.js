@@ -192,6 +192,16 @@
         return label;
     };
 
+    /**
+     * End truncation, for a label whose START identifies it — a node name in
+     * a network. The middle form below suits a category axis whose two ends
+     * both matter; on a network it printed "Fête de Tab…hier la fête".
+     */
+    C._truncateEnd = function (str, maxLen) {
+        if (!str || str.length <= maxLen) return str || '';
+        return str.slice(0, Math.max(1, maxLen - 1)).replace(/\s+$/, '') + '\u2026';
+    };
+
     C._truncate = function (str, maxLen) {
         if (!str || str.length <= maxLen) return str || '';
         var head = Math.floor((maxLen - 1) / 2);

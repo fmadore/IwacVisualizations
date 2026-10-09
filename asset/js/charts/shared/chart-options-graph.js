@@ -159,9 +159,9 @@
                     show: true,
                     position: 'outside',
                     fontSize: 11,
-                    // Long French subject labels get a middle-ellipsis on
-                    // the perimeter; tooltips carry the full name.
-                    formatter: function (p) { return C._truncate(p.name, 28); }
+                    // Long French subject labels are cut at the end on the
+                    // perimeter; tooltips carry the full name.
+                    formatter: function (p) { return C._truncateEnd(p.name, 28); }
                 },
                 itemStyle: { borderRadius: 3 },
                 lineStyle: { color: 'gradient', opacity: 0.28 },

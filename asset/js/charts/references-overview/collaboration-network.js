@@ -79,7 +79,7 @@
             var norm = Math.max(0, Math.min(1, (n.value || 0) / maxValue));
             return {
                 id: String(n.id),
-                name: C._truncate(n.name || '', maxLen),
+                name: C._truncateEnd(n.name || '', maxLen),
                 fullTitle: n.name || '',
                 value: n.value || 0,
                 symbolSize: 8 + Math.sqrt(norm) * 28,

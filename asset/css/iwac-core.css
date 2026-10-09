@@ -1190,7 +1190,10 @@ body {
 
 .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
     font-size: var(--text-xl, 1.5rem);
-    font-weight: 700;
+    /*  600, not 700: Besley is loaded at 500/600/800 only, and a
+     *  requested 700 resolves to 800 — the featured figure was rendering
+     *  a weight nobody chose. */
+    font-weight: 600;
 }
 
 /*  The step up, for both variants. `md` rather than a vw ramp: the cards go

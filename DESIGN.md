@@ -314,7 +314,7 @@ everywhere except the one place it sanctions a box: a chart panel is a true pane
 `.iwac-vis-panel` takes `--shadow-sm`, a 1px `--border` hairline and `--panel-radius`.
 Nothing *inside* a panel casts a shadow — tabs, chips, keys, window notes, tables and
 summary cards are drawn with hairlines, tints and type. The one floating element is the
-chart tooltip, which carries its own 8px-radius drop shadow because it leaves the panel's
+chart tooltip, which carries the theme's `--shadow-md` and `--radius-md` because it leaves the panel's
 box entirely (`appendTo: 'body'` to escape ancestor `overflow: hidden`, `confine: true` so
 it does not drift off a phone). A chart in a panel with a fullscreen control is the
 exception: native fullscreen draws only the fullscreen element, so a `<body>` tooltip

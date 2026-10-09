@@ -41,14 +41,13 @@
     var LINK_HIT = 36;          // 6px, squared
 
     /**
-     * Middle-ellipsis truncation, same shape as `C._truncate` so a label
-     * reads identically whether it was drawn here or by an ECharts panel.
+     * End truncation, the same shape as `C._truncateEnd` in the ECharts
+     * networks. A node's name is identified by its start; the middle ellipsis
+     * this used printed "Fête de Tab…hier la fête".
      */
     function truncate(str, maxLen) {
         if (!str || str.length <= maxLen) return str || '';
-        var head = Math.floor((maxLen - 1) / 2);
-        var tail = maxLen - 1 - head;
-        return str.slice(0, head) + '…' + str.slice(-tail);
+        return str.slice(0, Math.max(1, maxLen - 1)).replace(/\s+$/, '') + '…';
     }
 
     /**
@@ -310,6 +309,16 @@
             return false;
         }
 
+        /** `overlaps`, skipping the box at index `self` (a label's own node). */
+        function overlapsOthers(box, boxes, self) {
+            for (var i = 0; i < boxes.length; i++) {
+                if (i === self) continue;
+                var b = boxes[i];
+                if (box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1]) return true;
+            }
+            return false;
+        }
+
         /**
          * Greedy collision placement: walk the nodes in priority order and keep
          * a label only while its box is still free. Zooming in frees space, so
@@ -331,6 +340,14 @@
             c.textBaseline = 'middle';
             c.lineJoin = 'round';
 
+            // Labels avoid other labels AND other nodes: a name drawn across
+            // a neighbouring node hid the node it crossed. A node's own disc
+            // is not an obstacle to its own label, which starts beside it.
+            var nodeBoxes = ordered.map(function (m) {
+                var r = Math.max(1.6, m.r * k);
+                return [screenX(m) - r, screenY(m) - r, screenX(m) + r, screenY(m) + r];
+            });
+
             for (var i = 0; i < ordered.length && boxes.length < budget; i++) {
                 var n = ordered[i];
                 // Only these skip the collision test. Members of the focus set
@@ -350,6 +367,7 @@
                 var box = [lx - 2, ly - size * 0.66, lx + c.measureText(text).width + 2, ly + size * 0.66];
                 if (box[2] < 0 || box[0] > o.w || box[3] < 0 || box[1] > o.h) continue;
                 if (!forced && overlaps(box, boxes)) continue;
+                if (!forced && overlapsOthers(box, nodeBoxes, i)) continue;
                 boxes.push(box);
 
                 // Stroke the surface colour behind the glyphs so a label stays

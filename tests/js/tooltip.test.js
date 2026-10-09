@@ -162,3 +162,20 @@ test('a landscape tabulates titles, buckets and details, never projection floats
         [{ text: 'Beta', href: '/s/iwac/item/12' }, 'Niger', '1990'],
     ]);
 });
+
+test('a network label is cut at its end, where a name stops identifying itself', () => {
+    // V-19: the middle ellipsis printed "Fête de Tab…hier la fête".
+    const C = loadBuilders();
+    const label = C._truncateEnd('Fête de Tabaski, hier la fête', 24);
+    assert.equal(label.length <= 24, true);
+    assert.ok(label.startsWith('Fête de Tabaski'));
+    assert.ok(label.endsWith('\u2026'));
+    assert.equal(C._truncateEnd('Short', 24), 'Short');
+});
+
+test('the theme tooltip and legend take their chrome from tokens', () => {
+    const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
+    assert.match(source, /extraCssText: 'box-shadow: var\(--shadow-md, /);
+    assert.match(source, /border-radius: var\(--radius-md, 0\.5rem\);'/);
+    assert.match(source, /inactiveColor: tokens\.muted/);
+});
