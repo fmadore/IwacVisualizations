@@ -26,13 +26,6 @@
     }
 
     var TYPE_ORDER = ['Personnes', 'Lieux', 'Organisations', 'Sujets', '\u00c9v\u00e9nements'];
-    var TYPE_I18N = {
-        'Personnes':            'Persons',
-        'Lieux':                'Places',
-        'Organisations':        'Organizations',
-        'Sujets':               'Subjects',
-        '\u00c9v\u00e9nements': 'Events'
-    };
     var ALL_KEY = '__all__';
     var PAGE_SIZE = 25;
 
@@ -60,7 +53,7 @@
         controls.appendChild(searchInput);
 
         var types = { __all__: P.t('All types') };
-        TYPE_ORDER.forEach(function (t) { types[t] = P.t(TYPE_I18N[t] || t); });
+        TYPE_ORDER.forEach(function (t) { types[t] = P.entityTypeLabel(t); });
         var facetBar = P.buildFacetButtons({
             facets: [{
                 key: 'type',
@@ -89,7 +82,7 @@
             return filtered.map(function (r) {
                 return {
                     title:     r.title,
-                    type:      P.t(TYPE_I18N[r.type] || r.type || ''),
+                    type:      P.entityTypeLabel(r.type),
                     frequency: r.frequency || 0,
                     first:     r.first,
                     last:      r.last,

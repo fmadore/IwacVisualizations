@@ -245,12 +245,11 @@
 
             // Entity type labels (legend + tooltips of the entity graphs)
             'entity_type_center': 'Centre',
-            'entity_type_Personnes': 'Persons',
+            // The five index types: People, Places, Organisations, Subjects,
+            // Events — the labels IwacSearch and the theme use too. Every
+            // block reads them here, through P.entityTypeLabel or this key.
+            'entity_type_Personnes': 'People',
             'entity_type_Organisations': 'Organisations',
-            // Bare entity-type label used as a card/axis caption; the English
-            // spelling has to be overridden because the call sites key on the
-            // American form.
-            'Organizations': 'Organisations',
             'entity_type_Lieux': 'Places',
             'entity_type_Sujets': 'Subjects',
             'entity_type_\u00c9v\u00e9nements': 'Events',
@@ -354,9 +353,8 @@
             'Chart': 'Graphique',
             'Filters': 'Filtres',
 
-            // Entity type tabs
-            'Persons': 'Personnes',
-            'Organizations': 'Organisations',
+            // Captions that name a type in prose; the type labels themselves
+            // are the entity_type_* keys above.
             'Places': 'Lieux',
             'Subjects': 'Sujets',
             'Events': '\u00c9v\u00e9nements',

@@ -62,6 +62,27 @@
      * mark. Two call sites concatenated `label + ':'` and got the English
      * form on both sites.
      */
+    /**
+     * The display label of a raw IWAC index type ("Personnes", "Lieux",
+     * "Organisations", "Sujets", "Événements"): People / Places /
+     * Organisations / Subjects / Events in English, the catalogue's own words
+     * in French, from the one `entity_type_*` table in iwac-i18n.js. Five
+     * blocks kept a private type → label map that said "Persons" and the
+     * American "Organizations" while the graphs said "Organisations"; the
+     * site's English uses the British spelling, and "Subjects", not
+     * "Topics", because "topics" means the LDA topic models here.
+     *
+     * @param {string} type  raw index type
+     * @returns {string}
+     */
+    P.entityTypeLabel = function (type) {
+        var raw = String(type == null ? '' : type);
+        if (!raw) return '';
+        var key = 'entity_type_' + raw;
+        var label = P.t(key);
+        return label === key ? raw : label;
+    };
+
     P.labelColon = function (label) {
         return String(label == null ? '' : label) + (ns.locale === 'fr' ? ' :' : ':');
     };

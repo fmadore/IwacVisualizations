@@ -262,3 +262,24 @@ test('the suite itself runs west of UTC, and the date still holds', () => {
     }
     assert.equal(loadPanels({ locale: 'en' }).P.formatDate('1989-11-04'), 'Nov 4, 1989');
 });
+
+test('index types read People / Places / Organisations / Subjects / Events, from one table', () => {
+    // X-13: five blocks kept their own type → label maps ("Persons", the
+    // American "Organizations"); every one now goes through the
+    // entity_type_* keys of iwac-i18n.js.
+    const i18n = readFileSync(join(ROOT, 'asset', 'js', 'iwac-i18n.js'), 'utf8');
+    const context = { Intl, document: { documentElement: { getAttribute: () => 'en' } }, window: { IWACVis: {} } };
+    vm.createContext(context);
+    vm.runInContext(i18n, context, { filename: 'iwac-i18n.js' });
+    const ns = context.window.IWACVis;
+    const { P } = loadPanels({ t: (key, params) => ns.t(key, params) });
+    const labels = ['Personnes', 'Lieux', 'Organisations', 'Sujets', 'Événements'].map((t) => P.entityTypeLabel(t));
+    assert.deepEqual(labels, ['People', 'Places', 'Organisations', 'Subjects', 'Events']);
+    assert.equal(P.entityTypeLabel('Inconnu'), 'Inconnu', 'an unknown type reads as itself');
+    assert.equal(P.entityTypeLabel(''), '');
+    for (const file of ['index-overview/activity-gantt.js', 'index-overview/index-table.js', 'index-overview/lifespan.js',
+        'index-overview/type-distribution.js', 'shared/entities-panel.js']) {
+        const src = readFileSync(join(ROOT, 'asset', 'js', 'charts', file), 'utf8');
+        assert.doesNotMatch(src, /'Persons'|'Organizations'/, `${file} keeps a private type label`);
+    }
+});

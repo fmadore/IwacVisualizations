@@ -21,11 +21,11 @@
 
         var cards = [
             { value: s.total_entities,              labelKey: 'Total entities' },
-            { value: byType['Personnes'],           labelKey: 'Persons' },
-            { value: byType['Lieux'],               labelKey: 'Places' },
-            { value: byType['Organisations'],       labelKey: 'Organizations' },
-            { value: byType['Sujets'],              labelKey: 'Subjects' },
-            { value: byType['\u00c9v\u00e9nements'], labelKey: 'Events' },
+            { value: byType['Personnes'],           labelKey: 'entity_type_Personnes' },
+            { value: byType['Lieux'],               labelKey: 'entity_type_Lieux' },
+            { value: byType['Organisations'],       labelKey: 'entity_type_Organisations' },
+            { value: byType['Sujets'],              labelKey: 'entity_type_Sujets' },
+            { value: byType['\u00c9v\u00e9nements'], labelKey: 'entity_type_\u00c9v\u00e9nements' },
             { value: s.total_mentions,              labelKey: 'Total mentions' },
             { value: s.with_coordinates,            labelKey: 'With coordinates' }
         ];

@@ -1,7 +1,7 @@
 /**
  * IWAC Visualizations — Spatial Exploration: entity picker sidebar
  *
- * Type tabs (Persons / Organizations / Events / Subjects / Places) +
+ * Type tabs (People / Organisations / Events / Subjects / Places) +
  * search box + result list driven by the precomputed picker indexes in
  * spatial-exploration.json. Selecting an entity asks the shared state
  * to hydrate it from its dashboard fan-out; the current selection is

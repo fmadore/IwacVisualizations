@@ -16,19 +16,12 @@
     }
 
     var TYPE_ORDER = ['Personnes', 'Lieux', 'Organisations', 'Sujets', '\u00c9v\u00e9nements'];
-    var TYPE_I18N = {
-        'Personnes':            'Persons',
-        'Lieux':                'Places',
-        'Organisations':        'Organizations',
-        'Sujets':               'Subjects',
-        '\u00c9v\u00e9nements': 'Events'
-    };
 
     function render(panelEl, data) {
         var byType = (data && data.summary && data.summary.by_type) || {};
         var entries = TYPE_ORDER
             .map(function (t) {
-                return { name: P.t(TYPE_I18N[t] || t), value: byType[t] || 0 };
+                return { name: P.entityTypeLabel(t), value: byType[t] || 0 };
             })
             .filter(function (e) { return e.value > 0; });
 

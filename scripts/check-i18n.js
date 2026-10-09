@@ -441,6 +441,18 @@ for (const [group, entries] of Object.entries(bundles)) {
         for (const rel of filesOf(spec)) {
             const abs = join(JS_ROOT, rel);
             if (abs === SHARED) continue; // the dictionary declares, it does not use
+            // Shared code that COMPOSES a key from a literal prefix —
+            // `P.t('entity_type_' + type)` in P.entityTypeLabel — reads every
+            // key under that prefix, on every page, so those keys are shared
+            // however few blocks also spell one out.
+            if (group === 'shared') {
+                const PREFIX = /['"]([a-z0-9][a-z0-9_.]*[_.])['"]\s*\+/g;
+                let m;
+                const text = readFileSync(abs, 'utf8');
+                while ((m = PREFIX.exec(text)) !== null) {
+                    for (const key of sharedKeys) if (key.startsWith(m[1])) usedByShared.add(key);
+                }
+            }
             for (const value of literalsOf(abs)) {
                 if (!sharedKeys.has(value)) continue;
                 if (group === 'shared') usedByShared.add(value);

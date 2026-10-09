@@ -26,13 +26,6 @@
     }
 
     var TYPE_ORDER = ['Personnes', 'Lieux', 'Organisations', 'Sujets', '\u00c9v\u00e9nements'];
-    var TYPE_I18N = {
-        'Personnes':            'Persons',
-        'Lieux':                'Places',
-        'Organisations':        'Organizations',
-        'Sujets':               'Subjects',
-        '\u00c9v\u00e9nements': 'Events'
-    };
     var ALL_KEY = '__all__';
 
     function colorFor(type) {
@@ -50,7 +43,7 @@
         var series = types.map(function (t) {
             var entries = lifespan[t] || [];
             return {
-                name: P.t(TYPE_I18N[t] || t),
+                name: P.entityTypeLabel(t),
                 type: 'scatter',
                 itemStyle: { color: colorFor(t), opacity: 0.75 },
                 emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
@@ -83,7 +76,7 @@
                     var d = p.data || {};
                     var lines = [
                         '<strong>' + P.escapeHtml(d.title || '') + '</strong>',
-                        P.t(TYPE_I18N[d.type] || d.type || ''),
+                        P.entityTypeLabel(d.type),
                         (d.first_year || '?') + ' \u2013 ' + (d.last_year || '?'),
                         P.t('mentions_count', { count: d.frequency || 0 })
                     ];
@@ -119,7 +112,7 @@
         var types = { __all__: P.t('All types') };
         TYPE_ORDER.forEach(function (t) {
             if ((lifespan[t] || []).length > 0) {
-                types[t] = P.t(TYPE_I18N[t] || t);
+                types[t] = P.entityTypeLabel(t);
             }
         });
         var facetBar = P.buildFacetButtons({

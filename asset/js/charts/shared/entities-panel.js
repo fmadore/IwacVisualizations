@@ -29,13 +29,6 @@
         return;
     }
 
-    var TYPE_I18N = {
-        'Personnes':            'Persons',
-        'Lieux':                'Places',
-        'Organisations':        'Organizations',
-        'Sujets':               'Subjects',
-        'Événements': 'Events'
-    };
     var DEFAULT_ORDER = ['Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];
     var PAGE_SIZE = 10;
 
@@ -87,7 +80,7 @@
             name: 'entity-type',
             ariaLabel: P.t('Entity type'),
             options: availableTypes.map(function (type) {
-                return { key: type, label: P.t(TYPE_I18N[type] || type) };
+                return { key: type, label: P.entityTypeLabel(type) };
             }),
             active: state.type,
             onChange: function (type) {
