@@ -51,6 +51,10 @@
             xAxis: {
                 type: 'category',
                 data: months,
+                // "mai 2024", not the raw "2024-05" the bundle keys months by.
+                axisLabel: {
+                    formatter: function (v) { return ns.formatYearMonth ? ns.formatYearMonth(v, 'short') : v; }
+                },
                 name: t('Month'),
                 nameLocation: 'middle',
                 nameGap: useZoom ? 34 : 26

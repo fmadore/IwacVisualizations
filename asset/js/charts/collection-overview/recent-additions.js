@@ -33,7 +33,8 @@
 
         var tbl = P.buildTable({
             columns: [
-                { key: 'thumbnail',  label: '',                render: 'thumbnail', width: '72px' },
+                // Named: an empty <th> is a column a screen reader announces as nothing (axe).
+                { key: 'thumbnail',  label: P.t('Image'),      render: 'thumbnail', width: '72px' },
                 { key: 'title',      label: P.t('Title'),      render: 'link', linkKey: 'url' },
                 { key: 'source',     label: P.t('Source') },
                 { key: 'added_date', label: P.t('Added'),      render: 'date', width: '140px' }

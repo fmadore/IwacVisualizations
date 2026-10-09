@@ -138,10 +138,12 @@
         if (!countable || !isFinite(points) || points <= 0) {
             text = t('chart_aria_plain', { title: title });
         } else if (series.length === 1) {
-            text = t('chart_aria_single', { title: title, points: points });
+            // `count`, not a free placeholder: t() picks the plural form
+            // only from `count`, and "1 values" is what `points` produced.
+            text = t('chart_aria_single', { title: title, count: points });
         } else {
             text = t('chart_aria_summary', {
-                title: title, series: series.length, points: points
+                title: title, series: series.length, count: points
             });
         }
 

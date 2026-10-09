@@ -102,7 +102,7 @@ test('a chart is described inside its own setOption — one pass, arguments inta
     assert.equal(instance.calls.length, 1, 'the render is exactly one native setOption');
     const [option, arg] = instance.calls[0];
     assert.equal(arg, true, 'the caller\'s notMerge flag passes through');
-    const description = 'chart_aria_single:{"title":"Items per year","points":3}';
+    const description = 'chart_aria_single:{"title":"Items per year","count":3}';
     // JSON round-trip: the option was built inside the vm realm, whose Object
     // prototype is not this realm's, and strict deep equality compares those.
     assert.deepEqual(JSON.parse(JSON.stringify(option.aria)), { enabled: true, label: { enabled: true, description } });
@@ -116,7 +116,7 @@ test('a chart is described inside its own setOption — one pass, arguments inta
     assert.deepEqual(JSON.parse(JSON.stringify(instance.calls[1][1])), { notMerge: true, lazyUpdate: true });
     assert.equal(
         instance.calls[1][0].aria.label.description,
-        'chart_aria_summary:{"title":"Chart","series":2,"points":3}'
+        'chart_aria_summary:{"title":"Chart","series":2,"count":3}'
     );
 
     // A partial merge that carries no data keeps the description it has.
@@ -126,7 +126,7 @@ test('a chart is described inside its own setOption — one pass, arguments inta
 
     // The R.withMedia form describes and labels the base option.
     instance.setOption({ baseOption: { series: [{ data: [1] }] }, media: [] }, true);
-    assert.equal(instance.calls[3][0].baseOption.aria.label.description, 'chart_aria_single:{"title":"Chart","points":1}');
+    assert.equal(instance.calls[3][0].baseOption.aria.label.description, 'chart_aria_single:{"title":"Chart","count":1}');
 });
 
 test('a dataZoom window is announced with its keyboard hint', () => {
@@ -140,7 +140,7 @@ test('a dataZoom window is announced with its keyboard hint', () => {
     });
     assert.equal(
         instance.calls[0][0].aria.label.description,
-        'chart_aria_single:{"title":"Chart","points":2} chart_aria_zoom'
+        'chart_aria_single:{"title":"Chart","count":2} chart_aria_zoom'
     );
 });
 

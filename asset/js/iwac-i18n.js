@@ -96,8 +96,14 @@
             // (aria.label.description), so they are the ONLY thing a screen
             // reader gets: they have to name the chart and stop.
             'chart_aria_plain': '{title}: chart.',
-            'chart_aria_single': '{title}: chart with {points} values.',
-            'chart_aria_summary': '{title}: chart with {series} series and {points} values.',
+            // {count} is the number of values, so t() can pick the singular:
+            // these passed {points} and announced "1 values".
+            'chart_aria_single': '{title}: chart with {count} values.',
+            'chart_aria_single_one': '{title}: chart with {count} value.',
+            'chart_aria_single_other': '{title}: chart with {count} values.',
+            'chart_aria_summary': '{title}: chart with {series} series and {count} values.',
+            'chart_aria_summary_one': '{title}: chart with {series} series and {count} value.',
+            'chart_aria_summary_other': '{title}: chart with {series} series and {count} values.',
             'chart_aria_zoom': 'Focus the chart and use the arrow keys to move the visible window.',
 
             // The semantic landscapes' facet control (references, articles, laïcité)
@@ -347,8 +353,12 @@
 
             // Chart text alternatives
             'chart_aria_plain': '{title} : graphique.',
-            'chart_aria_single': '{title} : graphique de {points} valeurs.',
-            'chart_aria_summary': '{title} : graphique de {series} s\u00e9ries et {points} valeurs.',
+            'chart_aria_single': '{title} : graphique de {count} valeurs.',
+            'chart_aria_single_one': '{title} : graphique de {count} valeur.',
+            'chart_aria_single_other': '{title} : graphique de {count} valeurs.',
+            'chart_aria_summary': '{title} : graphique de {series} s\u00e9ries et {count} valeurs.',
+            'chart_aria_summary_one': '{title} : graphique de {series} s\u00e9ries et {count} valeur.',
+            'chart_aria_summary_other': '{title} : graphique de {series} s\u00e9ries et {count} valeurs.',
             'chart_aria_zoom': 'Placez le focus sur le graphique et utilisez les touches fl\u00e9ch\u00e9es pour d\u00e9placer la fen\u00eatre visible.',
             'Chart': 'Graphique',
             'Filters': 'Filtres',
@@ -927,15 +937,16 @@
 
     /**
      * A year-month key ("2024-05") as the page writes it: "May 2024" /
-     * "mai 2024". Anything else passes through unchanged.
+     * "mai 2024"; with `'short'`, for an axis, "Jan 2024" / "janv. 2024". Anything else passes through unchanged.
      *
      * @param {string} key
+     * @param {'long'|'short'} [width='long']
      * @returns {string}
      */
-    ns.formatYearMonth = function (key) {
+    ns.formatYearMonth = function (key, width) {
         var m = /^(\d{4})-(\d{2})$/.exec(String(key == null ? '' : key));
         if (!m || +m[2] < 1 || +m[2] > 12) return key == null ? '' : String(key);
-        return calendarNames('month', 'long')[+m[2] - 1] + ' ' + m[1];
+        return calendarNames('month', width === 'short' ? 'short' : 'long')[+m[2] - 1] + ' ' + m[1];
     };
 
     /** Extend the dictionary at runtime (for strings added by individual charts). */

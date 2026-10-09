@@ -69,27 +69,34 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
-        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year, by country'), P.t('collection.timeline_desc'));
-        var typesPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items by type, over time'), P.t('collection.types_desc'));
-        var growthPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection growth over time'), P.t('collection.growth_desc'));
-        var ganttPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Newspaper coverage'), P.t('collection.gantt_desc'));
-        var countryPanel   = P.buildPanel('iwac-vis-panel',                      P.t('Content by country'), P.t('collection.country_desc'));
-        var languagePanel  = P.buildPanel('iwac-vis-panel',                      P.t('Languages represented'), P.t('collection.language_desc'));
-        var entitiesPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most-cited entities'), P.t('collection.entities_desc'));
+        // The block sits straight under the page's <h1> with no heading of
+        // its own, so its panels are the page's sections: <h2>, as On This
+        // Day's is. At the <h4> default the outline skipped two levels (axe:
+        // heading order). The look does not follow the level (iwac-core.css).
+        var H = { heading: 'h2' };
+
+        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year, by country'), P.t('collection.timeline_desc'), H);
+        var typesPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items by type, over time'), P.t('collection.types_desc'), H);
+        var growthPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection growth over time'), P.t('collection.growth_desc'), H);
+        var ganttPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Newspaper coverage'), P.t('collection.gantt_desc'), H);
+        var countryPanel   = P.buildPanel('iwac-vis-panel',                      P.t('Content by country'), P.t('collection.country_desc'), H);
+        var languagePanel  = P.buildPanel('iwac-vis-panel',                      P.t('Languages represented'), P.t('collection.language_desc'), H);
+        var entitiesPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most-cited entities'), P.t('collection.entities_desc'), H);
         entitiesPanel.panel.classList.add('iwac-vis-entities-panel');
-        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'), P.t('collection.breakdown_desc'));
+        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'), P.t('collection.breakdown_desc'), H);
         // Nested treemap (country › type › source) needs more vertical
         // room than the 320px floor so 3 levels of headers stay legible.
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
-        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'), P.t('collection.wordcloud_desc'));
-        var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'), P.t('collection.map_desc'));
+        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'), P.t('collection.wordcloud_desc'), H);
+        var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'), P.t('collection.map_desc'), H);
         var sourcesPanel   = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide iwac-vis-sources-map',
             P.t('Source locations'),
-            P.t('source_locations_desc')
+            P.t('source_locations_desc'),
+            H
         );
         var recentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
-                                          P.t('Recent additions'), P.t('collection.recent_desc'));
+                                          P.t('Recent additions'), P.t('collection.recent_desc'), H);
 
         [
             timelinePanel, typesPanel, growthPanel, ganttPanel,

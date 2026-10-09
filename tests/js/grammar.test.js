@@ -231,8 +231,10 @@ test('the disclosure and the chart descriptions are French on the French site', 
     for (const key of ['chart_aria_plain', 'chart_aria_single', 'chart_aria_summary', 'chart_aria_zoom']) {
         assert.notEqual(t(key), key, `${key} has no French translation`);
     }
-    assert.match(t('chart_aria_summary', { title: 'Couverture', series: 3, points: 12 }),
+    assert.match(t('chart_aria_summary', { title: 'Couverture', series: 3, count: 12 }),
         /^Couverture : graphique de 3 séries et 12 valeurs\.$/);
+    // V-20: one value is one value, not "1 valeurs" / "1 values".
+    assert.equal(t('chart_aria_single', { title: 'Total', count: 1 }), 'Total : graphique de 1 valeur.');
 });
 
 test('nothing is hidden, nothing is said', () => {
