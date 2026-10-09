@@ -103,6 +103,8 @@
         var created = P.createIwacMap(host, {
             center: P.WEST_AFRICA_VIEW.center,
             zoom: P.WEST_AFRICA_VIEW.zoom,
+            // Names the host for a screen reader (and MapLibre's canvas).
+            title: P.t('article_spatial_title'),
             onStyleReady: function (m) {
                 if (!m.getSource(SOURCE_ID)) {
                     m.addSource(SOURCE_ID, {

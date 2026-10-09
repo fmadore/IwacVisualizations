@@ -68,8 +68,11 @@
         { chart: 'iwacArticleFurther', wide: true, dataAccessor: ALL,
           title: 'Further reading',  description: 'desc_article_further_reading',
           hasData: hasFurtherData },
+        // Not the shared 'Spatial coverage' key: that reads "Places
+        // associated with the items", which is right for an item set and
+        // wrong for one article's tagged places.
         { chart: 'iwacArticleMap', wide: true, dataAccessor: ALL,
-          title: 'Spatial coverage', description: 'desc_article_spatial',
+          title: 'article_spatial_title', description: 'desc_article_spatial',
           hasData: hasSpatialData }
     ]);
 
