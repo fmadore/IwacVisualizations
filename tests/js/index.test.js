@@ -7,36 +7,12 @@ process.env.TZ = 'America/New_York';
 
 // Cross-platform entry point: Windows shells do not expand `*.test.js`, and
 // Node treats a directory argument as a module rather than discovering it.
-require('./i18n.test.js');
-require('./i18n-locales.test.js');
-require('./gettext.test.js');
-require('./panels.test.js');
-require('./tooltip.test.js');
-require('./bar-race.test.js');
-require('./plural.test.js');
-require('./linked-facet.test.js');
-require('./maplibre.test.js');
-require('./maplibre-gate.test.js');
-require('./assets.test.js');
-require('./cdn-integrity.test.js');
-require('./grammar.test.js');
-require('./sentiment.test.js');
-require('./diverging-bar.test.js');
-require('./associated-entities.test.js');
-require('./minimal-item.test.js');
-require('./wordcloud-ink.test.js');
-require('./gantt-window.test.js');
-require('./lifecycle.test.js');
-require('./store.test.js');
-require('./controls.test.js');
-require('./chart-rows.test.js');
-require('./landscape.test.js');
-require('./theme-animation.test.js');
-require('./hijri.test.js');
-require('./laicite-update.test.js');
-require('./laicite-orchestrator.test.js');
-require('./responsive.test.js');
-require('./graph-chrome.test.js');
-require('./timeline.test.js');
-require('./embed-brand.test.js');
-require('./palette.test.js');
+// Every `*.test.js` beside this file is loaded, in name order: the list used
+// to be written out by hand, and a new test file that nobody added to it
+// never ran (V-17).
+const { readdirSync } = require('node:fs');
+const { join } = require('node:path');
+
+for (const file of readdirSync(__dirname).filter((f) => f.endsWith('.test.js') && f !== 'index.test.js').sort()) {
+    require(join(__dirname, file));
+}

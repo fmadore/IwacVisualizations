@@ -30,6 +30,9 @@ parameters:
         - Module.php
         - src
         - config
+        # The operator command ships in the archive and runs as an admin
+        # against the live database; it was the one PHP file left out (V-17).
+        - bin
     # Read, not analysed: the host's classes exist so signatures resolve,
     # but its 1,900 files are not this module's to keep clean.
     scanDirectories:
