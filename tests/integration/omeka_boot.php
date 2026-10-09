@@ -226,11 +226,13 @@ $dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedCo
     // it would write every later dispatch's layout variables onto the FIRST
     // dispatch's view model, and every ?theme / ?primary assertion here
     // would read null and look like a controller bug. `blockAction` needs
-    // only `layout()` and `params()`, both of which a bare PluginManager
-    // registers itself.
-    $embedController->setPluginManager(
-        new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager())
-    );
+    // `layout()` and `params()`, which a bare PluginManager registers itself,
+    // and `translate()` for the tab title (1.76.0), which only Omeka's own
+    // manager registers — so that one plugin is borrowed from the shared
+    // manager. It is stateless (a translator wrapper), unlike `Layout`.
+    $embedPlugins = new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager());
+    $embedPlugins->setService('translate', $services->get('ControllerPluginManager')->get('translate'));
+    $embedController->setPluginManager($embedPlugins);
 
     $view = $embedController->dispatch($request, $response);
     return [
