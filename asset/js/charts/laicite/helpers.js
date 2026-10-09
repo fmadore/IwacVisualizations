@@ -92,7 +92,7 @@
             return out;
         }
         return [{
-            query: { maxWidth: R && R.BP ? R.BP.sm : 640 },
+            query: { maxWidth: R && R.below ? R.below('sm') : 599 },
             option: {
                 grid: opts.grid,
                 xAxis: axes(opts.xAxes, function () {

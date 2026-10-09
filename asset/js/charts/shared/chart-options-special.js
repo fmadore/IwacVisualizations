@@ -187,7 +187,7 @@
 
         var pieMedia = [
             {
-                query: { maxWidth: R ? R.BP.sm : 640 },
+                query: { maxWidth: R ? R.below('sm') : 599 },
                 option: {
                     legend: {
                         orient: 'horizontal',
@@ -777,7 +777,7 @@
         // 375px viewport instead of ~13%. When nothing is windowed there is no
         // slider and the tight gutter is right, so it stays conditional.
         var ganttMedia = [{
-            query: { maxWidth: R ? R.BP.sm : 640 },
+            query: { maxWidth: R ? R.below('sm') : 599 },
             option: {
                 grid: {
                     left: GANTT_LABEL_W_SM + GANTT_LABEL_GAP,
@@ -953,8 +953,10 @@
         var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
         var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
         var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
+        // The smallest word never drops under the theme's 11px floor, which
+        // the 0.8 phone scale took the dense clouds to (8px).
         function fontRange(scale) {
-            return [Math.round(minFont * scale), Math.round(maxFont * scale)];
+            return [Math.max(11, Math.round(minFont * scale)), Math.round(maxFont * scale)];
         }
 
         var wcTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
@@ -1033,13 +1035,15 @@
         // Non-overlapping rules also resize the cloud without rebuilding it.
         var wcMedia = [
             {
-                query: { maxWidth: R ? R.BP.sm : 640 },
+                query: { maxWidth: R ? R.below('sm') : 599 },
                 option: {
                     series: [{ sizeRange: fontRange(0.8) }]
                 }
             },
-            { query: { minWidth: 641, maxWidth: 1024 }, option: { series: [{ sizeRange: fontRange(1.1) }] } },
-            { query: { minWidth: 1025, maxWidth: 1600 }, option: { series: [{ sizeRange: fontRange(1.5) }] } }
+            // On the published breakpoints: the tiers used to start at 641
+            // and 1025 and end at 1600, three widths the theme does not have.
+            { query: { minWidth: R ? R.BP.sm : 600, maxWidth: R ? R.below('lg') : 1023 }, option: { series: [{ sizeRange: fontRange(1.1) }] } },
+            { query: { minWidth: R ? R.BP.lg : 1024, maxWidth: R ? R.below('xxl') : 1459 }, option: { series: [{ sizeRange: fontRange(1.5) }] } }
         ];
 
         return R && R.withMedia

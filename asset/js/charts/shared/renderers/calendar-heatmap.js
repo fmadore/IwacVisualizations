@@ -325,11 +325,11 @@
                 // being case-sensitive, so French pages read English names.
                 dayLabel: {
                     color: tokens.muted,
-                    fontSize: 9
+                    fontSize: P.AXIS_FONT_SM
                 },
                 monthLabel: {
                     color: tokens.inkLight,
-                    fontSize: 10
+                    fontSize: P.AXIS_FONT_SM
                 }
             };
         });

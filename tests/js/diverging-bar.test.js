@@ -50,7 +50,8 @@ function loadChartOptions() {
                 isUnknown: () => false,
             },
             responsive: {
-                BP: { sm: 640, md: 768, lg: 1024 },
+                BP: { sm: 600, md: 768, lg: 1024 },
+                below(name) { return this.BP[name] - 1; },
                 withMedia: (base, ...media) => ({ baseOption: base, media: media.flat() }),
             },
         },

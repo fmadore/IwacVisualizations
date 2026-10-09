@@ -346,7 +346,7 @@
     function divergingMedia(labelWidth, countMargin) {
         return [
             {
-                query: { maxWidth: R.BP.md },
+                query: { maxWidth: R.below('md') },
                 option: {
                     grid: { top: 76 },
                     yAxis: [

@@ -86,16 +86,16 @@
         // names close. Custom media (not R.valueChartMedia) because the
         // yAxis is a two-element array that must be merged element-wise.
         var growthMedia = [{
-            query: { maxWidth: R ? R.BP.sm : 640 },
+            query: { maxWidth: R ? R.below('sm') : 599 },
             option: {
                 grid: { left: 44, right: 44, top: 56, bottom: useZoom ? 64 : 56, containLabel: true },
                 xAxis: {
                     nameGap: useZoom ? 28 : 24,
-                    axisLabel: { rotate: 45, fontSize: 9, hideOverlap: true }
+                    axisLabel: { rotate: 45, fontSize: P.AXIS_FONT_SM, hideOverlap: true }
                 },
                 yAxis: [
-                    { nameGap: 28, nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 9 } },
-                    { nameGap: 28, nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 9 } }
+                    { nameGap: 28, nameTextStyle: { fontSize: P.AXIS_FONT_SM }, axisLabel: { fontSize: P.AXIS_FONT_SM } },
+                    { nameGap: 28, nameTextStyle: { fontSize: P.AXIS_FONT_SM }, axisLabel: { fontSize: P.AXIS_FONT_SM } }
                 ]
             }
         }];

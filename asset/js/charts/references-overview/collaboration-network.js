@@ -91,7 +91,7 @@
                     show: norm > 0.45,
                     position: 'right',
                     formatter: '{b}',
-                    fontSize: 10
+                    fontSize: 11
                 }
             };
         });

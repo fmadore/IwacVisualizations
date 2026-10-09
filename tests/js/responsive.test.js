@@ -44,3 +44,16 @@ test('media fallbacks combine presets and respect an explicit caller fallback', 
     assert.equal(explicit.media[1], fallback);
     assert.equal(R.withMedia(base, {}), base);
 });
+
+test('the JS breakpoints are the theme’s, and a "below" rule ends one pixel short', () => {
+    // V-13: R.BP said sm: 640 while tokens.json and every stylesheet say 600.
+    const tokens = JSON.parse(readFileSync(join(__dirname, '../../tokens.json'), 'utf8'));
+    const R = responsive();
+    const px = (v) => Number(String(v).replace('px', ''));
+    assert.deepEqual(Object.keys(R.BP).sort(), Object.keys(tokens.breakpoints).sort());
+    for (const [name, value] of Object.entries(tokens.breakpoints)) {
+        assert.equal(R.BP[name], px(value), `R.BP.${name}`);
+        assert.equal(R.below(name), px(value) - 1);
+    }
+    assert.equal(R.gridMedia[0].query.maxWidth, px(tokens.breakpoints.sm) - 1);
+});

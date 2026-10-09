@@ -33,8 +33,14 @@
      * What this replaces is the literal appearing at four different values —
      * 15 in `special`, 7 in `hbar`, 3 in `bar`, 3 in `graph` — for what is
      * one decision.
+     *
+     * 11, not 10: the theme's type floor is --text-2xs (11px), and chart
+     * text is text. Several builders went to 9–10px (the growth chart's
+     * phone axes, the calendar's day and month labels, the collaboration
+     * network, graph edge labels); `npm run lint:theme` now fails on a
+     * numeric chart `fontSize` under 11.
      */
-    P.AXIS_FONT_SM = 10;
+    P.AXIS_FONT_SM = 11;
 
     /**
      * Below this width a chart is drawn in its compact form — fewer labels,
@@ -45,7 +51,7 @@
      * tablet is not. `laicite/arenas.js` read `window.innerWidth` and so laid
      * a 400 px embed out in three columns.
      */
-    P.COMPACT_MAX = 600;
+    P.COMPACT_MAX = 600;   // tokens.json breakpoints.sm, asserted by lint:theme
 
     P.isCompact = function (el) {
         if (!el) return false;

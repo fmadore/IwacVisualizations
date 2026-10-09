@@ -131,8 +131,11 @@
         var w = (el && (el.clientWidth
             || (el.getBoundingClientRect && el.getBoundingClientRect().width))) || 0;
         if (!w) w = window.innerWidth || 1024;
-        if (w < 640) return 1;
-        if (w < 1024) return 2;
+        // The published breakpoints (responsive.js): this said 640, the
+        // width the theme retired, while every stylesheet reflows at 600.
+        var bp = (ns.responsive && ns.responsive.BP) || { sm: 600, lg: 1024 };
+        if (w < bp.sm) return 1;
+        if (w < bp.lg) return 2;
         return 3;
     }
 

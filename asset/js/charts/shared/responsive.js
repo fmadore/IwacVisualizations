@@ -18,7 +18,25 @@
     /*  Breakpoint constants                                              */
     /* ----------------------------------------------------------------- */
 
-    R.BP = { sm: 640, md: 768, lg: 1024 };
+    /**
+     * The theme's six published breakpoints, px — tokens.json `breakpoints`,
+     * which `npm run lint:theme` holds this object to (a module rule in
+     * scripts/check-theme-tokens.js). It said `sm: 640` while the theme, and
+     * every stylesheet here, reflow at 600, so a chart 600–640 px wide was
+     * BUILT non-compact (P.isCompact, < 600) and then given the phone
+     * overrides by its media rules.
+     */
+    R.BP = { xs: 400, sm: 600, md: 768, lg: 1024, xl: 1200, xxl: 1460 };
+
+    /**
+     * The `maxWidth` of an ECharts media rule for "below `name`". ECharts'
+     * maxWidth is inclusive, so the below half of a breakpoint ends one pixel
+     * short of it — the same contract the stylesheets keep (`max-width` at
+     * breakpoint − 1), and the reason a width can never match both halves.
+     */
+    R.below = function (name) {
+        return R.BP[name] - 1;
+    };
 
     /* ----------------------------------------------------------------- */
     /*  Container width helper                                            */
@@ -36,7 +54,7 @@
 
     R.legendMedia = [
         {
-            query: { maxWidth: R.BP.sm },
+            query: { maxWidth: R.below('sm') },
             option: {
                 legend: {
                     orient: 'horizontal',
@@ -51,7 +69,7 @@
 
     R.gridMedia = [
         {
-            query: { maxWidth: R.BP.sm },
+            query: { maxWidth: R.below('sm') },
             option: {
                 grid: { left: 24, right: 12, top: 36, bottom: 24 }
             }
@@ -64,7 +82,7 @@
         var smFontSize = opts.smFontSize || 11;
         return [
             {
-                query: { maxWidth: R.BP.sm },
+                query: { maxWidth: R.below('sm') },
                 option: {
                     yAxis: {
                         axisLabel: {
@@ -80,7 +98,7 @@
 
     R.dataZoomMedia = [
         {
-            query: { maxWidth: R.BP.sm },
+            query: { maxWidth: R.below('sm') },
             option: {
                 dataZoom: [{ height: 14 }]
             }
@@ -103,7 +121,7 @@
         opts = opts || {};
         var hasZoom = !!opts.hasZoom;
         var rule = {
-            query: { maxWidth: R.BP.sm },
+            query: { maxWidth: R.below('sm') },
             option: {
                 grid: { left: 42, right: 14, top: 34, bottom: hasZoom ? 60 : 36, containLabel: true },
                 xAxis: { nameGap: hasZoom ? 28 : 22, axisLabel: { fontSize: P.AXIS_FONT_SM } },

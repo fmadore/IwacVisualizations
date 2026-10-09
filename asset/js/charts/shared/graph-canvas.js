@@ -395,7 +395,8 @@
                 return (bf - af) || (a.name.length - b.name.length);
             });
 
-            var size = Math.max(9, T.fontSize - 2);
+            // Never under the theme's 11px type floor (--text-2xs).
+            var size = Math.max(11, T.fontSize - 1);
             c.font = size + 'px ' + T.fontFamily;
             c.textBaseline = 'middle';
             c.textAlign = 'center';

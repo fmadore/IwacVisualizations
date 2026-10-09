@@ -27,6 +27,7 @@
  *   - one rule about this module's chart JS, run before the shared engine:
  *     a token read in chart code never falls back to a hex literal.
  */
+const { readFileSync } = require('fs');
 const { join } = require('path');
 const { cli, collectFiles } = require('./theme-token-guard.cjs');
 
@@ -89,6 +90,60 @@ function staleHexFallbacks() {
         }
     }
     return found;
+}
+
+/*
+ * Module rule (V-13): chart breakpoints and chart type sizes, which the
+ * shared engine reads only in CSS. The JS kept its own `sm: 640` for months
+ * after the theme and every stylesheet here moved to 600, and several
+ * builders set chart text at 9–10px, under the theme's 11px floor
+ * (--text-2xs). Three checks:
+ *   - responsive.js's R.BP is tokens.json `breakpoints`, key for key, and
+ *     panels.js's COMPACT_MAX is its `sm`;
+ *   - an ECharts media `query` names its widths through R.BP / R.below(),
+ *     never as a bare number;
+ *   - no numeric chart `fontSize` under 11.
+ */
+function chartBreakpointsAndType() {
+    const found = [];
+    const tokens = JSON.parse(readFileSync(join(ROOT, 'tokens.json'), 'utf8'));
+    const px = (v) => Number(String(v).replace('px', ''));
+    const responsive = blankComments(readFileSync(join(ROOT, 'asset/js/charts/shared/responsive.js'), 'utf8'));
+    const bp = /R\.BP\s*=\s*\{([^}]*)\}/.exec(responsive);
+    const declared = {};
+    if (bp) {
+        for (const m of bp[1].matchAll(/(\w+)\s*:\s*(\d+)/g)) declared[m[1]] = Number(m[2]);
+    }
+    const expected = Object.fromEntries(Object.entries(tokens.breakpoints || {}).map(([k, v]) => [k, px(v)]));
+    if (JSON.stringify(declared) !== JSON.stringify(expected)) {
+        found.push(`  asset/js/charts/shared/responsive.js  R.BP ${JSON.stringify(declared)} ≠ tokens.json breakpoints ${JSON.stringify(expected)}`);
+    }
+    const panels = readFileSync(join(ROOT, 'asset/js/charts/shared/panels.js'), 'utf8');
+    const compact = /P\.COMPACT_MAX\s*=\s*(\d+)/.exec(panels);
+    if (!compact || Number(compact[1]) !== expected.sm) {
+        found.push(`  asset/js/charts/shared/panels.js  P.COMPACT_MAX ${compact ? compact[1] : '(missing)'} ≠ tokens.json breakpoints.sm ${expected.sm}`);
+    }
+    const files = collectFiles(ROOT, [['asset/js', ['.js']]],
+        (rel) => /\.min\.js$/.test(rel) || rel.startsWith('asset/js/dist/'));
+    for (const { rel, text } of files) {
+        const src = blankComments(text);
+        for (const m of src.matchAll(/query\s*:\s*\{[^}]*?\b(max|min)Width\s*:\s*(\d+)/g)) {
+            found.push(`  ${rel}:${lineOf(src, m.index)}  an ECharts media query with a literal ${m[1]}Width ${m[2]} — use R.BP / R.below() (tokens.json breakpoints)`);
+        }
+        for (const m of src.matchAll(/\bfontSize\s*:\s*(\d+(?:\.\d+)?)\b/g)) {
+            if (Number(m[1]) < 11) {
+                found.push(`  ${rel}:${lineOf(src, m.index)}  chart fontSize ${m[1]} is under the theme's 11px floor (--text-2xs) — use P.AXIS_FONT_SM or more`);
+            }
+        }
+    }
+    return found;
+}
+
+const chartIssues = chartBreakpointsAndType();
+if (chartIssues.length) {
+    console.error(`\n✗ theme-token guard: ${chartIssues.length} chart breakpoint / type-size problem(s)\n`);
+    console.error(chartIssues.join('\n'));
+    process.exit(1);
 }
 
 const stale = staleHexFallbacks();
