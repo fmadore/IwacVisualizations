@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC article dashboard fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        const fixtureLang = /^fr/i.test(fixtureParams.get('lang') || '') ? 'fr' : 'en';
+        document.documentElement.lang = fixtureLang;
+    </script>
+    <!-- What the article template enqueues: the core sheet and the block's
+         own, plus the map sheet the on-view loader adds for a `maplibre`
+         block. MapLibre's own CSS is not loaded; maplibre-stub.js draws the
+         few elements the module styles. -->
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-maplibre.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/article-dashboard.min.css">
+    <style>
+        main { max-width: 1180px; margin: 0 auto; }
+        .maplibregl-canvas-container { position: absolute; inset: 0; }
+        .maplibregl-control-container > div { position: absolute; display: flex; flex-direction: column; gap: 4px; padding: 8px; }
+        .maplibregl-ctrl-top-left { top: 0; left: 0; }
+        .maplibregl-ctrl-top-right { top: 0; right: 0; }
+        .maplibregl-ctrl-bottom-left { bottom: 0; left: 0; }
+        .maplibregl-ctrl-bottom-right { bottom: 0; right: 0; }
+        .maplibregl-popup { position: absolute; top: 0; left: 0; display: flex; pointer-events: none; }
+        .maplibregl-popup-anchor-top, .maplibregl-popup-anchor-top-left, .maplibregl-popup-anchor-top-right { flex-direction: column; }
+        .maplibregl-popup-anchor-bottom, .maplibregl-popup-anchor-bottom-left, .maplibregl-popup-anchor-bottom-right { flex-direction: column-reverse; }
+        .maplibregl-popup-tip { width: 0; height: 0; border: 10px solid transparent; align-self: center; }
+        .maplibregl-popup-content { position: relative; padding: 15px 10px; pointer-events: auto; }
+    </style>
+</head>
+<body>
+    <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
+    <script>
+        // The article's bundle is fetched from files/iwac-visualizations/;
+        // serve it from tests/browser/fixtures/data/ instead, and refuse
+        // anything else, so an unexpected request fails the console check.
+        // `?item=` picks the bundle (one with no file exercises the 404).
+        window.__fetched = [];
+        (function () {
+            const realFetch = window.fetch.bind(window);
+            window.fetch = function (url, init) {
+                const u = String(url);
+                window.__fetched.push(u);
+                const m = /\/files\/iwac-visualizations\/([^?]+)/.exec(u);
+                if (m) return realFetch('/tests/browser/fixtures/data/' + m[1], init);
+                return Promise.reject(new Error('unexpected fetch: ' + u));
+            };
+        })();
+
+        // The PHP side of the page. article.phtml translates through Omeka's
+        // gettext catalogue, which is language/fr.mo — compiled from fr.po,
+        // and `npm run lint:i18n-mo` keeps the two equal — so the French
+        // page reads its strings from fr.po rather than from copies here.
+        function syncText(url) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, false);
+            xhr.send();
+            return xhr.responseText;
+        }
+        function parsePo(text) {
+            const out = {};
+            let entry = null;
+            let field = null;
+            text.split(/\r?\n/).forEach(function (line) {
+                if (/^msgid /.test(line)) {
+                    if (entry) out[entry.id] = entry.str;
+                    entry = { id: '', str: '' };
+                    field = 'id';
+                    line = line.slice(6);
+                } else if (/^msgstr /.test(line)) {
+                    field = 'str';
+                    line = line.slice(7);
+                } else if (/^(msgctxt|msgid_plural|msgstr\[)/.test(line)) {
+                    field = null;
+                    return;
+                } else if (!/^"/.test(line)) {
+                    return;
+                }
+                if (entry && field) entry[field] += JSON.parse(line.trim());
+            });
+            if (entry) out[entry.id] = entry.str;
+            return out;
+        }
+        const catalogue = fixtureLang === 'fr' ? parsePo(syncText('/language/fr.po')) : {};
+        function translate(msgid) { return catalogue[msgid] || msgid; }
+        const modelInfo = {};
+        JSON.parse(syncText('/config/sentiment-models.json')).active.forEach(function (m) { modelInfo[m.id] = m; });
+    </script>
+    <main>
+        <!-- The theme's item page: the record's title, then its sections. -->
+        <h1>Tabaski : le Conseil supérieur des imams appelle au calme</h1>
+        <!-- What common/iwac-block-shell renders for article.phtml: the h2
+             section opener, the loading slot the orchestrator swaps for the
+             dashboard, and the server-rendered AI-sentiment panel in the
+             `append` slot (added by the script below, from the same loop). -->
+        <div class="iwac-vis-block iwac-vis-article"
+             id="fixture-block"
+             data-base-path=""
+             data-site-base="/s/iwac">
+            <h2 id="fixture-heading">Visualisations</h2>
+            <div class="iwac-vis-loading iwac-vis-article__loading" role="status" aria-live="polite">
+                <div class="iwac-vis-spinner" aria-hidden="true"></div>
+                <span id="fixture-loading">Loading dashboard&hellip;</span>
+            </div>
+        </div>
+    </main>
+    <script>
+        (function () {
+            const block = document.getElementById('fixture-block');
+            block.dataset.itemId = fixtureParams.get('item') || '4321';
+            document.getElementById('fixture-heading').textContent = translate('Visualisations');
+            document.getElementById('fixture-loading').textContent = translate('Loading dashboard') + '…';
+
+            // SentimentExtractor::fromItem() for this article: three of the
+            // five active models rated it; Gemma and Qwen have not yet.
+            const sentiment = {
+                gpt_5_6_luna: {
+                    polarite: 'Positive', polarite_numeric: 4,
+                    centralite: 'Very central', centralite_numeric: 5,
+                    subjectivite_label: 'Rather objective', subjectivite_score: 2,
+                    polarite_justification: 'The article presents the imams’ appeal favourably.',
+                    centralite_justification: 'Islamic leaders and the feast are the subject.',
+                    subjectivite_justification: '',
+                },
+                mistral_small_2603: {
+                    polarite: 'Neutral', polarite_numeric: 3,
+                    centralite: 'Very central', centralite_numeric: 5,
+                    subjectivite_label: 'Rather subjective', subjectivite_score: 4,
+                    polarite_justification: 'Factual reporting of a public statement.',
+                    centralite_justification: '', subjectivite_justification: '',
+                },
+                deepseek_v4_flash_0731: {
+                    polarite: 'Positive', polarite_numeric: 4,
+                    centralite: 'Very central', centralite_numeric: 5,
+                    subjectivite_label: 'Very objective', subjectivite_score: 1,
+                    polarite_justification: '', centralite_justification: '', subjectivite_justification: '',
+                },
+            };
+            const rated = Object.keys(modelInfo).filter(function (m) { return sentiment[m]; });
+
+            // The rest of this function is article.phtml's markup, built with
+            // the DOM instead of echo.
+            const axes = [
+                { title: 'Polarity', low: 'Very negative', high: 'Very positive', diverging: true,
+                  labelKey: 'polarite', scoreKey: 'polarite_numeric', justKey: 'polarite_justification' },
+                { title: 'Centrality', low: 'Not addressed', high: 'Very central', diverging: false,
+                  labelKey: 'centralite', scoreKey: 'centralite_numeric', justKey: 'centralite_justification' },
+                { title: 'Subjectivity', low: 'Very objective', high: 'Very subjective', diverging: false,
+                  labelKey: 'subjectivite_label', scoreKey: 'subjectivite_score', justKey: 'subjectivite_justification' },
+            ];
+            function el(tag, className, parent, text) {
+                const node = document.createElement(tag);
+                if (className) node.className = className;
+                if (text != null) node.textContent = text;
+                if (parent) parent.appendChild(node);
+                return node;
+            }
+            function verdict(scores) {
+                const scored = scores.filter(function (s) { return s >= 1; });
+                if (scored.length < 2) return null;
+                const spread = Math.max.apply(null, scored) - Math.min.apply(null, scored);
+                if (spread === 0) return ['agree', translate('Models agree')];
+                if (spread === 1) return ['near', translate('Models nearly agree')];
+                return ['differ', translate('Models disagree')];
+            }
+
+            const section = el('section', 'iwac-vis-panel iwac-vis-panel--wide iwac-vis-article__sentiment', block);
+            section.dataset.iwacNoPanelToolbar = '1';
+            el('h3', null, section, translate('AI sentiment'));
+            el('p', 'iwac-vis-panel-desc', section, translate('AI assessments produced independently by %s. Polarity describes the tone towards Islam and Muslims; centrality describes their prominence in the article; subjectivity describes factual or opinion-based language. These ratings need checking against the text. Subjectivity is particularly uncertain, and agreement between models does not establish accuracy.')
+                .replace('%s', rated.map(function (m) { return modelInfo[m].name; }).join(', ')));
+            const sent = el('div', 'iwac-vis-sent', section);
+
+            axes.forEach(function (axis) {
+                const lanes = [];
+                const justs = [];
+                rated.forEach(function (model) {
+                    const s = sentiment[model];
+                    if (!s[axis.labelKey]) return;
+                    lanes.push({ model: model, label: s[axis.labelKey], score: s[axis.scoreKey] || 0 });
+                    if (s[axis.justKey]) justs.push([model, s[axis.justKey]]);
+                });
+                if (!lanes.length) return;
+                const v = verdict(lanes.map(function (l) { return l.score; }));
+
+                const axisEl = el('section', 'iwac-vis-sent-axis', sent);
+                const head = el('header', 'iwac-vis-sent-axis__head', axisEl);
+                el('h4', 'iwac-vis-sent-axis__title', head, translate(axis.title));
+                if (v) el('p', 'iwac-vis-sent-axis__verdict iwac-vis-sent-axis__verdict--' + v[0], head, v[1]);
+                const anchors = el('div', 'iwac-vis-sent-axis__anchors', axisEl);
+                anchors.setAttribute('aria-hidden', 'true');
+                el('span', 'iwac-vis-sent-axis__anchor', anchors, translate(axis.low));
+                el('span', 'iwac-vis-sent-axis__anchor', anchors, translate(axis.high));
+
+                const list = el('ul', 'iwac-vis-sent-lanes', axisEl);
+                lanes.forEach(function (lane) {
+                    const info = modelInfo[lane.model];
+                    const reading = translate(lane.label);
+                    const scored = lane.score >= 1;
+                    const li = el('li', 'iwac-vis-sent-lane' + (scored ? '' : ' iwac-vis-sent-lane--unscored'), list);
+                    const who = el('span', 'iwac-vis-sent-lane__model', li);
+                    const logo = el('img', 'iwac-vis-sent-lane__logo', who);
+                    logo.src = '/asset/img/ai-logos/' + info.logo;
+                    logo.alt = '';
+                    logo.width = 18;
+                    logo.height = 18;
+                    logo.loading = 'lazy';
+                    el('span', 'iwac-vis-sent-lane__name', who, info.name);
+                    const track = el('span', 'iwac-vis-sent-track' + (axis.diverging ? ' iwac-vis-sent-track--diverging' : ''), li);
+                    track.setAttribute('aria-hidden', 'true');
+                    for (let stop = 1; stop <= 5; stop++) {
+                        const on = stop === lane.score;
+                        const dot = el('span', 'iwac-vis-sent-stop' + (on ? ' iwac-vis-sent-stop--on' : ''), track);
+                        if (on && scored) dot.title = info.name + ' — ' + reading + ' (' + lane.score + '/5)';
+                    }
+                    const row = el('span', 'iwac-vis-sent-lane__reading-row', li);
+                    row.style.setProperty('--iwac-vis-sent-lead', scored ? lane.score - 1 : 0);
+                    row.style.setProperty('--iwac-vis-sent-trail', scored ? 5 - lane.score : 1);
+                    el('span', 'iwac-vis-sent-lane__reading', row, reading);
+                });
+
+                if (justs.length) {
+                    const why = el('details', 'iwac-vis-sent-axis__why', axisEl);
+                    el('summary', null, why, translate('Show reasoning'));
+                    const body = el('div', 'iwac-vis-sent-why', why);
+                    justs.forEach(function (pair) {
+                        const item = el('div', 'iwac-vis-sent-why__item', body);
+                        el('span', 'iwac-vis-sent-why__model', item, modelInfo[pair[0]].name);
+                        el('p', null, item, pair[1]);
+                    });
+                }
+            });
+        })();
+    </script>
+    <!-- The on-view loader's parallel MapLibre import, stood in for. -->
+    <script src="/tests/browser/fixtures/maplibre-stub.js"></script>
+    <!-- The CDN libraries the template's needs ask for, from the test-only npm
+         copies at the versions view/common/iwac-assets.phtml pins (asserted in
+         article-dashboard.spec.js), in the partial's load order: d3's UMD
+         modules share one global, so d3-force comes last. -->
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="/node_modules/d3-dispatch/dist/d3-dispatch.min.js"></script>
+    <script src="/node_modules/d3-quadtree/dist/d3-quadtree.min.js"></script>
+    <script src="/node_modules/d3-timer/dist/d3-timer.min.js"></script>
+    <script src="/node_modules/d3-force/dist/d3-force.min.js"></script>
+    <!-- Then the bundles, in Site\AssetPlan::bundles() order for this
+         template's needs. shared-core and the block bundle carry
+         dictionaries, so production serves their locale variant. -->
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+    <script src="/asset/js/dist/shared-charts.min.js"></script>
+    <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script src="/asset/js/dist/shared-layout.min.js"></script>
+    <script src="/asset/js/dist/shared-map.min.js"></script>
+    <script src="/asset/js/dist/shared-d3.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/blocks/article-dashboard.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+</body>
+</html>

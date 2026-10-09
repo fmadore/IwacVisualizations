@@ -24,6 +24,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
 const WCAG_A_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 const FIXTURES = [
+    'article-dashboard',
     'associated-entities',
     'chart-layout',
     'dashboard',

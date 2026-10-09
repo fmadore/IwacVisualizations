@@ -13,6 +13,11 @@ const MIME = {
     '.html': 'text/html; charset=utf-8',
     '.js': 'text/javascript; charset=utf-8',
     '.json': 'application/json; charset=utf-8',
+    // The model logos and card thumbnails. A browser renders a PNG served as
+    // octet-stream by sniffing it, but never an SVG: without this every
+    // sentiment-lane logo was a broken image in the fixtures.
+    '.png': 'image/png',
+    '.svg': 'image/svg+xml',
 };
 
 const server = http.createServer((request, response) => {
