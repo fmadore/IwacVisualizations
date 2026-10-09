@@ -179,12 +179,13 @@
         };
     }
 
-    function buildOption(data, facet) {
+    function buildOption(data, facet, siteBase) {
         var pts = data.points;
         var topics = data.topics || [];
         var countries = data.countries || [];
 
         return C.landscape(pts, buildGroups(data, facet), {
+            siteBase: siteBase,
             // Ten thousand points: small and translucent. NOT progressive —
             // ECharts compares `progressiveThreshold` against ONE SERIES'
             // data length, and every facet here splits the points into
@@ -256,14 +257,14 @@
                 if (cfg.facets.indexOf(f) === -1) f = cfg.facets[0];
                 state.facet = f;
                 if (chart && !chart.isDisposed()) {
-                    chart.setOption(buildOption(data, state.facet), true);
+                    chart.setOption(buildOption(data, state.facet, siteBase), true);
                 }
             }
         });
         panel.panel.insertBefore(facetBar.root, panel.chart);
 
         var chart = ns.registerChart(panel.chart, function (el, instance) {
-            instance.setOption(buildOption(data, state.facet), true);
+            instance.setOption(buildOption(data, state.facet, siteBase), true);
         });
 
         P.navigateOnClick(chart, siteBase, function (params) {

@@ -48,6 +48,28 @@
         }
 
         renderTable(panelEl, sources, ctx || {});
+
+        // The toolbar's table and CSV read the same sources the paged table
+        // below shows; with no provider the map's two buttons stayed disabled.
+        if (P.setPanelRows && panelEl.panel) {
+            var siteBase = (ctx && ctx.siteBase) || '';
+            P.setPanelRows(panelEl.panel, function () {
+                return {
+                    columns: [
+                        { label: P.t('Source'), numeric: false },
+                        { label: P.t('Count'), numeric: true },
+                        { label: P.t('Countries'), numeric: false }
+                    ],
+                    rows: sources.map(function (source) {
+                        return [
+                            siteBase && source.o_id ? { text: source.name, href: P.itemUrl(siteBase, source.o_id) } : source.name,
+                            source.count || 0,
+                            (source.countries || []).join(', ')
+                        ];
+                    })
+                };
+            });
+        }
     }
 
     function renderTable(panelEl, sources, ctx) {

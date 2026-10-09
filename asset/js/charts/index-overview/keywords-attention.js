@@ -52,6 +52,21 @@
 
         var state = { yearIdx: 0 };
 
+        // The whole series the map animates, as a table: a row per year, a
+        // column per country. The toolbar offered "View as table" and CSV on
+        // this map and had nothing to give them.
+        if (P.setPanelRows && panelEl.panel) {
+            P.setPanelRows(panelEl.panel, function () {
+                return {
+                    columns: [{ label: P.t('Year'), numeric: false }].concat(
+                        IWAC_COUNTRIES.map(function (c) { return { label: c, numeric: true }; })),
+                    rows: years.map(function (y, i) {
+                        return [String(y)].concat(IWAC_COUNTRIES.map(function (c) { return byCountry[c][i] || 0; }));
+                    })
+                };
+            });
+        }
+
         function countsAt(idx) {
             var out = {};
             IWAC_COUNTRIES.forEach(function (c) { out[c] = byCountry[c][idx] || 0; });

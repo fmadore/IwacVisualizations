@@ -146,3 +146,19 @@ test('a panel with a fullscreen control sets no <body> tooltip', () => {
     }
     assert.deepEqual(offenders, [], 'route these through C._inPanelTooltip');
 });
+
+test('a landscape tabulates titles, buckets and details, never projection floats', () => {
+    // V-12: "View as table" on a semantic landscape listed UMAP x and y.
+    const C = loadBuilders();
+    const option = C.landscape(
+        { x: [0.1, 0.2], y: [0.3, 0.4], title: ['Alpha', 'Beta'], o_id: [11, 12] },
+        { groups: { Togo: [0], Niger: [1] }, order: ['Togo', 'Niger'] },
+        { siteBase: '/s/iwac', tooltipBits: (i) => [i ? '1990' : '1985'] }
+    );
+    const table = JSON.parse(JSON.stringify(option.iwacRows()));
+    assert.deepEqual(table.columns.map((c) => c.label), ['Title', 'Category', 'Details']);
+    assert.deepEqual(table.rows, [
+        [{ text: 'Alpha', href: '/s/iwac/item/11' }, 'Togo', '1985'],
+        [{ text: 'Beta', href: '/s/iwac/item/12' }, 'Niger', '1990'],
+    ]);
+});

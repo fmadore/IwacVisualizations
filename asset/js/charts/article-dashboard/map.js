@@ -73,6 +73,21 @@
         var host = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(host);
 
+        // The article's places as rows — the table and CSV the panel toolbar
+        // offers, and the pointer-free route to them. Without a provider the
+        // two buttons sat there disabled for good.
+        var panel = panelEl.chart.closest ? panelEl.chart.closest('.iwac-vis-panel') : null;
+        if (panel && P.setPanelRows) {
+            P.setPanelRows(panel, function () {
+                return {
+                    columns: [{ label: P.t('Place'), numeric: false }],
+                    rows: places.map(function (p) {
+                        return [siteBase && p.o_id ? { text: p.name, href: P.itemUrl(siteBase, p.o_id) } : p.name];
+                    })
+                };
+            });
+        }
+
         function popupFor(hit) {
             var place = places[Number(hit.properties.idx)];
             if (!place) return null;

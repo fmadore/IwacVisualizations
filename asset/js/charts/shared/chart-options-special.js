@@ -1395,7 +1395,32 @@
                 { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
             ],
             series: series,
-            animation: false
+            animation: false,
+            // What "View as table" and the CSV list (P.optionToRows reads
+            // this before the series): one row per point with the title, its
+            // bucket and the tooltip's own lines. Without it the table was
+            // the scatter's data — UMAP x and y floats, which carry no unit
+            // and no meaning, under a "Series" column.
+            iwacRows: function () {
+                var rows = [];
+                order.forEach(function (name) {
+                    (groups[name] || []).forEach(function (i) {
+                        var title = titles[i] || '';
+                        var href = opts.siteBase && pts.o_id && pts.o_id[i] != null
+                            ? P.itemUrl(opts.siteBase, pts.o_id[i]) : '';
+                        var bits = (opts.tooltipBits && opts.tooltipBits(i)) || [];
+                        rows.push([href ? { text: title, href: href } : title, name, bits.join(' · ')]);
+                    });
+                });
+                return rows.length ? {
+                    columns: [
+                        { label: t('Title'), numeric: false },
+                        { label: opts.groupLabel || t('Category'), numeric: false },
+                        { label: t('Details'), numeric: false }
+                    ],
+                    rows: rows
+                } : null;
+            }
         };
     };
 

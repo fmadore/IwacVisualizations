@@ -428,6 +428,7 @@
             'Next': 'Suivant',
             'Page': 'Page',
             'Title': 'Titre',
+            'Details': 'D\u00e9tails',
             'Source': 'Source',
             'Type': 'Type',
             'Loading': 'Chargement',

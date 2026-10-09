@@ -80,6 +80,38 @@
         // panel simply vanished on any page fast enough to render before the
         // import settled.)
         P.withMaplibre(mapHost, function () { attachMap(); });
+
+        // Both corpora's places as rows: the toolbar's table and CSV, which
+        // were offered and never had anything to show.
+        if (P.setPanelRows) {
+            var siteBase = (ctx && ctx.siteBase) || '';
+            P.setPanelRows(panel, function () {
+                var byName = {};
+                function add(pts, key) {
+                    pts.forEach(function (p) {
+                        var row = byName[p.name] || (byName[p.name] = { p: p, a: 0, b: 0 });
+                        row[key] += p.count || 0;
+                    });
+                }
+                add(aPts, 'a');
+                add(bPts, 'b');
+                var rows = Object.keys(byName).map(function (name) {
+                    var r = byName[name];
+                    return [siteBase && r.p.o_id ? { text: name, href: P.itemUrl(siteBase, r.p.o_id) } : name,
+                        r.p.country || '', r.a, r.b];
+                });
+                rows.sort(function (x, y) { return (y[2] + y[3]) - (x[2] + x[3]); });
+                return rows.length ? {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Country'), numeric: false },
+                        { label: dataA.name, numeric: true },
+                        { label: dataB.name, numeric: true }
+                    ],
+                    rows: rows
+                } : null;
+            });
+        }
         return panel;
 
         function attachMap() {

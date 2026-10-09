@@ -99,11 +99,12 @@
         return { groups: groups, order: order };
     }
 
-    function option(bundle, facet, frameLabel, frameColors) {
+    function option(bundle, facet, frameLabel, frameColors, siteBase) {
         var pts = bundle.points;
         var frames = bundle.frames || [];
 
         return C.landscape(pts, groupsFor(bundle, facet, frameLabel), {
+            siteBase: siteBase,
             symbolSize: 6,
             opacity: 0.7,
             tooltipBits: function (i) {
@@ -191,7 +192,7 @@
         function repaint(facet) {
             active = facet;
             var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
-            if (live) live.setOption(option(bundle, active, frameLabel, cfg.frameColors), true);
+            if (live) live.setOption(option(bundle, active, frameLabel, cfg.frameColors, cfg.siteBase), true);
         }
 
         if (facets.length > 1 && P.buildFacetButtons) {
@@ -222,7 +223,7 @@
             mount: function () {
                 var chart = ns.registerChart(panel.chart, function (el, instance) {
                     instance.setOption(
-                        option(bundle, active, frameLabel, cfg.frameColors), true);
+                        option(bundle, active, frameLabel, cfg.frameColors, cfg.siteBase), true);
                 });
                 P.navigateOnClick(chart, cfg.siteBase, function (params) {
                     var i = params.data && params.data[2];

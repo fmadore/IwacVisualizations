@@ -166,3 +166,15 @@ test('CSV: BOM, CRLF, quoting, raw numbers, link cells by their text, formulas n
         '',
     ]);
 });
+
+test('an option that names its own rows is read first, before its series', () => {
+    // V-12: the UMAP landscapes' table listed x, y projection floats.
+    const P = load();
+    const rows = { columns: [{ label: 'Title', numeric: false }], rows: [['A']] };
+    const table = P.optionToRows({
+        xAxis: { type: 'value' }, yAxis: { type: 'value' },
+        series: [{ name: 'S', type: 'scatter', data: [[0.12, 3.4, 0]] }],
+        iwacRows: () => rows,
+    });
+    assert.deepEqual(plain(table), rows);
+});

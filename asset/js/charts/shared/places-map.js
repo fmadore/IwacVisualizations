@@ -50,9 +50,41 @@
      *   live at once (P.deferMaplibre replays calls until the map exists)
      */
     P.createFilteredPlacesMap = function (mapEl, cfg) {
-        return P.deferMaplibre(mapEl, function () {
+        var ctl = P.deferMaplibre(mapEl, function () {
             return buildFilteredPlacesMap(mapEl, cfg);
         }, ['resize', 'update']);
+        // The places as rows, under the active filter: the panel toolbar's
+        // "View as table" and CSV. Both blocks' maps offered the two buttons
+        // and left them disabled forever, because nothing gave the panel any
+        // rows. Registered here, not in the deferred factory, so the table
+        // works while MapLibre is still arriving — or never does.
+        var panel = mapEl && mapEl.closest ? mapEl.closest('.iwac-vis-panel') : null;
+        if (!panel || !P.setPanelRows) return ctl;
+        P.setPanelRows(panel, function () {
+            var places = cfg.places || [];
+            var siteBase = cfg.siteBase || '';
+            var rows = [];
+            places.forEach(function (place) {
+                var count = cfg.count(place);
+                if (!(count > 0)) return;
+                rows.push([
+                    siteBase && place.o_id ? { text: place.name, href: P.itemUrl(siteBase, place.o_id) } : place.name,
+                    count
+                ]);
+            });
+            rows.sort(function (a, b) { return b[1] - a[1]; });
+            return rows.length ? {
+                columns: [{ label: P.t('Place'), numeric: false }, { label: P.t('Items'), numeric: true }],
+                rows: rows
+            } : null;
+        });
+        var update = ctl.update;
+        ctl.update = function () {
+            var out = update.apply(ctl, arguments);
+            if (P.panelRowsChanged) P.panelRowsChanged(panel);
+            return out;
+        };
+        return ctl;
     };
 
     function buildFilteredPlacesMap(mapEl, cfg) {

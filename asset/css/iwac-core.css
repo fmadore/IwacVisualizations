@@ -736,6 +736,13 @@ body {
     z-index: var(--iwac-vis-z-raised, 5);
     display: flex;
     flex-direction: row;
+    /*  Four buttons (download, table, CSV, embed) are wider than a narrow
+     *  panel's header, and an absolute row does not wrap by itself: on the
+     *  article page the map panel's CSV button ran past the panel edge. The
+     *  row now wraps inside the panel, right-aligned. */
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100% - var(--space-4, 1rem));
     gap: var(--space-1, 0.25rem);
 }
 

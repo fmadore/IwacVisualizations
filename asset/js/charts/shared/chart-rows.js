@@ -23,6 +23,9 @@
  *   - name/value series (pie, funnel, wordcloud, treemap, sunburst) → one
  *     row per item, nested trees flattened with a ` › ` path
  *   - two value axes (scatter) → one row per point: series, x, y
+ *   - an option carrying `iwacRows()` → whatever it returns, first: a
+ *     builder whose numbers mean nothing as a table (the UMAP landscapes)
+ *     hands over the rows that do
  *
  * Series types that carry no tabular reading (graph, custom, lines, map,
  * sankey, tree) return null and the toolbar offers nothing. A panel whose
@@ -272,6 +275,9 @@
     P.optionToRows = function (option) {
         var base = option && (option.baseOption || option);
         if (!base) return null;
+        // A builder that knows its rows better than its series do says so:
+        // the landscape scatters list titles, not projection coordinates.
+        if (typeof base.iwacRows === 'function') return base.iwacRows();
         var series = readableSeries(base);
         if (!series.length) return null;
 

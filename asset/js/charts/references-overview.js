@@ -139,6 +139,28 @@
         var mapEl = P.el('div', 'iwac-vis-map iwac-vis-map--references-provenance');
         mapHost.appendChild(mapEl);
 
+        // The provenance places as rows, for the panel toolbar's table and CSV.
+        if (panelEl && P.setPanelRows) {
+            P.setPanelRows(panelEl, function () {
+                var rows = locations.map(function (loc) {
+                    var span = loc.earliestYear
+                        ? (loc.latestYear && loc.latestYear !== loc.earliestYear
+                            ? loc.earliestYear + '\u2013' + loc.latestYear : String(loc.earliestYear))
+                        : '';
+                    return [siteBase && loc.o_id ? { text: loc.name, href: P.itemUrl(siteBase, loc.o_id) } : loc.name,
+                        loc.count || 0, span];
+                }).sort(function (a, b) { return b[1] - a[1]; });
+                return rows.length ? {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Count'), numeric: true },
+                        { label: P.t('Period covered_short'), numeric: false }
+                    ],
+                    rows: rows
+                } : null;
+            });
+        }
+
         var featureBundle = P.buildCountFeatures(locations, {
             countKey: 'count',
             minCount: 1,
@@ -408,11 +430,12 @@
         return { groups: groups, order: order };
     }
 
-    function landscapeOption(landscape, facet) {
+    function landscapeOption(landscape, facet, siteBase) {
         var pts = landscape.points;
         var types = landscape.types || [];
 
         return C.landscape(pts, landscapeGroups(landscape, facet), {
+            siteBase: siteBase,
             // Larger than the article landscape's 4px: a few hundred
             // points can afford to be legible.
             symbolSize: 7,
@@ -472,14 +495,14 @@
                     // `true` — each facet produces a different series
                     // set, so a merged update would leave the previous
                     // facet's groups on the canvas.
-                    if (live) live.setOption(landscapeOption(landscape, state.facet), true);
+                    if (live) live.setOption(landscapeOption(landscape, state.facet, siteBase), true);
                 }
             });
             panel.panel.insertBefore(facetBar.root, host);
         }
 
         var chart = ns.registerChart(host, function (el, instance) {
-            instance.setOption(landscapeOption(landscape, state.facet), true);
+            instance.setOption(landscapeOption(landscape, state.facet, siteBase), true);
         });
 
         P.navigateOnClick(chart, siteBase, function (params) {
