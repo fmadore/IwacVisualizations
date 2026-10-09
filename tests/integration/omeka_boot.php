@@ -207,7 +207,11 @@ $embedController = $controllers->get('IwacVisualizations\Controller\Site\Embed')
  * below would pass by reading nothing. A fresh Response per call keeps a
  * 404 from one case leaking into the next.
  */
-$dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedController) {
+// Resolved once, outside the closure: Omeka's shared controller-plugin manager
+// registers `translate` (core config, 4.0+); the per-dispatch manager below
+// does not.
+$translatePlugin = $services->get('ControllerPluginManager')->get('translate');
+$dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedController, $translatePlugin) {
     $request = new Request();
     $request->setQuery(new \Laminas\Stdlib\Parameters($queryParams));
     $response = new Response();
@@ -231,7 +235,7 @@ $dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedCo
     // manager registers — so that one plugin is borrowed from the shared
     // manager. It is stateless (a translator wrapper), unlike `Layout`.
     $embedPlugins = new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager());
-    $embedPlugins->setService('translate', $services->get('ControllerPluginManager')->get('translate'));
+    $embedPlugins->setService('translate', $translatePlugin);
     $embedController->setPluginManager($embedPlugins);
 
     $view = $embedController->dispatch($request, $response);
