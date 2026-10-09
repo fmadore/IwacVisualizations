@@ -8,4 +8,5 @@
 return [
     'primary'   => '#e64a19',
     'secondary' => '#394f68',
+    'fontsUrl'  => 'https://fonts.bunny.net/css?family=besley:500,600,800|public-sans:ital,wght@0,400..700;1,400|source-serif-4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&display=swap',
 ];

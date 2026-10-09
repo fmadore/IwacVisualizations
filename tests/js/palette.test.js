@@ -100,15 +100,6 @@ function countryMap() {
     return Object.values(byCountry);
 }
 
-/**
- * Contrast shortfalls the THEME has already fixed upstream and this repo has
- * not synced yet: IWAC-theme's "Lift every series slot to 3:1 on all four
- * surfaces" raises dark --series-7 and light --series-14. Self-retiring — an
- * entry whose colour now clears 3:1 fails the test until it is deleted, so
- * the list goes when the contract sync lands.
- */
-const PENDING_THEME_LIFT = new Set(['Burkina Faso:dark', 'Sénégal:light']);
-
 test('no two countries are colours a reader cannot tell apart, in either theme', () => {
     const countries = countryMap();
     assert.equal(countries.length, 7);
@@ -127,18 +118,16 @@ test('no two countries are colours a reader cannot tell apart, in either theme',
 });
 
 test('every country colour reads at 3:1 on the panel, in both themes', () => {
+    // No exceptions since IWAC-theme lifted every series slot to 3:1 on all
+    // four surfaces (contract synced in c506b1c2).
     const failures = [];
-    const retired = [];
     for (const { name, slot } of countryMap()) {
         for (const theme of ['light', 'dark']) {
             const ratio = contrast(TOKENS.series[theme][slot], PANEL[theme]);
-            const key = `${name}:${theme}`;
-            if (ratio < 3 && !PENDING_THEME_LIFT.has(key)) failures.push(`${key} ${ratio.toFixed(2)}:1`);
-            if (ratio >= 3 && PENDING_THEME_LIFT.has(key)) retired.push(key);
+            if (ratio < 3) failures.push(`${name}:${theme} ${ratio.toFixed(2)}:1`);
         }
     }
     assert.deepEqual(failures, []);
-    assert.deepEqual(retired, [], 'the synced contract fixed these — delete them from PENDING_THEME_LIFT');
 });
 
 test('countries stay off the admin-tunable lead slots', () => {
