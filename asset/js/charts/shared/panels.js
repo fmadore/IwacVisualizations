@@ -654,6 +654,27 @@
     };
 
     /**
+     * A panel's title element, at whatever level `buildPanel` gave it.
+     *
+     * The embed picker and the PNG export used to look for `:scope > h4`,
+     * then for any `h4` in the panel. Once a title is promoted to <h2> or
+     * <h3> the first finds nothing and the second finds whatever <h4> the
+     * panel's content holds, or none: the panel was offered for embedding
+     * untitled, and exported without its title. The direct-child heading at
+     * any level `buildPanel` / `panelHeadingLevel` produce comes first; the
+     * `h4` fallback keeps the hand-built panels that wrap their title in a
+     * header row (Scary Terms, Laïcité).
+     *
+     * @param {Element} panelEl a `.iwac-vis-panel`
+     * @returns {Element|null}
+     */
+    P.panelTitle = function (panelEl) {
+        if (!panelEl || !panelEl.querySelector) return null;
+        return panelEl.querySelector(':scope > h2, :scope > h3, :scope > h4, :scope > h5')
+            || panelEl.querySelector('h4');
+    };
+
+    /**
      * The heading level a panel should take inside `el`'s block: one step
      * below whatever the block's own heading turned out to be.
      *

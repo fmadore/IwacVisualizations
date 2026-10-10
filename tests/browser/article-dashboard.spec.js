@@ -183,6 +183,12 @@ test('the map tabulates its places and opens a pin’s record', async ({ page })
     await expect(rows.nth(1).getByRole('link')).toHaveAttribute('href', '/s/iwac/item/502');
     await panel.getByRole('button', { name: 'Hide table' }).click();
 
+    // The CSV is named for the panel's title, an h3 on the item page. The
+    // export looked for an h4, so every promoted panel's file was "iwac-chart".
+    const download = page.waitForEvent('download');
+    await panel.getByRole('button', { name: 'Download CSV' }).click();
+    expect((await download).suggestedFilename()).toBe('places-associated-with-this-article.csv');
+
     // The view was fitted to the two pins; click Ouagadougou's.
     const pin = await page.evaluate(() => window.__fixtureMaps[0].project([-1.5197, 12.3714]));
     const box = await panel.locator('canvas.maplibregl-canvas').boundingBox();

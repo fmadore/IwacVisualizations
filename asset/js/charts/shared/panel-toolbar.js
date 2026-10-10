@@ -167,11 +167,10 @@
         });
     }
 
-    /** Read the panel's `<h4>` title, trimmed. Empty string if absent. */
+    /** Read the panel's title, at any heading level, trimmed. Empty string if absent. */
     function readPanelTitle(panelEl) {
-        if (!panelEl) return '';
-        var h4 = panelEl.querySelector(':scope > h4') || panelEl.querySelector('h4');
-        return h4 ? (h4.textContent || '').trim() : '';
+        var heading = P.panelTitle(panelEl);
+        return heading ? (heading.textContent || '').trim() : '';
     }
 
     /** Read the panel's `.iwac-vis-panel-desc` paragraph, trimmed. */
@@ -398,7 +397,7 @@
     }
     P.triggerDownload = triggerDownload;
 
-    /** Filesystem-safe filename stem from the panel's h4 title. */
+    /** Filesystem-safe filename stem from the panel's title. */
     function filenameFromPanel(panelEl) {
         var title = readPanelTitle(panelEl);
         if (!title) title = 'iwac-chart';

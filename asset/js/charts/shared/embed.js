@@ -160,8 +160,9 @@
             if (used[slug]) slug = slug + '-' + used[slug];
             used[slug] = (used[slug] || 0) + 1;
             p.setAttribute('data-iwac-panel', slug);
-            var h4 = p.querySelector(':scope > h4') || p.querySelector('h4');
-            out.push({ el: p, slug: slug, title: h4 ? (h4.textContent || '').trim() : '' });
+            // At any level: a panel promoted to <h2>/<h3> was listed untitled.
+            var heading = ns.panels && ns.panels.panelTitle ? ns.panels.panelTitle(p) : null;
+            out.push({ el: p, slug: slug, title: heading ? (heading.textContent || '').trim() : '' });
         }
         return out;
     };
