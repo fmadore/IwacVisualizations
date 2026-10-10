@@ -16,6 +16,7 @@
     ns.addTranslations('en', {
         'No overlap': 'No shared tags in these lists',
         'Spatial coverage overlap': 'Places shared by the selections',
+        'compare_map_title': 'Places mentioned in each selection: {a} and {b}',
         'Subject overlap': 'Subjects shared by the selections',
         'compare.overlap_desc': 'Tags found in both selections or in only one of the supplied tag lists. Each column shows its most frequent entries; shared counts are listed in A / B order. The source lists are limited, so absence from a list does not establish absence from the full selection.',
         'compare.newspapers_desc': 'Number of collected items per newspaper or periodical in each selection. This describes IWAC holdings, not the publication’s total production.',
@@ -49,6 +50,7 @@
         'Choose two corpora to compare': 'Choisissez deux corpus \u00e0 comparer',
         'Subject overlap': 'Sujets communs aux sélections',
         'Spatial coverage overlap': 'Lieux communs aux sélections',
+        'compare_map_title': 'Lieux mentionnés dans chaque sélection : {a} et {b}',
         'Timeline (items per year)':     'Chronologie (documents par année)',
         'Top subjects (combined top 15)': 'Principaux sujets (top 15 combin\u00e9)',
         'Newspapers within each corpus': 'Journaux dans chaque corpus',

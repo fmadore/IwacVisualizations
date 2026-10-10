@@ -46,6 +46,9 @@
      *   popupLines(place, count) — the lines under the popup's title
      *   siteBase — for the popup's title link (P.itemUrl)
      *   center, zoom — default [2.5, 12] / 4, the six countries
+     *   title — what the map shows, translated: the map host's accessible
+     *     name (P.createIwacMap's `title`). Required in practice;
+     *     tests/js/maplibre.test.js fails on a call site without one
      * @returns {{resize: function(), update: function()}} a controller,
      *   live at once (P.deferMaplibre replays calls until the map exists)
      */
@@ -127,6 +130,7 @@
         }
 
         var map = P.createIwacMap(mapEl, {
+            title: cfg.title,
             center: cfg.center || P.WEST_AFRICA_VIEW.center,
             zoom: cfg.zoom != null ? cfg.zoom : P.WEST_AFRICA_VIEW.zoom,
             onStyleReady: function (m) {

@@ -174,8 +174,10 @@
         panel.appendChild(chartHeader);
         var chartEl = P.el('div', 'iwac-vis-chart iwac-vis-scary-chart');
         panel.appendChild(chartEl);
+        // Named by createIwacMap (the `title` scary-terms/map.js passes), which
+        // gives the host the role its aria-label needs; set here, on a bare
+        // <div>, the label was a prohibited attribute and the map skipped it.
         var mapEl = P.el('div', 'iwac-vis-map iwac-vis-scary-map');
-        mapEl.setAttribute('aria-label', P.t('scary.map_chart_title'));
         panel.appendChild(mapEl);
         var detailsHost = P.el('div', 'iwac-vis-scary-details-host');
         panel.appendChild(detailsHost);

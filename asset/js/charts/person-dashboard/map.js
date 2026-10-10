@@ -85,6 +85,9 @@
         }
 
         var createdMap = P.createIwacMap(mapContainer, {
+            // The host's accessible name. One panel module serves both
+            // dashboards; the bundle's header says whose places these are.
+            title: P.t(data && data.entity ? 'entity_map_title' : 'person_map_title'),
             center: P.WEST_AFRICA_VIEW.center,
             zoom: P.WEST_AFRICA_VIEW.zoom,
             onStyleReady: function (m) {

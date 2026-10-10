@@ -98,8 +98,10 @@
         controls.appendChild(yearLabel);
         panelEl.chart.appendChild(controls);
 
+        // Named by createIwacMap's `title` below, with the role an aria-label
+        // needs. Set here on a bare <div>, the label was a prohibited
+        // attribute, and createIwacMap leaves a host that names itself alone.
         var mapEl = P.el('div', 'iwac-vis-map iwac-vis-keywords-attention-map');
-        mapEl.setAttribute('aria-label', P.t('Geographic attention over time'));
         panelEl.chart.appendChild(mapEl);
 
         // --- Map + always-on choropleth ----------------------------------
@@ -112,6 +114,7 @@
         var choropleth = null;
         P.withMaplibre(mapEl, function () {
             var map = P.createIwacMap(mapEl, {
+                title: P.t('geo_attention_map_title'),
                 center: P.WEST_AFRICA_VIEW.center,
                 zoom: P.WEST_AFRICA_VIEW.zoom,
                 onStyleReady: function () { /* choropleth re-adds itself */ }

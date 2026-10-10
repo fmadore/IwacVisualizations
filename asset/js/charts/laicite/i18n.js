@@ -363,6 +363,7 @@
 
         'laicite.map_title': 'Where laïcité is placed',
         'laicite.map_desc': 'Places tagged on the dossier’s items, sized by how many items name them. Filter by frame or by country; the two filters are alternatives and cannot be combined.',
+        'laicite.map_name': 'Places tagged on the dossier’s items',
         'laicite.map_method': '{places} geocoded places, each tagged on at least {min} items.',
         'laicite.map_items': '{count} items',
         'laicite.map_items_one': '{count} item',
@@ -727,6 +728,7 @@
 
         'laicite.map_title': 'O\u00f9 la la\u00efcit\u00e9 est situ\u00e9e',
         'laicite.map_desc': 'Les lieux index\u00e9s sur les documents du dossier, dimensionn\u00e9s selon le nombre de documents qui les nomment. Filtrez par cadre ou par pays\u202f; les deux filtres sont des alternatives et ne se combinent pas.',
+        'laicite.map_name': 'Lieux indexés sur les documents du dossier',
         'laicite.map_method': '{places} lieux g\u00e9ocod\u00e9s, chacun index\u00e9 sur au moins {min} documents.',
         'laicite.map_items': '{count} documents',
         'laicite.map_items_one': '{count} document',

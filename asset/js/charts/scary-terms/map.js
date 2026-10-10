@@ -41,6 +41,7 @@
         var getFilter = opts.getFilter;
         var termColors = opts.termColors || {};
         return P.createFilteredPlacesMap(mapEl, {
+            title: P.t('scary.map_chart_title'),
             places: (placesData && placesData.places) || [],
             sourceId: SOURCE_ID,
             layerId: LAYER_ID,

@@ -228,6 +228,9 @@
             'desc_entity_countries_covered':    'Distribution of mentions by country of publication of the source.',
             'desc_entity_associated_entities':  'People, organisations, places, subjects and events associated with this entry in the catalogue. The TF-IDF ranking gives more weight to associations specific to this entry and less to entries common across the collection. Switch between the network, ranked list and timeline. Connections reflect shared records and require interpretation through the sources.',
             'desc_entity_associated_locations': 'Places recorded on items associated with this entry. Locations come from catalogue place fields and matching place tags; a shared record does not establish an event or activity at that location.',
+            // The associated-locations map's accessible name (person-dashboard/map.js).
+            'person_map_title': 'Places recorded on items associated with this person',
+            'entity_map_title': 'Places recorded on items associated with this entry',
 
             // Network panel toolbar + canvas force graph.
             // English keys are their own value, so only the parameterised
@@ -497,6 +500,8 @@
             'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
             'desc_entity_associated_entities':  'Personnes, organisations, lieux, sujets et événements associés à cette entrée dans le catalogue. Le classement TF-IDF donne plus de poids aux associations propres à cette entrée et moins aux entrées fréquentes dans l’ensemble de la collection. Passez du réseau à la liste classée ou à la chronologie. Les liens reflètent des notices communes et demandent une interprétation à partir des sources.',
             'desc_entity_associated_locations': 'Lieux enregistrés sur les documents associés à cette entrée. Ils proviennent des champs de lieux du catalogue et des mots-clés correspondants\u202f; une notice commune n’établit pas un événement ou une activité dans ce lieu.',
+            'person_map_title': 'Lieux enregistrés sur les documents associés à cette personne',
+            'entity_map_title': 'Lieux enregistrés sur les documents associés à cette entrée',
 
             // New shared panels (person + entity)
             'Year × month heatmap': 'Documents enregistrés par année et mois',

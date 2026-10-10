@@ -345,3 +345,76 @@ test('a named map host gets a role, so its aria-label is not a prohibited attrib
     P.createIwacMap(named, { title: 'Places mentioned' });
     assert.deepEqual({ ...named.attrs }, { 'aria-label': 'Own name', role: 'region' });
 });
+
+test('every map call site names its map with a translated title', () => {
+    // A map with no `title` leaves its host without an accessible name: a
+    // screen reader reaches an interactive canvas it can only call
+    // "application". Four maps shipped that way after createIwacMap learned
+    // to name the host (the person/entity, Compare Newspapers, filtered
+    // places and keyword-attention maps), and two of them set a role-less
+    // aria-label by hand instead, which ARIA 1.2 prohibits. So every call —
+    // and every call of createFilteredPlacesMap, which forwards its own
+    // `cfg.title` — must pass a `title` that is translated where it is
+    // written: a t() call, a choice between t() calls, or a forwarded
+    // `*.title`. A config built in a variable is followed to its literal.
+    const acorn = require('acorn');
+    const FACTORIES = new Set(['createIwacMap', 'createFilteredPlacesMap']);
+    const files = [];
+    (function walkDir(dir) {
+        for (const name of readdirSync(dir)) {
+            const path = join(dir, name);
+            if (statSync(path).isDirectory()) { if (name !== 'dist') walkDir(path); } else if (path.endsWith('.js') && !path.endsWith('.min.js')) files.push(path);
+        }
+    })(join(ROOT, 'asset', 'js'));
+
+    function visit(node, fn) {
+        if (!node || typeof node.type !== 'string') return;
+        fn(node);
+        for (const key of Object.keys(node)) {
+            const child = node[key];
+            if (Array.isArray(child)) child.forEach((c) => visit(c, fn));
+            else if (child && typeof child.type === 'string') visit(child, fn);
+        }
+    }
+    const isT = (n) => n.type === 'CallExpression' && (
+        (n.callee.type === 'Identifier' && n.callee.name === 't')
+        || (n.callee.type === 'MemberExpression' && !n.callee.computed && n.callee.property.name === 't'));
+    const translated = (n) => isT(n)
+        || (n.type === 'ConditionalExpression' && translated(n.consequent) && translated(n.alternate))
+        || (n.type === 'MemberExpression' && !n.computed && n.property.name === 'title');
+
+    const seen = new Set();
+    const sites = [];
+    const untitled = [];
+    for (const path of files) {
+        const src = readFileSync(path, 'utf8');
+        if (!/create(IwacMap|FilteredPlacesMap)\b/.test(src)) continue;
+        const label = relative(ROOT, path).split(sep).join('/');
+        const ast = acorn.parse(src, { ecmaVersion: 'latest', locations: true });
+        const literals = {};
+        visit(ast, (n) => {
+            if (n.type === 'VariableDeclarator' && n.id.type === 'Identifier' && n.init && n.init.type === 'ObjectExpression') {
+                literals[n.id.name] = n.init;
+            }
+        });
+        visit(ast, (n) => {
+            if (n.type !== 'CallExpression') return;
+            const name = n.callee.type === 'MemberExpression' && !n.callee.computed ? n.callee.property.name
+                : n.callee.type === 'Identifier' ? n.callee.name : null;
+            if (!FACTORIES.has(name)) return;
+            seen.add(name);
+            const where = `${label}:${n.loc.start.line} ${name}`;
+            sites.push(where);
+            let config = n.arguments[1];
+            if (config && config.type === 'Identifier') config = literals[config.name];
+            const title = config && config.type === 'ObjectExpression' && config.properties.find((p) =>
+                p.type === 'Property' && !p.computed && (p.key.name || p.key.value) === 'title');
+            if (!title || !translated(title.value)) untitled.push(where);
+        });
+    }
+
+    assert.deepEqual(untitled, []);
+    // Not a vacuous pass: the scan found both factories and every map.
+    assert.deepEqual([...seen].sort(), ['createFilteredPlacesMap', 'createIwacMap']);
+    assert.ok(sites.length >= 13, `only ${sites.length} map call sites found:\n${sites.join('\n')}`);
+});

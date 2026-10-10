@@ -289,6 +289,9 @@
             }
 
             var map = P.createIwacMap(mapHost, {
+                // The host's accessible name, naming both corpora: the
+                // legend that tells the two colours apart is not in it.
+                title: P.t('compare_map_title', { a: dataA.name, b: dataB.name }),
                 // Default view centered on West Africa — there's no point in
                 // fitBounds when the points can span Mecca, Paris, and New
                 // York; forcing the view to that bounding box zooms out too

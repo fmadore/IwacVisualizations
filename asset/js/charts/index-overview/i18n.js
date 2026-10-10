@@ -44,6 +44,7 @@
         'top_n_over_time':           'Top {count} keywords over time',
         'desc_subjects_bump':        'Rank of the leading subjects in each decade. A line that climbs is a subject gaining ground on those below it. A line breaks where the subject drops out of the decade’s top eight; hover over a decade for ranks and counts.',
         'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage, whatever year you are viewing.',
+        'geo_attention_map_title':   'Articles catalogued as being about each country, by year',
         // Was 'Spatial Coverage': one capital away from the unrelated
         // 'Spatial coverage' (places on an item's dashboard).
         'index.place_tags':          'Place tags',
@@ -105,6 +106,7 @@
         'desc_subjects_bump':        'Rang des principaux sujets dans chaque d\u00e9cennie. Une ligne qui monte est un sujet qui gagne du terrain sur ceux qui le suivent. Une ligne s\u2019interrompt quand le sujet sort des huit premiers de la d\u00e9cennie\u202f; survolez une d\u00e9cennie pour les rangs et les comptes.',
         'Geographic attention over time': 'Attention g\u00e9ographique au fil du temps',
         'desc_geo_attention':        'L\u2019attention accord\u00e9e par la presse \u00e0 chaque pays au fil du temps, mesur\u00e9e par la fr\u00e9quence \u00e0 laquelle les articles ont \u00e9t\u00e9 catalogu\u00e9s comme le concernant. Faites glisser le curseur des ann\u00e9es ou lancez la lecture. L\u2019\u00e9chelle de couleurs est identique chaque ann\u00e9e, si bien qu\u2019un pays plus sombre signifie toujours une couverture plus forte, quelle que soit l\u2019ann\u00e9e affich\u00e9e.',
+        'geo_attention_map_title':   'Articles catalogués comme concernant chaque pays, par année',
         'index.place_tags':          'Mots-clés de lieux',
         'Frequency':                 'Fr\u00e9quence',
         'Play':                      'Lecture',

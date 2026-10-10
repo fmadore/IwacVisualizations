@@ -124,6 +124,7 @@
         // `cfg.state`, read at call time: `update(state)` may hand in a new
         // object, and a copy captured here would keep filtering by the old.
         return P.createFilteredPlacesMap(mapEl, {
+            title: P.t('laicite.map_name'),
             places: bundle.places || [],
             sourceId: SOURCE_ID,
             layerId: LAYER_ID,
