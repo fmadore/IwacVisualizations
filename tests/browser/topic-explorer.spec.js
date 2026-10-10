@@ -10,6 +10,7 @@
  */
 
 const { test, expect } = require('@playwright/test');
+const AxeBuilder = require('@axe-core/playwright').default;
 const DATA = require('./fixtures/data/topic-explorer.json');
 
 const FIXTURE = '/tests/browser/fixtures/topic-explorer.html';
@@ -72,6 +73,60 @@ test('one topic reads in the singular, in both languages', async ({ page }) => {
     await ready(page, '?lang=fr');
     await expect(treemapDesc(page)).toHaveText(/^Le rectangle correspond au seul thème identifié par un modèle statistique/);
     await expect(treemapDesc(page)).toContainText('Cliquez sur le rectangle pour explorer ce thème.');
+});
+
+/** The page's headings in document order, as level + text. */
+function outline(page) {
+    return page.locator('main').evaluate((main) =>
+        Array.from(main.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+            .filter((h) => h.getClientRects().length)
+            .map((h) => ({ level: Number(h.tagName[1]), text: h.textContent.trim() })));
+}
+
+function expectNoSkippedLevel(headings) {
+    expect(headings[0]).toEqual({ level: 1, text: 'Topic Explorer' });
+    for (let i = 1; i < headings.length; i++) {
+        expect(headings[i].level - headings[i - 1].level, `"${headings[i].text}" skips a level`).toBeLessThanOrEqual(1);
+    }
+}
+
+test('the outline runs h1, the overview’s sections at h2, an open topic’s panels at h3', async ({ page }) => {
+    // The block has no heading of its own, so what it shows are the page's
+    // sections. Its panels were h4 and its "All topics" list an h3 under the
+    // page's h1 (axe: heading-order); an open topic was an h3 over h4 panels.
+    await ready(page);
+    let headings = await outline(page);
+    expectNoSkippedLevel(headings);
+    expect(headings.slice(1)).toEqual([
+        { level: 2, text: 'Topic distribution' },
+        { level: 2, text: 'Topics over time' },
+        { level: 2, text: 'All topics' },
+    ]);
+
+    const problems = watch(page);
+    await page.locator('.iwac-vis-topic-card').first().click();
+    await expect(page.locator('.iwac-vis-topic-explorer__detail.is-active h2')).toHaveText('Topic 0');
+    await expect(page.locator('.iwac-vis-topic-explorer__detail .iwac-vis-panel')).toHaveCount(4);
+    headings = await outline(page);
+    expectNoSkippedLevel(headings);
+    expect(headings.slice(1, 6)).toEqual([
+        { level: 2, text: 'Topic 0' },
+        { level: 3, text: 'Publication calendar' },
+        { level: 3, text: 'Top countries' },
+        { level: 3, text: 'Top newspapers' },
+        { level: 3, text: 'Most representative articles' },
+    ]);
+    // accessibility.spec.js scans the overview; this is the open topic.
+    const axe = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
+    expect(axe.violations.map((v) => v.nodes.map((n) => n.target.join(' ')).join(', '))).toEqual([]);
+    expect(axe.passes.map((p) => p.id)).toContain('heading-order');
+
+    // The exports and the embed picker read a panel's title at h3 too.
+    const download = page.waitForEvent('download');
+    await page.locator('.iwac-vis-topic-explorer__detail .iwac-vis-panel')
+        .filter({ hasText: 'Top countries' }).getByRole('button', { name: 'Download CSV' }).click();
+    expect((await download).suggestedFilename()).toBe('top-countries.csv');
+    expect(problems).toEqual([]);
 });
 
 test('the payload carries the keys validate_data.py requires of it', () => {

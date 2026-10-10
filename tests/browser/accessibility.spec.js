@@ -42,9 +42,10 @@ const FIXTURES = [
  * Fixtures whose heading outline is asserted, at any impact. axe files
  * `heading-order` as a best practice (moderate, outside the WCAG tags above),
  * so the scan below never runs it; these name it. The Sentiment Atlas's
- * sections were h3 straight under the page's h1, with its panels at h4.
+ * sections were h3 straight under the page's h1, with its panels at h4; the
+ * Topic Explorer's panels were h4 there, its "All topics" list an h3.
  */
-const OUTLINE_FIXTURES = ['sentiment-atlas'];
+const OUTLINE_FIXTURES = ['sentiment-atlas', 'topic-explorer'];
 
 for (const fixture of OUTLINE_FIXTURES) {
     for (const theme of ['light', 'dark']) {

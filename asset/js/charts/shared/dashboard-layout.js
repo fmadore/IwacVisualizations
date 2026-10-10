@@ -276,7 +276,11 @@
      *                                 own slice.
      * @param {Object}      [ctx]      Per-orchestrator context (siteBase,
      *                                 itemId, facet, etc.) passed straight
-     *                                 through to renderers.
+     *                                 through to renderers. `ctx.panelHeading`
+     *                                 names the panels' heading level outright
+     *                                 when they sit under a heading inside the
+     *                                 block rather than under the block's own
+     *                                 (the Topic Explorer's topic title).
      * @returns {{grid: HTMLElement, rendered: Array<{slot: Object, panel: Object}>}|null}
      */
     DL.render = function (rootEl, layoutKey, data, ctx) {
@@ -296,7 +300,7 @@
         // One step below the block's own heading, whatever level the surface
         // gave it. Appended first so the wrapper is in the document and the
         // lookup can reach the block heading.
-        var panelHeading = P.panelHeadingLevel(rootEl);
+        var panelHeading = (ctx && ctx.panelHeading) || P.panelHeadingLevel(rootEl);
 
         var rendered = [];
         for (var i = 0; i < slots.length; i++) {

@@ -234,6 +234,17 @@
     /*  Overview view — treemap + topic cards                             */
     /* ----------------------------------------------------------------- */
 
+    /*
+     * The outline. The block sits straight under the page's <h1> with no
+     * heading of its own, so what it shows are the page's sections, at <h2>:
+     * the overview's two panels and its "All topics" list, or the open
+     * topic's title, with that topic's panels under it at <h3>. They were
+     * <h4> panels and <h3> headings under the <h1> (axe: heading-order) —
+     * the Collection Overview and Sentiment Atlas fix again. The look does
+     * not follow the level (iwac-core.css, blocks/topic-explorer.css).
+     */
+    var SECTION = { heading: 'h2' };
+
     function renderOverview(host, data, onTopicSelected) {
         // Treemap of all topics — sized by article count, click → drill
         var grid = P.buildChartsGrid();
@@ -246,7 +257,8 @@
         var treemapPanel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide iwac-vis-topic-explorer__treemap',
             P.t('Topic distribution'),
-            topicCount ? P.t('desc_topic_treemap', { count: topicCount }) : null
+            topicCount ? P.t('desc_topic_treemap', { count: topicCount }) : null,
+            SECTION
         );
         grid.appendChild(treemapPanel.panel);
 
@@ -285,7 +297,7 @@
         renderTopicRiver(grid, data, onTopicSelected);
 
         // Topic cards grid — every topic, click drills in
-        var listLabel = P.el('h3', 'iwac-vis-section-heading', P.t('All topics'));
+        var listLabel = P.el('h2', 'iwac-vis-section-heading', P.t('All topics'));
         host.appendChild(listLabel);
 
         var topicGrid = P.el('div', 'iwac-vis-topic-explorer__topics');
@@ -433,7 +445,8 @@
         var panel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('topics_over_time_title'),
-            P.t('topics_over_time_desc')
+            P.t('topics_over_time_desc'),
+            SECTION
         );
         grid.appendChild(panel.panel);
 
@@ -644,7 +657,9 @@
             top_articles:           topArticles
         }, {
             siteBase: ctx.siteBase,
-            topic:    topic
+            topic:    topic,
+            // Under the topic's <h2> title, not the block's (it has none).
+            panelHeading: 'h3'
         });
 
         // Bring the detail header into view smoothly so the user
@@ -663,7 +678,7 @@
 
         var topRow = P.el('div', 'iwac-vis-topic-detail__row');
         topRow.appendChild(P.el(
-            'h3',
+            'h2',
             'iwac-vis-topic-detail__title',
             P.t('Topic') + ' ' + topic.id
         ));
