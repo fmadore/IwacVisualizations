@@ -14,7 +14,9 @@
     if (!ns || !ns.addTranslations) { return; }
 
     ns.addTranslations('en', {
-        'desc_topic_treemap':           'Each rectangle is one of the 30 themes identified by a statistical topic model (LDA), which groups words commonly used together. Its area shows the number of articles assigned that theme as their strongest match. These groupings support exploration and need interpretation through the texts. Click a rectangle to explore a theme.',
+        // {count}: the bundle's topics, which the copy used to fix at 30.
+        'desc_topic_treemap':           'Each rectangle is one of the {count} themes identified by a statistical topic model (LDA), which groups words commonly used together. Its area shows the number of articles assigned that theme as their strongest match. These groupings support exploration and need interpretation through the texts. Click a rectangle to explore a theme.',
+        'desc_topic_treemap_one':       'The rectangle is the one theme identified by a statistical topic model (LDA), which groups words commonly used together. Its area shows the number of articles assigned that theme as their strongest match. These groupings support exploration and need interpretation through the texts. Click the rectangle to explore the theme.',
         'cal_panel_title':              'Publication calendar',
         'desc_topic_calendar':          'When articles classified into this topic were published. Only articles with a full date, down to the day, appear here; those dated to a year or a month alone are left out rather than placed on 1 January.',
         'topic_copy_link':              'Copy link to this topic',
@@ -41,7 +43,8 @@
         'topic_copy_link':              'Copier le lien vers ce th\u00e8me',
         'topic_link_copied':            'Lien copi\u00e9',
         'Most representative articles': 'Articles les plus repr\u00e9sentatifs',
-        'desc_topic_treemap':           'Chaque rectangle correspond à l’un des 30 thèmes identifiés par un modèle statistique (LDA), qui regroupe les mots fréquemment employés ensemble. Sa surface indique le nombre d’articles auxquels ce thème est attribué comme correspondance principale. Ces regroupements facilitent l’exploration et demandent une interprétation à partir des textes. Cliquez sur un rectangle pour explorer un thème.',
+        'desc_topic_treemap':           'Chaque rectangle correspond à l’un des {count} thèmes identifiés par un modèle statistique (LDA), qui regroupe les mots fréquemment employés ensemble. Sa surface indique le nombre d’articles auxquels ce thème est attribué comme correspondance principale. Ces regroupements facilitent l’exploration et demandent une interprétation à partir des textes. Cliquez sur un rectangle pour explorer un thème.',
+        'desc_topic_treemap_one':       'Le rectangle correspond au seul thème identifié par un modèle statistique (LDA), qui regroupe les mots fréquemment employés ensemble. Sa surface indique le nombre d’articles auxquels ce thème est attribué comme correspondance principale. Ces regroupements facilitent l’exploration et demandent une interprétation à partir des textes. Cliquez sur le rectangle pour explorer ce thème.',
         'desc_topic_calendar':          'Dates de parution des articles class\u00e9s dans ce th\u00e8me. Seuls les articles dont la date est compl\u00e8te, jusqu\u2019au jour, figurent ici\u202f; ceux dat\u00e9s d\u2019une ann\u00e9e ou d\u2019un mois seulement sont \u00e9cart\u00e9s plut\u00f4t que ramen\u00e9s au 1er janvier.',
         'desc_topic_countries':         'R\u00e9partition des articles de ce th\u00e8me par pays de publication.',
         'desc_topic_newspapers':        'Journaux et p\u00e9riodiques o\u00f9 ce th\u00e8me appara\u00eet le plus souvent.',

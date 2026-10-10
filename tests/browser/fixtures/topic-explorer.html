@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC Topic Explorer fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        const fixtureLang = /^fr/i.test(fixtureParams.get('lang') || '') ? 'fr' : 'en';
+        document.documentElement.lang = fixtureLang;
+    </script>
+    <!-- iwac-core, then the block's own sheet (BlockRegistry: blockCss). -->
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/topic-explorer.min.css">
+    <style>
+        main { max-width: 1180px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
+    <script>
+        // The bundle comes from files/iwac-visualizations/topic-explorer.json;
+        // serve tests/browser/fixtures/data/topic-explorer.json instead — four
+        // topics, so a description that counts them reads 4, not the 30 of
+        // the deployed model — and refuse anything else.
+        window.__fetched = [];
+        (function () {
+            const realFetch = window.fetch.bind(window);
+            window.fetch = function (url, init) {
+                const u = String(url);
+                window.__fetched.push(u);
+                const m = /\/files\/iwac-visualizations\/([^?]+)/.exec(u);
+                if (m) return realFetch('/tests/browser/fixtures/data/' + m[1], init);
+                return Promise.reject(new Error('unexpected fetch: ' + u));
+            };
+        })();
+    </script>
+    <main>
+        <h1>Topic Explorer</h1>
+        <!-- What block-layout/_generic.phtml renders for the registry row. -->
+        <div class="iwac-vis-block iwac-vis-topic-explorer"
+             data-base-path=""
+             data-site-base="/s/iwac"
+             data-embed-slug="topic-explorer"
+             data-embed-base="/s/iwac">
+            <div class="iwac-vis-loading iwac-vis-topic-explorer__loading" role="status" aria-live="polite">
+                <div class="iwac-vis-spinner" aria-hidden="true"></div>
+                <span>Loading Topic Explorer&hellip;</span>
+            </div>
+        </div>
+    </main>
+    <!-- ECharts from the test-only npm copy, then the bundles in
+         Site\AssetPlan::bundles() order for chartOptions + facetButtons +
+         layout. shared-core and the block bundle are built per locale. -->
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+    <script src="/asset/js/dist/shared-charts.min.js"></script>
+    <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script src="/asset/js/dist/shared-layout.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/blocks/topic-explorer.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+</body>
+</html>

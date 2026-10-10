@@ -137,6 +137,28 @@ test('the outline runs h1, the sections at h2, their panels at h3', async ({ pag
     expect((await download).suggestedFilename()).toBe('polarity-over-time.csv');
 });
 
+test('the topic panel’s description counts the bundle’s topics', async ({ page }) => {
+    // The fixture has three topics; the copy used to say thirty regardless.
+    const desc = page.locator('[data-iwac-panel="polarity-by-topic"] .iwac-vis-panel-desc');
+    expect(DATA.topics).toHaveLength(3);
+    await ready(page);
+    await expect(desc).toHaveText(/^Each of the 3 topics found by the statistical model as a share/);
+    await expect(desc).not.toContainText('30');
+    await ready(page, '?lang=fr');
+    await expect(desc).toHaveText(/^Chacun des 3 thèmes dégagés par le modèle statistique/);
+    await expect(desc).not.toContainText('30');
+
+    // One topic reads in the singular, in both languages.
+    await page.route('**/tests/browser/fixtures/data/sentiment-atlas.json', (route) =>
+        route.fulfill({ json: { ...DATA, topics: DATA.topics.slice(0, 1) } }));
+    await ready(page);
+    await expect(desc).toHaveText(/^The one topic found by the statistical model as a share/);
+    await expect(desc).toContainText('The topic name shows its two leading words');
+    await ready(page, '?lang=fr');
+    await expect(desc).toHaveText(/^Le seul thème dégagé par le modèle statistique/);
+    await expect(desc).toContainText('Le nom du thème affiche ses deux mots principaux');
+});
+
 test('“View as table” lists each panel’s figures exactly', async ({ page }) => {
     await ready(page);
     const panel = page.locator('[data-iwac-panel="polarity-by-year"]');

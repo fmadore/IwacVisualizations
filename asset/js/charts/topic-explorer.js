@@ -239,10 +239,14 @@
         var grid = P.buildChartsGrid();
         host.appendChild(grid);
 
+        // The description counts the topics the treemap draws. It said "30"
+        // whatever the bundle held; with none there is nothing to describe
+        // (French "one" covers 0, and "the one theme" would be false).
+        var topicCount = (data.topics || []).length;
         var treemapPanel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide iwac-vis-topic-explorer__treemap',
             P.t('Topic distribution'),
-            P.t('desc_topic_treemap')
+            topicCount ? P.t('desc_topic_treemap', { count: topicCount }) : null
         );
         grid.appendChild(treemapPanel.panel);
 

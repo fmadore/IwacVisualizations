@@ -35,6 +35,7 @@ const FIXTURES = [
     'on-this-day',
     'sentiment-atlas',
     'table-records',
+    'topic-explorer',
 ];
 
 /**

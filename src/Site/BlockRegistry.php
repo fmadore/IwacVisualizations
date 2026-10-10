@@ -482,7 +482,7 @@ final class BlockRegistry
             'invokable'   => 'topicExplorer',
             'class'       => BlockLayout\TopicExplorer::class,
             'label'       => 'Topic Explorer', // @translate
-            'description' => 'Explore 30 themes identified in newspaper articles by a statistical topic model. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags.', // @translate
+            'description' => 'Explore the themes a statistical topic model identifies in newspaper articles. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags.', // @translate
             'embeddable'  => true,
             'shell'       => [
                 'assets' => [

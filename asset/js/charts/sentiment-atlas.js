@@ -82,8 +82,8 @@
     }
 
     /** Panel description + the mandatory AI-provenance caveat. */
-    function descWithAiNote(key) {
-        return P.t(key) + ' ' + P.t('sentiment.ai_note');
+    function descWithAiNote(key, params) {
+        return P.t(key, params) + ' ' + P.t('sentiment.ai_note');
     }
 
     /* ----------------------------------------------------------------- */
@@ -640,7 +640,10 @@
         var topicSortHost = null;
         if ((data.topics || []).length) {
             topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'),
+                // The bundle's own topic count, not a number in the copy: the
+                // description said "30" whatever the model was refit with.
+                P.t('sentiment.polarity_topic_title'),
+                descWithAiNote('sentiment.polarity_topic_desc', { count: data.topics.length }),
                 { key: 'polarity-by-topic', heading: PANEL_HEADING });
             topicPanel.chart.classList.add('iwac-vis-chart--likert');
             topicSortHost = P.el('div', 'iwac-vis-facet-host');
