@@ -1,7 +1,30 @@
 'use strict';
 const { test, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
+const tokens = require('../../tokens.json');
 const URL = '/tests/browser/fixtures/timeline.html';
+
+/** A tokens.json hex colour as getComputedStyle prints it. */
+function rgb(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`;
+}
+
+/**
+ * Switch the theme and wait until the page has finished repainting for it.
+ *
+ * Every timeline button eases its background over --transition-fast (150ms)
+ * while its text colour flips at once, so an axe scan that starts inside that
+ * window reads the dark ink on a still-light ground (1.23:1 on the markers)
+ * and fails: under a loaded run it did. Wait for every running transition to
+ * finish, then for a marker to show the theme's own --surface.
+ */
+async function switchTheme(page, root, theme) {
+    await page.evaluate(value => { document.body.dataset.theme = value; }, theme);
+    await page.evaluate(() => Promise.all(document.getAnimations().map(a => a.finished.catch(() => {}))));
+    await expect(root.locator('.iwac-vis-timeline__marker').first())
+        .toHaveCSS('background-color', rgb(tokens[theme]['--surface']));
+}
 
 async function ready(page, suffix = '') {
     await page.route('https://example.org/**', route => route.abort());
@@ -85,7 +108,7 @@ test('complete reading view and native links work with JavaScript disabled', asy
 for (const theme of ['light', 'dark']) {
     test(`timeline accessible in ${theme} mode, including ranges and failed media`, async ({ page }) => {
         const root = await ready(page, '#timeline=history&slide=range');
-        await page.evaluate(value => { document.body.dataset.theme = value; }, theme);
+        await switchTheme(page, root, theme);
         await expect(root.locator('.iwac-vis-timeline__image-link')).toContainText('Archival page');
         const result = await new AxeBuilder({ page }).include('[data-instance="block-1"]')
             .withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
