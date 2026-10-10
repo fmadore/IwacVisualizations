@@ -37,6 +37,29 @@ const FIXTURES = [
     'table-records',
 ];
 
+/**
+ * Fixtures whose heading outline is asserted, at any impact. axe files
+ * `heading-order` as a best practice (moderate, outside the WCAG tags above),
+ * so the scan below never runs it; these name it. The Sentiment Atlas's
+ * sections were h3 straight under the page's h1, with its panels at h4.
+ */
+const OUTLINE_FIXTURES = ['sentiment-atlas'];
+
+for (const fixture of OUTLINE_FIXTURES) {
+    for (const theme of ['light', 'dark']) {
+        test(`${fixture} (${theme}) passes axe heading-order`, async ({ page }) => {
+            await page.goto(`/tests/browser/fixtures/${fixture}.html?theme=${theme}`);
+            await page.waitForLoadState('networkidle');
+            // Rendered first: over a page with no headings the rule passes vacuously.
+            await expect(page.locator('.iwac-vis-block .iwac-vis-panel').first()).toBeVisible();
+            const results = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
+            expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`))
+                .toEqual([]);
+            expect(results.passes.map((p) => p.id)).toContain('heading-order');
+        });
+    }
+}
+
 for (const fixture of FIXTURES) {
     for (const theme of ['light', 'dark']) {
         test(`${fixture} (${theme}) has no serious WCAG A/AA violation`, async ({ page }) => {

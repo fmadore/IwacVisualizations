@@ -234,9 +234,17 @@ body {
  *  next section heading is one (item-set pages, via the shell's
  *  `headingLevel`) — the same level-is-an-outline-decision split the panel
  *  titles below already make. Without the second selector a promoted heading
- *  would inherit the theme's h2: serif, --text-2xl, its own margins. */
+ *  would inherit the theme's h2: serif, --text-2xl, its own margins.
+ *
+ *  The third selector is the same decision one level down: a section heading
+ *  (`.iwac-vis-section-heading`, below) is an <h3> inside most blocks and an
+ *  <h2> in the Sentiment Atlas, whose sections sit straight under the page's
+ *  <h1>. It is not a direct child of the block, so the second selector does
+ *  not reach it, and this rule is what paints a section heading's size,
+ *  weight, colour, tracking and margin at <h3>. */
 .iwac-vis-block h3,
-.iwac-vis-block > h2 {
+.iwac-vis-block > h2,
+.iwac-vis-block h2.iwac-vis-section-heading {
     /*  A heading that wraps should break evenly rather than leave one
      *  word alone on the second line (C2). */
     text-wrap: balance;
@@ -271,8 +279,9 @@ body {
 
 /*  A panel title, at whichever heading level the outline needs. `buildPanel`
  *  emits <h4> by default, <h3> under a block heading promoted to <h2>
- *  (item-set pages — `P.panelHeadingLevel`), and <h2> for a page block that
- *  sits directly under the page's <h1> (On This Day). The level is a
+ *  (item-set pages — `P.panelHeadingLevel`) or under a section <h2> (the
+ *  Sentiment Atlas), and <h2> for a page block that sits directly under the
+ *  page's <h1> (On This Day, Collection Overview). The level is a
  *  document-structure decision, so all three are styled together and render
  *  identically. Without the extra selectors a promoted heading would inherit
  *  the theme's h2/h3: serif, --text-2xl, its own margins.
@@ -307,6 +316,11 @@ body {
      *  same title at h4 — measured, not theorised. Panel titles are UI
      *  labels; the display tracking belongs to the headings above them. */
     letter-spacing: normal;
+    /*  Explicit for the same reason: the block-heading rule's word breaking
+     *  reached a title at h3 and no other level (computed-style diff of the
+     *  Sentiment Atlas's titles across their h4 → h3 promotion). */
+    overflow-wrap: normal;
+    word-break: normal;
 }
 
 
@@ -678,7 +692,14 @@ body {
     overflow: hidden;
 }
 
-.iwac-vis-overview-grid .iwac-vis-panel h4 {
+/*  The title at any level `buildPanel` gives it (see the panel-title rule
+ *  above). Only the <h4> was listed, so a title promoted to <h2> or <h3> kept
+ *  the panel-title rule's 0.5rem bottom margin on top of the grid's gap and
+ *  sat 8px further from its description than an <h4> does. The promoted
+ *  levels are direct children only: an <h3> deeper in a panel is content. */
+.iwac-vis-overview-grid .iwac-vis-panel h4,
+.iwac-vis-overview-grid .iwac-vis-panel > h2,
+.iwac-vis-overview-grid .iwac-vis-panel > h3 {
     margin: 0;
 }
 
@@ -2072,7 +2093,9 @@ select.iwac-vis-control:hover {
     text-wrap: balance;
     /*  As with `.iwac-vis-block-header__title`: the block's `h3` rule paints
      *  size, weight, colour, tracking and margin (19px / 600 / --ink,
-     *  measured), so this rule declares only what renders. It used to ask for
+     *  measured) — at either level, since the Sentiment Atlas's <h2> section
+     *  headings are listed in it too — so this rule declares only what
+     *  renders. It used to ask for
      *  24px at weight 700 — a Besley weight the theme does not even load
      *  (500/600/800), which the token guard's font-weight rule now refuses. */
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);

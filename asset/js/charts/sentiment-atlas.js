@@ -538,9 +538,19 @@
     /*  Layout composition                                                 */
     /* ----------------------------------------------------------------- */
 
-    /** A full-width section divider/heading between panel groups. */
+    /**
+     * A full-width section divider/heading between panel groups.
+     *
+     * The block sits straight under the page's <h1> with no heading of its
+     * own, so its sections are the page's sections: <h2>, with the panels
+     * under them at <h3> (PANEL_HEADING). At <h3> / <h4> the outline skipped
+     * a level (axe: heading-order) — the Collection Overview fix (V-20),
+     * applied to a block that has sections. The look does not follow the
+     * level (iwac-core.css).
+     */
+    var PANEL_HEADING = 'h3';
     function sectionHeading(text) {
-        return P.el('h3', 'iwac-vis-section-heading', text);
+        return P.el('h2', 'iwac-vis-section-heading', text);
     }
 
     function buildLayout(container, data) {
@@ -584,13 +594,13 @@
         // the first time a bundle arrives without topics or newspapers.
         var polarityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.polarity_year_title'), descWithAiNote('sentiment.polarity_year_desc'),
-            { key: 'polarity-by-year' });
+            { key: 'polarity-by-year', heading: PANEL_HEADING });
         var centralityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.centrality_year_title'), descWithAiNote('sentiment.centrality_year_desc'),
-            { key: 'centrality-by-year' });
+            { key: 'centrality-by-year', heading: PANEL_HEADING });
         var subjectivityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.subjectivity_title'), descWithAiNote('sentiment.subjectivity_desc'),
-            { key: 'subjectivity' });
+            { key: 'subjectivity', heading: PANEL_HEADING });
 
         // Dynamic "Non applicable" caption under the polarity timeline.
         var naNote = P.el('p', 'iwac-vis-muted');
@@ -607,13 +617,13 @@
 
         var countryPanel = P.buildPanel('iwac-vis-panel',
             P.t('sentiment.polarity_country_title'), descWithAiNote('sentiment.polarity_country_desc'),
-            { key: 'polarity-by-country' });
+            { key: 'polarity-by-country', heading: PANEL_HEADING });
         var correlationPanel = P.buildPanel('iwac-vis-panel',
             P.t('sentiment.correlation_title'), descWithAiNote('sentiment.correlation_desc'),
-            { key: 'correlation' });
+            { key: 'correlation', heading: PANEL_HEADING });
         var cenHeatPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.cenheat_title'), descWithAiNote('sentiment.cenheat_desc'),
-            { key: 'centrality-heatmap' });
+            { key: 'centrality-heatmap', heading: PANEL_HEADING });
 
         breakdownGrid.appendChild(countryPanel.panel);
         breakdownGrid.appendChild(correlationPanel.panel);
@@ -631,7 +641,7 @@
         if ((data.topics || []).length) {
             topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
                 P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'),
-                { key: 'polarity-by-topic' });
+                { key: 'polarity-by-topic', heading: PANEL_HEADING });
             topicPanel.chart.classList.add('iwac-vis-chart--likert');
             topicSortHost = P.el('div', 'iwac-vis-facet-host');
             topicPanel.panel.insertBefore(topicSortHost, topicPanel.chart);
@@ -644,7 +654,7 @@
                 P.t('sentiment.polarity_newspaper_title'),
                 P.t('sentiment.polarity_newspaper_desc', { min: data.newspaper_min || 50 })
                     + ' ' + P.t('sentiment.ai_note'),
-                { key: 'polarity-by-newspaper' });
+                { key: 'polarity-by-newspaper', heading: PANEL_HEADING });
             newspaperPanel.chart.classList.add('iwac-vis-chart--likert');
             newspaperSortHost = P.el('div', 'iwac-vis-facet-host');
             newspaperPanel.panel.insertBefore(newspaperSortHost, newspaperPanel.chart);
@@ -658,7 +668,7 @@
 
         var extremesPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.extremes_title'), descWithAiNote('sentiment.extremes_desc'),
-            { key: 'extremes' });
+            { key: 'extremes', heading: PANEL_HEADING });
         var extremesControls = P.el('div', 'iwac-vis-facet-host');
         // Controls sit between the description and the chart.
         extremesPanel.panel.insertBefore(extremesControls, extremesPanel.chart);
@@ -675,7 +685,7 @@
 
         var agreementPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.agreement_title'), descWithAiNote('sentiment.agreement_desc'),
-            { key: 'model-agreement' });
+            { key: 'model-agreement', heading: PANEL_HEADING });
         var matrixCaption = P.el('p', 'iwac-vis-muted');
         compareGrid.appendChild(agreementPanel.panel);
 

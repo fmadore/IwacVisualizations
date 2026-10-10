@@ -74,7 +74,7 @@ for (const theme of ['light', 'dark']) {
             .toHaveText([`1${NNBSP}234`, `1${NNBSP}187`, `1${NNBSP}156`, `1${NNBSP}123`]);
         await expect(cards.nth(1)).toContainText('Rated by GPT-5.6 Luna');
         await expect(page.getByText('Period covered: 2019 – 2024')).toBeVisible();
-        await expect(page.locator('h3.iwac-vis-section-heading')).toHaveText([
+        await expect(page.locator('h2.iwac-vis-section-heading')).toHaveText([
             'Ratings over time', 'How the ratings break down',
             'Subjects associated with high and low ratings', 'Model comparison',
         ]);
@@ -104,6 +104,38 @@ for (const theme of ['light', 'dark']) {
         expect(problems).toEqual([]);
     });
 }
+
+test('the outline runs h1, the sections at h2, their panels at h3', async ({ page }) => {
+    await ready(page);
+    // The page block has no heading of its own: its sections are the page's.
+    // They were h3 under the h1, with panels at h4 (axe: heading-order).
+    const outline = await page.locator('main').evaluate((main) =>
+        Array.from(main.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+            .map((h) => ({ level: Number(h.tagName[1]), text: h.textContent.trim() })));
+    expect(outline[0]).toEqual({ level: 1, text: 'Sentiment Atlas' });
+    for (let i = 1; i < outline.length; i++) {
+        expect(outline[i].level - outline[i - 1].level, `"${outline[i].text}" skips a level`).toBeLessThanOrEqual(1);
+    }
+    expect(outline.filter((h) => h.level === 2).map((h) => h.text)).toEqual([
+        'Ratings over time', 'How the ratings break down',
+        'Subjects associated with high and low ratings', 'Model comparison',
+    ]);
+    const titles = await page.locator('[data-iwac-panel]').evaluateAll((els) =>
+        els.map((el) => el.firstElementChild.tagName));
+    expect(titles).toEqual(PANELS.map(() => 'H3'));
+
+    // Code that reads a panel's title follows it to h3. Both looked for an
+    // h4: the embed picker would list every panel untitled, and the CSV and
+    // PNG exports would all be called "iwac-chart".
+    const headings = await page.locator('[data-iwac-panel] > h3').allTextContents();
+    const listed = await page.evaluate(() => window.IWACVis.embed
+        .enumeratePanels(document.querySelector('.iwac-vis-sentiment-atlas'))
+        .map((info) => info.title));
+    expect(listed).toEqual(headings);
+    const download = page.waitForEvent('download');
+    await page.locator('[data-iwac-panel="polarity-by-year"]').getByRole('button', { name: 'Download CSV' }).click();
+    expect((await download).suggestedFilename()).toBe('polarity-over-time.csv');
+});
 
 test('“View as table” lists each panel’s figures exactly', async ({ page }) => {
     await ready(page);
@@ -153,7 +185,7 @@ test('reads in French: labels, ratings and number formats', async ({ page }) => 
     const problems = watch(page);
     await ready(page, '?lang=fr');
 
-    await expect(page.locator('h3.iwac-vis-section-heading')).toHaveText([
+    await expect(page.locator('h2.iwac-vis-section-heading')).toHaveText([
         'Évaluations au fil du temps', 'Répartition des évaluations',
         'Sujets associés aux évaluations hautes et basses', 'Comparaison des modèles',
     ]);
