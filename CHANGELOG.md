@@ -13,9 +13,9 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased — the article page and the Sentiment Atlas under test (2026-10)
+### v1.76.0 — review fixes: one formatter, the controls grammar, gated releases (2026-10-10)
 
-Not yet released; the version stays 1.76.0 until the release commit.
+Fixes from the 2026-10-08 review of the theme, IwacSearch and this module, and the follow-ups that put the last untested blocks under test.
 
 - The article map is titled for its article. Its slot borrowed the shared "Spatial coverage" key, which reads "Places associated with the items" ("Lieux associés aux documents") for the item-set dashboard; it now reads "Places associated with this article" / "Lieux associés à cet article", which also gives the map host the accessible name it lacked.
 - Panel exports and embed links find the panel's title at any heading level. The toolbar's PNG and CSV exports and the embed picker read the title as the panel's `h4`, so a panel promoted to `h2` or `h3` (Collection Overview, the item-page dashboards, the item-set dashboard) downloaded as "iwac-chart", its PNG carried no title, and the iframe in its embed snippet had an empty `title`. `P.panelTitle` reads the title at whatever level `buildPanel` gave it; the article fixture checks the CSV's name.
@@ -27,9 +27,6 @@ Not yet released; the version stays 1.76.0 until the release commit.
 - The French sentiment panel's description joins "par" and the rater list with an ordinary space. The typography sweep had put a narrow no-break space before the `%s` placeholder, taking it for a percent sign.
 - The article dashboards and the Sentiment Atlas render in browser fixtures, the last two blocks that never did. The article fixture builds the server-side sentiment panel with the template's loop and strings, runs the real canvas force graph (d3-force and its three modules join ECharts as test-only npm copies at the production pins) and the shared map helpers against a MapLibre stand-in; the atlas fixture reads a payload aggregated from synthetic rows with the generator's rules. Both specs check the boot without console errors in both themes, each panel's content and tables, the French render (U+202F grouping, UTC dates), the light/dark toggle repainting the entity-type colours and the composed ramps from the theme tokens, tooltips inside a fullscreen panel, and an axe scan in both themes. The fixture server sends SVG and PNG with their types.
 
-### v1.76.0 — review fixes: one formatter, the controls grammar, gated releases (2026-10-09)
-
-Fixes from the 2026-10-08 review of the theme, IwacSearch and this module.
 
 - The module's composed colour tokens follow the reader's light/dark toggle. The 21 tokens built from theme tokens (`--iwac-vis-sent-*`, `-cent-*`, `-subj-*`, `-heatmap-*`) were declared on `:root` only, and a custom property holding a `var()` is substituted where it is declared. The theme's manual toggle re-declares its tokens on `body[data-theme]`, so a reader on a light OS who chose dark got the light heatmap ramp on dark panels: the lowest bucket near-white and the scale reading inverted. They are now declared on `:root, body`; the literal-valued tokens stay on `:root`. A browser test flips the toggle against the OS scheme both ways and fails on the old sheet. (V-01)
 - One number rule, shared with the theme and IwacSearch. Thousands are grouped with a narrow no-break space (U+202F) in both languages, so the English site no longer prints "7,649" beside the theme's "20 944", and the decimal mark and the percent follow the page: "12,5 %" in French, "12.5%" in English. `iwac-i18n.js` holds the one formatter (`formatNumber`, plus `formatDecimal`, `formatPercent` and `formatCompact`, promoted from the Laïcité block's own pair); `P.*` are the shortcuts. (X-02)
