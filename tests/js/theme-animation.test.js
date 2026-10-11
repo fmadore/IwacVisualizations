@@ -26,7 +26,7 @@ function registerTheme(options = {}) {
         window: {
             IWACVis: {},
             addEventListener() {},
-            matchMedia: (q) => ({ matches: !!options.reducedMotion && /reduced-motion/.test(q), addEventListener() {}, addListener() {} }),
+            matchMedia: (q) => ({ matches: (!!options.reducedMotion && /reduced-motion/.test(q)) || (!!options.dark && /color-scheme: dark/.test(q)), addEventListener() {}, addListener() {} }),
         },
         setTimeout,
     };
@@ -47,6 +47,19 @@ test('the registered theme carries the 600 ms ease-out entrance next to the moti
 test('under a reduced-motion preference the switch is off and the tempo is irrelevant', () => {
     const [{ theme }] = registerTheme({ reducedMotion: true });
     assert.equal(theme.animation, false);
+});
+
+test('the theme tells zrender which way the automatic label halo goes', () => {
+    // A label that inherits its series colour gets a stroke the colour of
+    // the canvas; on a transparent canvas zrender assumes white unless told
+    // the chart is dark, which drew a white outline round every pie and
+    // end label on the dark panels.
+    const [{ name: light, theme: lightTheme }] = registerTheme();
+    assert.equal(light, 'iwac-light');
+    assert.equal(lightTheme.darkMode, false);
+    const [{ name: dark, theme: darkTheme }] = registerTheme({ dark: true });
+    assert.equal(dark, 'iwac-dark');
+    assert.equal(darkTheme.darkMode, true);
 });
 
 test('no option builder spells the theme default out again', () => {

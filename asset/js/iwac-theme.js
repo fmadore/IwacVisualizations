@@ -532,6 +532,14 @@
         return {
             color: palette,
             backgroundColor: 'transparent',
+            // Which way zrender's automatic label halo goes. A label that
+            // inherits its series colour — a pie's outside labels, a line's
+            // end label — gets a stroke the colour of the canvas behind it,
+            // and a transparent canvas reads as white unless the chart is
+            // told it is dark: on the dark panels every such label sat in a
+            // white outline. 'auto' cannot tell either, since it judges the
+            // (transparent) background, so the mode is stated.
+            darkMode: ns.getCurrentTheme() === 'dark',
             // Accessibility — ECharts generates an aria-label summary of
             // every chart unless a caller explicitly disables it.
             aria: { enabled: true },
