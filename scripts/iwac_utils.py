@@ -233,6 +233,28 @@ def canonicalize_country_field(value: Any) -> Any:
     return canonical_country(s)
 
 
+def parse_country_list(value: Any) -> List[str]:
+    """The distinct canonical countries of a pipe-separated cell, in order.
+
+    For the index's computed ``countries`` column, which upstream writes as
+    the pipe-join of every country COMBINATION its scan met rather than of
+    the countries themselves: an item filed under "Bénin|Burkina Faso" adds
+    that pair as one member, so "Burkina Faso" arrives as
+    ``Bénin|Bénin|Burkina Faso|Bénin|Burkina Faso|Côte d'Ivoire|…`` — 37
+    segments naming six countries, and the Index table printed all 37.
+
+    The six collection countries come first in :data:`IWAC_COUNTRIES` order;
+    anything else follows, sorted without regard to accents.
+    """
+    seen: Dict[str, None] = {}
+    for part in parse_pipe_separated(value):
+        name = canonical_country(part)
+        if name:
+            seen.setdefault(name, None)
+    rank = {name: i for i, name in enumerate(IWAC_COUNTRIES)}
+    return sorted(seen, key=lambda c: (rank.get(c, len(rank)), fold_plain(c)))
+
+
 def normalize_country(
     value: Any,
     return_list: bool = True,

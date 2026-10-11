@@ -74,6 +74,7 @@ from iwac_utils import (
     load_dataset_safe,
     normalize_location_name,
     parse_coordinates,
+    parse_country_list,
     parse_pipe_separated,
     place_country_resolver,
     save_json,
@@ -412,7 +413,7 @@ def compute_activity(
                 # Anything else has only the countries whose press mention
                 # it — a list, never collapsed to its first (most-catalogued)
                 # member.
-                entry["countries"] = parse_pipe_separated(row.get("countries"))
+                entry["countries"] = parse_country_list(row.get("countries"))
             rows.append(entry)
 
         rows.sort(key=lambda r: -r["total"])
@@ -468,7 +469,7 @@ def compute_index_table(index_df: pd.DataFrame) -> List[Dict[str, Any]]:
         if not title:
             continue
         freq = pd.to_numeric(row.get("frequency"), errors="coerce")
-        countries = parse_pipe_separated(row.get("countries"))
+        countries = parse_country_list(row.get("countries"))
         first_y = extract_year(clean_str(row.get("first_occurrence")))
         last_y = extract_year(clean_str(row.get("last_occurrence")))
         rows.append({

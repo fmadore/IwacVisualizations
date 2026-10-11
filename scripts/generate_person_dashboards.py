@@ -46,7 +46,7 @@ from iwac_utils import (
     DATASET_ID,
     configure_logging,
     find_column,
-    parse_pipe_separated,
+    parse_country_list,
     save_json,
 )
 
@@ -226,7 +226,7 @@ class PersonDashboardGenerator(DashboardAggregator):
         nom_col = self.nom_col
         genre_col = self.genre_col
 
-        countries = parse_pipe_separated(row.get("countries"))
+        countries = parse_country_list(row.get("countries"))
         first = str(row.get("first_occurrence") or "").strip() or None
         last = str(row.get("last_occurrence") or "").strip() or None
 

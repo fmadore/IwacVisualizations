@@ -52,6 +52,17 @@ class UtilityContractTests(unittest.TestCase):
             ["Ramadan", "Islam"],
         )
 
+    def test_country_list_names_each_country_once(self) -> None:
+        # The index's `countries` cell joins country COMBINATIONS, so a
+        # country repeats once per combination it belongs to.
+        cell = "Bénin|Bénin|Burkina Faso|Togo|benin|Côte d'Ivoire|Ghana|Burkina Faso|Mali"
+        self.assertEqual(
+            iwac_utils.parse_country_list(cell),
+            ["Bénin", "Burkina Faso", "Côte d'Ivoire", "Togo", "Ghana", "Mali"],
+        )
+        self.assertEqual(iwac_utils.parse_country_list(None), [])
+        self.assertEqual(iwac_utils.parse_country_list(" | "), [])
+
     def test_unknown_contract_is_trimmed_and_bilingual(self) -> None:
         for value in (None, np.nan, "", " Unknown ", "inconnu", "N/A", "na", "none", "null", "—"):
             self.assertTrue(iwac_utils.is_unknown(value), value)
@@ -1446,7 +1457,7 @@ class PlaceCountryTests(unittest.TestCase):
 
         people = pd.DataFrame({
             "o:id": [9], "Titre": ["Someone"], "Type": ["Personnes"],
-            "countries": ["Togo|Bénin"], "frequency": [3],
+            "countries": ["Togo|Bénin|Togo"], "frequency": [3],
             "first_occurrence": ["1995"], "last_occurrence": ["1999"],
         })
         activity = generate_index_overview.compute_activity(
@@ -1456,7 +1467,9 @@ class PlaceCountryTests(unittest.TestCase):
         self.assertIsNone(lieux["Paris"]["country"])
         self.assertNotIn("countries", lieux["Paris"])
         person = activity["Personnes"][0]
-        self.assertEqual(person["countries"], ["Togo", "Bénin"])
+        # The whole list — never collapsed to its first member — with each
+        # country once, in the collection's own order.
+        self.assertEqual(person["countries"], ["Bénin", "Togo"])
         self.assertNotIn("country", person)
 
 
