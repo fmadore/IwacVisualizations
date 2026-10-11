@@ -45,6 +45,232 @@
 
 
 /* =================================================================== */
+/*  All index entries — the ledger                                       */
+/* =================================================================== */
+
+/*  The theme's result-row grammar, as IwacSearch draws it: hairline-ruled
+ *  records with no box, a tracked dateline (categorical dot + type, primary
+ *  interpunct, years), the Besley title, a quiet interpunct line of
+ *  multi-values, and the count set as a right-aligned tabular figure so a
+ *  scan down the edge reads the ranking.
+ *
+ *  It replaced a five-column table whose Countries column took the width
+ *  the other four needed, breaking "Places" and "6447" across lines. */
+.iwac-vis-index-ledger-wrapper {
+    container-type: inline-size;
+    container-name: iwac-vis-index-ledger;
+}
+
+.iwac-vis-index-ledger-count {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+    font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.iwac-vis-index-ledger {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    /*  A page turn scrolls the list's top into view; clear the sticky
+     *  masthead rather than tuck the first record under it. */
+    scroll-margin-top: var(--header-height, 133px);
+}
+
+/*  Two newspaper columns once there is room for them: an index entry is a
+ *  short record, and at full panel width one per line left most of the row
+ *  as a gap between the name and its count. Column-major, like a printed
+ *  index — the order reads down the first column, then the second. */
+@container iwac-vis-index-ledger (min-width: 56rem) {
+    .iwac-vis-index-ledger {
+        columns: 2;
+        column-gap: var(--space-8, 2rem);
+        column-rule: 1px solid var(--border-light, #e2e5e8);
+    }
+}
+
+.iwac-vis-index-ledger__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4, 1rem);
+    align-items: start;
+    padding: var(--space-3, 0.75rem) var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+    break-inside: avoid;
+    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-index-ledger__row:hover,
+.iwac-vis-index-ledger__row:has(:focus-visible) {
+    background: color-mix(in oklab, var(--primary, #ce4115) 4%, transparent);
+}
+
+.iwac-vis-index-ledger__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+    min-width: 0;
+}
+
+.iwac-vis-index-ledger__dateline,
+.iwac-vis-index-ledger__title,
+.iwac-vis-index-ledger__countries,
+.iwac-vis-index-ledger__figure {
+    margin: 0;
+}
+
+.iwac-vis-index-ledger__dateline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.5em;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    line-height: 1.25;
+}
+
+/*  Category is a dot, not a fill. The colour is the theme's single-source
+ *  `--type-entity-*` map; the hex is its light canonical value. */
+.iwac-vis-index-ledger__type {
+    --iwac-vis-ledger-dot: var(--muted, #66696e);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--ink-light, #3f4349);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.iwac-vis-index-ledger__type::before {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--iwac-vis-ledger-dot);
+    flex-shrink: 0;
+}
+
+.iwac-vis-index-ledger__type--personnes     { --iwac-vis-ledger-dot: var(--type-entity-personnes, #037ac0); }
+.iwac-vis-index-ledger__type--lieux         { --iwac-vis-ledger-dot: var(--type-entity-lieux, #2e9052); }
+.iwac-vis-index-ledger__type--organisations { --iwac-vis-ledger-dot: var(--type-entity-organisations, #d66800); }
+.iwac-vis-index-ledger__type--sujets        { --iwac-vis-ledger-dot: var(--type-entity-sujets, #7c5295); }
+.iwac-vis-index-ledger__type--evenements    { --iwac-vis-ledger-dot: var(--type-entity-evenements, #4c9491); }
+
+.iwac-vis-index-ledger__years {
+    color: var(--muted, #66696e);
+    letter-spacing: var(--tracking-wider, 0.08em);
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    white-space: nowrap;
+}
+
+/*  The dateline's interpunct, primary as the theme's datelines have it. */
+.iwac-vis-index-ledger__sep {
+    color: var(--primary, #ce4115);
+    font-weight: 700;
+}
+
+.iwac-vis-index-ledger__title {
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-size: var(--text-base, 1.0625rem);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: var(--tracking-display, -0.01em);
+    color: var(--ink-strong, #05070c);
+    overflow-wrap: break-word;
+}
+
+/*  The padding is a target-size decision (WCAG 2.2 SC 2.5.8): an inline
+ *  link's hit area follows the font, not the line, and measured under 24px
+ *  at this size. Block padding on an inline box grows it without moving
+ *  the line. */
+.iwac-vis-index-ledger__link {
+    padding-block: 2px;
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-index-ledger__link:hover {
+    color: var(--primary-hover, #b03710);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.iwac-vis-index-ledger__link:focus-visible {
+    outline: var(--focus-outline, 2px solid #ce4115);
+    outline-offset: 2px;
+}
+
+/*  A quiet multi-value line: muted interpuncts, each name kept whole. */
+.iwac-vis-index-ledger__countries {
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.45;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-index-ledger__label {
+    margin-inline-end: 0.15em;
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--muted, #66696e);
+}
+
+/*  The interpunct hangs off the END of a name, inside its no-wrap box, so
+ *  the line breaks at the space after it: a wrapped line opens on a
+ *  country, never on a dot. */
+.iwac-vis-index-ledger__country {
+    white-space: nowrap;
+}
+
+.iwac-vis-index-ledger__country:not(:last-child)::after {
+    content: "·";
+    margin-inline-start: 0.35em;
+    color: var(--muted, #66696e);
+    font-weight: 700;
+}
+
+.iwac-vis-index-ledger__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/*  Public Sans, not Besley: a column of counts has to align digit for
+ *  digit, and Besley's tabular zero is broken (see the On This Day note).
+ *  font-feature-settings because the theme's body sets an inherited
+ *  oldstyle/proportional pair that outranks font-variant-numeric. */
+.iwac-vis-index-ledger__count {
+    font-size: var(--text-base, 1.0625rem);
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+    font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.iwac-vis-index-ledger__unit {
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--muted, #66696e);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .iwac-vis-index-ledger__row,
+    .iwac-vis-index-ledger__link {
+        transition: none;
+    }
+}
+
+
+/* =================================================================== */
 /*  Keyword Explorer — Section B layout                                  */
 /* =================================================================== */
 

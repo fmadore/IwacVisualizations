@@ -30,6 +30,7 @@ const FIXTURES = [
     'dashboard',
     'embed-tokens',
     'horizontal-bar-renderer',
+    'index-ledger',
     'map-popup',
     'minimal-item',
     'on-this-day',

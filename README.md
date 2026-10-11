@@ -79,7 +79,7 @@ Two complementary sections bundled in one block.
 - **Lifespan × frequency** — scatter of every entity with both a first and last occurrence; x = span years, y = total mentions, color by type; click → entity page
 - **Places map** — MapLibre with two toggleable layers: **authority pins** (every place in the index with parseable coordinates, ~555 places) and **mention bubbles** (how often each place is tagged in an item's dct:spatial field, joined back to authorities by name, ~541 resolved). Click → place page via `siteBase + '/item/' + o_id`.
 - **Temporal extent** — gantt of first→last year each entity appears (top 30 per type, type facet)
-- **Index table** — searchable, type-faceted, paginated (25/page) table of every entity with frequency, year span, and countries; click → entity page
+- **All index entries** — searchable, type-faceted, paginated (30/page) ledger of every entity with frequency, year span, and the countries of the documents it appears in; click → entity page
 
 **Section B — Keyword Explorer** is a vanilla-JS port of [iwac-dashboard's `/keywords` route](https://github.com/fmadore/iwac-dashboard/tree/main/src/routes/keywords), generalized to scan every content subset (not just articles):
 
@@ -364,7 +364,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.76.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.77.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

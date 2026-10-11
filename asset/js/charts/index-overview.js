@@ -77,7 +77,7 @@
             P.t('Temporal extent'),
             P.t('desc_temporal_extent')
         );
-        var indexPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Index table'), P.t('index.table_desc'));
+        var indexPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('All index entries'), P.t('index.table_desc'));
 
         [
             typePanel, topEntitiesPanel,
@@ -100,7 +100,7 @@
         var keywordsLayout = P.el('div', 'iwac-vis-layout--sidebar iwac-vis-keywords-layout');
         sectionB.appendChild(keywordsLayout);
 
-        // Two-column: filters sidebar + chart + table
+        // Two-column: filters sidebar + chart
         var filtersHost = P.el('div', 'iwac-vis-aside iwac-vis-keywords-sidebar');
         keywordsLayout.appendChild(filtersHost);
 
@@ -110,8 +110,11 @@
         var chartPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Keywords over time'), P.t('index.keywords_desc'));
         keywordsMain.appendChild(chartPanel.panel);
 
+        // The table spans the section under both columns. In the chart
+        // column it sat beside an empty gutter once the filters ended, a
+        // third of the width the keyword names and Add buttons needed.
         var tablePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('All keywords'), P.t('index.keywords_table_desc'));
-        keywordsMain.appendChild(tablePanel.panel);
+        sectionB.appendChild(tablePanel.panel);
 
         // Derived Section B panels (ROADMAP 9.7 / 9.8) — both feed off
         // the same deferred keyword bundles, so they render in

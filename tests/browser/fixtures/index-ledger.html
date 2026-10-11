@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC index ledger fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        const fixtureLang = /^fr/i.test(fixtureParams.get('lang') || '') ? 'fr' : 'en';
+        document.documentElement.lang = fixtureLang;
+    </script>
+    <!-- iwac-core, then the block's own sheet (BlockRegistry: blockCss). -->
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/index-overview.min.css">
+    <style>
+        main { max-width: 1240px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
+    <main>
+        <h1>Entity index explorer</h1>
+        <!-- Not .iwac-vis-index-overview: that class is what the orchestrator
+             boots, and it would replace the ledger with a fetch of the bundle. -->
+        <div class="iwac-vis-block" id="host"></div>
+    </main>
+    <!-- The index overview's bundles in Site\AssetPlan::bundles() order, less
+         the map: the ledger is rendered on its own, from inline rows, so no
+         data file is fetched. -->
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+    <script src="/asset/js/dist/shared-charts.min.js"></script>
+    <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/blocks/index-overview.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+    <script>
+        (function () {
+            // The shapes that broke the table, and the edges of the row: an
+            // entry cited in all six countries, an organisation whose name
+            // wraps, a single-year entry, an undated one, one cited nowhere,
+            // and one with no item to open.
+            var six = ['Bénin', 'Burkina Faso', 'Côte d’Ivoire', 'Niger', 'Nigeria', 'Togo'];
+            var rows = [
+                { o_id: 546, title: 'Burkina Faso', type: 'Lieux', frequency: 6447, first: 1924, last: 2026, countries: six },
+                { o_id: 600, title: 'Ouagadougou', type: 'Lieux', frequency: 3394, first: 1962, last: 2026, countries: six.slice(0, 5) },
+                { o_id: 601, title: 'Prière', type: 'Sujets', frequency: 2385, first: 1962, last: 2024, countries: ['Bénin', 'Burkina Faso', 'Côte d’Ivoire', 'Togo'] },
+                { o_id: 602, title: 'Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques', type: 'Organisations', frequency: 871, first: 1989, last: 2024, countries: ['Burkina Faso', 'Côte d’Ivoire'] },
+                { o_id: 603, title: 'Aïd al-Adha (Tabaski)', type: 'Événements', frequency: 934, first: 1962, last: 2024, countries: six },
+                { o_id: 604, title: 'Mahomet', type: 'Personnes', frequency: 1404, first: 1970, last: 2024, countries: six.slice(0, 3) },
+                { o_id: 605, title: 'Single year', type: 'Personnes', frequency: 1, first: 1995, last: 1995, countries: ['Togo'] },
+                { o_id: 606, title: 'Undated', type: 'Sujets', frequency: 3, first: null, last: null, countries: ['Niger'] },
+                { o_id: 607, title: 'Cited nowhere', type: 'Lieux', frequency: 2, first: 2001, last: 2003, countries: [] },
+                { title: 'No item to open', type: 'Organisations', frequency: 2, first: 2010, last: 2012, countries: ['Nigeria'] }
+            ];
+            for (var i = 0; i < 40; i++) {
+                rows.push({ o_id: 700 + i, title: 'Filler entry ' + (i + 1), type: 'Personnes', frequency: 50 - i, first: 1990, last: 2000 + (i % 20), countries: six.slice(0, 1 + (i % 6)) });
+            }
+
+            var P = window.IWACVis.panels;
+            var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('All index entries'), P.t('index.table_desc'), { heading: 'h2' });
+            document.getElementById('host').appendChild(panel.panel);
+            window.IWACVis.indexOverview.indexTable.render(panel, { index_table: rows }, { siteBase: '/s/iwac' });
+        })();
+    </script>
+</body>
+</html>
