@@ -14,7 +14,7 @@
  *      year for the same periodical, zero-filled) with this issue's
  *      year dotted.
  *   4. `similarItems` — "Similar issues": semantic neighbours over
- *      embedding_tableOfContents (768-dim Gemini). This replaced an
+ *      embedding_tableOfContents (768-dim EmbeddingGemma 2). This replaced an
  *      earlier chronological "other issues of this periodical" strip
  *      now that the table-of-contents embeddings cover the subset.
  *

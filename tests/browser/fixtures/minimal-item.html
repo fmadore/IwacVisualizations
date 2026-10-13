@@ -99,7 +99,27 @@
                 }
             };
         }
-        const BUNDLE = { subsets: { audiovisual: audiovisual } };
+        // `subset=documents` turns the page into a Document record, whose
+        // subset carries similarity neighbours (embedding_OCR, 2026-10).
+        function doc(id, title, date, score) {
+            return {
+                o_id: id, title: title, date: date, country: 'Burkina Faso',
+                type: 'document', thumbnail: '', score: score
+            };
+        }
+        const documents = {
+            total: 26,
+            year_min: 1999, year_max: 2010,
+            years: [{ year: 1999, count: 4 }, { year: 2004, count: 12 }, { year: 2010, count: 10 }],
+            top_items: [doc(2001, 'Most recent document', '2010-05-01')],
+            similar_by_id: {
+                '42': [
+                    doc(2002, 'Lettre au ministre', '2004-03-01', 0.9412),
+                    doc(2003, 'Communiqué de la FAIB', '2004-02-11', 0.9127)
+                ]
+            }
+        };
+        const BUNDLE = { subsets: { audiovisual: audiovisual, documents: documents } };
 
         // The block fetches its bundle from files/iwac-visualizations/;
         // serve it from memory so the fixture stays hermetic.
@@ -130,6 +150,16 @@
             </div>
         </div>
     </main>
+    <script>
+        if (fixtureParams.get('subset') === 'documents') {
+            const block = document.querySelector('.iwac-vis-minimal-item');
+            block.dataset.subset = 'documents';
+            block.dataset.templateId = '22';
+            block.dataset.pubYear = '2004';
+            delete block.dataset.channel;
+            delete block.dataset.watchUrl;
+        }
+    </script>
     <!-- The three bundles the block's template asks for, as production
          serves them: shared-core, shared-layout (with every renderer), and the
          block's own bundle with the orchestrator last. -->

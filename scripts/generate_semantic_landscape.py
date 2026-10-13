@@ -1,6 +1,8 @@
 """Generate the Semantic Landscape bundle — a 2-D UMAP projection of
-every article's ``embedding_OCR`` (768-dim Gemini vectors), the "map of
-everything" for the IWAC press corpus.
+every article's ``embedding_OCR`` (768-dim ``google/embeddinggemma-2``
+vectors since 2026-10-13), the "map of everything" for the IWAC press
+corpus. The projection is refit from the current vectors on every run;
+coordinates from the Gemini-era vectors must never be mixed with them.
 
 Output: ``asset/data/semantic-landscape.json`` (one bundle, columnar to
 keep 12k points compact):

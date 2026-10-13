@@ -25,11 +25,15 @@ without any further network calls:
                                 count; up to 3 shared-entity o_ids
                                 inlined for the tooltip)
     * ``semantic_neighbors``  — top-K articles by cosine similarity of
-                                ``embedding_OCR`` (768-dim Gemini)
+                                ``embedding_OCR`` (768-dim
+                                ``google/embeddinggemma-2``)
     * ``related_scholarship`` — top-K works from the ``references``
-                                subset by cosine similarity, across
-                                subsets in the one shared embedding
-                                space. Absent (not empty) when the
+                                subset by cosine similarity between
+                                this article's text and each work's
+                                ``embedding_abstract``, in the one
+                                shared embedding space. Only works with
+                                an abstract can appear. Absent (not
+                                empty) when the
                                 references carry no embeddings, which is
                                 how the panel knows to elide itself.
 
@@ -55,7 +59,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import numpy as np
 import pandas as pd
 
-from iwac_embeddings import build_normalized_matrix, coerce_embedding
+from iwac_embeddings import EMBEDDING_COLUMNS, build_normalized_matrix, coerce_embedding
 from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
@@ -75,15 +79,20 @@ from iwac_utils import (
 
 # Per-article dashboards are about the NEWSPAPER article as a unit, so
 # they don't aggregate other subsets — with one deliberate exception since
-# 2026-07. The `references` subset now carries `embedding_OCR` from the
-# same `gemini-embedding-2` model as the articles, in the same 768-dim
-# space, which makes "which scholarship resembles this newspaper article"
-# a plain cosine lookup across the two subsets. That is a question this
+# 2026-07. The `references` subset carries an embedding from the same
+# model as the articles (`google/embeddinggemma-2` since 2026-10-13), in
+# the same 768-dim space, which makes "which scholarship resembles this
+# newspaper article" a plain cosine lookup across the two subsets. Since
+# that date the reference side embeds title + abstract
+# (`embedding_abstract`) rather than full text: an article's text against
+# a work's abstract is still a same-space comparison, and an abstract is
+# a better summary of what a work argues than an average of its chunks. That is a question this
 # archive is unusually well placed to answer — a press corpus and its own
 # secondary literature, in one embedding space — so the bridge is worth
 # the extra load.
 ARTICLES_SUBSET = "articles"
 REFERENCES_SUBSET = "references"
+REFERENCES_EMBEDDING = EMBEDDING_COLUMNS[REFERENCES_SUBSET]
 
 # Sentiment intentionally NOT precomputed here. v0.11.0+ the article
 # dashboard renders its sentiment panel server-side from Omeka item
@@ -102,16 +111,18 @@ DEFAULT_TOP_K_RELATED = 20
 DEFAULT_TOP_K_SEMANTIC = 10
 
 # Scholarly works surfaced per article. Kept smaller than the semantic
-# neighbour list: only ~423 of 867 references have extracted text, so the
+# neighbour list: only ~442 of 867 references have an abstract, so the
 # candidate pool is two orders of magnitude smaller than the article pool
 # and a long list would pad itself with weak matches.
 DEFAULT_TOP_K_SCHOLARSHIP = 5
 
 # A reference appearing in more than this share of articles' scholarship
-# lists is reported as a hub. Chunk-averaged embeddings of long documents
-# drift toward the corpus centroid, so a broad survey can end up "most
-# similar" to almost everything — a known artefact of averaging, not a
-# finding about the survey. Since v1.24.1 the centering correction below is
+# lists is reported as a hub. The Gemini-era vectors embedded each work's
+# full text, and chunk-averaged embeddings of long documents drift toward
+# the corpus centroid, so a broad survey could end up "most similar" to
+# almost everything. Abstracts are short and should hub less, but a
+# general-audience abstract can still sit near the centroid, so the check
+# and the correction stay. Since v1.24.1 the centering correction below is
 # supposed to prevent this, so a warning here now means the correction was
 # not strong enough rather than that no correction exists.
 SCHOLARSHIP_HUB_SHARE = 0.25
@@ -220,17 +231,18 @@ class ArticleDashboardGenerator:
             REFERENCES_SUBSET,
             repo_id=self.repo_id,
             columns=["o:id", "title", "author", "pub_date", "o:resource_class",
-                     "doi", "URL", "embedding_OCR"],
+                     "doi", "URL", REFERENCES_EMBEDDING],
         )
         if df is None or df.empty:
             logger.warning("  references subset unavailable — scholarship links skipped")
             return
-        if "embedding_OCR" not in df.columns:
-            logger.warning("  references subset has no embedding_OCR — scholarship links skipped")
+        if REFERENCES_EMBEDDING not in df.columns:
+            logger.warning("  references subset has no %s — scholarship links skipped",
+                           REFERENCES_EMBEDDING)
             return
 
         self.references_df = df
-        matrix, valid_rows = build_normalized_matrix(df, "embedding_OCR")
+        matrix, valid_rows = build_normalized_matrix(df, REFERENCES_EMBEDDING)
         if matrix.shape[0] == 0:
             logger.warning("  no usable reference embeddings — scholarship links skipped")
             self.reference_matrix = None
@@ -536,19 +548,23 @@ class ArticleDashboardGenerator:
     def compute_scholarship_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K scholarly works per article, hubness-corrected.
 
-        Both sides are ``gemini-embedding-2`` vectors of the same
+        Both sides are ``google/embeddinggemma-2`` vectors of the same
         dimensionality, so the dot product is meaningful across subsets —
         but the two are not symmetric in character. An article embeds one
-        short news text; a reference embeds a book or thesis whose chunks
-        were averaged, which pulls long documents toward the corpus
-        centroid. The first run against the real data showed exactly the
+        news text; a reference embeds its title and abstract. Before
+        2026-10 the reference side was a book or thesis whose chunks were
+        averaged, which pulls long documents toward the corpus centroid,
+        and the first run against the real data showed exactly the
         predicted failure: one interview surfaced for 38% of all articles
-        and a survey for 32%, which is an artefact of averaging rather than
-        an affinity anyone would recognise.
+        and a survey for 32%, an artefact of averaging rather than an
+        affinity anyone would recognise. Abstracts remove most of that
+        averaging, but the correction below is cheap and still guards
+        against a broad abstract that sits near everything.
 
         A similarity floor cannot fix that, and this method used to suggest
         one. A hub is close to *everything* by construction — those two sat
-        inside a distribution whose median top-1 was 0.691 — so any
+        inside a distribution whose median top-1 was 0.691 on the Gemini
+        vectors; EmbeddingGemma 2 scores run higher still — so any
         threshold high enough to exclude them would first delete the
         legitimate matches. The correction has to be relative to how
         popular a reference is overall, not absolute.

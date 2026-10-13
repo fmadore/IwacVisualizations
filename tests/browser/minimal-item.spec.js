@@ -62,6 +62,26 @@ test('an older data bundle falls back to whole-subset context', async ({ page })
     await expect(page.locator('.iwac-vis-similar-card')).toHaveCount(1);
 });
 
+test('a document page ranks its text neighbours instead of listing recent items', async ({ page }) => {
+    await page.goto(`${FIXTURE}?subset=documents`);
+
+    await expect(page.locator('.iwac-vis-minimal-item__loading')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Similar documents' })).toBeVisible();
+    const cards = page.locator('.iwac-vis-similar-card');
+    await expect(cards).toHaveCount(2);
+    await expect(cards.first()).toHaveAttribute('href', '/s/iwac/item/2002');
+    // Rank on the badge, the score in its tooltip.
+    const badge = cards.first().locator('.iwac-vis-similar-card__score');
+    await expect(badge).toHaveText('No. 1');
+    await expect(badge).toHaveAttribute('title', /^Rank 1 of 2\. Similarity score 0\.941/);
+    // No runtime figures or watch link on a document.
+    await expect(page.locator('.iwac-vis-summary-card')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Watch on YouTube' })).toHaveCount(0);
+
+    await page.goto(`${FIXTURE}?subset=documents&lang=fr`);
+    await expect(page.getByRole('heading', { name: 'Documents similaires' })).toBeVisible();
+});
+
 test('the channel view reads in French', async ({ page }) => {
     await page.goto(`${FIXTURE}?lang=fr`);
 

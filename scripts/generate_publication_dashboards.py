@@ -33,7 +33,7 @@ Each file carries these blocks:
                              ``medium`` in v1.46.0.
   * ``semantic_neighbors`` — top-K issues by cosine similarity over
                              ``embedding_tableOfContents`` (768-dim
-                             Gemini), in the exact card shape the shared
+                             ``google/embeddinggemma-2``), in the exact card shape the shared
                              similar-items renderer consumes
                              (``o_id / title / newspaper / country /
                              date / thumbnail / similarity``). Same kNN

@@ -285,6 +285,11 @@
             'desc_radar_profile':       'Compare measures along separate axes. Each axis has its own scale, so inspect the labels and values rather than treating the overall shape or area as a combined score.',
             'desc_sibling_sparkline':   'Activity over time for the parent collection, such as this article within its newspaper’s timeline. The dot marks the current item.',
             'desc_similar_items':       'Articles ranked by an AI comparison of their full texts. Matches below the chosen similarity threshold are hidden. Similarity suggests reading leads, but does not establish a shared argument or source.',
+            // Neighbour cards (shared/renderers/similar-items.js and the
+            // article dashboard's further-reading strip) badge the rank, not
+            // the cosine: EmbeddingGemma 2 scores crowd into the 90s.
+            'similar_rank':             'No. {rank}',
+            'similar_score_title':      'Rank {rank} of {total}. Similarity score {score} on a 0–1 scale; scores from this model are uniformly high, so the order says more than the number.',
             'desc_sunburst':            'A breakdown by level, drawn as concentric rings. Each ring is one level, and the longer the arc, the higher the count.',
             'desc_treemap':             'A breakdown by level, drawn as nested rectangles. Click a rectangle to open it; the trail at the bottom leads back up.',
 
@@ -600,7 +605,6 @@
             'entity_type_\u00c9v\u00e9nements': '\u00c9v\u00e9nements',
             'entity_type_article': 'Article de presse',
 
-            'Similarity':              'Similarit\u00e9',
             'Most frequent words':           'Mots les plus fr\u00e9quents',
             'Period covered':                'P\u00e9riode couverte',
             'mentions':                      'mentions',
@@ -650,6 +654,8 @@
             'desc_radar_profile':       'Comparez les mesures selon des axes distincts. Chaque axe a sa propre échelle\u00a0: examinez les libellés et les valeurs sans interpréter la forme ou la surface globale comme un score combiné.',
             'desc_sibling_sparkline':   'Activité dans le temps de la collection parente, par exemple cet article dans la chronologie de son journal. Le point indique le document courant.',
             'desc_similar_items':       'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA. Les correspondances sous le seuil de similarité retenu sont masquées. La similarité suggère des pistes de lecture, sans établir un argument ou une source communs.',
+            'similar_rank':             'Nº {rank}',
+            'similar_score_title':      'Rang {rank} sur {total}. Score de similarité {score} sur une échelle de 0 à 1 ; les scores de ce modèle sont uniformément élevés, l’ordre en dit donc plus que le chiffre.',
             'desc_sunburst':            'D\u00e9composition par niveaux, en anneaux concentriques. Chaque anneau est un niveau et plus l\u2019arc est long, plus le nombre est \u00e9lev\u00e9.',
             'desc_treemap':             'D\u00e9composition par niveaux, en rectangles imbriqu\u00e9s. Cliquez sur un rectangle pour l\u2019ouvrir\u202f; le fil d\u2019Ariane en bas permet de remonter.',
 

@@ -123,6 +123,22 @@
         });
     }
 
+    // Rank badge, score in the tooltip. EmbeddingGemma 2 cosines (since
+    // 2026-10) sit in the 0.9s for nearly every neighbour, so a percentage
+    // badge showed a near-uniform row of 93s and 95s; the order is what a
+    // reader can use. Same convention as shared/renderers/similar-items.js.
+    function rankBadge(similarity, rank, total) {
+        if (typeof similarity !== 'number') return null;
+        var badge = P.el('span', 'iwac-vis-article-card__sim',
+            P.t('similar_rank', { rank: P.formatNumber(rank) }));
+        badge.setAttribute('title', P.t('similar_score_title', {
+            rank:  P.formatNumber(rank),
+            total: P.formatNumber(total),
+            score: P.formatNumber(similarity, { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+        }));
+        return badge;
+    }
+
     // -------------------- Content view (semantic neighbours) ------------
     function renderContentView(gridHost, neighbours, siteBase) {
         gridHost.innerHTML = '';
@@ -130,14 +146,8 @@
             gridHost.appendChild(P.buildEmptyState('No similar articles'));
             return;
         }
-        neighbours.forEach(function (n) {
-            var badge = null;
-            if (typeof n.similarity === 'number') {
-                var pct = Math.round(n.similarity * 1000) / 10;
-                badge = P.el('span', 'iwac-vis-article-card__sim', P.formatPercent(pct, 0));
-                badge.setAttribute('title', P.labelColon(P.t('Similarity')) + ' ' + P.formatPercent(pct, 1));
-            }
-            gridHost.appendChild(buildCard(n, badge, siteBase));
+        neighbours.forEach(function (n, i) {
+            gridHost.appendChild(buildCard(n, rankBadge(n.similarity, i + 1, neighbours.length), siteBase));
         });
     }
 
@@ -148,13 +158,8 @@
             gridHost.appendChild(P.buildEmptyState('No related scholarship'));
             return;
         }
-        works.forEach(function (w) {
-            var badge = null;
-            if (typeof w.similarity === 'number') {
-                var pct = Math.round(w.similarity * 1000) / 10;
-                badge = P.el('span', 'iwac-vis-article-card__sim', P.formatPercent(pct, 0));
-                badge.setAttribute('title', P.labelColon(P.t('Similarity')) + ' ' + P.formatPercent(pct, 1));
-            }
+        works.forEach(function (w, i) {
+            var badge = rankBadge(w.similarity, i + 1, works.length);
             // Authors · type · year. The type arrives as the French
             // resource-class label the dataset stores, so it routes through
             // the same `ref_type_*` keys the References Overview uses.

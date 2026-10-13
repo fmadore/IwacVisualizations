@@ -24,7 +24,8 @@
  *  15. Author collaborations — force-directed network (wide)
  *
  * Panels 11–12 exist because the 2026-07 pipeline began extracting full
- * text for the bibliography (`OCR`, `embedding_OCR`, its own LDA run).
+ * text for the bibliography (`OCR`, its own LDA run; its vector is
+ * `embedding_abstract`, title + abstract, since 2026-10).
  * They are deliberately adjacent: the topic panels describe the digitised
  * subset, and the coverage panel immediately above states how large that
  * subset is, so the topic distribution is never read as a claim about the
@@ -375,9 +376,10 @@
     /* ----------------------------------------------------------------- */
     //
     // The bibliography's counterpart to the press corpus's Semantic
-    // Landscape block, as a panel rather than a block: at ~423 points
+    // Landscape block, as a panel rather than a block: at ~442 points
     // it is one view among several here, not a destination of its own.
-    // Both are UMAP over 768-dim gemini-embedding-2 vectors, so the two
+    // Both are UMAP over 768-dim EmbeddingGemma 2 vectors (abstracts here,
+    // full texts there), so the two
     // maps are built the same way — but they are separate projections
     // and coordinates are NOT comparable across them.
 

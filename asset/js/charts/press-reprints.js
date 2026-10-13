@@ -4,14 +4,15 @@
  * Near-duplicate article pairs across different newspapers (ROADMAP
  * 9.9): syndicated wire copy, shared communiqués, straight reprints.
  * Loads `press-reprints.json` (built by `scripts/generate_reprints.py`
- * via embedding cosine similarity — see the AI-provenance note in the
+ * via embedding cosine similarity, confirmed or extended by word-trigram
+ * overlap of the two OCR texts — see the AI-provenance note in the
  * block description) and renders:
  *
  *   - summary cards — published pairs, newspapers involved, median
  *     day gap, articles scanned
  *   - circulation network — newspapers as nodes (country-colored),
  *     edge width = number of shared texts
- *   - the pair table — similarity, day gap, both articles linked to
+ *   - the pair table — similarity, shared wording, day gap, both articles linked to
  *     their IWAC items
  *
  * Load order: after shared/panels.js + chart-options*.js + table.js.
@@ -30,7 +31,7 @@
     if (ns.addTranslations) {
         ns.addTranslations('en', {
             'reprints.title':          'Possible press reprints and shared copy',
-            'reprints.description':    'Pairs of articles from different newspapers with highly similar AI representations of their full texts. These matches may identify agency dispatches, shared communiqués or reprints, but can also reflect similar subject matter. The software compares text representations, not identical wording. Read both articles before concluding that a text was copied or identifying a source.',
+            'reprints.description':    'Pairs of articles from different newspapers whose AI representations of their full texts are near-identical, or similar with much of their wording in common (runs of three words). These matches may identify agency dispatches, shared communiqués or reprints; a pair found by its representation alone can also reflect similar subject matter. Read both articles before concluding that a text was copied or identifying a source.',
             'reprints.card_pairs':     'Candidate article pairs',
             'reprints.card_papers':    'Newspapers involved',
             'reprints.card_gap':       'Median gap (days)',
@@ -40,8 +41,9 @@
             'reprints.network_tip':    '{a} ↔ {b}: {n} candidate pairs',
             'reprints.node_tip':       '{name}: {n} candidate pairs',
             'reprints.table_title':    'Candidate article pairs',
-            'reprints.table_desc':     'Candidate pairs ranked by similarity score. The score is expressed as a percentage, not a probability of copying. Publication-date gaps can help investigate circulation, but do not distinguish agency dispatches from reprints on their own.',
+            'reprints.table_desc':     'Candidate pairs ranked by similarity score, on a 0–1 scale and not a probability of copying. Shared wording is the share of three-word runs the two texts have in common; a dash means a text could not be compared. Publication-date gaps can help investigate circulation, but do not distinguish agency dispatches from reprints on their own.',
             'reprints.col_sim':        'Similarity',
+            'reprints.col_words':      'Shared wording',
             'reprints.col_gap':        'Gap (days)',
             'reprints.col_article_a':  'Article A',
             'reprints.col_paper_a':    'Newspaper A',
@@ -51,7 +53,7 @@
         });
         ns.addTranslations('fr', {
             'reprints.title':          'Reprises de presse et textes communs possibles',
-            'reprints.description':    'Paires d’articles de journaux différents dont les représentations des textes intégraux produites par IA sont très similaires. Ces rapprochements peuvent signaler des dépêches d’agence, des communiqués communs ou des reprises, mais aussi des sujets proches. Le logiciel compare des représentations textuelles, sans vérifier que les formulations sont identiques. Lisez les deux articles avant de conclure à une reprise ou d’en identifier la source.',
+            'reprints.description':    'Paires d’articles de journaux différents dont les représentations des textes intégraux produites par IA sont quasi identiques, ou similaires avec une grande part de formulations communes (suites de trois mots). Ces rapprochements peuvent signaler des dépêches d’agence, des communiqués communs ou des reprises ; une paire repérée par sa seule représentation peut aussi refléter des sujets proches. Lisez les deux articles avant de conclure à une reprise ou d’en identifier la source.',
             'reprints.card_pairs':     'Paires d’articles candidates',
             'reprints.card_papers':    'Journaux concernés',
             'reprints.card_gap':       'Écart médian (jours)',
@@ -61,8 +63,9 @@
             'reprints.network_tip':    '{a} ↔ {b}\u00a0: {n} paires candidates',
             'reprints.node_tip':       '{name}\u00a0: {n} paires candidates',
             'reprints.table_title':    'Paires d’articles candidates',
-            'reprints.table_desc':     'Paires candidates classées par score de similarité. Le score est exprimé en pourcentage et ne donne pas une probabilité de reprise. L’écart entre les dates de publication aide à étudier la circulation, mais ne suffit pas à distinguer une dépêche d’agence d’une reprise.',
+            'reprints.table_desc':     'Paires candidates classées par score de similarité, sur une échelle de 0 à 1, qui ne donne pas une probabilité de reprise. Les formulations communes indiquent la part des suites de trois mots partagées par les deux textes ; un tiret signale qu’un texte n’a pas pu être comparé. L’écart entre les dates de publication aide à étudier la circulation, mais ne suffit pas à distinguer une dépêche d’agence d’une reprise.',
             'reprints.col_sim':        'Similarité',
+            'reprints.col_words':      'Formulations communes',
             'reprints.col_gap':        'Écart (jours)',
             'reprints.col_article_a':  'Article A',
             'reprints.col_paper_a':    'Journal A',
@@ -209,6 +212,9 @@
                 // Pre-formatted: the shared number renderer would show a
                 // missing day gap as "0", which reads as same-day.
                 sim: (p.similarity != null) ? P.formatNumber(p.similarity, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '',
+                // Null when either OCR text was missing, and absent from
+                // bundles built before the lexical check existed.
+                words: (p.lexical_jaccard != null) ? P.formatPercent(p.lexical_jaccard * 100, 0) : '—',
                 gap: (p.day_gap != null) ? String(p.day_gap) : '—',
                 titleA: p.a.title || ('#' + p.a.o_id),
                 hrefA: ctx.siteBase ? ctx.siteBase + '/item/' + p.a.o_id : null,
@@ -221,6 +227,7 @@
         var table = P.buildTable({
             columns: [
                 { key: 'sim',    label: P.t('reprints.col_sim'),       width: '6rem' },
+                { key: 'words',  label: P.t('reprints.col_words'),     width: '7rem' },
                 { key: 'gap',    label: P.t('reprints.col_gap'),       width: '6rem' },
                 // Both articles are labelled lines of their own: the pair is
                 // the finding, so promoting one of them to the record's

@@ -135,15 +135,20 @@ class SemanticMixin:
 
         * ``articles`` carry ``embedding_OCR`` — a vector of the text.
         * ``publications`` carry ``embedding_tableOfContents`` and no
-          ``embedding_OCR``. It is the same 768-dim gemini space, so the
+          ``embedding_OCR``. It is the same 768-dim EmbeddingGemma 2
+          space, so the
           arithmetic would work, which is exactly the trap: a magazine's
           contents page and an article's body are different objects, and
           co-projecting them would place a periodical by its index rather
           than by what it argues. This block's own rule is that no bundle
           sums across subsets without labelling it; silently mixing two
           kinds of vector would break that rule invisibly.
-        * ``documents`` carry no embedding at all.
-        * ``references`` do carry ``embedding_OCR``, but they are
+        * ``documents`` have carried ``embedding_OCR`` since 2026-10, but
+          only 26 of them exist across the whole collection; folding a
+          handful of points into a press map would add a label to the
+          legend and nothing to the reading.
+        * ``references`` carry ``embedding_abstract`` — a vector of an
+          abstract, not a text — and they are
           scholarship *about* the sources rather than sources, which is
           why every temporal facet in this block already excludes them.
           They keep their own axis in the bibliography view.

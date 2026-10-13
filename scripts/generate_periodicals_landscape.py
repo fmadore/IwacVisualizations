@@ -1,6 +1,8 @@
 """Generate the Periodicals Semantic Landscape bundle — a 2-D UMAP
 projection of every Islamic-periodical issue's
-``embedding_tableOfContents`` (768-dim Gemini vectors). This is the
+``embedding_tableOfContents`` (768-dim ``google/embeddinggemma-2``
+vectors since 2026-10-13; the coordinates are refit from them on every
+run, never carried over from the Gemini-era projection). This is the
 ``publications``-subset counterpart to the article ``semantic-landscape``:
 nearby points are issues whose table of contents is semantically similar,
 so clusters read as thematic neighbourhoods of the periodical corpus.

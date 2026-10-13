@@ -2,7 +2,7 @@
  * IWAC Visualizations — Semantic Landscape page block (orchestrator)
  *
  * The "map of everything": a 2-D UMAP projection of every article's
- * 768-dim Gemini `embedding_OCR`, precomputed by
+ * 768-dim EmbeddingGemma 2 `embedding_OCR`, precomputed by
  * `scripts/generate_semantic_landscape.py` into one columnar bundle
  * (`asset/data/semantic-landscape.json`). Nearby points are articles
  * whose full text is semantically similar; clusters are themes.

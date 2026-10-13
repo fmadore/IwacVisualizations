@@ -12,9 +12,11 @@ References were the last content type with no per-item Visualizations
 surface, for a good reason: until the 2026-07 pipeline they carried only
 bibliographic metadata, which Omeka's own item page already displays
 better than a chart could. They now carry extracted full text
-(``OCR``), an ``embedding_OCR`` from the same model as the articles, their
-own LDA topics and ``nb_mots`` — enough for a dashboard that adds
-something the item page cannot.
+(``OCR``), their own LDA topics, ``nb_mots`` and — for the works with an
+abstract — an ``embedding_abstract`` from the same model as the articles
+(``google/embeddinggemma-2`` since 2026-10-13, title + abstract; it
+replaced a full-text ``embedding_OCR`` that no longer exists). Enough for
+a dashboard that adds something the item page cannot.
 
 Each file carries:
 
@@ -29,13 +31,13 @@ Each file carries:
                              sparse here for a per-imprint run to mean
                              anything.
   * ``semantic_neighbors`` — top-K works from the bibliography by cosine
-                             similarity over ``embedding_OCR``.
+                             similarity over ``embedding_abstract``.
   * ``press_neighbors``    — top-K *newspaper articles* by cosine
                              similarity, the reverse of the bridge the
                              article dashboards added: from a scholarly
                              work to the press coverage it resembles.
-                             Same 768-dim ``gemini-embedding-2`` space on
-                             both sides.
+                             Same 768-dim space on both sides: the work's
+                             abstract against each article's full text.
   * ``reviews``            — the ``bibo:reviewOf`` relation, resolved
                              both ways: what this work reviews, and which
                              works in the bibliography review it. Title
@@ -44,9 +46,9 @@ Each file carries:
                              a review of a book the collection does not
                              hold still says what it reviews.
 
-Coverage is partial by nature (~423 of 867 references have text), so every
-block is independently omittable and the front-end elides the slots it
-doesn't get.
+Coverage is partial by nature (~442 of 867 references have an abstract,
+and so a vector), so every block is independently omittable and the
+front-end elides the slots it doesn't get.
 
 Usage
 -----
@@ -70,7 +72,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from iwac_embeddings import build_normalized_matrix, top_k_cosine
+from iwac_embeddings import EMBEDDING_COLUMNS, build_normalized_matrix, top_k_cosine
 from iwac_utils import (
     expect_item_outputs,
     DATASET_ID,
@@ -90,8 +92,10 @@ logger = logging.getLogger("generate_reference_dashboards")
 
 REFERENCES_SUBSET = "references"
 ARTICLES_SUBSET = "articles"
+REFERENCES_EMBEDDING = EMBEDDING_COLUMNS[REFERENCES_SUBSET]
+ARTICLES_EMBEDDING = EMBEDDING_COLUMNS[ARTICLES_SUBSET]
 
-# Neighbour caps. The bibliography is small (867 rows, ~423 embedded), so
+# Neighbour caps. The bibliography is small (867 rows, ~442 embedded), so
 # ten scholarly neighbours already reaches into weak matches; the press
 # side has 12k candidates and can afford the same.
 DEFAULT_TOP_K_SEMANTIC = 10
@@ -101,7 +105,7 @@ DEFAULT_TOP_K_PRESS = 10
 # minimal: this generator has no use for OCR or lemmas, and materialising
 # them for 12k rows is the expensive part of loading the subset.
 ARTICLE_COLUMNS = ["o:id", "title", "newspaper", "country", "pub_date",
-                   "thumbnail", "embedding_OCR"]
+                   "thumbnail", ARTICLES_EMBEDDING]
 
 
 def _fold(value: Any) -> str:
@@ -276,12 +280,12 @@ class ReferenceDashboardGenerator:
     def compute_semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K bibliography neighbours per reference."""
         result: Dict[int, List[Dict[str, Any]]] = {}
-        if "embedding_OCR" not in self.df.columns:
-            logger.warning("references subset has no embedding_OCR — scholarly "
-                           "neighbours skipped")
+        if REFERENCES_EMBEDDING not in self.df.columns:
+            logger.warning("references subset has no %s — scholarly "
+                           "neighbours skipped", REFERENCES_EMBEDDING)
             return result
 
-        X, valid = build_normalized_matrix(self.df, "embedding_OCR")
+        X, valid = build_normalized_matrix(self.df, REFERENCES_EMBEDDING)
         if X.shape[0] < 2:
             logger.warning("fewer than two usable reference embeddings — "
                            "scholarly neighbours skipped")
@@ -319,23 +323,24 @@ class ReferenceDashboardGenerator:
     def compute_press_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K newspaper articles per reference — the reverse bridge.
 
-        Same caveat as the forward direction on the article dashboards: a
-        chunk-averaged book embedding sits nearer the corpus centroid than
-        any single article does, so these are leads, not citations. Here the
-        asymmetry works in the reader's favour, though — one long work
-        against 12k short articles produces a ranking over the press, which
-        is exactly the "what did the papers say about this" question.
+        Same caveat as the forward direction on the article dashboards: an
+        abstract summarises a whole work, so it sits nearer the corpus
+        centroid than any single article does, and these are leads, not
+        citations. Here the asymmetry works in the reader's favour, though
+        — one work's abstract against 16k articles produces a ranking over
+        the press, which is exactly the "what did the papers say about
+        this" question.
         """
         result: Dict[int, List[Dict[str, Any]]] = {}
-        if self.articles_df is None or "embedding_OCR" not in self.df.columns:
+        if self.articles_df is None or REFERENCES_EMBEDDING not in self.df.columns:
             return result
-        if "embedding_OCR" not in self.articles_df.columns:
-            logger.warning("articles subset has no embedding_OCR — press "
-                           "neighbours skipped")
+        if ARTICLES_EMBEDDING not in self.articles_df.columns:
+            logger.warning("articles subset has no %s — press "
+                           "neighbours skipped", ARTICLES_EMBEDDING)
             return result
 
-        R, ref_valid = build_normalized_matrix(self.df, "embedding_OCR")
-        A, art_valid = build_normalized_matrix(self.articles_df, "embedding_OCR")
+        R, ref_valid = build_normalized_matrix(self.df, REFERENCES_EMBEDDING)
+        A, art_valid = build_normalized_matrix(self.articles_df, ARTICLES_EMBEDDING)
         if R.shape[0] == 0 or A.shape[0] == 0:
             return result
         if R.shape[1] != A.shape[1]:
@@ -353,7 +358,7 @@ class ReferenceDashboardGenerator:
         thumb_col = find_column(self.articles_df, ["thumbnail"])
 
         K = min(self.top_k_press, A.shape[0])
-        sims = R @ A.T                     # (refs, articles) — 423 × 12k
+        sims = R @ A.T                     # (refs, articles) — ~442 × 16.7k
         k_eff = min(K, sims.shape[1])
         part_idx = np.argpartition(-sims, k_eff - 1, axis=1)[:, :k_eff]
         part_sims = np.take_along_axis(sims, part_idx, axis=1)

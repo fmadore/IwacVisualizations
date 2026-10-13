@@ -128,6 +128,9 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         metrics.extend(_enrichment_metrics(df, n, "OCR text"))
         if col("embedding_OCR") is not None:
             metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
+        if col("related_articles") is not None:
+            metrics.append(metric("Precomputed neighbours",
+                                  _nonempty(df["related_articles"]), n))
         # Labels name the exact model that produced the annotation, which
         # is also what the HF columns and the model ids key on. A model
         # with no column yields no row at all rather than a 0% one — this
@@ -164,9 +167,13 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         # Since 2026-07 the bibliography carries full text, its own
         # embeddings and its own (two-model) LDA run — the same enrichment
         # ladder as articles, and worth steering with the same meters.
+        # Since 2026-10 the vector embeds title + abstract
+        # (`embedding_abstract`), so it tracks the Abstract meter below
+        # rather than the full text; the old `embedding_OCR` is gone.
         metrics.extend(_enrichment_metrics(df, n, "Full text"))
-        if col("embedding_OCR") is not None:
-            metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
+        if col("embedding_abstract") is not None:
+            metrics.append(metric("Abstract embeddings",
+                                  _embeddings(df["embedding_abstract"]), n))
         if col("lda_topic_id") is not None:
             assigned = int(((df["lda_topic_id"].notna())
                             & (df["lda_topic_id"] != -1)).sum())
@@ -261,6 +268,14 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         # documents, and any subset added upstream before it gets a branch
         # here — keep the generic ladder so a new subset still reports.
         metrics.extend(_enrichment_metrics(df, n, "OCR text"))
+        # Documents gained a text embedding and precomputed neighbours on
+        # 2026-10-13; read generically so another subset that gains them
+        # reports too.
+        if col("embedding_OCR") is not None:
+            metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
+        if col("related_articles") is not None:
+            metrics.append(metric("Precomputed neighbours",
+                                  _nonempty(df["related_articles"]), n))
         if col("doi") is not None:
             metrics.append(metric("DOI", _nonempty(df["doi"]), n))
         if col("pub_date") is not None:

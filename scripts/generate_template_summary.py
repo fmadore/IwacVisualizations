@@ -21,11 +21,15 @@ Three HF subsets feed it:
   split cannot be recovered from them at all.
 * ``documents`` — heterogeneous (official letters, communiqués,
   sermons, posters), split on free-text ``type``; Document is template 22.
-* ``images`` — photographs (class 58 ``bibo:Image``), template 15. The
-  only subset here carrying an embedding (``embedding_image``, a
-  multimodal ``gemini-embedding-2`` vector of the photograph *itself*),
-  so photograph pages get real similarity neighbours in
-  ``similar_by_id`` instead of the recency list the others fall back to.
+* ``images`` — photographs (class 58 ``bibo:Image``), template 15,
+  embedded as ``embedding_image`` (a multimodal
+  ``google/embeddinggemma-2`` vector of the photograph *itself*).
+
+``images`` and ``documents`` carry an embedding (documents gained
+``embedding_OCR``, title + full text, on 2026-10-13), so their pages get
+real similarity neighbours in ``similar_by_id`` instead of the recency
+list audiovisual falls back to — audiovisual has transcriptions but no
+vectors.
 
 Every count below is generated, never asserted in prose: the corpus
 grew from 47 to four figures in a single afternoon when the YouTube
@@ -66,7 +70,7 @@ Output bundle: ``asset/data/template-summary.json`` keyed by subset:
             ...
           }
         },
-        "documents": { "total": 26, ..., "by_type": {...} },
+        "documents": { "total": 26, ..., "by_type": {...}, "similar_by_id": {...} },
         "images":    { "total": 30, ..., "similar_by_id": {...} }
       }
     }
@@ -103,6 +107,7 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
+from iwac_embeddings import EMBEDDING_COLUMNS as SUBSET_EMBEDDINGS
 from iwac_embeddings import build_normalized_matrix, top_k_cosine
 from iwac_utils import (
     add_standard_args,
@@ -134,12 +139,13 @@ SUBSETS = ["audiovisual", "documents", "images"]
 TOP_ITEMS = 30
 
 # subset → embedding column, for subsets where we can do better than a
-# recency list. Only ``images`` qualifies today: ``embedding_image`` is
-# multimodal (the photograph itself is embedded), so cosine neighbours
-# are genuinely "looks / reads like this one". The text subsets here
-# carry no embedding at all — audiovisual has transcriptions but no
-# vectors, documents neither.
-EMBEDDING_COLUMNS: Dict[str, str] = {"images": "embedding_image"}
+# recency list: ``images`` (``embedding_image``, the photograph itself)
+# and, since 2026-10-13, ``documents`` (``embedding_OCR``, title + full
+# text). Read from the shared map so the column names live in one place;
+# audiovisual has transcriptions but no vectors, so it is absent there.
+EMBEDDING_COLUMNS: Dict[str, str] = {
+    subset: SUBSET_EMBEDDINGS[subset] for subset in SUBSETS if subset in SUBSET_EMBEDDINGS
+}
 
 # Neighbours kept per item. The strip renders up to 8 cards; 6 keeps
 # the payload small while leaving the client room to drop any card

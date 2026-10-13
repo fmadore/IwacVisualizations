@@ -59,12 +59,19 @@
         return P.translateKeyed('ref_type_', type);
     }
 
-    function fmtScore(score) {
+    /**
+     * The badge names the rank; the score rides in the tooltip. Under the
+     * EmbeddingGemma 2 vectors (2026-10) a cosine reads 0.9-something for
+     * nearly every neighbour, so a percentage badge showed a row of 93s
+     * and 95s that a reader takes for confidence. The order is the finding.
+     */
+    function scoreTitle(score, rank, total) {
         if (typeof score !== 'number' || isNaN(score)) return '';
-        var pct = Math.round(score * 100);
-        if (pct < 1)   pct = 1;
-        if (pct > 99) pct = 99;
-        return P.formatPercent(pct, 0);
+        return P.t('similar_score_title', {
+            rank:  P.formatNumber(rank),
+            total: P.formatNumber(total),
+            score: P.formatNumber(score, { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+        });
     }
 
     /** Normalize either generator output (`o_id`, `similarity`,
@@ -94,7 +101,7 @@
         };
     }
 
-    function buildCard(raw, ctx) {
+    function buildCard(raw, ctx, rank, total) {
         var item = normalize(raw);
         if (!item) return null;
 
@@ -124,11 +131,14 @@
         var body = P.el('span', 'iwac-vis-similar-card__body');
 
         if (item.score != null) {
-            body.appendChild(P.el(
+            var badge = P.el(
                 'span',
                 'iwac-vis-similar-card__score',
-                P.t('Similarity') + ' ' + fmtScore(item.score)
-            ));
+                P.t('similar_rank', { rank: P.formatNumber(rank) })
+            );
+            var title = scoreTitle(item.score, rank, total);
+            if (title) badge.title = title;
+            body.appendChild(badge);
         }
 
         body.appendChild(P.el('span', 'iwac-vis-similar-card__title', item.title || P.t('Untitled')));
@@ -180,7 +190,7 @@
 
         var grid = P.el('div', 'iwac-vis-similar-strip');
         for (var i = 0; i < filtered.length; i++) {
-            var card = buildCard(filtered[i], ctx);
+            var card = buildCard(filtered[i], ctx, i + 1, filtered.length);
             if (card) grid.appendChild(card);
         }
         el.appendChild(grid);

@@ -4,7 +4,28 @@ IWAC Shared Embedding Utilities
 ================================
 
 Shared kNN / similarity helpers over the dataset's 768-dim
-``gemini-embedding-2`` vectors. Extracted per REFACTORING.md Tier 4 —
+``google/embeddinggemma-2`` vectors (float32, run upstream from a pinned
+ONNX export and averaged over chunks). They replaced the
+``gemini-embedding-2`` vectors in place on 2026-10-13: the two are
+different spaces, so nothing computed on one may be mixed with the other,
+and every projection and threshold here was re-derived for the new one.
+
+What each subset embeds (``EMBEDDING_COLUMNS``):
+
+- ``articles`` / ``documents`` — ``embedding_OCR``, title + full text
+- ``references``               — ``embedding_abstract``, title + abstract
+                                 (only the works that have an abstract;
+                                 the old ``embedding_OCR`` is gone)
+- ``publications``             — ``embedding_tableOfContents``
+- ``images``                   — ``embedding_image``, the photograph
+
+All five live in the one space, so a cross-subset dot product is
+meaningful. Cosines run high in it — the median nearest-neighbour score on
+articles is about 0.91 — so a raw score reads as "very similar" almost
+everywhere; rank within a list, never the percentage, is what a reader
+can use.
+
+Extracted per REFACTORING.md Tier 4 —
 the coerce → normalize → batched-cosine stack was copy-pasted across
 ``generate_article_dashboards.py``, ``generate_publication_dashboards.py``,
 ``generate_semantic_landscape.py`` and ``generate_periodicals_landscape.py``;
@@ -20,14 +41,32 @@ Functions
                            list of source row positions)
 - top_k_cosine:            batched top-k neighbour indices + scores
 - pairs_above_threshold:   batched (i, j, sim) pairs with sim ≥ threshold
+- word_shingles / shingle_jaccard: lexical overlap of two texts, the
+                           confirmation step for near-duplicates
 """
 from __future__ import annotations
 
 import logging
-from typing import Any, Iterator, List, Optional, Sequence, Tuple
+import re
+import zlib
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
+
+
+EMBEDDING_MODEL = "google/embeddinggemma-2"
+
+# Subset → the column holding its vector. References embed their abstract,
+# not their full text: a generator that reads `embedding_OCR` there finds no
+# column and silently degrades, which is how this map came to exist.
+EMBEDDING_COLUMNS: Dict[str, str] = {
+    "articles":     "embedding_OCR",
+    "documents":    "embedding_OCR",
+    "references":   "embedding_abstract",
+    "publications": "embedding_tableOfContents",
+    "images":       "embedding_image",
+}
 
 
 def coerce_embedding(value: Any) -> Optional[np.ndarray]:
@@ -174,3 +213,37 @@ def pairs_above_threshold(
             for off in js:
                 j = i + 1 + int(off)
                 yield i, j, float(row[j])
+
+
+_WORD_RE = re.compile(r"[^\W_]+", re.UNICODE)
+
+
+def word_shingles(text: Any, size: int = 3) -> np.ndarray:
+    """Sorted unique 32-bit hashes of the text's word ``size``-grams.
+
+    Tokenised as upstream's ``analyses/reprint_candidates.py`` does —
+    casefolded runs of letters and digits — so a Jaccard computed here
+    means what the dataset's own calibration measured. Hashes rather than
+    tuples because the reprint scan may hold shingles for thousands of
+    articles at once; CRC32 rather than ``hash()`` so the result does not
+    change between runs. A collision can only inflate overlap by one
+    shingle in billions, which no threshold here can see.
+    """
+    if not isinstance(text, str) or not text:
+        return np.empty(0, dtype=np.uint32)
+    tokens = _WORD_RE.findall(text.casefold())
+    if len(tokens) < size:
+        return np.empty(0, dtype=np.uint32)
+    grams = {
+        zlib.crc32(" ".join(tokens[i:i + size]).encode("utf-8"))
+        for i in range(len(tokens) - size + 1)
+    }
+    return np.fromiter(sorted(grams), dtype=np.uint32, count=len(grams))
+
+
+def shingle_jaccard(a: np.ndarray, b: np.ndarray) -> float:
+    """Jaccard overlap of two ``word_shingles`` arrays (0.0 if either is empty)."""
+    if a.size == 0 or b.size == 0:
+        return 0.0
+    inter = np.intersect1d(a, b, assume_unique=True).size
+    return inter / (a.size + b.size - inter)

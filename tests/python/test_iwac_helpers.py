@@ -203,6 +203,24 @@ class EmbeddingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             list(iwac_embeddings.pairs_above_threshold(matrix, 0.5, batch_size=0))
 
+    def test_references_read_their_abstract_vector(self) -> None:
+        # The references' full-text embedding_OCR was removed upstream on
+        # 2026-10-13; a generator reading it degrades silently.
+        self.assertEqual(iwac_embeddings.EMBEDDING_COLUMNS["references"], "embedding_abstract")
+        self.assertEqual(iwac_embeddings.EMBEDDING_COLUMNS["articles"], "embedding_OCR")
+
+    def test_shingle_jaccard_matches_upstream_tokenisation(self) -> None:
+        # Casefolded letter/digit runs: punctuation and case do not count.
+        a = iwac_embeddings.word_shingles("Le CSI appelle au calme, à Ouagadougou.")
+        b = iwac_embeddings.word_shingles("le csi appelle au calme à ouagadougou")
+        self.assertEqual(iwac_embeddings.shingle_jaccard(a, b), 1.0)
+        c = iwac_embeddings.word_shingles("le csi appelle au calme à Bobo-Dioulasso")
+        # 5 and 6 trigrams, 4 of them shared → 4 / 7.
+        self.assertAlmostEqual(iwac_embeddings.shingle_jaccard(a, c), 4 / 7)
+        self.assertEqual(iwac_embeddings.word_shingles("deux mots").size, 0)
+        self.assertEqual(iwac_embeddings.word_shingles(None).size, 0)
+        self.assertEqual(iwac_embeddings.shingle_jaccard(a, np.empty(0, np.uint32)), 0.0)
+
 
 class StatisticsTests(unittest.TestCase):
     def test_dunning_g2_uses_the_complete_two_by_two_table(self) -> None:
@@ -816,6 +834,37 @@ class TemplateSummaryAudiovisualTests(unittest.TestCase):
         self.assertEqual(summary["duration"]["count"], 5)
 
 
+class TemplateSummaryDocumentTests(unittest.TestCase):
+    """Documents gained `embedding_OCR` on 2026-10-13, so their pages get
+    similarity neighbours the way photographs do."""
+
+    def test_documents_get_neighbours_from_their_text_vector(self) -> None:
+        frame = pd.DataFrame([
+            {"o:id": "1", "title": "Communiqué du CSI", "pub_date": "2004-02-01",
+             "country": "Burkina Faso", "type": "Communiqué",
+             "embedding_OCR": [1.0, 0.0, 0.0]},
+            {"o:id": "2", "title": "Lettre au ministre", "pub_date": "2004-03-01",
+             "country": "Burkina Faso", "type": "Lettre",
+             "embedding_OCR": [0.9, 0.1, 0.0]},
+            {"o:id": "3", "title": "Sermon", "pub_date": "1999",
+             "country": "Niger", "type": "Sermon",
+             "embedding_OCR": [0.0, 0.0, 1.0]},
+            # No vector: absent from the map, so its page keeps the
+            # recency list rather than an empty strip.
+            {"o:id": "4", "title": "Affiche", "pub_date": "2010",
+             "country": "Bénin", "type": "Affiche", "embedding_OCR": None},
+        ])
+        summary = generate_template_summary.build_subset_summary("documents", frame)
+        similar = summary["similar_by_id"]
+        self.assertNotIn("4", similar)
+        self.assertEqual([card["o_id"] for card in similar["1"]][0], 2)
+        self.assertNotIn(1, [card["o_id"] for card in similar["1"]])
+        self.assertTrue(all("score" in card for card in similar["1"]))
+
+    def test_audiovisual_stays_on_the_recency_list(self) -> None:
+        self.assertNotIn("audiovisual", generate_template_summary.EMBEDDING_COLUMNS)
+
+
 class CollectionOverviewAudiovisualTests(unittest.TestCase):
     """The `audiovisual_minutes` KPI on the homepage hero."""
 
@@ -1291,6 +1340,26 @@ class ReferencesNetworkTests(unittest.TestCase):
 
     def rows(self, records):
         return pd.DataFrame(records)
+
+    def test_topic_model_language_comes_from_the_rows_not_the_name(self) -> None:
+        # Since 2026-10 lda_model_name is an opaque bundle identity, which
+        # a name → language table could not know.
+        fr, en = "lda-legacy-sha256:e74e38b4", "lda-sha256:0123abcd"
+        records = [
+            {"o:id": 1, "title": "A", "lda_model_name": fr, "lda_topic_id": 3,
+             "lda_topic_label": "islam, laïcité", "language": "Français"},
+            {"o:id": 2, "title": "B", "lda_model_name": fr, "lda_topic_id": 3,
+             "lda_topic_label": "islam, laïcité", "language": "Français|Anglais"},
+            {"o:id": 3, "title": "C", "lda_model_name": en, "lda_topic_id": 3,
+             "lda_topic_label": "sufism, order", "language": "Anglais"},
+            {"o:id": 4, "title": "D", "lda_model_name": en, "lda_topic_id": 1,
+             "lda_topic_label": "reform", "language": "Français"},
+        ]
+        out = generate_references_overview.compute_topics(self.rows(records), items_per_topic=2)
+        languages = {m["model"]: m["language"] for m in out["models"]}
+        self.assertEqual(languages[fr], "Français")
+        # One English row and one French: no majority, so no guess.
+        self.assertEqual(languages[en], "")
 
     def test_the_node_cap_keeps_the_most_prolific_and_reports_the_rest(self) -> None:
         # A ring of authors, every one connected, so min_degree drops nobody.

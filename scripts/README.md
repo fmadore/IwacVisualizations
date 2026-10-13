@@ -400,13 +400,18 @@ The ASCII-folded `shard_key` logic is mirrored client-side in
 
 ### `generate_reprints.py`
 
-Writes `asset/data/press-reprints.json` (~24 KB) for the Press Reprints
-block: batched upper-triangle cosine scan over `embedding_OCR`
-(via `iwac_embeddings.py`), logging a similarity histogram from
-`--scan-threshold` (0.90) on every build and publishing cross-newspaper
-pairs ≥ `--threshold` (0.97), capped at `--max-pairs` (500). The
-histogram ships in the bundle so the threshold stays tunable with
-evidence.
+Writes `asset/data/press-reprints.json` for the Press Reprints block:
+batched upper-triangle cosine scan over `embedding_OCR` (via
+`iwac_embeddings.py`) from `--scan-threshold` (0.91), publishing the
+cross-newspaper pairs that either reach `--threshold` (0.97) or share
+wording — word-trigram Jaccard ≥ `--min-jaccard` (0.45) over the OCR,
+mirroring upstream's `analyses/reprint_candidates.py` — capped at
+`--max-pairs` (500). Each pair carries its `lexical_jaccard` and the `test`
+that admitted it. Both thresholds are upstream's calibration of the
+EmbeddingGemma 2 space (0.91 passes 97.6 % of held-out lexical
+duplicates; 0.97 is 94 % lexically confirmed), not the Gemini-era
+values. The similarity histogram (all / cross-newspaper / cross with
+shared wording) ships in the bundle so the cut-offs stay checkable.
 
 ### `generate_corpus_health.py`
 
@@ -496,7 +501,10 @@ where `1 - cdf` cancels to zero.
 
 The coerce → normalize → batched-cosine stack ([historical audit, Tier 4](https://github.com/fmadore/IwacVisualizations/blob/2c0252713e01470d16d5022ef37c043d912c8126/REFACTORING.md)):
 `coerce_embedding`, `build_normalized_matrix`, `top_k_cosine`,
-`pairs_above_threshold`. First consumer: `generate_reprints.py`; the
+`pairs_above_threshold`, plus `word_shingles` / `shingle_jaccard` for
+lexical confirmation and `EMBEDDING_COLUMNS` — the subset → vector column
+map (references read `embedding_abstract`; their `embedding_OCR` no longer
+exists). First consumer: `generate_reprints.py`; the
 four older embedding generators (`article_dashboards`,
 `publication_dashboards`, `semantic_landscape`,
 `periodicals_landscape`) still carry local copies and should migrate
@@ -620,7 +628,7 @@ Block-specific extras (partial list):
 | `--max-words`, `--min-frequency`, `--min-place-articles` | `scary-terms` | Word-cloud slice cap (200) / document-frequency floor (5) / map place floor (3) for the issue #2–#4 bundles. |
 | `--window-size`, `--top-n-terms`, `--min-cooccurrence`, `--targets` | `org-cooccurrence` | Sliding-window half-width (50), matrix vocabulary (30), weak-pair floor (2), sidecar path. |
 | `--max-terms`, `--min-total` | `term-trends` | Ngram vocabulary cap (5000) and total-document-frequency floor (25). |
-| `--threshold`, `--scan-threshold`, `--max-pairs` | `reprints` | Publication cosine cut-off (0.97), histogram scan floor (0.90), published-pair cap (500). |
+| `--threshold`, `--scan-threshold`, `--min-jaccard`, `--max-pairs` | `reprints` | Cosine-only cut-off (0.97), cosine prefilter and histogram floor (0.91), trigram Jaccard that admits a pair below the cut-off (0.45), published-pair cap (500). |
 
 ## Adding a new generator
 

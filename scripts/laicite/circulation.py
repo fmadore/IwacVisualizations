@@ -16,10 +16,14 @@ from laicite.scan import ItemScan
 # -----------------------------------------------------------------------
 # Circulation (issue #19 D)
 # -----------------------------------------------------------------------
-# 0.97 is generate_reprints.py's publication threshold, kept identical so
-# "reprint" means the same thing in both blocks. That script re-derives
-# the cut-off empirically on every data refresh (it logs a similarity
-# histogram from 0.90 up); if it ever moves, move this with it.
+# 0.97 is generate_reprints.py's cosine-only publication threshold, kept
+# identical so the semantic test means the same thing in both blocks. It
+# was re-checked for the EmbeddingGemma 2 vectors (2026-10): upstream's
+# calibration found 94 % of held-out pairs above it lexically confirmed.
+# Press Reprints now also admits pairs from 0.91 that share wording
+# (trigram Jaccard ≥ 0.45); this scan does not, because ItemScan carries
+# no text, so its count is the stricter of the two. If the cosine cut-off
+# ever moves there, move this with it.
 CIRCULATION_THRESHOLD = 0.97
 # Cap on the pair list the bundle ships as browsable rows. Every
 # aggregate — the outlet network, the per-decade counts, the reprinted-item

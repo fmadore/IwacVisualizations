@@ -40,11 +40,12 @@ Payload shape (top-level keys):
                                  grouping key is (lda_model_name,
                                  lda_topic_id) — see compute_topics.
     semantic_landscape         — 2-D UMAP projection of the references
-                                 that carry an ``embedding_OCR``, in the
-                                 columnar {types, countries, decades,
-                                 points, meta} shape. Covers only the
-                                 embedded subset (~423/867) and says so
-                                 in ``meta.embedded`` / ``meta.total``.
+                                 that carry an ``embedding_abstract``
+                                 (title + abstract), in the columnar
+                                 {types, countries, decades, points,
+                                 meta} shape. Covers only the works with
+                                 an abstract (~442/867) and says so in
+                                 ``meta.embedded`` / ``meta.total``.
                                  Degrades to an empty-state contract when
                                  umap-learn is absent or the subset is
                                  too small to project honestly.
@@ -80,7 +81,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from iwac_embeddings import coerce_embedding
+from iwac_embeddings import EMBEDDING_COLUMNS, EMBEDDING_MODEL, coerce_embedding
 from iwac_stats import build_timeline_series
 from iwac_utils import (
     add_standard_args,
@@ -125,7 +126,11 @@ PROVENANCE_COLUMNS = ("provenance", "Provenance", "place", "Place", "lieu", "Lie
 # Representative references kept per LDA topic (highest lda_topic_prob).
 TOPIC_ITEMS_PER_TOPIC = 5
 
-# Semantic landscape (UMAP over embedding_OCR). The bibliography is two
+# The references' vector column. Since 2026-10-13 it embeds title +
+# abstract (`embedding_abstract`); the full-text `embedding_OCR` is gone.
+EMBEDDING_COLUMN = EMBEDDING_COLUMNS[SUBSET]
+
+# Semantic landscape (UMAP over embedding_abstract). The bibliography is two
 # orders of magnitude smaller than the article corpus, so the default
 # neighbourhood shrinks with it — 15 neighbours over ~400 points smooths
 # away the local structure the map exists to show. Below LANDSCAPE_MIN_POINTS
@@ -139,14 +144,16 @@ LANDSCAPE_TITLE_LEN = 70
 # The LDA outlier bucket (-1) is excluded from the topic panel, as
 # everywhere else in the module — iwac_utils.lda_topic_id rejects it.
 
-# `lda_model_name` → the language that model was trained and predicted on.
-# The upstream presets are `lda_model_references` (Français) and
-# `lda_model_references_en` (Anglais); anything else is surfaced with an
-# empty language rather than guessed at.
-MODEL_LANGUAGES: Dict[str, str] = {
-    "lda_model_references":    "Français",
-    "lda_model_references_en": "Anglais",
-}
+# A topic model's language is read off the rows it labelled — the
+# majority of their `language` values — never off `lda_model_name`. The
+# name used to be the preset directory (`lda_model_references`,
+# `lda_model_references_en`) and a lookup table keyed on it; in 2026-10
+# upstream switched to bundle identities (`lda-legacy-sha256:…`,
+# `lda-sha256:…`) that change with every refit, and the French panel lost
+# its heading overnight. The rows' own language survives any renaming.
+# A model whose rows agree on no language below this share is shown
+# without one rather than with a guess.
+MODEL_LANGUAGE_MIN_SHARE = 0.5
 
 
 # Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
@@ -315,7 +322,10 @@ def compute_fulltext_coverage(rows: pd.DataFrame) -> Dict[str, Any]:
     """
     total = int(len(rows))
     ocr = rows.get("OCR")
-    embedding = rows.get("embedding_OCR")
+    # Counts abstract vectors, not full-text ones: since 2026-10 the
+    # references embed title + abstract, so this is no longer a subset of
+    # `with_ocr` — a work with an abstract and no digitised text has one.
+    embedding = rows.get(EMBEDDING_COLUMN)
     topic_ids = rows.get("lda_topic_id")
     public_flags = rows.get("OCR_is_public")
     words = rows.get("nb_mots")
@@ -387,10 +397,11 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
 
     **The grouping key is ``(lda_model_name, lda_topic_id)``, never the
     topic id alone.** Unlike ``articles`` — one French model, so its ids
-    are globally meaningful — ``references`` is topic-modelled twice:
-    ``lda_model_references`` for the French texts and
-    ``lda_model_references_en`` for the English ones, and both write the
-    *same* ``lda_topic_*`` columns. Topic 3 therefore exists twice with
+    are globally meaningful — ``references`` is topic-modelled twice,
+    once over the French texts and once over the English ones, and both
+    write the *same* ``lda_topic_*`` columns. The model names are opaque
+    bundle identities (``lda-legacy-sha256:…``) since 2026-10, so the
+    panel's language comes from the rows (``_model_language``). Topic 3 therefore exists twice with
     unrelated meanings, and aggregating on the id would silently merge a
     French topic with an English one into a single nonsense bucket.
 
@@ -406,6 +417,7 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
     # model → topic_id → accumulator
     models: Dict[str, Dict[int, Dict[str, Any]]] = defaultdict(dict)
     model_totals: Counter = Counter()
+    model_languages: Dict[str, Counter] = defaultdict(Counter)
 
     for position, (_, row) in enumerate(rows.iterrows()):
         topic_id = lda_topic_id(row.get("lda_topic_id"))
@@ -420,6 +432,8 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
         )
         bucket["count"] += 1
         model_totals[model_name] += 1
+        for language in set(clean_values(parse_pipe_separated(row.get("language")))):
+            model_languages[model_name][language] += 1
 
         label = clean_known_str(row.get("lda_topic_label"))
         if label and not bucket["label"]:
@@ -454,7 +468,7 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
         topic_list.sort(key=lambda entry: (-entry["count"], entry["topic_id"]))
         out_models.append({
             "model":    model_name,
-            "language": MODEL_LANGUAGES.get(model_name, ""),
+            "language": _model_language(model_languages[model_name], n_docs),
             "n_docs":   n_docs,
             "n_topics": len(topic_list),
             "topics":   topic_list,
@@ -464,6 +478,18 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
     # bibliography without hardcoding which model that is.
     out_models.sort(key=lambda entry: -entry["n_docs"])
     return {"models": out_models}
+
+
+def _model_language(languages: Counter, n_docs: int) -> str:
+    """The language most of a topic model's rows are in, or ``""``.
+
+    See ``MODEL_LANGUAGE_MIN_SHARE``: upstream fits one model per language,
+    so a clear majority is expected, and a split means the rows cannot say.
+    """
+    if not languages or not n_docs:
+        return ""
+    language, count = languages.most_common(1)[0]
+    return language if count / n_docs > MODEL_LANGUAGE_MIN_SHARE else ""
 
 
 def _empty_landscape(reason: str, embedded: int = 0, total: int = 0) -> Dict[str, Any]:
@@ -500,16 +526,19 @@ def compute_semantic_landscape(
     """2-D UMAP projection of the references that carry an embedding.
 
     Same recipe as ``generate_semantic_landscape.py`` (cosine metric over
-    L2-normalised ``embedding_OCR``, fixed ``random_state``), so a
-    reference and an article land in comparable geometry — both are
-    ``gemini-embedding-2`` at 768 dims.
+    L2-normalised vectors, fixed ``random_state``). Both are
+    ``google/embeddinggemma-2`` at 768 dims, but the two maps are not
+    co-registered — each UMAP fit has its own axes — and here a point is a
+    work's title + abstract, not its text.
 
     **Read the coverage before reading the map.** Only the references
-    IWAC holds full text for have an embedding — roughly half — and that
-    half is not a random sample: it skews toward what could be obtained
-    and digitised. The projection is therefore a map of the digitised
-    bibliography, never of the field. ``meta.embedded`` / ``meta.total``
-    carry the denominators so the panel can say so out loud.
+    with an abstract have an embedding — roughly half — and that half is
+    not a random sample. It is a different skew from the digitised half
+    the Gemini-era map covered: which works carry an abstract depends on
+    their genre and on how they were catalogued, not on what they argue.
+    It is a map of the abstracted bibliography, never of the field. ``meta.embedded`` /
+    ``meta.total`` carry the denominators so the panel can say so out
+    loud.
 
     Neighbourhood size is deliberately smaller than the 12k-article
     landscape's default: at a few hundred points, ``n_neighbors=15``
@@ -518,7 +547,7 @@ def compute_semantic_landscape(
     UMAP cannot ask for more neighbours than the set contains.
     """
     total = int(len(rows))
-    if "embedding_OCR" not in rows.columns:
+    if EMBEDDING_COLUMN not in rows.columns:
         return _empty_landscape("missing_embedding_column", 0, total)
 
     try:
@@ -535,7 +564,7 @@ def compute_semantic_landscape(
     dim: Optional[int] = None
 
     for _, row in rows.iterrows():
-        vec = coerce_embedding(row.get("embedding_OCR"))
+        vec = coerce_embedding(row.get(EMBEDDING_COLUMN))
         if vec is None:
             continue
         if dim is None:
@@ -629,6 +658,7 @@ def compute_semantic_landscape(
             "embedded": embedded,
             "total":    total,
             "reason":   "",
+            "embedding": {"model": EMBEDDING_MODEL, "column": EMBEDDING_COLUMN},
             "umap": {
                 "n_neighbors":  neighbors,
                 "min_dist":     min_dist,

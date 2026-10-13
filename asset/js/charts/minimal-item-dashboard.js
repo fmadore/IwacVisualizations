@@ -18,7 +18,8 @@
  *      at the current item's year (pulled from ``data-pub-year``).
  *   2. ``similarItems``     — the slice's ``similar_by_id`` neighbours
  *      for this item when the subset carries an embedding (photographs:
- *      multimodal ``embedding_image`` cosine), else the most-recent N
+ *      multimodal ``embedding_image`` cosine; documents: ``embedding_OCR``
+ *      cosine), else the most-recent N
  *      items in the slice excluding the current one (filtered by
  *      ``data-item-id``).
  *
@@ -58,12 +59,20 @@
 
     // Layout is a function, not a static array: the panel copy has to
     // tell the truth about what produced its content. "Every video this
-    // channel has posted", "other items in this collection" and
-    // multimodal cosine similarity are three different claims, and a
-    // reader cannot tell them apart from the cards alone.
+    // channel has posted", "other items in this collection" and cosine
+    // similarity are different claims, and a reader cannot tell them
+    // apart from the cards alone. Similarity itself is two claims: a
+    // photograph is compared by the image, a document (since 2026-10) by
+    // its title and full text.
+    var SEMANTIC_COPY = {
+        images:    { title: 'Visually similar photographs', description: 'desc_minimal_similar_semantic' },
+        documents: { title: 'Similar documents',            description: 'desc_minimal_similar_documents' }
+    };
+
     DL.register('minimalItem', function (data) {
         var semantic = !!(data && data.semantic);
         var scoped   = !!(data && data.scope);
+        var copy     = semantic ? (SEMANTIC_COPY[data.subset] || SEMANTIC_COPY.images) : null;
         return [
             { chart: 'siblingSparkline', wide: true,
               dataKey: 'sparkline',
@@ -71,11 +80,11 @@
               description: scoped ? 'desc_minimal_sparkline_scoped' : 'desc_minimal_sparkline' },
             { chart: 'similarItems',     wide: true,
               dataKey: 'similar',
-              title: semantic
-                  ? 'Visually similar photographs'
+              title: copy
+                  ? copy.title
                   : (scoped ? 'More from this source' : 'Other items in this collection'),
-              description: semantic
-                  ? 'desc_minimal_similar_semantic'
+              description: copy
+                  ? copy.description
                   : (scoped ? 'desc_minimal_similar_scoped' : 'desc_minimal_similar'),
               // The recency list has no similarity score; the renderer's
               // normalize pass omits the badge when absent. Either way
@@ -252,7 +261,8 @@
 
             // Similar items — prefer the precomputed neighbours for this
             // exact item when the subset has an embedding (images:
-            // multimodal cosine over embedding_image). Neighbours are
+            // multimodal cosine over embedding_image; documents: cosine
+            // over embedding_OCR). Neighbours are
             // computed over the whole subset, so they are read from there
             // rather than from the scoped slice. Otherwise fall back to the
             // recency list, dropping the current item so users don't see
@@ -272,6 +282,7 @@
                 sparkline: sparkline,
                 similar:   similar,
                 semantic:  semantic,
+                subset:    ds.subset,
                 scope:     !!scoped.scope
             };
         },

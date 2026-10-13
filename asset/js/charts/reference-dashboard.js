@@ -18,11 +18,12 @@
  *   3. `siblingSparkline` — where this work sits in the bibliography's
  *      own publication timeline.
  *   4. `similarItems` — the closest works in the bibliography, by
- *      cosine similarity over `embedding_OCR`.
+ *      cosine similarity over `embedding_abstract` (title + abstract).
  *   5. `similarItems` — the closest *newspaper articles*: the reverse of
  *      the bridge on the article dashboards. Both corpora were embedded
- *      by the same model into the same space, so a scholarly work can be
- *      ranked against the press.
+ *      by the same model into the same space — the work's abstract, each
+ *      article's full text — so a scholarly work can be ranked against
+ *      the press.
  *
  * Slots 4 and 5 depend on the 2026-07 full-text pipeline and are absent
  * for the ~half of the bibliography with no extracted text; the layout

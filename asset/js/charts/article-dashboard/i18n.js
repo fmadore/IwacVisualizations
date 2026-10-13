@@ -22,9 +22,9 @@
         'desc_further_reading_tags':
             'Articles tagged with the same people, places, organisations or subjects as this one. The badge shows how many tags they share.',
         'desc_further_reading_scholarship':
-            'Scholarly works suggested by an AI comparison of their full texts with this article. Long works are represented by averages of their passages, so a match can reflect broad subject matter. Check the work before using it as a reference; the match does not establish that it discusses this article.',
+            'Scholarly works suggested by an AI comparison of their titles and abstracts with this article. Only works with an abstract can appear, and an abstract summarises a whole work, so a match can reflect broad subject matter. Check the work before using it as a reference; the match does not establish that it discusses this article.',
         'desc_further_reading_content':
-            'Articles ranked by an AI comparison of their full texts, including articles with no shared catalogue tags. The badge gives a similarity score expressed as a percentage, not the probability of a correct match. Read the articles to assess what they have in common.',
+            'Articles ranked by an AI comparison of their full texts, including articles with no shared catalogue tags. The badge gives each article’s rank; hover it for the similarity score, which is not the probability of a correct match. Read the articles to assess what they have in common.',
         'shares_n_entities':       '{count} shared tags',
         'No related articles':     'No articles with shared tags',
         'No entities tagged':      'No entities tagged on this article',
@@ -47,9 +47,9 @@
         'desc_further_reading_tags':
             'Articles balis\u00e9s avec les m\u00eames personnes, lieux, organisations ou sujets que celui-ci. Le badge indique combien de balises ils ont en commun.',
         'desc_further_reading_scholarship':
-            'Travaux scientifiques suggérés par comparaison de leurs textes intégraux avec cet article au moyen d’une IA. Les textes longs sont représentés par une moyenne de leurs passages ; un rapprochement peut donc refléter un sujet général. Examinez le travail avant de le citer ; le rapprochement n’établit pas qu’il traite de cet article.',
+            'Travaux scientifiques suggérés par comparaison de leurs titres et résumés avec cet article au moyen d’une IA. Seuls les travaux pourvus d’un résumé peuvent apparaître, et un résumé couvre l’ensemble d’un travail ; un rapprochement peut donc refléter un sujet général. Examinez le travail avant de le citer ; le rapprochement n’établit pas qu’il traite de cet article.',
         'desc_further_reading_content':
-            'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA, y compris sans mots-clés communs dans le catalogue. Le badge indique un score de similarité exprimé en pourcentage, et non la probabilité d’un rapprochement correct. Lisez les articles pour évaluer leurs points communs.',
+            'Articles classés par comparaison de leurs textes intégraux au moyen d’une IA, y compris sans mots-clés communs dans le catalogue. Le badge indique le rang de chaque article ; survolez-le pour voir le score de similarité, qui n’est pas la probabilité d’un rapprochement correct. Lisez les articles pour évaluer leurs points communs.',
         'Shares':                  'Partage',
         'shares_n_entities':       '{count} balises partag\u00e9es',
         'No related articles':     'Aucun article avec des balises communes',

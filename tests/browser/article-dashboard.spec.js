@@ -23,7 +23,6 @@ const path = require('node:path');
 const tokens = require('../../tokens.json');
 
 const FIXTURE = '/tests/browser/fixtures/article-dashboard.html';
-const NNBSP = ' ';
 const NBSP = ' ';
 
 test.use({ timezoneId: 'America/New_York' });
@@ -161,8 +160,11 @@ test('further reading switches between tags, content and scholarship', async ({ 
 
     await panel.getByRole('button', { name: 'By similar content' }).click();
     await expect(cards).toHaveCount(3);
-    await expect(cards.first().locator('.iwac-vis-article-card__sim')).toHaveText('92%');
-    await expect(cards.first().locator('.iwac-vis-article-card__sim')).toHaveAttribute('title', 'Similarity: 91.8%');
+    // Rank on the badge, raw score in the tooltip: EmbeddingGemma 2
+    // cosines crowd into the 0.9s, so a percentage badge said little.
+    await expect(cards.first().locator('.iwac-vis-article-card__sim')).toHaveText('No. 1');
+    await expect(cards.first().locator('.iwac-vis-article-card__sim'))
+        .toHaveAttribute('title', /^Rank 1 of 3\. Similarity score 0\.918 on a 0–1 scale;/);
 
     await panel.getByRole('button', { name: 'In the scholarship' }).click();
     await expect(cards).toHaveCount(2);
@@ -232,9 +234,9 @@ test.describe('in French', () => {
         await expect(cards.first().locator('.iwac-vis-article-card__meta'))
             .toHaveText('Sidwaya · Burkina Faso · 17 nov. 2010');
         await panel.getByRole('button', { name: 'Par contenu similaire' }).click();
-        await expect(cards.first().locator('.iwac-vis-article-card__sim')).toHaveText(`92${NNBSP}%`);
+        await expect(cards.first().locator('.iwac-vis-article-card__sim')).toHaveText(`Nº${NBSP}1`);
         await expect(cards.first().locator('.iwac-vis-article-card__sim'))
-            .toHaveAttribute('title', `Similarité${NBSP}: 91,8${NNBSP}%`);
+            .toHaveAttribute('title', /^Rang 1 sur 3\. Score de similarité 0,918 sur une échelle de 0 à 1/);
         await panel.getByRole('button', { name: 'Dans la littérature' }).click();
         await expect(cards.first().locator('.iwac-vis-article-card__meta'))
             .toHaveText('Otayek, René, Cissé, Issa · Livre · 2003');
