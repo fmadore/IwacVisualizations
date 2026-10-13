@@ -29,7 +29,16 @@ Three HF subsets feed it:
 ``embedding_OCR``, title + full text, on 2026-10-13), so their pages get
 real similarity neighbours in ``similar_by_id`` instead of the recency
 list audiovisual falls back to — audiovisual has transcriptions but no
-vectors.
+vectors. Documents also carry upstream's precomputed ``related_articles``,
+which ``similar_by_id`` prefers to recomputing them; the cosine pass here covers ``images`` and
+any document whose cell is empty.
+
+Those lists name other *documents*: upstream ranks within the subset, and
+so does the MCP server. A "related press articles" strip on Document pages
+would need a document → article ranking that neither publishes, so it
+would be a cross-subset kNN of this module's own — the divergence from
+upstream that reading ``related_articles`` exists to remove. It waits for
+an upstream column.
 
 Every count below is generated, never asserted in prose: the corpus
 grew from 47 to four figures in a single afternoon when the YouTube
@@ -108,7 +117,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 
 from iwac_embeddings import EMBEDDING_COLUMNS as SUBSET_EMBEDDINGS
-from iwac_embeddings import build_normalized_matrix, top_k_cosine
+from iwac_embeddings import RELATED_COLUMN, build_normalized_matrix, parse_related, top_k_cosine
 from iwac_utils import (
     add_standard_args,
     DATASET_ID,
@@ -422,34 +431,60 @@ def build_similar_by_id(
     """``{o_id: [neighbour card, …]}`` by cosine similarity over
     ``embed_col``, for subsets that carry an embedding.
 
+    Upstream's ``related_articles`` list is used where the row has one
+    (documents), truncated to ``top_k`` and in upstream's order; the
+    cosine pass here fills every row whose cell is empty, or all of them
+    on a subset without the column (images). It breaks ties by string
+    o:id, as upstream does.
+
     Rows without a usable vector are simply absent from the map — the
     client falls back to the recency list for those, so partial
     embedding coverage degrades gracefully instead of emptying the
     panel.
     """
-    if embed_col not in df.columns:
+    id_col = columns["id"]
+    if not id_col or embed_col not in df.columns:
         return {}
 
+    sources: Dict[int, Dict[str, Any]] = {}       # row position -> card
+    position_by_id: Dict[int, int] = {}
+    for pos in range(len(df)):
+        card = build_item(df.iloc[pos], columns)
+        if card is not None:
+            sources[pos] = card
+            position_by_id[card["o_id"]] = pos
+
+    def neighbour_card(pos: int, score: float) -> Dict[str, Any]:
+        return dict(sources[pos], score=round(score, 4))
+
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    pending = set(sources)
+    if RELATED_COLUMN in df.columns:
+        cells = df[RELATED_COLUMN]
+        for pos, source in sources.items():
+            pairs = parse_related(cells.iat[pos], exclude=source["o_id"])
+            if not pairs:
+                continue
+            pending.discard(pos)
+            cards = [neighbour_card(position_by_id[o_id], score)
+                     for o_id, score in pairs if o_id in position_by_id][:top_k]
+            if cards:
+                out[str(source["o_id"])] = cards
+
+    if not pending:
+        return out
     X, valid = build_normalized_matrix(df, embed_col)
     if X.shape[0] < 2:
-        return {}
-
-    neighbours = top_k_cosine(X, valid, top_k)
-    out: Dict[str, List[Dict[str, Any]]] = {}
-
+        return out
+    tie_keys = [clean_str(df[id_col].iat[pos]) for pos in valid]
+    neighbours = top_k_cosine(X, valid, top_k, tie_keys=tie_keys)
     for i, row_pos in enumerate(valid):
-        source = build_item(df.iloc[row_pos], columns)
-        if source is None:
+        if row_pos not in pending:
             continue
-        cards: List[Dict[str, Any]] = []
-        for matrix_idx, score in neighbours[i]:
-            card = build_item(df.iloc[valid[matrix_idx]], columns)
-            if card is None:
-                continue
-            card["score"] = round(score, 4)
-            cards.append(card)
+        cards = [neighbour_card(valid[matrix_idx], score)
+                 for matrix_idx, score in neighbours[i] if valid[matrix_idx] in sources]
         if cards:
-            out[str(source["o_id"])] = cards
+            out[str(sources[row_pos]["o_id"])] = cards
 
     return out
 

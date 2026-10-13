@@ -568,7 +568,7 @@ python3 scripts/generate_topic_explorer.py     --minify     # → asset/data/top
 python3 scripts/generate_person_dashboards.py   # → asset/data/person-dashboards/{o_id}.json
 python3 scripts/generate_entity_dashboards.py   # → asset/data/entity-dashboards/{o_id}.json
 
-# Per-article data (includes semantic kNN over embedding_OCR)
+# Per-article data (semantic neighbours from upstream related_articles; kNN over embedding_OCR only where a cell is empty)
 python3 scripts/generate_article_dashboards.py  # → asset/data/article-dashboards/{o_id}.json
 
 # Per-publication-issue data (periodical runs + kNN over embedding_tableOfContents)

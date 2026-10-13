@@ -26,7 +26,11 @@ without any further network calls:
                                 inlined for the tooltip)
     * ``semantic_neighbors``  — top-K articles by cosine similarity of
                                 ``embedding_OCR`` (768-dim
-                                ``google/embeddinggemma-2``)
+                                ``google/embeddinggemma-2``), read from
+                                the dataset's own ``related_articles``
+                                lists rather than recomputed; computed
+                                here only for rows upstream left without
+                                a list
     * ``related_scholarship`` — top-K works from the ``references``
                                 subset by cosine similarity between
                                 this article's text and each work's
@@ -54,12 +58,19 @@ import argparse
 import logging
 from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 import numpy as np
 import pandas as pd
 
-from iwac_embeddings import EMBEDDING_COLUMNS, build_normalized_matrix, coerce_embedding
+from iwac_embeddings import (
+    EMBEDDING_COLUMNS,
+    RELATED_COLUMN,
+    build_normalized_matrix,
+    coerce_embedding,
+    parse_related,
+    rank_neighbours,
+)
 from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
@@ -106,7 +117,9 @@ REFERENCES_EMBEDDING = EMBEDDING_COLUMNS[REFERENCES_SUBSET]
 # are CLI-overridable. Twenty related-by-entities articles is plenty
 # for a radial outer ring (any more and the network becomes a hairball);
 # ten semantic neighbours is the "5–10 closest articles" the user
-# explicitly asked for.
+# explicitly asked for, and also the length of upstream's
+# `related_articles` lists — a larger cap lengthens only the lists
+# computed here, never the precomputed ones.
 DEFAULT_TOP_K_RELATED = 20
 DEFAULT_TOP_K_SEMANTIC = 10
 
@@ -139,9 +152,9 @@ SCHOLARSHIP_HUBNESS_WEIGHT = 1.0
 # three would bloat the JSON without being readable in a tooltip.
 SHARED_ENTITIES_SAMPLE_SIZE = 3
 
-# Batch size for the kNN pass. 500 × 12,287 float32 = ~24 MB per batch,
-# well inside cache on any reasonable dev machine but small enough to
-# stream through rather than allocating a 144 M × 4 B = 576 MB square.
+# Batch size for the kNN passes (the fallback neighbours and the
+# scholarship scan). 500 × 16,715 float32 = ~33 MB per batch, small
+# enough to stream through rather than allocating the ~1.1 GB square.
 KNN_BATCH_SIZE = 500
 
 logger: Optional[logging.Logger] = None
@@ -381,7 +394,7 @@ class ArticleDashboardGenerator:
 
 
     # ------------------------------------------------------------------
-    # Semantic kNN (embedding_OCR cosine similarity)
+    # Semantic neighbours (upstream related_articles, kNN fallback)
     # ------------------------------------------------------------------
 
     def build_embedding_matrix(self) -> None:
@@ -452,15 +465,89 @@ class ArticleDashboardGenerator:
             f"{N - int(valid.sum())} missing/invalid"
         )
 
-    def compute_semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
-        """Top-K cosine neighbours per valid row, computed in batches.
+    def semantic_neighbor_card(self, neigh_id: int, similarity: float) -> Optional[Dict[str, Any]]:
+        """One ``semantic_neighbors`` entry, or None when ``neigh_id`` is not
+        an article in this snapshot."""
+        meta = self.article_meta.get(neigh_id)
+        if not meta:
+            return None
+        return {
+            "o_id":       neigh_id,
+            "title":      meta.get("title", ""),
+            "newspaper":  meta.get("newspaper", ""),
+            "country":    meta.get("country", ""),
+            "date":       meta.get("pub_date", ""),
+            "thumbnail":  meta.get("thumbnail", ""),
+            "similarity": round(similarity, 4),
+        }
 
-        Returns dict keyed by article o_id mapping to a list of neighbour
-        dicts ``[{"o_id", "title", "newspaper", "date", "similarity"}]``.
-        Invalid rows (no embedding) get an empty list.
+    def read_related_articles(self) -> Tuple[Dict[int, List[Dict[str, Any]]], List[int]]:
+        """Neighbour cards from upstream's ``related_articles`` column.
+
+        Returns ``(lists, pending)``: the cards for every article whose cell
+        holds a list, and the ids of the articles whose cell is empty, which
+        ``compute_semantic_neighbors`` fills in. Upstream's order is kept
+        as it is: it is the dataset's published ranking, by the rule the
+        MCP server's ``get_similar_items`` also ranks by (score, then
+        string o:id), and a recomputation here can differ from it on
+        near-ties at float32 precision.
         """
-        result: Dict[int, List[Dict[str, Any]]] = {aid: [] for aid in self.target_ids}
-        if self.embedding_matrix is None:
+        df = self.articles_df
+        if RELATED_COLUMN not in df.columns:
+            logger.warning(
+                "articles subset has no %s column — every neighbour list is "
+                "computed in process", RELATED_COLUMN,
+            )
+            return {}, list(self.target_ids)
+
+        cells = df[RELATED_COLUMN]
+        lists: Dict[int, List[Dict[str, Any]]] = {}
+        pending: List[int] = []
+        dangling = 0
+        for article_id in self.target_ids:
+            pairs = parse_related(cells.at[self.article_row_index[article_id]],
+                                  exclude=article_id)
+            if not pairs:
+                pending.append(article_id)
+                continue
+            cards: List[Dict[str, Any]] = []
+            for neigh_id, similarity in pairs:
+                card = self.semantic_neighbor_card(neigh_id, similarity)
+                if card is None:
+                    dangling += 1
+                    continue
+                cards.append(card)
+                if len(cards) == self.top_k_semantic:
+                    break
+            lists[article_id] = cards
+
+        if dangling:
+            # Upstream nulls the column on any membership change, so a list
+            # naming a missing article means it was pushed with
+            # --preserve-derived or read across revisions.
+            logger.warning(
+                "  %d related_articles entries name articles missing from this "
+                "snapshot and were dropped", dangling,
+            )
+        return lists, pending
+
+    def compute_semantic_neighbors(
+        self, article_ids: Optional[Sequence[int]] = None,
+    ) -> Dict[int, List[Dict[str, Any]]]:
+        """Top-K cosine neighbours over ``embedding_OCR``, for the articles
+        upstream left without a ``related_articles`` list (default: every
+        article).
+
+        The fallback is what keeps the panel filled between an upstream
+        push that clears the column and the ``related_articles.py --push``
+        that refills it. It follows upstream's rules, so its lists match
+        the ones it stands in for: neighbours come from articles with a
+        usable vector, the article itself is excluded, and ties are ordered
+        by string o:id. Articles without a vector get an empty list.
+        """
+        ids = list(self.target_ids if article_ids is None else article_ids)
+        result: Dict[int, List[Dict[str, Any]]] = {aid: [] for aid in ids}
+        if self.embedding_matrix is None or not ids:
             return result
 
         X = self.embedding_matrix
@@ -474,70 +561,47 @@ class ArticleDashboardGenerator:
             row_idx: article_id
             for article_id, row_idx in self.article_row_index.items()
         }
+        # A row can be a neighbour only if it has a vector and an id.
+        eligible = np.zeros(N, dtype=bool)
+        for row_idx in row_to_id:
+            eligible[row_idx] = valid[row_idx]
+        tie_keys = np.array([str(row_to_id.get(i, "")) for i in range(N)])
 
-        for start in range(0, N, KNN_BATCH_SIZE):
-            end = min(start + KNN_BATCH_SIZE, N)
-            batch = X[start:end]                 # (B, 768)
-            sims = batch @ X.T                   # (B, N)
+        rows = [self.article_row_index[aid] for aid in ids
+                if eligible[self.article_row_index[aid]]]
+        n_batches = (len(rows) + KNN_BATCH_SIZE - 1) // KNN_BATCH_SIZE
+        for batch_no, start in enumerate(range(0, len(rows), KNN_BATCH_SIZE)):
+            batch_rows = np.asarray(rows[start:start + KNN_BATCH_SIZE])
+            sims = X[batch_rows] @ X.T                         # (B, N)
+            sims[:, ~eligible] = -np.inf
+            sims[np.arange(len(batch_rows)), batch_rows] = -np.inf   # self
 
-            # Zero out self-similarity for every row in the batch
-            for local_i in range(end - start):
-                global_i = start + local_i
-                sims[local_i, global_i] = -np.inf
-
-            # argpartition is O(N) per row and gives the indices of the
-            # top-K (unordered); then a tiny sort within K lands them
-            # in descending similarity order for display.
-            # Guard against N < K (shouldn't happen on 12k rows, but
-            # keeps the logic safe on tiny smoke-test runs).
-            k_eff = min(K, sims.shape[1] - 1)
-            if k_eff <= 0:
-                continue
-            part_idx = np.argpartition(-sims, k_eff, axis=1)[:, :k_eff]
-            part_sims = np.take_along_axis(sims, part_idx, axis=1)
-            order = np.argsort(-part_sims, axis=1)
-            top_idx = np.take_along_axis(part_idx, order, axis=1)
-            top_sims = np.take_along_axis(part_sims, order, axis=1)
-
-            for local_i in range(end - start):
-                global_i = start + local_i
-                if not valid[global_i]:
-                    continue
-                article_id = row_to_id.get(global_i)
-                if article_id is None:
-                    continue
+            for local_i, global_i in enumerate(batch_rows):
                 neighbours: List[Dict[str, Any]] = []
-                for rank in range(k_eff):
-                    neigh_row = int(top_idx[local_i, rank])
-                    sim = float(top_sims[local_i, rank])
-                    if sim <= 0.0 or not valid[neigh_row]:
-                        continue
-                    neigh_id = row_to_id.get(neigh_row)
-                    if neigh_id is None:
-                        continue
-                    meta = self.article_meta.get(neigh_id)
-                    if not meta:
-                        continue
-                    neighbours.append({
-                        "o_id":       neigh_id,
-                        "title":      meta.get("title", ""),
-                        "newspaper":  meta.get("newspaper", ""),
-                        "country":    meta.get("country", ""),
-                        "date":       meta.get("pub_date", ""),
-                        "thumbnail":  meta.get("thumbnail", ""),
-                        "similarity": round(sim, 4),
-                    })
-                result[article_id] = neighbours
+                for neigh_row in rank_neighbours(sims[local_i], K, tie_keys):
+                    card = self.semantic_neighbor_card(
+                        row_to_id[int(neigh_row)], float(sims[local_i, neigh_row]))
+                    if card is not None:
+                        neighbours.append(card)
+                result[row_to_id[int(global_i)]] = neighbours
 
-            if (start // KNN_BATCH_SIZE) % 5 == 0:
-                logger.info(
-                    f"  kNN batch {start // KNN_BATCH_SIZE + 1} / "
-                    f"{(N + KNN_BATCH_SIZE - 1) // KNN_BATCH_SIZE}"
-                )
+            if batch_no % 5 == 0:
+                logger.info(f"  kNN batch {batch_no + 1} / {n_batches}")
 
-        n_with_neighbours = sum(1 for v in result.values() if v)
+        return result
+
+    def semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
+        """``semantic_neighbors`` per article: upstream's list where the cell
+        holds one, the in-process kNN where it is empty."""
+        lists, pending = self.read_related_articles()
+        computed = self.compute_semantic_neighbors(pending) if pending else {}
+        result = {**lists, **computed}
         logger.info(
-            f"Semantic neighbours computed for {n_with_neighbours}/{len(result)} articles"
+            "Semantic neighbours: %d articles from %s, %d computed in process "
+            "(%d of those have a list), %d without",
+            len(lists), RELATED_COLUMN, len(computed),
+            sum(1 for v in computed.values() if v),
+            sum(1 for v in result.values() if not v),
         )
         return result
 
@@ -877,14 +941,14 @@ class ArticleDashboardGenerator:
         return payload
 
     def generate_all(self) -> int:
-        """Compute the kNN once up-front, then stream one JSON per
-        article. Writing ~12k files at once is I/O-bound — we log
+        """Resolve the neighbour lists once up-front, then stream one JSON
+        per article. Writing ~12k files at once is I/O-bound — we log
         progress every 500 files so long runs stay interactive.
         """
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.build_embedding_matrix()
-        semantic_map = self.compute_semantic_neighbors()
+        semantic_map = self.semantic_neighbors()
         scholarship_map = self.compute_scholarship_neighbors()
 
         targets = self.target_ids
@@ -933,7 +997,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--top-k-semantic",
         type=int,
         default=DEFAULT_TOP_K_SEMANTIC,
-        help="Semantic-neighbours cap per article (default: %(default)s)",
+        help="Semantic-neighbours cap per article (default: %(default)s). "
+             "Upstream's related_articles lists hold 10, so a larger cap "
+             "lengthens only the lists computed in process",
     )
     parser.add_argument(
         "--top-k-scholarship",

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import math
 import sys
 import unittest
@@ -17,6 +18,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 import dashboard_aggregator  # noqa: E402
+import generate_article_dashboards  # noqa: E402
 import generate_collection_overview  # noqa: E402
 import generate_compare_newspapers  # noqa: E402
 import generate_index_overview  # noqa: E402
@@ -202,6 +204,37 @@ class EmbeddingTests(unittest.TestCase):
             iwac_embeddings.top_k_cosine(matrix, [0, 1], 1, batch_size=0)
         with self.assertRaises(ValueError):
             list(iwac_embeddings.pairs_above_threshold(matrix, 0.5, batch_size=0))
+
+    def test_tie_keys_order_equal_scores_like_upstream(self) -> None:
+        # Rows 1 and 2 are the same vector, so they tie as neighbours of 0;
+        # upstream orders ties by string o:id, where "100" sorts before "9".
+        matrix = np.asarray([[1.0, 0.0], [0.6, 0.8], [0.6, 0.8], [0.0, 1.0]], dtype=np.float32)
+        result = iwac_embeddings.top_k_cosine(matrix, [0, 1, 2, 3], 2,
+                                              tie_keys=["5", "9", "100", "7"])
+        self.assertEqual([idx for idx, _score in result[0]], [2, 1])
+
+    def test_rank_neighbours_keeps_every_tie_at_the_cut(self) -> None:
+        # Three-way tie for the last two places: the keys decide which two
+        # survive, not argpartition, and -inf (self) never appears.
+        scores = np.asarray([-np.inf, 0.9, 0.5, 0.5, 0.5], dtype=np.float32)
+        keys = np.asarray(["1", "2", "c", "a", "b"])
+        self.assertEqual(iwac_embeddings.rank_neighbours(scores, 3, keys).tolist(), [1, 3, 4])
+        self.assertEqual(iwac_embeddings.rank_neighbours(scores, 10, keys).tolist(), [1, 3, 4, 2])
+        self.assertEqual(iwac_embeddings.rank_neighbours(scores[:1], 3, keys[:1]).size, 0)
+
+    def test_related_cell_parses_in_stored_order(self) -> None:
+        cell = "11387:0.8382|11377:0.8225|76294:0.8041"
+        self.assertEqual(iwac_embeddings.parse_related(cell),
+                         [(11387, 0.8382), (11377, 0.8225), (76294, 0.8041)])
+
+    def test_empty_related_cells_mean_no_list(self) -> None:
+        for cell in (None, float("nan"), pd.NA, "", "   ", "|", 3):
+            self.assertEqual(iwac_embeddings.parse_related(cell), [], repr(cell))
+
+    def test_related_parser_skips_what_it_cannot_read(self) -> None:
+        cell = "x:0.9| 12:abc |13|14:0.8|14:0.7|5:0.6|15:nan|16:inf| 17 : 0.5 "
+        self.assertEqual(iwac_embeddings.parse_related(cell, exclude=5),
+                         [(14, 0.8), (17, 0.5)])
 
     def test_references_read_their_abstract_vector(self) -> None:
         # The references' full-text embedding_OCR was removed upstream on
@@ -863,6 +896,107 @@ class TemplateSummaryDocumentTests(unittest.TestCase):
 
     def test_audiovisual_stays_on_the_recency_list(self) -> None:
         self.assertNotIn("audiovisual", generate_template_summary.EMBEDDING_COLUMNS)
+
+    def test_documents_prefer_upstream_related_articles(self) -> None:
+        # Document 1's stored list contradicts the vectors (2 is closer), so
+        # the order proves which source was read. It also names an item
+        # missing from the snapshot and the document itself.
+        frame = pd.DataFrame([
+            {"o:id": "1", "title": "Communiqué du CSI", "pub_date": "2004-02-01",
+             "type": "Communiqué", "embedding_OCR": [1.0, 0.0, 0.0],
+             "related_articles": "3:0.8100|2:0.8000|999:0.7000|1:0.9900"},
+            # Empty cell: computed here from the vectors.
+            {"o:id": "2", "title": "Lettre au ministre", "pub_date": "2004-03-01",
+             "type": "Lettre", "embedding_OCR": [0.9, 0.1, 0.0],
+             "related_articles": None},
+            {"o:id": "3", "title": "Sermon", "pub_date": "1999",
+             "type": "Sermon", "embedding_OCR": [0.0, 0.0, 1.0],
+             "related_articles": "1:0.7000"},
+            {"o:id": "4", "title": "Affiche", "pub_date": "2010",
+             "type": "Affiche", "embedding_OCR": None, "related_articles": None},
+        ])
+        similar = generate_template_summary.build_subset_summary("documents", frame)["similar_by_id"]
+        self.assertEqual([card["o_id"] for card in similar["1"]], [3, 2])
+        self.assertEqual(similar["1"][0]["score"], 0.81)
+        self.assertEqual(similar["1"][0]["title"], "Sermon")
+        self.assertEqual([card["o_id"] for card in similar["2"]], [1, 3])
+        self.assertEqual([card["o_id"] for card in similar["3"]], [1])
+        self.assertNotIn("4", similar)
+
+        columns = generate_template_summary.find_columns(frame, "documents")
+        capped = generate_template_summary.build_similar_by_id(frame, columns, "embedding_OCR", top_k=1)
+        self.assertEqual([card["o_id"] for card in capped["1"]], [3])
+
+
+class ArticleSemanticNeighbourTests(unittest.TestCase):
+    """`semantic_neighbors` come from upstream's `related_articles`, and the
+    in-process kNN fills only the rows whose cell is empty."""
+
+    def setUp(self) -> None:
+        patcher = patch.object(generate_article_dashboards, "logger",
+                               logging.getLogger("test-article-dashboards"))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    @staticmethod
+    def article(o_id: int, vector, related=None) -> dict:
+        return {"o:id": str(o_id), "title": f"Article {o_id}", "newspaper": "Sidwaya",
+                "country": "Burkina Faso", "pub_date": "2004-02-01",
+                "embedding_OCR": vector, "related_articles": related}
+
+    def neighbours(self, rows, top_k: int = 10) -> dict:
+        gen = generate_article_dashboards.ArticleDashboardGenerator(
+            output_dir=Path("unused"), top_k_semantic=top_k)
+        gen.articles_df = pd.DataFrame(rows)
+        gen.resolve_articles()
+        gen.build_embedding_matrix()
+        return gen.semantic_neighbors()
+
+    @staticmethod
+    def ids(cards) -> list:
+        return [card["o_id"] for card in cards]
+
+    def test_stored_lists_win_and_empty_cells_fall_back(self) -> None:
+        rows = [
+            # Stored order contradicts the vectors (2 is closer than 3) and
+            # names an article this snapshot does not hold.
+            self.article(1, [1.0, 0.0, 0.0], "3:0.9500|2:0.9000|999:0.8000"),
+            self.article(2, [0.99, 0.1, 0.0]),
+            self.article(3, [0.0, 1.0, 0.0], "1:0.9500"),
+            self.article(4, None),
+        ]
+        result = self.neighbours(rows)
+        self.assertEqual(self.ids(result[1]), [3, 2])
+        self.assertEqual(result[1][0]["similarity"], 0.95)
+        self.assertEqual(result[1][0]["newspaper"], "Sidwaya")
+        self.assertEqual(self.ids(result[3]), [1])
+        # Computed: by cosine, never itself, never the article with no vector.
+        self.assertEqual(self.ids(result[2]), [1, 3])
+        self.assertAlmostEqual(result[2][0]["similarity"], 0.995, places=3)
+        self.assertEqual(result[4], [])
+
+    def test_the_cap_truncates_stored_lists(self) -> None:
+        rows = [self.article(1, [1.0, 0.0], "3:0.9500|2:0.9000"),
+                self.article(2, [0.0, 1.0], "1:0.9000"),
+                self.article(3, [0.7, 0.7], "1:0.9500")]
+        self.assertEqual(self.ids(self.neighbours(rows, top_k=1)[1]), [3])
+
+    def test_computed_lists_order_ties_by_string_id(self) -> None:
+        # 9 and 100 share a vector, so they tie; upstream and the MCP server
+        # order ties by string o:id, where "100" sorts before "9".
+        rows = [self.article(10, [1.0, 0.0]),
+                self.article(9, [0.6, 0.8], "100:1.0000"),
+                self.article(100, [0.6, 0.8], "9:1.0000")]
+        self.assertEqual(self.ids(self.neighbours(rows)[10]), [100, 9])
+
+    def test_a_snapshot_without_the_column_computes_every_list(self) -> None:
+        rows = [self.article(1, [1.0, 0.0]), self.article(2, [0.8, 0.6]),
+                self.article(3, [0.0, 1.0])]
+        for row in rows:
+            del row["related_articles"]
+        result = self.neighbours(rows, top_k=1)
+        self.assertEqual({key: self.ids(value) for key, value in result.items()},
+                         {1: [2], 2: [1], 3: [2]})
 
 
 class CollectionOverviewAudiovisualTests(unittest.TestCase):

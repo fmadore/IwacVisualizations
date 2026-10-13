@@ -250,9 +250,16 @@ python3 scripts/generate_article_dashboards.py --top-k-related 20     # default
    `Titre alternatif` aliases)
 3. For each article, resolve `subject` + `spatial` names to index
    entity o_ids; record the inverted `entity → articles` map as a side-product
-4. **Semantic kNN**: stack embeddings into an `(N, 768)` float32 matrix,
-   L2-normalize, batched `X[i:i+500] @ X.T` with `argpartition` for
-   top-K per row (~4 s total on 12k articles)
+4. **Semantic neighbours**: read upstream's `related_articles` (top 10 by
+   `embedding_OCR` cosine, `"o:id:cosine|…"`) through
+   `iwac_embeddings.parse_related`: the dataset's published ranking, by the
+   rule the MCP server's `get_similar_items` also ranks by. An article whose cell is empty gets a
+   list computed here by upstream's rules (self excluded, ties by string
+   o:id): batched `X[rows] @ X.T` over the L2-normalized `embedding_OCR`
+   matrix, ~9 s if the whole column is empty. That happens between an
+   upstream push that clears the column and the `related_articles.py
+   --push` that refills it. The matrix is built either way: the
+   scholarship pass needs it
 5. **Related-by-entities**: for each article, counter-union its
    entities' article sets, take `most_common(top_k_related)`; record
    up to 3 shared-entity ids inline so the UI tooltip can name them
@@ -453,9 +460,13 @@ never supported the audio/video split the earlier `by_medium` facet implied.
 
 Emits `by_source_type` and `by_publisher` (the channel or depositing body)
 for audiovisual, `by_type` for documents, and `similar_by_id` wherever the
-subset carries an embedding — today only `images`, whose multimodal
-`embedding_image` makes its neighbours genuine visual similarity rather
-than a recency list. Slice keys are NFC-lowercased so the front-end can
+subset carries an embedding: `images`, whose multimodal `embedding_image`
+makes its neighbours genuine visual similarity rather than a recency list,
+and `documents`, whose lists come from upstream's `related_articles` (the
+first six), with a cosine pass over `embedding_OCR` for any empty cell.
+Those lists name other documents. A "related press articles" strip would
+need a document → article ranking that neither upstream nor the MCP server
+publishes, so it is not built here. Slice keys are NFC-lowercased so the front-end can
 look them up case-insensitively; each slice carries its most common raw
 label for display, and a `duration` block (`count` / `total_seconds` /
 `median_seconds`) wherever runtimes exist.
@@ -504,7 +515,10 @@ The coerce → normalize → batched-cosine stack ([historical audit, Tier 4](ht
 `pairs_above_threshold`, plus `word_shingles` / `shingle_jaccard` for
 lexical confirmation and `EMBEDDING_COLUMNS` — the subset → vector column
 map (references read `embedding_abstract`; their `embedding_OCR` no longer
-exists). First consumer: `generate_reprints.py`; the
+exists). `parse_related` reads upstream's `related_articles` cells
+(`RELATED_COLUMN`), and `rank_neighbours` (or `top_k_cosine(…,
+tie_keys=…)`) ranks with upstream's tie rule, so a list computed for an
+empty cell matches the ones upstream wrote. First consumer: `generate_reprints.py`; the
 four older embedding generators (`article_dashboards`,
 `publication_dashboards`, `semantic_landscape`,
 `periodicals_landscape`) still carry local copies and should migrate

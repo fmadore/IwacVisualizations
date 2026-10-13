@@ -39,6 +39,8 @@ Functions
 - coerce_embedding:        raw cell → float32 vector or None
 - build_normalized_matrix: DataFrame column → (unit-L2 float32 matrix,
                            list of source row positions)
+- parse_related:           upstream ``related_articles`` cell → [(o_id, cosine)]
+- rank_neighbours:         top-k of one score row in upstream's tie order
 - top_k_cosine:            batched top-k neighbour indices + scores
 - pairs_above_threshold:   batched (i, j, sim) pairs with sim ≥ threshold
 - word_shingles / shingle_jaccard: lexical overlap of two texts, the
@@ -47,6 +49,7 @@ Functions
 from __future__ import annotations
 
 import logging
+import math
 import re
 import zlib
 from typing import Any, Dict, Iterator, List, Optional, Sequence, Tuple
@@ -67,6 +70,22 @@ EMBEDDING_COLUMNS: Dict[str, str] = {
     "publications": "embedding_tableOfContents",
     "images":       "embedding_image",
 }
+
+# Upstream's precomputed neighbour lists (IWAC-Hugging-Face
+# `post-processing/related_articles.py`), on `articles` and `documents`:
+# the top 10 by cosine over the subset's own `embedding_OCR`, *within* the
+# subset, as "o:id:cosine|…" with 4-decimal scores. Self is excluded and
+# order is descending score, ties by string o:id — the rule the MCP
+# server's `get_similar_items` also ranks by when it computes neighbours
+# live. A documents list therefore
+# names other documents, never press articles.
+#
+# A filled cell is current for its snapshot: upstream nulls the whole
+# column whenever any vector or the row membership changes, and fills it
+# again only with an explicit `related_articles.py --push`. So an empty
+# cell means "not computed for this snapshot", never "no neighbours", and
+# readers fall back to computing the list themselves.
+RELATED_COLUMN = "related_articles"
 
 
 def coerce_embedding(value: Any) -> Optional[np.ndarray]:
@@ -135,11 +154,63 @@ def build_normalized_matrix(
     return X, valid
 
 
+def parse_related(value: Any, exclude: Optional[int] = None) -> List[Tuple[int, float]]:
+    """One ``related_articles`` cell → ``[(o_id, cosine), …]`` in stored order.
+
+    Null, NaN, blank and non-string cells give ``[]``, which callers read as
+    "upstream has no list for this row" (see ``RELATED_COLUMN``). Entries
+    that do not parse as an integer id and a finite score are skipped
+    rather than guessed, a repeated id keeps its first position, and
+    ``exclude`` (the row's own o:id) is dropped, although upstream already
+    leaves it out. The stored order is kept as it is: it is upstream's
+    ranking, ties included.
+    """
+    if not isinstance(value, str):
+        return []
+    out: List[Tuple[int, float]] = []
+    seen = set()
+    for entry in value.split("|"):
+        id_part, sep, score_part = entry.strip().rpartition(":")
+        if not sep:
+            continue
+        try:
+            o_id = int(id_part.strip())
+            score = float(score_part.strip())
+        except ValueError:
+            continue
+        if not math.isfinite(score) or o_id == exclude or o_id in seen:
+            continue
+        seen.add(o_id)
+        out.append((o_id, score))
+    return out
+
+
+def rank_neighbours(scores: np.ndarray, k: int, tie_keys: np.ndarray) -> np.ndarray:
+    """Indices of the ``k`` highest scores in one row, best first.
+
+    Ties are ordered by ``tie_keys`` ascending, which is how upstream's
+    ``related_articles`` and the MCP server's ``get_similar_items`` order
+    them when the key is the string o:id. A list computed here for a row
+    upstream left empty is then the list upstream would have written.
+    Every tie at the k-th score is a candidate before the cut, or which of
+    them survives would depend on ``argpartition``. Entries at ``-inf``
+    (the row itself, masked rows) are never returned.
+    """
+    kk = min(k, int(np.isfinite(scores).sum()))
+    if kk <= 0:
+        return np.empty(0, dtype=np.int64)
+    part = np.argpartition(-scores, kk - 1)[:kk]
+    candidates = np.flatnonzero(scores >= scores[part].min())
+    order = np.lexsort((tie_keys[candidates], -scores[candidates]))[:kk]
+    return candidates[order]
+
+
 def top_k_cosine(
     X: np.ndarray,
     valid: Sequence[int],
     k: int,
     batch_size: Optional[int] = None,
+    tie_keys: Optional[Sequence[Any]] = None,
 ) -> List[List[Tuple[int, float]]]:
     """For every row of the normalized matrix ``X``, its top-k cosine
     neighbours (excluding itself).
@@ -148,6 +219,9 @@ def top_k_cosine(
     ``[(neighbour_matrix_index, similarity), …]`` sorted descending.
     ``batch_size`` bounds the similarity block held in memory
     (default: whole matrix when n ≤ 4096, else 1024-row batches).
+    ``tie_keys``, parallel to the rows of ``X``, orders equal scores the
+    way ``rank_neighbours`` does; without it the order among ties is
+    whatever ``argpartition`` leaves.
     """
     n = X.shape[0]
     if n == 0 or k <= 0:
@@ -158,6 +232,7 @@ def top_k_cosine(
         raise ValueError("batch_size must be a positive integer")
     if batch_size is None:
         batch_size = n if n <= 4096 else 1024
+    keys = np.asarray(tie_keys) if tie_keys is not None else None
 
     out: List[List[Tuple[int, float]]] = []
     for start in range(0, n, batch_size):
@@ -167,8 +242,11 @@ def top_k_cosine(
             row = sims[local]
             row[start + local] = -np.inf                # exclude self
             kk = min(k, n - 1)
-            idx = np.argpartition(row, -kk)[-kk:]
-            idx = idx[np.argsort(row[idx])[::-1]]
+            if keys is not None:
+                idx = rank_neighbours(row, kk, keys)
+            else:
+                idx = np.argpartition(row, -kk)[-kk:]
+                idx = idx[np.argsort(row[idx])[::-1]]
             out.append([(int(j), float(row[j])) for j in idx])
     return out
 
