@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.80.1 — the activity sparkline keeps its year labels readable (2026-10-21)
+
+A fix to the per-item dashboards' "Activity of this source over time" sparkline (`siblingSparkline`), and the theme contract synced from IWAC-theme 2.26.0. No data change.
+
+- **The plot stops above its labels.** The year labels sit on the bottom edge, and the line and area ran down to it, so a series near zero at either end drew its line through the first or last year ("1992" struck through on Le Patriote's arc). The plot's floor is now 13 units up — the 11px labels plus 2px of clearance — so the labels own the bottom strip.
+- **The highlighted year no longer overprints an end year.** Its label was pinned to an edge only when the item's year *was* the first or last, so a year one step in still clipped and a year a few steps in printed over its neighbour ("20172019" two years from the end). Where the label lands is now measured instead: it centres under its dot, is pinned to the edge only when centring would clip it, and an end label is dropped only when the two would overlap. The item's own year wins.
+- `tests/js/sibling-sparkline.test.js` covers both against a DOM stand-in, on Le Patriote's 1992–2019 series: the plot's lowest point stays above the labels, a near-end highlight drops only the end label it would cover, a mid-series one keeps both ends, and a highlight one step in is pinned rather than clipped.
+
 ### v1.80.0 — the sentiment atlas compares its models, and the newspaper coverage counts its years (2026-10-21)
 
 The visualisations the [IWAC sentiment analysis dashboard](https://iwac.frederickmadore.com/sentiment-analysis/) built in the browser, brought into the Sentiment Atlas as precomputed panels, and a newspaper × year volume view in the Collection Overview. **The new panels appear with the next data build and Pull latest data**; until then the atlas draws exactly what it drew before.
