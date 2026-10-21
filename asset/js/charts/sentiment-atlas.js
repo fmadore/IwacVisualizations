@@ -7,8 +7,8 @@
  * `scripts/generate_sentiment_atlas.py`) and renders all panels from
  * it.
  *
- * Every figure on this page is an AI-generated assessment (three rating
- * models: GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash), not
+ * Every figure on this page is an AI-generated assessment (the rating
+ * panel the bundle carries — the generator's present models), not
  * human-curated archival metadata — each panel description repeats that
  * caveat.
  *
@@ -16,17 +16,26 @@
  *   Intro      — summary cards + "period covered" subtitle
  *   [Model]    — a single facet bar; the model lens for the panels below
  *   Over time  — polarity over time, centrality over time (both faceted),
- *                subjectivity trend (every model at once — the only panel
- *                here that does, hence the per-model colour tokens)
- *   Breakdown  — polarity by country, polarity × subjectivity, the
- *                centrality-by-country-and-year heatmap, and polarity by
- *                topic / by newspaper (all faceted). The last two are
- *                diverging bars — thirty-odd rows sharing a baseline at
- *                the neutral midpoint, each with its own order control
+ *                then the two panels that draw every model at once, hence
+ *                the per-model colour tokens: the subjectivity trend and
+ *                the cross-model trend (share negative / central /
+ *                subjective, with the lowest-to-highest model band)
+ *   Breakdown  — polarity by country, polarity × subjectivity (with
+ *                Spearman's rho), the centrality-by-country-and-year
+ *                heatmap (with a minimum per cell), polarity by topic / by
+ *                newspaper — diverging bars, thirty-odd rows sharing a
+ *                baseline at the neutral midpoint — the newspaper ranking
+ *                with 95% intervals, and the places map (all faceted)
  *   Extremes   — top subject / place keywords in the most extreme-rated
  *                articles, with a sentiment-bucket + keyword-type facet
- *   Comparison — a model-pair facet driving cross-model agreement (cards +
- *                cross-tab heatmap)
+ *   Comparison — a dimension facet driving every pair's agreement (model ×
+ *                model matrix + the panel's Fleiss' kappa), one pair's
+ *                measures and cross-tab (its own pair facet), each model's
+ *                label shares, and the panel's unanimity and lone dissent
+ *
+ * The comparison, trend, ranking and map builders live in
+ * sentiment-atlas/{scales,compare,trends,ranking,map}.js; this file keeps
+ * the single-model panels, the layout and the state.
  *
  * Polarité and centralité are both ORDINAL, so every panel that stacks
  * either one paints from a semantic ramp and never from the categorical
@@ -36,8 +45,9 @@
  * `--iwac-vis-cent-*` one.
  *
  * Load order: after shared/panels.js + shared/chart-options*.js +
- * shared/facet-buttons.js + sentiment-atlas/i18n.js (the block's en/fr
- * strings, split out so this file carries logic, not a translation table).
+ * shared/facet-buttons.js + shared/places-map.js + sentiment-atlas/i18n.js
+ * (the block's en/fr strings, split out so this file carries logic, not a
+ * translation table) and the sentiment-atlas/ panel files.
  */
 (function () {
     'use strict';
@@ -49,6 +59,12 @@
     }
     var P = ns.panels;
     var C = ns.chartOptions;
+    // The comparison, trend, ranking and map panels (sentiment-atlas/*.js).
+    var S = ns.sentimentAtlas;
+    if (!S || !S.reliabilityFor || !S.trendOption || !S.rankingOption) {
+        console.warn('IWACVis sentiment atlas: missing its panel files — check the bundle');
+        return;
+    }
 
     var NOT_APPLICABLE = 'Non applicable';
     // Midpoint of the polarité scale — the grade that straddles zero on
@@ -419,15 +435,20 @@
      * matrix is repainted on every model change and must not flash
      * through progressive rendering).
      */
-    function buildCentralityHeatmap(data, modelKey) {
+    function buildCentralityHeatmap(data, modelKey, minCount) {
         var model = data.models[modelKey] || {};
         var cellsIn = model.centrality_heatmap || [];
         var years = data.years || [];
         var countries = data.countries || [];
+        var min = minCount || 1;
 
         // c = [countryIdx, yearIdx, mean, n]; ECharts heatmap wants
-        // [xIdx, yIdx, value] with x = year, y = country.
-        var cells = cellsIn.map(function (c) {
+        // [xIdx, yIdx, value] with x = year, y = country. A cell under the
+        // reader's minimum is left out, not painted: a mean of two
+        // articles is as dark as a mean of two hundred.
+        var cells = cellsIn.filter(function (c) {
+            return c[3] >= min;
+        }).map(function (c) {
             return { value: [c[1], c[0], c[2]], n: c[3] };
         });
 
@@ -446,6 +467,12 @@
                 });
             }
         });
+    }
+
+    /** How many of the model's heatmap cells the minimum leaves out. */
+    function heatmapHidden(data, modelKey, minCount) {
+        var cells = (data.models[modelKey] || {}).centrality_heatmap || [];
+        return cells.filter(function (c) { return c[3] < (minCount || 1); }).length;
     }
 
     /**
@@ -469,69 +496,28 @@
     }
 
     /**
-     * 6×6 polarity cross-tab heatmap for one model pair: value labels on
-     * non-zero cells, a surface→primary ramp rather than the heat ramp
-     * (this is agreement, not intensity), static like the centrality map.
+     * Spearman's rho between the selected model's polarity and
+     * subjectivity, from the correlation cross-tab the panel already draws
+     * (polarity rows most negative first, subjectivité 1..5 across), so it
+     * needs nothing a v0.3.0 bundle lacks. A sentence, not a chart: the
+     * stacks show the shape, this says how monotone it is.
      */
-    function buildAgreementMatrix(data, pairEntry) {
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var primary = (ns.resolveCssVar && ns.resolveCssVar('--primary')) || tokens.primary;
-        var surface = (ns.resolveCssVar && ns.resolveCssVar('--surface-raised'))
-            || tokens.surfaceRaised || tokens.surface;
-
-        var order = data.polarity_order || [];
-        var labels = order.map(function (l) { return P.t(l); });
-        var matrix = pairEntry.matrix || [];
-        var labelA = modelLabel(pairEntry.models[0]);
-        var labelB = modelLabel(pairEntry.models[1]);
-
-        var cells = [];
-        for (var i = 0; i < order.length; i++) {
-            for (var j = 0; j < order.length; j++) {
-                // x = model B label index, y = model A label index.
-                cells.push([j, i, (matrix[i] && matrix[i][j]) || 0]);
-            }
-        }
-
-        return C.heatmapMatrix({ xLabels: labels, yLabels: labels, cells: cells }, {
-            visualMin: 0,
-            ramp: [surface, primary],
-            grid: { left: 110, top: 16, bottom: 84 },
-            xLabelRotate: 35,
-            cellLabels: true,
-            cellBorder: true,
-            static: true,
-            tooltipFormatter: function (p) {
-                return P.t('sentiment.pair_cell', {
-                    a: P.escapeHtml(labelA),
-                    la: P.escapeHtml(labels[p.value[1]] || ''),
-                    b: P.escapeHtml(labelB),
-                    lb: P.escapeHtml(labels[p.value[0]] || ''),
-                    count: p.value[2] || 0
-                });
-            }
+    function spearmanCaption(data, modelKey) {
+        var corr = (data.models[modelKey] || {}).correlation || {};
+        var rows = S.readingOrder(data, 'polarity')
+            .filter(function (label) { return label !== NOT_APPLICABLE; })
+            .map(function (label) { return corr[label] || []; });
+        var r = S.spearmanFromTable(rows);
+        if (r.rho == null) return '';
+        var p = r.p == null ? P.t('sentiment.na_value')
+            : r.p < 0.001 ? P.t('sentiment.p_below', { p: P.formatNumber(0.001) })
+                : P.t('sentiment.p_equals', { p: P.formatNumber(Math.round(r.p * 1000) / 1000) });
+        return P.t('sentiment.spearman', {
+            rho: (r.rho > 0 ? '+' : '') + P.formatNumber(Math.round(r.rho * 100) / 100),
+            band: P.t('sentiment.rho_' + S.rhoBand(r.rho)),
+            count: r.n,
+            p: p
         });
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Agreement cards (pairwise % summary)                              */
-    /* ----------------------------------------------------------------- */
-
-    function buildAgreementCards(agreement) {
-        var cardsEl = P.el('div', 'iwac-vis-overview-summary');
-        (agreement || []).forEach(function (entry) {
-            var card = P.el('div', 'iwac-vis-summary-card');
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__label',
-                modelLabel(entry.models[0]) + ' × ' + modelLabel(entry.models[1])));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
-                entry.agreement_pct == null
-                    ? '—'
-                    : P.t('sentiment.pct_value', { pct: P.formatNumber(entry.agreement_pct) })));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__label',
-                P.t('sentiment.co_rated', { count: entry.co_rated || 0 })));
-            cardsEl.appendChild(card);
-        });
-        return cardsEl;
     }
 
     /* ----------------------------------------------------------------- */
@@ -551,6 +537,29 @@
     var PANEL_HEADING = 'h3';
     function sectionHeading(text) {
         return P.el('h2', 'iwac-vis-section-heading', text);
+    }
+
+    /**
+     * A host for a panel's own controls, between its description and chart;
+     * `row` lays several bars side by side rather than stacked.
+     */
+    function controlsHost(panel, row) {
+        var host = P.el('div', 'iwac-vis-facet-host' + (row ? ' iwac-vis-facet-host--row' : ''));
+        panel.panel.insertBefore(host, panel.chart);
+        return host;
+    }
+
+    /** A muted line, under the chart (`after`) or just above it. */
+    function captionLine(panel, after) {
+        var line = P.el('p', 'iwac-vis-muted');
+        if (after) panel.panel.appendChild(line);
+        else panel.panel.insertBefore(line, panel.chart);
+        return line;
+    }
+
+    function widePanel(titleKey, desc, key) {
+        return P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t(titleKey), desc,
+            { key: key, heading: PANEL_HEADING });
     }
 
     function buildLayout(container, data) {
@@ -589,26 +598,33 @@
         var timeGrid = P.buildChartsGrid();
         root.appendChild(timeGrid);
 
-        // Named panels (S13): two of the panels below are conditional, and
-        // a positional slug would renumber every embed permalink after them
-        // the first time a bundle arrives without topics or newspapers.
-        var polarityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.polarity_year_title'), descWithAiNote('sentiment.polarity_year_desc'),
-            { key: 'polarity-by-year', heading: PANEL_HEADING });
-        var centralityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.centrality_year_title'), descWithAiNote('sentiment.centrality_year_desc'),
-            { key: 'centrality-by-year', heading: PANEL_HEADING });
-        var subjectivityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.subjectivity_title'), descWithAiNote('sentiment.subjectivity_desc'),
-            { key: 'subjectivity', heading: PANEL_HEADING });
+        // Named panels (S13): several panels below are conditional, and a
+        // positional slug would renumber every embed permalink after them
+        // the first time a bundle arrives without one of their sections.
+        var polarityPanel = widePanel('sentiment.polarity_year_title',
+            descWithAiNote('sentiment.polarity_year_desc'), 'polarity-by-year');
+        var centralityPanel = widePanel('sentiment.centrality_year_title',
+            descWithAiNote('sentiment.centrality_year_desc'), 'centrality-by-year');
+        var subjectivityPanel = widePanel('sentiment.subjectivity_title',
+            descWithAiNote('sentiment.subjectivity_desc'), 'subjectivity');
 
         // Dynamic "Non applicable" caption under the polarity timeline.
-        var naNote = P.el('p', 'iwac-vis-muted');
-        polarityPanel.panel.appendChild(naNote);
+        var naNote = captionLine(polarityPanel, true);
 
         timeGrid.appendChild(polarityPanel.panel);
         timeGrid.appendChild(centralityPanel.panel);
         timeGrid.appendChild(subjectivityPanel.panel);
+
+        // Cross-model trend (v0.4.0 bundles): every model at once, so it
+        // carries its own target / period / cohort facets.
+        var trendsPanel = null;
+        if (S.trendTargets(data).length) {
+            trendsPanel = widePanel('sentiment.trends_title',
+                descWithAiNote('sentiment.trends_desc'), 'model-trends');
+            trendsPanel.controls = controlsHost(trendsPanel, true);
+            trendsPanel.caption = captionLine(trendsPanel, true);
+            timeGrid.appendChild(trendsPanel.panel);
+        }
 
         // -- Section: how the ratings break down -----------------------
         root.appendChild(sectionHeading(P.t('sentiment.sec_breakdown')));
@@ -621,9 +637,11 @@
         var correlationPanel = P.buildPanel('iwac-vis-panel',
             P.t('sentiment.correlation_title'), descWithAiNote('sentiment.correlation_desc'),
             { key: 'correlation', heading: PANEL_HEADING });
-        var cenHeatPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.cenheat_title'), descWithAiNote('sentiment.cenheat_desc'),
-            { key: 'centrality-heatmap', heading: PANEL_HEADING });
+        correlationPanel.caption = captionLine(correlationPanel, true);
+        var cenHeatPanel = widePanel('sentiment.cenheat_title',
+            descWithAiNote('sentiment.cenheat_desc'), 'centrality-heatmap');
+        cenHeatPanel.controls = controlsHost(cenHeatPanel);
+        cenHeatPanel.caption = captionLine(cenHeatPanel, true);
 
         breakdownGrid.appendChild(countryPanel.panel);
         breakdownGrid.appendChild(correlationPanel.panel);
@@ -639,29 +657,42 @@
         var topicPanel = null;
         var topicSortHost = null;
         if ((data.topics || []).length) {
-            topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+            topicPanel = widePanel('sentiment.polarity_topic_title',
                 // The bundle's own topic count, not a number in the copy: the
                 // description said "30" whatever the model was refit with.
-                P.t('sentiment.polarity_topic_title'),
                 descWithAiNote('sentiment.polarity_topic_desc', { count: data.topics.length }),
-                { key: 'polarity-by-topic', heading: PANEL_HEADING });
+                'polarity-by-topic');
             topicPanel.chart.classList.add('iwac-vis-chart--likert');
-            topicSortHost = P.el('div', 'iwac-vis-facet-host');
-            topicPanel.panel.insertBefore(topicSortHost, topicPanel.chart);
+            topicSortHost = controlsHost(topicPanel);
             breakdownGrid.appendChild(topicPanel.panel);
         }
         var newspaperPanel = null;
         var newspaperSortHost = null;
         if ((data.newspapers || []).length) {
-            newspaperPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('sentiment.polarity_newspaper_title'),
+            newspaperPanel = widePanel('sentiment.polarity_newspaper_title',
                 P.t('sentiment.polarity_newspaper_desc', { min: data.newspaper_min || 50 })
                     + ' ' + P.t('sentiment.ai_note'),
-                { key: 'polarity-by-newspaper', heading: PANEL_HEADING });
+                'polarity-by-newspaper');
             newspaperPanel.chart.classList.add('iwac-vis-chart--likert');
-            newspaperSortHost = P.el('div', 'iwac-vis-facet-host');
-            newspaperPanel.panel.insertBefore(newspaperSortHost, newspaperPanel.chart);
+            newspaperSortHost = controlsHost(newspaperPanel);
             breakdownGrid.appendChild(newspaperPanel.panel);
+        }
+
+        // Newspaper ranking with intervals and the places map (v0.4.0).
+        var rankingPanel = null;
+        if (data.ranking && (data.ranking.newspapers || []).length) {
+            rankingPanel = widePanel('sentiment.rank_title',
+                descWithAiNote('sentiment.rank_desc'), 'newspaper-ranking');
+            rankingPanel.controls = controlsHost(rankingPanel);
+            rankingPanel.caption = captionLine(rankingPanel, true);
+            breakdownGrid.appendChild(rankingPanel.panel);
+        }
+        var mapPanel = null;
+        if (data.places_file && S.mountPlacesMap && P.createFilteredPlacesMap) {
+            mapPanel = widePanel('sentiment.map_title',
+                descWithAiNote('sentiment.map_desc'), 'places-map');
+            mapPanel.controls = controlsHost(mapPanel);
+            breakdownGrid.appendChild(mapPanel.panel);
         }
 
         // -- Section: extreme-article keywords -------------------------
@@ -669,49 +700,76 @@
         var extremesGrid = P.buildChartsGrid();
         root.appendChild(extremesGrid);
 
-        var extremesPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.extremes_title'), descWithAiNote('sentiment.extremes_desc'),
-            { key: 'extremes', heading: PANEL_HEADING });
-        var extremesControls = P.el('div', 'iwac-vis-facet-host');
+        var extremesPanel = widePanel('sentiment.extremes_title',
+            descWithAiNote('sentiment.extremes_desc'), 'extremes');
         // Controls sit between the description and the chart.
-        extremesPanel.panel.insertBefore(extremesControls, extremesPanel.chart);
-        var extremesNote = P.el('p', 'iwac-vis-muted');
-        extremesPanel.panel.appendChild(extremesNote);
+        var extremesControls = controlsHost(extremesPanel);
+        var extremesNote = captionLine(extremesPanel, true);
         extremesGrid.appendChild(extremesPanel.panel);
 
         // -- Section: model comparison ---------------------------------
+        // One dimension lens for the whole section; the pair lens lives in
+        // the one panel it drives.
         root.appendChild(sectionHeading(P.t('sentiment.sec_compare')));
-        var pairFacetHost = P.el('div', 'iwac-vis-facet-host');
-        root.appendChild(pairFacetHost);
+        var dimensionFacetHost = P.el('div', 'iwac-vis-facet-host');
+        root.appendChild(dimensionFacetHost);
         var compareGrid = P.buildChartsGrid();
         root.appendChild(compareGrid);
 
-        var agreementPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-            P.t('sentiment.agreement_title'), descWithAiNote('sentiment.agreement_desc'),
-            { key: 'model-agreement', heading: PANEL_HEADING });
-        var matrixCaption = P.el('p', 'iwac-vis-muted');
+        var pairsPanel = widePanel('sentiment.pairs_title',
+            descWithAiNote('sentiment.pairs_desc'), 'model-pairs');
+        pairsPanel.controls = controlsHost(pairsPanel);
+        pairsPanel.caption = captionLine(pairsPanel, false);
+        compareGrid.appendChild(pairsPanel.panel);
+
+        var agreementPanel = widePanel('sentiment.agreement_title',
+            descWithAiNote('sentiment.agreement_desc'), 'model-agreement');
+        agreementPanel.controls = controlsHost(agreementPanel);
+        agreementPanel.cards = P.el('div', 'iwac-vis-pair-cards');
+        agreementPanel.panel.insertBefore(agreementPanel.cards, agreementPanel.chart);
+        agreementPanel.caption = captionLine(agreementPanel, false);
         compareGrid.appendChild(agreementPanel.panel);
 
+        var calibrationPanel = null;
+        if (MODELS.every(function (m) { return (data.models[m.key] || {}).distribution; })) {
+            calibrationPanel = widePanel('sentiment.calibration_title',
+                descWithAiNote('sentiment.calibration_desc'), 'model-calibration');
+            compareGrid.appendChild(calibrationPanel.panel);
+        }
+        var dissentPanel = null;
+        if (data.consensus) {
+            dissentPanel = widePanel('sentiment.dissent_title',
+                descWithAiNote('sentiment.dissent_desc'), 'model-dissent');
+            dissentPanel.cards = P.el('div', 'iwac-vis-pair-cards');
+            dissentPanel.panel.insertBefore(dissentPanel.cards, dissentPanel.chart);
+            compareGrid.appendChild(dissentPanel.panel);
+        }
+
         return {
-            root:              root,
-            modelFacetHost:    modelFacetHost,
-            polarityPanel:     polarityPanel,
-            centralityPanel:   centralityPanel,
-            subjectivityPanel: subjectivityPanel,
-            countryPanel:      countryPanel,
-            correlationPanel:  correlationPanel,
-            cenHeatPanel:      cenHeatPanel,
-            topicPanel:        topicPanel,
-            topicSortHost:     topicSortHost,
-            newspaperPanel:    newspaperPanel,
-            newspaperSortHost: newspaperSortHost,
-            extremesPanel:     extremesPanel,
-            extremesControls:  extremesControls,
-            extremesNote:      extremesNote,
-            pairFacetHost:     pairFacetHost,
-            agreementPanel:    agreementPanel,
-            matrixCaption:     matrixCaption,
-            naNote:            naNote
+            root:               root,
+            modelFacetHost:     modelFacetHost,
+            polarityPanel:      polarityPanel,
+            centralityPanel:    centralityPanel,
+            subjectivityPanel:  subjectivityPanel,
+            trendsPanel:        trendsPanel,
+            countryPanel:       countryPanel,
+            correlationPanel:   correlationPanel,
+            cenHeatPanel:       cenHeatPanel,
+            topicPanel:         topicPanel,
+            topicSortHost:      topicSortHost,
+            newspaperPanel:     newspaperPanel,
+            newspaperSortHost:  newspaperSortHost,
+            rankingPanel:       rankingPanel,
+            mapPanel:           mapPanel,
+            extremesPanel:      extremesPanel,
+            extremesControls:   extremesControls,
+            extremesNote:       extremesNote,
+            dimensionFacetHost: dimensionFacetHost,
+            pairsPanel:         pairsPanel,
+            agreementPanel:     agreementPanel,
+            calibrationPanel:   calibrationPanel,
+            dissentPanel:       dissentPanel,
+            naNote:             naNote
         };
     }
 
@@ -719,7 +777,10 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function render(container, data) {
+    // The heatmap's minimum-articles-per-cell choices (1 = every cell).
+    var MIN_CELLS = ['1', '5', '10', '25'];
+
+    function render(container, data, ctx) {
         if (!data || !data.models || !data.summary || !data.summary.total) {
             container.innerHTML = '';
             container.appendChild(P.buildEmptyState());
@@ -735,6 +796,18 @@
         }
 
         var firstCat = (data.extreme_categories || ['subjectivity_high'])[0];
+        var dims = S.compareDimensions(data);
+        function pairsOf(dim) {
+            return (S.reliabilityFor(data, dim) || { pairs: [] }).pairs;
+        }
+        // A measure joins the pair matrix's facet only when the bundle has
+        // it: a v0.3.0 bundle carries exact agreement alone.
+        var firstPair = pairsOf(dims[0] || 'polarity')[0] || {};
+        var metrics = S.PAIR_METRICS.filter(function (k) { return firstPair[k] != null; });
+        var targets = S.trendTargets(data);
+        var trendDefault = String((data.trends || {}).min_count || 5);
+        var trendMins = S.TREND_MINIMUMS.indexOf(trendDefault) >= 0
+            ? S.TREND_MINIMUMS : [trendDefault].concat(S.TREND_MINIMUMS);
         var state = {
             model: MODELS[0].key,
             pair: 0,
@@ -743,25 +816,43 @@
             // Most positive → most negative by default: the order that makes
             // the diverging bars readable as a gradient rather than a comb.
             topicSort: 'polarity',
-            newspaperSort: 'polarity'
+            newspaperSort: 'polarity',
+            minCell: MIN_CELLS[0],
+            dimension: dims[0] || 'polarity',
+            pairMetric: metrics[0] || 'exact',
+            trendTarget: targets[0] || 'negative',
+            trendPeriod: S.TREND_PERIODS[0],
+            trendCohort: S.TREND_COHORTS[0],
+            trendMin: trendDefault,
+            rankMeasure: 'polarity',
+            mapDim: 'polarity'
         };
         // The facets patch this store; the subscriptions below repaint what
         // each key drives. All of it is URL-addressable:
-        // `?sentiment.model=gpt_5_6_luna&sentiment.sort_topic=volume`.
+        // `?sentiment.model=gpt_5_6_luna&sentiment.dimension=centrality`.
         var store = P.createStore(state);
-        var agreementCount = (data.agreement || []).length;
+        var pairCount = pairsOf(state.dimension).length;
         var url = P.bindUrlState ? P.bindUrlState(store, {
             prefix: 'sentiment',
             keys: [
                 { key: 'model', values: MODELS.map(function (m) { return m.key; }) },
                 { key: 'pair', validate: function (v) {
-                    return v >= 0 && v < agreementCount && v === Math.floor(v);
+                    return v >= 0 && v < pairCount && v === Math.floor(v);
                 } },
                 { key: 'exCategory', param: 'category',
                   values: data.extreme_categories || [firstCat] },
                 { key: 'exType', param: 'type', values: ['subject', 'spatial'] },
                 { key: 'topicSort', param: 'sort_topic', values: ['polarity', 'volume'] },
-                { key: 'newspaperSort', param: 'sort_newspaper', values: ['polarity', 'volume'] }
+                { key: 'newspaperSort', param: 'sort_newspaper', values: ['polarity', 'volume'] },
+                { key: 'minCell', param: 'min_cell', values: MIN_CELLS },
+                { key: 'dimension', values: dims.length ? dims : ['polarity'] },
+                { key: 'pairMetric', param: 'metric', values: metrics.length ? metrics : ['exact'] },
+                { key: 'trendTarget', param: 'trend', values: targets.length ? targets : ['negative'] },
+                { key: 'trendPeriod', param: 'period', values: S.TREND_PERIODS },
+                { key: 'trendCohort', param: 'cohort', values: S.TREND_COHORTS },
+                { key: 'trendMin', param: 'trend_min', values: trendMins },
+                { key: 'rankMeasure', param: 'rank', values: S.DIMENSIONS },
+                { key: 'mapDim', param: 'map', values: S.DIMENSIONS }
             ]
         }) : null;
         // Pinned once, over every model AND both breakdowns, so neither the
@@ -775,6 +866,9 @@
         function newspaperOption() {
             return buildDivergingPolarity(data, state.model, 'newspaper', state.newspaperSort, sharedExtent);
         }
+        function heatmapOption() {
+            return buildCentralityHeatmap(data, state.model, Number(state.minCell));
+        }
         function repaint(host, option) {
             var live = host && ns.getLiveChart ? ns.getLiveChart(host) : null;
             if (!live) return;
@@ -783,6 +877,30 @@
             // toggles the reader set survive the model switch.
             if (ns.repaint) ns.repaint(live, option);
             else live.setOption(option, true);
+        }
+        // A full replace, for the panels whose axes change with a facet (a
+        // dimension's five or six labels, a model's ranked titles): a merge
+        // would keep the old categories' leftovers.
+        function replace(host, option) {
+            var live = host && ns.getLiveChart ? ns.getLiveChart(host) : null;
+            if (live && option) live.setOption(option, true);
+        }
+        /** One facet bar into `host`; `apply(subKey)` on change. */
+        function mountFacet(host, key, label, subFacets, current, apply, renderAs) {
+            if (!host || !P.buildFacetButtons) return null;
+            var bar = P.buildFacetButtons({
+                facets: [{ key: key, label: label, subFacets: subFacets, renderAs: renderAs }],
+                activeKey: key,
+                activeSubKey: current,
+                onChange: function (evt) { apply(evt.subFacet || current); }
+            });
+            host.appendChild(bar.root);
+            return bar;
+        }
+        function dimensionFacets() {
+            var out = {};
+            S.DIMENSIONS.forEach(function (dim) { out[dim] = S.dimensionLabel(dim); });
+            return out;
         }
         var h = buildLayout(container, data);
 
@@ -793,6 +911,19 @@
             });
         }
         updateNaNote();
+
+        function updateHeatmapCaption() {
+            var hidden = heatmapHidden(data, state.model, Number(state.minCell));
+            h.cenHeatPanel.caption.textContent = hidden
+                ? P.t('sentiment.cenheat_hidden', { count: hidden, min: state.minCell })
+                : '';
+        }
+        updateHeatmapCaption();
+
+        function updateSpearman() {
+            h.correlationPanel.caption.textContent = spearmanCaption(data, state.model);
+        }
+        updateSpearman();
 
         function renderExtremes() {
             repaint(h.extremesPanel.chart,
@@ -807,38 +938,62 @@
         if (P.buildFacetButtons) {
             var subFacets = {};
             MODELS.forEach(function (m) { subFacets[m.key] = m.label; });
-            var facetBar = P.buildFacetButtons({
-                facets: [{
-                    key: 'model',
-                    label: P.t('Model'),
-                    subFacets: subFacets,
-                    renderAs: 'buttons'
-                }],
-                activeKey: 'model',
-                activeSubKey: state.model,
-                onChange: function (evt) {
-                    store.patch({ model: evt.subFacet || MODELS[0].key });
-                }
-            });
-            h.modelFacetHost.appendChild(facetBar.root);
+            mountFacet(h.modelFacetHost, 'model', P.t('Model'), subFacets, state.model, function (key) {
+                store.patch({ model: key || MODELS[0].key });
+            }, 'buttons');
             if (url && P.buildCopyLinkButton) {
                 h.modelFacetHost.appendChild(P.buildCopyLinkButton({ href: url.href }));
             }
         }
+
+        // -- Ranking + map: the model lens and their own measure ---
+        function rankingOption() {
+            return S.rankingOption(data, state.model, state.rankMeasure);
+        }
+        function sizeRanking() {
+            var rows = S.rankingRows(data, state.model, state.rankMeasure).length;
+            h.rankingPanel.chart.style.height = S.rankingHeight(rows) + 'px';
+            h.rankingPanel.caption.textContent = S.rankingCaption(data, state.model, state.rankMeasure);
+        }
+        function repaintRanking() {
+            if (!h.rankingPanel) return;
+            sizeRanking();
+            var live = ns.getLiveChart ? ns.getLiveChart(h.rankingPanel.chart) : null;
+            if (live) {
+                live.resize();
+                live.setOption(rankingOption(), true);
+            }
+        }
+        var mapController = null;
+        if (h.mapPanel) {
+            mapController = S.mountPlacesMap(h.mapPanel, {
+                url: ((ctx && ctx.dataBase) || P.DATA_BASE) + data.places_file,
+                siteBase: (ctx && ctx.siteBase) || '',
+                getState: function () { return { model: state.model, dim: state.mapDim }; }
+            });
+            mountFacet(h.mapPanel.controls, 'map', P.t('sentiment.measure'), dimensionFacets(),
+                state.mapDim, function (dim) { store.patch({ mapDim: dim }); }, 'buttons');
+            store.subscribe(function () { mapController.update(); }, { keys: ['mapDim'] });
+        }
+
         store.subscribe(function () {
             updateNaNote();
+            updateHeatmapCaption();
+            updateSpearman();
             var faceted = [
                 [h.polarityPanel.chart,    buildPolarityByYear],
                 [h.centralityPanel.chart,  buildCentralityByYear],
                 [h.countryPanel.chart,     buildPolarityByCountry],
-                [h.correlationPanel.chart, buildCorrelation],
-                [h.cenHeatPanel.chart,     buildCentralityHeatmap]
+                [h.correlationPanel.chart, buildCorrelation]
             ];
             faceted.forEach(function (pair) {
                 repaint(pair[0], pair[1](data, state.model));
             });
+            replace(h.cenHeatPanel.chart, heatmapOption());
             if (h.topicPanel) repaint(h.topicPanel.chart, topicOption());
             if (h.newspaperPanel) repaint(h.newspaperPanel.chart, newspaperOption());
+            repaintRanking();
+            if (mapController) mapController.update();
             renderExtremes();
         }, { keys: ['model'] });
 
@@ -856,35 +1011,30 @@
             chart.setOption(buildCorrelation(data, state.model), true);
         });
         ns.registerChart(h.cenHeatPanel.chart, function (el, chart) {
-            chart.setOption(buildCentralityHeatmap(data, state.model), true);
+            chart.setOption(heatmapOption(), true);
         });
-        // -- Diverging polarity panels + their sort controls -------
-        function mountSortControl(host, current, apply) {
-            if (!host || !P.buildFacetButtons) return;
-            var bar = P.buildFacetButtons({
-                facets: [{
-                    key: 'sort',
-                    label: P.t('sentiment.sort_by'),
-                    subFacets: {
-                        polarity: P.t('sentiment.sort_polarity'),
-                        volume: P.t('sentiment.sort_volume')
-                    },
-                    renderAs: 'buttons'
-                }],
-                activeKey: 'sort',
-                activeSubKey: current,
-                onChange: function (evt) { apply(evt.subFacet || current); }
-            });
-            host.appendChild(bar.root);
-        }
+        var minCellFacets = {};
+        MIN_CELLS.forEach(function (v) {
+            minCellFacets[v] = v === '1' ? P.t('sentiment.min_cell_all') : P.formatNumber(Number(v));
+        });
+        mountFacet(h.cenHeatPanel.controls, 'min_cell', P.t('sentiment.min_cell'), minCellFacets,
+            state.minCell, function (v) { store.patch({ minCell: v }); }, 'buttons');
+        store.subscribe(function () {
+            replace(h.cenHeatPanel.chart, heatmapOption());
+            updateHeatmapCaption();
+        }, { keys: ['minCell'] });
 
+        // -- Diverging polarity panels + their sort controls -------
+        var sortFacets = {
+            polarity: P.t('sentiment.sort_polarity'),
+            volume: P.t('sentiment.sort_volume')
+        };
         if (h.topicPanel) {
             ns.registerChart(h.topicPanel.chart, function (el, chart) {
                 chart.setOption(topicOption(), true);
             });
-            mountSortControl(h.topicSortHost, state.topicSort, function (mode) {
-                store.patch({ topicSort: mode });
-            });
+            mountFacet(h.topicSortHost, 'sort', P.t('sentiment.sort_by'), sortFacets, state.topicSort,
+                function (mode) { store.patch({ topicSort: mode }); }, 'buttons');
             store.subscribe(function () {
                 repaint(h.topicPanel.chart, topicOption());
             }, { keys: ['topicSort'] });
@@ -893,12 +1043,20 @@
             ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
                 chart.setOption(newspaperOption(), true);
             });
-            mountSortControl(h.newspaperSortHost, state.newspaperSort, function (mode) {
-                store.patch({ newspaperSort: mode });
-            });
+            mountFacet(h.newspaperSortHost, 'sort', P.t('sentiment.sort_by'), sortFacets, state.newspaperSort,
+                function (mode) { store.patch({ newspaperSort: mode }); }, 'buttons');
             store.subscribe(function () {
                 repaint(h.newspaperPanel.chart, newspaperOption());
             }, { keys: ['newspaperSort'] });
+        }
+        if (h.rankingPanel) {
+            sizeRanking();
+            ns.registerChart(h.rankingPanel.chart, function (el, chart) {
+                chart.setOption(rankingOption(), true);
+            });
+            mountFacet(h.rankingPanel.controls, 'rank', P.t('sentiment.measure'), dimensionFacets(),
+                state.rankMeasure, function (dim) { store.patch({ rankMeasure: dim }); }, 'buttons');
+            store.subscribe(repaintRanking, { keys: ['rankMeasure'] });
         }
 
         // -- Subjectivity trend (all models at once) ---------------
@@ -906,35 +1064,55 @@
             chart.setOption(buildSubjectivityOption(data), true);
         });
 
+        // -- Cross-model trend (all models at once) ----------------
+        if (h.trendsPanel) {
+            var trendState = function () {
+                return {
+                    target: state.trendTarget, period: state.trendPeriod,
+                    cohort: state.trendCohort, min: Number(state.trendMin)
+                };
+            };
+            var trendOption = function () {
+                return S.trendOption(data, trendState(), MODELS, modelColor);
+            };
+            var updateTrendCaption = function () {
+                h.trendsPanel.caption.textContent = S.trendCaption(data, trendState());
+            };
+            ns.registerChart(h.trendsPanel.chart, function (el, chart) {
+                chart.setOption(trendOption(), true);
+            });
+            updateTrendCaption();
+            var targetFacets = {};
+            targets.forEach(function (t) { targetFacets[t] = P.t('sentiment.trend_' + t); });
+            mountFacet(h.trendsPanel.controls, 'trend', P.t('sentiment.trend_measure'), targetFacets,
+                state.trendTarget, function (t) { store.patch({ trendTarget: t }); }, 'buttons');
+            mountFacet(h.trendsPanel.controls, 'period', P.t('sentiment.trend_period'), {
+                year: P.t('Year'), decade: P.t('Decade')
+            }, state.trendPeriod, function (v) { store.patch({ trendPeriod: v }); }, 'buttons');
+            mountFacet(h.trendsPanel.controls, 'cohort', P.t('sentiment.trend_cohort'), {
+                common: P.t('sentiment.cohort_common'), available: P.t('sentiment.cohort_available')
+            }, state.trendCohort, function (v) { store.patch({ trendCohort: v }); }, 'buttons');
+            var minFacets = {};
+            trendMins.forEach(function (v) { minFacets[v] = P.formatNumber(Number(v)); });
+            mountFacet(h.trendsPanel.controls, 'trend_min', P.t('sentiment.trend_min'), minFacets,
+                state.trendMin, function (v) { store.patch({ trendMin: v }); }, 'buttons');
+            store.subscribe(function () {
+                replace(h.trendsPanel.chart, trendOption());
+                updateTrendCaption();
+            }, { keys: ['trendTarget', 'trendPeriod', 'trendCohort', 'trendMin'] });
+        }
+
         // -- Extreme-article keyword facets ------------------------
         if (P.buildFacetButtons) {
             var catFacets = {};
             (data.extreme_categories || []).forEach(function (cat) {
                 catFacets[cat] = P.t('sentiment.cat_' + cat);
             });
-            var catBar = P.buildFacetButtons({
-                facets: [{ key: 'category', label: P.t('sentiment.extremes_category'), subFacets: catFacets }],
-                activeKey: 'category',
-                activeSubKey: state.exCategory,
-                onChange: function (evt) {
-                    store.patch({ exCategory: evt.subFacet || firstCat });
-                }
-            });
-            var typeBar = P.buildFacetButtons({
-                facets: [{
-                    key: 'type',
-                    label: P.t('sentiment.extremes_type'),
-                    subFacets: { subject: P.t('sentiment.kw_subject'), spatial: P.t('sentiment.kw_spatial') },
-                    renderAs: 'buttons'
-                }],
-                activeKey: 'type',
-                activeSubKey: state.exType,
-                onChange: function (evt) {
-                    store.patch({ exType: evt.subFacet || 'subject' });
-                }
-            });
-            h.extremesControls.appendChild(catBar.root);
-            h.extremesControls.appendChild(typeBar.root);
+            mountFacet(h.extremesControls, 'category', P.t('sentiment.extremes_category'), catFacets,
+                state.exCategory, function (cat) { store.patch({ exCategory: cat || firstCat }); });
+            mountFacet(h.extremesControls, 'type', P.t('sentiment.extremes_type'), {
+                subject: P.t('sentiment.kw_subject'), spatial: P.t('sentiment.kw_spatial')
+            }, state.exType, function (type) { store.patch({ exType: type || 'subject' }); }, 'buttons');
         }
         ns.registerChart(h.extremesPanel.chart, function (el, chart) {
             chart.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
@@ -943,59 +1121,119 @@
         renderExtremes();
 
         // -- Comparison section ------------------------------------
-        var agreement = data.agreement || [];
-        if (agreement.length === 0) {
-            h.agreementPanel.chart.appendChild(
-                P.buildEmptyState());
+        if (!dims.length || !pairsOf(state.dimension).length) {
+            [h.pairsPanel, h.agreementPanel].forEach(function (panel) {
+                panel.chart.appendChild(P.buildEmptyState());
+            });
             return;
         }
 
-        function renderComparison() {
-            var entry = agreement[state.pair];
-            if (!entry) return;
-            h.matrixCaption.textContent = P.t('sentiment.matrix_caption', {
-                a: modelLabel(entry.models[0]),
-                b: modelLabel(entry.models[1])
-            });
-            var liveM = ns.getLiveChart ? ns.getLiveChart(h.agreementPanel.chart) : null;
-            if (liveM) liveM.setOption(buildAgreementMatrix(data, entry), true);
+        function currentPair() {
+            var pairs = pairsOf(state.dimension);
+            return pairs[state.pair] || pairs[0];
         }
 
-        // Pairwise % cards (all pairs) + caption above the matrix.
-        h.agreementPanel.panel.insertBefore(
-            buildAgreementCards(agreement), h.agreementPanel.chart);
-        h.agreementPanel.panel.insertBefore(h.matrixCaption, h.agreementPanel.chart);
+        if (dims.length > 1) {
+            var dimFacets = {};
+            dims.forEach(function (dim) { dimFacets[dim] = S.dimensionLabel(dim); });
+            mountFacet(h.dimensionFacetHost, 'dimension', P.t('sentiment.measure'), dimFacets,
+                state.dimension, function (dim) { store.patch({ dimension: dim }); }, 'buttons');
+        }
 
-        // One pair facet drives the cross-tab matrix.
-        if (P.buildFacetButtons && agreement.length > 1) {
+        // Every pair: model × model matrix of one measure. A click on a
+        // cell selects that pair for the panel below.
+        var pairBar = null;
+        if (metrics.length > 1) {
+            var metricFacets = {};
+            metrics.forEach(function (k) { metricFacets[k] = P.t('sentiment.metric_' + k); });
+            mountFacet(h.pairsPanel.controls, 'metric', P.t('sentiment.metric'), metricFacets,
+                state.pairMetric, function (k) { store.patch({ pairMetric: k }); }, 'buttons');
+        }
+        function pairsOption() {
+            return S.pairMatrixOption(data, state.dimension, state.pairMetric, MODELS);
+        }
+        function updatePairsCaption() {
+            h.pairsPanel.caption.textContent = S.panelCaption(data, state.dimension);
+        }
+        updatePairsCaption();
+        ns.registerChart(h.pairsPanel.chart, function (el, chart) {
+            chart.setOption(pairsOption(), true);
+            chart.off('click');
+            chart.on('click', function (p) {
+                if (!p.data || p.data.pairIndex == null) return;
+                store.patch({ pair: p.data.pairIndex });
+                if (pairBar) pairBar.setActive('pair', String(p.data.pairIndex));
+            });
+        });
+
+        // One pair: its measures + the label-by-label cross-tab.
+        var pairs = pairsOf(state.dimension);
+        if (P.buildFacetButtons && pairs.length > 1) {
             var pairFacets = {};
-            agreement.forEach(function (entry, idx) {
+            pairs.forEach(function (entry, idx) {
                 pairFacets[String(idx)] = modelLabel(entry.models[0])
                     + ' × ' + modelLabel(entry.models[1]);
             });
-            var pairBar = P.buildFacetButtons({
-                facets: [{
-                    key: 'pair',
-                    label: P.t('Model comparison'),
-                    subFacets: pairFacets,
-                    renderAs: 'buttons'
-                }],
-                activeKey: 'pair',
-                activeSubKey: String(state.pair),
-                onChange: function (evt) {
-                    store.patch({ pair: parseInt(evt.subFacet, 10) || 0 });
-                }
-            });
-            h.pairFacetHost.appendChild(pairBar.root);
+            pairBar = mountFacet(h.agreementPanel.controls, 'pair', P.t('Model comparison'), pairFacets,
+                String(state.pair), function (v) { store.patch({ pair: parseInt(v, 10) || 0 }); }, 'buttons');
         }
-        store.subscribe(renderComparison, { keys: ['pair'] });
-
+        function renderPair() {
+            var entry = currentPair();
+            if (!entry) return;
+            h.agreementPanel.cards.innerHTML = '';
+            h.agreementPanel.cards.appendChild(S.pairCards(entry, state.dimension));
+            h.agreementPanel.caption.textContent = P.t('sentiment.matrix_caption', {
+                a: modelLabel(entry.models[0]),
+                b: modelLabel(entry.models[1])
+            });
+        }
+        function crossTabOption() {
+            return S.crossTabOption(data, state.dimension, currentPair(), modelLabel);
+        }
+        renderPair();
         ns.registerChart(h.agreementPanel.chart, function (el, chart) {
-            chart.setOption(buildAgreementMatrix(data, agreement[state.pair]), true);
+            chart.setOption(crossTabOption(), true);
         });
 
-        // Seed the comparison caption (charts self-render on register).
-        renderComparison();
+        // Calibration and consensus, on the same dimension lens.
+        if (h.calibrationPanel) {
+            ns.registerChart(h.calibrationPanel.chart, function (el, chart) {
+                chart.setOption(S.calibrationOption(data, state.dimension, MODELS), true);
+            });
+        }
+        function renderConsensusCards() {
+            if (!h.dissentPanel) return;
+            h.dissentPanel.cards.innerHTML = '';
+            h.dissentPanel.cards.appendChild(S.consensusCards(data, state.dimension));
+        }
+        if (h.dissentPanel) {
+            renderConsensusCards();
+            ns.registerChart(h.dissentPanel.chart, function (el, chart) {
+                var option = S.dissentOption(data, state.dimension, MODELS);
+                if (option) chart.setOption(option, true);
+            });
+        }
+
+        store.subscribe(function () {
+            renderPair();
+            replace(h.agreementPanel.chart, crossTabOption());
+        }, { keys: ['pair'] });
+        store.subscribe(function () {
+            replace(h.pairsPanel.chart, pairsOption());
+        }, { keys: ['pairMetric'] });
+        store.subscribe(function () {
+            updatePairsCaption();
+            replace(h.pairsPanel.chart, pairsOption());
+            renderPair();
+            replace(h.agreementPanel.chart, crossTabOption());
+            if (h.calibrationPanel) {
+                replace(h.calibrationPanel.chart, S.calibrationOption(data, state.dimension, MODELS));
+            }
+            if (h.dissentPanel) {
+                renderConsensusCards();
+                replace(h.dissentPanel.chart, S.dissentOption(data, state.dimension, MODELS));
+            }
+        }, { keys: ['dimension'] });
     }
 
     P.bootBlock({

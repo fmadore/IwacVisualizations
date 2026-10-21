@@ -507,8 +507,8 @@ def _scan_newspapers(
     """
     One pass over the newspaper-bearing subsets.
 
-    Returns ``(name, subset) -> {"total": int, "years": set, "countries":
-    Counter}``. That key is the finest grain either caller needs:
+    Returns ``(name, subset) -> {"total": int, "years": set, "by_year":
+    Counter, "countries": Counter}``. That key is the finest grain either caller needs:
     ``compute_newspaper_coverage`` keeps the subsets apart (one Gantt row per
     newspaper *per type*), ``compute_newspapers`` folds them together and
     also reports the per-subset split. Deriving the coarser shape from the
@@ -545,6 +545,7 @@ def _scan_newspapers(
                 entry = agg.setdefault((name, subset), {
                     "total": 0,
                     "years": set(),
+                    "by_year": Counter(),
                     "countries": Counter(),
                 })
                 entry["total"] += 1
@@ -553,6 +554,7 @@ def _scan_newspapers(
                     year = extract_year(dates[idx], min_year=year_min, max_year=year_max)
                     if year is not None:
                         entry["years"].add(year)
+                        entry["by_year"][year] += 1
 
                 if countries is not None:
                     country_str = clean_str(countries[idx])
@@ -569,14 +571,18 @@ def compute_newspaper_coverage(
 ) -> Dict[str, Any]:
     """
     Gantt-ready newspaper coverage: one entry per newspaper with its
-    year range, country, type (article | publication), and total item
-    count. Empty newspapers and "Unknown" are skipped.
+    year range, country, type (article | publication), total item count,
+    and the items held per year as sparse ``[year, count]`` pairs — the
+    panel's "items per year" view, where a run's internal gaps show that
+    the span bar draws over. Empty newspapers and "Unknown" are skipped;
+    an item with no parseable year counts in ``total`` but in no year.
 
     Returns:
         {
           "coverage": [
             { "name": "Sidwaya", "country": "Burkina Faso", "type": "article",
-              "year_min": 1984, "year_max": 2025, "total": 3421 },
+              "year_min": 1984, "year_max": 2025, "total": 3421,
+              "by_year": [[1984, 12], [1985, 40], ...] },
             ...
           ]
         }
@@ -599,6 +605,7 @@ def compute_newspaper_coverage(
             "year_min": min(years),
             "year_max": max(years),
             "total": int(entry["total"]),
+            "by_year": [[int(y), int(c)] for y, c in sorted(entry["by_year"].items())],
         })
 
     # Sort: by country, then by year_min, then by name — stable visual order

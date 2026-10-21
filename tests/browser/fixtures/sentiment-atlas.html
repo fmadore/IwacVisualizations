@@ -9,8 +9,10 @@
         const fixtureLang = /^fr/i.test(fixtureParams.get('lang') || '') ? 'fr' : 'en';
         document.documentElement.lang = fixtureLang;
     </script>
-    <!-- The block declares no sheet of its own (BlockRegistry: no blockCss). -->
+    <!-- The block declares no sheet of its own (BlockRegistry: no blockCss);
+         the map sheet is what the on-view loader adds for a `maplibre` block. -->
     <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-maplibre.min.css">
     <style>
         main { max-width: 1180px; margin: 0 auto; }
     </style>
@@ -21,18 +23,27 @@
         // The bundle comes from files/iwac-visualizations/sentiment-atlas.json;
         // serve tests/browser/fixtures/data/sentiment-atlas.json instead — a
         // 1,234-row synthetic sample aggregated with the rules of
-        // generate_sentiment_atlas.py, so every stack sums to its model's
-        // rated count and every agreement matrix to its co-rated count — and
-        // refuse anything else.
+        // generate_sentiment_atlas.py v0.3.0, so every stack sums to its
+        // model's rated count and every agreement matrix to its co-rated
+        // count — and refuse anything else.
+        //
+        // `?bundle=v4` serves sentiment-atlas-v4.json instead: the v0.4.0
+        // payload (reliability, consensus, trends, ranking, places) the real
+        // generator wrote over tests/python/test_sentiment_atlas.py's seeded
+        // corpus, beside its places sidecar. The default stays the v0.3.0
+        // bundle, which is what proves the block still renders a data pull
+        // older than its code.
         window.__fetched = [];
         (function () {
             const realFetch = window.fetch.bind(window);
+            const v4 = fixtureParams.get('bundle') === 'v4';
             window.fetch = function (url, init) {
                 const u = String(url);
                 window.__fetched.push(u);
                 const m = /\/files\/iwac-visualizations\/([^?]+)/.exec(u);
-                if (m) return realFetch('/tests/browser/fixtures/data/' + m[1], init);
-                return Promise.reject(new Error('unexpected fetch: ' + u));
+                if (!m) return Promise.reject(new Error('unexpected fetch: ' + u));
+                const file = v4 && m[1] === 'sentiment-atlas.json' ? 'sentiment-atlas-v4.json' : m[1];
+                return realFetch('/tests/browser/fixtures/data/' + file, init);
             };
         })();
     </script>
@@ -54,14 +65,18 @@
     </main>
     <!-- ECharts from the test-only npm copy (the version iwac-assets.phtml
          pins; chart-layout.spec.js asserts it), then the bundles in
-         Site\AssetPlan::bundles() order for chartOptions + facetButtons.
+         Site\AssetPlan::bundles() order for maplibre + chartOptions +
+         facetButtons.
          shared-core and the block bundle are built per locale. -->
+    <!-- The on-view loader's parallel MapLibre import, stood in for. -->
+    <script src="/tests/browser/fixtures/maplibre-stub.js"></script>
     <script src="/node_modules/echarts/dist/echarts.min.js"></script>
     <script>
         document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
     </script>
     <script src="/asset/js/dist/shared-charts.min.js"></script>
     <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script src="/asset/js/dist/shared-map.min.js"></script>
     <script>
         document.write('<script src="/asset/js/dist/blocks/sentiment-atlas.' + fixtureLang + '.min.js"><\/script>');
     </script>

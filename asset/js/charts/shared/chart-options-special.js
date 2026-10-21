@@ -1457,6 +1457,12 @@
      *   static — `progressive: 0, animation: false` on the series: a
      *     small matrix that is repainted on a facet change must not
      *     restart progressive rendering and flash empty
+     *   pieces — [{min, max?, label}] count bins, lowest first: a
+     *     piecewise legend over the same ramp, one stop per bin, instead
+     *     of the continuous slider. For counts spread over orders of
+     *     magnitude (a newspaper's items per year run from 1 to several
+     *     hundred), where a linear ramp paints all but the largest cells
+     *     in its palest stop
      */
     C.heatmapMatrix = function (data, opts) {
         opts = opts || {};
@@ -1555,7 +1561,7 @@
                 axisTick: { show: false },
                 splitArea: { show: false }
             },
-            visualMap: {
+            visualMap: opts.pieces ? piecewiseMap(opts.pieces, heatStops) : {
                 min: opts.visualMin != null ? opts.visualMin : 0,
                 max: max,
                 calculable: true,
@@ -1569,4 +1575,31 @@
             series: [series]
         };
     };
+
+    /**
+     * `pieces` → a piecewise visualMap. Bin i of n takes the ramp at
+     * (i + 1) / n, so the darkest bin is the ramp's end and the palest is
+     * one step in from its start: the ramp's first stop is the empty-cell
+     * tint, and a bin of real items painted with it vanished into the
+     * background.
+     */
+    function piecewiseMap(pieces, stops) {
+        var n = Math.max(1, pieces.length);
+        var lerp = typeof echarts !== 'undefined' && echarts.color && echarts.color.lerp;
+        return {
+            type: 'piecewise',
+            orient: 'horizontal',
+            left: 'center',
+            bottom: 4,
+            itemWidth: 14,
+            itemHeight: 10,
+            pieces: pieces.map(function (piece, i) {
+                var out = { min: piece.min, label: piece.label };
+                if (piece.max != null) out.max = piece.max;
+                var at = (i + 1) / n;
+                out.color = lerp ? lerp(at, stops) : stops[Math.round(at * (stops.length - 1))];
+                return out;
+            })
+        };
+    }
 })();

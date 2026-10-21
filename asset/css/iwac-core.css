@@ -1399,6 +1399,17 @@ body {
     margin-bottom: var(--space-3, 0.75rem);
 }
 
+/*  Several facet bars side by side, wrapping, for a panel whose chart takes
+ *  more than one independent control (the sentiment atlas's cross-model
+ *  trend: share, period, articles, minimum). Stacked, its four bars pushed
+ *  the chart below the fold of a laptop screen. */
+.iwac-vis-facet-host--row {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-6, 1.5rem);
+    align-items: flex-start;
+}
+
 .iwac-vis-facets__main,
 .iwac-vis-facets__sub {
     display: flex;

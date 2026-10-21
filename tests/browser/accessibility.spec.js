@@ -35,6 +35,9 @@ const FIXTURES = [
     'minimal-item',
     'on-this-day',
     'sentiment-atlas',
+    // The v0.4.0 payload: the comparison, trend, ranking and map panels a
+    // v0.3.0 bundle does not draw.
+    'sentiment-atlas?bundle=v4',
     'table-records',
     'topic-explorer',
 ];
@@ -46,12 +49,18 @@ const FIXTURES = [
  * sections were h3 straight under the page's h1, with its panels at h4; the
  * Topic Explorer's panels were h4 there, its "All topics" list an h3.
  */
-const OUTLINE_FIXTURES = ['sentiment-atlas', 'topic-explorer'];
+const OUTLINE_FIXTURES = ['sentiment-atlas', 'sentiment-atlas?bundle=v4', 'topic-explorer'];
+
+/** A fixture name, optionally with its own query (`name?a=b`), at a theme. */
+function fixtureUrl(fixture, theme) {
+    const [name, query] = fixture.split('?');
+    return `/tests/browser/fixtures/${name}.html?${query ? `${query}&` : ''}theme=${theme}`;
+}
 
 for (const fixture of OUTLINE_FIXTURES) {
     for (const theme of ['light', 'dark']) {
         test(`${fixture} (${theme}) passes axe heading-order`, async ({ page }) => {
-            await page.goto(`/tests/browser/fixtures/${fixture}.html?theme=${theme}`);
+            await page.goto(fixtureUrl(fixture, theme));
             await page.waitForLoadState('networkidle');
             // Rendered first: over a page with no headings the rule passes vacuously.
             await expect(page.locator('.iwac-vis-block .iwac-vis-panel').first()).toBeVisible();
@@ -66,7 +75,7 @@ for (const fixture of OUTLINE_FIXTURES) {
 for (const fixture of FIXTURES) {
     for (const theme of ['light', 'dark']) {
         test(`${fixture} (${theme}) has no serious WCAG A/AA violation`, async ({ page }) => {
-            await page.goto(`/tests/browser/fixtures/${fixture}.html?theme=${theme}`);
+            await page.goto(fixtureUrl(fixture, theme));
             // Panels render after the shared bundle boots; scan what a reader gets.
             await page.waitForLoadState('networkidle');
             const results = await new AxeBuilder({ page }).withTags(WCAG_A_AA).analyze();

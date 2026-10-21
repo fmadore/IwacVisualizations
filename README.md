@@ -22,7 +22,7 @@ Every registered block is wired end-to-end with live data — twenty-two page bl
 | Periodicals Overview | page block | **Live** — 11 panels: runs gantt, issue-holdings matrix, issues/year, languages & countries donuts, top subjects, word cloud, and LDA themes (mixtures over `lda_topic_topk` — prevalence over time, per-theme ranking, representative issues) | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets, topic cluster labels | Precompute (`generate_semantic_landscape.py`) |
 | Periodicals Semantic Landscape | page block | **Live** — zoomable UMAP scatter of periodical issues by table-of-contents embedding, Country/Decade facets | Precompute (`generate_periodicals_landscape.py`) |
-| Sentiment Atlas | page block | **Live** — corpus-level multi-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, polarity by country, diverging Likert bars for polarity by topic and by newspaper (share of each row, ordered by net polarity or by volume), centralité-by-country heatmap, extreme-article keywords, cross-model agreement | Precompute (`generate_sentiment_atlas.py`) |
+| Sentiment Atlas | page block | **Live** — corpus-level multi-model AI sentiment: polarity/centralité over time, subjectivity trends, the spread between models over time, polarity×subjectivity with Spearman's rho, polarity by country, diverging Likert bars for polarity by topic and by newspaper, a newspaper ranking with 95% intervals, a places map, centralité-by-country heatmap, extreme-article keywords, and model comparison on all three ratings (kappa, Fleiss' kappa, calibration, lone dissent) | Precompute (`generate_sentiment_atlas.py` + places sidecar) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — entity co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
@@ -62,7 +62,7 @@ A bird's-eye summary of the whole IWAC collection, designed to drop onto a site 
 - **Countries covered** — horizontal bar
 - **Languages** — horizontal bar with global / by-type / by-country facets
 - **Top entities** — tabbed bar (Persons / Orgs / Places / Subjects / Events), 50 per type with client pagination at 10/page; bars click through to the Omeka entity page
-- **Gantt** — newspaper coverage periods (start → end) with country and type facets
+- **Gantt** — newspaper coverage periods (start → end) with country and type facets, and a View facet that swaps the bars for a newspaper × year heatmap of the items held each year (binned 1–4 … 100+), where a run's gaps and thin years show
 - **Word cloud** — `echarts-wordcloud` with a horizontal-bar fallback; facets for global / by country / by year; lazy-loaded via `IntersectionObserver`
 - **World map** — MapLibre bubbles from `index.Lieux` entries with a type facet; lazy-loaded; GeoJSON plumbed for future choropleth
 - **Source locations** — MapLibre bubbles for source repositories/platforms and a ranked source table, ported from the deprecated dashboard’s Sources Map
@@ -211,9 +211,15 @@ The publications counterpart to the Semantic Landscape: a zoomable UMAP scatter 
 
 ### Sentiment Atlas (page block)
 
-Corpus-level view of the AI sentiment ratings that would otherwise only be visible item-by-item. The roster comes from the bundle — `generate_sentiment_atlas.py` publishes only the models the loaded snapshot has Hugging Face columns for, so a model being annotated on Omeka appears here at the first regeneration after its column lands, not before. A global model facet drives polarity and centralité-of-Islam over time, polarity by country, a polarity × subjectivity breakdown, and a centralité-by-country-and-year intensity heatmap; an extremes section shows the subject/place keywords most frequent among the articles a model rated at the ends of each scale; a subjectivity trend overlays every model at once (the only panel that does, hence the `--iwac-vis-model-*` colour tokens); and a model-pair facet drives cross-model agreement (pairwise rates + a polarity cross-tab — one card per unordered pair, so the section grows quadratically with the roster: 3 models give 3 cards, 4 give 6). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts.
+Corpus-level view of the AI sentiment ratings that would otherwise only be visible item-by-item. The roster comes from the bundle — `generate_sentiment_atlas.py` publishes only the models the loaded snapshot has Hugging Face columns for, so a model being annotated on Omeka appears here at the first regeneration after its column lands, not before.
 
-Every cut recomputes from Hugging Face via `generate_sentiment_atlas.py` (≈ 40 KB bundle).
+- **The model lens.** A global model facet drives polarity and centralité-of-Islam over time, polarity by country, a polarity × subjectivity breakdown (with Spearman's rho under it), the centralité-by-country-and-year heatmap (with a minimum of articles per cell), the diverging bars by topic and by newspaper, a **newspaper ranking** (each title's mean rating with a 95% interval, titles under 30 rated articles left out and counted), and a **places map** (geocoded places tagged on the articles, sized by mentions and coloured by the model's mean rating, grey under five rated articles). An extremes section shows the subject/place keywords most frequent among the articles a model rated at the ends of each scale.
+- **Every model at once.** The subjectivity trend, and a **cross-model trend**: each model's share of negative, central or subjective ratings by year or decade over a band from the lowest model to the highest, on the articles every model rated (default) or each model's own. These two use the `--iwac-vis-model-*` colour tokens.
+- **Model comparison**, on polarity, centralité or subjectivité: a model × model matrix of weighted kappa, Cohen's kappa or exact agreement with the whole panel's Fleiss' kappa; one pair's four measures and label-by-label cross-tab (select a cell or a pair); each model's own label shares; and how often the panel is unanimous and how often one model alone rates above or below the rest.
+
+Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts. The comparison statistics are ports of the sibling [IWAC sentiment analysis dashboard](https://iwac.frederickmadore.com/sentiment-analysis/)'s definitions, computed once in the generator rather than in the browser. A bundle from before v1.80.0 still renders: the new panels leave themselves out, and the comparison falls back to polarity and exact agreement.
+
+Every cut recomputes from Hugging Face via `generate_sentiment_atlas.py` (≈ 110 KB bundle, plus the ≈ 100 KB places sidecar the map fetches as it nears the viewport).
 
 ### Press Language (page block)
 
@@ -364,7 +370,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.79.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.80.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

@@ -1,13 +1,15 @@
 /**
  * IWAC Visualizations — Filtered places map + its ranked-list fallback
  *
- * The bubble map two dossier blocks draw over a precomputed places bundle
- * — the laïcité dossier's tagged places and the scary-terms block's —
- * where the count under a bubble depends on the reader's active filter
- * (a frame, a term family, a country) and changes without a reload:
- * `update()` re-counts every place, hides the ones at zero, re-scales the
- * radii to the new maximum and recolours the layer for the active filter.
- * Until v1.63.0 the two blocks carried the same ~230 lines each.
+ * The bubble map three blocks draw over a precomputed places bundle — the
+ * laïcité dossier's tagged places, the scary-terms block's and the
+ * sentiment atlas's — where the count under a bubble depends on the
+ * reader's active filter (a frame, a term family, a country) and changes
+ * without a reload: `update()` re-counts every place, hides the ones at
+ * zero, re-scales the radii to the new maximum and recolours the layer for
+ * the active filter. The atlas colours each bubble by its own value (a
+ * mean rating) rather than one colour per filter: `value` + `colorSteps`.
+ * Until v1.63.0 the two dossier blocks carried the same ~230 lines each.
  *
  * Reuses the shared map stack end to end: P.createIwacMap (theme-aware
  * basemap that swaps on toggle), P.buildCountFeatures, the bubble
@@ -34,6 +36,9 @@
         return;
     }
 
+    // A bubble with no value under `cfg.value`: below every real bound.
+    var NO_VALUE = -1e9;
+
     /**
      * @param {HTMLElement} mapEl
      * @param {Object} cfg
@@ -43,6 +48,13 @@
      *     afresh on every update, so it should close over live state
      *   color() — the raw colour for the active filter, or nothing for
      *     --primary; normalised here
+     *   value(place) — optional: a number per place that colours its
+     *     bubble through `colorSteps`, or null for the fallback colour.
+     *     Read afresh on every update, like `count`
+     *   colorSteps() — optional, with `value`: {fallback, stops} where
+     *     `stops` is [[lowerBound, rawColour], …] ascending and `fallback`
+     *     paints a null value or one below the first bound; every colour
+     *     normalised here. Replaces `color` when given
      *   popupLines(place, count) — the lines under the popup's title
      *   siteBase — for the popup's title link (P.itemUrl)
      *   center, zoom — default [2.5, 12] / 4, the six countries
@@ -106,14 +118,32 @@
             places.forEach(function (place, idx) {
                 var count = cfg.count(place);
                 if (count <= 0) return;
-                items.push({ lng: place.lng, lat: place.lat, count: count, idx: idx });
+                var value = cfg.value ? cfg.value(place) : null;
+                items.push({
+                    lng: place.lng, lat: place.lat, count: count, idx: idx,
+                    // A sentinel rather than null: a `step` expression
+                    // cannot compare null, and anything below the first
+                    // bound already falls through to the fallback colour.
+                    value: value == null || !isFinite(value) ? NO_VALUE : value
+                });
             });
             return P.buildCountFeatures(items, {
                 countKey: 'count',
                 toProps: function (item) {
-                    return { count: item.count, idx: item.idx };
+                    return { count: item.count, idx: item.idx, value: item.value };
                 }
             });
+        }
+
+        /** The fill: one colour, or a step over each bubble's value. */
+        function fillColor() {
+            var steps = cfg.value && cfg.colorSteps && cfg.colorSteps();
+            if (!steps || !steps.stops || !steps.stops.length) return activeColor();
+            var expr = ['step', ['get', 'value'], P.normalizeColorForMapLibre(steps.fallback)];
+            steps.stops.forEach(function (stop) {
+                expr.push(stop[0], P.normalizeColorForMapLibre(stop[1]));
+            });
+            return expr;
         }
 
         function paintFor(max) {
@@ -122,7 +152,7 @@
                 // sqrt scaling so Abidjan and Ouagadougou do not swallow
                 // the Sahel — the same treatment as every IWAC bubble map.
                 radius: P.countRadius('count', max, 3, 24),
-                color: activeColor(),
+                color: fillColor(),
                 stroke: P.normalizeColorForMapLibre(tokens.surface),
                 opacity: [0.7, 0.95],
                 strokeWidth: [1, 2]

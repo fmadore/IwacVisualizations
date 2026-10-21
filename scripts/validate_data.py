@@ -80,6 +80,7 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "laicite-trends.json":            ("research",),
     "laicite-seasonality.json":       ("by_subset", "minimum_cell"),
     "sentiment-atlas.json":           ("models", "years", "summary"),
+    "sentiment-atlas-places.json":    ("places", "models"),
     "semantic-landscape.json":        ("points", "topics"),
     "periodicals-landscape.json":     ("points",),
     "lexical-metrics.json":           (),

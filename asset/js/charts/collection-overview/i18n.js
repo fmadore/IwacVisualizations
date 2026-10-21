@@ -27,7 +27,7 @@
             'collection.entities_desc': 'People, organisations, places, subjects and events ranked by the number of items whose subject or place fields carry them. These are catalogue associations; a high rank does not directly measure historical influence.',
             'collection.language_desc': 'Items grouped by their recorded languages. A multilingual item can contribute to more than one language. These counts describe cataloguing and available holdings.',
             'collection.country_desc': 'Items grouped by the country recorded in their catalogue data. Compare document types within the collection; larger counts can reflect greater collecting coverage.',
-            'collection.gantt_desc': 'Each bar spans the first and last dated items held for a newspaper or periodical. Gaps within that span may remain. The chart does not establish when a title began or ceased publication.',
+            'collection.gantt_desc': 'Each bar spans the first and last dated items held for a newspaper or periodical; switch to items per year to see how many the collection holds each year, gaps included. An empty year means nothing was collected, not that nothing was published, and the chart does not establish when a title began or ceased publication.',
             'collection.growth_desc': 'Bars show records added to IWAC each month; the line shows their cumulative total. These are catalogue addition dates, so a rise can reflect a batch import of older material.',
             'collection.types_desc': 'Collected items by publication year and document type. Use the country filter to explore changes within one country. Uneven collecting and missing dates can affect the pattern.',
             'collection.timeline_desc': 'Collected articles, periodical issues, archival documents, recordings and photographs by recorded publication year and country. Bibliographic references and index records are excluded. Counts describe IWAC holdings, not all material published in a country.',
@@ -37,6 +37,9 @@
         'gantt_window_note': 'Showing the {shown} best-covered of {total} newspapers.',
         'gantt_window_all': 'Showing all {total} newspapers.',
         'gantt_show_top': 'Show top {shown}',
+        'gantt_view': 'View',
+        'gantt_view_span': 'Years covered',
+        'gantt_view_volume': 'Items per year',
     });
 
     ns.addTranslations('fr', {
@@ -47,7 +50,7 @@
             'collection.entities_desc': 'Personnes, organisations, lieux, sujets et événements classés selon le nombre de documents dont les champs de sujet ou de lieu les mentionnent. Il s’agit d’associations dans le catalogue\u202f; un rang élevé ne mesure pas directement une influence historique.',
             'collection.language_desc': 'Documents regroupés selon leurs langues enregistrées. Un document multilingue peut contribuer à plusieurs langues. Ces nombres décrivent le catalogage et les documents disponibles.',
             'collection.country_desc': 'Documents regroupés selon le pays enregistré dans le catalogue. Comparez les types de documents au sein de la collection\u202f; des nombres élevés peuvent refléter une collecte plus étendue.',
-            'collection.gantt_desc': 'Chaque barre couvre la période entre les premiers et derniers documents datés conservés pour un journal ou périodique. Cette période peut comporter des lacunes. Le graphique n’établit pas les dates de début ou de fin de publication d’un titre.',
+            'collection.gantt_desc': 'Chaque barre couvre la période entre les premiers et derniers documents datés conservés pour un journal ou périodique\u202f; la vue par année indique combien de documents la collection conserve chaque année, lacunes comprises. Une année vide signifie que rien n’a été collecté, non que rien n’a été publié, et le graphique n’établit pas les dates de début ou de fin de publication d’un titre.',
             'collection.growth_desc': 'Les barres indiquent les notices ajoutées à IWAC chaque mois\u202f; la ligne indique leur total cumulé. Il s’agit des dates d’ajout au catalogue\u00a0: une hausse peut correspondre à l’importation groupée de documents anciens.',
             'collection.types_desc': 'Documents collectés par année de publication et par type. Utilisez le filtre de pays pour explorer les variations au sein d’un pays. Une collecte inégale et des dates manquantes peuvent affecter le profil.',
             'collection.timeline_desc': 'Articles, numéros de périodiques, documents d’archives, enregistrements et photographies collectés, par année de publication et pays enregistrés. Les références bibliographiques et notices d’index sont exclues. Les nombres décrivent les collections IWAC, et non toute la production d’un pays.',
@@ -75,6 +78,9 @@
         'gantt_window_note': 'Affichage des {shown} journaux les mieux couverts sur {total}.',
         'gantt_window_all': 'Affichage des {total} journaux.',
         'gantt_show_top': 'Afficher les {shown} premiers',
+        'gantt_view': 'Vue',
+        'gantt_view_span': 'Années couvertes',
+        'gantt_view_volume': 'Documents par année',
         'Month': 'Mois',
         'Monthly': 'Mensuel',
         'Cumulative': 'Cumul\u00e9',

@@ -29,6 +29,11 @@ Functions
 - kleinberg_bursts: burst intervals from a 2-state automaton
 - contiguous_years: zero-filled calendar range over observed years
 - build_timeline_series: year × category counts shaped for C.timeline
+- kappa_from_matrix: Cohen's kappa (unweighted or quadratic) from a cross-tab
+- matrix_agreement: exact and within-one-step shares of a cross-tab
+- fleiss_kappa:     Fleiss' kappa + unanimity over complete-case items
+- classify_dissent: unanimous / lone dissenter / split for one item
+- mean_interval:    mean and 95% half-width from running sums
 """
 from __future__ import annotations
 
@@ -390,3 +395,145 @@ def kleinberg_bursts(
         })
     return bursts
 
+
+
+# =============================================================================
+# Inter-rater agreement (the Sentiment Atlas's model comparison)
+# =============================================================================
+#
+# Ports of the reference implementations in the sibling
+# IWAC-sentiment-analysis dashboard (`src/lib/utils/agreement.ts`,
+# `consensus.ts`, `stats.ts`), which computes the same measures in the
+# browser from per-article scores. The atlas ships aggregates instead, so the
+# maths runs here; the definitions should stay the same in both places.
+
+def kappa_from_matrix(matrix: Sequence[Sequence[int]], weighting: str = "none") -> Any:
+    """Cohen's kappa from a square confusion matrix, or None when undefined.
+
+    ``matrix[i][j]`` counts items rater A put in category i and rater B in
+    category j, both in scale order. ``weighting`` is ``"none"`` (the
+    all-or-nothing kappa) or ``"quadratic"`` (the ordinal variant: one step
+    off costs a sixteenth of four steps off on a five-point scale).
+
+    None when no item contributed, or when expected disagreement is zero
+    (every rating in one category, so chance-corrected agreement has no
+    meaning) — a caller must print that as "n/a", never as 0.
+    """
+    k = len(matrix)
+    n = sum(sum(row) for row in matrix)
+    if not n or k == 0:
+        return None
+    rows = [sum(row) for row in matrix]
+    cols = [sum(matrix[i][j] for i in range(k)) for j in range(k)]
+
+    def weight(i: int, j: int) -> float:
+        if weighting == "none":
+            return 0.0 if i == j else 1.0
+        if k <= 1:
+            return 0.0
+        d = abs(i - j) / (k - 1)
+        return d * d
+
+    observed = 0.0
+    expected = 0.0
+    for i in range(k):
+        for j in range(k):
+            w = weight(i, j)
+            observed += w * matrix[i][j] / n
+            expected += w * rows[i] * cols[j] / (n * n)
+    if expected == 0:
+        return None
+    return 1.0 - observed / expected
+
+
+def matrix_agreement(matrix: Sequence[Sequence[int]]) -> Dict[str, Any]:
+    """Exact and within-one-step agreement shares (0–1) of a square matrix.
+
+    Within-one counts the diagonal and its two neighbouring bands, which
+    separates "labels one notch apart" from "labels that disagree". Only
+    meaningful when the categories are an ordinal scale in order.
+    """
+    k = len(matrix)
+    n = sum(sum(row) for row in matrix)
+    if not n:
+        return {"n": 0, "exact": None, "within_one": None}
+    exact = sum(matrix[i][i] for i in range(k))
+    near = sum(matrix[i][j] for i in range(k) for j in range(k) if abs(i - j) <= 1)
+    return {"n": int(n), "exact": exact / n, "within_one": near / n}
+
+
+def fleiss_kappa(items: Sequence[Sequence[int]]) -> Dict[str, Any]:
+    """Fleiss' kappa over items rated by the same number of raters.
+
+    Each item is its per-category rating counts (``[2, 3, 0, 0, 0]`` is two
+    raters in the first category, three in the second). Only complete cases
+    belong here: an item one rater skipped is a different agreement question
+    and must be dropped by the caller, not passed with a smaller total.
+
+    Returns ``{"n", "kappa", "unanimous"}`` — kappa None when undefined, and
+    ``unanimous`` the share of items every rater put in one category.
+    """
+    rows = [list(r) for r in items if sum(r) > 0]
+    if not rows:
+        return {"n": 0, "kappa": None, "unanimous": None}
+    raters = sum(rows[0])
+    rows = [r for r in rows if sum(r) == raters]
+    n = len(rows)
+    if n == 0 or raters < 2:
+        return {"n": n, "kappa": None, "unanimous": None}
+    k = len(rows[0])
+    totals = [0] * k
+    agreement = 0.0
+    unanimous = 0
+    for r in rows:
+        agreement += sum(c * (c - 1) for c in r) / (raters * (raters - 1))
+        if max(r) == raters:
+            unanimous += 1
+        for i, c in enumerate(r):
+            totals[i] += c
+    observed = agreement / n
+    expected = sum((t / (n * raters)) ** 2 for t in totals)
+    kappa = None if expected == 1 else (observed - expected) / (1 - expected)
+    return {"n": n, "kappa": kappa, "unanimous": unanimous / n}
+
+
+def classify_dissent(values: Sequence[int]) -> Dict[str, Any]:
+    """How a panel split on one item's ordinal ratings.
+
+    ``unanimous`` when every value is equal; ``majority`` only when exactly
+    one rater holds a value alone and all the others share one (2–1 with
+    three raters, 4–1 with five) — ``dissenter`` is its index and
+    ``direction`` +1 when it graded above the rest, -1 below; ``split``
+    otherwise, which at five raters also absorbs 3–2 and 2–2–1, so no lone
+    dissenter is named where the split does not have one.
+    """
+    spread = max(values) - min(values)
+    if spread == 0:
+        return {"kind": "unanimous", "dissenter": None, "direction": 0, "spread": 0}
+    counts = Counter(values)
+    if len(counts) == 2:
+        (a, ca), (b, cb) = counts.most_common()
+        if cb == 1 and ca == len(values) - 1:
+            return {
+                "kind": "majority",
+                "dissenter": list(values).index(b),
+                "direction": 1 if b > a else -1,
+                "spread": spread,
+            }
+    return {"kind": "split", "dissenter": None, "direction": 0, "spread": spread}
+
+
+def mean_interval(total: float, total_sq: float, n: int, z: float = 1.96) -> Dict[str, Any]:
+    """Mean and normal-approximation confidence half-width from running sums.
+
+    ``z × s / √n`` with the sample standard deviation. At the thresholds the
+    atlas uses (30 rated articles and up) a t quantile would widen the
+    interval by under 4%. The half-width is 0 below two observations.
+    """
+    if n <= 0:
+        return {"mean": None, "half": None}
+    mean = total / n
+    if n < 2:
+        return {"mean": mean, "half": 0.0}
+    var = max(0.0, (total_sq - n * mean * mean) / (n - 1))
+    return {"mean": mean, "half": z * math.sqrt(var / n)}

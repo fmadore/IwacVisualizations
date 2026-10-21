@@ -433,6 +433,7 @@ final class BlockRegistry
             'shell'       => [
                 'assets' => [
                     'needs' => [
+                        'maplibre'     => true,
                         'chartOptions' => true,
                         'facetButtons' => true,
                     ],

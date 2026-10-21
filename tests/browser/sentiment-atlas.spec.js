@@ -3,16 +3,25 @@
 /**
  * The Sentiment Atlas page block, booted the way _generic.phtml boots it.
  *
- * The bundle is tests/browser/fixtures/data/sentiment-atlas.json: a 1,234-row
- * synthetic sample aggregated with generate_sentiment_atlas.py's rules, so it
- * has the generator's keys (and validate_data.py's required ones) and every
- * stack sums to its model's rated count. Real ECharts, the real bundles, the
- * theme's token cascade from tokens.json.
+ * The default bundle is tests/browser/fixtures/data/sentiment-atlas.json: a
+ * 1,234-row synthetic sample aggregated with generate_sentiment_atlas.py
+ * v0.3.0's rules, so it has that generator's keys (and validate_data.py's
+ * required ones) and every stack sums to its model's rated count. It is kept
+ * at v0.3.0 on purpose: the block ships as a release while its data arrives
+ * by a separate pull, so new code must keep drawing an older bundle.
+ *
+ * `?bundle=v4` serves sentiment-atlas-v4.json and its places sidecar instead:
+ * what the v0.4.0 generator wrote over the seeded corpus in
+ * tests/python/test_sentiment_atlas.py, for the comparison, trend, ranking
+ * and map panels. Real ECharts, the real bundles, the theme's token cascade
+ * from tokens.json, and the MapLibre stand-in.
  */
 
 const { test, expect } = require('@playwright/test');
 const tokens = require('../../tokens.json');
 const DATA = require('./fixtures/data/sentiment-atlas.json');
+const V4 = require('./fixtures/data/sentiment-atlas-v4.json');
+const PLACES = require('./fixtures/data/sentiment-atlas-places.json');
 
 const FIXTURE = '/tests/browser/fixtures/sentiment-atlas.html';
 const NNBSP = ' ';
@@ -21,7 +30,17 @@ const NBSP = ' ';
 const PANELS = [
     'polarity-by-year', 'centrality-by-year', 'subjectivity',
     'polarity-by-country', 'correlation', 'centrality-heatmap',
-    'polarity-by-topic', 'polarity-by-newspaper', 'extremes', 'model-agreement',
+    'polarity-by-topic', 'polarity-by-newspaper', 'extremes',
+    'model-pairs', 'model-agreement',
+];
+
+/** A v0.4.0 bundle adds the trend, ranking, map, calibration and dissent. */
+const PANELS_V4 = [
+    'polarity-by-year', 'centrality-by-year', 'subjectivity', 'model-trends',
+    'polarity-by-country', 'correlation', 'centrality-heatmap',
+    'polarity-by-topic', 'polarity-by-newspaper', 'newspaper-ranking', 'places-map',
+    'extremes',
+    'model-pairs', 'model-agreement', 'model-calibration', 'model-dissent',
 ];
 
 function watch(page) {
@@ -51,6 +70,7 @@ function option(page, key) {
                 color: s.itemStyle && s.itemStyle.color,
                 data: (s.data || []).map((d) => (d && typeof d === 'object' && 'value' in d ? d.value : d)),
             })),
+            xAxis: (opt.xAxis || []).map((a) => a.data),
             yAxis: (opt.yAxis || []).map((a) => a.data),
             visualMap: (opt.visualMap || []).map((v) => v.inRange && v.inRange.color),
             tooltip: (opt.tooltip || []).map((t) => ({ confine: t.confine })),
@@ -92,10 +112,19 @@ for (const theme of ['light', 'dark']) {
         expect((await option(page, 'subjectivity')).series.map((s) => s.name))
             .toEqual(['GPT-5.6 Luna', 'Mistral Small 4', 'DeepSeek V4 Flash']);
 
-        // The comparison: a card per model pair, with the matrix caption.
-        const agreement = page.locator('[data-iwac-panel="model-agreement"] .iwac-vis-summary-card');
-        await expect(agreement).toHaveCount(3);
-        await expect(agreement.first()).toContainText('GPT-5.6 Luna × Mistral Small 4');
+        // The comparison, from a v0.3.0 bundle: polarity and exact agreement
+        // only, so no dimension or measure facet, and one card for the
+        // selected pair — never a kappa the bundle does not carry.
+        const pairs = await option(page, 'model-pairs');
+        expect(pairs.series[0].data.length).toBe(2 * DATA.agreement.length);
+        await expect(page.locator('.iwac-vis-overview-root > .iwac-vis-facet-host').nth(1).getByRole('button'))
+            .toHaveCount(0);
+        await expect(page.locator('[data-iwac-panel="model-pairs"]').getByRole('button', { name: 'Weighted kappa' })).toHaveCount(0);
+        const agreementPanel = page.locator('[data-iwac-panel="model-agreement"]');
+        const agreement = agreementPanel.locator('.iwac-vis-summary-card');
+        await expect(agreement).toHaveCount(1);
+        await expect(agreementPanel.getByRole('button', { name: 'GPT-5.6 Luna × Mistral Small 4' }))
+            .toHaveAttribute('aria-pressed', 'true');
         await expect(agreement.first()).toContainText('57.9%');
         await expect(agreement.first()).toContainText(`1${NNBSP}112 co-rated articles`);
         await expect(page.getByText('Rows: GPT-5.6 Luna · Columns: Mistral Small 4')).toBeVisible();
@@ -120,6 +149,8 @@ test('the outline runs h1, the sections at h2, their panels at h3', async ({ pag
         'Ratings over time', 'How the ratings break down',
         'Subjects associated with high and low ratings', 'Model comparison',
     ]);
+    // Spearman's rho under the cross-tab, from counts a v0.3.0 bundle has.
+    await expect(page.locator('[data-iwac-panel="correlation"]').getByText(/^Spearman’s ρ = [+−-]?\d/)).toBeVisible();
     const titles = await page.locator('[data-iwac-panel]').evaluateAll((els) =>
         els.map((el) => el.firstElementChild.tagName));
     expect(titles).toEqual(PANELS.map(() => 'H3'));
@@ -359,5 +390,154 @@ test('the payload carries the keys validate_data.py requires of it', () => {
     for (const model of Object.values(DATA.models)) {
         const rated = Object.values(model.polarity_by_year).flat().reduce((a, b) => a + b, 0);
         expect(rated).toBe(model.rated);
+    }
+});
+
+/* ------------------------------------------------------------------------ */
+/*  A v0.4.0 bundle: comparison on three dimensions, trends, ranking, map   */
+/* ------------------------------------------------------------------------ */
+
+const fmt = (n, digits = 2) => {
+    const v = Math.round(n * 10 ** digits) / 10 ** digits;
+    return String(v);
+};
+
+test('a v0.4.0 bundle boots every new panel, map included, without an error', async ({ page }) => {
+    const problems = watch(page);
+    await ready(page, '?bundle=v4');
+
+    const keys = await page.locator('[data-iwac-panel]').evaluateAll((els) => els.map((el) => el.dataset.iwacPanel));
+    expect(keys).toEqual(PANELS_V4);
+    for (const key of PANELS_V4.filter((k) => k !== 'places-map')) {
+        const opt = await option(page, key);
+        expect(opt.series.length, `${key} series`).toBeGreaterThan(0);
+    }
+
+    // The map fetches its sidecar only as it nears the viewport.
+    expect(await page.evaluate(() => window.__fetched))
+        .toEqual(['/files/iwac-visualizations/sentiment-atlas.json']);
+    const map = page.locator('[data-iwac-panel="places-map"]');
+    await map.scrollIntoViewIfNeeded();
+    await expect.poll(() => page.evaluate(() => window.__fixtureMaps.length)).toBe(1);
+    expect(await page.evaluate(() => window.__fetched))
+        .toContain('/files/iwac-visualizations/sentiment-atlas-places.json');
+    // Five grades and the neutral "too few" swatch; each bubble coloured
+    // by a step over its own mean, not one colour for the layer.
+    await expect(map.locator('.iwac-vis-key__item')).toHaveCount(6);
+    const fill = await page.evaluate(() => window.__fixtureMaps[0]
+        .getPaintProperty('iwac-sentiment-places-bubbles', 'circle-color'));
+    expect(fill[0]).toBe('step');
+    expect(fill.length).toBe(3 + 2 * 5);
+    await expect(map.locator('details tbody tr')).toHaveCount(PLACES.places.length);
+
+    expect(problems).toEqual([]);
+});
+
+test('the comparison follows the dimension, the measure and a click on a pair', async ({ page }) => {
+    await ready(page, '?bundle=v4');
+    const panel = (key) => page.locator(`[data-iwac-panel="${key}"]`);
+
+    // The whole panel's Fleiss' kappa heads the pair matrix.
+    const fleiss = V4.reliability.polarity.panel;
+    await expect(panel('model-pairs').locator('p.iwac-vis-muted'))
+        .toContainText(`Fleiss’ kappa ${fmt(fleiss.fleiss_kappa)}`);
+    // Weighted kappa by default: each cell rounded to two places.
+    const firstPair = V4.reliability.polarity.pairs[0];
+    expect((await option(page, 'model-pairs')).series[0].data)
+        .toContainEqual([1, 0, Math.round(firstPair.weighted_kappa * 100) / 100]);
+    // The selected pair's four measures.
+    await expect(panel('model-agreement').locator('.iwac-vis-summary-card')).toHaveCount(4);
+    await expect(panel('model-agreement').locator('.iwac-vis-summary-card').first())
+        .toContainText(`${firstPair.exact}%`);
+
+    // A click on a matrix cell (column DeepSeek, row Mistral) selects that
+    // pair below.
+    await panel('model-pairs').scrollIntoViewIfNeeded();
+    const cell = await page.evaluate(() => {
+        const el = document.querySelector('[data-iwac-panel="model-pairs"] .iwac-vis-chart');
+        const chart = window.echarts.getInstanceByDom(el);
+        const px = chart.convertToPixel({ seriesIndex: 0 }, [2, 1]);
+        const box = el.getBoundingClientRect();
+        return [box.left + px[0], box.top + px[1]];
+    });
+    await page.mouse.click(cell[0], cell[1]);
+    await expect(page.getByText('Rows: Mistral Small 4 · Columns: DeepSeek V4 Flash')).toBeVisible();
+    await expect(panel('model-agreement').getByRole('button', { name: 'Mistral Small 4 × DeepSeek V4 Flash' }))
+        .toHaveAttribute('aria-pressed', 'true');
+    expect(new URL(page.url()).searchParams.get('sentiment.pair')).toBe('2');
+
+    // The dimension lens (the section's own bar, after the page's model
+    // bar) repaints all four panels.
+    await page.locator('.iwac-vis-overview-root > .iwac-vis-facet-host').nth(1)
+        .getByRole('button', { name: 'Centrality', exact: true }).click();
+    expect(new URL(page.url()).searchParams.get('sentiment.dimension')).toBe('centrality');
+    await expect.poll(async () => (await option(page, 'model-calibration')).series.map((s) => s.name))
+        .toEqual(['Not addressed', 'Marginal', 'Secondary', 'Central', 'Very central']);
+    const cenPair = V4.reliability.centrality.pairs[2];
+    await expect(panel('model-agreement').locator('.iwac-vis-summary-card').first())
+        .toContainText(`${cenPair.exact}%`);
+    const consensus = V4.consensus.centrality;
+    await expect(panel('model-dissent').locator('.iwac-vis-summary-card').first())
+        .toContainText(`of ${consensus.n} articles`);
+    expect((await option(page, 'model-dissent')).series.map((s) => s.name))
+        .toEqual(['Alone less central', 'Alone more central']);
+
+    // And the measure facet swaps the matrix to exact agreement.
+    await panel('model-pairs').getByRole('button', { name: 'Exact agreement' }).click();
+    expect((await option(page, 'model-pairs')).series[0].data)
+        .toContainEqual([1, 0, V4.reliability.centrality.pairs[0].exact]);
+});
+
+test('the trend, ranking and heatmap controls repaint and address their views', async ({ page }) => {
+    await ready(page, '?bundle=v4');
+    const panel = (key) => page.locator(`[data-iwac-panel="${key}"]`);
+
+    // Trend: a band (two helper series) under one line per model.
+    const trend = await option(page, 'model-trends');
+    expect(trend.series.map((s) => s.name).slice(2))
+        .toEqual(['GPT-5.6 Luna', 'Mistral Small 4', 'DeepSeek V4 Flash']);
+    await expect(panel('model-trends').locator('p.iwac-vis-muted'))
+        .toContainText(`fewer than ${V4.trends.min_count} articles`);
+    await panel('model-trends').getByRole('button', { name: 'Decade' }).click();
+    await expect.poll(async () => (await option(page, 'model-trends')).xAxis[0])
+        .toEqual(['1990s', '2000s', '2010s', '2020s']);
+    await panel('model-trends').getByRole('button', { name: 'Each model’s own' }).click();
+    expect(new URL(page.url()).searchParams.get('sentiment.cohort')).toBe('available');
+
+    // Ranking: one row per title over the threshold, lowest mean first on
+    // the category axis (drawn at the bottom), and the omitted count said.
+    const rows = V4.ranking.models.gpt_5_6_luna.polarity;
+    const ranked = await option(page, 'newspaper-ranking');
+    expect(ranked.yAxis[0]).toHaveLength(rows.length);
+    const lowest = rows.reduce((a, b) => (b[2] < a[2] ? b : a));
+    expect(ranked.yAxis[0][0]).toBe(V4.ranking.newspapers[lowest[0]]);
+    await expect(panel('newspaper-ranking').locator('p.iwac-vis-muted'))
+        .toContainText(`fewer than ${V4.ranking.min} rated articles`);
+    await panel('newspaper-ranking').getByRole('button', { name: 'Subjectivity' }).click();
+    expect(new URL(page.url()).searchParams.get('sentiment.rank')).toBe('subjectivity');
+
+    // Heatmap: a minimum per cell hides the thin cells and says how many.
+    const cells = V4.models.gpt_5_6_luna.centrality_heatmap;
+    const hidden = cells.filter((c) => c[3] < 10).length;
+    await panel('centrality-heatmap').getByRole('button', { name: '10', exact: true }).click();
+    expect((await option(page, 'centrality-heatmap')).series[0].data).toHaveLength(cells.length - hidden);
+    if (hidden) {
+        await expect(panel('centrality-heatmap').locator('p.iwac-vis-muted'))
+            .toContainText(`fewer than 10 rated articles`);
+    }
+
+    // The addressed view survives a fresh load.
+    await ready(page, new URL(page.url()).search);
+    await expect(panel('model-trends').getByRole('button', { name: 'Decade' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(panel('newspaper-ranking').getByRole('button', { name: 'Subjectivity' })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('the v0.4.0 payloads carry the keys validate_data.py requires of them', () => {
+    // REQUIRED_KEYS in scripts/validate_data.py.
+    for (const key of ['models', 'years', 'summary']) expect(V4).toHaveProperty(key);
+    for (const key of ['places', 'models']) expect(PLACES).toHaveProperty(key);
+    expect(V4.places_file).toBe('sentiment-atlas-places.json');
+    for (const [model, block] of Object.entries(V4.models)) {
+        expect(block.distribution.polarity.reduce((a, b) => a + b, 0), model).toBe(block.rated);
     }
 });

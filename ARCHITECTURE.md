@@ -69,7 +69,7 @@ IwacVisualizations/
 │       │   ├── references-overview/     # 2 files — panel modules
 │       │   ├── scary-terms/             # 7 files — panel modules
 │       │   ├── semantic-landscape/      # 1 file — panel module
-│       │   ├── sentiment-atlas/         # 2 files — panel modules
+│       │   ├── sentiment-atlas/         # 7 files — panel modules
 │       │   ├── shared/                  # 41 files — the reusable primitives every block draws on
 │       │   ├── spatial-exploration/     # 4 files — panel modules
 │       │   ├── timeline/                # 4 files — panel modules
@@ -234,7 +234,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 41 files — Playwright specs
+│   ├── browser/                         # 43 files — Playwright specs
 │   ├── fixtures/
 │   │   └── timeline.json
 │   ├── integration/
@@ -242,7 +242,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 34 files — node:test units
+│   ├── js/                              # 35 files — node:test units
 │   ├── php/
 │   │   ├── run.php
 │   │   ├── sync_data_archive.php
@@ -254,6 +254,7 @@ IwacVisualizations/
 │       ├── test_laicite_audit.py
 │       ├── test_laicite_methodology.py
 │       ├── test_publication.py
+│       ├── test_sentiment_atlas.py
 │       └── test_timeline.py
 ├── view/
 │   ├── common/
@@ -578,7 +579,7 @@ python3 scripts/generate_publication_dashboards.py  # → asset/data/publication
 python3 scripts/generate_periodicals_overview.py            # → asset/data/periodicals-overview.json
 python3 scripts/generate_semantic_landscape.py   --minify   # → asset/data/semantic-landscape.json (needs umap-learn)
 python3 scripts/generate_periodicals_landscape.py --minify  # → asset/data/periodicals-landscape.json (needs umap-learn)
-python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
+python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json + sentiment-atlas-places.json
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
 
 # v1.19.0 blocks
