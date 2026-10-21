@@ -246,7 +246,8 @@
             chipsRow.appendChild(P.el('span', 'iwac-vis-ngram-chips__label',
                 P.t('ngram.selected', { max: MAX_SELECTED })));
             state.selected.forEach(function (term) {
-                var chip = P.el('button', 'iwac-vis-chip', term + ' ×');
+                var chip = P.el('button', 'iwac-vis-chip', term);
+                chip.appendChild(P.icon('x'));
                 chip.type = 'button';
                 chip.setAttribute('aria-label', term);
                 chip.addEventListener('click', function () { removeTerm(term); });

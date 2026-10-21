@@ -171,24 +171,14 @@
     /*  Copy-embed button                                                 */
     /* ----------------------------------------------------------------- */
 
-    function renderBtn(btn, glyph, labelTxt) {
-        btn.textContent = '';
-        var g = document.createElement('span');
-        g.className = 'iwac-vis-embed-btn__glyph';
-        g.setAttribute('aria-hidden', 'true');
-        g.textContent = glyph;
-        btn.appendChild(g);
-        if (labelTxt) {
-            var l = document.createElement('span');
-            l.textContent = labelTxt;
-            btn.appendChild(l);
-        }
+    function renderBtn(btn, icon, labelTxt) {
+        ns.panels.setIcon(btn, icon, labelTxt);
     }
 
     /**
      * A copy-embed-code button. opts: { src, snippetTitle, height, label }.
-     * With `label` it renders a glyph + text (whole-block button); otherwise
-     * glyph-only (the dense panel toolbar). Reuses the shared `.iwac-vis-btn`
+     * With `label` it renders an icon + text (whole-block button); otherwise
+     * icon-only (the dense panel toolbar). Reuses the shared `.iwac-vis-btn`
      * skin so it follows the IWAC theme like every other control.
      */
     E.makeButton = function (opts) {
@@ -199,18 +189,18 @@
             + (labelTxt ? ' iwac-vis-embed-btn--labeled' : '');
         btn.title = t('Copy embed code');
         btn.setAttribute('aria-label', t('Copy embed code'));
-        renderBtn(btn, '</>', labelTxt);
+        renderBtn(btn, 'code', labelTxt);
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             E.copyToClipboard(E.snippet(opts.src, opts.snippetTitle || opts.title, opts.height))
                 .then(function () {
                     btn.classList.add('iwac-vis-embed-btn--copied');
-                    renderBtn(btn, '✓', labelTxt ? t('Copied!') : '');
+                    renderBtn(btn, 'check', labelTxt ? t('Copied!') : '');
                     clearTimeout(btn._iwacT);
                     btn._iwacT = setTimeout(function () {
                         btn.classList.remove('iwac-vis-embed-btn--copied');
-                        renderBtn(btn, '</>', labelTxt);
+                        renderBtn(btn, 'code', labelTxt);
                     }, 1600);
                 });
         });

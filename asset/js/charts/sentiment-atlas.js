@@ -590,7 +590,9 @@
         if (subtitle) root.appendChild(subtitle);
 
         // Global model lens for every single-model panel below.
-        var modelFacetHost = P.el('div', 'iwac-vis-facet-host');
+        // A row, so "Copy link to this view" sits at the far end of the
+        // model chips rather than on a line of its own under them.
+        var modelFacetHost = P.el('div', 'iwac-vis-facet-host iwac-vis-facet-host--row');
         root.appendChild(modelFacetHost);
 
         // -- Section: ratings over time --------------------------------

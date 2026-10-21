@@ -75,7 +75,7 @@
 
         // --- Controls row: play button + slider + year label ------------
         var controls = P.el('div', 'iwac-vis-keywords-attention-controls');
-        var playBtn = P.el('button', 'iwac-vis-btn iwac-vis-keywords-attention-play', '▶');
+        var playBtn = P.setIcon(P.el('button', 'iwac-vis-btn iwac-vis-keywords-attention-play'), 'play');
         playBtn.type = 'button';
         playBtn.setAttribute('aria-label', P.t('Play'));
         controls.appendChild(playBtn);
@@ -161,11 +161,11 @@
             rewind: function () { setYear(0); },
             advance: function () { setYear(state.yearIdx + 1); },
             onPlay: function () {
-                playBtn.textContent = '⏸';
+                P.setIcon(playBtn, 'pause');
                 playBtn.setAttribute('aria-label', P.t('Pause'));
             },
             onStop: function () {
-                playBtn.textContent = '▶';
+                P.setIcon(playBtn, 'play');
                 playBtn.setAttribute('aria-label', P.t('Play'));
             }
         });

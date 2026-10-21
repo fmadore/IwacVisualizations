@@ -425,14 +425,21 @@
     transition: color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-sent-axis__why > summary::-webkit-details-marker { display: none; }
+/*  A drawn chevron, two borders of a square turned 45°: the "▸"
+ *  character it replaces sat on each font's own baseline and size. */
 .iwac-vis-sent-axis__why > summary::before {
-    content: '▸';
+    content: "";
     display: inline-block;
-    margin-right: 0.35rem;
+    width: 0.4em;
+    height: 0.4em;
+    margin-right: 0.45rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.1em) rotate(-45deg);
     transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-sent-axis__why[open] > summary::before {
-    transform: rotate(90deg);
+    transform: translateY(-0.2em) rotate(45deg);
 }
 .iwac-vis-sent-axis__why > summary:hover {
     color: var(--ink, #13161c);

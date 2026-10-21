@@ -362,25 +362,25 @@
         }
 
         var bar = P.el('div', 'iwac-vis-graph-toolbar');
-        function btn(label, title, onClick) {
-            var b = P.iconButton(label, title, onClick, 'iwac-vis-graph-toolbar__btn');
+        function btn(icon, title, onClick) {
+            var b = P.iconButton(icon, title, onClick, 'iwac-vis-graph-toolbar__btn');
             bar.appendChild(b);
             return b;
         }
 
-        btn('+', P.t('Zoom in'), function () {
+        btn('plus', P.t('Zoom in'), function () {
             if (!chart.isDisposed()) dispatchZoom(ZOOM);
         });
-        btn('−', P.t('Zoom out'), function () {
+        btn('minus', P.t('Zoom out'), function () {
             if (!chart.isDisposed()) dispatchZoom(1 / ZOOM);
         });
-        btn('↺', P.t('Reset view'), function () {
+        btn('rotate-ccw', P.t('Reset view'), function () {
             if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
         });
 
         // Look the live instance up through ns.getLiveChart so we never
         // call getDataURL on an instance disposed by a panel teardown.
-        btn('⭳', P.t('Download chart'), function () {
+        btn('image-down', P.t('Download chart'), function () {
             var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
             if (!live) return;
             P.downloadPanelImage(panelEl.panel, live.getDataURL({
@@ -390,7 +390,7 @@
             }), opts.downloadName);
         });
 
-        var fullBtn = btn('⛶', P.t('Toggle fullscreen'));
+        var fullBtn = btn('maximize', P.t('Toggle fullscreen'));
         if (panelEl.panel) {
             P.bindFullscreen(fullBtn, panelEl.panel, {
                 onChange: function () { if (!chart.isDisposed()) chart.resize(); }

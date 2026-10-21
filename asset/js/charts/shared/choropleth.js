@@ -306,10 +306,8 @@
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'iwac-choropleth-ctrl__btn';
-            // The glyph here is a "squared four areas" character that
-            // reads as a polygon-fill icon. CSS may swap it for an
-            // SVG later without touching the button's role.
-            btn.innerHTML = '<span aria-hidden="true">▥</span>';
+            // Fill the regions: the choropleth, against the default bubbles.
+            P.setIcon(btn, 'paint-bucket');
             updateButtonState(btn, initialMode);
             btn.addEventListener('click', onClick);
 

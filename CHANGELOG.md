@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.81.0 — the visualisations' buttons draw their icons (2026-10-21)
+
+The icon buttons across every block, and the "Copy link to this view" button on the Sentiment Atlas. No data change.
+
+- **One drawn icon set.** The panel toolbar, both graph toolbars, the embed button and the playback controls used Unicode characters for their faces (⭳ ▤ ⛶ ↺ ❄ ⊘ ▶ ⏸), with "CSV" and "</>" as words beside them. So did the map's choropleth toggle (▥), the graph card's close button and the removable term and place chips (×), the Topic Explorer's back button (←), the laïcité AI-reading marker (✦) and the article dashboard's "Why?" disclosure (▸, now a drawn chevron in CSS). Each font draws those at its own size, weight and baseline, so no two buttons in one toolbar matched. They are now inline SVG from Lucide, the set the IWAC theme already draws its header with: a 24px grid, 2px round strokes, ink from `currentColor`, so hover, pressed and dark mode reach them with no rule of their own. Download chart is an image with an arrow, distinct from the CSV file; the scary-terms "next" step, which shared ▶ with "play", is a chevron.
+- **`P.icon` / `P.setIcon`** (new `charts/shared/icons.js`, in `shared-core` after `panels.js`) build the icons; `P.iconButton` and the embed button take an icon name where they took a glyph. Sized and stroked by `.iwac-vis-icon` in `iwac-core.css`.
+- **Copy link to this view sits at the end of the model chips.** On the Sentiment Atlas it was appended to a block-level facet host, so `margin-inline-start: auto` did nothing: the button fell onto a line of its own at the left, flush against the next section's rule. The host is now a facet row, the button aligns with the chips' line and keeps the bars' bottom margin, and on a phone it wraps to its own line at the right. It carries a link icon, swapped for a check while "Link copied" shows, and announces the confirmation through a polite live region.
+
 ### v1.80.1 — the activity sparkline keeps its year labels readable (2026-10-21)
 
 A fix to the per-item dashboards' "Activity of this source over time" sparkline (`siblingSparkline`), and the theme contract synced from IWAC-theme 2.26.0. No data change.

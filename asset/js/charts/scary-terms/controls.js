@@ -306,7 +306,7 @@
 
         function paintPlayButton(btn) {
             var playing = !!state.isPlaying;
-            btn.textContent = playing ? '⏸' : '▶';
+            P.setIcon(btn, playing ? 'pause' : 'play');
             var title = playing ? P.t('scary.pause') : P.t('scary.play');
             btn.title = title;
             btn.setAttribute('aria-label', title);
@@ -315,10 +315,10 @@
 
         function buildPlaybackGroup() {
             var group = P.el('div', 'iwac-vis-scary-playback');
-            group.appendChild(ctrlButton('prev', '◀', P.t('scary.previous'), function () {
+            group.appendChild(ctrlButton('prev', 'chevron-left', P.t('scary.previous'), function () {
                 stepTo(state.yearIdx > 0 ? state.yearIdx - 1 : 0);
             }));
-            var playBtn = ctrlButton('play', '▶', P.t('scary.play'), function () {
+            var playBtn = ctrlButton('play', 'play', P.t('scary.play'), function () {
                 if (state.isPlaying) {
                     ctx.playback.stop();      // announced → onStop patches isPlaying
                 } else if (state.view === 'race' && years.length) {
@@ -329,10 +329,10 @@
             paintPlayButton(playBtn);
             live.playBtn = playBtn;
             group.appendChild(playBtn);
-            group.appendChild(ctrlButton('next', '▶', P.t('scary.next'), function () {
+            group.appendChild(ctrlButton('next', 'chevron-right', P.t('scary.next'), function () {
                 stepTo(Math.min(state.yearIdx + 1, years.length - 1));
             }));
-            group.appendChild(ctrlButton('reset', '↺', P.t('scary.reset'), function () {
+            group.appendChild(ctrlButton('reset', 'rotate-ccw', P.t('scary.reset'), function () {
                 stepTo(0);
             }));
             var yearLabel = P.el('span', 'iwac-vis-scary-year-label',
@@ -370,8 +370,8 @@
             return live.slider.root;
         }
 
-        function ctrlButton(name, glyph, title, handler) {
-            var btn = P.el('button', 'iwac-vis-scary-ctrl-btn', glyph);
+        function ctrlButton(name, icon, title, handler) {
+            var btn = P.setIcon(P.el('button', 'iwac-vis-scary-ctrl-btn'), icon);
             btn.type = 'button';
             btn.title = title;
             btn.setAttribute('aria-label', title);

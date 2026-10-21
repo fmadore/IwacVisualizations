@@ -70,7 +70,7 @@ IwacVisualizations/
 │       │   ├── scary-terms/             # 7 files — panel modules
 │       │   ├── semantic-landscape/      # 1 file — panel module
 │       │   ├── sentiment-atlas/         # 7 files — panel modules
-│       │   ├── shared/                  # 41 files — the reusable primitives every block draws on
+│       │   ├── shared/                  # 42 files — the reusable primitives every block draws on
 │       │   ├── spatial-exploration/     # 4 files — panel modules
 │       │   ├── timeline/                # 4 files — panel modules
 │       │   ├── topic-explorer/          # 1 file — panel module

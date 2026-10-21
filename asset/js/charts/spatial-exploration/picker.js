@@ -155,7 +155,8 @@
             }
 
             var chipRow = P.el('div', 'iwac-vis-chip-row iwac-vis-spatial-picker__chip-row');
-            var chip = P.el('button', 'iwac-vis-chip', sel.label + ' ×');
+            var chip = P.el('button', 'iwac-vis-chip', sel.label);
+            chip.appendChild(P.icon('x'));
             chip.type = 'button';
             chip.setAttribute('aria-label', P.t('Clear selection') + ': ' + sel.label);
             chip.addEventListener('click', function () { state.clearEntity(); });

@@ -684,8 +684,8 @@
         ));
         var actions = P.el('div', 'iwac-vis-topic-detail__actions');
 
-        var back = P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__back',
-            '← ' + P.t('Back to all topics'));
+        var back = P.setIcon(P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__back'),
+            'arrow-left', P.t('Back to all topics'));
         back.type = 'button';
         back.addEventListener('click', onBack);
         actions.appendChild(back);
@@ -695,15 +695,15 @@
         // (no `URL` support) or no clipboard helper on the page.
         var href = topicUrl(topic.id);
         if (href && ns.embed && ns.embed.copyToClipboard) {
-            var copy = P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__copy',
-                P.t('topic_copy_link'));
+            var copy = P.setIcon(P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__copy'),
+                'link', P.t('topic_copy_link'));
             copy.type = 'button';
             copy.addEventListener('click', function () {
                 ns.embed.copyToClipboard(href);
-                copy.textContent = P.t('topic_link_copied');
+                P.setIcon(copy, 'check', P.t('topic_link_copied'));
                 copy.classList.add('iwac-vis-embed-btn--copied');
                 setTimeout(function () {
-                    copy.textContent = P.t('topic_copy_link');
+                    P.setIcon(copy, 'link', P.t('topic_copy_link'));
                     copy.classList.remove('iwac-vis-embed-btn--copied');
                 }, 2000);
             });

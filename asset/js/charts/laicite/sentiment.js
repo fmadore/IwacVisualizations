@@ -274,7 +274,7 @@
         // description" label is `.iwac-vis-laicite-ai-badge`, and with both
         // on one class the context sheet (loaded last) blew that label up
         // to this sparkle's size and accent.
-        var glyph = P.el('span', 'iwac-vis-laicite-ai-glyph', '✦');
+        var glyph = P.setIcon(P.el('span', 'iwac-vis-laicite-ai-glyph'), 'sparkles');
         glyph.setAttribute('aria-hidden', 'true');
         head.appendChild(glyph);
         head.appendChild(P.el('span', 'iwac-vis-laicite-ai-title',

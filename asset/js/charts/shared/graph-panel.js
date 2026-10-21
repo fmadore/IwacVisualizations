@@ -54,7 +54,7 @@
     /* ------------------------------------------------------------------ */
 
     /**
-     * The vertical icon column, top-right of the stage. Glyphs and classes
+     * The vertical icon column, top-right of the stage. Icons and classes
      * match `P.buildGraphPanelToolbar` (the ECharts graphs' toolbar) so the two
      * families stay visually identical while both exist; the buttons, the
      * export and the fullscreen binding are the panel toolbar's own.
@@ -62,40 +62,40 @@
     function buildToolbar(graph, panelEl, opts) {
         var bar = P.el('div', 'iwac-vis-graph-toolbar');
 
-        function btn(label, title, onClick) {
-            var b = P.iconButton(label, title, onClick, 'iwac-vis-graph-toolbar__btn');
+        function btn(icon, title, onClick) {
+            var b = P.iconButton(icon, title, onClick, 'iwac-vis-graph-toolbar__btn');
             bar.appendChild(b);
             return b;
         }
         /** A toggle whose pressed state mirrors what the graph reports back. */
-        function toggle(label, title, fn) {
-            var b = btn(label, title, function () {
+        function toggle(icon, title, fn) {
+            var b = btn(icon, title, function () {
                 b.setAttribute('aria-pressed', String(!!fn()));
             });
             b.setAttribute('aria-pressed', 'false');
             return b;
         }
 
-        btn('+', t('Zoom in'), function () { graph.zoomBy(1.4); });
-        btn('−', t('Zoom out'), function () { graph.zoomBy(1 / 1.4); });
-        btn('↺', t('Reset view'), function () { graph.resetView(); });
-        toggle('A', t('Show all labels'), function () { return graph.toggleLabels(); });
-        toggle('↔', t('Name the connections'), function () { return graph.toggleEdgeLabels(); });
-        toggle('❄', t('Freeze the layout'), function () { return graph.toggleFrozen(); });
+        btn('plus', t('Zoom in'), function () { graph.zoomBy(1.4); });
+        btn('minus', t('Zoom out'), function () { graph.zoomBy(1 / 1.4); });
+        btn('rotate-ccw', t('Reset view'), function () { graph.resetView(); });
+        toggle('type', t('Show all labels'), function () { return graph.toggleLabels(); });
+        toggle('move-horizontal', t('Name the connections'), function () { return graph.toggleEdgeLabels(); });
+        toggle('snowflake', t('Freeze the layout'), function () { return graph.toggleFrozen(); });
 
         // Only meaningful once the reader has dragged something into place, so
         // it appears then and leaves when the last pin is released.
-        var unpinBtn = btn('⊘', t('Release the nodes you moved'), function () { graph.unpinAll(); });
+        var unpinBtn = btn('pin-off', t('Release the nodes you moved'), function () { graph.unpinAll(); });
         unpinBtn.hidden = true;
         graph.onPinChange(function (count) { unpinBtn.hidden = (count === 0); });
 
         // Rendered at the export scale and framed with the panel's title,
         // date and attribution, like every other panel's download.
-        btn('⭳', t('Download chart'), function () {
+        btn('image-down', t('Download chart'), function () {
             P.downloadPanelImage(panelEl.panel, graph.toDataURL(P.EXPORT_SCALE), opts.downloadName);
         });
 
-        var fullBtn = btn('⛶', t('Toggle fullscreen'));
+        var fullBtn = btn('maximize', t('Toggle fullscreen'));
         if (panelEl.panel) {
             P.bindFullscreen(fullBtn, panelEl.panel, {
                 // The graph's own ResizeObserver usually beats this to it;
@@ -180,7 +180,7 @@
             while (card.firstChild) card.removeChild(card.firstChild);
             if (!node) { card.hidden = true; return; }
 
-            var closeBtn = P.el('button', 'iwac-vis-graph-card__close', '×');
+            var closeBtn = P.setIcon(P.el('button', 'iwac-vis-graph-card__close'), 'x');
             closeBtn.type = 'button';
             closeBtn.setAttribute('aria-label', t('Close'));
             closeBtn.addEventListener('click', close);

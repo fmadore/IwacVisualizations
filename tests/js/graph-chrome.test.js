@@ -97,6 +97,7 @@ function makeDocument() {
         fullscreenElement: null,
         fullscreenEnabled: false,
         createElement(tag) { return new Element(tag, doc); },
+        createElementNS(ns, tag) { return new Element(tag, doc); },
         addEventListener(name, fn) { (doc.listeners[name] = doc.listeners[name] || []).push(fn); },
         removeEventListener(name, fn) { doc.listeners[name] = (doc.listeners[name] || []).filter((f) => f !== fn); },
         fire(name, event = {}) { (doc.listeners[name] || []).slice().forEach((fn) => fn(event)); },
@@ -290,10 +291,11 @@ test('an entity graph colours its categories from the live theme, not a mount-ti
 
 function loadToolbar() {
     const env = load([], {});
+    vm.runInContext(read('charts', 'shared', 'icons.js'), env.context, { filename: 'icons.js' });
     vm.runInContext(read('charts', 'shared', 'panel-toolbar.js'), env.context, { filename: 'panel-toolbar.js' });
     const target = env.document.createElement('section');
     env.document.body.appendChild(target);
-    const button = env.P.iconButton('F', 'Toggle fullscreen');
+    const button = env.P.iconButton('maximize', 'Toggle fullscreen');
     target.appendChild(button);
     return Object.assign(env, { target, button });
 }

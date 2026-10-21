@@ -794,14 +794,6 @@ body {
     cursor: progress;
 }
 
-/*  "CSV" is a word, not a glyph: smaller and heavier than the icons
- *  beside it so it reads at the same visual weight. */
-.iwac-vis-panel-toolbar__btn--csv {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 700;
-    letter-spacing: var(--tracking-wide, 0.04em);
-}
-
 /* -------------------------------------------------------------------
  *  "View as table" — the chart's numbers, under the chart
  *
@@ -1026,6 +1018,41 @@ body {
     cursor: not-allowed;
 }
 
+/* -------------------------------------------------------------------
+ *  Control icons — `P.icon` (asset/js/charts/shared/icons.js)
+ *
+ *  Lucide's 24px grid and 2px round stroke, the set the theme draws its
+ *  own chrome with. Ink is `currentColor`, so a button's hover, pressed
+ *  and dark-mode colours reach the icon with no rule here. 18px inside
+ *  the 36px icon buttons; a labelled button sizes it to its own text.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-icon {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.iwac-vis-icon--filled {
+    fill: currentColor;
+}
+
+.iwac-vis-btn:has(> .iwac-vis-icon + span) {
+    gap: 0.4em;
+}
+
+.iwac-vis-btn--sm > .iwac-vis-icon,
+.iwac-vis-embed-btn--labeled > .iwac-vis-icon,
+.iwac-vis-chip > .iwac-vis-icon {
+    width: 1.1em;
+    height: 1.1em;
+}
+
 
 /* =================================================================== */
 /*  Embed: copy-embed buttons + single-panel framing                    */
@@ -1043,11 +1070,6 @@ body {
     font-size: var(--text-xs, 0.8125rem);
     line-height: 1;
     box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
-}
-
-.iwac-vis-embed-btn__glyph {
-    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
-    font-weight: 600;
 }
 
 .iwac-vis-embed-btn--labeled {
@@ -1274,9 +1296,17 @@ body {
     display: contents;
 }
 
-/*  "Copy link to this view": at the far end of the row it lives in. */
+/*  "Copy link to this view": at the far end of the row it lives in. In a
+ *  row of facet bars it sits on the chips' line, not the label's, and
+ *  keeps the bars' bottom margin so the next heading's rule never touches
+ *  it. */
 .iwac-vis-copy-link {
     margin-inline-start: auto;
+}
+
+.iwac-vis-facet-host--row > .iwac-vis-copy-link {
+    align-self: flex-end;
+    margin-block-end: var(--space-3, 0.75rem);
 }
 
 .iwac-vis-copy-link--copied {

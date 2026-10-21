@@ -112,6 +112,8 @@ function loadOrchestrator() {
             if (text != null) node.textContent = String(text);
             return node;
         },
+        // icons.js is not loaded here; the copy-link button only needs a face.
+        setIcon(el, name, text) { el.textContent = text || ''; return el; },
         t(key) { return key; },
         formatNumber(n) { return String(n); },
         isCompact() { return false; },

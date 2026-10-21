@@ -385,19 +385,23 @@
         cfg = cfg || {};
         var label = cfg.label || P.t('Copy link to this view');
         var copied = cfg.copiedLabel || P.t('Link copied');
-        var btn = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-btn--ghost iwac-vis-copy-link', label);
+        var btn = P.setIcon(P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-btn--ghost iwac-vis-copy-link'),
+            'link', label);
         btn.type = 'button';
         btn.setAttribute('data-iwac-control', 'copy-link');
+        // The confirmation replaces the label in place; a polite live region
+        // is what tells a screen reader it happened.
+        btn.setAttribute('aria-live', 'polite');
         var timer = null;
         btn.addEventListener('click', function () {
             var text = typeof cfg.href === 'function' ? cfg.href() : cfg.href;
             if (!text) return;
             var done = function () {
-                btn.textContent = copied;
+                P.setIcon(btn, 'check', copied);
                 btn.classList.add('iwac-vis-copy-link--copied');
                 if (timer) clearTimeout(timer);
                 timer = setTimeout(function () {
-                    btn.textContent = label;
+                    P.setIcon(btn, 'link', label);
                     btn.classList.remove('iwac-vis-copy-link--copied');
                 }, 1800);
             };

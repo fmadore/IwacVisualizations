@@ -65,6 +65,8 @@ function load(options = {}) {
                     addEventListener(name, fn) { this['on' + name] = fn; },
                 };
             },
+            // icons.js: the label is the only text; the icon is recorded.
+            setIcon(el, name, text) { el.icon = name; el.textContent = text || ''; return el; },
         },
     };
     vm.createContext(context);
@@ -317,9 +319,11 @@ test('the copy-link button copies the current href and reports it', async () => 
     let n = 0;
     const btn = P.buildCopyLinkButton({ href: () => 'https://x.test/p?v=' + (++n) });
     assert.equal(btn.textContent, 'Copy link to this view');
+    assert.equal(btn.icon, 'link');
     assert.equal(btn.attrs['data-iwac-control'], 'copy-link');
     btn.onclick();
     await tick();
     assert.equal(copied, 'https://x.test/p?v=1', 'href is read at click time');
     assert.equal(btn.textContent, 'Link copied');
+    assert.equal(btn.icon, 'check');
 });

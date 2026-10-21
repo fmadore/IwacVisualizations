@@ -447,21 +447,21 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * A toolbar icon button: the shared `.iwac-vis-btn` skin, the glyph as
+     * A toolbar icon button: the shared `.iwac-vis-btn` skin, a `P.icon` as
      * its face, the label as both its accessible name and its tooltip.
      *
      * One builder for the three toolbars that each wrote this function —
      * the panel toolbar, the canvas force graph's column and the ECharts
      * graphs' column differ only in the geometry class.
      *
-     * @param {string} glyph
+     * @param {string} icon  a key of `P.ICONS` (icons.js)
      * @param {string} label
      * @param {function(Event):void} [onClick]
      * @param {string} [className='iwac-vis-panel-toolbar__btn']
      * @returns {HTMLButtonElement}
      */
-    P.iconButton = function (glyph, label, onClick, className) {
-        var b = P.el('button', 'iwac-vis-btn ' + (className || BTN_CLASS), glyph);
+    P.iconButton = function (icon, label, onClick, className) {
+        var b = P.setIcon(P.el('button', 'iwac-vis-btn ' + (className || BTN_CLASS)), icon);
         b.type = 'button';
         b.setAttribute('aria-label', label);
         b.title = label;
@@ -598,7 +598,7 @@
         var bar = ensureToolbar(panelEl);
         if (bar.querySelector('.iwac-vis-panel-toolbar__btn--download')) return bar;
         bar._iwacDownloadTarget = chartEl;
-        var btn = P.iconButton('⭳', P.t('Download chart'), function () {
+        var btn = P.iconButton('image-down', P.t('Download chart'), function () {
             if (btn.disabled) return;
             btn.disabled = true;
             btn.classList.add('iwac-vis-panel-toolbar__btn--busy');
@@ -651,7 +651,7 @@
         var bar = ensureToolbar(panelEl);
         if (bar.querySelector('.iwac-vis-panel-toolbar__btn--fullscreen')) return bar;
 
-        var btn = P.iconButton('⛶', P.t('Toggle fullscreen'));
+        var btn = P.iconButton('maximize', P.t('Toggle fullscreen'));
         btn.classList.add('iwac-vis-panel-toolbar__btn--fullscreen');
         bar.appendChild(btn);
         P.bindFullscreen(btn, opts.target || panelEl, {
@@ -809,7 +809,7 @@
         panelEl.appendChild(tableHost);
 
         var open = false;
-        var tableBtn = P.iconButton('▤', P.t('View as table'), function () {
+        var tableBtn = P.iconButton('table', P.t('View as table'), function () {
             open = !open;
             tableHost.hidden = !open;
             // The pressed look keys on aria-expanded (iwac-core.css), so it
@@ -826,7 +826,7 @@
         tableBtn.setAttribute('aria-controls', tableHost.id);
         bar.appendChild(tableBtn);
 
-        var csvBtn = P.iconButton('CSV', P.t('Download CSV'), function () {
+        var csvBtn = P.iconButton('file-spreadsheet', P.t('Download CSV'), function () {
             downloadCsv(panelEl, chartEl);
         });
         csvBtn.classList.add('iwac-vis-panel-toolbar__btn--csv');
