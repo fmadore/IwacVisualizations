@@ -35,6 +35,18 @@
 
     var SVG_NS = 'http://www.w3.org/2000/svg';
 
+    // Year labels are `--text-2xs` (11px) and sit on the bottom edge. In user
+    // units, which is what both the geometry and the type scale in, so these
+    // hold at any rendered width:
+    //   LABEL_BAND  the strip the labels own — 11px type plus 2px clearance.
+    //               The plot used to run to the bottom edge, so a series near
+    //               zero at either end drew its line through "1992".
+    //   LABEL_W     a four-digit year at 11px in the body face (~26 units).
+    //   LABEL_GAP   the least daylight kept between two labels.
+    var LABEL_BAND = 13;
+    var LABEL_W    = 28;
+    var LABEL_GAP  = 4;
+
     function svg(tag, attrs) {
         var n = document.createElementNS(SVG_NS, tag);
         if (attrs) {
@@ -55,8 +67,9 @@
         var W = 320;
         var H = 56;
         var pad = 4;
+        var base = H - LABEL_BAND;   // the plot's floor; the labels live below it
         var innerW = W - pad * 2;
-        var innerH = H - pad * 2;
+        var innerH = base - pad;
 
         var max = 1;
         for (var i = 0; i < values.length; i++) {
@@ -66,7 +79,7 @@
         var stepX = innerW / (years.length - 1);
         var pts = values.map(function (v, idx) {
             var x = pad + idx * stepX;
-            var y = pad + innerH - (v / max) * innerH;
+            var y = base - (v / max) * innerH;
             return [x, y];
         });
 
@@ -78,9 +91,9 @@
         });
 
         // Filled area under the curve — soft tinted region
-        var areaD = 'M' + pts[0][0] + ',' + (H - pad) + ' L' +
+        var areaD = 'M' + pts[0][0] + ',' + base + ' L' +
             pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' L') +
-            ' L' + pts[pts.length - 1][0] + ',' + (H - pad) + ' Z';
+            ' L' + pts[pts.length - 1][0] + ',' + base + ' Z';
         root.appendChild(svg('path', {
             'd': areaD,
             'class': 'iwac-vis-sparkline__area'
@@ -93,13 +106,16 @@
             'class': 'iwac-vis-sparkline__line'
         }));
 
-        // Highlight dot (current year). When the highlight sits on an
-        // endpoint, anchor its label to that edge — otherwise the
-        // centre-anchored label both clips off-canvas and overprints the
-        // endpoint label below it (the garbled "207014" on first-year
-        // issues).
-        var lastIdx = years.length - 1;
+        // Highlight dot (current year). Its label centres under the dot, but
+        // is pinned to the edge when centring would clip it off-canvas.
+        // That used to be decided by index — only the first and last year
+        // were pinned — so a highlight one step in still clipped, and one a
+        // few steps in still overprinted the endpoint label beside it (the
+        // garbled "207014" on first-year issues; "20172019" two years from
+        // the end). Deciding from where the label actually lands covers both.
         var hlIdx = data.highlight != null ? years.indexOf(data.highlight) : -1;
+        var hlLeft = Infinity;
+        var hlRight = -Infinity;
         if (hlIdx >= 0) {
             var p = pts[hlIdx];
             root.appendChild(svg('circle', {
@@ -108,8 +124,19 @@
                 'r': 3.5,
                 'class': 'iwac-vis-sparkline__dot'
             }));
-            var hlAnchor = hlIdx === 0 ? 'start' : (hlIdx === lastIdx ? 'end' : 'middle');
-            var hlX      = hlIdx === 0 ? pad   : (hlIdx === lastIdx ? (W - pad) : p[0]);
+            var hlAnchor = 'middle';
+            var hlX = p[0];
+            hlLeft = p[0] - LABEL_W / 2;
+            if (hlLeft < pad) {
+                hlAnchor = 'start';
+                hlX = pad;
+                hlLeft = pad;
+            } else if (hlLeft + LABEL_W > W - pad) {
+                hlAnchor = 'end';
+                hlX = W - pad;
+                hlLeft = W - pad - LABEL_W;
+            }
+            hlRight = hlLeft + LABEL_W;
             var label = svg('text', {
                 'x': hlX,
                 'y': H - 1,
@@ -120,9 +147,9 @@
             root.appendChild(label);
         }
 
-        // Endpoint year labels — skip whichever end the highlight label
-        // already covers so the two never overprint.
-        if (hlIdx !== 0) {
+        // Endpoint year labels — dropped where the highlight label would
+        // overprint them. The highlight is the page's own year, so it wins.
+        if (hlLeft >= pad + LABEL_W + LABEL_GAP) {
             var startLabel = svg('text', {
                 'x': pad,
                 'y': H - 1,
@@ -132,7 +159,7 @@
             root.appendChild(startLabel);
         }
 
-        if (hlIdx !== lastIdx) {
+        if (hlRight <= W - pad - LABEL_W - LABEL_GAP) {
             var endLabel = svg('text', {
                 'x': W - pad,
                 'y': H - 1,
