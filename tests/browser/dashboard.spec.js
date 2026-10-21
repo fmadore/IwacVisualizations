@@ -41,7 +41,9 @@ test('localizes embed controls in French', async ({ page }) => {
     const buttons = page.getByRole('button', { name: 'Copier le code d’intégration' });
     await expect(buttons).toHaveCount(3);
     await buttons.first().click();
-    await expect(buttons.first().locator('span').last()).toHaveText('✓');
+    // The confirmation swaps the code icon for the check (icons.js).
+    await expect(buttons.first()).toHaveClass(/iwac-vis-embed-btn--copied/);
+    await expect(buttons.first().locator('svg.iwac-vis-icon path')).toHaveAttribute('d', 'M20 6 9 17l-5-5');
 });
 
 test('keeps dark mobile layouts inside the viewport', async ({ page }) => {

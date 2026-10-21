@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.81.1 — v1.81.0's icons, shipped (2026-10-21)
+
+v1.81.0 was tagged but never got its module zip: the release workflow's browser suite still asserted the embed button's old "✓" character, which the check icon replaced. `tests/browser/dashboard.spec.js` now asserts the check icon itself. The code is v1.81.0's; install this one.
+
 ### v1.81.0 — the visualisations' buttons draw their icons (2026-10-21)
 
 The icon buttons across every block, and the "Copy link to this view" button on the Sentiment Atlas. No data change.
