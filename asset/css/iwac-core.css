@@ -171,11 +171,14 @@ body {
     --iwac-vis-thumb-col-md: 60px;
     --iwac-vis-thumb-col-sm: 52px;
 
-    /* Panel-toolbar reservation — chart headers that render a trailing
-     * badge or toolbar slot (e.g. scary-terms) use this to avoid
-     * collision with the download + fullscreen buttons injected by
-     * panel-toolbar.js. Two toolbar buttons + gap ≈ 80px; 96px breathes. */
-    --iwac-vis-panel-toolbar-reserve: 96px;
+    /* Panel-toolbar reservation — the width a panel's title (and a block's
+     * own chart header: scary-terms, org-cooccurrence) leaves free for the
+     * toolbar panel-toolbar.js floats over the top-right corner. A panel
+     * that has a toolbar recomputes it from its button count (see
+     * `.iwac-vis-panel:has(> .iwac-vis-panel-toolbar)`); this default is
+     * the usual four buttons plus a `--space-3` gutter. It was 96px, sized
+     * for the two buttons the toolbar had before table, CSV and embed. */
+    --iwac-vis-panel-toolbar-reserve: calc(4 * (var(--size-control-sm, 2.25rem) + var(--space-1, 0.25rem)) - var(--space-1, 0.25rem) + var(--space-3, 0.75rem));
 
     /* (--iwac-vis-icon-btn / -sm removed in 1.48. `-sm` was 28px, which is
      * --size-control-xs to the pixel — a duplicate of a theme token living
@@ -307,6 +310,9 @@ body {
 .iwac-vis-panel > h2,
 .iwac-vis-panel > h3 {
     font-size: var(--text-base, 1.0625rem);
+    /*  A known line box, so the panel toolbar can centre on the first line
+     *  (`.iwac-vis-panel-toolbar` computes its `top` from these two). */
+    line-height: var(--line-height-tight, 1.25);
     font-weight: 600;
     color: var(--ink, #13161c);
     margin: 0 0 var(--space-2, 0.5rem);
@@ -750,10 +756,16 @@ body {
  *  build their buttons with `P.iconButton`.
  * ------------------------------------------------------------------- */
 
+/*  Aligned to the content, not to the panel's border: the right edge sits
+ *  on the panel padding, where the title and the chart end, and the row is
+ *  centred on the title's first line (a `--line-height-tight` line of
+ *  `--text-base`, set on the panel title below). It used to sit `--space-2`
+ *  in from the border on both sides, so it hung 8px past every chart's
+ *  right edge and rode 1–2px above the title it belongs to. */
 .iwac-vis-panel-toolbar {
     position: absolute;
-    top: var(--space-2, 0.5rem);
-    right: var(--space-2, 0.5rem);
+    top: calc(var(--space-4, 1rem) + (var(--text-base, 1.0625rem) * var(--line-height-tight, 1.25) - var(--size-control-sm, 2.25rem)) / 2);
+    right: var(--space-4, 1rem);
     z-index: var(--iwac-vis-z-raised, 5);
     display: flex;
     flex-direction: row;
@@ -763,8 +775,40 @@ body {
      *  row now wraps inside the panel, right-aligned. */
     flex-wrap: wrap;
     justify-content: flex-end;
-    max-width: calc(100% - var(--space-4, 1rem));
+    max-width: calc(100% - 2 * var(--space-4, 1rem));
     gap: var(--space-1, 0.25rem);
+}
+
+/*  The title keeps clear of the toolbar. Its width is the toolbar's —
+ *  however many buttons this panel got — plus a `--space-3` gutter, so a
+ *  long title wraps beside the buttons instead of running under them. The
+ *  count comes from the toolbar's last child; panels carry one to five. */
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar) {
+    --iwac-vis-panel-toolbar-reserve: calc(var(--iwac-vis-toolbar-slots, 4) * (var(--size-control-sm, 2.25rem) + var(--space-1, 0.25rem)) - var(--space-1, 0.25rem) + var(--space-3, 0.75rem));
+}
+
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar > :last-child:nth-child(1)) { --iwac-vis-toolbar-slots: 1; }
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar > :last-child:nth-child(2)) { --iwac-vis-toolbar-slots: 2; }
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar > :last-child:nth-child(3)) { --iwac-vis-toolbar-slots: 3; }
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar > :last-child:nth-child(5)) { --iwac-vis-toolbar-slots: 5; }
+
+.iwac-vis-panel:has(> .iwac-vis-panel-toolbar) > :is(h2, h3, h4, h5) {
+    padding-inline-end: var(--iwac-vis-panel-toolbar-reserve);
+}
+
+/*  A phone has no room for a title beside four buttons: the title would
+ *  get a third of the width and break every two words. Below `sm` the
+ *  toolbar takes its own row at the top of the panel, right-aligned, and
+ *  the title starts under it at full width. */
+@media (max-width: 599px) { /* sm */
+    .iwac-vis-panel:has(> .iwac-vis-panel-toolbar) {
+        --iwac-vis-panel-toolbar-reserve: 0px;
+        padding-top: calc(var(--space-4, 1rem) + var(--size-control-sm, 2.25rem) + var(--space-3, 0.75rem));
+    }
+
+    .iwac-vis-panel-toolbar {
+        top: var(--space-4, 1rem);
+    }
 }
 
 .iwac-vis-panel-toolbar__btn {
@@ -986,11 +1030,28 @@ body {
  *  pagination) live further down and have a deliberately different
  *  aesthetic (transparent → hover → primary-tinted active). */
 
+/*  Control heights come from the theme's control scale, never from
+ *  padding × font size × line height. They used to: the theme's 1.6 body
+ *  leading made a default button 41px, a tab 33px, a facet chip 29px, a
+ *  small button 30px, a removable chip 28.5px and a search field 41px, so
+ *  no two controls in one row lined up. Now:
+ *
+ *    --size-control-sm (36px)  buttons, tabs, facet chips, pagination,
+ *                              selects and text fields — and the icon
+ *                              buttons of every toolbar, already 36px
+ *    --size-control-xs (28px)  `--sm` buttons and removable chips
+ *
+ *  `min-height`, so a label that wraps still grows; the leading is
+ *  `--line-height-tight` so one line sits centred in the box. Playback
+ *  buttons keep their deliberate 44px tap target (`--size-control-lg`). */
+
 .iwac-vis-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    min-height: var(--size-control-sm, 2.25rem);
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    line-height: var(--line-height-tight, 1.25);
     background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
@@ -1103,7 +1164,8 @@ body {
 /* Size / tone variants composed on top of .iwac-vis-btn */
 
 .iwac-vis-btn--sm {
-    padding: 0.25rem 0.55rem;
+    min-height: var(--size-control-xs, 1.75rem);
+    padding: 0 0.55rem;
     font-size: var(--text-xs, 0.8125rem);
 }
 
@@ -1299,8 +1361,10 @@ body {
 /*  "Copy link to this view": at the far end of the row it lives in. In a
  *  row of facet bars it sits on the chips' line, not the label's, and
  *  keeps the bars' bottom margin so the next heading's rule never touches
- *  it. */
+ *  it. Quiet type (`--sm`), but the row's control height: it stands among
+ *  tabs, chips and selects, all `--size-control-sm`. */
 .iwac-vis-copy-link {
+    min-height: var(--size-control-sm, 2.25rem);
     margin-inline-start: auto;
 }
 
@@ -1347,7 +1411,12 @@ body {
 
 .iwac-vis-tab,
 .iwac-vis-pagination__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--size-control-sm, 2.25rem);
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    line-height: var(--line-height-tight, 1.25);
     background: transparent;
     color: var(--muted, #66696e);
     border: 1px solid transparent;
@@ -1491,7 +1560,12 @@ body {
 
 .iwac-vis-facets__btn,
 .iwac-vis-facets__sub-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--size-control-sm, 2.25rem);
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    line-height: var(--line-height-tight, 1.25);
     background: var(--surface, #fdfcfb);
     color: var(--ink-light, #3f4349);
     border: 1px solid var(--border, #ced1d6);
@@ -1646,7 +1720,9 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.2rem 0.6rem;
+    min-height: var(--size-control-xs, 1.75rem);
+    padding: 0 0.6rem;
+    line-height: var(--line-height-tight, 1.25);
     /*  A control, so the chip radius: --radius-full is for dots. */
     border-radius: var(--radius-sm, 0.375rem);
     border: 1px solid color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
@@ -1682,8 +1758,19 @@ body {
  *  The class is applied centrally by `P.buildSelectControl` /
  *  `P.buildSearchDropdown` and at the handful of hand-built sites. */
 
-.iwac-vis-control {
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+/*  `input.iwac-vis-control` ties the theme's `input[type="search"]` (0,1,1)
+ *  and wins by loading after it; the bare class lost, so the module's
+ *  search fields drew at the theme's 17px / 41px form size beside 36px
+ *  controls, and kept the theme's 8px form-field bottom margin, which
+ *  pushed the field 4px above everything centred beside it. `height`, not
+ *  `min-height`: a select ignores the latter. Spacing around a control is
+ *  its row's gap, never its own margin. */
+.iwac-vis-control,
+input.iwac-vis-control {
+    height: var(--size-control-sm, 2.25rem);
+    margin: 0;
+    padding: 0 var(--space-3, 0.75rem);
+    line-height: var(--line-height-tight, 1.25);
     background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);

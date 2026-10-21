@@ -36,6 +36,16 @@
     max-width: 28rem;
 }
 
+/*  The mode tabs share a line with the search field and "Copy link", so
+ *  they drop the tab group's rule and its bottom padding: that rule is a
+ *  separator under a group that heads a sidebar list, and here it only
+ *  made the group 8px taller than its row-mates and lifted its chips off
+ *  their centre line. */
+.iwac-vis-ngram-mode {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
 /* Selected-term chips row */
 
 .iwac-vis-ngram-chips {

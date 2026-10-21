@@ -254,7 +254,8 @@
                 chipsRow.appendChild(chip);
             });
             if (state.selected.length > 1) {
-                var clear = P.el('button', 'iwac-vis-btn iwac-vis-btn--ghost',
+                // `--sm`: it shares a line with the 28px term chips.
+                var clear = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-btn--ghost',
                     P.t('ngram.clear'));
                 clear.type = 'button';
                 clear.addEventListener('click', function () {

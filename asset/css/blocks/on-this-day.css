@@ -53,6 +53,13 @@
     margin-top: var(--space-3, 0.75rem);
 }
 
+/*  In flow, it takes no room from the masthead and needs no row of its own
+ *  on a phone: undo core's title reserve and phone padding. */
+.iwac-vis-otd-panel:has(> .iwac-vis-panel-toolbar) {
+    --iwac-vis-panel-toolbar-reserve: 0px;
+    padding-top: 0;
+}
+
 /*  Responsive rules below key off the BLOCK's width, not the viewport's.
  *  A page block does not always get the whole page: dropped into a narrow
  *  column, a viewport-keyed layout keeps its five-across decade grid and

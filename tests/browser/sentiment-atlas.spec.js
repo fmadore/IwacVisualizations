@@ -168,6 +168,40 @@ test('the outline runs h1, the sections at h2, their panels at h3', async ({ pag
     expect((await download).suggestedFilename()).toBe('polarity-over-time.csv');
 });
 
+test('the panel toolbar and the controls row line up with what they sit beside', async ({ page }) => {
+    await ready(page);
+    const m = await page.evaluate(() => {
+        const box = (el) => el.getBoundingClientRect();
+        const bar = document.querySelector('.iwac-vis-panel-toolbar');
+        const panel = bar.parentElement;
+        const title = panel.querySelector(':scope > h3, :scope > h2, :scope > h4');
+        const range = document.createRange();
+        range.selectNodeContents(title);
+        const line = range.getClientRects()[0];
+        const ps = getComputedStyle(panel);
+        const contentRight = box(panel).right - parseFloat(ps.borderRightWidth) - parseFloat(ps.paddingRight);
+        const chip = document.querySelector('.iwac-vis-facets__sub-btn');
+        const copy = document.querySelector('.iwac-vis-copy-link');
+        return {
+            barMid: (box(bar).top + box(bar).bottom) / 2,
+            lineMid: (line.top + line.bottom) / 2,
+            barRight: box(bar).right,
+            contentRight,
+            titleClear: box(bar).left - (box(title).right - parseFloat(getComputedStyle(title).paddingRight)),
+            chip: [box(chip).top, box(chip).height],
+            copy: [box(copy).top, box(copy).height],
+        };
+    });
+    // Centred on the title's first line, ending where the content ends.
+    expect(Math.abs(m.barMid - m.lineMid)).toBeLessThan(1);
+    expect(Math.abs(m.barRight - m.contentRight)).toBeLessThan(1);
+    // The title stops short of the buttons instead of running under them.
+    expect(m.titleClear).toBeGreaterThanOrEqual(0);
+    // "Copy link" is a row control: the model chips' height, on their line.
+    expect(m.copy[1]).toBeCloseTo(m.chip[1], 0);
+    expect(m.copy[0]).toBeCloseTo(m.chip[0], 0);
+});
+
 test('the topic panel’s description counts the bundle’s topics', async ({ page }) => {
     // The fixture has three topics; the copy used to say thirty regardless.
     const desc = page.locator('[data-iwac-panel="polarity-by-topic"] .iwac-vis-panel-desc');

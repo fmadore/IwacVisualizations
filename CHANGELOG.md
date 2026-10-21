@@ -13,6 +13,16 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.82.0 — the buttons line up (2026-10-21)
+
+The visualisations' buttons and controls on one grid: one height per kind of control, one centre line per row, and the chart toolbar on the content's edge. No data change.
+
+- **Control heights come from the theme's scale.** They came from padding × font size × the theme's 1.6 leading, so one row could hold a 41px search field, 33px tabs and a 30px "Copy link to this view", and a 41px "Clear" beside 28.5px term chips. Buttons, tabs, facet chips, pagination, selects and text fields are now `--size-control-sm` (36px), the height the toolbars' icon buttons already had; `--sm` buttons and removable chips are `--size-control-xs` (28px); playback buttons keep their 44px tap target. The leading is `--line-height-tight`, so one line sits centred in its box.
+- **Search fields stop taking the theme's form styling.** `.iwac-vis-control` lost to the theme's `input[type="search"]` on specificity, so the module's search fields drew at 17px and 41px with an 8px bottom margin that lifted them 4px off their row. `input.iwac-vis-control` now outranks it and the margin is gone.
+- **The chart toolbar sits on the content's edge and the title's line.** It was `--space-2` in from the panel border, so it hung 8px past every chart's right edge and rode 1–2px above the title. Its right edge is now the panel padding and it centres on the title's first line, which takes `--line-height-tight` for a known line box. Titles reserve the toolbar's width, counted from its buttons, so a long one wraps beside them instead of running underneath; the old 96px reserve was sized for two buttons. Below `sm` the toolbar takes its own row above the title.
+- **Term Trends' mode tabs drop the rule under them** where they share a line with the search field and "Copy link"; it made the group 8px taller than its row-mates. "Clear" beside the term chips is a small button. "Copy link to this view" takes its row's 36px height.
+- `tests/browser/sentiment-atlas.spec.js` asserts the toolbar's centre against the title's first line, its right edge against the content edge, the title's clearance, and the copy-link button against the model chips.
+
 ### v1.81.1 — v1.81.0's icons, shipped (2026-10-21)
 
 v1.81.0 was tagged but never got its module zip: the release workflow's browser suite still asserted the embed button's old "✓" character, which the check icon replaced. `tests/browser/dashboard.spec.js` now asserts the check icon itself. The code is v1.81.0's; install this one.
