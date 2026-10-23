@@ -60,6 +60,12 @@
             'M3 16v3a2 2 0 0 0 2 2h3',
             'M16 21h3a2 2 0 0 0 2-2v-3'
         ],
+        minimize: [
+            'M8 3v3a2 2 0 0 1-2 2H3',
+            'M21 8h-3a2 2 0 0 1-2-2V3',
+            'M3 16h3a2 2 0 0 1 2 2v3',
+            'M16 21v-3a2 2 0 0 1 2-2h3'
+        ],
         plus: ['M5 12h14', 'M12 5v14'],
         minus: ['M5 12h14'],
         'rotate-ccw': ['M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8', 'M3 3v5h5'],
@@ -84,6 +90,7 @@
         ],
         'chevron-left': ['m15 18-6-6 6-6'],
         'chevron-right': ['m9 18 6-6-6-6'],
+        'chevron-down': ['m6 9 6 6 6-6'],
         x: ['M18 6 6 18', 'm6 6 12 12'],
         'arrow-left': ['m12 19-7-7 7-7', 'M19 12H5'],
         // The marker for AI-generated content.

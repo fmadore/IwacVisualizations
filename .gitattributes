@@ -25,6 +25,9 @@ package-lock.json   export-ignore
 tokens.json         export-ignore
 CLAUDE.md           export-ignore
 ROADMAP.md          export-ignore
+# The editorial sources of the IWAC Timeline exhibits. CI imports them into
+# the data release; Omeka reads the generated JSON, never the CSV.
+content/            export-ignore
 # The Hugging Face dataset schema the generators read. The generators
 # (scripts/) do not ship, so neither does their input's description; it is
 # the same audience as CLAUDE.md and scripts/README.md. LAICITE_METHODOLOGY.md

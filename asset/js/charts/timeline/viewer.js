@@ -16,38 +16,49 @@
         var current = Math.max(0, ids.indexOf(root.dataset.startSlide || 'intro'));
         var section = root.querySelector('.iwac-vis-timeline__reading');
         var stage = root.querySelector('.iwac-vis-timeline__events');
-        var controls = P.el('div', 'iwac-vis-timeline__controls');
+        var headline = function (article) { return article.querySelector('h3').textContent; };
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        function button(label, className, icon, iconAfter) {
+            var el = P.el('button', className);
+            el.type = 'button';
+            if (!icon) {
+                el.textContent = ns.t(label);
+                return el;
+            }
+            el.append(P.icon(icon), P.el('span', '', ns.t(label)));
+            if (iconAfter) el.appendChild(el.firstChild);
+            return el;
+        }
+
+        /*  One toolbar above the stage carries every control a reader uses
+         *  repeatedly — the view, the step buttons, the event picker and
+         *  fullscreen — so none of them moves when an event changes. */
+        var toolbar = P.el('div', 'iwac-vis-timeline__controls');
         var views = P.el('div', 'iwac-vis-timeline__views');
         views.setAttribute('role', 'group');
         views.setAttribute('aria-label', ns.t('timeline_views'));
-
-        function button(label, className) {
-            var el = P.el('button', className, ns.t(label));
-            el.type = 'button';
-            return el;
-        }
         var narrative = button('timeline_narrative', 'iwac-vis-timeline__view');
         var all = button('timeline_all_events', 'iwac-vis-timeline__view');
         views.append(narrative, all);
-        var selectLabel = P.el('label', 'iwac-vis-timeline__select-label', ns.t('timeline_select'));
-        var select = P.el('select', 'iwac-vis-control iwac-vis-timeline__select');
-        select.id = instance + '-select';
-        selectLabel.htmlFor = select.id;
-        articles.forEach(function (article, i) {
-            var heading = article.querySelector('h3').textContent;
-            var label = article.dataset.dateLabel;
-            var option = P.el('option', '', i === 0 ? ns.t('timeline_intro') : label + ' · ' + heading);
-            option.value = ids[i];
-            select.appendChild(option);
-        });
-        selectLabel.appendChild(select);
-        controls.append(views, selectLabel);
-        section.insertBefore(controls, stage);
+        var pager = P.el('div', 'iwac-vis-timeline__pager');
+        var previous = P.iconButton('chevron-left', ns.t('timeline_previous'), null, 'iwac-vis-timeline__step');
+        var next = P.iconButton('chevron-right', ns.t('timeline_next'), null, 'iwac-vis-timeline__step');
+        var menu = ns.createTimelineMenu(instance, articles.map(function (article, i) {
+            return i === 0 ? { id: ids[i], date: '', headline: ns.t('timeline_intro') }
+                : { id: ids[i], date: article.dataset.dateLabel, headline: headline(article) };
+        }), function (id) { choose(id, true, view === 'list' ? 'list' : 'top'); });
+        pager.append(previous, menu.element, next);
+        var fullscreen = P.iconButton('maximize', ns.t('Toggle fullscreen'), null, 'iwac-vis-timeline__fullscreen');
+        toolbar.append(views, pager, fullscreen);
+        section.insertBefore(toolbar, stage);
+
+        // The same steps after the event, for a reader who has scrolled to its end.
         var navigation = P.el('div', 'iwac-vis-timeline__navigation');
-        var previous = button('timeline_previous', 'iwac-vis-timeline__previous');
-        var next = button('timeline_next', 'iwac-vis-timeline__next');
+        var previousEnd = button('timeline_previous', 'iwac-vis-timeline__previous', 'chevron-left');
+        var nextEnd = button('timeline_next', 'iwac-vis-timeline__next', 'chevron-right', true);
         var progress = P.el('span', 'iwac-vis-timeline__progress');
-        navigation.append(previous, progress, next);
+        navigation.append(previousEnd, progress, nextEnd);
         section.appendChild(navigation);
         var status = P.el('span', 'iwac-vis-timeline__status');
         status.setAttribute('role', 'status');
@@ -58,33 +69,72 @@
         var axis = ns.createTimelineAxis(section, articles.slice(1).map(function (article) {
             return { id: article.dataset.eventId, start: article.dataset.start, end: article.dataset.end,
                 order: Number(article.dataset.order),
-                label: article.dataset.dateLabel + ' · ' + article.querySelector('h3').textContent };
-        }), function (id) { view = 'narrative'; choose(id, true); });
+                label: article.dataset.dateLabel + ' · ' + headline(article) };
+        }), function (id) { view = 'narrative'; choose(id, true, 'below'); });
+
+        var newTab = P.el('span', 'iwac-vis-timeline__status', ns.t('timeline_new_tab'));
+        newTab.id = instance + '-new-tab';
+        newTab.hidden = true;
+        section.appendChild(newTab);
+        root.querySelectorAll('a[target="_blank"]').forEach(function (link) {
+            link.setAttribute('aria-describedby', newTab.id);
+        });
+
+        P.bindFullscreen(fullscreen, root, {
+            stateClass: 'iwac-vis-timeline--fullscreen',
+            onChange: function (full) {
+                P.setIcon(fullscreen, full ? 'minimize' : 'maximize');
+                axis.update(ids[current], true);
+            }
+        });
 
         function render(announce) {
             root.dataset.view = view;
-            articles.forEach(function (article, i) { article.hidden = view === 'narrative' && i !== current; });
+            articles.forEach(function (article, i) { article.classList.toggle('is-current', i === current); });
             narrative.setAttribute('aria-pressed', String(view === 'narrative'));
             all.setAttribute('aria-pressed', String(view === 'list'));
-            previous.disabled = current === 0;
-            next.disabled = current === articles.length - 1;
+            previous.disabled = previousEnd.disabled = current === 0;
+            next.disabled = nextEnd.disabled = current === articles.length - 1;
             navigation.hidden = view === 'list';
             axis.element.hidden = view === 'list';
-            select.value = ids[current];
-            progress.textContent = current === 0 ? ns.t('timeline_intro')
+            var text = current === 0 ? ns.t('timeline_intro')
                 : ns.t('timeline_progress').replace('{current}', String(current)).replace('{total}', String(articles.length - 1));
+            progress.textContent = text;
+            menu.update(ids[current], text);
             axis.update(ids[current], announce);
-            if (announce) status.textContent = progress.textContent + ' · ' + articles[current].querySelector('h3').textContent;
+            if (announce) status.textContent = text + ' · ' + headline(articles[current]);
         }
 
-        function choose(id, publish) {
+        /**
+         * A step taken from below the stage (the closing pager, the axis)
+         * turns the page: when the event's start has scrolled away, bring
+         * the toolbar and heading back, as a book reader would. A step from
+         * the toolbar never scrolls — the toolbar is already where the
+         * reader is looking, and the stage below it keeps one height.
+         */
+        function reveal(origin) {
+            var behavior = reduceMotion && reduceMotion.matches ? 'auto' : 'smooth';
+            if (origin === 'list') {
+                articles[current].scrollIntoView({ block: 'start', behavior: behavior });
+            } else if (origin === 'below' && stage.getBoundingClientRect().top < 0) {
+                toolbar.scrollIntoView({ block: 'start', behavior: behavior });
+            }
+        }
+
+        function choose(id, publish, origin) {
             var index = ids.indexOf(id);
             if (index < 0) return;
             current = index;
             if (publish) history.replaceState(history.state, '', M.fragment(slug, id, instance));
             render(publish);
-            if (document.activeElement === previous && previous.disabled
-                || document.activeElement === next && next.disabled) stage.focus({ preventScroll: true });
+            reveal(origin);
+            var stranded = [previous, next, previousEnd, nextEnd].indexOf(document.activeElement) !== -1
+                && document.activeElement.disabled;
+            if (stranded) stage.focus({ preventScroll: true });
+        }
+
+        function step(delta, origin) {
+            choose(ids[Math.max(0, Math.min(ids.length - 1, current + delta))], true, origin);
         }
 
         function followHash() {
@@ -93,9 +143,10 @@
             var id = M.linkedEvent(location.hash, slug, instance, ids, first);
             if (id) { view = 'narrative'; choose(id, false); }
         }
-        previous.addEventListener('click', function () { choose(ids[Math.max(0, current - 1)], true); });
-        next.addEventListener('click', function () { choose(ids[Math.min(ids.length - 1, current + 1)], true); });
-        select.addEventListener('change', function () { view = 'narrative'; choose(select.value, true); });
+        previous.addEventListener('click', function () { step(-1, 'top'); });
+        next.addEventListener('click', function () { step(1, 'top'); });
+        previousEnd.addEventListener('click', function () { step(-1, 'below'); });
+        nextEnd.addEventListener('click', function () { step(1, 'below'); });
         narrative.addEventListener('click', function () { view = 'narrative'; render(false); });
         all.addEventListener('click', function () { view = 'list'; render(false); });
         root.querySelectorAll('[data-event-link]').forEach(function (link) {
@@ -108,7 +159,7 @@
         });
         root.addEventListener('keydown', function (event) {
             if (view !== 'narrative' || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
-                || event.target.closest('input, select, textarea, a, [contenteditable="true"]')) return;
+                || event.target.closest('input, select, textarea, a, [contenteditable="true"], .iwac-vis-timeline__menu')) return;
             var index = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: ids.length - 1 }[event.key];
             if (index === undefined) return;
             event.preventDefault();
@@ -133,9 +184,7 @@
             var dx = event.clientX - touch.x;
             var dy = event.clientY - touch.y;
             touch = null;
-            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2) {
-                choose(ids[Math.max(0, Math.min(ids.length - 1, current + (dx < 0 ? 1 : -1)))], true);
-            }
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2) step(dx < 0 ? 1 : -1, 'below');
         });
         // Image failures preserve caption/citation and an ordinary source link.
         root.querySelectorAll('img').forEach(function (img) {
@@ -151,6 +200,6 @@
         followHash();
         render(false);
         // Page blocks are normally static; tests/admin previews can dispose explicitly.
-        return { destroy: function () { axis.destroy(); window.removeEventListener('hashchange', followHash); } };
+        return { destroy: function () { axis.destroy(); menu.close(false); window.removeEventListener('hashchange', followHash); } };
     };
 }());

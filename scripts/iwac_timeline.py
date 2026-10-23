@@ -15,6 +15,8 @@ import nh3
 
 SCHEMA_VERSION = 1
 IDENTIFIER = re.compile(r"^[a-z0-9][a-z0-9-]{0,79}$")
+# The committed editorial sources, relative to the repository root.
+SOURCE_PATH = re.compile(r"content/timelines/[a-z0-9][a-z0-9-]{0,79}\.(?:en|fr)\.csv")
 DATE_COLUMNS = ("Year", "Month", "Day", "End Year", "End Month", "End Day")
 STANDARD_COLUMNS = set(DATE_COLUMNS) | {
     "Time", "End Time", "Display Date", "Headline", "Text", "Media", "Media Credit",
@@ -111,19 +113,12 @@ def date_bound(value: dict, upper: bool = False) -> date:
     return date(year, month, day)
 
 
-def legacy_key(row: dict) -> str:
-    """Match the frozen migration IDs without depending on row order or wording.
-
-    An explicit ID column supersedes this map. Changes to a legacy match key
-    require updating the map while retaining its ID; unknown keys fail loudly.
-    """
-    media = row.get("Media", "").strip()
-    if media:
-        return "media:" + safe_url(media)
-    return "date:" + "|".join(row.get(key, "").strip() for key in DATE_COLUMNS)
+def straight_quotes(*fragments: str) -> bool:
+    """A straight double quote in running text (attribute values excluded)."""
+    return any('"' in text for fragment in fragments for text in Fragment(fragment).text)
 
 
-def parse_csv(text: str, slug: str, locale: str, legacy_ids: dict | None = None) -> dict:
+def parse_csv(text: str, slug: str, locale: str) -> dict:
     if not IDENTIFIER.fullmatch(slug) or locale not in {"en", "fr"}:
         raise ValueError("Invalid timeline slug or locale")
     reader = csv.DictReader(io.StringIO(text.lstrip("\ufeff")))
@@ -171,9 +166,11 @@ def parse_csv(text: str, slug: str, locale: str, legacy_ids: dict | None = None)
                          "url": media_url, "thumbnail": safe_url(row.get("Media Thumbnail", "")),
                          "alt": plain(row.get("Media Alt", "")) or plain(caption),
                          "captionHtml": caption, "creditHtml": credit}
-            identifier = "intro" if is_intro else row.get("ID") or (legacy_ids or {}).get(legacy_key(row))
+            if straight_quotes(row.get("Headline", ""), body, caption, credit):
+                warnings.append(f"Row {row_number}: straight quotation marks; use “ ” in English, « » in French")
+            identifier = "intro" if is_intro else row.get("ID")
             if not identifier or not IDENTIFIER.fullmatch(identifier):
-                raise ValueError("Add a permanent lowercase ID column (or retain the ID in the legacy map)")
+                raise ValueError("Every dated row needs a permanent lowercase ID")
             if not is_intro and identifier in ids:
                 raise ValueError(f"Duplicate/reserved event ID: {identifier}")
             ids.add(identifier)
@@ -248,7 +245,8 @@ def validate_timeline(payload: dict) -> None:
                 if not isinstance(media.get(key), str) or CLEANER.clean(media[key]) != media[key]:
                     raise ValueError("Unsafe timeline caption/credit")
     source = payload.get("metadata", {}).get("source", {})
-    if not re.fullmatch(r"[a-f0-9]{64}", source.get("sha256", "")) or not safe_url(source.get("url", "")):
+    if (not re.fullmatch(r"[a-f0-9]{64}", source.get("sha256", ""))
+            or not SOURCE_PATH.fullmatch(source.get("path", ""))):
         raise ValueError("Missing timeline source provenance")
 
 

@@ -38,7 +38,8 @@ test('narrative order, chronological reading view, keyboard, print and theme sta
     page.on('pageerror', error => errors.push(error.message));
     const root = await ready(page);
     await expect(root.locator('[data-event-id]:visible')).toHaveAttribute('data-event-id', 'intro');
-    await root.getByRole('button', { name: 'Next event', exact: true }).click();
+    // The toolbar's step (above the stage) and the closing one share a name.
+    await root.getByRole('button', { name: 'Next event', exact: true }).first().click();
     await expect(root.locator('[data-event-id]:visible')).toHaveAttribute('data-event-id', 'later');
     await root.locator('.iwac-vis-timeline__events').focus();
     await page.keyboard.press('ArrowRight');
@@ -57,6 +58,53 @@ test('narrative order, chronological reading view, keyboard, print and theme sta
     await expect(root.locator('.iwac-vis-timeline__controls')).toBeHidden();
     expect(await page.evaluate(() => typeof window.echarts)).toBe('undefined');
     expect(errors).toEqual([]);
+});
+
+test('stable stage, event picker, fullscreen and new-tab links', async ({ page }) => {
+    const root = await ready(page);
+    const stage = root.locator('.iwac-vis-timeline__events');
+    const toolbar = root.locator('.iwac-vis-timeline__controls');
+    const heights = [];
+    const tops = [];
+    for (let i = 0; i < 4; i++) {
+        heights.push(await stage.evaluate(node => node.getBoundingClientRect().height));
+        tops.push(await root.locator('.iwac-vis-timeline__axis').evaluate(node => node.getBoundingClientRect().top));
+        await toolbar.getByRole('button', { name: 'Next event', exact: true }).click();
+    }
+    // Every event shares one cell: nothing below the stage moves.
+    expect(new Set(heights).size).toBe(1);
+    expect(new Set(tops).size).toBe(1);
+    // A step from the toolbar keeps focus there; the picker lists every event.
+    const picker = root.locator('.iwac-vis-timeline__menu-toggle');
+    await expect(picker).toHaveAttribute('aria-expanded', 'false');
+    await picker.click();
+    await expect(picker).toHaveAttribute('aria-expanded', 'true');
+    await expect(root.locator('[data-menu-event]')).toHaveCount(5);
+    await expect(root.locator('[data-menu-event][aria-current="true"]')).toBeFocused();
+    await page.keyboard.press('Home');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(picker).toHaveAttribute('aria-expanded', 'false');
+    await expect(picker).toBeFocused();
+    await expect(root.locator('[data-event-id]:visible')).toHaveAttribute('data-event-id', 'later');
+    await picker.click();
+    await page.keyboard.press('Escape');
+    await expect(picker).toHaveAttribute('aria-expanded', 'false');
+    // Fullscreen: the browser may refuse it headless; the overlay is the same state.
+    const full = root.getByRole('button', { name: 'Toggle fullscreen', exact: true });
+    await full.click();
+    await expect(full).toHaveAttribute('aria-pressed', 'true');
+    await expect(root).toHaveClass(/iwac-vis-timeline--fullscreen/);
+    await full.click();
+    await expect(full).toHaveAttribute('aria-pressed', 'false');
+    // Links that leave the exhibit open in a new tab and say so.
+    const outgoing = root.locator('a[target="_blank"]');
+    expect(await outgoing.count()).toBeGreaterThan(0);
+    for (const link of await outgoing.all()) {
+        await expect(link).toHaveAttribute('rel', /noopener/);
+        await expect(link).toHaveAttribute('aria-describedby', 'block-1-new-tab');
+    }
+    await expect(root.locator('.iwac-vis-timeline__permalink svg.iwac-vis-icon').first()).toBeAttached();
 });
 
 test('deep links distinguish repeated instances and respond to hash changes', async ({ page }) => {

@@ -221,7 +221,7 @@ jobs:
           # development documentation and ignored; LAICITE_METHODOLOGY.md
           # ships on purpose, because README.md links it as the Laïcité
           # block's published method.
-          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|eslint\.config\.js$|phpstan\.neon\.dist$|ruff\.toml$|\.stylelintrc\.json$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|ROADMAP\.md$|DATA_NOTES\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
+          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|content/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|eslint\.config\.js$|phpstan\.neon\.dist$|ruff\.toml$|\.stylelintrc\.json$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|ROADMAP\.md$|DATA_NOTES\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
             echo "::error::development files leaked into the release archive — check .gitattributes export-ignore"
             exit 1
           fi

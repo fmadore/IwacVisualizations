@@ -12,7 +12,8 @@ $directory = rtrim($services->get('Omeka\File\Store')->getLocalPath(''), '/\\')
 mkdir($directory, 0775, true);
 $fixture = json_decode(file_get_contents(__DIR__ . '/../fixtures/timeline.json'), true);
 // Independently assert PHP purification rather than trusting the Python output.
-$fixture['title']['textHtml'] .= '<script>alert(1)</script><a href="javascript:alert(1)">Unsafe URL</a>';
+$fixture['title']['textHtml'] .= '<script>alert(1)</script><a href="javascript:alert(1)">Unsafe URL</a>'
+    . '<a href="https://islam.zmo.de/s/westafrica/item/1">An item</a>';
 file_put_contents($directory . '/history.en.json', json_encode($fixture));
 file_put_contents($directory . '/index.json', json_encode(['schemaVersion' => 1, 'timelines' => [
     ['slug' => 'history', 'locales' => ['en' => ['title' => 'A history', 'file' => 'history.en.json']]],
@@ -36,6 +37,9 @@ try {
     }
     if (strpos($html, '<script>alert') !== false || strpos($html, 'javascript:') !== false || strpos($html, 'echarts@') !== false) {
         throw new RuntimeException('Timeline rendered unsafe HTML or fetched an unused chart library.');
+    }
+    if (strpos($html, '<a href="https://islam.zmo.de/s/westafrica/item/1" target="_blank" rel="noopener">') === false) {
+        throw new RuntimeException('A link to an IWAC item does not open in a new tab.');
     }
     $form = $handler->form($renderer, $site, $page, $block);
     if (strpos($form, 'value="history" selected') === false && strpos($form, 'selected="selected" value="history"') === false) {

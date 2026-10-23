@@ -26,9 +26,15 @@
     letter-spacing: var(--tracking-display, -0.01em);
     font-feature-settings: "kern", "liga", "dlig", "lnum";
     overflow-wrap: anywhere;
+    text-wrap: balance;
 }
 
 .iwac-vis-timeline__header h2 { font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem)); }
+
+/* -------------------------------------------------------------------
+ *  Toolbar — every control a reader uses repeatedly sits ABOVE the
+ *  stage, so a taller or shorter event never moves one of them.
+ * ------------------------------------------------------------------- */
 
 .iwac-vis-timeline__controls,
 .iwac-vis-timeline__navigation {
@@ -37,22 +43,26 @@
     justify-content: space-between;
     align-items: center;
     gap: var(--space-3, 0.75rem);
-    padding-block: var(--space-4, 1rem);
+    padding-block: var(--space-3, 0.75rem);
     border-block: 1px solid var(--border, #ced1d6);
 }
 
-.iwac-vis-timeline__views {
+.iwac-vis-timeline__views,
+.iwac-vis-timeline__pager {
     display: flex;
+    align-items: center;
     gap: var(--space-2, 0.5rem);
-    flex-wrap: wrap;
 }
 
-.iwac-vis-timeline button,
-.iwac-vis-timeline select {
+.iwac-vis-timeline__views { flex-wrap: wrap; }
+.iwac-vis-timeline__pager { flex: 1 1 auto; justify-content: center; min-width: 0; }
+
+.iwac-vis-timeline button {
     min-height: var(--size-control-lg, 2.75rem);
     min-width: var(--size-control-lg, 2.75rem);
     border: 1px solid var(--border-strong, #aeb1b7);
     border-radius: var(--radius-md, 0.5rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     background: transparent;
     color: var(--ink, #13161c);
     font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
@@ -63,25 +73,137 @@
     transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-.iwac-vis-timeline button { padding: var(--space-2, 0.5rem) var(--space-4, 1rem); }
-.iwac-vis-timeline select { padding: var(--space-2, 0.5rem); max-width: 100%; }
 .iwac-vis-timeline button:disabled { opacity: 0.5; cursor: default; }
 .iwac-vis-timeline button:hover:not(:disabled) { background: var(--surface-sunken, #f4f1ef); }
 .iwac-vis-timeline button[aria-pressed="true"] { border-color: var(--primary, #ce4115); background: var(--selection-bg, rgba(206, 65, 21, 0.14)); }
 
-.iwac-vis-timeline :is(button, select, a, [tabindex]):focus-visible {
+/* Icon-only squares: the toolbar's steps and fullscreen. */
+.iwac-vis-timeline button.iwac-vis-timeline__step,
+.iwac-vis-timeline button.iwac-vis-timeline__fullscreen {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--size-control-lg, 2.75rem);
+    padding: 0;
+}
+
+/* Labelled steps after the event: the chevron points where it goes. */
+.iwac-vis-timeline__previous,
+.iwac-vis-timeline__next {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-timeline :is(button, a, [tabindex]):focus-visible {
     outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
-.iwac-vis-timeline__select-label {
+/* -------------------------------------------------------------------
+ *  Event picker — the exhibit's table of contents, in the theme's
+ *  type: a date line over a serif headline, the current one washed.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-timeline__menu { position: relative; min-width: 0; flex: 0 1 18rem; }
+
+.iwac-vis-timeline button.iwac-vis-timeline__menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2, 0.5rem);
+    width: 100%;
+    padding-inline: var(--space-4, 1rem) var(--space-3, 0.75rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-timeline__menu-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iwac-vis-timeline__menu-toggle .iwac-vis-icon { transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)); }
+.iwac-vis-timeline__menu-toggle[aria-expanded="true"] .iwac-vis-icon { transform: rotate(180deg); }
+
+.iwac-vis-timeline__menu-panel {
+    position: absolute;
+    top: calc(100% + var(--space-1, 0.25rem));
+    left: 50%;
+    z-index: var(--iwac-vis-z-popover, 300);
+    width: min(30rem, 100cqw - 2 * var(--space-4, 1rem));
+    transform: translateX(-50%);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--surface-raised, #faf8f6);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
+}
+
+.iwac-vis-timeline__menu-list {
+    max-height: min(28rem, 60vh);
+    margin: 0;
+    padding: var(--space-1, 0.25rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong, #aeb1b7) transparent;
+}
+
+.iwac-vis-timeline button.iwac-vis-timeline__menu-item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1, 0.25rem);
-    min-width: 0;
-    flex: 0 1 50%;
+    align-items: flex-start;
+    gap: 0.125rem;
+    width: 100%;
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    border: 0;
+    border-radius: var(--radius-sm, 0.375rem);
+    text-align: start;
+}
+
+.iwac-vis-timeline__menu-item:focus-visible { outline-offset: -2px; }
+
+.iwac-vis-timeline__menu-date {
     font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
     color: var(--ink-light, #3f4349);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-timeline__menu-headline {
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-base, 1.0625rem);
+    line-height: var(--line-height-snug, 1.4);
+    color: var(--ink, #13161c);
+    text-wrap: pretty;
+}
+
+.iwac-vis-timeline button.iwac-vis-timeline__menu-item[aria-current="true"] { background: var(--selection-bg, rgba(206, 65, 21, 0.14)); }
+.iwac-vis-timeline__menu-item[aria-current="true"] .iwac-vis-timeline__menu-headline { color: var(--ink-strong, #05070c); font-weight: 600; }
+
+/* -------------------------------------------------------------------
+ *  Stage — in the narrative view only the current event is shown; the
+ *  others are hidden from sight, focus and assistive technology alike.
+ *  From 768px every event shares ONE grid cell, so the stage is always
+ *  as tall as the longest event and the page below it (the closing
+ *  steps, the axis, the rest of the page) stands still. A phone keeps
+ *  each event's own height: one column stacks text over image, so the
+ *  longest event runs to several screens and would leave the short ones
+ *  above a screenful of blank paper — and there the toolbar above the
+ *  stage is what has to stay put.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-timeline__events { outline-offset: 2px; touch-action: pan-y pinch-zoom; }
+.iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__event:not(.is-current) { display: none; }
+
+@container iwac-timeline (min-width: 768px) {
+    .iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__events { display: grid; }
+    .iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__event { grid-area: 1 / 1; }
+    .iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__event:not(.is-current) { display: grid; visibility: hidden; opacity: 0; }
+}
+
+.iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__event.is-current {
+    transition: opacity var(--duration-base, 200ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-timeline__event {
@@ -96,7 +218,6 @@
 
 .iwac-vis-timeline__event:not(:has(.iwac-vis-timeline__media)) { grid-template-columns: minmax(0, 1fr); }
 .iwac-vis-timeline__copy { min-width: 0; }
-.iwac-vis-timeline__events { outline-offset: 2px; touch-action: pan-y pinch-zoom; }
 .iwac-vis-timeline__dateline {
     margin: 0 0 var(--space-3, 0.75rem);
     font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
@@ -117,29 +238,35 @@
 
 .iwac-vis-timeline a { color: var(--primary, #ce4115); text-decoration: underline; text-underline-offset: 0.15em; }
 .iwac-vis-timeline__prose p { margin-block: 0 var(--space-4, 1rem); }
+
+/* The quotation is the theme's own — its tint, start rule and quote glyph.
+ * Two things are taken back: the theme lays blockquote out as flex, which
+ * turned a quotation's text runs and every link inside it into side-by-side
+ * columns, and its desktop inline margin would squeeze the copy column. */
 .iwac-vis-timeline__prose blockquote {
-    margin: var(--space-4, 1rem) 0;
-    padding: var(--space-4, 1rem) 0;
-    border-inline: 0;
-    border-block: 1px solid var(--border, #ced1d6);
-    color: var(--ink, #13161c);
-    background: transparent;
-    font-style: italic;
+    display: block;
+    margin-inline: 0;
 }
 
 .iwac-vis-timeline__permalink {
     display: inline-flex;
     align-items: center;
+    gap: var(--space-2, 0.5rem);
     min-height: var(--size-control-lg, 2.75rem);
     margin-top: var(--space-3, 0.75rem);
     font-size: var(--text-xs, 0.8125rem);
 }
 
+.iwac-vis-timeline__permalink .iwac-vis-icon { width: 1em; height: 1em; }
+
+/* A fixed frame: an image's own proportions never set the event's height,
+ * before it loads or after. */
 .iwac-vis-timeline__media { margin: 0; min-width: 0; }
 .iwac-vis-timeline__media img {
     display: block;
     width: 100%;
-    max-height: 65vh;
+    aspect-ratio: 4 / 5;
+    max-height: min(36rem, 70vh);
     object-fit: contain;
     background: var(--surface-sunken, #f4f1ef);
 }
@@ -155,7 +282,8 @@
 
 .iwac-vis-timeline__credit { margin-top: var(--space-2, 0.5rem); }
 .iwac-vis-timeline__external { display: inline-flex; align-items: center; min-height: var(--size-control-lg, 2.75rem); }
-.iwac-vis-timeline__progress { color: var(--ink-light, #3f4349); font-size: var(--text-xs, 0.8125rem); }
+.iwac-vis-timeline__progress { color: var(--ink-light, #3f4349); font-size: var(--text-xs, 0.8125rem); font-variant-numeric: tabular-nums; }
+.iwac-vis-timeline[data-view="list"] .iwac-vis-timeline__step { display: none; }
 .iwac-vis-timeline__axis { padding-top: var(--space-4, 1rem); }
 .iwac-vis-timeline__axis-hint { margin: 0 0 var(--space-3, 0.75rem); font-size: var(--text-xs, 0.8125rem); color: var(--ink-light, #3f4349); }
 .iwac-vis-timeline__axis-scroll { max-width: 100%; overflow-x: auto; padding: var(--space-2, 0.5rem); }
@@ -197,22 +325,63 @@
 .iwac-vis-timeline__range.is-current { background: var(--primary, #ce4115); }
 .iwac-vis-timeline__status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
+/* -------------------------------------------------------------------
+ *  Fullscreen — the block takes the viewport (natively, or as the
+ *  overlay P.bindFullscreen falls back to on an iPhone). The toolbar
+ *  stays pinned while the reader scrolls a long event.
+ * ------------------------------------------------------------------- */
+
+/* Doubled class: a host page's block spacing (`.block { margin… }`) must not
+ * offset the overlay from the viewport's edge. */
+.iwac-vis-timeline.iwac-vis-timeline--fullscreen,
+.iwac-vis-timeline.iwac-vis-timeline:fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: var(--iwac-vis-z-popover, 300);
+    margin: 0;
+    padding: 0 max(var(--space-6, 1.5rem), (100% - 80rem) / 2) var(--space-6, 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--surface, #fdfcfb);
+    border-radius: 0;
+}
+
+.iwac-vis-timeline--fullscreen .iwac-vis-timeline__header { margin-bottom: var(--space-2, 0.5rem); padding-top: var(--space-6, 1.5rem); border-top: 0; }
+.iwac-vis-timeline--fullscreen .iwac-vis-timeline__header h2 { font-size: var(--text-2xl, 1.875rem); }
+.iwac-vis-timeline--fullscreen .iwac-vis-timeline__controls {
+    position: sticky;
+    top: 0;
+    z-index: var(--iwac-vis-z-raised, 5);
+    background: var(--surface, #fdfcfb);
+}
+
+.iwac-vis-timeline--fullscreen .iwac-vis-timeline__event { scroll-margin-top: var(--space-20, 5rem); }
+
 @container iwac-timeline (max-width: 767px) {
+    .iwac-vis-timeline__controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+    .iwac-vis-timeline__pager { grid-column: 1 / -1; grid-row: 1; }
+    .iwac-vis-timeline__views { flex-wrap: nowrap; min-width: 0; }
+    .iwac-vis-timeline .iwac-vis-timeline__view { flex: 1 1 auto; min-width: 0; padding-inline: var(--space-3, 0.75rem); }
+    .iwac-vis-timeline__menu { flex: 1 1 auto; }
+    .iwac-vis-timeline__menu-panel { left: 0; right: 0; width: auto; transform: none; }
     .iwac-vis-timeline__navigation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .iwac-vis-timeline__progress { grid-column: 1 / -1; grid-row: 1; text-align: center; }
     .iwac-vis-timeline__navigation button { min-width: 0; white-space: normal; }
     .iwac-vis-timeline__event { grid-template-columns: minmax(0, 1fr); gap: var(--space-4, 1rem); }
-    .iwac-vis-timeline__select-label { flex-basis: 100%; }
     .iwac-vis-timeline__header h2 { font-size: var(--text-2xl, 1.875rem); }
     .iwac-vis-timeline__event h3 { font-size: var(--text-xl, 1.5rem); }
+    .iwac-vis-timeline__media img { max-height: min(28rem, 60vh); }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .iwac-vis-timeline *, .iwac-vis-timeline *::before { transition: none; scroll-behavior: auto; }
+    .iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__event.is-current { transition: none; }
 }
 
 @media print {
-    .iwac-vis-timeline .iwac-vis-timeline__event[hidden] { display: grid; }
+    .iwac-vis-timeline[data-view] .iwac-vis-timeline__events { display: block; }
+    .iwac-vis-timeline[data-view] .iwac-vis-timeline__event:not(.is-current),
+    .iwac-vis-timeline[data-view] .iwac-vis-timeline__event { display: grid; visibility: visible; opacity: 1; }
     .iwac-vis-timeline__controls, .iwac-vis-timeline__navigation, .iwac-vis-timeline__axis, .iwac-vis-timeline__status { display: none; }
     .iwac-vis-timeline__event { break-inside: avoid; }
     .iwac-vis-timeline__media img { max-height: 20rem; }

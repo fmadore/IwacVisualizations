@@ -36,6 +36,11 @@ class TimelineData extends AbstractHelper
             $config = \HTMLPurifier_Config::createDefault();
             $config->set('HTML.Allowed', 'a[href|title],em,i,strong,b,blockquote,p,br,ul,ol,li,sup,sub');
             $config->set('URI.AllowedSchemes', ['https' => true, 'http' => true, 'mailto' => true]);
+            // Every absolute link leaves the exhibit — mostly for an IWAC
+            // item — so it opens in a new tab and the reader keeps their
+            // place in the narrative. Fragments and mailto: are untouched.
+            $config->set('HTML.TargetBlank', true);
+            $config->set('HTML.TargetNoreferrer', false);
             $config->set('Cache.DefinitionImpl', null);
             $purifier = new \HTMLPurifier($config);
             $this->catalog = new Catalog($directory, [$purifier, 'purify']);

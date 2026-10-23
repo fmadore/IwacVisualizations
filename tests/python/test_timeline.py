@@ -39,6 +39,8 @@ class TimelineTests(unittest.TestCase):
         parsed = parse_csv(sheet([INTRO, SECOND, {**FIRST, "Type": "title"}]), "test", "en")
         self.assertEqual([x["id"] for x in parsed["events"]], ["second", "first"])
         self.assertIn("dated", " ".join(parsed["warnings"]))
+        quoted = parse_csv(sheet([INTRO, {**FIRST, "Text": '<p>a "quoted" <a title="kept">word</a></p>'}]), "test", "en")
+        self.assertIn("straight quotation", " ".join(quoted["warnings"]))
         changed = parse_csv(sheet([INTRO, {**FIRST, "Headline": "Renamed"}, SECOND]), "test", "fr")
         self.assertEqual({e["id"] for e in changed["events"]}, {e["id"] for e in parsed["events"]})
 
@@ -74,18 +76,23 @@ class TimelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             output = root / "timelines"
+            sources = root / "content/timelines"
+            sources.mkdir(parents=True)
             config = {"timelines": [{"slug": "test", "sources": {
-                locale: {"csvUrl": "https://example.org/sheet.csv"} for locale in ["en", "fr"]}}]}
+                locale: {"csv": f"content/timelines/test.{locale}.csv"} for locale in ["en", "fr"]}}]}
             for locale in ["en", "fr"]:
-                (root / f"test.{locale}.csv").write_text(sheet([INTRO, FIRST, SECOND]))
-            generate(config, output, csv_dir=root)
+                (sources / f"test.{locale}.csv").write_text(sheet([INTRO, FIRST, SECOND]))
+            generate(config, output, root=root)
             self.assertEqual(check_timelines(root), [])
             before = {p.name: p.read_bytes() for p in output.glob('*.json')}
-            (root / "test.fr.csv").write_text('broken input')
+            (sources / "test.fr.csv").write_text('broken input')
             with self.assertRaises(ValueError):
-                generate(config, output, csv_dir=root)
+                generate(config, output, root=root)
             self.assertEqual(before, {p.name: p.read_bytes() for p in output.glob('*.json')})
             index = json.loads((output / "index.json").read_text())
+            config["timelines"][0]["sources"]["en"]["csv"] = "../../etc/passwd"
+            with self.assertRaises(ValueError):
+                generate(config, output, root=root)
             index["timelines"][0]["locales"]["en"]["file"] = "../evil.json"
             (output / "index.json").write_text(json.dumps(index))
             self.assertTrue(check_timelines(root))

@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-"""Import published TimelineJS sheets into the standard IWAC data release."""
+"""Import the committed timeline CSVs (content/timelines/) into the IWAC data release."""
 from __future__ import annotations
 
 import argparse
 import json
 import logging
-import time
 from pathlib import Path
-from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
 
-from iwac_timeline import IDENTIFIER, parse_csv, safe_url, source_hash, validate_timeline
+from iwac_timeline import IDENTIFIER, SOURCE_PATH, parse_csv, source_hash, validate_timeline
 from iwac_utils import add_standard_args, parse_standard_args, save_json, generate_timestamp
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -19,27 +16,7 @@ MAX_CSV_BYTES = 4 * 1024 * 1024
 logger = logging.getLogger(__name__)
 
 
-def fetch_csv(url: str) -> bytes:
-    """Bounded anonymous reads. Never publish an error page as an empty exhibit."""
-    safe_url(url)
-    for attempt in range(3):
-        try:
-            request = Request(url, headers={"User-Agent": "IWAC-Timeline/1.0", "Accept": "text/csv"})
-            with urlopen(request, timeout=30) as response:
-                raw = response.read(MAX_CSV_BYTES + 1)
-            if len(raw) > MAX_CSV_BYTES:
-                raise ValueError("Timeline CSV exceeds 4 MiB")
-            return raw
-        except (HTTPError, URLError, TimeoutError) as exc:
-            if isinstance(exc, HTTPError) and exc.code not in {429, 500, 502, 503, 504}:
-                raise
-            if attempt == 2:
-                raise
-            time.sleep(attempt + 1)
-    raise RuntimeError("Unreachable")
-
-
-def generate(config: dict, output: Path, minify: bool = True, csv_dir: Path | None = None) -> dict:
+def generate(config: dict, output: Path, minify: bool = True, root: Path = ROOT) -> dict:
     bundles = []
     index = {"schemaVersion": 1, "metadata": {"generatedAt": generate_timestamp()}, "timelines": []}
     seen = set()
@@ -51,12 +28,18 @@ def generate(config: dict, output: Path, minify: bool = True, csv_dir: Path | No
         entry = {"slug": slug, "locales": {}}
         event_ids = None
         for locale, source in spec["sources"].items():
-            raw = ((csv_dir / f"{slug}.{locale}.csv").read_bytes() if csv_dir
-                   else fetch_csv(source["csvUrl"]))
-            payload = parse_csv(raw.decode("utf-8-sig"), slug, locale, spec.get("legacyIds"))
+            # The sources are committed files, never a network read: an edit is
+            # a reviewed commit, and a rebuild is reproducible from the tree.
+            path = source["csv"]
+            if path != f"content/timelines/{slug}.{locale}.csv" or not SOURCE_PATH.fullmatch(path):
+                raise ValueError(f"{slug}/{locale}: the source must be content/timelines/{slug}.{locale}.csv")
+            raw = (root / path).read_bytes()
+            if len(raw) > MAX_CSV_BYTES:
+                raise ValueError(f"{path} exceeds 4 MiB")
+            payload = parse_csv(raw.decode("utf-8-sig"), slug, locale)
             payload["metadata"] = {
                 "generatedAt": index["metadata"]["generatedAt"],
-                "source": {"url": source["csvUrl"], "sha256": source_hash(raw)},
+                "source": {"path": path, "sha256": source_hash(raw)},
             }
             validate_timeline(payload)
             ids = {e["id"] for e in payload["events"]}
@@ -91,11 +74,10 @@ def main():
     parser = add_standard_args(argparse.ArgumentParser(description=__doc__))
     parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output", type=Path, default=ROOT / "asset/data/timelines")
-    parser.add_argument("--csv-dir", type=Path, help="Offline inputs named <slug>.<locale>.csv")
     args = parse_standard_args(parser)
     # --repo is retained for run_all's common CLI, but this generator never
-    # reads Hugging Face; the authoritative sources are the published sheets.
-    generate(json.loads(args.config.read_text(encoding="utf-8")), args.output, args.minify, args.csv_dir)
+    # reads Hugging Face; the authoritative sources are content/timelines/*.csv.
+    generate(json.loads(args.config.read_text(encoding="utf-8")), args.output, args.minify)
 
 
 if __name__ == "__main__":

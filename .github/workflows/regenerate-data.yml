@@ -23,7 +23,8 @@ on:
   #
   # The code is not the only committed input. The generators also read curated
   # JSON sidecars (the laïcité lexicon and audit ledger, the org co-occurrence
-  # targets), the static geometry under asset/geo/, and ship the two
+  # targets), the timeline CSVs under content/timelines/, the static geometry
+  # under asset/geo/, and ship the two
   # hand-curated event files straight into the archive. A push that changed
   # only one of those used to rebuild nothing: e3130cef edited the lexicon and
   # the published laïcité bundles kept counting with the old one.
@@ -32,6 +33,7 @@ on:
     paths:
       - "config/sentiment-models.json"
       - "config/timelines.json"
+      - "content/timelines/**"
       - ".github/workflows/regenerate-data.yml"
       - "scripts/**/*.py"
       - "scripts/*.json"
