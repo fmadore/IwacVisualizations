@@ -115,8 +115,17 @@ event's own height, since there the longest event runs to several screens. A
 step taken below the stage (the closing buttons, the axis, a swipe) brings the
 toolbar back into view when the event's start has scrolled away. Fullscreen uses
 the browser's Fullscreen API, or the same layout as an overlay where it is
-missing (an iPhone); the toolbar stays pinned while a long event scrolls. The
-axis shows points and overlapping range lanes. Arrow keys,
+missing (an iPhone); the toolbar stays pinned while a long event scrolls.
+
+The axis under the event draws a card per event, as TimelineJS did: a square
+thumbnail, the date and the headline, its start edge on the event's date (the
+middle of a year or month, the first day of a range), with a range's line
+running on to its end. Overlapping cards take the next lane down, and the
+track scrolls sideways rather than stacking lanes. The thumbnail is Omeka's
+200px `files/square/` derivative of an item image, else the sheet's **Media
+Thumbnail**, else the image itself; a map or link shows a Lucide icon, an
+event with no media is a text card, and a thumbnail that fails to load leaves
+a text card. Arrow keys,
 Home and End operate only while focus is inside the timeline; form fields and
 links retain their own keyboard behaviour. Horizontal touch swipes change the
 event, while vertical scrolling remains available. Controls and axis targets

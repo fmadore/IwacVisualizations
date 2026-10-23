@@ -13,6 +13,16 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.84.0 — the timeline's axis shows its images (2026-10-23)
+
+The chronology under the IWAC Timeline draws cards instead of dots, as TimelineJS did. **The 1982 event's new headline arrives with the next data build and Pull latest data**; the cards ship with this release.
+
+- **A card per event.** Each card carries a square thumbnail of the event's image, its date and its headline, cut at two lines. The full date and headline are its accessible name and tooltip. The current event's card takes a primary outline, and its date turns primary. A card's start edge stands on the event's date: the middle of a year or month, as the dots did, or the first day of a range, whose line now runs from under the card to the end of the period. Overlapping cards take the next lane, and the track scrolls sideways (it gives each card four fifths of its width) rather than stacking a dozen lanes.
+- **Thumbnails cost little.** Item images use Omeka's 200px `files/square/` derivative instead of the large file the event shows; a site asset falls back to the sheet's Media Thumbnail or the image. Thumbnails load lazily. A map or link shows a Lucide `map-pin` or `link` in the thumbnail's place, an event without media is a text card, and a thumbnail that fails leaves a text card. The partial exposes `data-thumb` and `data-media` on each event for this.
+- **The cards are built once.** A resize moves them instead of rebuilding them, so a loaded thumbnail and a focused card survive it. `M.layout` now takes the card width and anchors cards at their start edge; it also returns its date-to-pixel scale for the year ticks, which gain a hairline.
+- **The 1982 student-activism event has a headline**: “Young intellectuals still distant from Islam” / « De jeunes intellectuels encore loin de l’islam ». The axis and the picker showed its date in its place.
+- `tests/browser/timeline.spec.js` asserts one card per dated event, headed by that event's headline, and no broken image where a thumbnail fails.
+
 ### v1.83.0 — the timeline holds still (2026-10-23)
 
 The IWAC Timeline block, reworked after the Hajj and student-activism exhibits went live: a reader stepping through the events saw the page change height under every image and the buttons move with it. **The corrected quotations and typography arrive with the next data build and Pull latest data**; the rest ships with this release.

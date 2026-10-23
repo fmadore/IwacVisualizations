@@ -27,11 +27,19 @@ $linkIcon = '<svg class="iwac-vis-icon" viewBox="0 0 24 24" aria-hidden="true" f
         $eventAnchor = $instance . '-' . $event['id'];
         $fragment = '#' . $eventAnchor;
         $media = $event['media'];
+        // The axis card's thumbnail: Omeka's 200px square derivative where
+        // the image is an item file, else the sheet's thumbnail or the image.
+        $thumb = '';
+        if ($media && $media['type'] === 'image') {
+            $thumb = preg_match('#^https://islam\.zmo\.de/files/(?:large|medium)/#', $media['url'])
+                ? (string) preg_replace('#/files/(?:large|medium)/#', '/files/square/', $media['url'], 1)
+                : ($media['thumbnail'] ?: $media['url']);
+        }
     ?>
         <article class="iwac-vis-timeline__event" id="<?= $attr($eventAnchor) ?>"
                  data-event-id="<?= $attr($event['id']) ?>" data-order="<?= $intro ? '-1' : (int) $event['sourceOrder'] ?>"
                  data-start="<?= $attr($event['start']['value'] ?? '') ?>" data-end="<?= $attr($event['end']['value'] ?? '') ?>"
-                 data-date-label="<?= $attr($date) ?>" aria-labelledby="<?= $attr($eventAnchor) ?>-heading">
+                 data-date-label="<?= $attr($date) ?>" data-media="<?= $attr($media['type'] ?? '') ?>" data-thumb="<?= $attr($thumb) ?>" aria-labelledby="<?= $attr($eventAnchor) ?>-heading">
             <div class="iwac-vis-timeline__copy">
                 <?php if (!$intro): ?>
                 <p class="iwac-vis-timeline__dateline">

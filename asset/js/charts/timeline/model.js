@@ -16,12 +16,24 @@
         return date.getTime();
     };
 
-    M.layout = function (events, width, hitWidth) {
+    /**
+     * Place each event's card on the axis, TimelineJS-style: the card's start
+     * edge stands on the event's date — the middle of its period for a point,
+     * the first day for a range, whose line then runs on to its end. A card
+     * that would overlap one already placed takes the next lane down.
+     *
+     * @param {Array} events  {id, start, end?, order}
+     * @param {number} width  the track's width
+     * @param {number} card   one card's width
+     * @returns {{positions: Array, lanes: number, min: number, max: number, x: function(number):number}}
+     */
+    M.layout = function (events, width, card) {
         var starts = events.map(function (e) { return M.bound(e.start, false); });
         var ends = events.map(function (e) { return M.bound(e.end || e.start, true); });
         var min = Math.min.apply(null, starts);
         var max = Math.max.apply(null, ends);
         var span = Math.max(max - min, 86400000);
+        var x = function (time) { return (time - min) / span * (width - card); };
         var lanes = [];
         var positions = events.map(function (event, i) {
             return { id: event.id, start: starts[i], end: ends[i], range: Boolean(event.end), event: event };
@@ -29,17 +41,15 @@
         positions.forEach(function (p) {
             // A year/month-only point sits within that period, never purports
             // to be an event known to have happened on January 1st.
-            var point = p.range ? p.start : (p.start + p.end) / 2;
-            p.x = hitWidth / 2 + (point - min) / span * (width - hitWidth);
-            p.endX = hitWidth / 2 + (p.end - min) / span * (width - hitWidth);
-            var left = p.x - hitWidth / 2;
-            var right = Math.max(p.x + hitWidth / 2, p.range ? p.endX : 0);
-            var lane = lanes.findIndex(function (end) { return end + 8 < left; });
+            p.x = x(p.range ? p.start : (p.start + p.end) / 2);
+            p.endX = x(p.end);
+            var right = Math.max(p.x + card, p.range ? p.endX : 0);
+            var lane = lanes.findIndex(function (end) { return end + 8 < p.x; });
             if (lane < 0) lane = lanes.length;
             lanes[lane] = right;
             p.lane = lane;
         });
-        return { positions: positions, lanes: lanes.length, min: min, max: max };
+        return { positions: positions, lanes: lanes.length, min: min, max: max, x: x };
     };
 
     M.fragment = function (slug, id, instance) {

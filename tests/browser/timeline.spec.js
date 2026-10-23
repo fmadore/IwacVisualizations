@@ -105,6 +105,13 @@ test('stable stage, event picker, fullscreen and new-tab links', async ({ page }
         await expect(link).toHaveAttribute('aria-describedby', 'block-1-new-tab');
     }
     await expect(root.locator('.iwac-vis-timeline__permalink svg.iwac-vis-icon').first()).toBeAttached();
+    // The axis draws a card per dated event, headed by that event's headline;
+    // a thumbnail that cannot load leaves a text card, never a broken image.
+    const headlines = await root.locator('.iwac-vis-timeline__event:not(#block-1-intro) h3')
+        .evaluateAll(nodes => nodes.map(node => node.textContent).sort());
+    expect(await root.locator('.iwac-vis-timeline__marker-headline')
+        .evaluateAll(nodes => nodes.map(node => node.textContent).sort())).toEqual(headlines);
+    await expect(root.locator('.iwac-vis-timeline__marker img')).toHaveCount(0);
 });
 
 test('deep links distinguish repeated instances and respond to hash changes', async ({ page }) => {

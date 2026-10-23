@@ -9,7 +9,7 @@
         'timeline_select': 'Go to an event',
         'timeline_intro': 'Introduction',
         'timeline_axis': 'Timeline navigation',
-        'timeline_axis_hint': 'Points mark events; lines show date ranges. Scroll to explore the chronology.',
+        'timeline_axis_hint': 'Each card stands on its event’s date; a line runs on to the end of a period. Scroll to explore the chronology.',
         'timeline_progress': 'Event {current} of {total}',
         'timeline_views': 'Timeline view',
         'timeline_new_tab': 'Opens in a new tab'
@@ -22,7 +22,7 @@
         'timeline_select': 'Aller à un événement',
         'timeline_intro': 'Introduction',
         'timeline_axis': 'Navigation chronologique',
-        'timeline_axis_hint': 'Les points indiquent les événements\u202f; les lignes représentent les périodes. Faites défiler pour explorer la chronologie.',
+        'timeline_axis_hint': 'Chaque carte se place à la date de son événement\u202f; une ligne prolonge les périodes jusqu’à leur fin. Faites défiler pour explorer la chronologie.',
         'timeline_progress': 'Événement {current} sur {total}',
         'timeline_views': 'Vue de la chronologie',
         'timeline_new_tab': 'S’ouvre dans un nouvel onglet'

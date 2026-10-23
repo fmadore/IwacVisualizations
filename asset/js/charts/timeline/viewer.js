@@ -68,7 +68,8 @@
         stage.tabIndex = 0;
         var axis = ns.createTimelineAxis(section, articles.slice(1).map(function (article) {
             return { id: article.dataset.eventId, start: article.dataset.start, end: article.dataset.end,
-                order: Number(article.dataset.order),
+                order: Number(article.dataset.order), date: article.dataset.dateLabel, headline: headline(article),
+                thumb: article.dataset.thumb, media: article.dataset.media,
                 label: article.dataset.dateLabel + ' · ' + headline(article) };
         }), function (id) { view = 'narrative'; choose(id, true, 'below'); });
 
