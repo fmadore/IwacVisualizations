@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.85.0 — MapLibre 6.16.0 and a dependency refresh (2026-10-26)
+
+Maps load **MapLibre GL 6.16.0** (from 6.12.0). The three jsDelivr files carry new SRI hashes, generated from the npm tarball and verified against the CDN. IwacSearch 3.26.0 moves to the same files and hashes, so a visitor still downloads MapLibre once for both modules. Deploy the two together. Checked on the live site with the new files swapped in: the Spatial exploration map renders in light and dark mode, loads all four MapLibre files under SRI, and logs no errors.
+
+- **Data generators.** The hashed Python lock is regenerated with uv 0.13.5: pandas 3.1.0, NumPy 2.5.4 (still below 2.6 for Numba 0.68), pyarrow 26.0.0 and huggingface-hub 2.3.0. The unit-test pins follow.
+- **Toolchain.** ESLint 10.13.0, Playwright 1.64.1 and axe-core/playwright 4.14.0. The braces audit exception is retired: the advisory is no longer reported, and `check:audit` fails on an exception it no longer needs.
+- The theme contract is synced from IWAC-theme 2.30.0.
+
 ### v1.84.0 — the timeline's axis shows its images (2026-10-23)
 
 The chronology under the IWAC Timeline draws cards instead of dots, as TimelineJS did. **The 1982 event's new headline arrives with the next data build and Pull latest data**; the cards ship with this release.
