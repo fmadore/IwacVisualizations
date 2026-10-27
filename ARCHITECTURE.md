@@ -674,12 +674,12 @@ npm run check:lighthouse -- --update            # rewrite tests/lighthouse/basel
 | Measure | Budget | Why that tolerance |
 | --- | --- | --- |
 | Script, stylesheet, image and font transfer bytes; request count | ≤ baseline + 10% | Deterministic — the same tree loads the same bytes, and a page whose runs disagree fails as unstable. The fixture harness (`/tests/browser/`) is not counted. |
-| Accessibility, best-practices score | ≥ baseline | Deterministic: the same DOM runs the same audits. |
-| Performance score | ≥ baseline − `PERFORMANCE_MARGIN` | Timed on the host's CPU, so it varies; the margin is measured on the runner (the script says from what). |
+| Accessibility, best-practices score | ≥ baseline | Repeats run to run on one host: the same DOM runs the same audits. Not across hosts — see below. |
+| Performance score | ≥ baseline − `PERFORMANCE_MARGIN` | Timed on the host's CPU, so it varies; the 0.05 margin is five times the worst drop measured across three runner VMs, and the baseline is the median of several CI attempts — `article-dashboard` is bimodal (≈0.74 or ≈0.93 run by run). |
 
 SEO is not measured: a fixture's `<head>` belongs to the harness, and the theme and IWAC-SEO own it live. The fixture server sends text gzipped, as Apache and jsDelivr do for the live site — uncompressed, the Albani page weighed 1.48 MB instead of 479 KB, and its performance score was mostly a measure of that.
 
-Slack retires itself, as the audit exceptions do: a page that got 20% lighter, or whose accessibility or best-practices score rose, fails until `--update` locks the improvement in. Outside CI, `--update` keeps the committed performance figures, because a laptop is not the runner; to move one, take `baseline.json` from the workflow's `lighthouse` artifact, which also carries each page's median-run HTML report.
+Slack retires itself, as the audit exceptions do: a page that got 20% lighter, or whose accessibility or best-practices score rose, fails until `--update` locks the improvement in. Outside CI, `--update` rewrites only the byte and request counts and keeps the committed scores, because a laptop is not the runner: its CPU times the performance score, and its fonts size the text the accessibility audits measure (IwacSearch's pages passed `target-size` on the Linux runner and failed it on Windows). To move a score, take `baseline.json` from the workflow's `lighthouse` artifact, which also carries each page's median-run HTML report.
 
 The fixtures stub the data and the theme, so this gate answers for what the module ships. The live pages — server, CDN, theme — are not a pull request's to answer for.
 

@@ -18,7 +18,8 @@
  *     run must load the same bytes, or the page is reported as unstable —
  *     so this is the part of the gate that cannot flake;
  *   - the accessibility and best-practices scores: no lower than the
- *     baseline. They are deterministic too (the same DOM, the same audits);
+ *     baseline. They repeat run to run on one host (the same DOM, the same
+ *     audits), but not across hosts, since fonts size the text (below);
  *   - the performance score: no lower than the baseline minus
  *     PERFORMANCE_MARGIN. This one is timed on the host's CPU, so it is the
  *     noisy one, and its baseline must come from the CI runner (below).
@@ -36,9 +37,13 @@
  * Re-baselining. Every run writes the baseline it measured to
  * test-results/lighthouse/baseline.json (uploaded as the CI job's artifact),
  * beside one HTML report per page. `--update` copies it over the committed
- * file — except outside CI, where the performance figures are kept: a laptop
- * is not the runner, and its scores would set the floor for the wrong
- * machine. To move a performance baseline, take baseline.json from a CI run.
+ * file — except outside CI, where the committed scores are kept and only the
+ * byte and request counts are rewritten. A laptop is not the runner: its CPU
+ * times the performance score, and its fonts size the text the accessibility
+ * audits measure (IwacSearch's pages passed `target-size` on the Linux runner
+ * and failed it on Windows). To move a score, take baseline.json from a CI
+ * run — for performance, the median of several attempts, not one (see
+ * PERFORMANCE_MARGIN).
  */
 'use strict';
 
@@ -79,8 +84,18 @@ const BYTE_TYPES = ['script', 'stylesheet', 'image', 'font'];
 const BYTES_HEADROOM = 1.10;
 /** A page this much lighter than its baseline fails until it is re-baselined. */
 const BYTES_STALE = 0.80;
-/** How far a page's median performance score may sit below its baseline. */
-const PERFORMANCE_MARGIN = 0.10;
+/**
+ * How far a page's median performance score may sit below its baseline.
+ * Measured, 2026-10-27: three attempts of the CI job on three runner VMs
+ * (benchmark index 2,080–2,480), nine runs per page. No page's median of three
+ * fell more than 0.01 below its nine-run median, so 0.05 is five times the
+ * worst drop seen. One page is bimodal: article-dashboard scores either ~0.74
+ * or ~0.93 run by run, and one attempt drew 0.93 three times. So a performance
+ * baseline is the median of several CI attempts' runs (details.json lists
+ * each run), never a single attempt's — that one would have set a floor the
+ * page's other mode fails.
+ */
+const PERFORMANCE_MARGIN = 0.05;
 
 function parseArgs(argv) {
     const args = { update: false, runs: 3, only: null };
@@ -265,13 +280,15 @@ async function main() {
         }
         if (!process.env.CI) {
             for (const page of pages) {
-                const kept = committed.pages[page]?.performance;
-                if (typeof kept === 'number') candidate.pages[page].performance = kept;
-                else console.warn(`  ! ${page}: no committed performance baseline; wrote this machine's ${measured[page].performance} — replace it with the CI run's`);
+                for (const id of CATEGORIES) {
+                    const kept = committed.pages[page]?.[id];
+                    if (typeof kept === 'number') candidate.pages[page][id] = kept;
+                    else console.warn(`  ! ${page}: no committed ${id} baseline; wrote this machine's ${measured[page][id]} — replace it with the CI run's`);
+                }
             }
         }
         writeFileSync(BASELINE, `${JSON.stringify(candidate, null, 2)}\n`);
-        console.log(`✓ lighthouse: wrote ${path.relative(ROOT, BASELINE)} for ${pages.length} page(s)${process.env.CI ? '' : ' (performance kept from the committed baseline)'}`);
+        console.log(`✓ lighthouse: wrote ${path.relative(ROOT, BASELINE)} for ${pages.length} page(s)${process.env.CI ? '' : ' (scores kept from the committed baseline)'}`);
         return 0;
     }
 
@@ -306,7 +323,7 @@ async function main() {
         printFailure(
             `lighthouse: ${problems.length} budget problem(s) over ${pages.length} page(s)`,
             problems,
-            `\nReports: ${path.relative(ROOT, OUT)}/<page>.html. A deliberate change re-baselines with --update;\nperformance figures come from the CI run's baseline.json artifact.\n`,
+            `\nReports: ${path.relative(ROOT, OUT)}/<page>.html. A deliberate change re-baselines with --update;\nscores come from the CI run's baseline.json artifact.\n`,
             { leadingBlank: false },
         );
         return 1;

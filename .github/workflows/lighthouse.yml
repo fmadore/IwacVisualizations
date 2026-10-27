@@ -9,7 +9,8 @@ name: Lighthouse budgets
 #   - script / stylesheet / image / font transfer bytes and the request count
 #     may grow by at most 10% (deterministic: every run must load the same
 #     bytes, or the page is reported as unstable);
-#   - the accessibility and best-practices scores may not fall at all;
+#   - the accessibility and best-practices scores may not fall at all
+#     (they repeat run to run on one host);
 #   - the performance score may fall by at most the margin the script states,
 #     measured from repeated runs on this runner, because it is timed on the
 #     runner's CPU.
@@ -23,9 +24,9 @@ name: Lighthouse budgets
 # rose, fails too, until the baseline is rewritten — the same self-retiring
 # rule as the audit exceptions, so an improvement is locked in rather than
 # left as headroom. Re-baseline with `npm run check:lighthouse -- --update`;
-# the performance figures come from this job's `lighthouse` artifact
-# (baseline.json), never from a laptop. The artifact also holds one HTML
-# report per page, the median run's.
+# the scores come from this job's `lighthouse` artifact (baseline.json), never
+# from a laptop, whose CPU and fonts are not the runner's. The artifact also
+# holds one HTML report per page, the median run's.
 #
 # TRIGGERS: build-check.yml's ignore-list, for the same reason — an allow-list
 # fails open the day a new file starts to matter.
