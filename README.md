@@ -301,6 +301,16 @@ Two things worth knowing before reading anything else:
   (issue #7). `asset/data/` is gitignored apart from two hand-curated event
   sidecars.
 
+**Block pages carry Lighthouse budgets.** `npm run check:lighthouse` (the
+`Lighthouse budgets` workflow, on every push and pull request) loads each
+block's browser fixture three times in Lighthouse 13 and fails when the median
+run ships more than 10% more script, stylesheet, image or font bytes or
+requests than `tests/lighthouse/baseline.json` records, loses any
+accessibility or best-practices points, or falls below its performance floor.
+`npm run check:lighthouse -- --update` re-baselines a deliberate change; see
+[ARCHITECTURE.md](ARCHITECTURE.md#lighthouse-budgets) for what is measured,
+the tolerances and why SEO is left out.
+
 ## Upgrading to 1.66.0
 
 Existing installed data continues to serve. Before the next **Pull latest data**,
