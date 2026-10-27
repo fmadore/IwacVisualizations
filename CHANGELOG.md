@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased — Claude Haiku 5.5, the sixth sentiment rater (2026-10)
+### v1.87.0 — Claude Haiku 5.5, the sixth sentiment rater (2026-10-27)
 
 **Claude Haiku 5.5 joins the sentiment panel** ([issue #29](https://github.com/fmadore/IwacVisualizations/issues/29)). Anthropic's `claude-haiku-5-5` was promoted into the panel on 2026-10-22 and its 2026-10-23 corpus pass writes `iwac:claudeHaiku55*` (properties 399–404) to Omeka. The article page reads Omeka, so it shows the sixth card and radar series as soon as this is installed; the corpus-level blocks pick up the `claude_haiku_5_5_*` columns at the first regeneration after the IWAC-Hugging-Face export carries them.
 
