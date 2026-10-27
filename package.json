@@ -44,7 +44,8 @@
     "update:sri": "node scripts/cdn-integrity.js --update",
     "verify:sri": "node scripts/cdn-integrity.js --verify",
     "lint:models": "node scripts/build-model-registry.js --check",
-    "check:audit": "node scripts/check-audit.js"
+    "check:audit": "node scripts/check-audit.js",
+    "check:lighthouse": "node scripts/check-lighthouse.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
@@ -61,6 +62,7 @@
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "globals": "17.13.0",
+    "lighthouse": "13.5.0",
     "stylelint": "17.16.0"
   },
   "overrides": {
