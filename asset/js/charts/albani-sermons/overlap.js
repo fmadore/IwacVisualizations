@@ -34,7 +34,7 @@
         return {
             grid: C._grid({ left: 8, right: 24, top: 36, bottom: 24 }),
             legend: C._legend({ top: 0 }),
-            tooltip: {
+            tooltip: C._inPanelTooltip({
                 trigger: 'axis',
                 axisPointer: { type: 'shadow' },
                 confine: true,
@@ -49,7 +49,7 @@
                     });
                     return lines.join('<br>');
                 }
-            },
+            }),
             xAxis: { type: 'value', name: P.t('albani_per_10k'), nameLocation: 'middle', nameGap: 26 },
             yAxis: {
                 type: 'category',

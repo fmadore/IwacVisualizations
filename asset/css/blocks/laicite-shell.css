@@ -41,9 +41,9 @@
     gap: var(--space-5, 1.25rem);
 }
 
-/*  One card: a frame, a concordance line, a collocate, a reprint pair. */
+/*  One card: a frame, a collocate, a reprint pair. (A concordance line's
+ *  card is the shared component's, in iwac-core.css.) */
 .iwac-vis-laicite-frame-card,
-.iwac-vis-kwic-row,
 .iwac-vis-laicite-collocate,
 .iwac-vis-laicite-circ-pair {
     padding: var(--space-3, 0.75rem);

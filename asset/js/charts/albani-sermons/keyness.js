@@ -36,7 +36,7 @@
             });
         }
         return ['monologue', 'exchange'].filter(function (k) { return data[k]; }).map(function (k) {
-            return { value: k, label: P.t(k === 'monologue' ? 'albani_scope_monologue' : 'albani_kwic_exchange') };
+            return { value: k, label: P.t(k === 'monologue' ? 'albani_mode_monologue' : 'albani_mode_exchange') };
         });
     }
 

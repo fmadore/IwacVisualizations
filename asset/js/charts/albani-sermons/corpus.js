@@ -65,7 +65,7 @@
         return {
             grid: C._grid({ left: 8, right: 16, top: 56, bottom: 32 }),
             legend: C._legend({ top: 0 }),
-            tooltip: {
+            tooltip: C._inPanelTooltip({
                 trigger: 'item',
                 confine: true,
                 formatter: function (p) {
@@ -75,7 +75,7 @@
                         + P.escapeHtml(P.formatDuration(r.dur)) + '<br>'
                         + P.escapeHtml(p.seriesName);
                 }
-            },
+            }),
             xAxis: { type: 'time', minInterval: 365 * 24 * 3600 * 1000 },
             yAxis: {
                 type: 'value',

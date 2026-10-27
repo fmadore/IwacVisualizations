@@ -58,7 +58,7 @@ test('passages come from the public transcript only, and say what was withheld',
     await expect(rows.locator('.iwac-vis-kwic-title').first()).toHaveText("Ziyarar 'Yan Uwa Daga Gombe");
     // The emir, never the divine epithet that ends the same transcript.
     await expect(rows.locator('.iwac-vis-kwic-match')).toHaveText(["'yan siyasa", 'Sarkin']);
-    await expect(politics).toContainText('counted above and not quoted');
+    await expect(politics).toContainText('counted above but not quoted');
     // No IIIF manifest in the fixture: the window falls back to the item page.
     await expect(rows.first().locator('.iwac-vis-albani__window')).toHaveAttribute('href', '/s/iwac/item/15889');
 });
@@ -74,6 +74,32 @@ test('the methods are explained in plain terms, with their sources linked', asyn
     // The header's jump link lands on the section's heading.
     const href = await page.locator('.iwac-vis-albani__jump').getAttribute('href');
     expect(href).toBe('#' + await method.locator('.iwac-vis-section-heading').getAttribute('id'));
+});
+
+test('every chart and network offers the shared full-screen control, and fills the screen', async ({ page }) => {
+    await ready(page);
+    // Every panel that draws (an ECharts canvas or a force graph) carries
+    // the shared toolbar's full-screen button; tables and lists do not.
+    const drawn = page.locator('.iwac-vis-albani__section .iwac-vis-panel').filter({ has: page.locator('canvas') });
+    const count = await drawn.count();
+    expect(count).toBeGreaterThan(8);
+    for (let i = 0; i < count; i++) {
+        await expect(drawn.nth(i).getByRole('button', { name: 'Toggle fullscreen' })).toHaveCount(1);
+    }
+    // A row-sized bar chart: its inline minimum height must not hold the
+    // chart at page size once the panel is expanded.
+    const panel = page.locator('[data-iwac-panel="albani-youth-intensity"]');
+    const chart = panel.locator('.iwac-vis-chart');
+    const before = (await chart.boundingBox()).height;
+    const viewport = page.viewportSize().height;
+    const button = panel.getByRole('button', { name: 'Toggle fullscreen' });
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    // iwac-core.css sizes a full-screen chart at 100vh - 160px.
+    await expect.poll(async () => (await chart.boundingBox()).height).toBeGreaterThan(before);
+    expect((await chart.boundingBox()).height).toBeGreaterThanOrEqual(viewport - 161);
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'false');
 });
 
 test('the counting scope is one control, reflected in the address bar', async ({ page }) => {

@@ -113,9 +113,9 @@
         return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
     }
 
-    /** `00:40–01:00`, `02:20–end`: the window, never a quotation time. */
+    /** `00:40–01:00`, `02:20–end`: the segment, never a quotation time. */
     A.windowLabel = function (start, end) {
-        return clock(start || 0) + '–' + (end == null ? 'end' : clock(end));
+        return clock(start || 0) + '–' + (end == null ? P.t('albani_window_end') : clock(end));
     };
 
     /**
@@ -128,9 +128,14 @@
         return A.itemHref(ctx, item && item.o, item && item.u);
     };
 
-    /** Bar-chart height for `n` rows, so a long list stays readable. */
+    /**
+     * Bar-chart height for `n` rows, so a long list stays readable. A
+     * MINIMUM height: an inline `height` would outrank the shared
+     * full-screen rule (iwac-core.css), and the expanded chart would keep
+     * its page size inside a full-screen panel.
+     */
     A.sizeFor = function (chartEl, n, row, floor) {
-        chartEl.style.height = Math.max(floor || 220, n * (row || 26) + 64) + 'px';
+        chartEl.style.minHeight = Math.max(floor || 220, n * (row || 26) + 64) + 'px';
     };
 
     /**
@@ -147,7 +152,7 @@
         opts = opts || {};
         return {
             grid: C._grid({ left: 8, top: 8, bottom: 40, right: 56 }),
-            tooltip: {
+            tooltip: C._inPanelTooltip({
                 trigger: 'item',
                 confine: true,
                 formatter: function (p) {
@@ -157,7 +162,7 @@
                     if (opts.tooltip) lines.push(opts.tooltip(term));
                     return lines.join('<br>');
                 }
-            },
+            }),
             xAxis: { type: 'value', name: opts.axis || '', nameLocation: 'middle', nameGap: 26 },
             yAxis: {
                 type: 'category',
@@ -204,10 +209,25 @@
             // the instance re-reads its size before the option is laid out.
             var option = build(built);
             chart.resize();
-            if (option) chart.setOption(option, true);
-            else chart.clear();
+            if (!option) { chart.clear(); return; }
+            // Every chart here sits in a panel with a full-screen control, and
+            // a <body> tooltip renders behind the full-screen layer. The shared
+            // bar and word-cloud builders leave theirs in <body>, so the panel
+            // moves it in-panel, whatever builder made the option (a
+            // media-query option keeps it under `baseOption`).
+            var target = option.baseOption || option;
+            if (target.tooltip) target.tooltip = C._inPanelTooltip(target.tooltip);
+            chart.setOption(option, true);
         }
         ns.registerChart(built.chart, function (el, chart) { draw(chart); });
+        // The shared full-screen control, after the download and table
+        // buttons registerChart attached, as on every other chart panel.
+        P.addFullscreenButton(built.panel, {
+            onResize: function () {
+                var live = ns.getLiveChart && ns.getLiveChart(built.chart);
+                if (live) live.resize();
+            }
+        });
         return {
             panel: built.panel,
             chart: built.chart,
