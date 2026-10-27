@@ -13,6 +13,18 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.88.0 — word clouds that keep words apart (2026-10-27)
+
+**Every word cloud is laid out by the module** (Albani Zaria Sermons, Collection Overview, Compare Newspapers, the item-set and publication dashboards, Periodicals Overview, Scary Terms). The clouds drew with echarts-wordcloud, which let two words on one line sit a pixel apart: in the Albani cloud *malam* and *annabi* read as one Hausa word, *malamannabi*. One very common word also took the top of the size range and left the rest on the floor, and a wide or full-screen panel framed a small island of words.
+
+- **Words never touch.** Each word is measured in the font it is drawn in and keeps a margin, so no two boxes overlap and no word leaves the panel.
+- **Area follows frequency** (size by the square root of the count), at the largest scale at which every word fits. A panel too small for all of them at the 11 px floor drops the rarest from the picture; "View as table" and the CSV still list every word with its count.
+- **The cloud fills its panel**, and is laid out again whenever the panel changes size, full screen included. The layout is the same on every redraw, so a theme toggle never reshuffles it.
+- **Colour marks frequency bands**: orange for the commonest few words, then teal, purple, tan and slate-blue for four equal bands below. The hues are the series colours that stay readable as text (4.5:1) on the panel in each theme, chosen at render time, so a palette change cannot leave an unreadable one in.
+- The download, the tooltip and full screen work as before. The publication dashboard's cloud now follows a light/dark toggle, which it used to ignore.
+- echarts-wordcloud is no longer used, but the six blocks still load it until it is removed.
+- The data build now also runs when an Albani word list, stop-word or spelling-rule file changes.
+
 ### v1.87.0 — Claude Haiku 5.5, the sixth sentiment rater (2026-10-27)
 
 **Claude Haiku 5.5 joins the sentiment panel** ([issue #29](https://github.com/fmadore/IwacVisualizations/issues/29)). Anthropic's `claude-haiku-5-5` was promoted into the panel on 2026-10-22 and its 2026-10-23 corpus pass writes `iwac:claudeHaiku55*` (properties 399–404) to Omeka. The article page reads Omeka, so it shows the sixth card and radar series as soon as this is installed; the corpus-level blocks pick up the `claude_haiku_5_5_*` columns at the first regeneration after the IWAC-Hugging-Face export carries them.
