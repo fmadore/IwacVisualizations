@@ -24,6 +24,8 @@ const AxeBuilder = require('@axe-core/playwright').default;
 const WCAG_A_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 const FIXTURES = [
+    // Every lazy section at once, so the scan reaches the concordances.
+    'albani-sermons?eager=1',
     'article-dashboard',
     'associated-entities',
     'chart-layout',

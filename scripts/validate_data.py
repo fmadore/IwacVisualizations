@@ -112,6 +112,18 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "laicite-references.json":        ("items",),
     "laicite-semantic.json":          ("points",),
     "laicite-sentiment.json":         ("by_model", "models"),
+    # Albani Zaria sermons (issue #31), read off scripts/albani/generator.py.
+    # Added with the generator, before a CI regeneration proved them — a wrong
+    # row fails the next data build loudly, which is the safe way.
+    "albani-sermons/metadata.json":   ("totals", "recordings", "params"),
+    "albani-sermons/vocabulary.json": ("scopes",),
+    "albani-sermons/lexicon.json":    ("themes", "entries", "by_recording"),
+    "albani-sermons/collocates.json": ("scopes",),
+    "albani-sermons/network.json":    ("scopes",),
+    "albani-sermons/overlap.json":    ("scopes",),
+    "albani-sermons/keyness.json":    ("by_recording", "period", "by_mode"),
+    "albani-sermons/concordance-youth.json":    ("items", "rows", "counts"),
+    "albani-sermons/concordance-politics.json": ("items", "rows", "counts"),
 }
 
 #: Nested figures a consumer OUTSIDE this module reads, keyed by
@@ -187,6 +199,15 @@ COMMITTED = ("scary-terms-events.json", "laicite-events.json")
 
 # Every aggregate and index required for publication; formerly duplicated in CI shell.
 REQUIRED_FILES = (
+    "albani-sermons/collocates.json",
+    "albani-sermons/concordance-politics.json",
+    "albani-sermons/concordance-youth.json",
+    "albani-sermons/keyness.json",
+    "albani-sermons/lexicon.json",
+    "albani-sermons/metadata.json",
+    "albani-sermons/network.json",
+    "albani-sermons/overlap.json",
+    "albani-sermons/vocabulary.json",
     "audiovisual-overview.json",
     "collection-map.json",
     "collection-overview.json",

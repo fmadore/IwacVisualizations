@@ -1,0 +1,13 @@
+{
+  "_comment": "Word-division join rule for the Albani Zaria transcripts (scripts/albani/normalize.py). The ASR writes the same word split and joined (kan su / kansu, da ke / dake); each entry maps the split spelling onto one token so both count as one word. Matching runs on the folded key, so hooked and unhooked spellings are both covered. Add a pair only when both spellings occur and mean the same thing.",
+  "joins": {
+    "kan su": "kansu",
+    "kan mu": "kanmu",
+    "kan ku": "kanku",
+    "kan sa": "kansa",
+    "kan ta": "kanta",
+    "kan shi": "kanshi",
+    "da ke": "dake",
+    "a kan": "akan"
+  }
+}

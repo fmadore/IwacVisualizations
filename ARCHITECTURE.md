@@ -29,7 +29,7 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                      # 50 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                      # 52 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css                # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
 │   │   ├── iwac-embed-tokens.css
@@ -51,6 +51,7 @@ IwacVisualizations/
 │   │       └── Qwen_logo.png
 │   └── js/
 │       ├── charts/
+│       │   ├── albani-sermons/          # 7 files — panel modules
 │       │   ├── article-dashboard/       # 4 files — panel modules
 │       │   ├── audiovisual-overview/    # 3 files — panel modules
 │       │   ├── collection-overview/     # 11 files — panel modules
@@ -74,6 +75,7 @@ IwacVisualizations/
 │       │   ├── spatial-exploration/     # 4 files — panel modules
 │       │   ├── timeline/                # 5 files — panel modules
 │       │   ├── topic-explorer/          # 1 file — panel module
+│       │   ├── albani-sermons.js
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
 │       │   ├── collection-overview.js
@@ -102,7 +104,7 @@ IwacVisualizations/
 │       │   ├── term-trends.js
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                        # 131 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                        # 135 files — built by scripts/build-js.js from bundles.json; committed
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js
@@ -132,6 +134,18 @@ IwacVisualizations/
 │   └── TIMELINES.md
 ├── language/                            # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
+│   ├── albani/
+│   │   ├── __init__.py
+│   │   ├── albani_lexicon.json
+│   │   ├── corpus.py
+│   │   ├── generator.py
+│   │   ├── layers.py
+│   │   ├── lexicon.py
+│   │   ├── neighbours.py
+│   │   ├── normalization.json
+│   │   ├── normalize.py
+│   │   ├── stopwords.json
+│   │   └── transcript.py
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
 │   ├── lib/                             # 4 files — file walk, bundle manifest and failure report the guards share
 │   ├── audit_laicite.py
@@ -156,6 +170,7 @@ IwacVisualizations/
 │   ├── check-versions.js
 │   ├── dashboard_aggregator.py          # Shared person/entity aggregation core
 │   ├── extract-pot.js
+│   ├── generate_albani_sermons.py
 │   ├── generate_article_dashboards.py
 │   ├── generate_audiovisual_overview.py
 │   ├── generate_collection_overview.py
@@ -228,7 +243,7 @@ IwacVisualizations/
 │   │   └── ViewHelper/
 │   │       └── TimelineDataFactory.php
 │   ├── Site/
-│   │   ├── BlockLayout/                 # 23 files — one `const SLUG` each; BlockRegistry.php is the truth
+│   │   ├── BlockLayout/                 # 24 files — one `const SLUG` each; BlockRegistry.php is the truth
 │   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
 │   │   ├── AssetPlan.php
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
@@ -240,8 +255,11 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 43 files — Playwright specs
+│   ├── browser/                         # 55 files — Playwright specs
 │   ├── fixtures/
+│   │   ├── albani/
+│   │   │   ├── current-format.txt
+│   │   │   └── legacy-format.txt
 │   │   └── timeline.json
 │   ├── integration/
 │   │   ├── block_assets.php
@@ -255,6 +273,7 @@ IwacVisualizations/
 │   │   └── timeline.php
 │   └── python/
 │       ├── requirements.txt
+│       ├── test_albani_sermons.py
 │       ├── test_entity_networks.py
 │       ├── test_iwac_helpers.py
 │       ├── test_laicite_audit.py

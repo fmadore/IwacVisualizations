@@ -405,7 +405,8 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 22, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 23, 'page-block registry count drifted');
+    check(BlockRegistry::get('albani-sermons')['invokable'] === 'albaniSermons', 'albani-sermons registry entry drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
@@ -472,10 +473,10 @@ namespace {
                 "$slug: has no shell but does not route to its own template");
         }
     }
-    check($shellRows === 20, "expected 20 generic blocks, found $shellRows");
+    check($shellRows === 21, "expected 21 generic blocks, found $shellRows");
     check($ownTemplate === 2, "expected 2 blocks with their own template (on-this-day, iwac-timeline), found $ownTemplate");
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
-        '_generic.phtml is missing — twenty blocks render through it');
+        '_generic.phtml is missing — twenty-one blocks render through it');
     // The periodicals sheet, specifically: the row that lost it.
     check(
         (BlockRegistry::get('periodicals-overview')['shell']['assets']['blockCss'] ?? null) === 'periodicals-overview',

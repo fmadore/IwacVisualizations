@@ -70,9 +70,10 @@ function everyKey() {
     return [...keys];
 }
 
-test('the dictionaries the stripper finds are the twenty-seven the i18n guard counts', () => {
-    // 19 until v1.73.0, which gave seven blocks their own dictionary.
-    assert.equal(BLOCKS.length + 1, 27);
+test('the dictionaries the stripper finds are the twenty-eight the i18n guard counts', () => {
+    // 19 until v1.73.0, which gave seven blocks their own dictionary; 28
+    // with the Albani Zaria sermons block (issue #31).
+    assert.equal(BLOCKS.length + 1, 28);
 });
 
 for (const locale of LOCALES) {

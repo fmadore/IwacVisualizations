@@ -1,0 +1,185 @@
+{
+  "_comment": "Research lexicon for generate_albani_sermons.py (issue #31). SEED CANDIDATES, NOT A VALIDATED INSTRUMENT: every entry is 'seed' until the curator's Hausa-speaking colleague accepts it through the review sheet the generator writes (--review-sheet). Only accepted rows are to be folded back here, with status 'validated'. Edit this file, never the code, to revise the instrument.",
+  "_matching": "Variants are written as the transcripts spell them; matching folds hooked letters (ɓ ɗ ƙ ƴ), apostrophe typography, q/k, doubled letters and a final -ah, so one hooked spelling also catches its unhooked twin. Hausa marks possession with a linker suffix (-n / -r: matasan, gwamnatin, tarbiyyar), so the linker forms are listed explicitly; there is no lemmatiser (issue #31: 57–63% accuracy is too noisy). Multi-word variants match consecutive words of one speaker turn. Within a category, matches never overlap and the longest wins ('yan siyasa before siyasa); categories are independent of each other.",
+  "_disambiguation": "'exclude_before' drops an occurrence whose PRECEDING word is listed (sarki after 'madaukakin' is the divine epithet Allah Madaukakin Sarki, 706 times in 29 transcripts). 'ambiguous' entries keep their counts and concordance lines so the specialist can judge them, but stay OUT of every pooled statistic (theme rates, collocates, network, overlap) until validated: the unhooked text merges kasa 'to fail' with ƙasa 'country', and kwaya 'grain, seed' with ƙwaya 'pill'.",
+  "status": "seed",
+  "themes": {
+    "youth": {
+      "label_en": "Youth",
+      "label_fr": "Jeunesse",
+      "categories": {
+        "youth": {
+          "label_en": "Young people",
+          "label_fr": "Les jeunes",
+          "core": true,
+          "entries": [
+            {"id": "matasa", "display": "matasa", "gloss_en": "young people; a young man, a young woman", "gloss_fr": "jeunes ; un jeune homme, une jeune femme", "variants": ["matasa", "matasan", "matashi", "matashin", "matashiya", "matashiyar"]},
+            {"id": "samari", "display": "samari", "gloss_en": "young men; a young man", "gloss_fr": "jeunes hommes ; un jeune homme", "variants": ["samari", "samarin", "saurayi", "saurayin", "samartaka", "samartakar"]},
+            {"id": "yan_mata", "display": "'yan mata", "gloss_en": "girls, young women", "gloss_fr": "jeunes filles", "variants": ["'yan mata", "yan mata", "'yammata", "yammata", "'yan matan", "yan matan"]},
+            {"id": "budurwa", "display": "budurwa", "gloss_en": "maiden, unmarried young woman", "gloss_fr": "jeune fille non mariée", "variants": ["budurwa", "budurwar", "'yan budurwai", "budurwai"]},
+            {"id": "yara", "display": "yara", "gloss_en": "children; a boy, a girl", "gloss_fr": "enfants ; un garçon, une fille", "variants": ["yara", "yaran", "yaro", "yaron", "yarinya", "yarinyar"]},
+            {"id": "kuruciya", "display": "ƙuruciya", "gloss_en": "youth, as an age of life", "gloss_fr": "la jeunesse, âge de la vie", "variants": ["ƙuruciya", "ƙuruciyar"]},
+            {"id": "dalibai", "display": "ɗalibai", "gloss_en": "students; a student", "gloss_fr": "étudiants, élèves ; un étudiant", "variants": ["ɗalibai", "ɗaliban", "ɗalibi", "ɗalibin", "ɗaliba", "ɗalibar"]},
+            {"id": "almajirai", "display": "almajirai", "gloss_en": "Qur'anic pupils", "gloss_fr": "élèves des écoles coraniques", "variants": ["almajirai", "almajiran", "almajiri", "almajirin"]},
+            {"id": "yaya", "display": "'ya'ya", "gloss_en": "offspring (as in tarbiyyar 'ya'ya)", "gloss_fr": "progéniture (comme dans tarbiyyar 'ya'ya)", "variants": ["'ya'ya", "ya'ya", "'ya'yan", "ya'yan"]},
+            {"id": "shabab", "display": "shabāb", "layer": "ar", "gloss_en": "youth (Arabic)", "gloss_fr": "jeunesse (arabe)", "variants": ["shabab", "shabbab", "shababi", "shabbi", "shabb"]},
+            {"id": "fityan", "display": "fityān", "layer": "ar", "gloss_en": "young men (Arabic)", "gloss_fr": "jeunes gens (arabe)", "variants": ["fityan", "fitya"]},
+            {"id": "tullab", "display": "ṭullāb", "layer": "ar", "gloss_en": "students (Arabic)", "gloss_fr": "étudiants (arabe)", "variants": ["tullab", "tullabi"]}
+          ]
+        },
+        "education": {
+          "label_en": "Education",
+          "label_fr": "Éducation",
+          "core": false,
+          "entries": [
+            {"id": "tarbiyya", "display": "tarbiyya", "gloss_en": "moral upbringing", "gloss_fr": "éducation morale", "variants": ["tarbiyya", "tarbiyyar", "tarbiyyan"]},
+            {"id": "ilimi", "display": "ilimi", "gloss_en": "knowledge, learning", "gloss_fr": "savoir, connaissance", "variants": ["ilimi", "ilimin"]},
+            {"id": "makaranta", "display": "makaranta", "gloss_en": "school", "gloss_fr": "école", "variants": ["makaranta", "makarantar", "makarantu", "makarantun"]},
+            {"id": "boko", "display": "boko", "gloss_en": "Western-style schooling", "gloss_fr": "école de type occidental", "variants": ["boko"]}
+          ]
+        },
+        "marriage": {
+          "label_en": "Marriage",
+          "label_fr": "Mariage",
+          "core": false,
+          "entries": [
+            {"id": "auren_wuri", "display": "auren wuri", "gloss_en": "early marriage", "gloss_fr": "mariage précoce", "variants": ["auren wuri"]},
+            {"id": "aure", "display": "aure", "gloss_en": "marriage", "gloss_fr": "mariage", "variants": ["aure", "auren"]}
+          ]
+        },
+        "parents": {
+          "label_en": "Parents and obedience",
+          "label_fr": "Parents et obéissance",
+          "core": false,
+          "entries": [
+            {"id": "iyaye", "display": "iyaye", "gloss_en": "parents", "gloss_fr": "parents", "variants": ["iyaye", "iyayen"]},
+            {"id": "biyayya", "display": "biyayya", "gloss_en": "obedience", "gloss_fr": "obéissance", "variants": ["biyayya", "biyayyar"]}
+          ]
+        },
+        "decline": {
+          "label_en": "Moral decline",
+          "label_fr": "Déclin moral",
+          "core": false,
+          "entries": [
+            {"id": "lalacewa", "display": "lalacewa", "gloss_en": "corruption, going to ruin", "gloss_fr": "dégradation, perdition", "variants": ["lalacewa", "lalacewar", "lalace"]},
+            {"id": "gurbacewa", "display": "gurɓacewa", "gloss_en": "corruption, being spoilt", "gloss_fr": "corruption, pourrissement", "variants": ["gurɓacewa", "gurɓacewar", "gurɓace"]},
+            {"id": "fitina", "display": "fitina", "gloss_en": "trial, discord, temptation", "gloss_fr": "épreuve, discorde, tentation", "variants": ["fitina", "fitinar", "fitintinu"]}
+          ]
+        },
+        "idleness": {
+          "label_en": "Drugs and idleness",
+          "label_fr": "Drogues et oisiveté",
+          "core": false,
+          "entries": [
+            {"id": "kwaya", "display": "ƙwaya", "ambiguous": true, "note": "Unhooked kwaya also means a grain or seed; validate before pooling.", "gloss_en": "pills, drugs", "gloss_fr": "comprimés, drogues", "variants": ["ƙwaya", "ƙwayoyi"]},
+            {"id": "shaye_shaye", "display": "shaye-shaye", "gloss_en": "drinking, substance abuse", "gloss_fr": "consommation d'alcool ou de drogues", "variants": ["shaye-shaye", "shaye shaye"]},
+            {"id": "zaman_banza", "display": "zaman banza", "gloss_en": "idleness", "gloss_fr": "oisiveté", "variants": ["zaman banza"]}
+          ]
+        }
+      }
+    },
+    "politics": {
+      "label_en": "Democracy and politics",
+      "label_fr": "Démocratie et politique",
+      "categories": {
+        "democracy": {
+          "label_en": "Democracy",
+          "label_fr": "Démocratie",
+          "core": true,
+          "entries": [
+            {"id": "demokuradiyya", "display": "demokuraɗiyya", "gloss_en": "democracy", "gloss_fr": "démocratie", "variants": ["demokuraɗiyya", "demokuraɗiyyar", "dimokuraɗiyya", "dimokuraɗiyyar", "demokradiyya", "demokradiyyar", "dimokradiyya", "dimokradiyyar", "dimuƙuraɗiyya", "dimukradiyya", "demokra'iyya", "demokradiyance", "dimokuradiyance", "democracy"]},
+            {"id": "dimuqratiyya", "display": "dīmuqrāṭiyya", "layer": "ar", "gloss_en": "democracy (Arabic)", "gloss_fr": "démocratie (arabe)", "variants": ["dimuqratiyya", "addimuqratiyya", "ad-dimuqratiyya"]}
+          ]
+        },
+        "politics": {
+          "label_en": "Politics and politicians",
+          "label_fr": "Politique et politiciens",
+          "core": true,
+          "entries": [
+            {"id": "yan_siyasa", "display": "'yan siyasa", "gloss_en": "politicians", "gloss_fr": "politiciens", "variants": ["'yan siyasa", "yan siyasa", "'yan siyasar", "yan siyasar"]},
+            {"id": "siyasa", "display": "siyasa", "gloss_en": "politics", "gloss_fr": "politique", "variants": ["siyasa", "siyasar", "siyasan", "siyasance"]}
+          ]
+        },
+        "government": {
+          "label_en": "Government",
+          "label_fr": "Gouvernement",
+          "core": true,
+          "entries": [
+            {"id": "gwamnati", "display": "gwamnati", "gloss_en": "government", "gloss_fr": "gouvernement", "variants": ["gwamnati", "gwamnatin", "gwamnatoci", "gwamnatocin"]},
+            {"id": "gwamna", "display": "gwamna", "note": "Not in the issue's seed list; added from the corpus frequency review (149 occurrences in 22 recordings).", "gloss_en": "governor", "gloss_fr": "gouverneur", "variants": ["gwamna", "gwamnan", "gwamnoni", "gwamnonin"]},
+            {"id": "hukuma", "display": "hukuma", "gloss_en": "authority, public body", "gloss_fr": "autorité, administration", "variants": ["hukuma", "hukumar", "hukumomi", "hukumomin"]}
+          ]
+        },
+        "rule": {
+          "label_en": "Rule and leadership",
+          "label_fr": "Pouvoir et direction",
+          "core": true,
+          "entries": [
+            {"id": "masu_mulki", "display": "masu mulki", "gloss_en": "rulers, those in power", "gloss_fr": "dirigeants, détenteurs du pouvoir", "variants": ["masu mulki"]},
+            {"id": "mulki", "display": "mulki", "gloss_en": "rule, power, government", "gloss_fr": "pouvoir, règne", "variants": ["mulki", "mulkin"]},
+            {"id": "shugabanci", "display": "shugabanci", "gloss_en": "leadership", "gloss_fr": "direction, leadership", "variants": ["shugabanci", "shugabancin"]},
+            {"id": "shugaba", "display": "shugaba", "gloss_en": "leader, head; president (shugaban ƙasa)", "gloss_fr": "chef, dirigeant ; président (shugaban ƙasa)", "variants": ["shugaba", "shugaban", "shugabanni", "shugabannin"]}
+          ]
+        },
+        "emirate": {
+          "label_en": "Emirate",
+          "label_fr": "Émirat",
+          "core": true,
+          "entries": [
+            {"id": "sarki", "display": "sarki", "exclude_before": ["maɗaukakin", "allah"], "note": "After 'maɗaukakin' or 'Allah' this is the divine epithet (Allah Maɗaukakin Sarki, Allah sarki), not the emir.", "gloss_en": "emir, king; sarkin musulmi, the Sultan of Sokoto", "gloss_fr": "émir, roi ; sarkin musulmi, le sultan de Sokoto", "variants": ["sarki", "sarkin", "sarakuna", "sarakunan"]},
+            {"id": "sarauta", "display": "sarauta", "gloss_en": "traditional rule, title", "gloss_fr": "chefferie, titre", "variants": ["sarauta", "sarautar"]}
+          ]
+        },
+        "elections": {
+          "label_en": "Elections and parties",
+          "label_fr": "Élections et partis",
+          "core": true,
+          "entries": [
+            {"id": "zabe", "display": "zaɓe", "note": "The verb zaɓa / zaɓi (to choose) is deliberately not listed.", "gloss_en": "election", "gloss_fr": "élection", "variants": ["zaɓe", "zaɓen"]},
+            {"id": "jamiyya", "display": "jam'iyya", "ambiguous": true, "note": "Also any association, including religious ones; validate before pooling.", "gloss_en": "party, association", "gloss_fr": "parti, association", "variants": ["jam'iyya", "jam'iyyar", "jam'iyyu", "jam'iyyun"]}
+          ]
+        },
+        "constitution": {
+          "label_en": "Constitution and rights",
+          "label_fr": "Constitution et droits",
+          "core": true,
+          "entries": [
+            {"id": "tsarin_mulki", "display": "tsarin mulki", "gloss_en": "constitution, system of government", "gloss_fr": "constitution, système de gouvernement", "variants": ["tsarin mulki", "constitution"]},
+            {"id": "yanci", "display": "'yanci", "gloss_en": "freedom", "gloss_fr": "liberté", "variants": ["'yanci", "'yancin", "yanci", "yancin"]},
+            {"id": "hakki", "display": "haƙƙi", "gloss_en": "right, due", "gloss_fr": "droit, dû", "variants": ["haƙƙi", "haƙƙin", "haƙƙoƙi", "haƙoƙin"]}
+          ]
+        },
+        "state": {
+          "label_en": "Country and state",
+          "label_fr": "Pays et État",
+          "core": true,
+          "entries": [
+            {"id": "kasa", "display": "ƙasa", "ambiguous": true, "note": "Unhooked kasa also means 'to fail' and 'below, the ground'; validate before pooling.", "gloss_en": "country, land", "gloss_fr": "pays, terre", "variants": ["ƙasa", "ƙasar"]}
+          ]
+        },
+        "sharia": {
+          "label_en": "Shari'a and jihad",
+          "label_fr": "Charia et djihad",
+          "core": true,
+          "entries": [
+            {"id": "sharia", "display": "shari'a", "gloss_en": "Islamic law", "gloss_fr": "charia, loi islamique", "variants": ["shari'a", "shari'ar", "shari'ah", "sharia"]},
+            {"id": "jihadi", "display": "jihadi", "gloss_en": "jihad", "gloss_fr": "djihad", "variants": ["jihadi", "jihadin", "jihad"]}
+          ]
+        },
+        "arabic": {
+          "label_en": "Arabic political vocabulary",
+          "label_fr": "Vocabulaire politique arabe",
+          "core": true,
+          "entries": [
+            {"id": "hakimiyya", "display": "ḥākimiyya", "layer": "ar", "gloss_en": "sovereignty (of God)", "gloss_fr": "souveraineté (divine)", "variants": ["hakimiyya", "al-hakimiyya"]},
+            {"id": "khilafa", "display": "khilāfa", "layer": "ar", "gloss_en": "caliphate", "gloss_fr": "califat", "variants": ["khilafa", "khilafah", "al-khilafa"]},
+            {"id": "imara", "display": "imāra", "layer": "ar", "gloss_en": "emirate, command", "gloss_fr": "émirat, commandement", "variants": ["imara", "imarah", "al-imara"]},
+            {"id": "wali_al_amr", "display": "walī al-amr", "layer": "ar", "gloss_en": "those in authority (obedience to rulers)", "gloss_fr": "détenteurs de l'autorité (obéissance aux gouvernants)", "variants": ["waliyyul amr", "waliyyul amri", "walatul amr", "ulul amr", "ulil amri", "ulul amri"]},
+            {"id": "khuruj", "display": "khurūj", "layer": "ar", "gloss_en": "rebellion against the ruler", "gloss_fr": "rébellion contre le gouvernant", "variants": ["khuruj", "al-khuruj"]},
+            {"id": "ilmaniyya", "display": "ʿilmāniyya", "layer": "ar", "gloss_en": "secularism", "gloss_fr": "laïcité, sécularisme", "variants": ["ilmaniyya", "almaniyya", "al-ilmaniyya", "secularism"]}
+          ]
+        }
+      }
+    }
+  }
+}

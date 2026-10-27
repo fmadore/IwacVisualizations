@@ -4,6 +4,7 @@ namespace IwacVisualizations;
 $config = [
     'block_layouts' => [
         'invokables' => [
+            'albaniSermons' => Site\BlockLayout\AlbaniSermons::class,
             'audiovisualOverview' => Site\BlockLayout\AudiovisualOverview::class,
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,

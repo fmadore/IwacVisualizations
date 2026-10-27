@@ -29,6 +29,15 @@
         ],
         "createdAt": "2026-10-13T07:43:14.880Z",
         "reason": "Claude: test fixture whose :root values mirror the IWAC theme's surface tokens (pre-existing, unchanged by this edit); the palette is owned by IWAC-theme tokens.json, not designed here"
+      },
+      {
+        "rule": "monotonous-spacing",
+        "value": "*",
+        "files": [
+          "tests/browser/fixtures/albani-sermons.html"
+        ],
+        "createdAt": "2026-10-27T09:00:54.231Z",
+        "reason": "Claude: Playwright test-harness page, not product UI; its one inline rule is the page gutter around the block, and the block's spacing lives in asset/css/blocks/albani-sermons.css"
       }
     ]
   }

@@ -135,6 +135,7 @@
             'lang_Espagnol':  'Spanish',
             'lang_Slov\u00e8ne': 'Slovenian',
             'lang_Arabe':     'Arabic',
+            'lang_Haoussa':   'Hausa',
             'lang_Portugais': 'Portuguese',
             'lang_N\u00e9erlandais': 'Dutch',
 
@@ -410,6 +411,7 @@
             'lang_Espagnol':  'Espagnol',
             'lang_Slov\u00e8ne': 'Slov\u00e8ne',
             'lang_Arabe':     'Arabe',
+            'lang_Haoussa':   'Haoussa',
             'lang_Portugais': 'Portugais',
             'lang_N\u00e9erlandais': 'N\u00e9erlandais',
 

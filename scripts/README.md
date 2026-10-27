@@ -494,6 +494,41 @@ Only five columns are materialised (`o:id`, `pub_date`, `country`, `subject`,
 `lemma_nostop`) — the subset also carries OCR and a 768-dim embedding per
 row, and pulling those into pandas is where the memory goes.
 
+### `generate_albani_sermons.py` (issue #31)
+
+Writes `asset/data/albani-sermons/` — the Albani Zaria Sermons block: the
+corpus listing, Hausa / Arabic frequency lists and formulae, the youth and
+politics lexicon counts, collocates, term networks, the places where the two
+lexicons meet, keyness by recording / period / segment kind, and one
+rights-gated concordance per theme. The logic is the `albani/` package; read
+its module docstrings for the decisions (strict parsing, folding, the layer
+heuristic, scopes, the rights boundary).
+
+- **Scope:** `audiovisual` rows with `source_type == "deposited"` whose
+  pipe-split `creator` includes *Muhammad Auwal Albani Zaria*.
+- **Strict transcripts.** The current markup (`[Part]`, 20-minute
+  `[Segment n/N | hh:mm:ss–hh:mm:ss]`, `[Speaker segN-spk:K]`) is parsed and
+  never counted. The older Gemini format (15850, 15878 until they are redone)
+  is listed and left out of every statistic; any other unreadable transcript
+  **stops the run**.
+- **The lexicons are seeds** (`albani/albani_lexicon.json`, status `seed`).
+  `--review-sheet <path>` writes the CSV the Hausa-speaking specialist
+  validates: every seed with its counts, forms and public example windows,
+  then candidate collocates and PPMI-SVD neighbours. It quotes public
+  transcripts; write it under the gitignored `.test-tmp/`, never into git.
+- **Rights:** aggregates cover every transcript; KWIC lines only rows whose
+  `OCR_is_public` is true, and no aggregate string is longer than three words.
+  `check_rights` tests both on the payloads before anything is written.
+- **Media links:** the generator reads each analysed item's IIIF manifest so a
+  window can link to its media file at `#t=<start>`; `--offline` skips it and
+  windows link to the item page.
+- `--transcripts-dir DIR` overlays `<o:id>.txt` files on the mirror's `OCR`,
+  to run ahead of the next dataset push; overlaid text counts as private
+  unless `--transcripts-public` is passed.
+
+The browser fixture's bundles are this generator's output on the test
+transcripts: `python tests/browser/build_albani_fixture.py`.
+
 ## Shared statistics helpers — `iwac_stats.py`
 
 BH q-values, Dunning G², Hardie's log ratio, the per-slice keyness pass, and

@@ -91,6 +91,7 @@ GENERATORS: List[str] = [
     "keyness",
     "reference_dashboards",
     "laicite",
+    "albani_sermons",
 ]
 """Every generator CI runs, in the order it runs them."""
 
