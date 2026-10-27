@@ -22,7 +22,8 @@ on:
   # excluded by the .py filter.)
   #
   # The code is not the only committed input. The generators also read curated
-  # JSON sidecars (the laïcité lexicon and audit ledger, the org co-occurrence
+  # JSON sidecars (the laïcité lexicon and audit ledger, the Albani lexicon,
+  # stop words and normalisation rules, the org co-occurrence
   # targets), the timeline CSVs under content/timelines/, the static geometry
   # under asset/geo/, and ship the two
   # hand-curated event files straight into the archive. A push that changed
@@ -38,6 +39,7 @@ on:
       - "scripts/**/*.py"
       - "scripts/*.json"
       - "scripts/laicite/*.json"
+      - "scripts/albani/*.json"
       - "asset/data/scary-terms-events.json"
       - "asset/data/laicite-events.json"
       - "asset/geo/**"
