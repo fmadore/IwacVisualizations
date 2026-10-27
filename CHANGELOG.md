@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.89.0 — one CDN library fewer (2026-10-27)
+
+**echarts-wordcloud is gone.** Since v1.88.0 the module lays its word clouds out itself, so the seven blocks that draw one (Albani Zaria Sermons, Collection Overview, Compare Newspapers, the item-set and publication dashboards, Periodicals Overview, Scary Terms) were downloading and running a CDN script for nothing. Those pages now make one request fewer, and the module pins eight CDN files instead of nine.
+
+- The `wordcloud` asset flag is retired: a block or template that still asks for it now fails loudly instead of loading without it. The block registry and the two resource-page templates no longer pass it.
+- The integration test fails any block that loads the plugin, and the CDN integrity list was regenerated; the other eight hashes are unchanged.
+- The test fixtures, `package.json` and the docs no longer name it.
+
 ### v1.88.0 — word clouds that keep words apart (2026-10-27)
 
 **Every word cloud is laid out by the module** (Albani Zaria Sermons, Collection Overview, Compare Newspapers, the item-set and publication dashboards, Periodicals Overview, Scary Terms). The clouds drew with echarts-wordcloud, which let two words on one line sit a pixel apart: in the Albani cloud *malam* and *annabi* read as one Hausa word, *malamannabi*. One very common word also took the top of the size range and left the rest on the floor, and a wide or full-screen panel framed a small island of words.
@@ -22,7 +30,7 @@ link to the historical documents preserved in Git.
 - **The cloud fills its panel**, and is laid out again whenever the panel changes size, full screen included. The layout is the same on every redraw, so a theme toggle never reshuffles it.
 - **Colour marks frequency bands**: orange for the commonest few words, then teal, purple, tan and slate-blue for four equal bands below. The hues are the series colours that stay readable as text (4.5:1) on the panel in each theme, chosen at render time, so a palette change cannot leave an unreadable one in.
 - The download, the tooltip and full screen work as before. The publication dashboard's cloud now follows a light/dark toggle, which it used to ignore.
-- echarts-wordcloud is no longer used, but the six blocks still load it until it is removed.
+- echarts-wordcloud is no longer used, but the seven blocks still load it until it is removed.
 - The data build now also runs when an Albani word list, stop-word or spelling-rule file changes.
 
 ### v1.87.0 — Claude Haiku 5.5, the sixth sentiment rater (2026-10-27)
