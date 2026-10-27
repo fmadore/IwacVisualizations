@@ -48,6 +48,7 @@
         "deepseek_v4_flash_0731": "DeepSeek V4 Flash",
         "gemma_4_31b_it": "Gemma 4 31B",
         "qwen3_8_27b": "Qwen3.8 27B",
+        "claude_haiku_5_5": "Claude Haiku 5.5",
         "gemini_3_flash_preview": "Gemini 3 Flash",
         "gpt_5_mini": "GPT-5 mini",
         "ministral_14b_2512": "Ministral 14B",

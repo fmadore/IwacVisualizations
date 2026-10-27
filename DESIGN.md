@@ -7,6 +7,7 @@ colors:
   model-3: "#af4700"
   model-4: "#007b80"
   model-5: "#c360bc"
+  model-6: "#f85509"
 components:
   panel:
     backgroundColor: "var(--panel-bg, var(--surface, #fdfcfb))"
@@ -139,10 +140,10 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
 
 ### Owned literals — AI model accents
 
-- **Model slots 1–5** (`--iwac-vis-model-1..5`): five per-model data-series accents used
+- **Model slots 1–6** (`--iwac-vis-model-1..6`): six per-model data-series accents used
   where the Sentiment Atlas draws every annotator model at once. They are **role slots
   numbered by position, not by model id**; the id → slot map lives in `MODEL_SLOT`
-  (charts/sentiment-atlas.js) and nowhere else. Since 2026-10 they are picked in OKLCH and
+  (charts/sentiment-atlas.js) and nowhere else. Since 2026-10 slots 1–5 are picked in OKLCH and
   measured, not nudged from the brand marks by eye: green 155°, blue 262°, burnt orange
   45°, teal 200°, magenta 330° — at least 45° apart, each the family its model's mark reads
   as — at the gamut's highest chroma between L 0.53 and 0.65, so every slot clears 3.2:1 on
@@ -150,6 +151,13 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
   deuteranopia or protanopia). The previous set had two blues at ΔEok 0.059 (0.027 to a
   deuteranope) and an amber at 2.74:1 on the light panel. `tests/js/palette.test.js`
   measures all of it.
+- **Slot 6** (`#f85509`, 2026-10, the sixth panel member) is a **lightness step, not a
+  hue**. Five hues 45° apart leave no gap of 40° on both sides inside the band that clears
+  3:1 on both panels, so a grid search there found only lightness twins of existing slots.
+  The bright orange is the one in its model's own family (the Claude mark is terracotta):
+  hue 39°, L 0.665 — 0.135 lighter than slot 3's burnt orange — ≥ 3.2:1 on both panels and
+  ΔEok ≥ 0.10 to every slot under deuteranopia and protanopia. A seventh model will not fit
+  this way; it needs a re-pick of the whole set.
 - **Model logos** sit on a `--white` chip at a hairline radius, in both themes: the vendor
   marks are fixed artwork, and the OpenAI mark is black, which vanished on the dark panel.
 

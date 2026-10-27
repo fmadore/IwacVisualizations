@@ -4,7 +4,7 @@
  *
  * WHY THIS EXISTS
  * ---------------
- * `.impeccable/design.json` and `DESIGN.md` carry colour literals — the five
+ * `.impeccable/design.json` and `DESIGN.md` carry colour literals — the six
  * `--iwac-vis-model-*` slot accents this module owns, and a mirror of every
  * theme token it consumes. `asset/css/iwac-core.css` carries the same
  * literals for the module-owned ones, `tokens.json` for the theme ones. Three

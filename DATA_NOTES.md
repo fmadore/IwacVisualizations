@@ -102,6 +102,7 @@ The `index` subset is **pre-aggregated** — each row already has:
   | `deepseek_v4_flash_0731_` | DeepSeek V4 Flash | `iwac:deepseekV4Flash0731*` |
   | `gemma_4_31b_it_` | Gemma 4 31B | `iwac:gemma431bIt*` |
   | `qwen3_8_27b_` | Qwen3.8 27B | `iwac:qwen3827b*` |
+  | `claude_haiku_5_5_` | Claude Haiku 5.5 | `iwac:claudeHaiku55*` |
 
   Never build these names by hand: call `iwac_utils.resolve_sentiment_columns(df)`, which resolves canonical id → live column and warns loudly if a model resolves to nothing.
 

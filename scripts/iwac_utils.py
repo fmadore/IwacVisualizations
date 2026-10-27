@@ -1697,7 +1697,7 @@ that produced the annotation. It is also the key in every generated JSON
 payload, in the block JS and i18n catalogs, and — camel-cased — in the
 Omeka properties ``SentimentExtractor.php`` reads (``iwac:gpt56Luna*``,
 ``iwac:mistralSmall2603*``, ``iwac:deepseekV4Flash0731*``,
-``iwac:gemma431bIt*``, ``iwac:qwen3827b*``).
+``iwac:gemma431bIt*``, ``iwac:qwen3827b*``, ``iwac:claudeHaiku55*``).
 
 This is a *wish list*, not a promise that the columns exist. A model
 joins the panel on Omeka first and reaches Hugging Face only once the
@@ -1715,6 +1715,12 @@ short: its full-corpus pass plus three retry rounds reached 12,098 of the
 12,251 eligible articles and the remaining 153 were retired deliberately,
 so a gap here is a finding about the model rather than a failed run to
 repair. Compare models by proportion, never by raw count.
+
+``claude_haiku_5_5`` (2026-10-22) is short the other way: it joined
+without a pilot and its 2026-10-23 pass reached more articles than the
+rest of the panel, so a share of its rows have no other rater beside
+them. Anything computed over "the articles every model rated" therefore
+does not grow with it.
 
 This replaced the earlier *vendor slot* ids (``gemini`` / ``chatgpt`` /
 ``mistral``, resolving to the ``gemini_3_flash_preview`` /  ``gpt_5_mini``

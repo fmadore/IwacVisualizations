@@ -45,6 +45,7 @@ IwacVisualizations/
 │   ├── img/
 │   │   └── ai-logos/
 │   │       ├── ChatGPT_logo.svg
+│   │       ├── Claude_logo.svg
 │   │       ├── DeepSeek_logo.svg
 │   │       ├── Gemma_logo.png
 │   │       ├── Mistral_AI_logo.svg

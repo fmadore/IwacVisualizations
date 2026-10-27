@@ -366,6 +366,8 @@ namespace {
         // article the run has reached.
         'iwac:gemma431bItCentraliteJustification' => ['hidden'],
         'iwac:qwen3827bPolariteJustification' => ['hidden'],
+        'iwac:claudeHaiku55SubjectiviteJustification' => ['hidden'],
+        'iwac:claudeHaiku55Polarite' => ['hidden'],
     ]]);
     (new Module())->filterSentimentValues($event);
     $filtered = $event->getParam('values');

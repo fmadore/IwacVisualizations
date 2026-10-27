@@ -35,7 +35,7 @@ class SentimentExtractor
      * The matching Hugging Face column prefixes — what the precomputed
      * blocks key on — are the snake_case forms: `gpt_5_6_luna`,
      * `mistral_small_2603`, `deepseek_v4_flash_0731`, `gemma_4_31b_it`,
-     * `qwen3_8_27b`.
+     * `qwen3_8_27b`, `claude_haiku_5_5`.
      *
      * A model joins the registry as soon as its corpus pass STARTS, not when it
      * finishes. This class reads Omeka per item, so a partially-annotated
@@ -52,7 +52,8 @@ class SentimentExtractor
      * Its pass retired 153 articles after four attempts rather than
      * failing on them, and they skew to material where Islam is
      * peripheral — so an article showing four lanes instead of five is
-     * usually that, not an unfinished run.
+     * usually that, not an unfinished run. (Claude Haiku 5.5, the sixth,
+     * reaches more articles than the others, not fewer.)
      */
     const MODELS = \IwacVisualizations\Sentiment\ModelRegistry::MODELS;
 

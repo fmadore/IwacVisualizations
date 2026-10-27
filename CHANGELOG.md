@@ -13,6 +13,16 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased — Claude Haiku 5.5, the sixth sentiment rater (2026-10)
+
+**Claude Haiku 5.5 joins the sentiment panel** ([issue #29](https://github.com/fmadore/IwacVisualizations/issues/29)). Anthropic's `claude-haiku-5-5` was promoted into the panel on 2026-10-22 and its 2026-10-23 corpus pass writes `iwac:claudeHaiku55*` (properties 399–404) to Omeka. The article page reads Omeka, so it shows the sixth card and radar series as soon as this is installed; the corpus-level blocks pick up the `claude_haiku_5_5_*` columns at the first regeneration after the IWAC-Hugging-Face export carries them.
+
+- **One registry edit.** `config/sentiment-models.json` gains the model; `scripts/build-model-registry.js` regenerates `ModelRegistry` (the hidden stems, the article-page roster and its chrome) and the JS display-name table. The hidden stem is the part that cannot wait: without it, every article the pass has reached shows six raw rating rows, justification prose included. `tests/php/run.php` now holds two of its properties to that.
+- **It joined without a pilot**, at the curator's decision, so no agreement or self-consistency figure exists for it yet. Its coverage runs *ahead* of the panel rather than behind it: a share of its articles have no other rater, so anything computed over the articles every model rated does not grow with it.
+- **The Claude mark** (`asset/img/ai-logos/Claude_logo.svg`) is the official spark glyph from Simple Icons 16.36.0 in the brand terracotta, wordmark dropped, like the DeepSeek whale.
+- **A sixth accent slot**, `--iwac-vis-model-6: #f85509`. Five hues 45° apart leave no 40° gap inside the band that clears 3:1 on both panels, so slot 6 is a lightness step: a bright orange in the mark's own family, 0.135 lighter than slot 3's burnt orange, ≥ 3.2:1 on both panels and ΔEok ≥ 0.10 to every slot under deuteranopia and protanopia. `tests/js/palette.test.js` now measures six slots; DESIGN.md and the Impeccable sidecar record it. A seventh model will need a re-pick of the whole set.
+- Corpus Health gains a coverage row for it, and DATA_NOTES the prefix row.
+
 ### v1.86.0 — the Albani Zaria sermons (2026-10-27)
 
 A new page block, **Albani Zaria Sermons** (`albani-sermons`, issue #31 phase 1): an exhibition of the Hausa/Arabic transcripts of Shaykh Muhammad Auwal Albani Zaria's sermons and lessons, centred on youth, democracy and politics. **Place the block on a page and run Pull latest data after the next data build.** The block publishes what the private mirror holds: on 2026-10-27 that was one analysable transcript out of 45 recordings (Omeka shows 31), so the figures grow with the next `audiovisual` push.

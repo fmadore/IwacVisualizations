@@ -101,6 +101,23 @@
           "#ffe0fb"
         ]
       },
+      "model-6": {
+        "role": "data-encoding",
+        "displayName": "Model Slot 6 — Bright Orange",
+        "canonical": "#f85509",
+        "token": "--iwac-vis-model-6",
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Added 2026-10 for the sixth panel member. A lightness step, not a new hue: no 40-degree hue gap is left inside the band that clears 3:1 on both panels, so it takes slot 3's orange family 0.135 lighter (hue 39, L 0.665), >= 3.2:1 on both panels, dEok >= 0.10 to every slot under deuteranopia and protanopia; tests/js/palette.test.js measures it.",
+        "tonalRamp": [
+          "#350b00",
+          "#551801",
+          "#772401",
+          "#9f3200",
+          "#f85509",
+          "#ff916c",
+          "#ffc3af",
+          "#fef0eb"
+        ]
+      },
       "theme/primary": {
         "role": "theme-token",
         "token": "--primary",

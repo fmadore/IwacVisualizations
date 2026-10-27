@@ -4,8 +4,8 @@
  * The module's categorical colour choices, measured.
  *
  * Two scales are this module's decision: which series slot each country
- * takes (COUNTRY_MAP, charts/shared/chart-options.js), and the five model
- * accents it owns outright (--iwac-vis-model-1..5, iwac-core.css). Both were
+ * takes (COUNTRY_MAP, charts/shared/chart-options.js), and the six model
+ * accents it owns outright (--iwac-vis-model-1..6, iwac-core.css). Both were
  * picked by eye and both had pairs a reader could not tell apart — Bénin
  * beside Niger at ΔEok 0.054, two model blues at 0.059 (0.027 to a
  * deuteranope) — and a member under 3:1 on the panel. These tests hold every
@@ -140,10 +140,12 @@ test('countries stay off the admin-tunable lead slots', () => {
 
 /* ---- model accents --------------------------------------------------- */
 
+const MODEL_SLOTS = 6;
+
 function modelAccents() {
     const css = readFileSync(join(ROOT, 'asset/css/iwac-core.css'), 'utf8');
     const out = [];
-    for (let n = 1; n <= 5; n++) {
+    for (let n = 1; n <= MODEL_SLOTS; n++) {
         const m = new RegExp(`--iwac-vis-model-${n}:\\s*(#[0-9a-fA-F]{6})`).exec(css);
         assert.ok(m, `--iwac-vis-model-${n} is not a #rrggbb literal`);
         out.push(m[1].toLowerCase());
@@ -151,18 +153,18 @@ function modelAccents() {
     return out;
 }
 
-test('the five model accents are apart for every reader, and read on both panels', () => {
+test('the model accents are apart for every reader, and read on both panels', () => {
     const accents = modelAccents();
     const failures = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < MODEL_SLOTS; i++) {
         for (const theme of ['light', 'dark']) {
             const ratio = contrast(accents[i], PANEL[theme]);
             if (ratio < 3) failures.push(`model-${i + 1} on the ${theme} panel: ${ratio.toFixed(2)}:1`);
         }
-        for (let j = i + 1; j < 5; j++) {
+        for (let j = i + 1; j < MODEL_SLOTS; j++) {
             const why = apart(accents[i], accents[j]);
             if (why) failures.push(`model-${i + 1} / model-${j + 1}: ${why}`);
-            // The one chart that draws all five is a line chart: two lines a
+            // The one chart that draws them all is a line chart: two lines a
             // colour-blind reader sees as one are one line.
             for (const [kind, matrix] of Object.entries(CVD)) {
                 const d = deltaE(simulate(accents[i], matrix), simulate(accents[j], matrix));

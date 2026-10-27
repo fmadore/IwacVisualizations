@@ -109,7 +109,7 @@
     /**
      * Model id → accent SLOT. The single place a model id meets a colour.
      *
-     * The CSS tokens are `--iwac-vis-model-1..5`, named by position rather
+     * The CSS tokens are `--iwac-vis-model-1..6`, named by position rather
      * than by release: the token name used to be derived from the model id
      * itself (`'--iwac-vis-model-' + key.replace(/_/g, '-')`), so every
      * model upgrade renamed a design token and orphaned the rule that
@@ -125,7 +125,8 @@
         deepseek_v4_flash_0731: 2,
         mistral_small_2603: 3,
         gemma_4_31b_it: 4,
-        qwen3_8_27b: 5
+        qwen3_8_27b: 5,
+        claude_haiku_5_5: 6
     };
 
     /**

@@ -146,12 +146,22 @@ body {
      * ≥ 3.2:1 on the light AND the dark panel, and no pair closer than
      * ΔEok 0.14, or 0.095 under deuteranopia or protanopia.
      * tests/js/palette.test.js measures all of it, so a re-pick that drifts
-     * fails the build. */
+     * fails the build.
+     *
+     * SLOT 6 (2026-10, Claude Haiku 5.5) is a lightness step, not a hue.
+     * Five hues 45° apart leave no gap of 40° on both sides inside the
+     * band where a colour clears 3:1 on both panels; a grid search of
+     * that band found only lightness twins of existing slots. The bright
+     * orange (hue 39°, L 0.67) is the one in its model's own family — the
+     * Claude mark is terracotta — and sits 0.13 lighter than slot 3's
+     * burnt orange, ΔEok ≥ 0.10 to every slot under deuteranopia and
+     * protanopia too, ≥ 3.2:1 on both panels. */
     --iwac-vis-model-1: #00a05b; /* allow-hex */
     --iwac-vis-model-2: #538bf5; /* allow-hex */
     --iwac-vis-model-3: #af4700; /* allow-hex */
     --iwac-vis-model-4: #007b80; /* allow-hex */
     --iwac-vis-model-5: #c360bc; /* allow-hex */
+    --iwac-vis-model-6: #f85509; /* allow-hex */
 
     /* (--iwac-vis-shadow-{subtle,soft,strong} removed in 1.48: they
      * re-derived from --ink exactly what the theme's --shadow-color,
