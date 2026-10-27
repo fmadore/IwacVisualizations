@@ -49,8 +49,7 @@
 }
 
 .iwac-vis-albani__status,
-.iwac-vis-albani__caveat,
-.iwac-vis-albani__method {
+.iwac-vis-albani__caveat {
     padding: var(--space-4, 1rem);
     background: var(--surface-sunken, #f4f1ef);
     border-radius: var(--radius-md, 0.5rem);
@@ -314,19 +313,76 @@
 
 
 /* =================================================================== */
-/*  Method note                                                          */
+/*  How this exhibition was made                                         */
 /* =================================================================== */
+/*  Short plain-language explanations in a reading grid, then the
+ *  references. The jump link in the header lands here. */
 
-.iwac-vis-albani__method > summary {
-    cursor: pointer;
+.iwac-vis-albani__jump {
+    align-self: center;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    color: var(--ink, #13161c);
+    color: var(--ink-light, #3f4349);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-underline-offset: 0.15em;
 }
 
-.iwac-vis-albani__method > p {
-    margin: var(--space-3, 0.75rem) 0 0;
+.iwac-vis-albani__jump:hover {
+    color: var(--primary, #ce4115);
+    text-decoration-color: currentColor;
+}
+
+.iwac-vis-albani__method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-4, 1rem) var(--space-6, 1.5rem);
+}
+
+.iwac-vis-albani__method-item {
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-albani__method-item > h4,
+.iwac-vis-albani__sources > h4 {
+    margin: 0 0 var(--space-2, 0.5rem);
+}
+
+.iwac-vis-albani__method-item > p {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.6;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-albani__sources {
+    padding: var(--space-4, 1rem);
+    background: var(--surface-sunken, #f4f1ef);
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+.iwac-vis-albani__references {
+    margin: 0;
+    padding-left: var(--space-5, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
     max-width: var(--measure-base, 52.5rem);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-albani__reference-link {
     color: var(--ink-light, #3f4349);
+    overflow-wrap: anywhere;
+}
+
+.iwac-vis-albani__reference-link:hover {
+    color: var(--primary, #ce4115);
+}
+
+.iwac-vis-albani__reference-use {
+    color: var(--muted, #66696e);
 }

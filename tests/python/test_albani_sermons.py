@@ -195,6 +195,17 @@ class LexiconTests(unittest.TestCase):
     def setUpClass(cls):
         cls.lex = Lexicon.load()
 
+    def test_the_published_stopword_list_stays_verbatim_and_loaded(self):
+        # Bashir, Bichi & Adamu (2024), Table 3: corpus-specific additions go
+        # in `hausa`, never into the published list.
+        import json
+        data = json.loads(L.RESOURCES_PATH.read_text(encoding="utf-8"))
+        published = data["hausa_bashir_2024"]
+        self.assertEqual((len(published), len(set(published))), (76, 76))
+        res = L.resources()
+        for word in published:
+            self.assertIn(N.match_key(N.fold(word)), res.hausa_stop, word)
+
     def test_no_stopword_removes_research_vocabulary(self):
         res = L.resources()
         overlap = self.lex.single_word_keys() & (res.hausa_stop | res.arabic_stop)

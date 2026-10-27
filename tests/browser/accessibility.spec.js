@@ -77,6 +77,11 @@ for (const fixture of OUTLINE_FIXTURES) {
 for (const fixture of FIXTURES) {
     for (const theme of ['light', 'dark']) {
         test(`${fixture} (${theme}) has no serious WCAG A/AA violation`, async ({ page }) => {
+            // The Albani page renders every section at once here — two force
+            // graphs and a dozen charts still settling — and axe's evaluate
+            // shares the main thread with them. Under parallel workers it ran
+            // past the 15 s default about one time in two, with no violation.
+            if (fixture.startsWith('albani-sermons')) test.slow();
             await page.goto(fixtureUrl(fixture, theme));
             // Panels render after the shared bundle boots; scan what a reader gets.
             await page.waitForLoadState('networkidle');

@@ -148,8 +148,32 @@
         'albani_keyness_tooltip':    '{count} occurrences in {segments} segments; G² {g2}',
         'albani_keyness_none':       'Nothing clears the thresholds for this selection.',
 
-        'albani_method':             'How these figures are made',
-        'albani_method_body':        'The transcript markup (parts, 20-minute segments, speaker labels) is parsed and never counted. Words are folded to plain Latin letters for counting, so hooked and unhooked spellings, q and k, and doubled letters count together. There is no lemmatiser: the lexicon lists each term’s forms by hand. Statistics use the speaker turn as the unit of co-occurrence and the 20-minute segment as the document. Aggregate figures include every transcript; passages are quoted only from public ones.'
+        'albani_method':             'How this exhibition was made',
+        'albani_method_lead':        'The methods behind every figure on this page, in plain terms, and the published work they rely on.',
+        'albani_method_jump':        'How this was made',
+        'albani_method_source':      'Where the text comes from',
+        'albani_method_source_body': 'Each recording was transcribed by speech-recognition software, not by a person. The software cuts the transcript into {minutes}-minute windows and guesses who is speaking in each one. The windows say where a passage sits in a recording, and the speaker guesses tell a sermon apart from questions and answers. Both can be wrong, which is why every passage links back to the recording.',
+        'albani_method_scope':       'Which recordings count',
+        'albani_method_scope_body':  'Only transcripts in the current format are counted. Two transcripts made earlier with a different method are being redone and are listed without being counted. Recordings with no transcript yet, and passages in English, are not counted either.',
+        'albani_method_spelling':    'Counting a word once, however it is spelt',
+        'albani_method_spelling_body': 'Hausa can be written with or without its hooked letters (ɓ, ɗ, ƙ, ƴ), and the transcripts do both. Both spellings count as one word, and so do q and k, single and double letters, and the different apostrophes. Words are not reduced to a dictionary form: the word lists name each form a term takes by hand (matasa, matasan, matashi…).',
+        'albani_method_stopwords':   'Leaving out the commonest words',
+        'albani_method_stopwords_body': 'Words like da (and), ya (he) or wannan (this) carry little meaning on their own and would fill every list. They are removed using the 76 Hausa stop words published by Bashir, Bichi and Adamu (2024), plus other grammatical words and this speaker’s habitual fillers (ainihin, wato). Religious formulae such as sallallahu alaihi wa sallam are counted separately, as whole phrases.',
+        'albani_method_layers':      'Telling Hausa from Arabic',
+        'albani_method_layers_body': 'The Arabic quotations are written in Latin letters, so the alphabet cannot separate the two languages. A simple rule marks a stretch as Arabic when it holds several Arabic grammatical words and almost no Hausa ones. It is a rough guide. Arabic words that have become Hausa (addini, shari’a, ilimi) count as Hausa.',
+        'albani_method_lexicon':     'The word lists',
+        'albani_method_lexicon_body': 'The youth and politics lists are a starting point drawn up from the research questions, not a finished instrument: a Hausa-speaking specialist will check every term. Until then, words with two meanings (ƙasa, “country” or “to fail”) are shown but left out of the combined figures, and sarki is not counted where it names God (Allah Maɗaukakin Sarki).',
+        'albani_method_collocates':  'Finding the words that travel together',
+        'albani_method_collocates_body': 'For each term, the page looks at the {window} words on either side of it, within one speaker’s turn, and compares how often each word appears there with how often it appears everywhere else. A word is shown only when the difference is too large to be chance. The test is log-likelihood (Dunning 1993), adjusted because thousands of words are tested at once (Benjamini and Hochberg 1995). Words are then ranked by how many times more frequent they are near the term, the log ratio (Hardie 2014), so a rare but telling word can rank above a common one.',
+        'albani_method_rights':      'What can be quoted',
+        'albani_method_rights_body': 'Every transcript feeds the counts, but passages are quoted only from transcripts whose text is public on the IWAC site. No figure on this page reproduces more than three consecutive words of a private transcript.',
+        'albani_method_reading':     'How to read the figures',
+        'albani_method_reading_body': 'The figures describe what these recordings contain, not what Hausa-speaking Muslims think, and not even everything Albani Zaria said: some recordings are not transcribed yet, and the transcription makes mistakes. A count shows where to look; the passage, and the recording behind it, are the evidence.',
+        'albani_sources':            'Sources',
+        'albani_ref_use_stopwords':  'the Hausa stop-word list',
+        'albani_ref_use_correction': 'the correction for testing many words at once',
+        'albani_ref_use_test':       'the log-likelihood test',
+        'albani_ref_use_ratio':      'the log ratio used for ranking'
     });
 
     ns.addTranslations('fr', {
@@ -286,7 +310,31 @@
         'albani_keyness_tooltip':    '{count} occurrences dans {segments} segments ; G² {g2}',
         'albani_keyness_none':       'Rien ne franchit les seuils pour cette sélection.',
 
-        'albani_method':             'Comment ces chiffres sont établis',
-        'albani_method_body':        'Le balisage des transcriptions (parties, segments de 20 minutes, étiquettes de locuteur) est analysé et jamais compté. Les mots sont ramenés à des lettres latines simples pour le comptage : les graphies avec ou sans lettres crochetées, q et k, les lettres doublées comptent ensemble. Il n’y a pas de lemmatiseur : le lexique énumère à la main les formes de chaque terme. Les statistiques prennent la prise de parole comme unité de cooccurrence et le segment de 20 minutes comme document. Les chiffres agrégés couvrent toutes les transcriptions ; les passages ne sont cités que depuis les transcriptions publiques.'
+        'albani_method':             'Comment cette exposition a été faite',
+        'albani_method_lead':        'Les méthodes derrière chaque chiffre de cette page, en termes simples, et les travaux publiés sur lesquels elles s’appuient.',
+        'albani_method_jump':        'Comment c’est fait',
+        'albani_method_source':      'D’où vient le texte',
+        'albani_method_source_body': 'Chaque enregistrement a été transcrit par un logiciel de reconnaissance vocale, et non par une personne. Le logiciel découpe la transcription en fenêtres de {minutes} minutes et devine qui parle dans chacune. Les fenêtres situent un passage dans l’enregistrement, et ces suppositions sur les locuteurs distinguent un sermon d’une séance de questions-réponses. Les deux peuvent se tromper : c’est pourquoi chaque passage renvoie à l’enregistrement.',
+        'albani_method_scope':       'Quels enregistrements comptent',
+        'albani_method_scope_body':  'Seules les transcriptions au format actuel sont comptées. Deux transcriptions faites plus tôt selon une autre méthode sont en cours de reprise : elles sont listées sans être comptées. Les enregistrements encore sans transcription et les passages en anglais ne sont pas comptés non plus.',
+        'albani_method_spelling':    'Compter un mot une seule fois, quelle que soit sa graphie',
+        'albani_method_spelling_body': 'Le haoussa s’écrit avec ou sans ses lettres crochetées (ɓ, ɗ, ƙ, ƴ), et les transcriptions font les deux. Les deux graphies comptent pour un seul mot, de même que q et k, les lettres simples et doublées, et les différentes apostrophes. Les mots ne sont pas ramenés à une forme de dictionnaire : les listes de mots énumèrent à la main les formes que prend chaque terme (matasa, matasan, matashi…).',
+        'albani_method_stopwords':   'Écarter les mots les plus courants',
+        'albani_method_stopwords_body': 'Des mots comme da (et), ya (il) ou wannan (ce) ont peu de sens par eux-mêmes et rempliraient toutes les listes. Ils sont retirés à l’aide des 76 mots vides haoussa publiés par Bashir, Bichi et Adamu (2024), complétés par d’autres mots grammaticaux et par les tics de langage de ce prédicateur (ainihin, wato). Les formules religieuses comme sallallahu alaihi wa sallam sont comptées à part, comme des expressions entières.',
+        'albani_method_layers':      'Distinguer le haoussa de l’arabe',
+        'albani_method_layers_body': 'Les citations arabes sont écrites en lettres latines : l’alphabet ne permet donc pas de séparer les deux langues. Une règle simple marque un passage comme arabe lorsqu’il contient plusieurs mots grammaticaux arabes et presque aucun mot haoussa. C’est une indication approximative. Les mots arabes devenus haoussa (addini, shari’a, ilimi) comptent comme du haoussa.',
+        'albani_method_lexicon':     'Les listes de mots',
+        'albani_method_lexicon_body': 'Les listes de la jeunesse et de la politique sont un point de départ établi à partir des questions de recherche, non un instrument achevé : un spécialiste haoussaphone vérifiera chaque terme. D’ici là, les mots à double sens (ƙasa, « pays » ou « échouer ») sont affichés mais restent hors des chiffres agrégés, et sarki n’est pas compté quand il désigne Dieu (Allah Maɗaukakin Sarki).',
+        'albani_method_collocates':  'Trouver les mots qui vont ensemble',
+        'albani_method_collocates_body': 'Pour chaque terme, la page examine les {window} mots de part et d’autre, dans la prise de parole d’un même locuteur, et compare la fréquence de chaque mot à cet endroit à sa fréquence partout ailleurs. Un mot n’est affiché que si l’écart est trop grand pour être dû au hasard. Le test est celui du log-vraisemblance (Dunning 1993), corrigé parce que des milliers de mots sont testés à la fois (Benjamini et Hochberg 1995). Les mots sont ensuite classés selon le nombre de fois où ils sont plus fréquents près du terme, le log-ratio (Hardie 2014) : un mot rare mais révélateur peut ainsi passer devant un mot courant.',
+        'albani_method_rights':      'Ce qui peut être cité',
+        'albani_method_rights_body': 'Toutes les transcriptions alimentent les comptages, mais les passages ne sont cités que depuis les transcriptions dont le texte est public sur le site d’IWAC. Aucun chiffre de cette page ne reproduit plus de trois mots consécutifs d’une transcription privée.',
+        'albani_method_reading':     'Comment lire les chiffres',
+        'albani_method_reading_body': 'Les chiffres décrivent le contenu de ces enregistrements, non ce que pensent les musulmans haoussaphones, ni même tout ce qu’a dit Albani Zaria : certains enregistrements ne sont pas encore transcrits, et la transcription commet des erreurs. Un comptage indique où regarder ; la preuve, c’est le passage et l’enregistrement qui le porte.',
+        'albani_sources':            'Sources',
+        'albani_ref_use_stopwords':  'la liste des mots vides haoussa',
+        'albani_ref_use_correction': 'la correction pour les tests multiples',
+        'albani_ref_use_test':       'le test de log-vraisemblance',
+        'albani_ref_use_ratio':      'le log-ratio utilisé pour le classement'
     });
 })();

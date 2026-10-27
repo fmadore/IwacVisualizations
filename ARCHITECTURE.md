@@ -51,7 +51,7 @@ IwacVisualizations/
 │   │       └── Qwen_logo.png
 │   └── js/
 │       ├── charts/
-│       │   ├── albani-sermons/          # 7 files — panel modules
+│       │   ├── albani-sermons/          # 8 files — panel modules
 │       │   ├── article-dashboard/       # 4 files — panel modules
 │       │   ├── audiovisual-overview/    # 3 files — panel modules
 │       │   ├── collection-overview/     # 11 files — panel modules

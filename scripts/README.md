@@ -511,6 +511,12 @@ heuristic, scopes, the rights boundary).
   never counted. The older Gemini format (15850, 15878 until they are redone)
   is listed and left out of every statistic; any other unreadable transcript
   **stops the run**.
+- **Stop words** (`albani/stopwords.json`): the 76 Hausa stop words of
+  Bashir, Bichi & Adamu (2024), *J. Electrical Systems and Information
+  Technology* 11, 58, <https://doi.org/10.1186/s43067-024-00187-5>, kept
+  verbatim under `hausa_bashir_2024` (a test holds it at 76), plus this
+  corpus's own additions under `hausa`. The block's "How this exhibition was
+  made" section cites it, with the statistical references, in plain terms.
 - **The lexicons are seeds** (`albani/albani_lexicon.json`, status `seed`).
   `--review-sheet <path>` writes the CSV the Hausa-speaking specialist
   validates: every seed with its counts, forms and public example windows,

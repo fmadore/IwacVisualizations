@@ -12,7 +12,8 @@
  *   4 politics  the same instrument on the political lexicon
  *   5 overlap   where the two vocabularies meet
  *   6 keyness   what sets each recording, period and segment kind apart
- *   method      how the figures are made
+ *   method      how it was made, in plain terms, with its sources
+ *               (albani-sermons/method.js)
  *
  * Data: metadata, lexicon and vocabulary (≈ 80 KB) load with the block;
  * every other bundle under files/iwac-visualizations/albani-sermons/ is
@@ -24,7 +25,7 @@
  *
  * Dependencies (in load order before this file): the block bundle in
  * asset/js/bundles.json — albani-sermons/{i18n,helpers,corpus,vocabulary,
- * theme,overlap,keyness}.js.
+ * theme,overlap,keyness,method}.js.
  */
 (function () {
     'use strict';
@@ -71,6 +72,9 @@
         if (metadata.lexicon_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_seed'), P.t('albani_badge_seed_hint')));
         }
+        // To the plain-language methods at the foot of the block; its href
+        // is set once that section exists.
+        badges.appendChild(P.el('a', 'iwac-vis-albani__jump', P.t('albani_method_jump')));
         root.appendChild(badges);
 
         root.appendChild(P.buildSummaryCards([
@@ -154,9 +158,11 @@
         A.renderKeyness(A.section(root, 'keyness', P.t('albani_keyness_heading'),
             P.t('albani_keyness_intro')), bundle, fetch);
 
-        var method = P.el('details', 'iwac-vis-albani__method');
-        method.appendChild(P.el('summary', null, P.t('albani_method')));
-        method.appendChild(P.el('p', null, P.t('albani_method_body')));
-        root.appendChild(method);
+        var method = A.section(root, 'method', P.t('albani_method'), P.t('albani_method_lead'));
+        A.renderMethod(method, metadata);
+        // The header's jump link, now that the section has its id.
+        var jump = root.querySelector('.iwac-vis-albani__jump');
+        var heading = method.querySelector('.iwac-vis-section-heading');
+        if (jump && heading) jump.href = '#' + heading.id;
     }
 })();

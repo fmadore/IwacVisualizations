@@ -26,7 +26,7 @@ function watch(page) {
 async function ready(page, query = '') {
     await page.goto(`${FIXTURE}?eager=1${query}`);
     await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
-    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(6);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(7);
     await expect(page.locator('[data-iwac-section="politics"] .iwac-vis-kwic-row').first()).toBeVisible();
 }
 
@@ -35,7 +35,7 @@ test('every section renders from its own bundle, without a console problem', asy
     await ready(page);
     const sections = await page.locator('.iwac-vis-albani__section').evaluateAll(
         (els) => els.map((el) => el.getAttribute('data-iwac-section')));
-    expect(sections).toEqual(['corpus', 'vocabulary', 'youth', 'politics', 'overlap', 'keyness']);
+    expect(sections).toEqual(['corpus', 'vocabulary', 'youth', 'politics', 'overlap', 'keyness', 'method']);
     const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()).sort());
     expect(fetched).toEqual([
         'collocates.json', 'concordance-politics.json', 'concordance-youth.json', 'keyness.json',
@@ -61,6 +61,19 @@ test('passages come from the public transcript only, and say what was withheld',
     await expect(politics).toContainText('counted above and not quoted');
     // No IIIF manifest in the fixture: the window falls back to the item page.
     await expect(rows.first().locator('.iwac-vis-albani__window')).toHaveAttribute('href', '/s/iwac/item/15889');
+});
+
+test('the methods are explained in plain terms, with their sources linked', async ({ page }) => {
+    await ready(page);
+    const method = page.locator('[data-iwac-section="method"]');
+    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(9);
+    await expect(method).toContainText('Bashir, Bichi and Adamu (2024)');
+    await expect(method.getByRole('link', { name: 'https://doi.org/10.1186/s43067-024-00187-5' }))
+        .toHaveAttribute('href', 'https://doi.org/10.1186/s43067-024-00187-5');
+    await expect(method.locator('.iwac-vis-albani__references > li')).toHaveCount(4);
+    // The header's jump link lands on the section's heading.
+    const href = await page.locator('.iwac-vis-albani__jump').getAttribute('href');
+    expect(href).toBe('#' + await method.locator('.iwac-vis-section-heading').getAttribute('id'));
 });
 
 test('the counting scope is one control, reflected in the address bar', async ({ page }) => {

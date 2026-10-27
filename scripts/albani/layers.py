@@ -81,7 +81,7 @@ def resources() -> Resources:
     if "r" not in _CACHE:
         data = json.loads(RESOURCES_PATH.read_text(encoding="utf-8"))
         res = Resources(
-            hausa_stop=_keys(data["hausa"]),
+            hausa_stop=_keys(data["hausa_bashir_2024"] + data["hausa"]),
             arabic_stop=_keys(data["arabic"]),
             english=_keys(data["english"]),
             noise=_keys(data.get("noise", [])),
