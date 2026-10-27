@@ -41,7 +41,7 @@
                     return;
                 }
                 var opts = (ns.chartOptions && ns.chartOptions.wordcloud)
-                    ? ns.chartOptions.wordcloud(pairs)
+                    ? ns.chartOptions.wordcloud(pairs, instance)
                     : null;
                 if (opts) {
                     instance.setOption(opts, true);

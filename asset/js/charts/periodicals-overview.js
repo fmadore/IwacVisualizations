@@ -275,12 +275,10 @@
         }
 
         // 6. Word cloud — most frequent lemmas across all issues.
-        // C.wordcloud falls back to a bar chart when the
-        // echarts-wordcloud extension isn't available.
         var wordcloud = data.wordcloud || [];
         if (wordcloud.length > 0) {
             ns.registerChart(h.wordcloud, function (el, chart) {
-                chart.setOption(C.wordcloud(wordcloud));
+                chart.setOption(C.wordcloud(wordcloud, chart), true);
             });
         }
 

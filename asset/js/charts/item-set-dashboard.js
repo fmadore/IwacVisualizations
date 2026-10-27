@@ -26,8 +26,7 @@
  *     + period subtitle
  *   - Items per year (single-series timeline bar)
  *   - Top subjects / Spatial coverage (horizontal bars)
- *   - Most frequent words (wordcloud, horizontal-bar fallback when
- *     echarts-wordcloud is unavailable)
+ *   - Most frequent words (word cloud)
  */
 (function () {
     'use strict';
@@ -143,23 +142,14 @@
             });
         });
 
-        // Most frequent words — wordcloud with an hbar fallback when
-        // echarts-wordcloud failed to load (setOption throws on the
-        // unknown series type; the fallback re-renders as a bar).
+        // Most frequent words.
         var pairs = corpus.wordcloud || [];
         if (pairs.length) {
             var wcPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most frequent words'),
                 P.t('desc_word_cloud'), headingOpts);
             grid.appendChild(wcPanel.panel);
             ns.registerChart(wcPanel.chart, function (el, instance) {
-                try {
-                    instance.setOption(C.wordcloud(pairs), true);
-                } catch (e) {
-                    var entries = pairs.slice(0, 15).map(function (p) {
-                        return { name: p[0], count: p[1] };
-                    });
-                    instance.setOption(C.horizontalBar(entries), true);
-                }
+                instance.setOption(C.wordcloud(pairs, instance), true);
             });
         }
     }

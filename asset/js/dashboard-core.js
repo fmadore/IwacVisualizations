@@ -417,6 +417,21 @@
                         ? undefined
                         : { animation: { duration: 200, easing: 'cubicOut' } }
                 );
+                // An option laid out in pixels (the word cloud) cannot be
+                // stretched to a new box: its words keep their font size, so
+                // a wider panel spreads them apart and a narrower one makes
+                // them collide. It carries its own layout, and is laid out
+                // again whenever the size differs from the one it was made for.
+                var painted = entry.instance._iwacLastOption;
+                if (painted && typeof painted.iwacRelayout === 'function') {
+                    var w = entry.instance.getWidth();
+                    var h = entry.instance.getHeight();
+                    var made = painted.iwacSize || [];
+                    if (w > 0 && h > 0 && (w !== made[0] || h !== made[1])) {
+                        try { entry.instance.setOption(painted.iwacRelayout(w, h), true); }
+                        catch (e) { console.error('IWACVis: relayout failed', e); }
+                    }
+                }
                 // A `compact` flag sampled once per draw is wrong for the rest
                 // of the chart's life: rotating a phone, opening a panel to
                 // fullscreen or dragging a window past 600 px left the dense

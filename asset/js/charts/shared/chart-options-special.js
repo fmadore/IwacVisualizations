@@ -837,218 +837,487 @@
     };
 
     /* ----------------------------------------------------------------- */
-    /*  Word cloud (requires echarts-wordcloud extension)                 */
+    /*  Word cloud                                                        */
     /* ----------------------------------------------------------------- */
 
-    var _wordcloudAvailable = null;
-
-    /** Hover halo: the theme's strongest ink at 40%, or a neutral if absent. */
-    function wcHalo(inkStrong) {
-        return (inkStrong && typeof echarts !== 'undefined'
-                && echarts.color && echarts.color.modifyAlpha)
-            ? echarts.color.modifyAlpha(inkStrong, 0.4)
-            : 'rgba(0, 0, 0, 0.4)';
-    }
-
-    function isWordCloudAvailable() {
-        if (_wordcloudAvailable !== null) return _wordcloudAvailable;
-        if (typeof echarts === 'undefined') {
-            _wordcloudAvailable = false;
-            return false;
-        }
-        try {
-            var probe = document.createElement('div');
-            probe.style.width = '40px';
-            probe.style.height = '40px';
-            probe.style.position = 'absolute';
-            probe.style.left = '-9999px';
-            document.body.appendChild(probe);
-            var tmp = echarts.init(probe);
-            tmp.setOption({ series: [{ type: 'wordCloud', data: [{ name: 'a', value: 1 }] }] });
-            // The production ECharts build does not throw on a series type
-            // nobody registered — it drops the series and carries on — so
-            // "setOption did not throw" was true with or without the plugin
-            // and the bar-chart fallback below could never run. Whether the
-            // series SURVIVED is the answer.
-            var kept = (tmp.getOption().series || []).length > 0;
-            tmp.dispose();
-            document.body.removeChild(probe);
-            _wordcloudAvailable = kept;
-            if (!kept) console.warn('IWACVis.wordcloud: echarts-wordcloud not loaded, falling back');
-        } catch (e) {
-            console.warn('IWACVis.wordcloud: echarts-wordcloud not loaded, falling back', e);
-            _wordcloudAvailable = false;
-        }
-        return _wordcloudAvailable;
-    }
-
     /**
-     * French word cloud, ported from ResourceVisualizations'
-     * dashboard-charts-wordcloud.js. Uses a shape function that behaves
-     * like a rectangle but fills the panel much better than the stock
-     * `shape: 'rectangle'` (which collapses everything to a diagonal arc
-     * in echarts-wordcloud 2). Size range + grid adapt to the word count.
+     * The word cloud's colours, one per datum, by frequency band:
+     * `--primary` for the top few words (at most five, about one in
+     * twenty-five), then the rest in four bands of equal size, each in its
+     * own hue (wcBandInks). Ranked by value, ties by input order, so a
+     * re-render (every theme toggle and resize) paints the same words the
+     * same way.
      *
-     * COLOUR (v1.53.0). Until now each word drew a random pick from a
-     * seven-hex literal that had drifted off the palette entirely — it still
-     * led with `#e64a19`, the pre-v2.0.0 brand seed, and it was the same
-     * array in both themes. Two consequences: the cloud was the one chart on
-     * the page not speaking the module's colour grammar, and roughly half its
-     * words failed AA against the panel in one theme or the other.
+     * Colour says what size says, a word's frequency band, so it is never
+     * the per-word lottery the cloud once drew from the series slots, five
+     * hues that encoded nothing. Until v1.88.0 the bands were the theme's
+     * inks, near-black to grey, which read as a monochrome page with a few
+     * orange words on it; the curator asked for colour, and a band can carry
+     * a hue as well as an ink can.
      *
-     * A word cloud is knocked-out TEXT, not a filled mark, so the bar the
-     * palette has to clear is text contrast: 4.5:1 against `--panel-bg` (the
-     * panel's real backdrop — `--surface` in light, `--surface-raised` in
-     * dark). The qualifying slots are COMPUTED from the live palette in the
-     * active theme rather than listed, so a future palette edit either keeps
-     * a slot qualified or silently drops it out of the cloud — it can never
-     * leave an unreadable one in. And the assignment is by rank, not random:
-     * the render callback re-runs on every theme toggle and resize, and a
-     * cloud that re-shuffles its colours each time reads as a bug.
-     *
-     * @param {Array<[string, number]>} pairs
-     */
-    /**
-     * The word cloud's colours, one per datum in rank order: `--primary` for
-     * the top few words (at most five, about one in twenty-five), then
-     * `--ink-strong`, `--ink` and `--ink-light` for the successive thirds of
-     * the rest. Ranked by value, ties by input order, so a re-render (every
-     * theme toggle and resize) paints the same words the same way.
+     * A word cloud is knocked-out TEXT, not a filled mark, so every colour
+     * here clears the text floor (4.5:1 against `--panel-bg`) in the theme
+     * it is painted in.
      *
      * @param {Array<{name:string, value:number}>} data
      * @param {Object} tokens  getChartTokens()
      * @returns {string[]}
      */
     C.wordcloudInks = function (data, tokens) {
-        var t = tokens || {};
         var n = (data || []).length;
-        var order = (data || []).map(function (d, i) { return i; });
-        order.sort(function (a, b) {
-            return ((Number(data[b].value) || 0) - (Number(data[a].value) || 0)) || (a - b);
-        });
+        var order = wcRanked(data);
         var top = Math.max(1, Math.min(5, Math.round(n / 25)));
-        var steps = [t.inkStrong || t.ink, t.ink, t.inkLight || t.ink];
+        var bands = wcBandInks(tokens || {});
+        var tail = bands.length > 1 ? bands.slice(1) : bands;
         var rest = Math.max(1, n - top);
         var out = new Array(n);
         order.forEach(function (index, rank) {
             out[index] = rank < top
-                ? (t.primary || t.ink)
-                : steps[Math.min(steps.length - 1, Math.floor(((rank - top) / rest) * steps.length))];
+                ? bands[0]
+                : tail[Math.min(tail.length - 1, Math.floor(((rank - top) / rest) * tail.length))];
         });
         return out;
     };
 
-    C.wordcloud = function (pairs) {
-        var data = (pairs || []).map(function (pair) {
-            return { name: pair[0], value: pair[1] };
+    var WC_BANDS = 5;
+
+    /** sRGB [r, g, b] (0-255) to OKLab, where distance follows the eye. */
+    function wcOklab(rgb) {
+        var lin = rgb.map(function (v) {
+            v /= 255;
+            return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
         });
-        if (!isWordCloudAvailable()) {
-            return C.horizontalBar(
-                data.slice(0, 20).map(function (d) { return { name: d.name, count: d.value }; }),
-                { nameKey: 'name', valueKey: 'count' }
-            );
+        var l = Math.cbrt(0.4122214708 * lin[0] + 0.5363325363 * lin[1] + 0.0514459929 * lin[2]);
+        var m = Math.cbrt(0.2119034982 * lin[0] + 0.6806995451 * lin[1] + 0.1073969566 * lin[2]);
+        var s = Math.cbrt(0.0883024619 * lin[0] + 0.2817188376 * lin[1] + 0.6299787005 * lin[2]);
+        return [
+            0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s
+        ];
+    }
+
+    /**
+     * The band inks: `--primary`, then, one at a time, the readable series
+     * slot (C.readableInks) farthest in OKLab from every ink already chosen,
+     * lightness counted at half weight so that two shades of one hue never
+     * pass for two bands. Computed per theme, like the readable set itself:
+     * on the 2026 palette both themes come out orange, teal, purple, tan and
+     * slate-blue, but a palette edit changes the picks rather than leaving
+     * a listed colour behind.
+     */
+    function wcBandInks(t) {
+        var lead = t.primary || t.ink;
+        var leadRgb = _rgb(lead);
+        var chosen = [lead];
+        var labs = leadRgb ? [wcOklab(leadRgb)] : [];
+        var pool = [];
+        C.readableInks(t.panelBg, t.ink).forEach(function (c) {
+            var rgb = c !== lead ? _rgb(c) : null;
+            if (rgb) pool.push({ color: c, lab: wcOklab(rgb) });
+        });
+        while (chosen.length < WC_BANDS && pool.length) {
+            var pick = 0;
+            var far = -1;
+            for (var i = 0; i < pool.length; i++) {
+                var near = Infinity;
+                for (var j = 0; j < labs.length; j++) {
+                    var dl = 0.5 * (pool[i].lab[0] - labs[j][0]);
+                    var da = pool[i].lab[1] - labs[j][1];
+                    var db = pool[i].lab[2] - labs[j][2];
+                    near = Math.min(near, dl * dl + da * da + db * db);
+                }
+                // Strictly farther: a tie keeps the earlier palette slot.
+                if (near > far) { far = near; pick = i; }
+            }
+            chosen.push(pool[pick].color);
+            labs.push(pool[pick].lab);
+            pool.splice(pick, 1);
+        }
+        return chosen;
+    }
+
+    /** Datum indices by value, highest first, ties in input order. */
+    function wcRanked(data) {
+        var order = (data || []).map(function (d, i) { return i; });
+        order.sort(function (a, b) {
+            return ((Number(data[b].value) || 0) - (Number(data[a].value) || 0)) || (a - b);
+        });
+        return order;
+    }
+
+    /*
+     * LAYOUT (v1.88.0). The cloud used to be echarts-wordcloud's spiral,
+     * which failed in three ways no setting could fix:
+     *
+     *  - Words touched. The plugin packs painted pixels on a 4–8 px grid,
+     *    so two words on one line could sit a pixel apart: in the Albani
+     *    cloud "malam" and "annabi" read as one Hausa word, "malamannabi".
+     *    Where word division is itself a finding (kan su / kansu), a gap
+     *    has to be guaranteed, not likely.
+     *  - Size was linear in frequency, so one very common word took the
+     *    top of the range and squeezed the rest onto the floor.
+     *  - The cloud did not fill its panel. Its font range was fixed per
+     *    viewport, so it covered whatever area that range needed, and a
+     *    wide or full-screen panel framed a small island of words.
+     *
+     * So the module lays the words out itself and draws them as labels on
+     * an invisible scatter, which keeps everything a panel gives an ECharts
+     * chart: the PNG download, the in-panel tooltip, the theme re-render,
+     * full screen. Area follows frequency (size ∝ √count). Every word is
+     * measured in the face and weight it is drawn in, and its box carries a
+     * margin, so neighbours always stand at least a letter-space apart. The
+     * scale is the largest at which every word fits, found by bisection;
+     * when even the type floor cannot fit them all, the rarest words leave
+     * the picture (never the table). The layout is deterministic, since the
+     * render re-runs on every theme toggle, and it is redone when the panel
+     * changes size: registerChart's observer calls `iwacRelayout`.
+     */
+    var WC_FLOOR = 11;          // px: the theme's smallest step, --text-2xs
+    var WC_MARGIN = 8;          // px kept clear at the panel edge
+    var WC_CELL = 4;            // px: the occupancy grid
+    var WC_DEFAULT = [800, 420]; // a host not laid out yet (a hidden tab)
+
+    var _wcContext = null;
+
+    /**
+     * A word's ink box in em, against the anchor ECharts draws a label
+     * from (centred, on the 'middle' baseline): width, the box centre's
+     * offset from the anchor, and the extent above and below it. Measured
+     * on a canvas in the drawing face; estimated from the letter count
+     * where there is no canvas (the node tests).
+     */
+    function wcMetrics(word, weight, family) {
+        try {
+            if (_wcContext === null) {
+                var canvas = typeof document !== 'undefined' && document.createElement
+                    ? document.createElement('canvas') : null;
+                _wcContext = (canvas && canvas.getContext && canvas.getContext('2d')) || false;
+            }
+            if (_wcContext) {
+                _wcContext.font = weight + ' 100px ' + (family || 'sans-serif');
+                _wcContext.textAlign = 'center';
+                _wcContext.textBaseline = 'middle';
+                var m = _wcContext.measureText(word);
+                var left = m.actualBoundingBoxLeft;
+                var right = m.actualBoundingBoxRight;
+                var up = m.actualBoundingBoxAscent;
+                var down = m.actualBoundingBoxDescent;
+                if (isFinite(left) && isFinite(right) && isFinite(up) && isFinite(down) && left + right > 0) {
+                    return { w: (left + right) / 100, dx: (right - left) / 200, up: up / 100, down: down / 100 };
+                }
+                if (m.width) return { w: m.width / 100, dx: 0, up: 0.38, down: 0.38 };
+            }
+        } catch (e) { /* estimate below */ }
+        return { w: 0.56 * String(word).length, dx: 0, up: 0.38, down: 0.38 };
+    }
+
+    /** Horizontal and vertical margin around a word drawn at `size` px. */
+    function wcPad(size) {
+        return [Math.max(2.5, 0.1 * size), Math.max(1.5, 0.06 * size)];
+    }
+
+    // Candidate centre cells, nearest the middle first, on ellipses of the
+    // panel's own aspect. One sort per grid size, shared by every attempt.
+    var _wcOrders = {};
+    var _wcOrderKeys = [];
+    function wcOrder(cols, rows) {
+        var key = cols + 'x' + rows;
+        if (_wcOrders[key]) return _wcOrders[key];
+        var n = cols * rows;
+        var dist = new Float64Array(n);
+        var idx = new Array(n);
+        var cx = (cols - 1) / 2;
+        var cy = (rows - 1) / 2;
+        for (var r = 0; r < rows; r++) {
+            for (var c = 0; c < cols; c++) {
+                var i = r * cols + c;
+                var dx = (c - cx) / (cols / 2);
+                var dy = (r - cy) / (rows / 2);
+                dist[i] = dx * dx + dy * dy;
+                idx[i] = i;
+            }
+        }
+        idx.sort(function (a, b) { return (dist[a] - dist[b]) || (a - b); });
+        _wcOrders[key] = idx;
+        _wcOrderKeys.push(key);
+        if (_wcOrderKeys.length > 4) delete _wcOrders[_wcOrderKeys.shift()];
+        return idx;
+    }
+
+    /**
+     * One placement pass at scale `k`. Each word takes the free spot
+     * nearest the middle. Returns null as soon as a word finds no room,
+     * unless `skip`, which leaves that word out and carries on.
+     */
+    function wcPlace(items, cols, rows, order, k, skip) {
+        var occ = new Uint8Array(cols * rows);
+        var placed = [];
+        for (var n = 0; n < items.length; n++) {
+            var item = items[n];
+            var size = item.size(k);
+            var pad = wcPad(size);
+            var bw = Math.ceil((item.m.w * size + 2 * pad[0]) / WC_CELL);
+            var bh = Math.ceil(((item.m.up + item.m.down) * size + 2 * pad[1]) / WC_CELL);
+            var hw = bw >> 1;
+            var hh = bh >> 1;
+            var found = -1;
+            if (bw <= cols && bh <= rows) {
+                for (var o = 0; o < order.length; o++) {
+                    var cell = order[o];
+                    if (occ[cell]) continue;
+                    var c0 = (cell % cols) - hw;
+                    var r0 = ((cell / cols) | 0) - hh;
+                    if (c0 < 0 || r0 < 0 || c0 + bw > cols || r0 + bh > rows) continue;
+                    // The corners first: most spots next to a placed word
+                    // fail there, before the full scan.
+                    var last = (r0 + bh - 1) * cols;
+                    if (occ[r0 * cols + c0] || occ[r0 * cols + c0 + bw - 1]
+                            || occ[last + c0] || occ[last + c0 + bw - 1]) continue;
+                    var free = true;
+                    for (var y = r0; y < r0 + bh && free; y++) {
+                        var row = y * cols;
+                        for (var x = c0; x < c0 + bw; x++) {
+                            if (occ[row + x]) { free = false; break; }
+                        }
+                    }
+                    if (free) { found = c0 + r0 * cols; break; }
+                }
+            }
+            if (found < 0) {
+                if (skip) continue;
+                return null;
+            }
+            var fc = found % cols;
+            var fr = (found / cols) | 0;
+            for (var yy = fr; yy < fr + bh; yy++) {
+                for (var xx = fc; xx < fc + bw; xx++) occ[yy * cols + xx] = 1;
+            }
+            placed.push({
+                index: item.index,
+                size: size,
+                x: (fc + bw / 2) * WC_CELL,
+                y: (fr + bh / 2) * WC_CELL,
+                w: bw * WC_CELL,
+                h: bh * WC_CELL
+            });
+        }
+        return placed;
+    }
+
+    /**
+     * Lay words out in a `width` × `height` panel.
+     *
+     * @param {Array<{value:number, m:{w:number, dx:number, up:number, down:number}}>} words
+     *   highest value first; `m` is the ink box in em (wcMetrics)
+     * @param {number} width
+     * @param {number} height
+     * @returns {{scale:number, placed:Array<{index:number, size:number,
+     *   x:number, y:number, w:number, h:number}>, dropped:number}}
+     *   centres and boxes in panel pixels, boxes margin included
+     */
+    C.wordcloudLayout = function (words, width, height) {
+        var W = Math.max(WC_CELL, (Number(width) || 0) - 2 * WC_MARGIN);
+        var H = Math.max(WC_CELL, (Number(height) || 0) - 2 * WC_MARGIN);
+        var cols = Math.max(1, Math.floor(W / WC_CELL));
+        var rows = Math.max(1, Math.floor(H / WC_CELL));
+        if (!words || !words.length) return { scale: WC_FLOOR, placed: [], dropped: 0 };
+        var order = wcOrder(cols, rows);
+        var lead = Math.max(Number(words[0].value) || 0, 1e-9);
+        var inkArea = 0;
+        var items = words.map(function (word, index) {
+            var r = Math.sqrt(Math.max(0, Number(word.value) || 0) / lead);
+            var em = Math.max(0.1, word.m.up + word.m.down);
+            inkArea += word.m.w * em * r * r;
+            // No word wider than two-fifths of the panel or taller than a
+            // quarter of it, so the commonest word cannot crowd out the rest.
+            var cap = Math.max(WC_FLOOR, Math.min(0.4 * W / Math.max(word.m.w, 0.1), 0.25 * H / em));
+            return {
+                index: index,
+                m: word.m,
+                size: function (k) { return Math.max(WC_FLOOR, Math.min(cap, k * r)); }
+            };
+        });
+        // No packing beats the whole panel, so the scale at which the ink
+        // alone would cover it bounds the search (doubled: the caps and the
+        // floor bend the sizes away from k·r).
+        var hi = Math.max(WC_FLOOR * 1.5, 2 * Math.sqrt((W * H) / Math.max(inkArea, 1e-9)));
+
+        var best = wcPlace(items, cols, rows, order, WC_FLOOR, false);
+        var scale = WC_FLOOR;
+        if (best) {
+            var lo = WC_FLOOR;
+            // To within 1% of the type size: finer is invisible.
+            for (var step = 0; step < 12 && hi - lo > 0.01 * lo; step++) {
+                var mid = (lo + hi) / 2;
+                var attempt = wcPlace(items, cols, rows, order, mid, false);
+                if (attempt) { lo = mid; best = attempt; } else { hi = mid; }
+            }
+            scale = lo;
+        } else {
+            best = wcPlace(items, cols, rows, order, WC_FLOOR, true);
         }
 
-        var count = data.length;
-        var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
-        var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
-        var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
-        // The smallest word never drops under the theme's 11px floor, which
-        // the 0.8 phone scale took the dense clouds to (8px).
-        function fontRange(scale) {
-            return [Math.max(11, Math.round(minFont * scale)), Math.round(maxFont * scale)];
-        }
-
-        var wcTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        // ONE ink ramp by frequency, --primary for the top few. The cloud used
-        // to cycle the readable series slots word by word — orange, slate,
-        // purple, tan, red — so five hues encoded nothing (size already
-        // carries frequency), the "random per-class colours" the theme's
-        // DESIGN-PHILOSOPHY rules out. Now colour repeats what size says, in
-        // the press-archive register: the few most frequent words in the
-        // accent, then the theme's inks stepping down by rank. Every step is
-        // a text token the theme keeps at AA on the panel in both themes.
-        var ramp = C.wordcloudInks(data, wcTokens);
-        // Per-datum rather than a `textStyle.color` callback: echarts-wordcloud
-        // resolves the datum's own textStyle, so this needs no assumption
-        // about what the library passes a colour function.
-        data.forEach(function (d, i) {
-            d.textStyle = { color: ramp[i] };
+        // Centre the cloud as a whole: the nearest-the-middle rule leaves it
+        // a cell or two off, and a lopsided margin reads as a mistake.
+        var x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        best.forEach(function (p) {
+            x0 = Math.min(x0, p.x - p.w / 2); x1 = Math.max(x1, p.x + p.w / 2);
+            y0 = Math.min(y0, p.y - p.h / 2); y1 = Math.max(y1, p.y + p.h / 2);
         });
+        var shiftX = best.length ? WC_MARGIN + (W - (x1 - x0)) / 2 - x0 : 0;
+        var shiftY = best.length ? WC_MARGIN + (H - (y1 - y0)) / 2 - y0 : 0;
+        best.forEach(function (p) { p.x += shiftX; p.y += shiftY; });
+        return { scale: scale, placed: best, dropped: words.length - best.length };
+    };
 
-        var base = {
+    /** [width, height] of a chart host: an ECharts instance, an element, or {width, height}. */
+    function wcHostSize(host) {
+        var w = 0, h = 0;
+        // An element's registered chart knows its drawing box, padding left out.
+        var live = host && typeof host.getWidth !== 'function' && host.nodeType === 1
+            && ns.getLiveChart ? ns.getLiveChart(host) : null;
+        if (live) host = live;
+        if (host && typeof host.getWidth === 'function') {
+            w = host.getWidth(); h = host.getHeight();
+        } else if (host && host.clientWidth != null) {
+            w = host.clientWidth; h = host.clientHeight;
+        } else if (host && host.width != null) {
+            w = host.width; h = host.height;
+        }
+        return w > 0 && h > 0 ? [w, h] : WC_DEFAULT.slice();
+    }
+
+    function wcInstance(host) {
+        if (host && typeof host.getWidth === 'function') return host;
+        return host && ns.getLiveChart ? ns.getLiveChart(host) : null;
+    }
+
+    /** Weight by rank: the leading words in bold, the long tail lighter. */
+    function wcWeight(rank, n) {
+        var q = n > 1 ? rank / n : 0;
+        return q < 0.05 ? 700 : (q < 0.3 ? 600 : 500);
+    }
+
+    function wcOption(data, width, height, host, animate) {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var family = tokens.fontFamily || 'sans-serif';
+        var inks = C.wordcloudInks(data, tokens);
+        var ranked = wcRanked(data);
+        var weights = new Array(data.length);
+        var words = ranked.map(function (index, rank) {
+            weights[index] = wcWeight(rank, data.length);
+            return {
+                value: Number(data[index].value) || 0,
+                m: wcMetrics(data[index].name, weights[index], family)
+            };
+        });
+        var layout = C.wordcloudLayout(words, width, height);
+        var strong = tokens.inkStrong || tokens.ink;
+
+        var option = {
+            grid: { left: 0, right: 0, top: 0, bottom: 0 },
+            xAxis: { type: 'value', min: 0, max: width, show: false },
+            yAxis: { type: 'value', min: 0, max: height, inverse: true, show: false },
             tooltip: {
                 confine: true,
                 formatter: function (p) {
-                    return '<strong>' + esc(p.name) + '</strong>: ' + fmt(p.value);
+                    var count = p && p.value ? p.value[2] : null;
+                    return '<strong>' + esc(p.name) + '</strong>: ' + fmt(count);
                 }
             },
             aria: { enabled: true },
             series: [{
-                type: 'wordCloud',
-                shape: function (theta) {
-                    var cos = Math.abs(Math.cos(theta));
-                    var sin = Math.abs(Math.sin(theta));
-                    return 1 / Math.max(cos, sin);
+                type: 'scatter',
+                symbol: 'rect',
+                cursor: 'default',
+                progressive: 0,
+                itemStyle: { color: 'rgba(0, 0, 0, 0)', borderWidth: 0, opacity: 1 },
+                label: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{b}',
+                    // The theme's body face, read off the page like every
+                    // other chart's (DESIGN.md, Charts-Inherit-The-Body-Face).
+                    fontFamily: family,
+                    textBorderWidth: 0,
+                    textShadowBlur: 0
                 },
-                left: 'center',
-                top: 'center',
-                width: '100%',
-                height: '100%',
-                right: null,
-                bottom: null,
-                sizeRange: fontRange(1.9),
-                // Horizontal only: tilted words were harder to read and
-                // carried no meaning.
-                rotationRange: [0, 0],
-                rotationStep: 0,
-                gridSize: grid,
-                drawOutOfBound: false,
-                shrinkToFit: true,
-                layoutAnimation: count <= 100,
-                // The theme's body face, read off the page like every other
-                // chart's (DESIGN.md, Charts-Inherit-The-Body-Face): this one
-                // still named the browser's generic 'sans-serif'.
-                textStyle: {
-                    fontFamily: wcTokens.fontFamily,
-                    fontWeight: 'bold'
-                },
+                labelLayout: { hideOverlap: false },
                 emphasis: {
-                    textStyle: {
-                        fontWeight: 'bold',
-                        shadowBlur: 14,
-                        // The hover halo was a literal black at 0.4 — which in
-                        // dark mode is a black glow behind bright type on a
-                        // near-black panel, i.e. no hover state at all. The
-                        // theme's strongest ink flips with the theme (near-black
-                        // in light, near-white in dark), so it is the one value
-                        // that reads as a halo in both.
-                        shadowColor: wcHalo(wcTokens.inkStrong)
-                    }
+                    scale: false,
+                    itemStyle: { color: 'rgba(0, 0, 0, 0)', borderWidth: 0 }
                 },
-                data: data
-            }]
+                data: layout.placed.map(function (p) {
+                    var word = data[ranked[p.index]];
+                    var source = ranked[p.index];
+                    var m = words[p.index].m;
+                    return {
+                        name: word.name,
+                        value: [p.x, p.y, Number(word.value) || 0],
+                        symbolSize: [p.w, p.h],
+                        label: {
+                            fontSize: Math.round(p.size * 10) / 10,
+                            fontWeight: weights[source],
+                            color: inks[source],
+                            // Centre the ink, not the em box, on the word's slot.
+                            offset: [-m.dx * p.size, (m.up - m.down) / 2 * p.size]
+                        },
+                        // Hover takes the word to the theme's strongest ink,
+                        // the one colour no band is painted in.
+                        emphasis: { label: { color: strong } }
+                    };
+                })
+            }],
+            // What the resize observer compares and re-runs (dashboard-core.js).
+            iwacSize: [width, height],
+            iwacRelayout: function (w, h) { return wcOption(data, w, h, host, false); },
+            // "View as table" and the CSV list every word, including any the
+            // panel had no room for, by count, never the scatter's pixels.
+            iwacRows: function () {
+                return {
+                    columns: [
+                        { label: t('Name'), numeric: false },
+                        { label: t('Value'), numeric: true }
+                    ],
+                    rows: ranked.map(function (i) { return [data[i].name, Number(data[i].value) || 0]; })
+                };
+            }
         };
 
-        // Match typography to the panel width instead of leaving the same
-        // small island of words in both a half-width card and a wide panel.
-        // Non-overlapping rules also resize the cloud without rebuilding it.
-        var wcMedia = [
-            {
-                query: { maxWidth: R ? R.below('sm') : 599 },
-                option: {
-                    series: [{ sizeRange: fontRange(0.8) }]
-                }
-            },
-            // On the published breakpoints: the tiers used to start at 641
-            // and 1025 and end at 1600, three widths the theme does not have.
-            { query: { minWidth: R ? R.BP.sm : 600, maxWidth: R ? R.below('lg') : 1023 }, option: { series: [{ sizeRange: fontRange(1.1) }] } },
-            { query: { minWidth: R ? R.BP.lg : 1024, maxWidth: R ? R.below('xxl') : 1459 }, option: { series: [{ sizeRange: fontRange(1.5) }] } }
-        ];
+        // The first draw keeps the theme's entrance (and its reduced-motion
+        // switch); a relayout on resize swaps the words in place.
+        if (!animate) option.animation = false;
 
-        return R && R.withMedia
-            ? R.withMedia(base, wcMedia)
-            : base;
+        // Measured before the web font arrived, the boxes fit the fallback
+        // face; lay out again once it is in, if this is still what is shown.
+        if (host && typeof document !== 'undefined' && document.fonts
+                && document.fonts.status === 'loading' && document.fonts.ready) {
+            document.fonts.ready.then(function () {
+                var live = wcInstance(host);
+                if (!live || live.isDisposed() || live._iwacLastOption !== option) return;
+                live.setOption(option.iwacRelayout(live.getWidth(), live.getHeight()), true);
+            });
+        }
+        return option;
+    }
+
+    /**
+     * A word cloud of `[word, count]` pairs, laid out for `host`: the chart
+     * element or its ECharts instance, whose size the layout fits. Without
+     * one the words are laid out for 800 × 420 and redone at the panel's
+     * real size by the resize observer.
+     *
+     * @param {Array<[string, number]>} pairs
+     * @param {HTMLElement|Object} [host]
+     */
+    C.wordcloud = function (pairs, host) {
+        var data = (pairs || []).map(function (pair) {
+            return { name: String(pair[0] == null ? '' : pair[0]), value: Number(pair[1]) || 0 };
+        }).filter(function (d) { return d.name !== ''; });
+        if (!data.length) return P.emptyChartOption ? P.emptyChartOption() : { series: [] };
+        var size = wcHostSize(host);
+        return wcOption(data, size[0], size[1], host, true);
     };
 
     /* ------------------------------------------------------------------ */

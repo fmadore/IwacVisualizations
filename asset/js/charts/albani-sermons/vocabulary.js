@@ -56,9 +56,9 @@
         section.appendChild(grid);
 
         var cloudDesc = P.el('p', 'iwac-vis-panel-desc');
-        var cloud = A.chartPanel(grid, P.t('albani_vocab_cloud'), null, function () {
+        var cloud = A.chartPanel(grid, P.t('albani_vocab_cloud'), null, function (built) {
             var terms = current().layer.terms || [];
-            return C.wordcloud(terms.slice(0, CLOUD_WORDS).map(function (t) { return [t.w, t.n]; }));
+            return C.wordcloud(terms.slice(0, CLOUD_WORDS).map(function (t) { return [t.w, t.n]; }), built.chart);
         }, { key: 'albani-vocab-cloud', before: [cloudDesc], chartClass: 'iwac-vis-albani__cloud' });
 
         var listPanel = P.buildPanel('iwac-vis-panel', P.t('albani_vocab_list'),

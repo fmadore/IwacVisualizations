@@ -64,7 +64,7 @@
             var option;
             if (kind === 'wordcloud') {
                 var pairs = await fetch('/tests/browser/fixtures/wordcloud.json').then(function (r) { return r.json(); });
-                option = C.wordcloud(pairs);
+                option = C.wordcloud(pairs, document.getElementById('host'));
             } else if (kind === 'gantt') {
                 option = C.gantt(years.map(function (year, i) {
                     return { name: 'Entity ' + i, country: 'Togo', year_min: year, year_max: 2026, total: count - i };

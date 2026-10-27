@@ -4,8 +4,6 @@
  * Lazy-loaded: waits for the panel to enter the viewport before
  * fetching `asset/data/collection-wordcloud.json`. Then renders a
  * faceted word cloud (Global / By country / By year) using C.wordcloud.
- * Falls back to a horizontal bar chart if echarts-wordcloud failed to
- * load from the CDN.
  */
 (function () {
     'use strict';
@@ -104,14 +102,14 @@
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {
             var fd = currentFacetData();
-            instance.setOption(C.wordcloud(fd.data || []), true);
+            instance.setOption(C.wordcloud(fd.data || [], instance), true);
             updateMeta(fd);
         });
 
         function rerender() {
             if (chart && !chart.isDisposed()) {
                 var fd = currentFacetData();
-                chart.setOption(C.wordcloud(fd.data || []), true);
+                chart.setOption(C.wordcloud(fd.data || [], chart), true);
                 updateMeta(fd);
             }
         }

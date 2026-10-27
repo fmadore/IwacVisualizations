@@ -2,10 +2,8 @@
  * IWAC Visualizations — Word cloud renderer
  *
  * Layout-system wrapper around `IWACVis.chartOptions.wordcloud`. Renders
- * a precomputed `[word, count]` frequency list as an ECharts word cloud
- * (echarts-wordcloud extension), falling back to a horizontal bar chart
- * when the extension failed to load — both behaviours live in
- * `C.wordcloud`, so this renderer just feeds it the pairs.
+ * a precomputed `[word, count]` frequency list as the shared word cloud,
+ * so this renderer just feeds it the pairs.
  *
  * Used by the per-issue publication dashboard ("most frequent words in
  * this issue"). The frequency list is computed server-side by
@@ -51,9 +49,10 @@
         }
         // Clouds need vertical room — opt into the taller host floor.
         el.classList.add('iwac-vis-wordcloud-host');
-        var option = ns.chartOptions.wordcloud(pairs);
+        // Built inside the callback: it re-runs on every theme swap, and an
+        // option made once kept the first theme's inks.
         ns.registerChart(el, function (_e, instance) {
-            instance.setOption(option, true);
+            instance.setOption(ns.chartOptions.wordcloud(pairs, instance), true);
         });
     });
 

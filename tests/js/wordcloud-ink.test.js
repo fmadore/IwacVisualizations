@@ -144,42 +144,43 @@ test('the qualifying sets differ between themes, so neither can be hardcoded', (
         'a cloud painted from one or two hues has lost the variety it exists for');
 });
 
+const FIXTURE_PAIRS = JSON.parse(readFileSync(join(ROOT, 'tests', 'browser', 'fixtures', 'wordcloud.json'), 'utf8'));
+
 for (const theme of ['light', 'dark']) {
-    test(`the cloud is one ink ramp by frequency, primary for the top few (${theme})`, () => {
-        // V-11: the cloud cycled five series hues word by word, which encoded
-        // nothing — size already carries frequency. Colour now says the same
-        // thing in the theme's inks, and every step clears the text floor.
+    test(`the cloud colours by frequency band, the accent for the top few (${theme})`, () => {
+        // Colour repeats what size says: one hue per band of frequency, never
+        // one per word. The top words take the accent, then four equal bands
+        // take four more hues, and every colour clears the text floor.
         const { C, panelBg } = load(theme);
         const t = TOKENS[theme];
-        const pairs = Array.from({ length: 100 }, (_, i) => ['w' + i, 1000 - i * 7]);
-        // Shuffled input: the ramp follows the counts, not the order given.
-        const shuffled = pairs.slice().sort((a, b) => (a[0] < b[0] ? -1 : 1));
-        const option = C.wordcloud(shuffled);
+        const tokens = { panelBg, primary: t['--primary'], ink: t['--ink'] };
+        const data = Array.from({ length: 100 }, (_, i) => ({ name: 'w' + i, value: 1000 - i * 7 }));
+        // Shuffled input: the bands follow the counts, not the order given.
+        const shuffled = data.slice().sort((a, b) => (a.name < b.name ? -1 : 1));
+        const inks = C.wordcloudInks(shuffled, tokens);
         const byWord = {};
-        for (const d of option.series[0].data) byWord[d.name] = d.textStyle.color;
-        const ranked = pairs.map(([w]) => byWord[w]);
+        shuffled.forEach((d, i) => { byWord[d.name] = inks[i]; });
+        const ranked = data.map((d) => byWord[d.name]);
         assert.deepEqual(ranked.slice(0, 4), Array(4).fill(t['--primary']), 'the top words take the accent');
-        assert.equal(ranked[4], t['--ink-strong']);
-        assert.equal(ranked[99], t['--ink-light']);
-        const allowed = [t['--primary'], t['--ink-strong'], t['--ink'], t['--ink-light']];
+        // Four bands of 24 below the accent: one colour each, all different.
+        const bands = [0, 1, 2, 3].map((b) => ranked.slice(4 + b * 24, 4 + (b + 1) * 24));
+        for (const band of bands) assert.equal(new Set(band).size, 1, 'one colour per band');
+        const hues = [t['--primary'], ...bands.map((band) => band[0])];
+        assert.equal(new Set(hues).size, 5, 'five bands, five colours');
+        assert.ok(!hues.includes(t['--ink']), 'the bands are hues, not the text ink');
         for (const c of ranked) {
-            assert.ok(allowed.includes(c), `${c} is not on the ink ramp`);
             assert.ok(contrast(parseColor(c), parseColor(panelBg)) >= 4.5, `${c} is under 4.5:1`);
         }
-        // Emphasis never rises as frequency falls.
-        const weight = (c) => allowed.indexOf(c);
-        for (let i = 1; i < ranked.length; i++) assert.ok(weight(ranked[i]) >= weight(ranked[i - 1]));
-        // The render callback re-runs on every toggle and resize: same words, same inks.
-        assert.deepEqual(C.wordcloud(shuffled).series[0].data.map((d) => d.textStyle.color),
-            option.series[0].data.map((d) => d.textStyle.color));
+        // The render re-runs on every toggle and resize: same words, same colours.
+        assert.deepEqual(C.wordcloudInks(shuffled, tokens), inks);
     });
 }
 
-test('the words lie flat and in the theme face', () => {
+test('without a readable palette the cloud is the accent alone, never empty', () => {
     const { C } = load('light');
-    const series = C.wordcloud([['alpha', 3], ['beta', 2]]).series[0];
-    assert.deepEqual(Array.from(series.rotationRange), [0, 0]);
-    assert.equal(series.textStyle.fontFamily, '"Public Sans", sans-serif');
+    const inks = C.wordcloudInks([{ name: 'a', value: 2 }, { name: 'b', value: 1 }],
+        { panelBg: '#7f7f7f', primary: '#000000', ink: '#000000' });
+    assert.deepEqual(Array.from(inks), ['#000000', '#000000']);
 });
 
 test('readableInks still answers when nothing qualifies', () => {
@@ -191,17 +192,95 @@ test('readableInks still answers when nothing qualifies', () => {
     assert.equal(inks[0], '#000000');
 });
 
-test('a missing echarts-wordcloud plugin falls back to a bar chart', () => {
-    // What the production ECharts build does with a series type nobody
-    // registered: it accepts the option, drops the series and does not throw.
-    // The probe used to test only for the throw, so it always said "available".
-    const { C } = load('light', () => ({
-        setOption() {},
-        getOption: () => ({ series: [] }),
-        dispose() {},
+function boxes(option) {
+    return option.series[0].data.map((d) => ({
+        name: d.name,
+        count: d.value[2],
+        size: d.label.fontSize,
+        x0: d.value[0] - d.symbolSize[0] / 2,
+        x1: d.value[0] + d.symbolSize[0] / 2,
+        y0: d.value[1] - d.symbolSize[1] / 2,
+        y1: d.value[1] + d.symbolSize[1] / 2,
     }));
-    const option = C.wordcloud([['alpha', 3], ['beta', 2]]);
-    assert.ok(option.series.every((s) => s.type !== 'wordCloud'),
-        'an unregistered wordCloud series paints nothing, so it must not be emitted');
-    assert.equal(option.series[0].type, 'bar');
+}
+
+for (const [width, height] of [[900, 400], [560, 380], [344, 320]]) {
+    test(`every word has its own box inside a ${width}x${height} panel`, () => {
+        // The plugin's pixel packing let two words on one line touch, and in
+        // the Albani cloud "malam" + "annabi" read as one Hausa word. Boxes
+        // that never overlap, each carrying a margin, make the gap certain.
+        const { C } = load('light');
+        const option = C.wordcloud(FIXTURE_PAIRS, { width, height });
+        const placed = boxes(option);
+        assert.ok(placed.length >= 0.9 * FIXTURE_PAIRS.length, `${placed.length} of ${FIXTURE_PAIRS.length} words drawn`);
+        for (let i = 0; i < placed.length; i++) {
+            const a = placed[i];
+            assert.ok(a.x0 >= 0 && a.y0 >= 0 && a.x1 <= width && a.y1 <= height, `${a.name} leaves the panel`);
+            assert.ok(a.size >= 11, `${a.name} is under the 11px type floor`);
+            for (let j = i + 1; j < placed.length; j++) {
+                const b = placed[j];
+                const overlap = a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+                assert.ok(!overlap, `${a.name} and ${b.name} overlap`);
+            }
+        }
+    });
+}
+
+test('size follows frequency, and the cloud fills its panel', () => {
+    const { C } = load('light');
+    const option = C.wordcloud(FIXTURE_PAIRS, { width: 900, height: 400 });
+    const placed = boxes(option).sort((a, b) => b.count - a.count);
+    for (let i = 1; i < placed.length; i++) {
+        assert.ok(placed[i].size <= placed[i - 1].size + 1e-9, `${placed[i].name} outgrows a commoner word`);
+    }
+    // Area, not height, follows the count: two words whose counts differ
+    // fourfold differ about twofold in size (until the cap or the floor).
+    const x0 = Math.min(...placed.map((p) => p.x0));
+    const x1 = Math.max(...placed.map((p) => p.x1));
+    const y0 = Math.min(...placed.map((p) => p.y0));
+    const y1 = Math.max(...placed.map((p) => p.y1));
+    assert.ok(x1 - x0 > 0.85 * 900, 'the words span the panel width');
+    assert.ok(y1 - y0 > 0.85 * 400, 'the words span the panel height');
+});
+
+test('the layout is the same every time, and is redone for a new size', () => {
+    const { C } = load('light');
+    const a = C.wordcloud(FIXTURE_PAIRS, { width: 700, height: 360 });
+    const b = C.wordcloud(FIXTURE_PAIRS, { width: 700, height: 360 });
+    assert.deepEqual(boxes(a), boxes(b));
+    assert.deepEqual(Array.from(a.iwacSize), [700, 360]);
+    const wider = a.iwacRelayout(1200, 500);
+    assert.deepEqual(Array.from(wider.iwacSize), [1200, 500]);
+    assert.ok(Math.max(...boxes(wider).map((p) => p.size)) > Math.max(...boxes(a).map((p) => p.size)),
+        'a bigger panel sets bigger type');
+});
+
+test('a panel too small for every word drops some from the picture, none from the table', () => {
+    const { C } = load('light');
+    const pairs = Array.from({ length: 200 }, (_, i) => ['term' + i, 400 - i]);
+    const option = C.wordcloud(pairs, { width: 240, height: 160 });
+    assert.ok(option.series[0].data.length > 0 && option.series[0].data.length < 200);
+    const rows = option.iwacRows();
+    assert.equal(rows.rows.length, 200);
+    assert.deepEqual(Array.from(rows.rows[0]), ['term0', 400]);
+    assert.deepEqual(Array.from(rows.columns, (c) => c.numeric), [false, true]);
+});
+
+test('the words lie flat, in the theme face, and hover takes the strongest ink', () => {
+    const { C } = load('light');
+    const option = C.wordcloud([['alpha', 3], ['beta', 2]], { width: 400, height: 200 });
+    const series = option.series[0];
+    assert.equal(series.label.fontFamily, '"Public Sans", sans-serif');
+    for (const d of series.data) {
+        assert.equal(d.label.rotate, undefined);
+        assert.equal(d.emphasis.label.color, TOKENS.light['--ink-strong']);
+    }
+    // The tooltip reads the count, not the scatter's pixel coordinates.
+    assert.match(option.tooltip.formatter({ name: 'alpha', value: [10, 20, 3] }), /alpha<\/strong>: 3$/);
+});
+
+test('an empty word list is the shared empty state', () => {
+    const { C } = load('light');
+    const option = C.wordcloud([], { width: 400, height: 200 });
+    assert.ok(!option.series || option.series.every((s) => s.type !== 'scatter'));
 });

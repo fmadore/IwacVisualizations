@@ -4,8 +4,8 @@
  * Stateless helpers for the vocabulary view: slice selection over the
  * precomputed scary-terms-wordcloud.json (global / by family / by
  * country / by 5-year period) and the `<details>` word-list fallback.
- * The pixels come from the shared C.wordcloud builder (echarts-wordcloud
- * with the horizontal-bar fallback) — no forked cloud implementation.
+ * The pixels come from the shared C.wordcloud builder — no forked cloud
+ * implementation.
  *
  * Loaded after scary-terms/helpers.js, before the orchestrator.
  */

@@ -11,7 +11,7 @@
  *   - country   top families for a single selected country
  *   - global    top families across the whole collection
  *   - matrix    term × term co-occurrence heatmap
- *   - wordcloud vocabulary of matching articles (echarts-wordcloud)
+ *   - wordcloud vocabulary of matching articles
  *   - map       MapLibre bubble map of tagged places (lazy data fetch)
  *
  * Term family colors come from the registered IWAC ECharts palette so
@@ -464,7 +464,7 @@
             }
             var details = SH.buildWordListDetails(slice);
             if (details) detailsHost.appendChild(details);
-            return C.wordcloud(slice.data);
+            return C.wordcloud(slice.data, currentInstance);
         }
 
         // -----------------------------------------------------------------
