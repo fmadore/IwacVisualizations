@@ -349,7 +349,6 @@ IwacVisualizations/
             'blockCss' => 'collection-overview',   // css/blocks/<name>.min.css; a list for several sheets
             'needs' => [                           // AssetPlan::FLAGS — an unknown flag throws
                 'maplibre'     => true,            // MapLibre (ES module import) + shared-map + iwac-maplibre.css
-                'wordcloud'    => true,            // echarts-wordcloud CDN
                 'chartOptions' => true,            // shared-charts
                 'facetButtons' => true,            // any of these five: shared-ui
                 'table'        => true,
@@ -385,7 +384,7 @@ Consequences for contributors:
 
 The shared partial hands the on-view loader a fixed sequence of bundles (built by `scripts/build-js.js` from `asset/js/bundles.json`); the loader injects them in order once a block nears the viewport, so the orchestrator always runs last, with its dependencies populated. MapLibre is the exception — an ES module imported in parallel, awaited only by the panels that draw a map.
 
-1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js` and the four d3-force modules
+1. **CDN libraries** — `echarts.min.js` and, optionally, the four d3-force modules
 2. **`shared-core`** — every block: `iwac-i18n` → `iwac-theme` → `dashboard-core` → the `panels` family (core, controls, store, map, boot) → `chart-rows` → `panel-toolbar` → `embed` → `responsive` → `hijri`
 3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (pagination, the entities panel, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the IWAC map helpers, the popup, the choropleth, the filtered places map), `shared-d3` (the canvas force graph)
 4. **Panel sets the block shares** — `panels/<name>` (the person and entity dashboards draw the same eleven panels)
@@ -695,7 +694,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 
-That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. `view/common/iwac-assets.phtml` is the only place those versions live — `npm run check:cdn` reads them from there and compares them against the registry, so this file deliberately names no version of its own. (Historical changelog and roadmap entries naming MapLibre 5.24 or ECharts 6.0 are records of when a decision was taken, not statements about the current pin.) Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
+That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. `view/common/iwac-assets.phtml` is the only place those versions live — `npm run check:cdn` reads them from there and compares them against the registry, so this file deliberately names no version of its own. (Historical changelog and roadmap entries naming MapLibre 5.24 or ECharts 6.0 are records of when a decision was taken, not statements about the current pin.) Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
 
 `scripts/check-cdn-versions.js` closes that loop — it parses the pins out of the partial and compares them against the npm registry:
 

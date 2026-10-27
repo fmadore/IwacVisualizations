@@ -72,8 +72,6 @@ final class BlockRegistry
                     'blockCss' => 'albani-sermons',
                     'needs' => [
                         'chartOptions' => true,
-                        // The vocabulary cloud; C.wordcloud falls back to bars.
-                        'wordcloud'    => true,
                         // The term networks: shared-d3's canvas force graph.
                         'd3'           => true,
                         // The KWIC list (implies pagination) and the tables.
@@ -119,7 +117,6 @@ final class BlockRegistry
                     'blockCss' => 'collection-overview',
                     'needs' => [
                         'maplibre'     => true,
-                        'wordcloud'    => true,
                         'chartOptions' => true,
                         'facetButtons' => true,
                         'table'        => true,
@@ -141,7 +138,6 @@ final class BlockRegistry
                 'assets' => [
                     'blockCss' => 'compare-newspapers',
                     'needs' => [
-                        'wordcloud'    => true,
                         'chartOptions' => true,
                         'maplibre'     => true,
                         'pagination'   => true,
@@ -334,7 +330,6 @@ final class BlockRegistry
                     'blockCss' => 'periodicals-overview',
                     'needs' => [
                         'chartOptions' => true,
-                        'wordcloud'    => true,
                     ],
                     'bundle' => 'periodicals-overview',
                 ],
@@ -410,9 +405,8 @@ final class BlockRegistry
                     'blockCss' => 'scary-terms',
                     'needs' => [
                         'chartOptions' => true,
-                        // Word cloud view (issue #4) — echarts-wordcloud + the shared
-                        // facet bar; Map view (issue #3) — the MapLibre stack.
-                        'wordcloud'    => true,
+                        // Word cloud view (issue #4) — the shared facet bar;
+                        // Map view (issue #3) — the MapLibre stack.
                         'facetButtons' => true,
                         'maplibre'     => true,
                         // Trends view (issue #2) — the annotated time series now lives

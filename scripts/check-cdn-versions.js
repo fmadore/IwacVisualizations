@@ -3,7 +3,7 @@
  * Upgrade signal for the pinned CDN libraries in `view/common/iwac-assets.phtml`.
  *
  * Why this exists: the libraries that actually reach visitors' browsers —
- * ECharts, echarts-wordcloud, MapLibre GL, the four d3 modules — are not npm
+ * ECharts, MapLibre GL, the four d3 modules — are not npm
  * dependencies. They are jsDelivr URLs written as PHP string constants, so
  * Dependabot cannot see them at all (`.github/dependabot.yml` covers only the
  * workflow actions). Before v1.22 those URLs carried floating major tags and

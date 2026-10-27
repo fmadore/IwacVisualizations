@@ -2,7 +2,7 @@
 /**
  * Subresource Integrity for the pinned CDN libraries.
  *
- * ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are the only
+ * ECharts, MapLibre GL and the four d3 modules are the only
  * code this module does not serve itself, and every visitor's browser runs
  * them. The pins in view/common/iwac-assets.phtml are exact, which makes the
  * bytes behind each URL fixed — so the browser can be told what they are, and

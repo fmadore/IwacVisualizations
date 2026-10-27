@@ -20,8 +20,7 @@
  *
  * Dependencies: dashboard-layout + word-cloud + sibling-sparkline +
  * similar-items renderers (declared via the partial's
- * $needs['renderers']), plus chartOptions + the echarts-wordcloud
- * extension ($needs['chartOptions'] + $needs['wordcloud']).
+ * $needs['renderers']), plus chartOptions ($needs['chartOptions']).
  */
 (function () {
     'use strict';

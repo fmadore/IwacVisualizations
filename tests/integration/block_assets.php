@@ -124,9 +124,9 @@ foreach (BlockRegistry::BLOCKS as $slug => $row) {
     if (!empty($needs['maplibre']) !== !empty($payload['mjs'])) {
         throw new \RuntimeException($slug . ': the MapLibre import does not follow its `maplibre` need');
     }
-    $hasWordcloud = (bool) array_filter($scripts, static fn($s) => is_string($s) && strpos($s, 'echarts-wordcloud') !== false);
-    if (!empty($needs['wordcloud']) !== $hasWordcloud) {
-        throw new \RuntimeException($slug . ': the word-cloud plugin does not follow its `wordcloud` need');
+    // The clouds are laid out by C.wordcloud since v1.88.0; the plugin is gone.
+    if (array_filter($scripts, static fn($s) => is_string($s) && strpos($s, 'echarts-wordcloud') !== false)) {
+        throw new \RuntimeException($slug . ': loads the retired echarts-wordcloud plugin');
     }
     $links = html_entity_decode((string) $view->plugin('headLink')->toString(), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     foreach ((array) ($assets['blockCss'] ?? []) as $sheet) {

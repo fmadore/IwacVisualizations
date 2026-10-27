@@ -642,7 +642,7 @@ namespace {
     check(AssetPlan::bundles([], null) === ['shared-core'], 'minimal asset plan gained unnecessary libraries');
     check(AssetPlan::bundles(['table' => true, 'pagination' => true, 'maplibre' => true], null)
         === ['shared-core', 'shared-ui', 'shared-map'], 'asset plan lost dependency ordering or deduplication');
-    check(AssetPlan::bundles(['echarts' => false, 'wordcloud' => true, 'd3' => true], null)
+    check(AssetPlan::bundles(['echarts' => false, 'd3' => true], null)
         === ['shared-core', 'shared-d3'], 'the CDN-only flags changed which bundles load');
     try {
         AssetPlan::bundles([], 'unknown-bundle');
@@ -651,8 +651,10 @@ namespace {
         check(true, 'unknown bundle rejected');
     }
     // An unknown flag is a typo or a removed flag, and either way the block
-    // would load without what it asked for. `renderers` is the removed one.
-    foreach (['renderers', 'mapLibre', 'chartoptions', 0] as $flag) {
+    // would load without what it asked for. `renderers` and `wordcloud` (the
+    // echarts-wordcloud plugin, dropped once C.wordcloud laid the clouds out
+    // itself) are the removed ones.
+    foreach (['renderers', 'wordcloud', 'mapLibre', 'chartoptions', 0] as $flag) {
         try {
             AssetPlan::bundles([$flag => true], null);
             check(false, "unknown needs flag '$flag' was accepted");

@@ -64,7 +64,7 @@ A bird's-eye summary of the whole IWAC collection, designed to drop onto a site 
 - **Languages** — horizontal bar with global / by-type / by-country facets
 - **Top entities** — tabbed bar (Persons / Orgs / Places / Subjects / Events), 50 per type with client pagination at 10/page; bars click through to the Omeka entity page
 - **Gantt** — newspaper coverage periods (start → end) with country and type facets, and a View facet that swaps the bars for a newspaper × year heatmap of the items held each year (binned 1–4 … 100+), where a run's gaps and thin years show
-- **Word cloud** — `echarts-wordcloud` with a horizontal-bar fallback; facets for global / by country / by year; lazy-loaded via `IntersectionObserver`
+- **Word cloud** — laid out by the module's own `C.wordcloud`, words never touching, sized by frequency and coloured by frequency band; facets for global / by country / by year; lazy-loaded via `IntersectionObserver`
 - **World map** — MapLibre bubbles from `index.Lieux` entries with a type facet; lazy-loaded; GeoJSON plumbed for future choropleth
 - **Source locations** — MapLibre bubbles for source repositories/platforms and a ranked source table, ported from the deprecated dashboard’s Sources Map
 

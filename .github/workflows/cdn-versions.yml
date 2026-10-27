@@ -1,8 +1,8 @@
 name: CDN versions
 
-# The upgrade signal Dependabot cannot give us. ECharts, echarts-wordcloud,
-# MapLibre GL and the four d3 modules are the only dependencies that reach
-# visitors' browsers, and they are jsDelivr URLs pinned as PHP constants in
+# The upgrade signal Dependabot cannot give us. ECharts, MapLibre GL and the
+# four d3 modules are the only dependencies that reach visitors' browsers,
+# and they are jsDelivr URLs pinned as PHP constants in
 # view/common/iwac-assets.phtml — not npm dependencies, so nothing in
 # .github/dependabot.yml can see them. Pinning them exactly (v1.22.0) stopped
 # the live site from silently upgrading itself; this restores the other half,

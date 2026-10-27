@@ -20,9 +20,10 @@ test('the partial records a well-formed sha384 for every CDN file it loads, and 
     for (const [url, hash] of recorded) {
         assert.match(hash, /^sha384-[A-Za-z0-9+/]{64}$/, url);
     }
-    // Every library the loader can request: ECharts, the word-cloud plugin,
-    // MapLibre's two main-thread modules and its sheet, and the four d3 builds.
-    assert.equal(used.length, 9);
+    // Every library the loader can request: ECharts, MapLibre's two
+    // main-thread modules and its sheet, and the four d3 builds. (The
+    // word-cloud plugin went once C.wordcloud laid the clouds out itself.)
+    assert.equal(used.length, 8);
 });
 
 test('a rendered block reads back as the same URL → hash pairs', () => {

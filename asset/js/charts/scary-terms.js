@@ -24,7 +24,7 @@
  * first activates.
  *
  * Dependencies (in load order before this file):
- *   echarts → echarts-wordcloud → maplibre-gl → iwac-i18n.js →
+ *   echarts → maplibre-gl → iwac-i18n.js →
  *   iwac-theme.js → dashboard-core.js → panels.js → responsive.js →
  *   chart-options.js → facet-buttons.js → maplibre.js → map-popup.js →
  *   scary-terms/{i18n,helpers,trends,wordcloud,map,controls}.js

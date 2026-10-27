@@ -9,7 +9,7 @@ final class AssetPlan
     /**
      * Every `needs` flag `view/common/iwac-assets.phtml` understands.
      *
-     * The first four pick CDN libraries in the partial itself (`echarts` is
+     * The first three pick CDN libraries in the partial itself (`echarts` is
      * the one that defaults ON, so it is only ever passed as `false`); the
      * rest choose shared bundles below. A flag outside this list is a typo or
      * a flag that was removed, and either way the block would silently load
@@ -21,7 +21,6 @@ final class AssetPlan
      */
     public const FLAGS = [
         'echarts',
-        'wordcloud',
         'maplibre',
         'd3',
         'chartOptions',

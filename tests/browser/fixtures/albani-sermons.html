@@ -57,12 +57,10 @@
             </div>
         </div>
     </main>
-    <!-- ECharts and the word-cloud extension from the test-only npm copies,
-         then d3's UMD modules (they share one global, so d3-force comes
+    <!-- ECharts from the test-only npm copy, then d3's UMD modules (they share one global, so d3-force comes
          last), then the bundles in Site\AssetPlan::bundles() order for
          chartOptions + concordance + table + d3. -->
     <script src="/node_modules/echarts/dist/echarts.min.js"></script>
-    <script src="/node_modules/echarts-wordcloud/dist/echarts-wordcloud.min.js"></script>
     <script src="/node_modules/d3-dispatch/dist/d3-dispatch.min.js"></script>
     <script src="/node_modules/d3-quadtree/dist/d3-quadtree.min.js"></script>
     <script src="/node_modules/d3-timer/dist/d3-timer.min.js"></script>
