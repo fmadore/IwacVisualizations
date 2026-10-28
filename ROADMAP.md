@@ -51,6 +51,27 @@ check data activation in the admin UI. Repository validation does not establish
 that the new version has been deployed. No production deployment or live-data
 mutation was performed during the refactoring.
 
+## Cross-module review with DRE Visualizations (2026-10-28)
+
+This module and its sibling [DRE Visualizations](https://github.com/AM-Digital-Research-Environment/DRE-Visualizations)
+were compared structurally. This one is ahead on the front end and on its own
+structure (block registry, asset plan, bundles, browser tests, Lighthouse);
+DRE is ahead on the data side. These are the items taken from it; DRE's list
+is in its docs/ROADMAP.md. Status: `[x]` done, `[ ]` open, `[-]` decided against.
+
+| | Problem | Scope | Accepted when |
+| --- | --- | --- | --- |
+| [x] D1 | `innerHTML` and popup HTML had no automatic guard | `eslint-plugin-no-unsanitized` over the browser sources; MapLibre `setHTML` added as a sink | `npm run lint:js` fails on an unescaped sink (shipped with the HTML-string popup path removed) |
+| [x] D2 | A notice inside a PHP predicate printed and the harness still passed | `tests/lib/strict-errors.php` in `tests/php/run.php` | any warning, notice or own deprecation fails the run |
+| [x] D3 | A bare tag got auto-generated notes | `scripts/changelog-section.js` feeds `release.yml` | the release takes its title and notes from the CHANGELOG entry |
+| [x] D4 | Dependabot proposed releases the day they appeared | `cooldown` on both ecosystems | — |
+| [-] D5 | — | `php_version_constraint` in module.ini | Decided against: Omeka S reads only `omeka_version_constraint`, so the key would be decorative |
+| [ ] D6 | A push to a generator republishes the moving `data` release, which a site on the previous module version can pull: its JavaScript then reads a JSON shape it does not know | a `dataContract` integer written into the manifest by the generators and declared by the module; SyncData refuses an archive of another contract | a mismatched archive fails the sync with a clear message and the active generation stays live |
+| [ ] D7 | The integration suites print warnings without failing | the strict handler in the Omeka integration scripts, deprecations outside the module's own tree ignored | `omeka-integration.yml` fails on a warning the module raises |
+| [ ] D8 | Generator output can change unnoticed: the Python tests are unit tests | a golden test that runs generators on a small synthetic dataset and compares every JSON file with `tests/golden/` (`UPDATE_GOLDEN=1` to accept a change) | an unintended change to any covered output fails `lint.yml` |
+| [ ] D9 | Escaping of chart formatters is tested for one helper | a sweep that builds the shared chart options with hostile labels and asserts every formatter's HTML is escaped | a formatter that interpolates a raw label fails `npm test` |
+| [ ] D10 | No security policy | `SECURITY.md` | the repository shows a reporting route |
+
 ## Historical audits
 
 The old documents remain available in Git history, rather than as competing
