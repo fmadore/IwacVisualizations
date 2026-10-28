@@ -94,6 +94,14 @@ before writing, alongside the five dashboard generators. The manifest records ha
 configuration and per-generator file lists. Full semantic schemas for every
 optional panel field are not claimed; add contracts alongside payload changes.
 
+The manifest also carries `dataContract` (`DATA_CONTRACT` in the validator),
+and the module refuses to sync an archive whose contract differs from its own
+`Data\Manifest::DATA_CONTRACT`. When a generator change renames, retypes or
+newly requires a key the JavaScript reads, or changes an id scheme, bump both
+numbers in the same commit; the previous module release then keeps its active
+data instead of pulling a shape it cannot read. Adding an optional key the old
+JavaScript ignores needs no bump. See ARCHITECTURE.md, "The data contract".
+
 ## Provenance
 
 `iwac_utils.py` and several generators here were originally seeded from the
@@ -700,7 +708,9 @@ Block-specific extras (partial list):
 4. Write output under `asset/data/<folder>/<id>.json` or
    `asset/data/<name>.json`. Keep per-item files under a subdirectory
    so `git status` stays readable.
-5. Add an entry to this README's "Available generators" section.
+5. Add an entry to this README's "Available generators" section. If you
+   change the shape of an existing output instead, decide whether it is a
+   data-contract change (see "Reproducible publication").
 6. If the new data feeds a new visualization, also add a chart JS under
    `asset/js/charts/` following the `collection-overview.js` pattern.
 

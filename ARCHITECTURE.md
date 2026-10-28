@@ -448,6 +448,21 @@ PHP box:
    alike. "Retry an interrupted sync" on the admin page closes the stale job
    (status `error`, an end time, a log line) before dispatching its replacement.
 
+**The data contract.** The data release follows every push to a generator, not
+a module release, so a site still on the previous release can be offered data
+its JavaScript cannot read. The manifest therefore carries `dataContract`, an
+integer the generators write (`DATA_CONTRACT` in `scripts/validate_data.py`)
+and the module declares (`Data\Manifest::DATA_CONTRACT`); `tests/php/run.php`
+fails while the two differ. SyncData reads it from the manifest inside the
+archive and refuses another contract before extracting anything, with a log
+line that says whether to upgrade the module or wait for a rebuilt data
+release; the active generation stays live. A manifest without the key is
+contract 1. Bump both numbers in one commit when a generator changes a JSON
+shape the JavaScript reads in a way the previous module release cannot follow
+(a key renamed, retyped or newly required, a different id scheme), and say in
+the changelog that the upgrade must come before the next data pull. An
+optional key the old JavaScript ignores is not a contract change.
+
 **Published cross-repo contract — the root `collection-overview.json`.** The IWAC
 theme's homepage banner (`helper/BannerStats.php` in
 [IWAC-theme](https://github.com/fmadore/IWAC-theme)) reads

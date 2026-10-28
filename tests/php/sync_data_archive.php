@@ -46,6 +46,7 @@ declare(strict_types=1);
 namespace {
 
 use IwacVisualizations\Data\Deployment;
+use IwacVisualizations\Data\Manifest;
 use IwacVisualizations\Job\SyncData;
 
 /** SyncData with the network replaced by a local file copy. */
@@ -172,8 +173,9 @@ function syncTempDir(string $label): string
  * A well-formed archive. `$entries` is `name => contents`; the marker entry
  * is added unless the caller already named it or passed `false`, and the
  * manifest listing every entry is added unless `$withManifest` is false.
+ * `$manifestKeys` adds top-level keys to that manifest (`dataContract`).
  */
-function syncMakeZip(string $path, array $entries, bool $withMarker = true, bool $withManifest = true): void
+function syncMakeZip(string $path, array $entries, bool $withMarker = true, bool $withManifest = true, array $manifestKeys = []): void
 {
     $zip = new \ZipArchive();
     if ($zip->open($path, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
@@ -187,7 +189,7 @@ function syncMakeZip(string $path, array $entries, bool $withMarker = true, bool
         $files[$name] = ['sha256' => hash('sha256', $contents)];
     }
     if ($withManifest) {
-        $entries[SyncData::MANIFEST_ENTRY] = json_encode(['schemaVersion' => 1, 'files' => $files]);
+        $entries[SyncData::MANIFEST_ENTRY] = json_encode(['schemaVersion' => 1, 'files' => $files] + $manifestKeys);
     }
     foreach ($entries as $name => $contents) {
         $zip->addFromString($name, $contents);
@@ -461,6 +463,36 @@ check(
     'an archive without the marker entry was accepted: ' . ($err ?: '(it succeeded)')
 );
 check(!is_dir($s['liveDir'] . '/generations'), 'a markerless archive still published a generation');
+
+// ------------------------------------------------------ another data contract
+// The data release follows every push to a generator, so a site on the
+// previous module release can be offered data its JavaScript cannot read.
+// The manifest says which contract it was built for; another one (or a
+// malformed one) is refused before extraction and the live data stays.
+$s = syncScenario('contract', ['collection-overview.json' => '{"generation":1}']);
+$syncRoots[] = $s['root'];
+check(syncRun($s['job']) === '', 'the first sync of the contract scenario failed');
+$active = $s['services']->settings->get(SyncData::SETTING_LAST_SYNC);
+$activeDir = syncGenerationDir($s);
+foreach ([Manifest::DATA_CONTRACT + 1, Manifest::DATA_CONTRACT - 1, '1', null] as $contract) {
+    $label = json_encode($contract);
+    syncMakeZip($s['fixture'], ['collection-overview.json' => '{"generation":2}'], true, true, ['dataContract' => $contract]);
+    $err = syncRun($s['job']);
+    check(strpos($err, 'data contract') !== false, "an archive declaring data contract $label was accepted: " . ($err ?: '(it succeeded)'));
+    check($s['services']->settings->get(SyncData::SETTING_LAST_SYNC) === $active, "an archive of data contract $label moved the active generation");
+    check(@file_get_contents($activeDir . '/collection-overview.json') === '{"generation":1}', "an archive of data contract $label changed the live data");
+    check(count(glob($s['liveDir'] . '/generations/*', GLOB_ONLYDIR)) === 1, "an archive of data contract $label published a generation");
+    check(!is_dir($s['workDir'] . '/stage-7'), "an archive of data contract $label was extracted");
+}
+syncMakeZip($s['fixture'], ['collection-overview.json' => '{"generation":3}'], true, true, ['dataContract' => Manifest::DATA_CONTRACT + 1]);
+check(strpos(syncRun($s['job']), 'Upgrade the module') !== false, 'a newer contract did not tell the admin to upgrade the module');
+// The contract this version reads, stated explicitly, syncs.
+syncMakeZip($s['fixture'], ['collection-overview.json' => '{"generation":4}'], true, true, ['dataContract' => Manifest::DATA_CONTRACT]);
+check(syncRun($s['job']) === '', 'an archive of this module\'s own data contract was refused');
+check(
+    file_get_contents(syncGenerationDir($s) . '/collection-overview.json') === '{"generation":4}',
+    'an archive of this module\'s own data contract was not activated'
+);
 
 // ---------------------------------------------------------- truncated archive
 // The case the digest sidecar exists for, reaching the reader anyway: a

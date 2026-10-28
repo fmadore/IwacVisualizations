@@ -637,6 +637,15 @@ namespace {
         }
     }
 
+    // The data contract: the generators write one number into manifest.json
+    // and the module reads another; if they drift, every sync of the next
+    // data release is refused (or, worse, a wrong one accepted).
+    check(
+        preg_match('/^DATA_CONTRACT = (\d+)\s*$/m', (string) file_get_contents($root . '/scripts/validate_data.py'), $contract) === 1
+            && (int) $contract[1] === \IwacVisualizations\Data\Manifest::DATA_CONTRACT,
+        'scripts/validate_data.py DATA_CONTRACT and Data\Manifest::DATA_CONTRACT disagree'
+    );
+
     // SyncData::perform() against real ZIP fixtures. Kept in its own file:
     // it needs a dozen fakes and a temp-directory lifecycle, which would
     // dwarf the pure contracts above.

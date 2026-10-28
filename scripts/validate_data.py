@@ -197,6 +197,16 @@ REQUIRED_FANOUT = (
 #: The two hand-curated sidecars ride in from the checkout, not a generator.
 COMMITTED = ("scary-terms-events.json", "laicite-events.json")
 
+#: The shape of the data the shipped JavaScript reads, written into
+#: manifest.json as ``dataContract``. The module declares the contract it
+#: reads (``Data\Manifest::DATA_CONTRACT``) and its sync refuses an archive of
+#: another, leaving the active data live; tests/php/run.php fails when the two
+#: numbers disagree. Bump both in one commit when a generator changes a JSON
+#: shape in a way the previous module release cannot read (a key renamed,
+#: retyped or newly required, a different id scheme). An optional key the old
+#: JavaScript ignores is not a contract change.
+DATA_CONTRACT = 1
+
 # Every aggregate and index required for publication; formerly duplicated in CI shell.
 REQUIRED_FILES = (
     "albani-sermons/collocates.json",
@@ -446,7 +456,8 @@ def write_manifest(data_dir: Path, provenance: Path) -> None:
         files[name] = {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                        "bytes": path.stat().st_size, "schema": name.split("/")[0],
                        "records": len(payload) if isinstance(payload, list) else None}
-    manifest = {"schemaVersion": 1, "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    manifest = {"schemaVersion": 1, "dataContract": DATA_CONTRACT,
+                "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "buildId": os.environ.get("GITHUB_SHA", "local"),
                 "sourceRevisions": proof["revisions"], "configuration": proof["configuration"],
                 "generators": proof["outputs"], "files": files}

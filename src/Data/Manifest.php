@@ -7,6 +7,49 @@ namespace IwacVisualizations\Data;
 final class Manifest
 {
     /**
+     * The shape of the data this version's JavaScript reads.
+     *
+     * The generators write their number into manifest.json as `dataContract`
+     * (`DATA_CONTRACT` in scripts/validate_data.py; tests/php/run.php fails
+     * when the two disagree), and the sync refuses an archive of another
+     * contract before extracting it, so the active generation stays live.
+     * The data release is built on every push to a generator, not on a
+     * module release: without this, a site still on the previous release
+     * would pull data its JavaScript cannot read and show empty panels.
+     *
+     * Bump both, in one commit, when a generator changes a JSON shape the
+     * JavaScript reads in a way the previous release cannot follow — a key
+     * renamed, retyped or newly required, a different id scheme. An optional
+     * key the old JavaScript ignores is not a contract change. A manifest
+     * written before the key existed is contract 1.
+     */
+    public const DATA_CONTRACT = 1;
+
+    /**
+     * Refuse a manifest built for another data contract, with what the
+     * admin can do about it: upgrade the module, or wait for the data
+     * release to be rebuilt.
+     */
+    public static function assertContract(array $manifest): void
+    {
+        $contract = array_key_exists('dataContract', $manifest) ? $manifest['dataContract'] : 1;
+        if (!is_int($contract) || $contract < 1) {
+            throw new \RuntimeException('The data archive declares an invalid data contract.');
+        }
+        if ($contract === self::DATA_CONTRACT) {
+            return;
+        }
+        throw new \RuntimeException(sprintf(
+            'The data archive was built for data contract %d, but this version of IWAC Visualizations reads data contract %d; the active data is unchanged. %s',
+            $contract,
+            self::DATA_CONTRACT,
+            $contract > self::DATA_CONTRACT
+                ? 'Upgrade the module to a release that reads it, then pull the data again.'
+                : 'Pull again once the data release has been rebuilt by the current generators.'
+        ));
+    }
+
+    /**
      * A lower-case SHA-256 hex digest — a manifest entry's checksum, and the
      * name of a generation (the digest of its manifest). The one copy of
      * the pattern; `Deployment::isGeneration()` asks this.
@@ -45,6 +88,7 @@ final class Manifest
         if (!is_array($manifest) || !is_array($manifest['files'] ?? null) || !$manifest['files']) {
             throw new \RuntimeException('Missing or incompatible data manifest.');
         }
+        self::assertContract($manifest);
         $allowed = [$manifestEntry => true];
         foreach (array_keys($manifest['files']) as $path) {
             if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path) || str_contains($path, '..')) {
@@ -73,6 +117,7 @@ final class Manifest
         ) {
             throw new \RuntimeException('Missing or incompatible data manifest.');
         }
+        self::assertContract($manifest);
         foreach ($manifest['files'] as $path => $entry) {
             if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path)
                 || str_contains($path, '..') || str_starts_with($path, '/')

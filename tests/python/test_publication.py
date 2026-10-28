@@ -103,6 +103,23 @@ class PublicationTests(unittest.TestCase):
         self.assertTrue(validation.check_references('article-dashboards/1.json',
                         {'neighbors': [{'o_id': '999'}]}, sources))
 
+    def test_manifest_declares_the_data_contract(self):
+        # The module's sync refuses an archive of another contract (D6); a
+        # manifest that lost the key would read as contract 1 forever.
+        with tempfile.TemporaryDirectory() as root:
+            directory = Path(root) / 'data'
+            directory.mkdir()
+            for name in validation.COMMITTED:
+                (directory / name).write_text('[]', encoding='utf-8')
+            proof = Path(root) / 'proof.json'
+            proof.write_text(json.dumps({'outputs': {name: [] for name in GENERATORS},
+                                         'sources': {}, 'revisions': {}, 'configuration': {}}))
+            validation.write_manifest(directory, proof)
+            manifest = json.loads((directory / 'manifest.json').read_text(encoding='utf-8'))
+        self.assertEqual(manifest['dataContract'], validation.DATA_CONTRACT)
+        self.assertIs(type(manifest['dataContract']), int)
+        self.assertEqual(set(manifest['files']), set(validation.COMMITTED))
+
     def test_manifest_requires_every_recorded_output(self):
         with tempfile.TemporaryDirectory() as root:
             directory = Path(root)
