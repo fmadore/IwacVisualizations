@@ -138,6 +138,8 @@ namespace {
     use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 
     $root = dirname(__DIR__, 2);
+    // A warning or deprecation the module raises fails the run, not just prints.
+    require $root . '/tests/lib/strict-errors.php';
     require $root . '/src/Sentiment/Polarite.php';
     require $root . '/src/Sentiment/Centralite.php';
     require $root . '/src/Sentiment/Subjectivite.php';
