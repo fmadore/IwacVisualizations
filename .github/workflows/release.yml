@@ -38,10 +38,11 @@ name: Release
 #
 # WRITING RELEASE NOTES: releases in this repo carry a descriptive title
 # ("v1.37.0 — Laïcité block, MapLibre 6, and a repo that says who owns it").
-# This workflow does not take that away. Publish the release first (UI or
-# `gh release create`), then push the tag — the run finds the existing release
-# and only uploads the asset. Push the tag alone and it falls back to creating
-# one titled after the tag with auto-generated notes.
+# Push the tag alone and the release is created from the version's CHANGELOG.md
+# entry: its heading without the date is the title, its body the notes
+# (scripts/changelog-section.js). A release published first (UI or
+# `gh release create`) keeps its own title and notes — the run finds it and
+# only uploads the asset.
 
 on:
   push:
@@ -102,6 +103,7 @@ jobs:
     outputs:
       tag: ${{ steps.v.outputs.tag }}
       zip: ${{ steps.v.outputs.zip }}
+      title: ${{ steps.notes.outputs.title }}
 
     steps:
       # fetch-depth 0 so the ancestry check below can see the default branch.
@@ -228,10 +230,22 @@ jobs:
 
           echo "$(wc -l < /tmp/list) files, $(du -h "$ZIP" | cut -f1)"
 
+      # Written after the stale-build check, which fails on any untracked
+      # file, and outside the zip, which `git archive` builds from HEAD.
+      - name: Release title and notes from CHANGELOG.md
+        id: notes
+        env:
+          WANT: ${{ steps.v.outputs.version }}
+        run: |
+          node scripts/changelog-section.js "$WANT" > release-notes.md
+          echo "title=$(node scripts/changelog-section.js "$WANT" --title)" >> "$GITHUB_OUTPUT"
+
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-archive
-          path: ${{ steps.v.outputs.zip }}
+          path: |
+            ${{ steps.v.outputs.zip }}
+            release-notes.md
           if-no-files-found: error
           retention-days: 7
 
@@ -252,9 +266,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.build.outputs.tag }}
           ZIP: ${{ needs.build.outputs.zip }}
+          TITLE: ${{ needs.build.outputs.title }}
         run: |
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$TAG" "$ZIP" --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" "$ZIP" --title "$TAG" --generate-notes --repo "$GITHUB_REPOSITORY"
+            gh release create "$TAG" "$ZIP" --title "${TITLE:-$TAG}" --notes-file release-notes.md --repo "$GITHUB_REPOSITORY"
           fi
