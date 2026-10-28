@@ -111,6 +111,9 @@
             hinted.slice(1).forEach(function (p) { p.catch(function () {}); });
             ready = hinted[0];
         }
+        // `url` is the MapLibre pin from the server-rendered asset payload
+        // (view/common/iwac-assets.phtml), never page data.
+        // eslint-disable-next-line no-unsanitized/method
         var pending = ready.then(function () { return import(url); }).then(function (m) {
             window.maplibregl = m;
             return m;

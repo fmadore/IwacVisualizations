@@ -18,6 +18,7 @@
 
 const js = require('@eslint/js');
 const globals = require('globals');
+const noUnsanitized = require('eslint-plugin-no-unsanitized');
 
 module.exports = [
     {
@@ -54,11 +55,28 @@ module.exports = [
                 d3: 'readonly',
             },
         },
+        plugins: { 'no-unsanitized': noUnsanitized },
         rules: {
             'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
             'no-empty': ['error', { allowEmptyCatch: true }],
             // `obj.hasOwnProperty(k)` on plain objects the module built itself.
             'no-prototype-builtins': 'off',
+            // Titles, names and OCR text come from the archive and its imports,
+            // so markup built from data must pass the escaper on its way in:
+            // `innerHTML = '<b>' + P.escapeHtml(name) + '</b>'` passes, the
+            // same line without it fails. `esc` is the local alias most
+            // chart-option builders take for `P.escapeHtml`. MapLibre's
+            // `Popup#setHTML` is added to the plugin's own sinks. ECharts
+            // formatters return HTML the rule cannot follow; their escaping is
+            // asserted in tests/js/tooltip.test.js instead.
+            'no-unsanitized/property': ['error', {
+                escape: { methods: ['P.escapeHtml', 'esc'] },
+            }],
+            'no-unsanitized/method': ['error', {
+                escape: { methods: ['P.escapeHtml', 'esc'] },
+            }, {
+                setHTML: { properties: [0] },
+            }],
         },
     },
     {

@@ -30,7 +30,7 @@
  *             m.on('click', 'bubbles', function (e) {
  *                 P.createIwacPopup()
  *                     .setLngLat(e.features[0].geometry.coordinates)
- *                     .setHTML('...')
+ *                     .setDOMContent(P.buildMapPopup({ title: '...' }))
  *                     .addTo(m);
  *             });
  *         }
@@ -455,8 +455,9 @@
      * @param {Object} cfg
      *   layers — a layer id, an array of ids, or a function returning them
      *   pick(features) — choose among several hits (default: the first)
-     *   content(feature, e) — a P.buildMapPopup config, a DOM node, an HTML
-     *     string, or null to open nothing
+     *   content(feature, e) — a P.buildMapPopup config, a DOM node, or null
+     *     to open nothing. Never an HTML string: popup text is archive data,
+     *     and a DOM body cannot carry unescaped markup
      *   lngLat(feature, e) — the anchor (default: a point feature's own
      *     coordinates, else the click point)
      *   popup — options for P.createIwacPopup
@@ -493,8 +494,7 @@
             var popup = P.createIwacPopup(cfg.popup || { closeButton: true, closeOnClick: true });
             if (!popup) return;
             popup.setLngLat(at);
-            if (typeof content === 'string') popup.setHTML(content);
-            else if (content.nodeType) popup.setDOMContent(content);
+            if (content.nodeType) popup.setDOMContent(content);
             else popup.setDOMContent(P.buildMapPopup(content));
             popup.addTo(map);
             if (cfg.onOpen) cfg.onOpen(popup, feature, e);
