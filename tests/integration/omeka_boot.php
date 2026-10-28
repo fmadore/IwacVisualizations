@@ -25,6 +25,8 @@ if ($expectedPhpSeries === '' || !preg_match('/^\d+\.\d+$/', $expectedPhpSeries)
     exit(2);
 }
 
+// A warning or a deprecation the module raises fails the run, not just prints.
+require dirname(__DIR__) . '/lib/strict-errors.php';
 require $omekaPath . '/bootstrap.php';
 $config = require $omekaPath . '/application/config/application.config.php';
 $application = \Omeka\Mvc\Application::init($config);

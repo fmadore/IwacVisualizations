@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+// A warning or a deprecation the module raises fails the run, not just prints.
+require dirname(__DIR__) . '/lib/strict-errors.php';
 require rtrim((string) getenv('OMEKA_PATH'), '/\\') . '/bootstrap.php';
 $application = \Omeka\Mvc\Application::init(require OMEKA_PATH . '/application/config/application.config.php');
 $services = $application->getServiceManager();

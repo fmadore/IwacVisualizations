@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 // Exercise real nested Laminas partials: include/return stubs miss the output
 // buffering contract that stranded all blocks in v1.66.0–v1.68.2.
+// A warning or a deprecation the module raises fails the run, not just prints.
+require dirname(__DIR__) . '/lib/strict-errors.php';
 require rtrim((string) getenv('OMEKA_PATH'), '/\\') . '/vendor/autoload.php';
 // The module's own classes, the way Omeka's module autoloader maps them
 // (templates reach for some, e.g. OnThisDay::DEFAULT_LAYOUT).

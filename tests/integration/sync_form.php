@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 // Use Omeka's actual Laminas form/CSRF validators, not the unit-test stubs.
+// A warning or a deprecation the module raises fails the run, not just prints.
+require dirname(__DIR__) . '/lib/strict-errors.php';
 require rtrim((string) getenv('OMEKA_PATH'), '/\\') . '/vendor/autoload.php';
 require dirname(__DIR__, 2) . '/src/Controller/Admin/DataController.php';
 
