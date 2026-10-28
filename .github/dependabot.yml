@@ -35,6 +35,10 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
+    # Let a release age before it is proposed: a compromised or broken
+    # publish is usually yanked within days. Security updates are not held.
+    cooldown:
+      default-days: 5
     # One grouped PR rather than one per action.
     groups:
       actions:
@@ -50,6 +54,8 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 5
     # Security updates arrive as they are published regardless of this
     # schedule; the monthly group is the routine refresh, one PR.
     groups:
