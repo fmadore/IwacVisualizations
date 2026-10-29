@@ -145,7 +145,9 @@ def build_normalized_matrix(
     if not vectors:
         return np.zeros((0, 0), dtype=np.float32), []
 
-    X = np.vstack(vectors)
+    # float64, not the vectors' float32: cosine scores then agree across CPUs
+    # far below the six decimals neighbours are ranked at (rank_neighbours).
+    X = np.vstack(vectors).astype(np.float64)
     norms = np.linalg.norm(X, axis=1, keepdims=True)
     norms[norms == 0] = 1.0
     X = X / norms
@@ -195,13 +197,19 @@ def rank_neighbours(scores: np.ndarray, k: int, tie_keys: np.ndarray) -> np.ndar
     Every tie at the k-th score is a candidate before the cut, or which of
     them survives would depend on ``argpartition``. Entries at ``-inf``
     (the row itself, masked rows) are never returned.
+
+    Scores are compared at six decimals. A float32 dot product differs in
+    its last bits from one CPU's BLAS to another's, so two neighbours that
+    tie in exact arithmetic would otherwise swap places between a laptop
+    and the CI runner; rounded, they tie everywhere and the o:id decides.
     """
     kk = min(k, int(np.isfinite(scores).sum()))
     if kk <= 0:
         return np.empty(0, dtype=np.int64)
-    part = np.argpartition(-scores, kk - 1)[:kk]
-    candidates = np.flatnonzero(scores >= scores[part].min())
-    order = np.lexsort((tie_keys[candidates], -scores[candidates]))[:kk]
+    rounded = np.round(scores.astype(np.float64), 6)
+    part = np.argpartition(-rounded, kk - 1)[:kk]
+    candidates = np.flatnonzero(rounded >= rounded[part].min())
+    order = np.lexsort((tie_keys[candidates], -rounded[candidates]))[:kk]
     return candidates[order]
 
 

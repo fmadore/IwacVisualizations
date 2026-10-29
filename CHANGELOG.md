@@ -17,7 +17,7 @@ link to the historical documents preserved in Git.
 
 **Data that a site cannot read is no longer installed.** Each data release now states which version of the data format it was built for. "Pull latest data" refuses a release this version of the module cannot read and keeps the current data online; the job log says whether to upgrade the module first or wait for the next data build. Data releases published before this change keep syncing as before.
 
-- **Rebuilding the data from an unchanged dataset gives identical files.** Ties no longer change order from one build to the next, in the Scary Terms word clouds or in the countries, newspapers, places and names on an entity page.
+- **Rebuilding the data from an unchanged dataset gives identical files, on any machine.** Ties no longer change order from one build to the next, in the Scary Terms word clouds or in the countries, newspapers, places and names on an entity page. Similar articles, issues and records are scored in double precision and ranked at six decimals, so two equally close neighbours keep their order (by item id) whichever computer builds the data.
 - **Embeds load the IWAC theme's own fonts.** With IWAC-theme 2.31, which self-hosts its webfonts, an embedded block links the theme's `fonts.css` instead of requesting them from Bunny Fonts; a site on another theme or an older IWAC-theme keeps the Bunny fallback.
 - The entity bar tooltip escapes its first and last mention dates, like the rest of its text.
 - Map popups take a DOM body or a popup description, never an HTML string: the string path, which nothing used, is gone.

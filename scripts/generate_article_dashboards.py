@@ -445,7 +445,11 @@ class ArticleDashboardGenerator:
         # Zero vectors have norm 0; we L2-normalize with a safe fallback
         # that leaves them zero, so their cosine similarity to anything
         # is 0 and they never surface as neighbours.
-        X = np.zeros((N, dim), dtype=np.float32)
+        # float64, not the vectors' float32: cosine scores then agree across
+        # CPUs far below the six decimals neighbours are ranked at
+        # (iwac_embeddings.rank_neighbours), so every machine builds the
+        # same lists.
+        X = np.zeros((N, dim), dtype=np.float64)
         for i, vec in enumerate(rows):
             if valid[i] and len(vec) == dim:
                 X[i] = vec

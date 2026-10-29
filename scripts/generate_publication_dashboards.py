@@ -272,7 +272,11 @@ class PublicationDashboardGenerator:
             self.valid_rows = valid
             return
 
-        X = np.zeros((N, dim), dtype=np.float32)
+        # float64, not the vectors' float32: cosine scores then agree across
+        # CPUs far below the six decimals neighbours are ranked at
+        # (iwac_embeddings.rank_neighbours), so every machine builds the
+        # same lists.
+        X = np.zeros((N, dim), dtype=np.float64)
         for i, vec in enumerate(vectors):
             if vec is not None and len(vec) == dim:
                 X[i] = vec
