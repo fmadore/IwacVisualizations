@@ -337,6 +337,7 @@ IwacVisualizations/
 ├── README.md
 ├── ROADMAP.md                           # Consolidated maintenance status and decisions
 ├── ruff.toml
+├── SECURITY.md
 └── tokens.json                          # Synced from the IWAC theme; `npm run lint:theme` enforces it
 ```
 
