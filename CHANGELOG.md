@@ -13,6 +13,22 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.90.0 — data that knows its version, and checks borrowed from DRE Visualizations (2026-10-29)
+
+**Data that a site cannot read is no longer installed.** Each data release now states which version of the data format it was built for. "Pull latest data" refuses a release this version of the module cannot read and keeps the current data online; the job log says whether to upgrade the module first or wait for the next data build. Data releases published before this change keep syncing as before.
+
+- **Rebuilding the data from an unchanged dataset gives identical files.** Ties no longer change order from one build to the next, in the Scary Terms word clouds or in the countries, newspapers, places and names on an entity page.
+- **Embeds load the IWAC theme's own fonts.** With IWAC-theme 2.31, which self-hosts its webfonts, an embedded block links the theme's `fonts.css` instead of requesting them from Bunny Fonts; a site on another theme or an older IWAC-theme keeps the Bunny fallback.
+- The entity bar tooltip escapes its first and last mention dates, like the rest of its text.
+- Map popups take a DOM body or a popup description, never an HTML string: the string path, which nothing used, is gone.
+
+For maintainers, from a structural comparison with DRE Visualizations (see ROADMAP.md):
+
+- ESLint runs `eslint-plugin-no-unsanitized` over the browser sources, with MapLibre's `setHTML` as a sink, and a hostile-label sweep builds every shared chart option and calls every tooltip formatter with an `<img onerror>` label.
+- A golden test runs 25 generators on a small synthetic dataset, offline, and compares every JSON file they write with `tests/golden/` (`UPDATE_GOLDEN=1` to accept a change).
+- The PHP harness and the Omeka integration suites fail on any warning, notice or deprecation the module raises.
+- A tag pushed alone creates its release with the title and notes of its CHANGELOG entry; Dependabot lets a release age five days before proposing it; the repository has a `SECURITY.md`.
+
 ### v1.89.0 — one CDN library fewer (2026-10-27)
 
 **echarts-wordcloud is gone.** Since v1.88.0 the module lays its word clouds out itself, so the seven blocks that draw one (Albani Zaria Sermons, Collection Overview, Compare Newspapers, the item-set and publication dashboards, Periodicals Overview, Scary Terms) were downloading and running a CDN script for nothing. Those pages now make one request fewer, and the module pins eight CDN files instead of nine.
