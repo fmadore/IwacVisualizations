@@ -36,6 +36,10 @@ final class Manifest
         if (!is_int($contract) || $contract < 1) {
             throw new \RuntimeException('The data archive declares an invalid data contract.');
         }
+        // Taken before the equality test narrows $contract: at contract 1 an
+        // archive past it can only be newer, and that must stay a question
+        // the day the constant moves on.
+        $newer = $contract > self::DATA_CONTRACT;
         if ($contract === self::DATA_CONTRACT) {
             return;
         }
@@ -43,7 +47,7 @@ final class Manifest
             'The data archive was built for data contract %d, but this version of IWAC Visualizations reads data contract %d; the active data is unchanged. %s',
             $contract,
             self::DATA_CONTRACT,
-            $contract > self::DATA_CONTRACT
+            $newer
                 ? 'Upgrade the module to a release that reads it, then pull the data again.'
                 : 'Pull again once the data release has been rebuilt by the current generators.'
         ));
