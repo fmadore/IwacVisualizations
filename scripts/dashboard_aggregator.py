@@ -795,9 +795,11 @@ class DashboardAggregator:
         return {
             "years": years,
             "months": list(range(1, 13)),
+            # Sorted: the buckets fill in the order of a set of item keys,
+            # which changes with every process's string hashing.
             "cells": [
                 [year_index[y], m - 1, count]
-                for (y, m), count in buckets.items()
+                for (y, m), count in sorted(buckets.items())
             ],
             "items": sum(buckets.values()),
         }

@@ -132,9 +132,12 @@ class EntityDashboardGenerator(DashboardAggregator):
             f"{with_mentions}/{self.n_targets} target entities have at least one mention"
         )
 
-    def _role_slices(self, target_id: int) -> Iterator[Tuple[str, Set[str]]]:
-        # Single no-op facet — every section lands in by_role.all.
-        yield "all", self.entity_items.get(target_id, set())
+    def _role_slices(self, target_id: int) -> Iterator[Tuple[str, List[str]]]:
+        # Single no-op facet — every section lands in by_role.all. Sorted,
+        # as the person dashboards' are: the order drives Counter insertion
+        # and so every most_common() tie, and a set of string keys iterates
+        # in a different order in every process.
+        yield "all", sorted(self.entity_items.get(target_id, set()))
 
     def _item_neighbor_ids(self, item_key: str, exclude: int) -> List[int]:
         return [
@@ -153,11 +156,11 @@ class EntityDashboardGenerator(DashboardAggregator):
             if o_id in self.lieux_rows
         ]
 
-    def _iter_target_items(self) -> Iterator[Tuple[int, Set[str]]]:
+    def _iter_target_items(self) -> Iterator[Tuple[int, List[str]]]:
         for entity_o_id, item_keys in self.entity_items.items():
             if entity_o_id not in self.targets:
                 continue
-            yield entity_o_id, item_keys
+            yield entity_o_id, sorted(item_keys)
 
     # ------------------------------------------------------------------
     # Per-entity JSON assembly + fan-out

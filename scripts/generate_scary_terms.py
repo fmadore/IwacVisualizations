@@ -598,8 +598,11 @@ class ScaryTermsGenerator:
             bucket_totals[label] += 1
 
         def flatten(counter: Counter, article_count: int) -> Dict[str, Any]:
+            # Ties broken by the word: each article's tokens are a set, so
+            # most_common() alone ordered equal counts by string hashing,
+            # which differs from one process to the next.
             filtered = [
-                (w, int(c)) for w, c in counter.most_common()
+                (w, int(c)) for w, c in sorted(counter.items(), key=lambda kv: (-kv[1], kv[0]))
                 if c >= self.min_frequency
             ]
             return {
