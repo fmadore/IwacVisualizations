@@ -62,6 +62,12 @@ $accents   = EmbedBrand::accents(
 );
 $primary   = $accents['primary'];
 $secondary = $accents['secondary'];
+
+// The theme's self-hosted webfonts when the site's theme ships them, so the
+// embed makes no third-party request; else the Bunny request (EmbedBrand).
+$themeFonts = EmbedBrand::themeFontsAsset(
+    $site && defined('OMEKA_PATH') ? OMEKA_PATH . '/themes/' . $site->theme() : null
+);
 ?>
 <!doctype html>
 <?php
@@ -86,12 +92,17 @@ if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escapeHtml($embedTitle) ?></title>
     <?php
-    // The theme's webfonts — the same request its layout.phtml makes. This
-    // route carries no theme stylesheet, so without it every heading and
-    // chart label fell back to the system stack.
-    ?>
+    // The theme's webfonts — the same faces its layout.phtml loads. This
+    // route carries no theme stylesheet, so without them every heading and
+    // chart label fell back to the system stack. `assetUrl()` with no module
+    // resolves against the site's theme, whose fonts.css points at its own
+    // asset/fonts/.
+    if ($themeFonts !== null): ?>
+    <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl($themeFonts)) ?>">
+    <?php else: ?>
     <link rel="preconnect" href="<?= $escapeAttr(EmbedBrand::WEBFONT_ORIGIN) ?>" crossorigin>
     <link rel="stylesheet" href="<?= $escapeAttr(EmbedBrand::webfontUrl()) ?>">
+    <?php endif; ?>
     <?php
     // The theme's tokens, light and dark, as generated literals: this route
     // carries no theme stylesheet, so without them every var() rendered its

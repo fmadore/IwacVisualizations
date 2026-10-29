@@ -91,8 +91,14 @@ function renderSeeds(tokens) {
         'return [',
         `    'primary'   => '${hex('--primary-base')}',`,
         `    'secondary' => '${hex('--secondary-base')}',`,
+        // The theme's self-hosted webfont stylesheet, relative to the theme
+        // root (theme 2.31). EmbedBrand::themeFontsAsset() prefers it.
+        ...(typeof tokens.fontsCss === 'string' && /^asset\/css\/[a-z-]+\.css$/.test(tokens.fontsCss)
+            ? [`    'fontsCss'  => '${tokens.fontsCss}',`]
+            : []),
         // The theme's webfont request, once tokens.json publishes it (theme
-        // 2.24); until then EmbedBrand::WEBFONT_URL is the copy.
+        // 2.24); until then EmbedBrand::WEBFONT_URL is the copy. Deprecated
+        // by the theme: only the fallback for a theme without fontsCss.
         ...(typeof tokens.fontsUrl === 'string' && /^https:\/\/[^'\\]+$/.test(tokens.fontsUrl)
             ? [`    'fontsUrl'  => '${tokens.fontsUrl}',`]
             : []),

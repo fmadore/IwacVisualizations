@@ -22,15 +22,38 @@ namespace IwacVisualizations\Site;
 final class EmbedBrand
 {
     /**
-     * The webfont request IWAC-theme's `view/layout/layout.phtml` makes —
-     * Besley 500/600/800, Public Sans, Source Serif 4 — on Bunny Fonts, the
-     * theme's GDPR-safe Google Fonts mirror. Without it an embed set every
-     * heading and chart label in the fallback stack. `tests/js/embed-brand.test.js`
+     * The webfont request IWAC-theme's `view/layout/layout.phtml` made before
+     * 2.31 — Besley 500/600/800, Public Sans, Source Serif 4 — on Bunny Fonts,
+     * the theme's GDPR-safe Google Fonts mirror. Now only the fallback when the
+     * site's theme does not ship themeFontsAsset(). `tests/js/embed-brand.test.js`
      * checks the families and weights against `tokens.json`'s `fonts`.
      */
     public const WEBFONT_URL = 'https://fonts.bunny.net/css?family=besley:500,600,800|public-sans:ital,wght@0,400..700;1,400|source-serif-4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&display=swap';
 
     public const WEBFONT_ORIGIN = 'https://fonts.bunny.net';
+
+    /**
+     * The theme's own webfont stylesheet, as a path for `assetUrl()` (relative
+     * to the theme's `asset/`), or null when the site's theme does not ship it.
+     *
+     * Since 2.31 IWAC-theme self-hosts its fonts and publishes the stylesheet
+     * holding only their `@font-face` rules as tokens.json `fontsCss`
+     * (`asset/css/fonts.css`, copied into config/theme-seeds.php). Loading it
+     * keeps the embed on its own origin; Bunny (webfontUrl()) is the fallback
+     * for a site on another theme, or on an IWAC-theme older than 2.31.
+     *
+     * @param string|null $themeRoot The site theme's directory on disk
+     * @param array{fontsCss?: string}|null $seeds
+     */
+    public static function themeFontsAsset(?string $themeRoot, ?array $seeds = null): ?string
+    {
+        $seeds = $seeds ?? self::seeds();
+        $path = $seeds['fontsCss'] ?? '';
+        if ($themeRoot === null || !is_string($path) || !preg_match('~^asset/(css/[a-z-]+\.css)$~', $path, $match)) {
+            return null;
+        }
+        return is_readable(rtrim($themeRoot, '/\\') . '/' . $path) ? $match[1] : null;
+    }
 
     /**
      * The webfont request: tokens.json's `fontsUrl` when the synced contract
@@ -45,7 +68,7 @@ final class EmbedBrand
     /**
      * The theme's seeds, from the file `npm run build:embed-tokens` writes.
      *
-     * @return array{primary?: string, secondary?: string, fontsUrl?: string}
+     * @return array{primary?: string, secondary?: string, fontsCss?: string, fontsUrl?: string}
      */
     public static function seeds(): array
     {

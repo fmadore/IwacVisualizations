@@ -61,6 +61,14 @@ test('the embed loads exactly the faces and weights the theme loads', () => {
     if (tokens.fontsUrl) assert.equal(url, tokens.fontsUrl);
 });
 
+test('the embed prefers the theme’s self-hosted font stylesheet', () => {
+    const seeds = readFileSync(join(ROOT, 'config', 'theme-seeds.php'), 'utf8');
+    assert.equal(tokens.fontsCss, 'asset/css/fonts.css');
+    assert.match(seeds, new RegExp(`'fontsCss'\\s*=> '${tokens.fontsCss}'`));
+    const layout = readFileSync(join(ROOT, 'view', 'iwac-visualizations', 'layout', 'embed.phtml'), 'utf8');
+    assert.match(layout, /EmbedBrand::themeFontsAsset\(/, 'the embed layout no longer asks for the theme fonts');
+});
+
 test('the embed derives its accent from a seed with the theme’s own mixes', () => {
     // tokens.json resolves the stock seed through the theme's derivation;
     // the embed rules must use the same percentages to land on the same
