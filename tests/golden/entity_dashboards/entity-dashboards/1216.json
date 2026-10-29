@@ -1,0 +1,1151 @@
+{
+ "version": 4,
+ "entity": {
+  "o_id": 1216,
+  "title": "Bobo-Dioulasso",
+  "type": "Lieux"
+ },
+ "summary": {
+  "by_role": {
+   "all": {
+    "total_mentions": 5,
+    "year_min": 1997,
+    "year_max": 2016,
+    "newspapers_count": 5,
+    "countries_count": 4
+   }
+  }
+ },
+ "timeline": {
+  "by_role": {
+   "all": {
+    "years": [
+     1997,
+     2004,
+     2011,
+     2015,
+     2016
+    ],
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Côte d'Ivoire",
+     "Niger"
+    ],
+    "series": {
+     "Burkina Faso": [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "Bénin": [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "Côte d'Ivoire": [
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "Niger": [
+      0,
+      0,
+      0,
+      1,
+      0
+     ]
+    }
+   }
+  }
+ },
+ "newspapers": {
+  "by_role": {
+   "all": [
+    {
+     "name": "La Gazette du Golfe",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Bénin",
+     "year_min": 2011,
+     "year_max": 2011
+    },
+    {
+     "name": "Le Quotidien du Faso",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Burkina Faso",
+     "year_min": 2004,
+     "year_max": 2004
+    },
+    {
+     "name": "L'Écho d'Abidjan",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Côte d'Ivoire",
+     "year_min": 1997,
+     "year_max": 1997
+    },
+    {
+     "name": "Le Courrier du Sahel",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Niger",
+     "year_min": 2015,
+     "year_max": 2015
+    },
+    {
+     "name": "Al-Hikma",
+     "total": 1,
+     "articles": 0,
+     "publications": 1,
+     "references": 0,
+     "country": "Bénin",
+     "year_min": 2016,
+     "year_max": 2016
+    }
+   ]
+  }
+ },
+ "countries": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Bénin",
+     "count": 2
+    },
+    {
+     "name": "Burkina Faso",
+     "count": 1
+    },
+    {
+     "name": "Côte d'Ivoire",
+     "count": 1
+    },
+    {
+     "name": "Niger",
+     "count": 1
+    }
+   ]
+  }
+ },
+ "network": {
+  "by_role": {
+   "all": {
+    "nodes": [
+     {
+      "o_id": 1216,
+      "title": "Bobo-Dioulasso",
+      "type": "center",
+      "cooc": null,
+      "score": null
+     },
+     {
+      "o_id": 1307,
+      "title": "Islam",
+      "type": "Sujets",
+      "cooc": 2,
+      "score": 1.2381
+     }
+    ],
+    "edges": [
+     {
+      "source": 1216,
+      "target": 1307,
+      "weight": 1.2381,
+      "cooc": 2,
+      "kind": "ego"
+     }
+    ],
+    "by_type": {
+     "Personnes": {
+      "nodes": [
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Organisations": {
+      "nodes": [
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Lieux": {
+      "nodes": [
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Sujets": {
+      "nodes": [
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "Sujets",
+        "cooc": 2,
+        "score": 1.2381
+       }
+      ],
+      "edges": [
+       {
+        "source": 1216,
+        "target": 1307,
+        "weight": 1.2381,
+        "cooc": 2,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Événements": {
+      "nodes": [
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     }
+    },
+    "over_time": {
+     "year_min": 1997,
+     "year_max": 2016,
+     "dated_items": 5,
+     "undated_items": 0,
+     "entities": {
+      "1307": [
+       [
+        2015,
+        1
+       ],
+       [
+        2016,
+        1
+       ]
+      ]
+     }
+    }
+   }
+  }
+ },
+ "locations": {
+  "by_role": {
+   "all": [
+    {
+     "o_id": 1216,
+     "name": "Bobo-Dioulasso",
+     "lat": 11.18,
+     "lng": -4.3,
+     "count": 5,
+     "articles": [
+      {
+       "o_id": 6005,
+       "subset": "publications",
+       "title": "Al-Hikma, numéro 6",
+       "publisher": "Al-Hikma",
+       "date": "2016-02-09"
+      },
+      {
+       "o_id": 5023,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 24",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2015-08-27"
+      },
+      {
+       "o_id": 5005,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 6",
+       "publisher": "La Gazette du Golfe",
+       "date": "2011-02-09"
+      },
+      {
+       "o_id": 5011,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 12",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2004-08-24"
+      },
+      {
+       "o_id": 5017,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 18",
+       "publisher": "L'Écho d'Abidjan",
+       "date": "1997-02-12"
+      }
+     ]
+    },
+    {
+     "o_id": 1201,
+     "name": "Bénin",
+     "lat": 9.3,
+     "lng": 2.31,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5005,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 6",
+       "publisher": "La Gazette du Golfe",
+       "date": "2011-02-09"
+      }
+     ]
+    },
+    {
+     "o_id": 1202,
+     "name": "Burkina Faso",
+     "lat": 12.24,
+     "lng": -1.56,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5011,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 12",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2004-08-24"
+      }
+     ]
+    },
+    {
+     "o_id": 1203,
+     "name": "Côte d'Ivoire",
+     "lat": 7.54,
+     "lng": -5.55,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5017,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 18",
+       "publisher": "L'Écho d'Abidjan",
+       "date": "1997-02-12"
+      }
+     ]
+    },
+    {
+     "o_id": 1204,
+     "name": "Niger",
+     "lat": 17.61,
+     "lng": 8.08,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5023,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 24",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2015-08-27"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "topics": {
+  "by_role": {
+   "all": [
+    {
+     "label": "école enseignement élève franco-arabe",
+     "count": 2
+    },
+    {
+     "label": "sécurité terrorisme attaque armée",
+     "count": 2
+    }
+   ]
+  }
+ },
+ "sentiment": {
+  "by_role": {
+   "all": {
+    "models": [
+     "gpt_5_6_luna",
+     "mistral_small_2603",
+     "deepseek_v4_flash_0731",
+     "gemma_4_31b_it",
+     "qwen3_8_27b",
+     "claude_haiku_5_5"
+    ],
+    "by_model": {
+     "gpt_5_6_luna": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 4
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.5,
+      "rated_articles": 4
+     },
+     "mistral_small_2603": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 4
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 1
+       }
+      ],
+      "subjectivite_avg": 3.25,
+      "rated_articles": 4
+     },
+     "deepseek_v4_flash_0731": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 3
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 1
+       }
+      ],
+      "subjectivite_avg": 3.33,
+      "rated_articles": 3
+     },
+     "gemma_4_31b_it": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 3
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 3.0,
+      "rated_articles": 3
+     },
+     "qwen3_8_27b": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 4
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 1
+       }
+      ],
+      "subjectivite_avg": 3.0,
+      "rated_articles": 4
+     },
+     "claude_haiku_5_5": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 4
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.5,
+      "rated_articles": 4
+     }
+    },
+    "articles_total": 4
+   }
+  }
+ },
+ "heatmap": {
+  "by_role": {
+   "all": {
+    "years": [
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016
+    ],
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "cells": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      7,
+      7,
+      1
+     ],
+     [
+      14,
+      1,
+      1
+     ],
+     [
+      18,
+      7,
+      1
+     ],
+     [
+      19,
+      1,
+      1
+     ]
+    ],
+    "items": 5,
+    "hijri": {
+     "years": [
+      1417,
+      1418,
+      1419,
+      1420,
+      1421,
+      1422,
+      1423,
+      1424,
+      1425,
+      1426,
+      1427,
+      1428,
+      1429,
+      1430,
+      1431,
+      1432,
+      1433,
+      1434,
+      1435,
+      1436,
+      1437,
+      1438,
+      1439,
+      1440
+     ],
+     "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "cells": [
+      [
+       0,
+       8,
+       1
+      ],
+      [
+       7,
+       8,
+       1
+      ],
+      [
+       14,
+       8,
+       1
+      ],
+      [
+       18,
+       8,
+       1
+      ],
+      [
+       23,
+       8,
+       1
+      ]
+     ],
+     "items": 5
+    }
+   }
+  }
+ },
+ "cooccurrence": {
+  "by_role": {
+   "all": {
+    "names": [
+     "Islam",
+     "Bénin",
+     "Pèlerinage",
+     "Jeunesse",
+     "Laïcité",
+     "Burkina Faso",
+     "Tabaski",
+     "Côte d'Ivoire",
+     "Femmes",
+     "Ramadan",
+     "Éducation",
+     "Niger",
+     "Radicalisation"
+    ],
+    "matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+     ],
+     [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ]
+   }
+  }
+ }
+}

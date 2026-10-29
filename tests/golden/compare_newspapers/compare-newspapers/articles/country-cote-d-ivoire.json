@@ -1,0 +1,451 @@
+{
+ "id": "articles::country::cote-d-ivoire",
+ "type": "articles",
+ "scope": "country",
+ "name": "Côte d'Ivoire",
+ "summary": {
+  "total_items": 5,
+  "total_words": 434,
+  "total_pages": 11,
+  "year_min": 1997,
+  "year_max": 2017,
+  "unique_subjects": 6,
+  "unique_spatial": 6,
+  "unique_languages": 1,
+  "unique_newspapers": 1,
+  "unique_geocoded_places": 6
+ },
+ "timeline": {
+  "years": [
+   1997,
+   2002,
+   2007,
+   2012,
+   2017
+  ],
+  "counts": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ]
+ },
+ "subjects": [
+  {
+   "name": "Mosquées",
+   "count": 3,
+   "o_id": 1303
+  },
+  {
+   "name": "Pèlerinage",
+   "count": 3,
+   "o_id": 1306
+  },
+  {
+   "name": "Aïcha Mama",
+   "count": 3,
+   "o_id": 1004
+  },
+  {
+   "name": "Femmes",
+   "count": 2,
+   "o_id": 1308
+  },
+  {
+   "name": "Ramadan",
+   "count": 2,
+   "o_id": 1301
+  },
+  {
+   "name": "Association des élèves musulmans",
+   "count": 1,
+   "o_id": 1101
+  }
+ ],
+ "spatial": [
+  {
+   "name": "Côte d'Ivoire",
+   "count": 5,
+   "o_id": 1203
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "o_id": 1213
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "o_id": 1212
+  },
+  {
+   "name": "Cotonou",
+   "count": 1,
+   "o_id": 1211
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "count": 1,
+   "o_id": 1216
+  },
+  {
+   "name": "Lomé",
+   "count": 1,
+   "o_id": 1215
+  }
+ ],
+ "languages": [
+  {
+   "name": "Français",
+   "count": 5
+  }
+ ],
+ "newspapers": [
+  {
+   "name": "L'Écho d'Abidjan",
+   "count": 5
+  }
+ ],
+ "wordcloud": [
+  [
+   "conseil",
+   22
+  ],
+  [
+   "pèlerinage",
+   21
+  ],
+  [
+   "femmes",
+   21
+  ],
+  [
+   "jihad",
+   21
+  ],
+  [
+   "tolérance",
+   21
+  ],
+  [
+   "prière",
+   20
+  ],
+  [
+   "fidèles",
+   20
+  ],
+  [
+   "état",
+   20
+  ],
+  [
+   "école",
+   19
+  ],
+  [
+   "union",
+   19
+  ],
+  [
+   "dialogue",
+   18
+  ],
+  [
+   "mosquée",
+   18
+  ],
+  [
+   "communauté",
+   18
+  ],
+  [
+   "jeûne",
+   18
+  ],
+  [
+   "laïcité",
+   18
+  ],
+  [
+   "paix",
+   18
+  ],
+  [
+   "jeunesse",
+   17
+  ],
+  [
+   "terrorisme",
+   17
+  ],
+  [
+   "imam",
+   9
+  ],
+  [
+   "ramadan",
+   9
+  ],
+  [
+   "enseignement",
+   9
+  ],
+  [
+   "religion",
+   9
+  ],
+  [
+   "mecque",
+   9
+  ],
+  [
+   "islamisme",
+   9
+  ],
+  [
+   "charia",
+   9
+  ],
+  [
+   "association",
+   9
+  ],
+  [
+   "musulmans",
+   9
+  ]
+ ],
+ "geo_points": [
+  {
+   "name": "Côte d'Ivoire",
+   "count": 5,
+   "lat": 7.54,
+   "lng": -5.55,
+   "o_id": 1203,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "lat": 5.35,
+   "lng": -4.01,
+   "o_id": 1213,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "lat": 12.37,
+   "lng": -1.52,
+   "o_id": 1212,
+   "country": "Burkina Faso"
+  },
+  {
+   "name": "Cotonou",
+   "count": 1,
+   "lat": 6.37,
+   "lng": 2.39,
+   "o_id": 1211,
+   "country": "Bénin"
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "count": 1,
+   "lat": 11.18,
+   "lng": -4.3,
+   "o_id": 1216,
+   "country": "Burkina Faso"
+  },
+  {
+   "name": "Lomé",
+   "count": 1,
+   "lat": 6.13,
+   "lng": 1.22,
+   "o_id": 1215,
+   "country": "Togo"
+  }
+ ],
+ "sentiment": {
+  "rated": 5,
+  "models": {
+   "gpt_5_6_luna": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 1
+     },
+     {
+      "label": "Neutre",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Secondaire",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "3",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 3.0,
+    "subjectivite_n": 5
+   },
+   "mistral_small_2603": {
+    "polarite": [
+     {
+      "label": "Négatif",
+      "count": 2
+     },
+     {
+      "label": "Non applicable",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Marginal",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "5",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 5.0,
+    "subjectivite_n": 4
+   },
+   "deepseek_v4_flash_0731": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 2
+     },
+     {
+      "label": "Neutre",
+      "count": 1
+     },
+     {
+      "label": "Très négatif",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Non abordé",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "2",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 2.0,
+    "subjectivite_n": 5
+   },
+   "gemma_4_31b_it": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 2
+     },
+     {
+      "label": "Négatif",
+      "count": 1
+     },
+     {
+      "label": "Non applicable",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Très central",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "4",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 4.0,
+    "subjectivite_n": 5
+   },
+   "qwen3_8_27b": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 1
+     },
+     {
+      "label": "Neutre",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Central",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "1",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 1.0,
+    "subjectivite_n": 4
+   },
+   "claude_haiku_5_5": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 2
+     },
+     {
+      "label": "Négatif",
+      "count": 2
+     },
+     {
+      "label": "Non applicable",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Secondaire",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "3",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 3.0,
+    "subjectivite_n": 5
+   }
+  }
+ }
+}

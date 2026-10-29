@@ -53,6 +53,7 @@ const SUMMARIZE = {
     'language/': 'template.pot + fr.po + the compiled fr.mo',
     'tests/js/': 'node:test units',
     'tests/browser/': 'Playwright specs',
+    'tests/golden/': 'generator output on the synthetic corpus; UPDATE_GOLDEN=1 rewrites it',
     'scripts/laicite/': 'one module per bundle, mirroring asset/js/charts/laicite/',
     'scripts/lib/': 'file walk, bundle manifest and failure report the guards share',
 };

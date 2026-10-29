@@ -1,0 +1,11342 @@
+{
+ "metadata": {
+  "totalRecords": 24,
+  "dataSource": "fmadore/islam-west-africa-collection-full",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "script": "generate_sentiment_atlas.py",
+  "script_version": "0.4.0",
+  "excludedNoYear": 0
+ },
+ "summary": {
+  "total": 24,
+  "year_min": 1996,
+  "year_max": 2020,
+  "models": {
+   "gpt_5_6_luna": {
+    "rated": 22,
+    "not_applicable": 0
+   },
+   "mistral_small_2603": {
+    "rated": 23,
+    "not_applicable": 8
+   },
+   "deepseek_v4_flash_0731": {
+    "rated": 23,
+    "not_applicable": 0
+   },
+   "gemma_4_31b_it": {
+    "rated": 22,
+    "not_applicable": 7
+   },
+   "qwen3_8_27b": {
+    "rated": 22,
+    "not_applicable": 0
+   },
+   "claude_haiku_5_5": {
+    "rated": 22,
+    "not_applicable": 7
+   }
+  }
+ },
+ "polarity_order": [
+  "Très positif",
+  "Positif",
+  "Neutre",
+  "Négatif",
+  "Très négatif",
+  "Non applicable"
+ ],
+ "centrality_order": [
+  "Très central",
+  "Central",
+  "Secondaire",
+  "Marginal",
+  "Non abordé"
+ ],
+ "subjectivity_levels": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "extreme_categories": [
+  "subjectivity_high",
+  "subjectivity_low",
+  "polarity_very_negative",
+  "polarity_very_positive",
+  "centrality_very_central",
+  "centrality_marginal"
+ ],
+ "years": [
+  1996,
+  1997,
+  1998,
+  1999,
+  2000,
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006,
+  2007,
+  2008,
+  2009,
+  2010,
+  2011,
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2019,
+  2020
+ ],
+ "countries": [
+  "Bénin",
+  "Burkina Faso",
+  "Côte d'Ivoire",
+  "Niger",
+  "Togo"
+ ],
+ "topics": [
+  {
+   "id": 0,
+   "label": "mosquée prière fidèle imam"
+  },
+  {
+   "id": 2,
+   "label": "pèlerinage mecque hadj voyage"
+  },
+  {
+   "id": 1,
+   "label": "école enseignement élève franco-arabe"
+  },
+  {
+   "id": 3,
+   "label": "sécurité terrorisme attaque armée"
+  }
+ ],
+ "newspapers": [],
+ "newspaper_min": 50,
+ "models": {
+  "gpt_5_6_luna": {
+   "rated": 22,
+   "not_applicable": 0,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Central": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "Secondaire": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "Marginal": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Non abordé": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     1,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     1,
+     2,
+     2,
+     0,
+     2
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     1,
+     2,
+     2,
+     1
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     1,
+     2,
+     1,
+     2
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     2,
+     1,
+     1
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     2,
+     2,
+     2
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     null,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     null,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     2.0,
+     4.0
+    ],
+    "n": [
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     1,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     1,
+     2,
+     2,
+     0,
+     2
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     1,
+     2,
+     2,
+     1
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     5,
+     5.0,
+     1
+    ],
+    [
+     0,
+     10,
+     5.0,
+     1
+    ],
+    [
+     0,
+     15,
+     5.0,
+     1
+    ],
+    [
+     0,
+     20,
+     5.0,
+     1
+    ],
+    [
+     1,
+     3,
+     4.0,
+     1
+    ],
+    [
+     1,
+     8,
+     4.0,
+     1
+    ],
+    [
+     1,
+     13,
+     4.0,
+     1
+    ],
+    [
+     1,
+     18,
+     4.0,
+     1
+    ],
+    [
+     1,
+     22,
+     4.0,
+     1
+    ],
+    [
+     2,
+     1,
+     3.0,
+     1
+    ],
+    [
+     2,
+     6,
+     3.0,
+     1
+    ],
+    [
+     2,
+     11,
+     3.0,
+     1
+    ],
+    [
+     2,
+     16,
+     3.0,
+     1
+    ],
+    [
+     2,
+     21,
+     3.0,
+     1
+    ],
+    [
+     3,
+     4,
+     2.0,
+     1
+    ],
+    [
+     3,
+     9,
+     2.0,
+     1
+    ],
+    [
+     3,
+     19,
+     2.0,
+     1
+    ],
+    [
+     3,
+     23,
+     2.0,
+     1
+    ],
+    [
+     4,
+     2,
+     1.0,
+     1
+    ],
+    [
+     4,
+     7,
+     1.0,
+     1
+    ],
+    [
+     4,
+     12,
+     1.0,
+     1
+    ],
+    [
+     4,
+     17,
+     1.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 8,
+     "subject": [
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       4
+      ],
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 9,
+     "subject": [
+      [
+       "Tabaski",
+       3
+      ],
+      [
+       "Laïcité",
+       3
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Fatimata Ouédraogo",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Burkina Faso",
+       5
+      ],
+      [
+       "Bénin",
+       4
+      ],
+      [
+       "Bobo-Dioulasso",
+       2
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 8,
+     "subject": [
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Mosquées",
+       1
+      ],
+      [
+       "Aïcha Mama",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Amadou Diallo",
+       1
+      ],
+      [
+       "Fatimata Ouédraogo",
+       1
+      ],
+      [
+       "Islam",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Abidjan",
+       4
+      ],
+      [
+       "Bobo-Dioulasso",
+       4
+      ],
+      [
+       "Côte d'Ivoire",
+       2
+      ],
+      [
+       "Bénin",
+       2
+      ],
+      [
+       "Niger",
+       2
+      ],
+      [
+       "Burkina Faso",
+       1
+      ],
+      [
+       "Togo",
+       1
+      ]
+     ]
+    },
+    "polarity_very_positive": {
+     "n": 7,
+     "subject": [
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Union des musulmans du Togo",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Éducation",
+       1
+      ],
+      [
+       "Moussa Koné",
+       1
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Aïcha Mama",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ],
+      [
+       "Laïcité",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niamey",
+       4
+      ],
+      [
+       "Cotonou",
+       3
+      ],
+      [
+       "Niger",
+       2
+      ],
+      [
+       "Burkina Faso",
+       2
+      ],
+      [
+       "Togo",
+       1
+      ],
+      [
+       "Côte d'Ivoire",
+       1
+      ],
+      [
+       "Bénin",
+       1
+      ]
+     ]
+    },
+    "centrality_very_central": {
+     "n": 4,
+     "subject": [
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Fatimata Ouédraogo",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       4
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 4,
+     "subject": [
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       4
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     7,
+     0,
+     7,
+     0,
+     8,
+     0
+    ],
+    "centrality": [
+     4,
+     5,
+     5,
+     4,
+     4
+    ],
+    "subjectivity": [
+     4,
+     5,
+     5,
+     4,
+     4
+    ]
+   }
+  },
+  "mistral_small_2603": {
+   "rated": 23,
+   "not_applicable": 8,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Central": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Secondaire": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "Marginal": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "Non abordé": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     2,
+     2,
+     0,
+     2,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     1,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     2,
+     1,
+     2,
+     2,
+     1
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     1,
+     2,
+     1,
+     2
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     2,
+     2,
+     2,
+     1
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     2,
+     2,
+     2,
+     2
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     null,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     4.0,
+     1.0
+    ],
+    "n": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     2,
+     1,
+     2,
+     2,
+     0
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     1,
+     2,
+     1,
+     2,
+     2
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     0,
+     4.0,
+     1
+    ],
+    [
+     0,
+     5,
+     4.0,
+     1
+    ],
+    [
+     0,
+     10,
+     4.0,
+     1
+    ],
+    [
+     0,
+     15,
+     4.0,
+     1
+    ],
+    [
+     0,
+     20,
+     4.0,
+     1
+    ],
+    [
+     1,
+     3,
+     3.0,
+     1
+    ],
+    [
+     1,
+     8,
+     3.0,
+     1
+    ],
+    [
+     1,
+     13,
+     3.0,
+     1
+    ],
+    [
+     1,
+     18,
+     3.0,
+     1
+    ],
+    [
+     1,
+     22,
+     3.0,
+     1
+    ],
+    [
+     2,
+     1,
+     2.0,
+     1
+    ],
+    [
+     2,
+     6,
+     2.0,
+     1
+    ],
+    [
+     2,
+     16,
+     2.0,
+     1
+    ],
+    [
+     2,
+     21,
+     2.0,
+     1
+    ],
+    [
+     3,
+     4,
+     1.0,
+     1
+    ],
+    [
+     3,
+     9,
+     1.0,
+     1
+    ],
+    [
+     3,
+     14,
+     1.0,
+     1
+    ],
+    [
+     3,
+     19,
+     1.0,
+     1
+    ],
+    [
+     3,
+     23,
+     1.0,
+     1
+    ],
+    [
+     4,
+     2,
+     5.0,
+     1
+    ],
+    [
+     4,
+     7,
+     5.0,
+     1
+    ],
+    [
+     4,
+     12,
+     5.0,
+     1
+    ],
+    [
+     4,
+     17,
+     5.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 9,
+     "subject": [
+      [
+       "Tabaski",
+       3
+      ],
+      [
+       "Laïcité",
+       3
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Aïcha Mama",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Burkina Faso",
+       5
+      ],
+      [
+       "Côte d'Ivoire",
+       4
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Bobo-Dioulasso",
+       2
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 9,
+     "subject": [
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Islam",
+       3
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       5
+      ],
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "polarity_very_positive": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "centrality_very_central": {
+     "n": 4,
+     "subject": [
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 4,
+     "subject": [
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Aïcha Mama",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ]
+     ],
+     "spatial": [
+      [
+       "Côte d'Ivoire",
+       4
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     0,
+     7,
+     0,
+     8,
+     0,
+     8
+    ],
+    "centrality": [
+     4,
+     5,
+     5,
+     4,
+     5
+    ],
+    "subjectivity": [
+     5,
+     4,
+     5,
+     5,
+     4
+    ]
+   }
+  },
+  "deepseek_v4_flash_0731": {
+   "rated": 23,
+   "not_applicable": 0,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Central": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Secondaire": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Marginal": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "Non abordé": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     2,
+     0,
+     2,
+     2,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     1,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     2,
+     2,
+     2,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     2,
+     1,
+     2
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     2,
+     2,
+     1
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     null,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     1.0,
+     3.0
+    ],
+    "n": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     0,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     1,
+     2,
+     1,
+     2
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     2,
+     1,
+     2,
+     1
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     0,
+     3.0,
+     1
+    ],
+    [
+     0,
+     5,
+     3.0,
+     1
+    ],
+    [
+     0,
+     10,
+     3.0,
+     1
+    ],
+    [
+     0,
+     15,
+     3.0,
+     1
+    ],
+    [
+     0,
+     20,
+     3.0,
+     1
+    ],
+    [
+     1,
+     3,
+     2.0,
+     1
+    ],
+    [
+     1,
+     13,
+     2.0,
+     1
+    ],
+    [
+     1,
+     18,
+     2.0,
+     1
+    ],
+    [
+     1,
+     22,
+     2.0,
+     1
+    ],
+    [
+     2,
+     1,
+     1.0,
+     1
+    ],
+    [
+     2,
+     6,
+     1.0,
+     1
+    ],
+    [
+     2,
+     11,
+     1.0,
+     1
+    ],
+    [
+     2,
+     16,
+     1.0,
+     1
+    ],
+    [
+     2,
+     21,
+     1.0,
+     1
+    ],
+    [
+     3,
+     4,
+     5.0,
+     1
+    ],
+    [
+     3,
+     9,
+     5.0,
+     1
+    ],
+    [
+     3,
+     14,
+     5.0,
+     1
+    ],
+    [
+     3,
+     19,
+     5.0,
+     1
+    ],
+    [
+     3,
+     23,
+     5.0,
+     1
+    ],
+    [
+     4,
+     2,
+     4.0,
+     1
+    ],
+    [
+     4,
+     7,
+     4.0,
+     1
+    ],
+    [
+     4,
+     12,
+     4.0,
+     1
+    ],
+    [
+     4,
+     17,
+     4.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 9,
+     "subject": [
+      [
+       "Ramadan",
+       3
+      ],
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Fatimata Ouédraogo",
+       3
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       5
+      ],
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 9,
+     "subject": [
+      [
+       "Mosquées",
+       3
+      ],
+      [
+       "Pèlerinage",
+       3
+      ],
+      [
+       "Aïcha Mama",
+       3
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Côte d'Ivoire",
+       5
+      ],
+      [
+       "Burkina Faso",
+       4
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Cotonou",
+       2
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 8,
+     "subject": [
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Tabaski",
+       1
+      ],
+      [
+       "Amadou Diallo",
+       1
+      ],
+      [
+       "Fatimata Ouédraogo",
+       1
+      ],
+      [
+       "Moussa Koné",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Pèlerinage",
+       1
+      ],
+      [
+       "Aïcha Mama",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Ouagadougou",
+       4
+      ],
+      [
+       "Lomé",
+       4
+      ],
+      [
+       "Burkina Faso",
+       2
+      ],
+      [
+       "Togo",
+       2
+      ],
+      [
+       "Côte d'Ivoire",
+       2
+      ],
+      [
+       "Bénin",
+       1
+      ],
+      [
+       "Niger",
+       1
+      ]
+     ]
+    },
+    "polarity_very_positive": {
+     "n": 7,
+     "subject": [
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Mosquées",
+       1
+      ],
+      [
+       "Aïcha Mama",
+       1
+      ],
+      [
+       "Tabaski",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Laïcité",
+       1
+      ],
+      [
+       "Amadou Diallo",
+       1
+      ],
+      [
+       "Fatimata Ouédraogo",
+       1
+      ],
+      [
+       "Islam",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Abidjan",
+       4
+      ],
+      [
+       "Bobo-Dioulasso",
+       3
+      ],
+      [
+       "Côte d'Ivoire",
+       2
+      ],
+      [
+       "Bénin",
+       2
+      ],
+      [
+       "Niger",
+       2
+      ],
+      [
+       "Togo",
+       1
+      ]
+     ]
+    },
+    "centrality_very_central": {
+     "n": 5,
+     "subject": [
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Islam",
+       3
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       5
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 4,
+     "subject": [
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Burkina Faso",
+       4
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     7,
+     0,
+     8,
+     0,
+     8,
+     0
+    ],
+    "centrality": [
+     5,
+     4,
+     5,
+     4,
+     5
+    ],
+    "subjectivity": [
+     4,
+     5,
+     5,
+     4,
+     5
+    ]
+   }
+  },
+  "gemma_4_31b_it": {
+   "rated": 22,
+   "not_applicable": 7,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "Central": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Secondaire": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Marginal": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Non abordé": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     2,
+     1,
+     2,
+     1,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     2,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     0,
+     2,
+     2,
+     1,
+     2
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     2,
+     2,
+     2,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     2,
+     2,
+     1,
+     2
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     2,
+     1,
+     2,
+     1
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     null,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     null,
+     2.0,
+     4.0,
+     3.0,
+     5.0
+    ],
+    "n": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     1,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     1,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     0,
+     2.0,
+     1
+    ],
+    [
+     0,
+     10,
+     2.0,
+     1
+    ],
+    [
+     0,
+     15,
+     2.0,
+     1
+    ],
+    [
+     0,
+     20,
+     2.0,
+     1
+    ],
+    [
+     1,
+     3,
+     1.0,
+     1
+    ],
+    [
+     1,
+     8,
+     1.0,
+     1
+    ],
+    [
+     1,
+     13,
+     1.0,
+     1
+    ],
+    [
+     1,
+     18,
+     1.0,
+     1
+    ],
+    [
+     1,
+     22,
+     1.0,
+     1
+    ],
+    [
+     2,
+     1,
+     5.0,
+     1
+    ],
+    [
+     2,
+     6,
+     5.0,
+     1
+    ],
+    [
+     2,
+     11,
+     5.0,
+     1
+    ],
+    [
+     2,
+     16,
+     5.0,
+     1
+    ],
+    [
+     2,
+     21,
+     5.0,
+     1
+    ],
+    [
+     3,
+     4,
+     4.0,
+     1
+    ],
+    [
+     3,
+     9,
+     4.0,
+     1
+    ],
+    [
+     3,
+     14,
+     4.0,
+     1
+    ],
+    [
+     3,
+     23,
+     4.0,
+     1
+    ],
+    [
+     4,
+     2,
+     3.0,
+     1
+    ],
+    [
+     4,
+     7,
+     3.0,
+     1
+    ],
+    [
+     4,
+     12,
+     3.0,
+     1
+    ],
+    [
+     4,
+     17,
+     3.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 9,
+     "subject": [
+      [
+       "Mosquées",
+       3
+      ],
+      [
+       "Pèlerinage",
+       3
+      ],
+      [
+       "Aïcha Mama",
+       3
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Côte d'Ivoire",
+       5
+      ],
+      [
+       "Niger",
+       4
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Cotonou",
+       2
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 8,
+     "subject": [
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Fatimata Ouédraogo",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       4
+      ],
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "polarity_very_positive": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "centrality_very_central": {
+     "n": 5,
+     "subject": [
+      [
+       "Mosquées",
+       3
+      ],
+      [
+       "Pèlerinage",
+       3
+      ],
+      [
+       "Aïcha Mama",
+       3
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Côte d'Ivoire",
+       5
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 4,
+     "subject": [
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Fatimata Ouédraogo",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       4
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     0,
+     7,
+     0,
+     8,
+     0,
+     7
+    ],
+    "centrality": [
+     5,
+     4,
+     4,
+     4,
+     5
+    ],
+    "subjectivity": [
+     4,
+     4,
+     5,
+     5,
+     4
+    ]
+   }
+  },
+  "qwen3_8_27b": {
+   "rated": 22,
+   "not_applicable": 0,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "Central": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "Secondaire": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Marginal": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non abordé": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     1,
+     2,
+     1,
+     1,
+     2
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     1,
+     2,
+     2,
+     1
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     2,
+     1,
+     2,
+     0
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     2,
+     1,
+     2,
+     1
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     2,
+     2,
+     2
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     2,
+     2,
+     1,
+     2
+    ],
+    "Non applicable": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     4.0,
+     1.0,
+     null,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     null,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     5.0,
+     2.0
+    ],
+    "n": [
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     1,
+     1,
+     2,
+     1,
+     2
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Neutre": [
+     2,
+     2,
+     1,
+     2,
+     1
+    ],
+    "Négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     1,
+     2,
+     0,
+     2,
+     2
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     0,
+     1.0,
+     1
+    ],
+    [
+     0,
+     5,
+     1.0,
+     1
+    ],
+    [
+     0,
+     10,
+     1.0,
+     1
+    ],
+    [
+     0,
+     15,
+     1.0,
+     1
+    ],
+    [
+     0,
+     20,
+     1.0,
+     1
+    ],
+    [
+     1,
+     3,
+     5.0,
+     1
+    ],
+    [
+     1,
+     8,
+     5.0,
+     1
+    ],
+    [
+     1,
+     13,
+     5.0,
+     1
+    ],
+    [
+     1,
+     18,
+     5.0,
+     1
+    ],
+    [
+     1,
+     22,
+     5.0,
+     1
+    ],
+    [
+     2,
+     1,
+     4.0,
+     1
+    ],
+    [
+     2,
+     6,
+     4.0,
+     1
+    ],
+    [
+     2,
+     11,
+     4.0,
+     1
+    ],
+    [
+     2,
+     21,
+     4.0,
+     1
+    ],
+    [
+     3,
+     4,
+     3.0,
+     1
+    ],
+    [
+     3,
+     9,
+     3.0,
+     1
+    ],
+    [
+     3,
+     14,
+     3.0,
+     1
+    ],
+    [
+     3,
+     19,
+     3.0,
+     1
+    ],
+    [
+     3,
+     23,
+     3.0,
+     1
+    ],
+    [
+     4,
+     7,
+     2.0,
+     1
+    ],
+    [
+     4,
+     12,
+     2.0,
+     1
+    ],
+    [
+     4,
+     17,
+     2.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 10,
+     "subject": [
+      [
+       "Ramadan",
+       3
+      ],
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Fatimata Ouédraogo",
+       3
+      ],
+      [
+       "Tabaski",
+       3
+      ],
+      [
+       "Laïcité",
+       3
+      ],
+      [
+       "Congrès islamique de 2004",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       5
+      ],
+      [
+       "Burkina Faso",
+       5
+      ],
+      [
+       "Cotonou",
+       2
+      ],
+      [
+       "Bobo-Dioulasso",
+       2
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 9,
+     "subject": [
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Islam",
+       3
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Aïcha Mama",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Issa Sow",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       5
+      ],
+      [
+       "Côte d'Ivoire",
+       4
+      ],
+      [
+       "Abidjan",
+       2
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Cotonou",
+       2
+      ],
+      [
+       "Bobo-Dioulasso",
+       2
+      ],
+      [
+       "Niamey",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 7,
+     "subject": [
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Ramadan",
+       1
+      ],
+      [
+       "Fatimata Ouédraogo",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Radicalisation",
+       1
+      ],
+      [
+       "Moussa Koné",
+       1
+      ],
+      [
+       "Mosquées",
+       1
+      ],
+      [
+       "Aïcha Mama",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ],
+      [
+       "Laïcité",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Cotonou",
+       4
+      ],
+      [
+       "Niamey",
+       3
+      ],
+      [
+       "Bénin",
+       2
+      ],
+      [
+       "Niger",
+       2
+      ],
+      [
+       "Burkina Faso",
+       2
+      ],
+      [
+       "Côte d'Ivoire",
+       1
+      ]
+     ]
+    },
+    "polarity_very_positive": {
+     "n": 7,
+     "subject": [
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Ramadan",
+       2
+      ],
+      [
+       "Éducation",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Tabaski",
+       1
+      ],
+      [
+       "Amadou Diallo",
+       1
+      ],
+      [
+       "Fatimata Ouédraogo",
+       1
+      ],
+      [
+       "Moussa Koné",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Mosquées",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Ouagadougou",
+       4
+      ],
+      [
+       "Lomé",
+       3
+      ],
+      [
+       "Burkina Faso",
+       2
+      ],
+      [
+       "Togo",
+       2
+      ],
+      [
+       "Côte d'Ivoire",
+       1
+      ],
+      [
+       "Bénin",
+       1
+      ],
+      [
+       "Niger",
+       1
+      ]
+     ]
+    },
+    "centrality_very_central": {
+     "n": 5,
+     "subject": [
+      [
+       "Tabaski",
+       3
+      ],
+      [
+       "Laïcité",
+       3
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Burkina Faso",
+       5
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 3,
+     "subject": [
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Radicalisation",
+       1
+      ],
+      [
+       "Mosquées",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Togo",
+       3
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     7,
+     0,
+     8,
+     0,
+     7,
+     0
+    ],
+    "centrality": [
+     5,
+     4,
+     5,
+     3,
+     5
+    ],
+    "subjectivity": [
+     4,
+     5,
+     3,
+     5,
+     5
+    ]
+   }
+  },
+  "claude_haiku_5_5": {
+   "rated": 22,
+   "not_applicable": 7,
+   "polarity_by_year": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_by_year": {
+    "Très central": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "Central": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "Secondaire": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "Marginal": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non abordé": [
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "polarity_by_country": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     1,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     2,
+     1,
+     2,
+     1,
+     1
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     2,
+     1,
+     1,
+     2,
+     1
+    ]
+   },
+   "polarity_by_topic": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     2,
+     2,
+     2,
+     1
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     1,
+     2,
+     2,
+     2
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "Non applicable": [
+     2,
+     2,
+     0,
+     2
+    ]
+   },
+   "polarity_by_newspaper": {
+    "Très positif": [],
+    "Positif": [],
+    "Neutre": [],
+    "Négatif": [],
+    "Très négatif": [],
+    "Non applicable": []
+   },
+   "subjectivity_by_year": {
+    "mean": [
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     null,
+     4.0,
+     1.0,
+     3.0,
+     5.0,
+     2.0,
+     4.0,
+     1.0,
+     3.0,
+     2.0,
+     null
+    ],
+    "n": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0
+    ]
+   },
+   "correlation": {
+    "Très positif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Positif": [
+     1,
+     2,
+     2,
+     1,
+     2
+    ],
+    "Neutre": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "Négatif": [
+     2,
+     1,
+     2,
+     1,
+     1
+    ],
+    "Très négatif": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "centrality_heatmap": [
+    [
+     0,
+     0,
+     5.0,
+     1
+    ],
+    [
+     0,
+     5,
+     5.0,
+     1
+    ],
+    [
+     0,
+     10,
+     5.0,
+     1
+    ],
+    [
+     0,
+     15,
+     5.0,
+     1
+    ],
+    [
+     0,
+     20,
+     5.0,
+     1
+    ],
+    [
+     1,
+     3,
+     4.0,
+     1
+    ],
+    [
+     1,
+     8,
+     4.0,
+     1
+    ],
+    [
+     1,
+     18,
+     4.0,
+     1
+    ],
+    [
+     1,
+     22,
+     4.0,
+     1
+    ],
+    [
+     2,
+     1,
+     3.0,
+     1
+    ],
+    [
+     2,
+     6,
+     3.0,
+     1
+    ],
+    [
+     2,
+     11,
+     3.0,
+     1
+    ],
+    [
+     2,
+     16,
+     3.0,
+     1
+    ],
+    [
+     2,
+     21,
+     3.0,
+     1
+    ],
+    [
+     3,
+     4,
+     2.0,
+     1
+    ],
+    [
+     3,
+     9,
+     2.0,
+     1
+    ],
+    [
+     3,
+     14,
+     2.0,
+     1
+    ],
+    [
+     3,
+     19,
+     2.0,
+     1
+    ],
+    [
+     4,
+     2,
+     1.0,
+     1
+    ],
+    [
+     4,
+     7,
+     1.0,
+     1
+    ],
+    [
+     4,
+     12,
+     1.0,
+     1
+    ],
+    [
+     4,
+     17,
+     1.0,
+     1
+    ]
+   ],
+   "extremes": {
+    "subjectivity_high": {
+     "n": 8,
+     "subject": [
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Islam",
+       3
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Femmes",
+       2
+      ],
+      [
+       "Amadou Diallo",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Mosquées",
+       2
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Union des musulmans du Togo",
+       1
+      ],
+      [
+       "Jeunesse",
+       1
+      ],
+      [
+       "Tabaski",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       4
+      ],
+      [
+       "Togo",
+       4
+      ],
+      [
+       "Niamey",
+       2
+      ],
+      [
+       "Ouagadougou",
+       2
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    },
+    "subjectivity_low": {
+     "n": 9,
+     "subject": [
+      [
+       "Ramadan",
+       3
+      ],
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Fatimata Ouédraogo",
+       3
+      ],
+      [
+       "Congrès islamique de 2004",
+       2
+      ],
+      [
+       "Tabaski",
+       2
+      ],
+      [
+       "Laïcité",
+       2
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Islam",
+       2
+      ],
+      [
+       "Radicalisation",
+       2
+      ],
+      [
+       "Moussa Koné",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       5
+      ],
+      [
+       "Burkina Faso",
+       4
+      ],
+      [
+       "Cotonou",
+       2
+      ],
+      [
+       "Bobo-Dioulasso",
+       2
+      ],
+      [
+       "Lomé",
+       2
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    },
+    "polarity_very_negative": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "polarity_very_positive": {
+     "n": 0,
+     "subject": [],
+     "spatial": []
+    },
+    "centrality_very_central": {
+     "n": 5,
+     "subject": [
+      [
+       "Ramadan",
+       3
+      ],
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Fatimata Ouédraogo",
+       3
+      ],
+      [
+       "Pèlerinage",
+       2
+      ],
+      [
+       "Jeunesse",
+       2
+      ],
+      [
+       "Association des élèves musulmans",
+       1
+      ],
+      [
+       "Congrès islamique de 2004",
+       1
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Bénin",
+       5
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ],
+      [
+       "Lomé",
+       1
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Abidjan",
+       1
+      ]
+     ]
+    },
+    "centrality_marginal": {
+     "n": 4,
+     "subject": [
+      [
+       "Éducation",
+       3
+      ],
+      [
+       "Islam",
+       3
+      ],
+      [
+       "Communauté musulmane du Faso",
+       1
+      ],
+      [
+       "Jeunesse",
+       1
+      ],
+      [
+       "Tabaski",
+       1
+      ],
+      [
+       "Conseil islamique du Bénin",
+       1
+      ],
+      [
+       "Issa Sow",
+       1
+      ]
+     ],
+     "spatial": [
+      [
+       "Niger",
+       4
+      ],
+      [
+       "Niamey",
+       1
+      ],
+      [
+       "Ouagadougou",
+       1
+      ],
+      [
+       "Cotonou",
+       1
+      ],
+      [
+       "Bobo-Dioulasso",
+       1
+      ]
+     ]
+    }
+   },
+   "distribution": {
+    "polarity": [
+     0,
+     8,
+     0,
+     7,
+     0,
+     7
+    ],
+    "centrality": [
+     5,
+     4,
+     5,
+     4,
+     4
+    ],
+    "subjectivity": [
+     5,
+     4,
+     5,
+     4,
+     4
+    ]
+   }
+  }
+ },
+ "agreement": [
+  {
+   "models": [
+    "gpt_5_6_luna",
+    "mistral_small_2603"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     6,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     8
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gpt_5_6_luna",
+    "deepseek_v4_flash_0731"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     7,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     7,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gpt_5_6_luna",
+    "gemma_4_31b_it"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     6
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     7,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gpt_5_6_luna",
+    "qwen3_8_27b"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     6,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     6,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     8,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gpt_5_6_luna",
+    "claude_haiku_5_5"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     6
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     7,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "mistral_small_2603",
+    "deepseek_v4_flash_0731"
+   ],
+   "co_rated": 22,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     7,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     8,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "mistral_small_2603",
+    "gemma_4_31b_it"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     7
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     7,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "mistral_small_2603",
+    "qwen3_8_27b"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     6,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     8,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "mistral_small_2603",
+    "claude_haiku_5_5"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     6
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     8,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "deepseek_v4_flash_0731",
+    "gemma_4_31b_it"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     6,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     8,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     7
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "deepseek_v4_flash_0731",
+    "qwen3_8_27b"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     7,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     7,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "deepseek_v4_flash_0731",
+    "claude_haiku_5_5"
+   ],
+   "co_rated": 21,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     6,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     7
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     8,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gemma_4_31b_it",
+    "qwen3_8_27b"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     7,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     7,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     6,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "gemma_4_31b_it",
+    "claude_haiku_5_5"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     6,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     7
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     7,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "models": [
+    "qwen3_8_27b",
+    "claude_haiku_5_5"
+   ],
+   "co_rated": 20,
+   "agreement_pct": 0.0,
+   "matrix": [
+    [
+     0,
+     7,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     7,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     6
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  }
+ ],
+ "reliability": {
+  "polarity": {
+   "labels": [
+    "Très positif",
+    "Positif",
+    "Neutre",
+    "Négatif",
+    "Très négatif",
+    "Non applicable"
+   ],
+   "pairs": [
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "mistral_small_2603"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 13,
+     "within_one": 100.0,
+     "weighted_kappa": 0.665,
+     "matrix": [
+      [
+       0,
+       6,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       8
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.5,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.5,
+     "matrix": [
+      [
+       0,
+       0,
+       7,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       7,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       7,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "gemma_4_31b_it"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 14,
+     "within_one": 0.0,
+     "weighted_kappa": -0.8,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       6
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       7,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.493,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.462,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       6,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       6,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       8,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 14,
+     "within_one": 100.0,
+     "weighted_kappa": 0.667,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       6
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       7,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 22,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 15,
+     "within_one": 100.0,
+     "weighted_kappa": 0.666,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       7,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       8,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       7,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.5,
+     "n_ordinal": 7,
+     "within_one": 0.0,
+     "weighted_kappa": 0.0,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       7
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       7,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.0,
+     "n_ordinal": 13,
+     "within_one": 0.0,
+     "weighted_kappa": -0.792,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       6,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       7,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       8,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.495,
+     "n_ordinal": 8,
+     "within_one": 0.0,
+     "weighted_kappa": 0.0,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       6
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       8,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 14,
+     "within_one": 100.0,
+     "weighted_kappa": 0.662,
+     "matrix": [
+      [
+       0,
+       6,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       8,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       7
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.5,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.5,
+     "matrix": [
+      [
+       0,
+       0,
+       7,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       7,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       7,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": 0.0,
+     "n_ordinal": 14,
+     "within_one": 0.0,
+     "weighted_kappa": -0.771,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       6,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       7
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       8,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.0,
+     "n_ordinal": 14,
+     "within_one": 100.0,
+     "weighted_kappa": 0.667,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       7,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       7,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       6,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.498,
+     "n_ordinal": 6,
+     "within_one": 0.0,
+     "weighted_kappa": 0.0,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       6,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       7
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       7,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "qwen3_8_27b",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.0,
+     "n_ordinal": 14,
+     "within_one": 100.0,
+     "weighted_kappa": 0.667,
+     "matrix": [
+      [
+       0,
+       7,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       7,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       6
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    }
+   ],
+   "panel": {
+    "n": 14,
+    "fleiss_kappa": -0.2,
+    "unanimous": 0.0
+   }
+  },
+  "centrality": {
+   "labels": [
+    "Très central",
+    "Central",
+    "Secondaire",
+    "Marginal",
+    "Non abordé"
+   ],
+   "pairs": [
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "mistral_small_2603"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 81.0,
+     "weighted_kappa": 0.0,
+     "matrix": [
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.476,
+     "matrix": [
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "gemma_4_31b_it"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.463,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       3,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.25,
+     "n_ordinal": 20,
+     "within_one": 80.0,
+     "weighted_kappa": -0.011,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 100.0,
+     "kappa": 1.0,
+     "n_ordinal": 20,
+     "within_one": 100.0,
+     "weighted_kappa": 1.0,
+     "matrix": [
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 22,
+     "exact": 0.0,
+     "kappa": -0.247,
+     "n_ordinal": 22,
+     "within_one": 77.3,
+     "weighted_kappa": -0.088,
+     "matrix": [
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.476,
+     "matrix": [
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.253,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.442,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       3,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 81.0,
+     "weighted_kappa": 0.045,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 76.2,
+     "weighted_kappa": -0.086,
+     "matrix": [
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.253,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.44,
+     "matrix": [
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.253,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.44,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       3,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.25,
+     "n_ordinal": 20,
+     "within_one": 75.0,
+     "weighted_kappa": -0.084,
+     "matrix": [
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.25,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.465,
+     "matrix": [
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "qwen3_8_27b",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 75.0,
+     "weighted_kappa": -0.139,
+     "matrix": [
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       3
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    }
+   ],
+   "panel": {
+    "n": 14,
+    "fleiss_kappa": -0.167,
+    "unanimous": 0.0
+   }
+  },
+  "subjectivity": {
+   "labels": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "pairs": [
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "mistral_small_2603"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.51,
+     "matrix": [
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       5,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 81.0,
+     "weighted_kappa": -0.0,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       5,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "gemma_4_31b_it"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 80.0,
+     "weighted_kappa": -0.111,
+     "matrix": [
+      [
+       0,
+       3,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       5,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       3
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.532,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       3,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gpt_5_6_luna",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 100.0,
+     "kappa": 1.0,
+     "n_ordinal": 20,
+     "within_one": 100.0,
+     "weighted_kappa": 1.0,
+     "matrix": [
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "deepseek_v4_flash_0731"
+     ],
+     "n": 22,
+     "exact": 0.0,
+     "kappa": -0.251,
+     "n_ordinal": 22,
+     "within_one": 0.0,
+     "weighted_kappa": -0.449,
+     "matrix": [
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 81.0,
+     "weighted_kappa": -0.0,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.239,
+     "n_ordinal": 21,
+     "within_one": 85.7,
+     "weighted_kappa": 0.203,
+     "matrix": [
+      [
+       0,
+       5,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       3,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       5,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       3,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "mistral_small_2603",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.476,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "gemma_4_31b_it"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.249,
+     "n_ordinal": 21,
+     "within_one": 0.0,
+     "weighted_kappa": -0.51,
+     "matrix": [
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       5,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "qwen3_8_27b"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.242,
+     "n_ordinal": 21,
+     "within_one": 81.0,
+     "weighted_kappa": 0.047,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       5,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       3,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       5,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "deepseek_v4_flash_0731",
+      "claude_haiku_5_5"
+     ],
+     "n": 21,
+     "exact": 0.0,
+     "kappa": -0.242,
+     "n_ordinal": 21,
+     "within_one": 76.2,
+     "weighted_kappa": -0.139,
+     "matrix": [
+      [
+       0,
+       3,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "qwen3_8_27b"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.508,
+     "matrix": [
+      [
+       0,
+       0,
+       3,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       5
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "gemma_4_31b_it",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.246,
+     "n_ordinal": 20,
+     "within_one": 80.0,
+     "weighted_kappa": -0.054,
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       5,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       3,
+       0
+      ]
+     ]
+    },
+    {
+     "models": [
+      "qwen3_8_27b",
+      "claude_haiku_5_5"
+     ],
+     "n": 20,
+     "exact": 0.0,
+     "kappa": -0.25,
+     "n_ordinal": 20,
+     "within_one": 0.0,
+     "weighted_kappa": -0.536,
+     "matrix": [
+      [
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       4,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       3
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0
+      ]
+     ]
+    }
+   ],
+   "panel": {
+    "n": 14,
+    "fleiss_kappa": -0.167,
+    "unanimous": 0.0
+   }
+  }
+ },
+ "consensus": {
+  "polarity": {
+   "n": 0,
+   "unanimous": 0,
+   "split": 0,
+   "spread_mean": null,
+   "dissent": {
+    "gpt_5_6_luna": {
+     "up": 0,
+     "down": 0
+    },
+    "mistral_small_2603": {
+     "up": 0,
+     "down": 0
+    },
+    "deepseek_v4_flash_0731": {
+     "up": 0,
+     "down": 0
+    },
+    "gemma_4_31b_it": {
+     "up": 0,
+     "down": 0
+    },
+    "qwen3_8_27b": {
+     "up": 0,
+     "down": 0
+    },
+    "claude_haiku_5_5": {
+     "up": 0,
+     "down": 0
+    }
+   }
+  },
+  "centrality": {
+   "n": 14,
+   "unanimous": 0,
+   "split": 14,
+   "spread_mean": 4.0,
+   "dissent": {
+    "gpt_5_6_luna": {
+     "up": 0,
+     "down": 0
+    },
+    "mistral_small_2603": {
+     "up": 0,
+     "down": 0
+    },
+    "deepseek_v4_flash_0731": {
+     "up": 0,
+     "down": 0
+    },
+    "gemma_4_31b_it": {
+     "up": 0,
+     "down": 0
+    },
+    "qwen3_8_27b": {
+     "up": 0,
+     "down": 0
+    },
+    "claude_haiku_5_5": {
+     "up": 0,
+     "down": 0
+    }
+   }
+  },
+  "subjectivity": {
+   "n": 14,
+   "unanimous": 0,
+   "split": 14,
+   "spread_mean": 4.0,
+   "dissent": {
+    "gpt_5_6_luna": {
+     "up": 0,
+     "down": 0
+    },
+    "mistral_small_2603": {
+     "up": 0,
+     "down": 0
+    },
+    "deepseek_v4_flash_0731": {
+     "up": 0,
+     "down": 0
+    },
+    "gemma_4_31b_it": {
+     "up": 0,
+     "down": 0
+    },
+    "qwen3_8_27b": {
+     "up": 0,
+     "down": 0
+    },
+    "claude_haiku_5_5": {
+     "up": 0,
+     "down": 0
+    }
+   }
+  }
+ },
+ "trends": {
+  "min_count": 20,
+  "targets": [
+   "negative",
+   "central",
+   "subjective"
+  ],
+  "common": {
+   "negative": {
+    "n": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "mistral_small_2603": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "gemma_4_31b_it": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "qwen3_8_27b": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "claude_haiku_5_5": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "central": {
+    "n": [
+     0,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     0,
+     0,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     0
+    ],
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ],
+     "mistral_small_2603": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "gemma_4_31b_it": [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "qwen3_8_27b": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "claude_haiku_5_5": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ]
+    }
+   },
+   "subjective": {
+    "n": [
+     0,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     0,
+     0,
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     0
+    ],
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "mistral_small_2603": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "gemma_4_31b_it": [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "qwen3_8_27b": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ],
+     "claude_haiku_5_5": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  },
+  "available": {
+   "negative": {
+    "n": {
+     "gpt_5_6_luna": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "mistral_small_2603": [
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gemma_4_31b_it": [
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1
+     ],
+     "qwen3_8_27b": [
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "claude_haiku_5_5": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0
+     ]
+    },
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "mistral_small_2603": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "gemma_4_31b_it": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "qwen3_8_27b": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "claude_haiku_5_5": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "central": {
+    "n": {
+     "gpt_5_6_luna": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "mistral_small_2603": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "deepseek_v4_flash_0731": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gemma_4_31b_it": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     "qwen3_8_27b": [
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "claude_haiku_5_5": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ]
+    },
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ],
+     "mistral_small_2603": [
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "gemma_4_31b_it": [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "qwen3_8_27b": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "claude_haiku_5_5": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ]
+    }
+   },
+   "subjective": {
+    "n": {
+     "gpt_5_6_luna": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "mistral_small_2603": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "deepseek_v4_flash_0731": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gemma_4_31b_it": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     "qwen3_8_27b": [
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "claude_haiku_5_5": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ]
+    },
+    "k": {
+     "gpt_5_6_luna": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "mistral_small_2603": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "deepseek_v4_flash_0731": [
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     "gemma_4_31b_it": [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "qwen3_8_27b": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+     ],
+     "claude_haiku_5_5": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  }
+ },
+ "ranking": {
+  "min": 30,
+  "newspapers": [],
+  "models": {
+   "gpt_5_6_luna": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   },
+   "mistral_small_2603": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   },
+   "deepseek_v4_flash_0731": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   },
+   "gemma_4_31b_it": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   },
+   "qwen3_8_27b": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   },
+   "claude_haiku_5_5": {
+    "polarity": [],
+    "centrality": [],
+    "subjectivity": []
+   }
+  },
+  "omitted": {
+   "gpt_5_6_luna": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   },
+   "mistral_small_2603": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   },
+   "deepseek_v4_flash_0731": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   },
+   "gemma_4_31b_it": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   },
+   "qwen3_8_27b": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   },
+   "claude_haiku_5_5": {
+    "polarity": 5,
+    "centrality": 5,
+    "subjectivity": 5
+   }
+  }
+ },
+ "places_file": "sentiment-atlas-places.json"
+}

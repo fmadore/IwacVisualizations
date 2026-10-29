@@ -1,0 +1,1190 @@
+{
+ "version": 4,
+ "entity": {
+  "o_id": 1205,
+  "title": "Togo",
+  "type": "Lieux"
+ },
+ "summary": {
+  "by_role": {
+   "all": {
+    "total_mentions": 5,
+    "year_min": 1998,
+    "year_max": 2013,
+    "newspapers_count": 2,
+    "countries_count": 1
+   }
+  }
+ },
+ "timeline": {
+  "by_role": {
+   "all": {
+    "years": [
+     1998,
+     2003,
+     2008,
+     2013
+    ],
+    "countries": [
+     "Togo"
+    ],
+    "series": {
+     "Togo": [
+      1,
+      1,
+      1,
+      2
+     ]
+    }
+   }
+  }
+ },
+ "newspapers": {
+  "by_role": {
+   "all": [
+    {
+     "name": "La Voix de Lomé",
+     "total": 4,
+     "articles": 4,
+     "publications": 0,
+     "references": 0,
+     "country": "Togo",
+     "year_min": 1998,
+     "year_max": 2013
+    },
+    {
+     "name": "Brill",
+     "total": 1,
+     "articles": 0,
+     "publications": 0,
+     "references": 1,
+     "country": "Togo",
+     "year_min": 2013,
+     "year_max": 2013
+    }
+   ]
+  }
+ },
+ "countries": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Togo",
+     "count": 5
+    }
+   ]
+  }
+ },
+ "network": {
+  "by_role": {
+   "all": {
+    "nodes": [
+     {
+      "o_id": 1205,
+      "title": "Togo",
+      "type": "center",
+      "cooc": null,
+      "score": null
+     },
+     {
+      "o_id": 1001,
+      "title": "Amadou Diallo",
+      "type": "Personnes",
+      "cooc": 2,
+      "score": 3.2973
+     },
+     {
+      "o_id": 1305,
+      "title": "Laïcité",
+      "type": "Sujets",
+      "cooc": 3,
+      "score": 2.3196
+     },
+     {
+      "o_id": 1310,
+      "title": "Radicalisation",
+      "type": "Sujets",
+      "cooc": 3,
+      "score": 2.0794
+     },
+     {
+      "o_id": 1308,
+      "title": "Femmes",
+      "type": "Sujets",
+      "cooc": 2,
+      "score": 1.7204
+     },
+     {
+      "o_id": 1303,
+      "title": "Mosquées",
+      "type": "Sujets",
+      "cooc": 2,
+      "score": 1.5464
+     }
+    ],
+    "edges": [
+     {
+      "source": 1205,
+      "target": 1001,
+      "weight": 3.2973,
+      "cooc": 2,
+      "kind": "ego"
+     },
+     {
+      "source": 1205,
+      "target": 1305,
+      "weight": 2.3196,
+      "cooc": 3,
+      "kind": "ego"
+     },
+     {
+      "source": 1205,
+      "target": 1310,
+      "weight": 2.0794,
+      "cooc": 3,
+      "kind": "ego"
+     },
+     {
+      "source": 1205,
+      "target": 1308,
+      "weight": 1.7204,
+      "cooc": 2,
+      "kind": "ego"
+     },
+     {
+      "source": 1205,
+      "target": 1303,
+      "weight": 1.5464,
+      "cooc": 2,
+      "kind": "ego"
+     },
+     {
+      "source": 1001,
+      "target": 1305,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     },
+     {
+      "source": 1001,
+      "target": 1308,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     },
+     {
+      "source": 1303,
+      "target": 1310,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     },
+     {
+      "source": 1305,
+      "target": 1308,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     }
+    ],
+    "by_type": {
+     "Personnes": {
+      "nodes": [
+       {
+        "o_id": 1205,
+        "title": "Togo",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1001,
+        "title": "Amadou Diallo",
+        "type": "Personnes",
+        "cooc": 2,
+        "score": 3.2973
+       }
+      ],
+      "edges": [
+       {
+        "source": 1205,
+        "target": 1001,
+        "weight": 3.2973,
+        "cooc": 2,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Organisations": {
+      "nodes": [
+       {
+        "o_id": 1205,
+        "title": "Togo",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Lieux": {
+      "nodes": [
+       {
+        "o_id": 1205,
+        "title": "Togo",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Sujets": {
+      "nodes": [
+       {
+        "o_id": 1205,
+        "title": "Togo",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1305,
+        "title": "Laïcité",
+        "type": "Sujets",
+        "cooc": 3,
+        "score": 2.3196
+       },
+       {
+        "o_id": 1310,
+        "title": "Radicalisation",
+        "type": "Sujets",
+        "cooc": 3,
+        "score": 2.0794
+       },
+       {
+        "o_id": 1308,
+        "title": "Femmes",
+        "type": "Sujets",
+        "cooc": 2,
+        "score": 1.7204
+       },
+       {
+        "o_id": 1303,
+        "title": "Mosquées",
+        "type": "Sujets",
+        "cooc": 2,
+        "score": 1.5464
+       }
+      ],
+      "edges": [
+       {
+        "source": 1205,
+        "target": 1305,
+        "weight": 2.3196,
+        "cooc": 3,
+        "kind": "ego"
+       },
+       {
+        "source": 1205,
+        "target": 1310,
+        "weight": 2.0794,
+        "cooc": 3,
+        "kind": "ego"
+       },
+       {
+        "source": 1205,
+        "target": 1308,
+        "weight": 1.7204,
+        "cooc": 2,
+        "kind": "ego"
+       },
+       {
+        "source": 1205,
+        "target": 1303,
+        "weight": 1.5464,
+        "cooc": 2,
+        "kind": "ego"
+       },
+       {
+        "source": 1303,
+        "target": 1310,
+        "weight": 2,
+        "cooc": 2,
+        "kind": "cross"
+       },
+       {
+        "source": 1305,
+        "target": 1308,
+        "weight": 2,
+        "cooc": 2,
+        "kind": "cross"
+       }
+      ]
+     },
+     "Événements": {
+      "nodes": [
+       {
+        "o_id": 1205,
+        "title": "Togo",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     }
+    },
+    "over_time": {
+     "year_min": 1998,
+     "year_max": 2013,
+     "dated_items": 5,
+     "undated_items": 0,
+     "entities": {
+      "1001": [
+       [
+        2008,
+        1
+       ],
+       [
+        2013,
+        1
+       ]
+      ],
+      "1305": [
+       [
+        2008,
+        1
+       ],
+       [
+        2013,
+        2
+       ]
+      ],
+      "1310": [
+       [
+        1998,
+        1
+       ],
+       [
+        2003,
+        1
+       ],
+       [
+        2013,
+        1
+       ]
+      ],
+      "1308": [
+       [
+        2008,
+        1
+       ],
+       [
+        2013,
+        1
+       ]
+      ],
+      "1303": [
+       [
+        1998,
+        1
+       ],
+       [
+        2003,
+        1
+       ]
+      ]
+     }
+    }
+   }
+  }
+ },
+ "locations": {
+  "by_role": {
+   "all": [
+    {
+     "o_id": 1205,
+     "name": "Togo",
+     "lat": 8.62,
+     "lng": 0.82,
+     "count": 5,
+     "articles": [
+      {
+       "o_id": 5014,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 15",
+       "publisher": "La Voix de Lomé",
+       "date": "2013-11-18"
+      },
+      {
+       "o_id": 7004,
+       "subset": "references",
+       "title": "Étude sur l'islam au Sahel, volume 5",
+       "publisher": "Brill",
+       "date": "2013"
+      },
+      {
+       "o_id": 5004,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 5",
+       "publisher": "La Voix de Lomé",
+       "date": "2008-09-02"
+      },
+      {
+       "o_id": 5019,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 20",
+       "publisher": "La Voix de Lomé",
+       "date": "2003-12-26"
+      },
+      {
+       "o_id": 5009,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 10",
+       "publisher": "La Voix de Lomé",
+       "date": "1998-10-10"
+      }
+     ]
+    },
+    {
+     "o_id": 1215,
+     "name": "Lomé",
+     "lat": 6.13,
+     "lng": 1.22,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5004,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 5",
+       "publisher": "La Voix de Lomé",
+       "date": "2008-09-02"
+      }
+     ]
+    },
+    {
+     "o_id": 1214,
+     "name": "Niamey",
+     "lat": 13.51,
+     "lng": 2.11,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5009,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 10",
+       "publisher": "La Voix de Lomé",
+       "date": "1998-10-10"
+      }
+     ]
+    },
+    {
+     "o_id": 1213,
+     "name": "Abidjan",
+     "lat": 5.35,
+     "lng": -4.01,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5014,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 15",
+       "publisher": "La Voix de Lomé",
+       "date": "2013-11-18"
+      }
+     ]
+    },
+    {
+     "o_id": 1212,
+     "name": "Ouagadougou",
+     "lat": 12.37,
+     "lng": -1.52,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5019,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 20",
+       "publisher": "La Voix de Lomé",
+       "date": "2003-12-26"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "topics": {
+  "by_role": {
+   "all": [
+    {
+     "label": "mosquée prière fidèle imam",
+     "count": 1
+    },
+    {
+     "label": "pèlerinage mecque hadj voyage",
+     "count": 1
+    }
+   ]
+  }
+ },
+ "sentiment": {
+  "by_role": {
+   "all": {
+    "models": [
+     "gpt_5_6_luna",
+     "mistral_small_2603",
+     "deepseek_v4_flash_0731",
+     "gemma_4_31b_it",
+     "qwen3_8_27b",
+     "claude_haiku_5_5"
+    ],
+    "by_model": {
+     "gpt_5_6_luna": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 1
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 2
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 4
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 4
+       }
+      ],
+      "subjectivite_avg": 5.0,
+      "rated_articles": 4
+     },
+     "mistral_small_2603": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 1
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 2
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 4
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 4
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.0,
+      "rated_articles": 4
+     },
+     "deepseek_v4_flash_0731": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 1
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 1
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 4
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 4
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 4.0,
+      "rated_articles": 4
+     },
+     "gemma_4_31b_it": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 1
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 1
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 4
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 4
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 1.0,
+      "rated_articles": 4
+     },
+     "qwen3_8_27b": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 2
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 3
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 3
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 3.0,
+      "rated_articles": 3
+     },
+     "claude_haiku_5_5": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 2
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 1
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 4
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 4
+       }
+      ],
+      "subjectivite_avg": 5.0,
+      "rated_articles": 4
+     }
+    },
+    "articles_total": 4
+   }
+  }
+ },
+ "heatmap": {
+  "by_role": {
+   "all": {
+    "years": [
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013
+    ],
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "cells": [
+     [
+      0,
+      9,
+      1
+     ],
+     [
+      5,
+      11,
+      1
+     ],
+     [
+      10,
+      8,
+      1
+     ],
+     [
+      15,
+      10,
+      1
+     ]
+    ],
+    "items": 4,
+    "hijri": {
+     "years": [
+      1418,
+      1419,
+      1420,
+      1421,
+      1422,
+      1423,
+      1424,
+      1425,
+      1426,
+      1427,
+      1428,
+      1429,
+      1430,
+      1431,
+      1432,
+      1433
+     ],
+     "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "cells": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       5,
+       4,
+       1
+      ],
+      [
+       10,
+       4,
+       1
+      ],
+      [
+       15,
+       8,
+       1
+      ]
+     ],
+     "items": 4
+    }
+   }
+  }
+ },
+ "cooccurrence": {
+  "by_role": {
+   "all": {
+    "names": [
+     "Laïcité",
+     "Radicalisation",
+     "Amadou Diallo",
+     "Femmes",
+     "Mosquées",
+     "Lomé",
+     "Union des musulmans du Togo",
+     "Niamey",
+     "Abidjan",
+     "Ouagadougou"
+    ],
+    "matrix": [
+     [
+      0,
+      1,
+      2,
+      2,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      2,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     [
+      2,
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+     ],
+     [
+      2,
+      0,
+      2,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+     ],
+     [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ]
+   }
+  }
+ }
+}

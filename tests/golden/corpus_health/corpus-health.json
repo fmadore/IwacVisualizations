@@ -1,0 +1,321 @@
+{
+ "generated_at": "2026-01-01T00:00:00Z",
+ "dataset": "fmadore/islam-west-africa-collection-full",
+ "subsets": {
+  "articles": {
+   "total": 24,
+   "metrics": [
+    {
+     "label": "OCR text",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Lemmatised",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Text embeddings",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Precomputed neighbours",
+     "covered": 18,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — GPT-5.6 Luna",
+     "covered": 22,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — Mistral Small 4",
+     "covered": 23,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — DeepSeek V4 Flash",
+     "covered": 23,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — Gemma 4 31B",
+     "covered": 22,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — Qwen3.8 27B",
+     "covered": 22,
+     "total": 24
+    },
+    {
+     "label": "Sentiment — Claude Haiku 5.5",
+     "covered": 22,
+     "total": 24
+    },
+    {
+     "label": "LDA topic assigned",
+     "covered": 22,
+     "total": 24
+    },
+    {
+     "label": "LDA top-k distribution",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Byline (author)",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Spatial tags",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 24,
+     "total": 24
+    },
+    {
+     "label": "Text public on islam.zmo.de",
+     "covered": 20,
+     "total": 24
+    }
+   ]
+  },
+  "publications": {
+   "total": 8,
+   "metrics": [
+    {
+     "label": "OCR text",
+     "covered": 8,
+     "total": 8
+    },
+    {
+     "label": "Lemmatised",
+     "covered": 8,
+     "total": 8
+    },
+    {
+     "label": "Table of contents",
+     "covered": 5,
+     "total": 8
+    },
+    {
+     "label": "ToC embeddings",
+     "covered": 5,
+     "total": 8
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 8,
+     "total": 8
+    },
+    {
+     "label": "Text public on islam.zmo.de",
+     "covered": 8,
+     "total": 8
+    }
+   ]
+  },
+  "index": {
+   "total": 31,
+   "metrics": [
+    {
+     "label": "Type: Lieux",
+     "covered": 11,
+     "total": 31
+    },
+    {
+     "label": "Type: Sujets",
+     "covered": 10,
+     "total": 31
+    },
+    {
+     "label": "Type: Personnes",
+     "covered": 5,
+     "total": 31
+    },
+    {
+     "label": "Type: Organisations",
+     "covered": 4,
+     "total": 31
+    },
+    {
+     "label": "Type: Événements",
+     "covered": 1,
+     "total": 31
+    },
+    {
+     "label": "Lieux geocoded",
+     "covered": 11,
+     "total": 11
+    }
+   ]
+  },
+  "documents": {
+   "total": 3,
+   "metrics": [
+    {
+     "label": "OCR text",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Lemmatised",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Text embeddings",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Precomputed neighbours",
+     "covered": 0,
+     "total": 3
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Text public on islam.zmo.de",
+     "covered": 3,
+     "total": 3
+    }
+   ]
+  },
+  "audiovisual": {
+   "total": 4,
+   "metrics": [
+    {
+     "label": "Transcription",
+     "covered": 0,
+     "total": 4
+    },
+    {
+     "label": "Medium",
+     "covered": 2,
+     "total": 4
+    },
+    {
+     "label": "Source — deposited media",
+     "covered": 2,
+     "total": 4
+    },
+    {
+     "label": "Source — YouTube channels",
+     "covered": 2,
+     "total": 4
+    },
+    {
+     "label": "Duration",
+     "covered": 4,
+     "total": 4
+    },
+    {
+     "label": "External URL",
+     "covered": 2,
+     "total": 4
+    },
+    {
+     "label": "Publisher / channel",
+     "covered": 4,
+     "total": 4
+    },
+    {
+     "label": "Spatial tags",
+     "covered": 4,
+     "total": 4
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 4,
+     "total": 4
+    },
+    {
+     "label": "Text public on islam.zmo.de",
+     "covered": 0,
+     "total": 4
+    }
+   ]
+  },
+  "references": {
+   "total": 6,
+   "metrics": [
+    {
+     "label": "Full text",
+     "covered": 3,
+     "total": 6
+    },
+    {
+     "label": "Lemmatised",
+     "covered": 0,
+     "total": 6
+    },
+    {
+     "label": "Abstract embeddings",
+     "covered": 3,
+     "total": 6
+    },
+    {
+     "label": "LDA topic assigned",
+     "covered": 3,
+     "total": 6
+    },
+    {
+     "label": "Abstract",
+     "covered": 3,
+     "total": 6
+    },
+    {
+     "label": "DOI",
+     "covered": 3,
+     "total": 6
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 0,
+     "total": 6
+    },
+    {
+     "label": "Text public on islam.zmo.de",
+     "covered": 0,
+     "total": 6
+    }
+   ]
+  },
+  "images": {
+   "total": 3,
+   "metrics": [
+    {
+     "label": "Multimodal embeddings",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Geocoded (coordinates)",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Subject tags",
+     "covered": 3,
+     "total": 3
+    },
+    {
+     "label": "Full dates (YYYY-MM-DD)",
+     "covered": 3,
+     "total": 3
+    }
+   ]
+  }
+ }
+}

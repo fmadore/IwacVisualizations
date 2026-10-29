@@ -1,0 +1,1555 @@
+{
+ "version": 4,
+ "entity": {
+  "o_id": 1307,
+  "title": "Islam",
+  "type": "Sujets"
+ },
+ "summary": {
+  "by_role": {
+   "all": {
+    "total_mentions": 8,
+    "year_min": 2005,
+    "year_max": 2019,
+    "newspapers_count": 5,
+    "countries_count": 3
+   }
+  }
+ },
+ "timeline": {
+  "by_role": {
+   "all": {
+    "years": [
+     2005,
+     2007,
+     2010,
+     2014,
+     2015,
+     2016,
+     2019
+    ],
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Niger"
+    ],
+    "series": {
+     "Burkina Faso": [
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      1
+     ],
+     "Bénin": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     "Niger": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0
+     ]
+    }
+   }
+  }
+ },
+ "newspapers": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Le Courrier du Sahel",
+     "total": 3,
+     "articles": 3,
+     "publications": 0,
+     "references": 0,
+     "country": "Niger",
+     "year_min": 2005,
+     "year_max": 2015
+    },
+    {
+     "name": "Le Quotidien du Faso",
+     "total": 2,
+     "articles": 2,
+     "publications": 0,
+     "references": 0,
+     "country": "Burkina Faso",
+     "year_min": 2014,
+     "year_max": 2019
+    },
+    {
+     "name": "Le Croissant",
+     "total": 1,
+     "articles": 0,
+     "publications": 1,
+     "references": 0,
+     "country": "Burkina Faso",
+     "year_min": 2007,
+     "year_max": 2007
+    },
+    {
+     "name": "Al-Hikma",
+     "total": 1,
+     "articles": 0,
+     "publications": 1,
+     "references": 0,
+     "country": "Bénin",
+     "year_min": 2016,
+     "year_max": 2016
+    },
+    {
+     "name": "Brill",
+     "total": 1,
+     "articles": 0,
+     "publications": 0,
+     "references": 1,
+     "country": "Burkina Faso",
+     "year_min": 2007,
+     "year_max": 2007
+    }
+   ]
+  }
+ },
+ "countries": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Burkina Faso",
+     "count": 4
+    },
+    {
+     "name": "Niger",
+     "count": 3
+    },
+    {
+     "name": "Bénin",
+     "count": 1
+    }
+   ]
+  }
+ },
+ "network": {
+  "by_role": {
+   "all": {
+    "nodes": [
+     {
+      "o_id": 1307,
+      "title": "Islam",
+      "type": "center",
+      "cooc": null,
+      "score": null
+     },
+     {
+      "o_id": 1003,
+      "title": "Moussa Koné",
+      "type": "Personnes",
+      "cooc": 2,
+      "score": 2.6244
+     },
+     {
+      "o_id": 1304,
+      "title": "Éducation",
+      "type": "Sujets",
+      "cooc": 4,
+      "score": 2.4762
+     },
+     {
+      "o_id": 1204,
+      "title": "Niger",
+      "type": "Lieux",
+      "cooc": 3,
+      "score": 2.3196
+     },
+     {
+      "o_id": 1202,
+      "title": "Burkina Faso",
+      "type": "Lieux",
+      "cooc": 3,
+      "score": 2.3196
+     },
+     {
+      "o_id": 1310,
+      "title": "Radicalisation",
+      "type": "Sujets",
+      "cooc": 3,
+      "score": 2.0794
+     },
+     {
+      "o_id": 1216,
+      "title": "Bobo-Dioulasso",
+      "type": "Lieux",
+      "cooc": 2,
+      "score": 1.3863
+     }
+    ],
+    "edges": [
+     {
+      "source": 1307,
+      "target": 1003,
+      "weight": 2.6244,
+      "cooc": 2,
+      "kind": "ego"
+     },
+     {
+      "source": 1307,
+      "target": 1304,
+      "weight": 2.4762,
+      "cooc": 4,
+      "kind": "ego"
+     },
+     {
+      "source": 1307,
+      "target": 1204,
+      "weight": 2.3196,
+      "cooc": 3,
+      "kind": "ego"
+     },
+     {
+      "source": 1307,
+      "target": 1202,
+      "weight": 2.3196,
+      "cooc": 3,
+      "kind": "ego"
+     },
+     {
+      "source": 1307,
+      "target": 1310,
+      "weight": 2.0794,
+      "cooc": 3,
+      "kind": "ego"
+     },
+     {
+      "source": 1307,
+      "target": 1216,
+      "weight": 1.3863,
+      "cooc": 2,
+      "kind": "ego"
+     },
+     {
+      "source": 1204,
+      "target": 1304,
+      "weight": 3,
+      "cooc": 3,
+      "kind": "cross"
+     },
+     {
+      "source": 1003,
+      "target": 1202,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     },
+     {
+      "source": 1003,
+      "target": 1310,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     },
+     {
+      "source": 1202,
+      "target": 1310,
+      "weight": 2,
+      "cooc": 2,
+      "kind": "cross"
+     }
+    ],
+    "by_type": {
+     "Personnes": {
+      "nodes": [
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1003,
+        "title": "Moussa Koné",
+        "type": "Personnes",
+        "cooc": 2,
+        "score": 2.6244
+       }
+      ],
+      "edges": [
+       {
+        "source": 1307,
+        "target": 1003,
+        "weight": 2.6244,
+        "cooc": 2,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Organisations": {
+      "nodes": [
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Lieux": {
+      "nodes": [
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1204,
+        "title": "Niger",
+        "type": "Lieux",
+        "cooc": 3,
+        "score": 2.3196
+       },
+       {
+        "o_id": 1202,
+        "title": "Burkina Faso",
+        "type": "Lieux",
+        "cooc": 3,
+        "score": 2.3196
+       },
+       {
+        "o_id": 1216,
+        "title": "Bobo-Dioulasso",
+        "type": "Lieux",
+        "cooc": 2,
+        "score": 1.3863
+       }
+      ],
+      "edges": [
+       {
+        "source": 1307,
+        "target": 1204,
+        "weight": 2.3196,
+        "cooc": 3,
+        "kind": "ego"
+       },
+       {
+        "source": 1307,
+        "target": 1202,
+        "weight": 2.3196,
+        "cooc": 3,
+        "kind": "ego"
+       },
+       {
+        "source": 1307,
+        "target": 1216,
+        "weight": 1.3863,
+        "cooc": 2,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Sujets": {
+      "nodes": [
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1304,
+        "title": "Éducation",
+        "type": "Sujets",
+        "cooc": 4,
+        "score": 2.4762
+       },
+       {
+        "o_id": 1310,
+        "title": "Radicalisation",
+        "type": "Sujets",
+        "cooc": 3,
+        "score": 2.0794
+       }
+      ],
+      "edges": [
+       {
+        "source": 1307,
+        "target": 1304,
+        "weight": 2.4762,
+        "cooc": 4,
+        "kind": "ego"
+       },
+       {
+        "source": 1307,
+        "target": 1310,
+        "weight": 2.0794,
+        "cooc": 3,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Événements": {
+      "nodes": [
+       {
+        "o_id": 1307,
+        "title": "Islam",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     }
+    },
+    "over_time": {
+     "year_min": 2005,
+     "year_max": 2019,
+     "dated_items": 8,
+     "undated_items": 0,
+     "entities": {
+      "1003": [
+       [
+        2014,
+        1
+       ],
+       [
+        2019,
+        1
+       ]
+      ],
+      "1304": [
+       [
+        2005,
+        1
+       ],
+       [
+        2007,
+        1
+       ],
+       [
+        2010,
+        1
+       ],
+       [
+        2015,
+        1
+       ]
+      ],
+      "1204": [
+       [
+        2005,
+        1
+       ],
+       [
+        2010,
+        1
+       ],
+       [
+        2015,
+        1
+       ]
+      ],
+      "1202": [
+       [
+        2007,
+        1
+       ],
+       [
+        2014,
+        1
+       ],
+       [
+        2019,
+        1
+       ]
+      ],
+      "1310": [
+       [
+        2014,
+        1
+       ],
+       [
+        2016,
+        1
+       ],
+       [
+        2019,
+        1
+       ]
+      ],
+      "1216": [
+       [
+        2015,
+        1
+       ],
+       [
+        2016,
+        1
+       ]
+      ]
+     }
+    }
+   }
+  }
+ },
+ "locations": {
+  "by_role": {
+   "all": [
+    {
+     "o_id": 1204,
+     "name": "Niger",
+     "lat": 17.61,
+     "lng": 8.08,
+     "count": 3,
+     "articles": [
+      {
+       "o_id": 5023,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 24",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2015-08-27"
+      },
+      {
+       "o_id": 5013,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 14",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2010-06-11"
+      },
+      {
+       "o_id": 5003,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 4",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2005-04-22"
+      }
+     ]
+    },
+    {
+     "o_id": 1202,
+     "name": "Burkina Faso",
+     "lat": 12.24,
+     "lng": -1.56,
+     "count": 3,
+     "articles": [
+      {
+       "o_id": 5016,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 17",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2019-09-05"
+      },
+      {
+       "o_id": 5006,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 7",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2014-07-16"
+      },
+      {
+       "o_id": 7001,
+       "subset": "references",
+       "title": "Étude sur l'islam au Sahel, volume 2",
+       "publisher": "Brill",
+       "date": "2007"
+      }
+     ]
+    },
+    {
+     "o_id": 1216,
+     "name": "Bobo-Dioulasso",
+     "lat": 11.18,
+     "lng": -4.3,
+     "count": 2,
+     "articles": [
+      {
+       "o_id": 6005,
+       "subset": "publications",
+       "title": "Al-Hikma, numéro 6",
+       "publisher": "Al-Hikma",
+       "date": "2016-02-09"
+      },
+      {
+       "o_id": 5023,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 24",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2015-08-27"
+      }
+     ]
+    },
+    {
+     "o_id": 1214,
+     "name": "Niamey",
+     "lat": 13.51,
+     "lng": 2.11,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5003,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 4",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2005-04-22"
+      }
+     ]
+    },
+    {
+     "o_id": 1211,
+     "name": "Cotonou",
+     "lat": 6.37,
+     "lng": 2.39,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5006,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 7",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2014-07-16"
+      }
+     ]
+    },
+    {
+     "o_id": 1212,
+     "name": "Ouagadougou",
+     "lat": 12.37,
+     "lng": -1.52,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5013,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 14",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2010-06-11"
+      }
+     ]
+    },
+    {
+     "o_id": 1215,
+     "name": "Lomé",
+     "lat": 6.13,
+     "lng": 1.22,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5016,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 17",
+       "publisher": "Le Quotidien du Faso",
+       "date": "2019-09-05"
+      }
+     ]
+    },
+    {
+     "o_id": 1213,
+     "name": "Abidjan",
+     "lat": 5.35,
+     "lng": -4.01,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 6002,
+       "subset": "publications",
+       "title": "Le Croissant, numéro 3",
+       "publisher": "Le Croissant",
+       "date": "2007-11-15"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "topics": {
+  "by_role": {
+   "all": [
+    {
+     "label": "sécurité terrorisme attaque armée",
+     "count": 2
+    },
+    {
+     "label": "pèlerinage mecque hadj voyage",
+     "count": 1
+    },
+    {
+     "label": "école enseignement élève franco-arabe",
+     "count": 1
+    },
+    {
+     "label": "mosquée prière fidèle imam",
+     "count": 1
+    }
+   ]
+  }
+ },
+ "sentiment": {
+  "by_role": {
+   "all": {
+    "models": [
+     "gpt_5_6_luna",
+     "mistral_small_2603",
+     "deepseek_v4_flash_0731",
+     "gemma_4_31b_it",
+     "qwen3_8_27b",
+     "claude_haiku_5_5"
+    ],
+    "by_model": {
+     "gpt_5_6_luna": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 2
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 1
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 2
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 2
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 2
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 2
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 3.0,
+      "rated_articles": 4
+     },
+     "mistral_small_2603": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 2
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 2
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 1
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 2
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 3
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 3
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 2
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.2,
+      "rated_articles": 5
+     },
+     "deepseek_v4_flash_0731": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 1
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 2
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 3
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 2
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 2
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 3
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.2,
+      "rated_articles": 5
+     },
+     "gemma_4_31b_it": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 2
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 2
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 2
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 2
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 2
+       }
+      ],
+      "subjectivite_avg": 4.0,
+      "rated_articles": 4
+     },
+     "qwen3_8_27b": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 2
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 1
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 2
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 3
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 3
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 2
+       }
+      ],
+      "subjectivite_avg": 3.2,
+      "rated_articles": 5
+     },
+     "claude_haiku_5_5": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 2
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 1
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 2
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 3
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 2
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 3
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 3.2,
+      "rated_articles": 5
+     }
+    },
+    "articles_total": 5
+   }
+  }
+ },
+ "heatmap": {
+  "by_role": {
+   "all": {
+    "years": [
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019
+    ],
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "cells": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      2,
+      10,
+      1
+     ],
+     [
+      5,
+      5,
+      1
+     ],
+     [
+      9,
+      6,
+      1
+     ],
+     [
+      10,
+      7,
+      1
+     ],
+     [
+      11,
+      1,
+      1
+     ],
+     [
+      14,
+      8,
+      1
+     ]
+    ],
+    "items": 7,
+    "hijri": {
+     "years": [
+      1425,
+      1426,
+      1427,
+      1428,
+      1429,
+      1430,
+      1431,
+      1432,
+      1433,
+      1434,
+      1435,
+      1436,
+      1437,
+      1438,
+      1439,
+      1440
+     ],
+     "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "cells": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       5,
+       4,
+       1
+      ],
+      [
+       6,
+       8,
+       1
+      ],
+      [
+       9,
+       0,
+       1
+      ],
+      [
+       10,
+       8,
+       1
+      ],
+      [
+       14,
+       4,
+       1
+      ],
+      [
+       15,
+       8,
+       1
+      ]
+     ],
+     "items": 7
+    }
+   }
+  }
+ },
+ "cooccurrence": {
+  "by_role": {
+   "all": {
+    "names": [
+     "Éducation",
+     "Niger",
+     "Burkina Faso",
+     "Radicalisation",
+     "Moussa Koné",
+     "Bobo-Dioulasso",
+     "Communauté musulmane du Faso",
+     "Niamey",
+     "Cotonou",
+     "Conseil islamique du Bénin",
+     "Ouagadougou",
+     "Congrès islamique de 2004",
+     "Lomé",
+     "Abidjan",
+     "Tabaski"
+    ],
+    "matrix": [
+     [
+      0,
+      3,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+     ],
+     [
+      3,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     [
+      0,
+      0,
+      2,
+      0,
+      2,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ]
+   }
+  }
+ }
+}

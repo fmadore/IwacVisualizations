@@ -265,6 +265,7 @@ IwacVisualizations/
 │   │   │   ├── current-format.txt
 │   │   │   └── legacy-format.txt
 │   │   └── timeline.json
+│   ├── golden/                          # 127 files — generator output on the synthetic corpus; UPDATE_GOLDEN=1 rewrites it
 │   ├── integration/
 │   │   ├── block_assets.php
 │   │   ├── omeka_boot.php
@@ -280,9 +281,12 @@ IwacVisualizations/
 │   │   ├── sync_data_archive.php
 │   │   └── timeline.php
 │   └── python/
+│       ├── golden_corpus.py
+│       ├── golden_org_targets.json
 │       ├── requirements.txt
 │       ├── test_albani_sermons.py
 │       ├── test_entity_networks.py
+│       ├── test_golden.py
 │       ├── test_iwac_helpers.py
 │       ├── test_laicite_audit.py
 │       ├── test_laicite_methodology.py

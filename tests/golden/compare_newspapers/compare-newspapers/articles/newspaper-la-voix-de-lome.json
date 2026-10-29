@@ -1,0 +1,433 @@
+{
+ "id": "articles::newspaper::la-voix-de-lome",
+ "type": "articles",
+ "scope": "newspaper",
+ "name": "La Voix de Lomé",
+ "summary": {
+  "total_items": 4,
+  "total_words": 434,
+  "total_pages": 8,
+  "year_min": 1998,
+  "year_max": 2013,
+  "unique_subjects": 6,
+  "unique_spatial": 5,
+  "unique_languages": 1,
+  "unique_newspapers": 1,
+  "unique_geocoded_places": 5,
+  "top_country": "Togo",
+  "top_country_count": 4
+ },
+ "timeline": {
+  "years": [
+   1998,
+   2003,
+   2008,
+   2013
+  ],
+  "counts": [
+   1,
+   1,
+   1,
+   1
+  ]
+ },
+ "subjects": [
+  {
+   "name": "Laïcité",
+   "count": 2,
+   "o_id": 1305
+  },
+  {
+   "name": "Femmes",
+   "count": 2,
+   "o_id": 1308
+  },
+  {
+   "name": "Amadou Diallo",
+   "count": 2,
+   "o_id": 1001
+  },
+  {
+   "name": "Radicalisation",
+   "count": 2,
+   "o_id": 1310
+  },
+  {
+   "name": "Mosquées",
+   "count": 2,
+   "o_id": 1303
+  },
+  {
+   "name": "Union des musulmans du Togo",
+   "count": 1,
+   "o_id": 1102
+  }
+ ],
+ "spatial": [
+  {
+   "name": "Togo",
+   "count": 4,
+   "o_id": 1205
+  },
+  {
+   "name": "Lomé",
+   "count": 1,
+   "o_id": 1215
+  },
+  {
+   "name": "Niamey",
+   "count": 1,
+   "o_id": 1214
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "o_id": 1213
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "o_id": 1212
+  }
+ ],
+ "languages": [
+  {
+   "name": "Français",
+   "count": 4
+  }
+ ],
+ "newspapers": [],
+ "wordcloud": [
+  [
+   "union",
+   24
+  ],
+  [
+   "mosquée",
+   23
+  ],
+  [
+   "communauté",
+   22
+  ],
+  [
+   "jeûne",
+   22
+  ],
+  [
+   "laïcité",
+   22
+  ],
+  [
+   "paix",
+   22
+  ],
+  [
+   "jeunesse",
+   22
+  ],
+  [
+   "terrorisme",
+   22
+  ],
+  [
+   "dialogue",
+   22
+  ],
+  [
+   "femmes",
+   14
+  ],
+  [
+   "enseignement",
+   13
+  ],
+  [
+   "islamisme",
+   13
+  ],
+  [
+   "charia",
+   13
+  ],
+  [
+   "association",
+   13
+  ],
+  [
+   "musulmans",
+   13
+  ],
+  [
+   "conseil",
+   13
+  ],
+  [
+   "jihad",
+   13
+  ],
+  [
+   "tolérance",
+   13
+  ],
+  [
+   "religion",
+   12
+  ],
+  [
+   "mecque",
+   12
+  ],
+  [
+   "imam",
+   12
+  ],
+  [
+   "ramadan",
+   12
+  ],
+  [
+   "prière",
+   12
+  ],
+  [
+   "fidèles",
+   12
+  ],
+  [
+   "école",
+   12
+  ],
+  [
+   "état",
+   12
+  ],
+  [
+   "pèlerinage",
+   12
+  ]
+ ],
+ "geo_points": [
+  {
+   "name": "Togo",
+   "count": 4,
+   "lat": 8.62,
+   "lng": 0.82,
+   "o_id": 1205,
+   "country": "Togo"
+  },
+  {
+   "name": "Lomé",
+   "count": 1,
+   "lat": 6.13,
+   "lng": 1.22,
+   "o_id": 1215,
+   "country": "Togo"
+  },
+  {
+   "name": "Niamey",
+   "count": 1,
+   "lat": 13.51,
+   "lng": 2.11,
+   "o_id": 1214,
+   "country": "Niger"
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "lat": 5.35,
+   "lng": -4.01,
+   "o_id": 1213,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "lat": 12.37,
+   "lng": -1.52,
+   "o_id": 1212,
+   "country": "Burkina Faso"
+  }
+ ],
+ "sentiment": {
+  "rated": 4,
+  "models": {
+   "gpt_5_6_luna": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 1
+     },
+     {
+      "label": "Neutre",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Non abordé",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "5",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 5.0,
+    "subjectivite_n": 4
+   },
+   "mistral_small_2603": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 1
+     },
+     {
+      "label": "Négatif",
+      "count": 2
+     },
+     {
+      "label": "Non applicable",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Très central",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "2",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 2.0,
+    "subjectivite_n": 4
+   },
+   "deepseek_v4_flash_0731": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 1
+     },
+     {
+      "label": "Neutre",
+      "count": 1
+     },
+     {
+      "label": "Très négatif",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Central",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "4",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 4.0,
+    "subjectivite_n": 4
+   },
+   "gemma_4_31b_it": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 1
+     },
+     {
+      "label": "Négatif",
+      "count": 1
+     },
+     {
+      "label": "Non applicable",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Secondaire",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "1",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 1.0,
+    "subjectivite_n": 4
+   },
+   "qwen3_8_27b": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 2
+     },
+     {
+      "label": "Neutre",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Marginal",
+      "count": 3
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "3",
+      "count": 3
+     }
+    ],
+    "subjectivite_avg": 3.0,
+    "subjectivite_n": 3
+   },
+   "claude_haiku_5_5": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 2
+     },
+     {
+      "label": "Négatif",
+      "count": 1
+     },
+     {
+      "label": "Non applicable",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Non abordé",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "5",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 5.0,
+    "subjectivite_n": 4
+   }
+  }
+ }
+}

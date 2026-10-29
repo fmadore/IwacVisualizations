@@ -1,0 +1,283 @@
+{
+ "totalRecords": 24,
+ "dataSource": "fmadore/islam-west-africa-collection-full",
+ "generatedAt": "2026-01-01T00:00:00Z",
+ "script": "generate_keyness.py",
+ "script_version": "0.1.0",
+ "params": {
+  "alpha": 0.05,
+  "min_count": 3,
+  "min_log_ratio": 0.585,
+  "top_n": 25,
+  "min_subject_total": 3,
+  "max_subjects": 40,
+  "burst_s": 3.0,
+  "burst_gamma": 1.0
+ },
+ "keyness": {
+  "country": [
+   {
+    "name": "Burkina Faso",
+    "docs": 5,
+    "tokens": 410,
+    "terms": []
+   },
+   {
+    "name": "Bénin",
+    "docs": 5,
+    "tokens": 345,
+    "terms": []
+   },
+   {
+    "name": "Côte d'Ivoire",
+    "docs": 5,
+    "tokens": 430,
+    "terms": []
+   },
+   {
+    "name": "Niger",
+    "docs": 5,
+    "tokens": 495,
+    "terms": []
+   },
+   {
+    "name": "Togo",
+    "docs": 4,
+    "tokens": 430,
+    "terms": []
+   }
+  ],
+  "decade": [
+   {
+    "name": "1990s",
+    "docs": 4,
+    "tokens": 385,
+    "terms": []
+   },
+   {
+    "name": "2000s",
+    "docs": 10,
+    "tokens": 875,
+    "terms": []
+   },
+   {
+    "name": "2010s",
+    "docs": 9,
+    "tokens": 760,
+    "terms": [
+     {
+      "token": "communauté",
+      "log_ratio": 0.829,
+      "g2": 6.25,
+      "q": 0.0257470787,
+      "count": 37,
+      "rate_ratio": 1.78
+     },
+     {
+      "token": "jeûne",
+      "log_ratio": 0.829,
+      "g2": 6.25,
+      "q": 0.0257470787,
+      "count": 37,
+      "rate_ratio": 1.78
+     },
+     {
+      "token": "laïcité",
+      "log_ratio": 0.829,
+      "g2": 6.25,
+      "q": 0.0257470787,
+      "count": 37,
+      "rate_ratio": 1.78
+     },
+     {
+      "token": "paix",
+      "log_ratio": 0.829,
+      "g2": 6.25,
+      "q": 0.0257470787,
+      "count": 37,
+      "rate_ratio": 1.78
+     },
+     {
+      "token": "dialogue",
+      "log_ratio": 0.792,
+      "g2": 5.93,
+      "q": 0.0286633902,
+      "count": 38,
+      "rate_ratio": 1.73
+     },
+     {
+      "token": "terrorisme",
+      "log_ratio": 0.754,
+      "g2": 5.29,
+      "q": 0.0386279405,
+      "count": 37,
+      "rate_ratio": 1.69
+     },
+     {
+      "token": "mosquée",
+      "log_ratio": 0.752,
+      "g2": 5.12,
+      "q": 0.0400017125,
+      "count": 36,
+      "rate_ratio": 1.68
+     },
+     {
+      "token": "jeunesse",
+      "log_ratio": 0.715,
+      "g2": 4.67,
+      "q": 0.0459090472,
+      "count": 36,
+      "rate_ratio": 1.64
+     },
+     {
+      "token": "union",
+      "log_ratio": 0.69,
+      "g2": 4.76,
+      "q": 0.0459090472,
+      "count": 39,
+      "rate_ratio": 1.61
+     }
+    ]
+   },
+   {
+    "name": "2020s",
+    "docs": 1,
+    "tokens": 90,
+    "terms": [
+     {
+      "token": "prière",
+      "log_ratio": 1.701,
+      "g2": 9.08,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.12
+     },
+     {
+      "token": "fidèles",
+      "log_ratio": 1.681,
+      "g2": 8.9,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.07
+     },
+     {
+      "token": "pèlerinage",
+      "log_ratio": 1.681,
+      "g2": 8.9,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.07
+     },
+     {
+      "token": "école",
+      "log_ratio": 1.681,
+      "g2": 8.9,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.07
+     },
+     {
+      "token": "état",
+      "log_ratio": 1.681,
+      "g2": 8.9,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.07
+     },
+     {
+      "token": "femmes",
+      "log_ratio": 1.661,
+      "g2": 8.73,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.03
+     },
+     {
+      "token": "jihad",
+      "log_ratio": 1.661,
+      "g2": 8.73,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 3.03
+     },
+     {
+      "token": "tolérance",
+      "log_ratio": 1.642,
+      "g2": 8.56,
+      "q": 0.00386832138,
+      "count": 10,
+      "rate_ratio": 2.99
+     },
+     {
+      "token": "conseil",
+      "log_ratio": 1.532,
+      "g2": 7.6,
+      "q": 0.00585277201,
+      "count": 10,
+      "rate_ratio": 2.77
+     }
+    ]
+   }
+  ]
+ },
+ "bursts": {
+  "years": [
+   1996,
+   1997,
+   1998,
+   1999,
+   2000,
+   2001,
+   2002,
+   2003,
+   2004,
+   2005,
+   2006,
+   2007,
+   2008,
+   2009,
+   2010,
+   2011,
+   2012,
+   2013,
+   2014,
+   2015,
+   2016,
+   2017,
+   2018,
+   2019,
+   2020
+  ],
+  "docs_total": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   0,
+   1,
+   1
+  ],
+  "subjects": [],
+  "tested": 13,
+  "onset_dropped": 0,
+  "with_bursts": 0
+ }
+}

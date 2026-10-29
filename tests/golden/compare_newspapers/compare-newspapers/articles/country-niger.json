@@ -1,0 +1,469 @@
+{
+ "id": "articles::country::niger",
+ "type": "articles",
+ "scope": "country",
+ "name": "Niger",
+ "summary": {
+  "total_items": 5,
+  "total_words": 501,
+  "total_pages": 10,
+  "year_min": 2000,
+  "year_max": 2020,
+  "unique_subjects": 8,
+  "unique_spatial": 6,
+  "unique_languages": 1,
+  "unique_newspapers": 1,
+  "unique_geocoded_places": 6
+ },
+ "timeline": {
+  "years": [
+   2000,
+   2005,
+   2010,
+   2015,
+   2020
+  ],
+  "counts": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ]
+ },
+ "subjects": [
+  {
+   "name": "Éducation",
+   "count": 3,
+   "o_id": 1304
+  },
+  {
+   "name": "Islam",
+   "count": 3,
+   "o_id": 1307
+  },
+  {
+   "name": "Jeunesse",
+   "count": 2,
+   "o_id": 1309
+  },
+  {
+   "name": "Tabaski",
+   "count": 2,
+   "o_id": 1302
+  },
+  {
+   "name": "Issa Sow",
+   "count": 2,
+   "o_id": 1005
+  },
+  {
+   "name": "Communauté musulmane du Faso",
+   "count": 1,
+   "o_id": 1104
+  },
+  {
+   "name": "Congrès islamique de 2004",
+   "count": 1,
+   "o_id": 1401
+  },
+  {
+   "name": "Conseil islamique du Bénin",
+   "count": 1,
+   "o_id": 1103
+  }
+ ],
+ "spatial": [
+  {
+   "name": "Niger",
+   "count": 5,
+   "o_id": 1204
+  },
+  {
+   "name": "Niamey",
+   "count": 1,
+   "o_id": 1214
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "o_id": 1213
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "o_id": 1212
+  },
+  {
+   "name": "Cotonou",
+   "count": 1,
+   "o_id": 1211
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "count": 1,
+   "o_id": 1216
+  }
+ ],
+ "languages": [
+  {
+   "name": "Français",
+   "count": 5
+  }
+ ],
+ "newspapers": [
+  {
+   "name": "Le Courrier du Sahel",
+   "count": 5
+  }
+ ],
+ "wordcloud": [
+  [
+   "conseil",
+   25
+  ],
+  [
+   "prière",
+   24
+  ],
+  [
+   "fidèles",
+   24
+  ],
+  [
+   "école",
+   23
+  ],
+  [
+   "état",
+   22
+  ],
+  [
+   "pèlerinage",
+   22
+  ],
+  [
+   "femmes",
+   22
+  ],
+  [
+   "jihad",
+   22
+  ],
+  [
+   "tolérance",
+   22
+  ],
+  [
+   "musulmans",
+   21
+  ],
+  [
+   "charia",
+   20
+  ],
+  [
+   "association",
+   20
+  ],
+  [
+   "imam",
+   20
+  ],
+  [
+   "ramadan",
+   20
+  ],
+  [
+   "enseignement",
+   20
+  ],
+  [
+   "religion",
+   20
+  ],
+  [
+   "mecque",
+   20
+  ],
+  [
+   "islamisme",
+   20
+  ],
+  [
+   "union",
+   13
+  ],
+  [
+   "terrorisme",
+   12
+  ],
+  [
+   "dialogue",
+   12
+  ],
+  [
+   "laïcité",
+   11
+  ],
+  [
+   "paix",
+   11
+  ],
+  [
+   "jeunesse",
+   11
+  ],
+  [
+   "mosquée",
+   11
+  ],
+  [
+   "communauté",
+   11
+  ],
+  [
+   "jeûne",
+   11
+  ],
+  [
+   "islamique",
+   2
+  ],
+  [
+   "bénin",
+   2
+  ]
+ ],
+ "geo_points": [
+  {
+   "name": "Niger",
+   "count": 5,
+   "lat": 17.61,
+   "lng": 8.08,
+   "o_id": 1204,
+   "country": "Niger"
+  },
+  {
+   "name": "Niamey",
+   "count": 1,
+   "lat": 13.51,
+   "lng": 2.11,
+   "o_id": 1214,
+   "country": "Niger"
+  },
+  {
+   "name": "Abidjan",
+   "count": 1,
+   "lat": 5.35,
+   "lng": -4.01,
+   "o_id": 1213,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "name": "Ouagadougou",
+   "count": 1,
+   "lat": 12.37,
+   "lng": -1.52,
+   "o_id": 1212,
+   "country": "Burkina Faso"
+  },
+  {
+   "name": "Cotonou",
+   "count": 1,
+   "lat": 6.37,
+   "lng": 2.39,
+   "o_id": 1211,
+   "country": "Bénin"
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "count": 1,
+   "lat": 11.18,
+   "lng": -4.3,
+   "o_id": 1216,
+   "country": "Burkina Faso"
+  }
+ ],
+ "sentiment": {
+  "rated": 5,
+  "models": {
+   "gpt_5_6_luna": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Marginal",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "4",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 4.0,
+    "subjectivite_n": 4
+   },
+   "mistral_small_2603": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 2
+     },
+     {
+      "label": "Négatif",
+      "count": 1
+     },
+     {
+      "label": "Non applicable",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Non abordé",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "1",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 1.0,
+    "subjectivite_n": 5
+   },
+   "deepseek_v4_flash_0731": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 2
+     },
+     {
+      "label": "Neutre",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Très central",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "3",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 3.0,
+    "subjectivite_n": 5
+   },
+   "gemma_4_31b_it": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 1
+     },
+     {
+      "label": "Négatif",
+      "count": 2
+     },
+     {
+      "label": "Non applicable",
+      "count": 1
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Central",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "5",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 5.0,
+    "subjectivite_n": 4
+   },
+   "qwen3_8_27b": {
+    "polarite": [
+     {
+      "label": "Très positif",
+      "count": 1
+     },
+     {
+      "label": "Neutre",
+      "count": 2
+     },
+     {
+      "label": "Très négatif",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Secondaire",
+      "count": 5
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "2",
+      "count": 5
+     }
+    ],
+    "subjectivite_avg": 2.0,
+    "subjectivite_n": 5
+   },
+   "claude_haiku_5_5": {
+    "polarite": [
+     {
+      "label": "Positif",
+      "count": 1
+     },
+     {
+      "label": "Négatif",
+      "count": 1
+     },
+     {
+      "label": "Non applicable",
+      "count": 2
+     }
+    ],
+    "centralite": [
+     {
+      "label": "Marginal",
+      "count": 4
+     }
+    ],
+    "subjectivite": [
+     {
+      "label": "4",
+      "count": 4
+     }
+    ],
+    "subjectivite_avg": 4.0,
+    "subjectivite_n": 4
+   }
+  }
+ }
+}

@@ -1,0 +1,1340 @@
+{
+ "metadata": {
+  "totalRecords": 31,
+  "dataSource": "fmadore/islam-west-africa-collection-full",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "script": "generate_index_overview.py",
+  "script_version": "0.1.0",
+  "top_n": 50
+ },
+ "summary": {
+  "total_entities": 31,
+  "by_type": {
+   "Personnes": 5,
+   "Lieux": 11,
+   "Organisations": 4,
+   "Sujets": 10,
+   "Événements": 1
+  },
+  "total_mentions": 211,
+  "year_min": 1996,
+  "year_max": 2024,
+  "with_coordinates": 11,
+  "with_mentioned_places": 11,
+  "with_dates": 31
+ },
+ "top_entities": {
+  "Personnes": [
+   {
+    "o_id": 1004,
+    "title": "Aïcha Mama",
+    "frequency": 3,
+    "first_occurrence": "2002-11-15",
+    "last_occurrence": "2012-03-20",
+    "countries": [
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1002,
+    "title": "Fatimata Ouédraogo",
+    "frequency": 3,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2006-05-06",
+    "countries": [
+     "Bénin"
+    ]
+   },
+   {
+    "o_id": 1001,
+    "title": "Amadou Diallo",
+    "frequency": 2,
+    "first_occurrence": "2008-09-02",
+    "last_occurrence": "2013-11-18",
+    "countries": [
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1005,
+    "title": "Issa Sow",
+    "frequency": 2,
+    "first_occurrence": "2000-07-19",
+    "last_occurrence": "2020-05-03",
+    "countries": [
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1003,
+    "title": "Moussa Koné",
+    "frequency": 2,
+    "first_occurrence": "2014-07-16",
+    "last_occurrence": "2019-09-05",
+    "countries": [
+     "Burkina Faso"
+    ]
+   }
+  ],
+  "Organisations": [
+   {
+    "o_id": 1101,
+    "title": "Association des élèves musulmans",
+    "frequency": 2,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2007-01-04",
+    "countries": [
+     "Bénin",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1104,
+    "title": "Communauté musulmane du Faso",
+    "frequency": 2,
+    "first_occurrence": "2005-04-22",
+    "last_occurrence": "2016-04-25",
+    "countries": [
+     "Bénin",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1103,
+    "title": "Conseil islamique du Bénin",
+    "frequency": 2,
+    "first_occurrence": "2000-07-19",
+    "last_occurrence": "2014-07-16",
+    "countries": [
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1102,
+    "title": "Union des musulmans du Togo",
+    "frequency": 2,
+    "first_occurrence": "1998-10-10",
+    "last_occurrence": "2009-10-13",
+    "countries": [
+     "Burkina Faso",
+     "Togo"
+    ]
+   }
+  ],
+  "Lieux": [
+   {
+    "o_id": 1211,
+    "title": "Cotonou",
+    "frequency": 9,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2030-05-21",
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Côte d'Ivoire",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1212,
+    "title": "Ouagadougou",
+    "frequency": 9,
+    "first_occurrence": "1999-06-08",
+    "last_occurrence": "2033-10-01",
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Côte d'Ivoire",
+     "Niger",
+     "Nigeria",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1213,
+    "title": "Abidjan",
+    "frequency": 8,
+    "first_occurrence": "1997-07-25",
+    "last_occurrence": "2036-03-08",
+    "countries": [
+     "Côte d'Ivoire",
+     "Bénin",
+     "Burkina Faso",
+     "Niger",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1201,
+    "title": "Bénin",
+    "frequency": 7,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2016-04-25",
+    "countries": [
+     "Bénin"
+    ]
+   },
+   {
+    "o_id": 1202,
+    "title": "Burkina Faso",
+    "frequency": 6,
+    "first_occurrence": "1999-06-08",
+    "last_occurrence": "2019-09-05",
+    "countries": [
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1203,
+    "title": "Côte d'Ivoire",
+    "frequency": 6,
+    "first_occurrence": "1997-02-12",
+    "last_occurrence": "2017-12-23",
+    "countries": [
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1214,
+    "title": "Niamey",
+    "frequency": 6,
+    "first_occurrence": "1998-10-10",
+    "last_occurrence": "2024-04-10",
+    "countries": [
+     "Bénin",
+     "Togo",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1204,
+    "title": "Niger",
+    "frequency": 6,
+    "first_occurrence": "2000-07-19",
+    "last_occurrence": "2020-05-03",
+    "countries": [
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1216,
+    "title": "Bobo-Dioulasso",
+    "frequency": 5,
+    "first_occurrence": "1997-02-12",
+    "last_occurrence": "2016-02-09",
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1215,
+    "title": "Lomé",
+    "frequency": 5,
+    "first_occurrence": "2001-03-17",
+    "last_occurrence": "2019-09-05",
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Côte d'Ivoire",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1205,
+    "title": "Togo",
+    "frequency": 5,
+    "first_occurrence": "1998-10-10",
+    "last_occurrence": "2013-11-18",
+    "countries": [
+     "Togo"
+    ]
+   }
+  ],
+  "Sujets": [
+   {
+    "o_id": 1303,
+    "title": "Mosquées",
+    "frequency": 11,
+    "first_occurrence": "1998-10-10",
+    "last_occurrence": "2036-03-08",
+    "countries": [
+     "Côte d'Ivoire",
+     "Bénin",
+     "Togo",
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1307,
+    "title": "Islam",
+    "frequency": 9,
+    "first_occurrence": "2005-04-22",
+    "last_occurrence": "2019-09-05",
+    "countries": [
+     "Burkina Faso",
+     "Niger",
+     "Bénin"
+    ]
+   },
+   {
+    "o_id": 1305,
+    "title": "Laïcité",
+    "frequency": 9,
+    "first_occurrence": "1997-07-25",
+    "last_occurrence": "2013-11-18",
+    "countries": [
+     "Burkina Faso",
+     "Togo",
+     "Bénin",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1306,
+    "title": "Pèlerinage",
+    "frequency": 9,
+    "first_occurrence": "2002-11-15",
+    "last_occurrence": "2016-04-25",
+    "countries": [
+     "Bénin",
+     "Côte d'Ivoire",
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1304,
+    "title": "Éducation",
+    "frequency": 9,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2019-02-18",
+    "countries": [
+     "Niger",
+     "Bénin",
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1308,
+    "title": "Femmes",
+    "frequency": 8,
+    "first_occurrence": "1997-02-12",
+    "last_occurrence": "2019-07-16",
+    "countries": [
+     "Côte d'Ivoire",
+     "Togo",
+     "Burkina Faso",
+     "Bénin",
+     "Nigeria"
+    ]
+   },
+   {
+    "o_id": 1309,
+    "title": "Jeunesse",
+    "frequency": 8,
+    "first_occurrence": "2000-07-19",
+    "last_occurrence": "2022-12-23",
+    "countries": [
+     "Bénin",
+     "Niger",
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1301,
+    "title": "Ramadan",
+    "frequency": 8,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2019-07-16",
+    "countries": [
+     "Bénin",
+     "Côte d'Ivoire",
+     "Burkina Faso"
+    ]
+   },
+   {
+    "o_id": 1302,
+    "title": "Tabaski",
+    "frequency": 8,
+    "first_occurrence": "1999-06-08",
+    "last_occurrence": "2022-12-23",
+    "countries": [
+     "Burkina Faso",
+     "Niger",
+     "Bénin"
+    ]
+   },
+   {
+    "o_id": 1310,
+    "title": "Radicalisation",
+    "frequency": 7,
+    "first_occurrence": "1998-10-10",
+    "last_occurrence": "2024-04-10",
+    "countries": [
+     "Togo",
+     "Burkina Faso",
+     "Bénin"
+    ]
+   }
+  ],
+  "Événements": [
+   {
+    "o_id": 1401,
+    "title": "Congrès islamique de 2004",
+    "frequency": 3,
+    "first_occurrence": "1996-01-01",
+    "last_occurrence": "2020-05-03",
+    "countries": [
+     "Burkina Faso",
+     "Bénin",
+     "Niger"
+    ]
+   }
+  ]
+ },
+ "lifespan": {
+  "Personnes": [
+   {
+    "o_id": 1002,
+    "title": "Fatimata Ouédraogo",
+    "frequency": 11,
+    "first_year": 1996,
+    "last_year": 2019,
+    "span_years": 23
+   },
+   {
+    "o_id": 1003,
+    "title": "Moussa Koné",
+    "frequency": 11,
+    "first_year": 1996,
+    "last_year": 2022,
+    "span_years": 26
+   },
+   {
+    "o_id": 1004,
+    "title": "Aïcha Mama",
+    "frequency": 11,
+    "first_year": 2000,
+    "last_year": 2024,
+    "span_years": 24
+   },
+   {
+    "o_id": 1001,
+    "title": "Amadou Diallo",
+    "frequency": 10,
+    "first_year": 1996,
+    "last_year": 2020,
+    "span_years": 24
+   },
+   {
+    "o_id": 1005,
+    "title": "Issa Sow",
+    "frequency": 7,
+    "first_year": 1998,
+    "last_year": 2020,
+    "span_years": 22
+   }
+  ],
+  "Lieux": [
+   {
+    "o_id": 1201,
+    "title": "Bénin",
+    "frequency": 7,
+    "first_year": 1996,
+    "last_year": 2016,
+    "span_years": 20
+   },
+   {
+    "o_id": 1211,
+    "title": "Cotonou",
+    "frequency": 7,
+    "first_year": 1996,
+    "last_year": 2019,
+    "span_years": 23
+   },
+   {
+    "o_id": 1212,
+    "title": "Ouagadougou",
+    "frequency": 7,
+    "first_year": 1999,
+    "last_year": 2022,
+    "span_years": 23
+   },
+   {
+    "o_id": 1202,
+    "title": "Burkina Faso",
+    "frequency": 6,
+    "first_year": 1999,
+    "last_year": 2019,
+    "span_years": 20
+   },
+   {
+    "o_id": 1203,
+    "title": "Côte d'Ivoire",
+    "frequency": 6,
+    "first_year": 1997,
+    "last_year": 2017,
+    "span_years": 20
+   },
+   {
+    "o_id": 1204,
+    "title": "Niger",
+    "frequency": 6,
+    "first_year": 2000,
+    "last_year": 2020,
+    "span_years": 20
+   },
+   {
+    "o_id": 1213,
+    "title": "Abidjan",
+    "frequency": 6,
+    "first_year": 2002,
+    "last_year": 2021,
+    "span_years": 19
+   },
+   {
+    "o_id": 1214,
+    "title": "Niamey",
+    "frequency": 6,
+    "first_year": 1998,
+    "last_year": 2024,
+    "span_years": 26
+   },
+   {
+    "o_id": 1205,
+    "title": "Togo",
+    "frequency": 5,
+    "first_year": 1998,
+    "last_year": 2013,
+    "span_years": 15
+   },
+   {
+    "o_id": 1215,
+    "title": "Lomé",
+    "frequency": 5,
+    "first_year": 2001,
+    "last_year": 2019,
+    "span_years": 18
+   },
+   {
+    "o_id": 1216,
+    "title": "Bobo-Dioulasso",
+    "frequency": 5,
+    "first_year": 1997,
+    "last_year": 2016,
+    "span_years": 19
+   }
+  ],
+  "Organisations": [
+   {
+    "o_id": 1101,
+    "title": "Association des élèves musulmans",
+    "frequency": 3,
+    "first_year": 1996,
+    "last_year": 2015,
+    "span_years": 19
+   },
+   {
+    "o_id": 1102,
+    "title": "Union des musulmans du Togo",
+    "frequency": 3,
+    "first_year": 1998,
+    "last_year": 2018,
+    "span_years": 20
+   },
+   {
+    "o_id": 1103,
+    "title": "Conseil islamique du Bénin",
+    "frequency": 3,
+    "first_year": 2000,
+    "last_year": 2021,
+    "span_years": 21
+   },
+   {
+    "o_id": 1104,
+    "title": "Communauté musulmane du Faso",
+    "frequency": 3,
+    "first_year": 2005,
+    "last_year": 2024,
+    "span_years": 19
+   }
+  ],
+  "Sujets": [
+   {
+    "o_id": 1306,
+    "title": "Pèlerinage",
+    "frequency": 9,
+    "first_year": 2002,
+    "last_year": 2016,
+    "span_years": 14
+   },
+   {
+    "o_id": 1307,
+    "title": "Islam",
+    "frequency": 9,
+    "first_year": 2005,
+    "last_year": 2019,
+    "span_years": 14
+   },
+   {
+    "o_id": 1301,
+    "title": "Ramadan",
+    "frequency": 8,
+    "first_year": 1996,
+    "last_year": 2019,
+    "span_years": 23
+   },
+   {
+    "o_id": 1302,
+    "title": "Tabaski",
+    "frequency": 8,
+    "first_year": 1999,
+    "last_year": 2022,
+    "span_years": 23
+   },
+   {
+    "o_id": 1304,
+    "title": "Éducation",
+    "frequency": 8,
+    "first_year": 1996,
+    "last_year": 2015,
+    "span_years": 19
+   },
+   {
+    "o_id": 1305,
+    "title": "Laïcité",
+    "frequency": 8,
+    "first_year": 1999,
+    "last_year": 2013,
+    "span_years": 14
+   },
+   {
+    "o_id": 1308,
+    "title": "Femmes",
+    "frequency": 8,
+    "first_year": 1997,
+    "last_year": 2019,
+    "span_years": 22
+   },
+   {
+    "o_id": 1309,
+    "title": "Jeunesse",
+    "frequency": 8,
+    "first_year": 2000,
+    "last_year": 2022,
+    "span_years": 22
+   },
+   {
+    "o_id": 1303,
+    "title": "Mosquées",
+    "frequency": 7,
+    "first_year": 1998,
+    "last_year": 2012,
+    "span_years": 14
+   },
+   {
+    "o_id": 1310,
+    "title": "Radicalisation",
+    "frequency": 7,
+    "first_year": 1998,
+    "last_year": 2024,
+    "span_years": 26
+   }
+  ],
+  "Événements": [
+   {
+    "o_id": 1401,
+    "title": "Congrès islamique de 2004",
+    "frequency": 3,
+    "first_year": 1996,
+    "last_year": 2020,
+    "span_years": 24
+   }
+  ]
+ },
+ "gender": {
+  "M": 3,
+  "F": 2
+ },
+ "places": [
+  {
+   "o_id": 1201,
+   "title": "Bénin",
+   "lat": 9.3,
+   "lng": 2.31,
+   "frequency": 7,
+   "country": "Bénin"
+  },
+  {
+   "o_id": 1211,
+   "title": "Cotonou",
+   "lat": 6.37,
+   "lng": 2.39,
+   "frequency": 7,
+   "country": "Bénin"
+  },
+  {
+   "o_id": 1212,
+   "title": "Ouagadougou",
+   "lat": 12.37,
+   "lng": -1.52,
+   "frequency": 7,
+   "country": "Burkina Faso"
+  },
+  {
+   "o_id": 1202,
+   "title": "Burkina Faso",
+   "lat": 12.24,
+   "lng": -1.56,
+   "frequency": 6,
+   "country": "Burkina Faso"
+  },
+  {
+   "o_id": 1203,
+   "title": "Côte d'Ivoire",
+   "lat": 7.54,
+   "lng": -5.55,
+   "frequency": 6,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "o_id": 1204,
+   "title": "Niger",
+   "lat": 17.61,
+   "lng": 8.08,
+   "frequency": 6,
+   "country": "Niger"
+  },
+  {
+   "o_id": 1213,
+   "title": "Abidjan",
+   "lat": 5.35,
+   "lng": -4.01,
+   "frequency": 6,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "o_id": 1214,
+   "title": "Niamey",
+   "lat": 13.51,
+   "lng": 2.11,
+   "frequency": 6,
+   "country": "Niger"
+  },
+  {
+   "o_id": 1205,
+   "title": "Togo",
+   "lat": 8.62,
+   "lng": 0.82,
+   "frequency": 5,
+   "country": "Togo"
+  },
+  {
+   "o_id": 1215,
+   "title": "Lomé",
+   "lat": 6.13,
+   "lng": 1.22,
+   "frequency": 5,
+   "country": "Togo"
+  },
+  {
+   "o_id": 1216,
+   "title": "Bobo-Dioulasso",
+   "lat": 11.18,
+   "lng": -4.3,
+   "frequency": 5,
+   "country": "Burkina Faso"
+  }
+ ],
+ "place_mentions": [
+  {
+   "name": "Cotonou",
+   "lat": 6.37,
+   "lng": 2.39,
+   "count": 9
+  },
+  {
+   "name": "Ouagadougou",
+   "lat": 12.37,
+   "lng": -1.52,
+   "count": 9
+  },
+  {
+   "name": "Abidjan",
+   "lat": 5.35,
+   "lng": -4.01,
+   "count": 8
+  },
+  {
+   "name": "Bénin",
+   "lat": 9.3,
+   "lng": 2.31,
+   "count": 7
+  },
+  {
+   "name": "Burkina Faso",
+   "lat": 12.24,
+   "lng": -1.56,
+   "count": 6
+  },
+  {
+   "name": "Côte d'Ivoire",
+   "lat": 7.54,
+   "lng": -5.55,
+   "count": 6
+  },
+  {
+   "name": "Niamey",
+   "lat": 13.51,
+   "lng": 2.11,
+   "count": 6
+  },
+  {
+   "name": "Niger",
+   "lat": 17.61,
+   "lng": 8.08,
+   "count": 6
+  },
+  {
+   "name": "Lomé",
+   "lat": 6.13,
+   "lng": 1.22,
+   "count": 5
+  },
+  {
+   "name": "Togo",
+   "lat": 8.62,
+   "lng": 0.82,
+   "count": 5
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "lat": 11.18,
+   "lng": -4.3,
+   "count": 5
+  }
+ ],
+ "activity": {
+  "Personnes": [
+   {
+    "o_id": 1002,
+    "name": "Fatimata Ouédraogo",
+    "type": "Personnes",
+    "year_min": 1996,
+    "year_max": 2019,
+    "total": 11,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Nigeria",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1003,
+    "name": "Moussa Koné",
+    "type": "Personnes",
+    "year_min": 1996,
+    "year_max": 2022,
+    "total": 11,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1004,
+    "name": "Aïcha Mama",
+    "type": "Personnes",
+    "year_min": 2000,
+    "year_max": 2024,
+    "total": 11,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire",
+     "Niger",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1001,
+    "name": "Amadou Diallo",
+    "type": "Personnes",
+    "year_min": 1996,
+    "year_max": 2020,
+    "total": 10,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1005,
+    "name": "Issa Sow",
+    "type": "Personnes",
+    "year_min": 1998,
+    "year_max": 2020,
+    "total": 7,
+    "countries": [
+     "Côte d'Ivoire",
+     "Niger",
+     "Togo"
+    ]
+   }
+  ],
+  "Lieux": [
+   {
+    "o_id": 1201,
+    "name": "Bénin",
+    "type": "Lieux",
+    "year_min": 1996,
+    "year_max": 2016,
+    "total": 7,
+    "country": "Bénin"
+   },
+   {
+    "o_id": 1211,
+    "name": "Cotonou",
+    "type": "Lieux",
+    "year_min": 1996,
+    "year_max": 2019,
+    "total": 7,
+    "country": "Bénin"
+   },
+   {
+    "o_id": 1212,
+    "name": "Ouagadougou",
+    "type": "Lieux",
+    "year_min": 1999,
+    "year_max": 2022,
+    "total": 7,
+    "country": "Burkina Faso"
+   },
+   {
+    "o_id": 1202,
+    "name": "Burkina Faso",
+    "type": "Lieux",
+    "year_min": 1999,
+    "year_max": 2019,
+    "total": 6,
+    "country": "Burkina Faso"
+   },
+   {
+    "o_id": 1203,
+    "name": "Côte d'Ivoire",
+    "type": "Lieux",
+    "year_min": 1997,
+    "year_max": 2017,
+    "total": 6,
+    "country": "Côte d'Ivoire"
+   },
+   {
+    "o_id": 1204,
+    "name": "Niger",
+    "type": "Lieux",
+    "year_min": 2000,
+    "year_max": 2020,
+    "total": 6,
+    "country": "Niger"
+   },
+   {
+    "o_id": 1213,
+    "name": "Abidjan",
+    "type": "Lieux",
+    "year_min": 2002,
+    "year_max": 2021,
+    "total": 6,
+    "country": "Côte d'Ivoire"
+   },
+   {
+    "o_id": 1214,
+    "name": "Niamey",
+    "type": "Lieux",
+    "year_min": 1998,
+    "year_max": 2024,
+    "total": 6,
+    "country": "Niger"
+   },
+   {
+    "o_id": 1205,
+    "name": "Togo",
+    "type": "Lieux",
+    "year_min": 1998,
+    "year_max": 2013,
+    "total": 5,
+    "country": "Togo"
+   },
+   {
+    "o_id": 1215,
+    "name": "Lomé",
+    "type": "Lieux",
+    "year_min": 2001,
+    "year_max": 2019,
+    "total": 5,
+    "country": "Togo"
+   },
+   {
+    "o_id": 1216,
+    "name": "Bobo-Dioulasso",
+    "type": "Lieux",
+    "year_min": 1997,
+    "year_max": 2016,
+    "total": 5,
+    "country": "Burkina Faso"
+   }
+  ],
+  "Organisations": [
+   {
+    "o_id": 1101,
+    "name": "Association des élèves musulmans",
+    "type": "Organisations",
+    "year_min": 1996,
+    "year_max": 2015,
+    "total": 3,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1102,
+    "name": "Union des musulmans du Togo",
+    "type": "Organisations",
+    "year_min": 1998,
+    "year_max": 2018,
+    "total": 3,
+    "countries": [
+     "Burkina Faso",
+     "Nigeria",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1103,
+    "name": "Conseil islamique du Bénin",
+    "type": "Organisations",
+    "year_min": 2000,
+    "year_max": 2021,
+    "total": 3,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1104,
+    "name": "Communauté musulmane du Faso",
+    "type": "Organisations",
+    "year_min": 2005,
+    "year_max": 2024,
+    "total": 3,
+    "countries": [
+     "Bénin",
+     "Niger",
+     "Togo"
+    ]
+   }
+  ],
+  "Sujets": [
+   {
+    "o_id": 1306,
+    "name": "Pèlerinage",
+    "type": "Sujets",
+    "year_min": 2002,
+    "year_max": 2016,
+    "total": 9,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1307,
+    "name": "Islam",
+    "type": "Sujets",
+    "year_min": 2005,
+    "year_max": 2019,
+    "total": 9,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1301,
+    "name": "Ramadan",
+    "type": "Sujets",
+    "year_min": 1996,
+    "year_max": 2019,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire"
+    ]
+   },
+   {
+    "o_id": 1302,
+    "name": "Tabaski",
+    "type": "Sujets",
+    "year_min": 1999,
+    "year_max": 2022,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1304,
+    "name": "Éducation",
+    "type": "Sujets",
+    "year_min": 1996,
+    "year_max": 2015,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1305,
+    "name": "Laïcité",
+    "type": "Sujets",
+    "year_min": 1999,
+    "year_max": 2013,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1308,
+    "name": "Femmes",
+    "type": "Sujets",
+    "year_min": 1997,
+    "year_max": 2019,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Côte d'Ivoire",
+     "Nigeria",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1309,
+    "name": "Jeunesse",
+    "type": "Sujets",
+    "year_min": 2000,
+    "year_max": 2022,
+    "total": 8,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   },
+   {
+    "o_id": 1303,
+    "name": "Mosquées",
+    "type": "Sujets",
+    "year_min": 1998,
+    "year_max": 2012,
+    "total": 7,
+    "countries": [
+     "Bénin",
+     "Côte d'Ivoire",
+     "Togo"
+    ]
+   },
+   {
+    "o_id": 1310,
+    "name": "Radicalisation",
+    "type": "Sujets",
+    "year_min": 1998,
+    "year_max": 2024,
+    "total": 7,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Togo"
+    ]
+   }
+  ],
+  "Événements": [
+   {
+    "o_id": 1401,
+    "name": "Congrès islamique de 2004",
+    "type": "Événements",
+    "year_min": 1996,
+    "year_max": 2020,
+    "total": 3,
+    "countries": [
+     "Bénin",
+     "Burkina Faso",
+     "Niger"
+    ]
+   }
+  ]
+ },
+ "recent_additions": [
+  {
+   "o_id": 1401,
+   "title": "Congrès islamique de 2004",
+   "type": "Événements",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1310,
+   "title": "Radicalisation",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1309,
+   "title": "Jeunesse",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1308,
+   "title": "Femmes",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1307,
+   "title": "Islam",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1306,
+   "title": "Pèlerinage",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1305,
+   "title": "Laïcité",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1304,
+   "title": "Éducation",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1303,
+   "title": "Mosquées",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1302,
+   "title": "Tabaski",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1301,
+   "title": "Ramadan",
+   "type": "Sujets",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1216,
+   "title": "Bobo-Dioulasso",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1215,
+   "title": "Lomé",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1214,
+   "title": "Niamey",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1213,
+   "title": "Abidjan",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1212,
+   "title": "Ouagadougou",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1211,
+   "title": "Cotonou",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1205,
+   "title": "Togo",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1204,
+   "title": "Niger",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  },
+  {
+   "o_id": 1203,
+   "title": "Côte d'Ivoire",
+   "type": "Lieux",
+   "added_date": "2021-03-01",
+   "thumbnail": null
+  }
+ ]
+}

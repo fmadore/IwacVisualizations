@@ -1,0 +1,831 @@
+{
+ "version": 4,
+ "entity": {
+  "o_id": 1104,
+  "title": "Communauté musulmane du Faso",
+  "type": "Organisations"
+ },
+ "summary": {
+  "by_role": {
+   "all": {
+    "total_mentions": 2,
+    "year_min": 2005,
+    "year_max": 2016,
+    "newspapers_count": 2,
+    "countries_count": 2
+   }
+  }
+ },
+ "timeline": {
+  "by_role": {
+   "all": {
+    "years": [
+     2005,
+     2016
+    ],
+    "countries": [
+     "Bénin",
+     "Niger"
+    ],
+    "series": {
+     "Bénin": [
+      0,
+      1
+     ],
+     "Niger": [
+      1,
+      0
+     ]
+    }
+   }
+  }
+ },
+ "newspapers": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Le Courrier du Sahel",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Niger",
+     "year_min": 2005,
+     "year_max": 2005
+    },
+    {
+     "name": "La Gazette du Golfe",
+     "total": 1,
+     "articles": 1,
+     "publications": 0,
+     "references": 0,
+     "country": "Bénin",
+     "year_min": 2016,
+     "year_max": 2016
+    }
+   ]
+  }
+ },
+ "countries": {
+  "by_role": {
+   "all": [
+    {
+     "name": "Niger",
+     "count": 1
+    },
+    {
+     "name": "Bénin",
+     "count": 1
+    }
+   ]
+  }
+ },
+ "network": {
+  "by_role": {
+   "all": {
+    "nodes": [
+     {
+      "o_id": 1104,
+      "title": "Communauté musulmane du Faso",
+      "type": "center",
+      "cooc": null,
+      "score": null
+     },
+     {
+      "o_id": 1214,
+      "title": "Niamey",
+      "type": "Lieux",
+      "cooc": 2,
+      "score": 1.1001
+     }
+    ],
+    "edges": [
+     {
+      "source": 1104,
+      "target": 1214,
+      "weight": 1.1001,
+      "cooc": 2,
+      "kind": "ego"
+     }
+    ],
+    "by_type": {
+     "Personnes": {
+      "nodes": [
+       {
+        "o_id": 1104,
+        "title": "Communauté musulmane du Faso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Organisations": {
+      "nodes": [
+       {
+        "o_id": 1104,
+        "title": "Communauté musulmane du Faso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Lieux": {
+      "nodes": [
+       {
+        "o_id": 1104,
+        "title": "Communauté musulmane du Faso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       },
+       {
+        "o_id": 1214,
+        "title": "Niamey",
+        "type": "Lieux",
+        "cooc": 2,
+        "score": 1.1001
+       }
+      ],
+      "edges": [
+       {
+        "source": 1104,
+        "target": 1214,
+        "weight": 1.1001,
+        "cooc": 2,
+        "kind": "ego"
+       }
+      ]
+     },
+     "Sujets": {
+      "nodes": [
+       {
+        "o_id": 1104,
+        "title": "Communauté musulmane du Faso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     },
+     "Événements": {
+      "nodes": [
+       {
+        "o_id": 1104,
+        "title": "Communauté musulmane du Faso",
+        "type": "center",
+        "cooc": null,
+        "score": null
+       }
+      ],
+      "edges": []
+     }
+    },
+    "over_time": {
+     "year_min": 2005,
+     "year_max": 2016,
+     "dated_items": 2,
+     "undated_items": 0,
+     "entities": {
+      "1214": [
+       [
+        2005,
+        1
+       ],
+       [
+        2016,
+        1
+       ]
+      ]
+     }
+    }
+   }
+  }
+ },
+ "locations": {
+  "by_role": {
+   "all": [
+    {
+     "o_id": 1214,
+     "name": "Niamey",
+     "lat": 13.51,
+     "lng": 2.11,
+     "count": 2,
+     "articles": [
+      {
+       "o_id": 5015,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 16",
+       "publisher": "La Gazette du Golfe",
+       "date": "2016-04-25"
+      },
+      {
+       "o_id": 5003,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 4",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2005-04-22"
+      }
+     ]
+    },
+    {
+     "o_id": 1204,
+     "name": "Niger",
+     "lat": 17.61,
+     "lng": 8.08,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5003,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 4",
+       "publisher": "Le Courrier du Sahel",
+       "date": "2005-04-22"
+      }
+     ]
+    },
+    {
+     "o_id": 1201,
+     "name": "Bénin",
+     "lat": 9.3,
+     "lng": 2.31,
+     "count": 1,
+     "articles": [
+      {
+       "o_id": 5015,
+       "subset": "articles",
+       "title": "Article de synthèse numéro 16",
+       "publisher": "La Gazette du Golfe",
+       "date": "2016-04-25"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "topics": {
+  "by_role": {
+   "all": [
+    {
+     "label": "sécurité terrorisme attaque armée",
+     "count": 2
+    }
+   ]
+  }
+ },
+ "sentiment": {
+  "by_role": {
+   "all": {
+    "models": [
+     "gpt_5_6_luna",
+     "mistral_small_2603",
+     "deepseek_v4_flash_0731",
+     "gemma_4_31b_it",
+     "qwen3_8_27b",
+     "claude_haiku_5_5"
+    ],
+    "by_model": {
+     "gpt_5_6_luna": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.5,
+      "rated_articles": 2
+     },
+     "mistral_small_2603": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.0,
+      "rated_articles": 2
+     },
+     "deepseek_v4_flash_0731": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 1
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 1
+       }
+      ],
+      "subjectivite_avg": 4.0,
+      "rated_articles": 2
+     },
+     "gemma_4_31b_it": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 1
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 0
+       },
+       {
+        "name": "5",
+        "count": 1
+       }
+      ],
+      "subjectivite_avg": 3.5,
+      "rated_articles": 2
+     },
+     "qwen3_8_27b": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 0
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 1
+       },
+       {
+        "name": "Marginal",
+        "count": 0
+       },
+       {
+        "name": "Non abordé",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 0
+       },
+       {
+        "name": "2",
+        "count": 1
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 3.0,
+      "rated_articles": 2
+     },
+     "claude_haiku_5_5": {
+      "polarite": [
+       {
+        "name": "Très positif",
+        "count": 0
+       },
+       {
+        "name": "Positif",
+        "count": 0
+       },
+       {
+        "name": "Neutre",
+        "count": 0
+       },
+       {
+        "name": "Négatif",
+        "count": 0
+       },
+       {
+        "name": "Très négatif",
+        "count": 0
+       },
+       {
+        "name": "Non applicable",
+        "count": 2
+       }
+      ],
+      "centralite": [
+       {
+        "name": "Très central",
+        "count": 1
+       },
+       {
+        "name": "Central",
+        "count": 0
+       },
+       {
+        "name": "Secondaire",
+        "count": 0
+       },
+       {
+        "name": "Marginal",
+        "count": 1
+       }
+      ],
+      "subjectivite": [
+       {
+        "name": "1",
+        "count": 1
+       },
+       {
+        "name": "2",
+        "count": 0
+       },
+       {
+        "name": "3",
+        "count": 0
+       },
+       {
+        "name": "4",
+        "count": 1
+       },
+       {
+        "name": "5",
+        "count": 0
+       }
+      ],
+      "subjectivite_avg": 2.5,
+      "rated_articles": 2
+     }
+    },
+    "articles_total": 2
+   }
+  }
+ },
+ "heatmap": {
+  "by_role": {
+   "all": {
+    "years": [
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016
+    ],
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "cells": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      11,
+      3,
+      1
+     ]
+    ],
+    "items": 2,
+    "hijri": {
+     "years": [
+      1425,
+      1426,
+      1427,
+      1428,
+      1429,
+      1430,
+      1431,
+      1432,
+      1433,
+      1434,
+      1435,
+      1436
+     ],
+     "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+     ],
+     "cells": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       11,
+       0,
+       1
+      ]
+     ],
+     "items": 2
+    }
+   }
+  }
+ },
+ "cooccurrence": {
+  "by_role": {
+   "all": {
+    "names": [
+     "Niamey",
+     "Niger",
+     "Éducation",
+     "Islam",
+     "Bénin",
+     "Pèlerinage",
+     "Jeunesse"
+    ],
+    "matrix": [
+     [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     [
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+     ]
+    ]
+   }
+  }
+ }
+}

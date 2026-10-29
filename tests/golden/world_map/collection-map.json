@@ -1,0 +1,141 @@
+{
+ "locations": [
+  {
+   "name": "Bénin",
+   "country": "Bénin",
+   "lat": 9.3,
+   "lng": 2.31,
+   "count": 7
+  },
+  {
+   "name": "Burkina Faso",
+   "country": "Burkina Faso",
+   "lat": 12.24,
+   "lng": -1.56,
+   "count": 6
+  },
+  {
+   "name": "Côte d'Ivoire",
+   "country": "Côte d'Ivoire",
+   "lat": 7.54,
+   "lng": -5.55,
+   "count": 6
+  },
+  {
+   "name": "Niger",
+   "country": "Niger",
+   "lat": 17.61,
+   "lng": 8.08,
+   "count": 6
+  },
+  {
+   "name": "Togo",
+   "country": "Togo",
+   "lat": 8.62,
+   "lng": 0.82,
+   "count": 5
+  },
+  {
+   "name": "Cotonou",
+   "country": "Bénin",
+   "lat": 6.37,
+   "lng": 2.39,
+   "count": 7
+  },
+  {
+   "name": "Ouagadougou",
+   "country": "Burkina Faso",
+   "lat": 12.37,
+   "lng": -1.52,
+   "count": 7
+  },
+  {
+   "name": "Abidjan",
+   "country": "Côte d'Ivoire",
+   "lat": 5.35,
+   "lng": -4.01,
+   "count": 6
+  },
+  {
+   "name": "Niamey",
+   "country": "Niger",
+   "lat": 13.51,
+   "lng": 2.11,
+   "count": 6
+  },
+  {
+   "name": "Lomé",
+   "country": "Togo",
+   "lat": 6.13,
+   "lng": 1.22,
+   "count": 5
+  },
+  {
+   "name": "Bobo-Dioulasso",
+   "country": "Burkina Faso",
+   "lat": 11.18,
+   "lng": -4.3,
+   "count": 5
+  }
+ ],
+ "country_counts": {
+  "Burkina Faso": {
+   "total": 13,
+   "by_type": {
+    "article": 5,
+    "publication": 4,
+    "document": 1,
+    "audiovisual": 1,
+    "reference": 1,
+    "image": 1
+   }
+  },
+  "Bénin": {
+   "total": 14,
+   "by_type": {
+    "article": 5,
+    "publication": 4,
+    "document": 1,
+    "audiovisual": 1,
+    "reference": 2,
+    "image": 1
+   }
+  },
+  "Côte d'Ivoire": {
+   "total": 8,
+   "by_type": {
+    "article": 5,
+    "document": 1,
+    "reference": 1,
+    "image": 1
+   }
+  },
+  "Niger": {
+   "total": 6,
+   "by_type": {
+    "article": 5,
+    "reference": 1
+   }
+  },
+  "Nigeria": {
+   "total": 1,
+   "by_type": {
+    "audiovisual": 1
+   }
+  },
+  "Togo": {
+   "total": 6,
+   "by_type": {
+    "article": 4,
+    "audiovisual": 1,
+    "reference": 1
+   }
+  }
+ },
+ "metadata": {
+  "generated_at": "2026-01-01T00:00:00Z",
+  "source": "index subset where Type == 'Lieux', filtered to valid coordinates",
+  "total_locations": 11,
+  "total_countries": 6
+ }
+}

@@ -1,0 +1,545 @@
+{
+ "_meta": {
+  "totalRecords": 31,
+  "dataSource": "fmadore/islam-west-africa-collection-full",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "columns": {
+   "locations": [
+    "o_id",
+    "name",
+    "lat",
+    "lng",
+    "count",
+    "focus_country_index"
+   ],
+   "pickers": [
+    "o_id",
+    "label",
+    "count"
+   ]
+  }
+ },
+ "types": [
+  "Personnes",
+  "Organisations",
+  "Événements",
+  "Sujets",
+  "Lieux"
+ ],
+ "focus_countries": [
+  "Bénin",
+  "Burkina Faso",
+  "Côte d'Ivoire",
+  "Niger",
+  "Nigeria",
+  "Togo"
+ ],
+ "locations": [
+  [
+   1201,
+   "Bénin",
+   9.3,
+   2.31,
+   7,
+   0
+  ],
+  [
+   1211,
+   "Cotonou",
+   6.37,
+   2.39,
+   7,
+   0
+  ],
+  [
+   1212,
+   "Ouagadougou",
+   12.37,
+   -1.52,
+   7,
+   1
+  ],
+  [
+   1202,
+   "Burkina Faso",
+   12.24,
+   -1.56,
+   6,
+   1
+  ],
+  [
+   1203,
+   "Côte d'Ivoire",
+   7.54,
+   -5.55,
+   6,
+   2
+  ],
+  [
+   1204,
+   "Niger",
+   17.61,
+   8.08,
+   6,
+   3
+  ],
+  [
+   1213,
+   "Abidjan",
+   5.35,
+   -4.01,
+   6,
+   2
+  ],
+  [
+   1214,
+   "Niamey",
+   13.51,
+   2.11,
+   6,
+   3
+  ],
+  [
+   1205,
+   "Togo",
+   8.62,
+   0.82,
+   5,
+   5
+  ],
+  [
+   1215,
+   "Lomé",
+   6.13,
+   1.22,
+   5,
+   5
+  ],
+  [
+   1216,
+   "Bobo-Dioulasso",
+   11.18,
+   -4.3,
+   5,
+   1
+  ]
+ ],
+ "pickers": {
+  "Personnes": [
+   [
+    1004,
+    "Aïcha Mama",
+    11
+   ],
+   [
+    1002,
+    "Fatimata Ouédraogo",
+    11
+   ],
+   [
+    1003,
+    "Moussa Koné",
+    11
+   ],
+   [
+    1001,
+    "Amadou Diallo",
+    10
+   ],
+   [
+    1005,
+    "Issa Sow",
+    7
+   ]
+  ],
+  "Organisations": [
+   [
+    1101,
+    "Association des élèves musulmans",
+    3
+   ],
+   [
+    1104,
+    "Communauté musulmane du Faso",
+    3
+   ],
+   [
+    1103,
+    "Conseil islamique du Bénin",
+    3
+   ],
+   [
+    1102,
+    "Union des musulmans du Togo",
+    3
+   ]
+  ],
+  "Événements": [
+   [
+    1401,
+    "Congrès islamique de 2004",
+    3
+   ]
+  ],
+  "Sujets": [
+   [
+    1307,
+    "Islam",
+    9
+   ],
+   [
+    1306,
+    "Pèlerinage",
+    9
+   ],
+   [
+    1308,
+    "Femmes",
+    8
+   ],
+   [
+    1309,
+    "Jeunesse",
+    8
+   ],
+   [
+    1305,
+    "Laïcité",
+    8
+   ],
+   [
+    1301,
+    "Ramadan",
+    8
+   ],
+   [
+    1302,
+    "Tabaski",
+    8
+   ],
+   [
+    1304,
+    "Éducation",
+    8
+   ],
+   [
+    1303,
+    "Mosquées",
+    7
+   ],
+   [
+    1310,
+    "Radicalisation",
+    7
+   ]
+  ],
+  "Lieux": [
+   [
+    1201,
+    "Bénin",
+    7
+   ],
+   [
+    1211,
+    "Cotonou",
+    7
+   ],
+   [
+    1212,
+    "Ouagadougou",
+    7
+   ],
+   [
+    1213,
+    "Abidjan",
+    6
+   ],
+   [
+    1202,
+    "Burkina Faso",
+    6
+   ],
+   [
+    1203,
+    "Côte d'Ivoire",
+    6
+   ],
+   [
+    1214,
+    "Niamey",
+    6
+   ],
+   [
+    1204,
+    "Niger",
+    6
+   ],
+   [
+    1216,
+    "Bobo-Dioulasso",
+    5
+   ],
+   [
+    1215,
+    "Lomé",
+    5
+   ],
+   [
+    1205,
+    "Togo",
+    5
+   ]
+  ]
+ },
+ "country_counts": {
+  "Burkina Faso": 13,
+  "Bénin": 14,
+  "Côte d'Ivoire": 8,
+  "Niger": 6,
+  "Nigeria": 1,
+  "Togo": 6
+ },
+ "country_bounds": {
+  "Bénin": [
+   0.76,
+   6.214,
+   3.837,
+   12.399
+  ],
+  "Burkina Faso": [
+   -5.523,
+   9.392,
+   2.39,
+   15.08
+  ],
+  "Côte d'Ivoire": [
+   -8.619,
+   4.344,
+   -2.506,
+   10.726
+  ],
+  "Niger": [
+   0.153,
+   11.696,
+   15.97,
+   23.517
+  ],
+  "Nigeria": [
+   2.671,
+   4.272,
+   14.67,
+   13.88
+  ],
+  "Togo": [
+   -0.166,
+   6.1,
+   1.782,
+   11.135
+  ]
+ },
+ "country_focus": {
+  "countries": [
+   {
+    "name": "Bénin",
+    "slug": "benin",
+    "levels": [
+     "regions",
+     "prefectures"
+    ]
+   },
+   {
+    "name": "Burkina Faso",
+    "slug": "burkina_faso",
+    "levels": [
+     "regions",
+     "prefectures"
+    ]
+   },
+   {
+    "name": "Côte d'Ivoire",
+    "slug": "cote_divoire",
+    "levels": [
+     "regions"
+    ]
+   },
+   {
+    "name": "Togo",
+    "slug": "togo",
+    "levels": [
+     "regions",
+     "prefectures"
+    ]
+   }
+  ],
+  "counts": {
+   "Bénin": {
+    "regions": {
+     "countsMentions": {
+      "Atlantique": 7,
+      "Borgou": 7
+     },
+     "countsArticles": {
+      "Atlantique": 7,
+      "Borgou": 7
+     },
+     "matchedLocations": 2,
+     "total": 14,
+     "units": 12
+    },
+    "prefectures": {
+     "countsMentions": {
+      "Abomey-Calavi": 7,
+      "Tchaourou": 7
+     },
+     "countsArticles": {
+      "Abomey-Calavi": 7,
+      "Tchaourou": 7
+     },
+     "matchedLocations": 2,
+     "total": 14,
+     "units": 78
+    }
+   },
+   "Burkina Faso": {
+    "regions": {
+     "countsMentions": {
+      "Central-Plateau": 13,
+      "Upper-Basins": 5
+     },
+     "countsArticles": {
+      "Central-Plateau": 13,
+      "Upper-Basins": 5
+     },
+     "matchedLocations": 3,
+     "total": 18,
+     "units": 13
+    },
+    "prefectures": {
+     "countsMentions": {
+      "Houet": 5,
+      "Kadiogo": 13
+     },
+     "countsArticles": {
+      "Houet": 5,
+      "Kadiogo": 13
+     },
+     "matchedLocations": 3,
+     "total": 18,
+     "units": 44
+    }
+   },
+   "Côte d'Ivoire": {
+    "regions": {
+     "countsMentions": {
+      "Belier": 6,
+      "District Autonome D'Abidjan": 6
+     },
+     "countsArticles": {
+      "Belier": 6,
+      "District Autonome D'Abidjan": 6
+     },
+     "matchedLocations": 2,
+     "total": 12,
+     "units": 33
+    }
+   },
+   "Togo": {
+    "regions": {
+     "countsMentions": {
+      "Centre": 5,
+      "Maritime": 5
+     },
+     "countsArticles": {
+      "Centre": 5,
+      "Maritime": 5
+     },
+     "matchedLocations": 2,
+     "total": 10,
+     "units": 5
+    },
+    "prefectures": {
+     "countsMentions": {
+      "Lome Commune": 5,
+      "Sotouboua": 5
+     },
+     "countsArticles": {
+      "Lome Commune": 5,
+      "Sotouboua": 5
+     },
+     "matchedLocations": 2,
+     "total": 10,
+     "units": 37
+    }
+   }
+  },
+  "maps": {
+   "Bénin": {
+    "regions": "admin-boundaries/benin_regions.geojson",
+    "prefectures": "admin-boundaries/benin_prefectures.geojson"
+   },
+   "Burkina Faso": {
+    "regions": "admin-boundaries/burkina_faso_regions.geojson",
+    "prefectures": "admin-boundaries/burkina_faso_prefectures.geojson"
+   },
+   "Côte d'Ivoire": {
+    "regions": "admin-boundaries/cote_divoire_regions.geojson"
+   },
+   "Togo": {
+    "regions": "admin-boundaries/togo_regions.geojson",
+    "prefectures": "admin-boundaries/togo_prefectures.geojson"
+   }
+  },
+  "bounds": {
+   "Bénin": {
+    "regions": [
+     0.7767,
+     6.0399,
+     3.8433,
+     12.4092
+    ],
+    "prefectures": [
+     0.7767,
+     6.2351,
+     3.8451,
+     12.4092
+    ]
+   },
+   "Burkina Faso": {
+    "regions": [
+     -5.5132,
+     9.4105,
+     2.409,
+     15.084
+    ],
+    "prefectures": [
+     -5.5132,
+     9.4105,
+     1.4082,
+     15.084
+    ]
+   },
+   "Côte d'Ivoire": {
+    "regions": [
+     -8.5841,
+     4.3606,
+     -2.4923,
+     10.7457
+    ]
+   },
+   "Togo": {
+    "regions": [
+     -0.1661,
+     6.1005,
+     1.7824,
+     11.135
+    ],
+    "prefectures": [
+     -0.1473,
+     6.1124,
+     1.8067,
+     11.139
+    ]
+   }
+  }
+ }
+}

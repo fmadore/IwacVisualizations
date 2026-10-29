@@ -102,6 +102,38 @@ numbers in the same commit; the previous module release then keeps its active
 data instead of pulling a shape it cannot read. Adding an optional key the old
 JavaScript ignores needs no bump. See ARCHITECTURE.md, "The data contract".
 
+## Golden output
+
+`tests/python/test_golden.py` runs 25 generators exactly as `run_all.py` does
+(`run_one`, their own CLI) on `tests/python/golden_corpus.py`, a small
+synthetic dataset with the real column names and types, and compares every
+JSON file they write with `tests/golden/<generator>/`. It is offline (a frame
+store serves the corpus instead of Hugging Face), freezes the clock, and runs
+in the `Lint (PHP/Python)` workflow with the rest of `tests/python`. Floats
+are compared at nine significant digits, so platform noise does not count.
+
+A change to an output fails it. When the change is intended, regenerate and
+review the diff in the commit:
+
+```bash
+UPDATE_GOLDEN=1 python -m unittest tests/python/test_golden.py
+```
+
+Covered: every generator that runs on the numeric stack alone. The four that
+need umap-learn or networkx (the semantic, periodicals and references
+landscapes, entity networks) and the three with their own pipelines
+(Laïcité, Albani, timelines) have tests of their own; `on_this_day` is left
+out because it writes a file for every day of the year. The thresholds sized
+for the real collection (15 articles per newspaper, 25 per term…) are lowered
+through each generator's own flags in `COVERED`, so the small corpus still
+fills every section.
+
+The golden run also guards determinism: a generator whose output depends on
+the order of a `set` of strings (ties in `most_common()`, cells in insertion
+order) changes from one process to the next, because Python randomises string
+hashing. The test fails on that, so a rebuild with unchanged data keeps the
+same manifest digest.
+
 ## Provenance
 
 `iwac_utils.py` and several generators here were originally seeded from the
@@ -711,7 +743,10 @@ Block-specific extras (partial list):
 5. Add an entry to this README's "Available generators" section. If you
    change the shape of an existing output instead, decide whether it is a
    data-contract change (see "Reproducible publication").
-6. If the new data feeds a new visualization, also add a chart JS under
+6. If it runs on the numeric stack alone, add it to `COVERED` in
+   `tests/python/test_golden.py` (extend `golden_corpus.py` if it reads a
+   column the corpus lacks) and write its goldens (see "Golden output").
+7. If the new data feeds a new visualization, also add a chart JS under
    `asset/js/charts/` following the `collection-overview.js` pattern.
 
 ## Troubleshooting

@@ -1,0 +1,21 @@
+{
+  "_comment": "Org co-occurrence targets for the golden test (tests/python/test_golden.py): two of golden_corpus.py's synthetic organisations, whose names the corpus writes into some articles' OCR. Same shape as scripts/org_cooccurrence_targets.json.",
+  "orgs": [
+    {
+      "id": "cib",
+      "name": "Conseil islamique du Bénin",
+      "acronym": "CIB",
+      "country": "Bénin",
+      "o_id": 1103,
+      "targets": ["cib", "conseil islamique du bénin"]
+    },
+    {
+      "id": "umt",
+      "name": "Union des musulmans du Togo",
+      "acronym": "UMT",
+      "country": "Togo",
+      "o_id": 1102,
+      "targets": ["umt", "union des musulmans du togo"]
+    }
+  ]
+}

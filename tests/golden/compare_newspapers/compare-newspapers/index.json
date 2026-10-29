@@ -1,0 +1,103 @@
+{
+ "subsets": {
+  "articles": {
+   "countries": [
+    {
+     "name": "Bénin",
+     "slug": "benin",
+     "count": 5
+    },
+    {
+     "name": "Burkina Faso",
+     "slug": "burkina-faso",
+     "count": 5
+    },
+    {
+     "name": "Côte d'Ivoire",
+     "slug": "cote-d-ivoire",
+     "count": 5
+    },
+    {
+     "name": "Niger",
+     "slug": "niger",
+     "count": 5
+    },
+    {
+     "name": "Togo",
+     "slug": "togo",
+     "count": 4
+    }
+   ],
+   "newspapers": [
+    {
+     "name": "L'Écho d'Abidjan",
+     "slug": "l-echo-d-abidjan",
+     "count": 5,
+     "country": "Côte d'Ivoire"
+    },
+    {
+     "name": "La Gazette du Golfe",
+     "slug": "la-gazette-du-golfe",
+     "count": 5,
+     "country": "Bénin"
+    },
+    {
+     "name": "Le Courrier du Sahel",
+     "slug": "le-courrier-du-sahel",
+     "count": 5,
+     "country": "Niger"
+    },
+    {
+     "name": "Le Quotidien du Faso",
+     "slug": "le-quotidien-du-faso",
+     "count": 5,
+     "country": "Burkina Faso"
+    },
+    {
+     "name": "La Voix de Lomé",
+     "slug": "la-voix-de-lome",
+     "count": 4,
+     "country": "Togo"
+    }
+   ]
+  },
+  "publications": {
+   "countries": [
+    {
+     "name": "Burkina Faso",
+     "slug": "burkina-faso",
+     "count": 4
+    },
+    {
+     "name": "Bénin",
+     "slug": "benin",
+     "count": 4
+    }
+   ],
+   "newspapers": [
+    {
+     "name": "Al-Hikma",
+     "slug": "al-hikma",
+     "count": 4,
+     "country": "Bénin"
+    },
+    {
+     "name": "Le Croissant",
+     "slug": "le-croissant",
+     "count": 4,
+     "country": "Burkina Faso"
+    }
+   ]
+  }
+ },
+ "metadata": {
+  "totalRecords": 14,
+  "dataSource": "fmadore/islam-west-africa-collection-full",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "script": "generate_compare_newspapers.py",
+  "script_version": "0.1.0",
+  "min_count": 3,
+  "top_n": 60,
+  "top_words": 120
+ }
+}

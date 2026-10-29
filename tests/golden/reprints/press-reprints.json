@@ -1,0 +1,211 @@
+{
+ "generated_at": "2026-01-01T00:00:00Z",
+ "embedding_model": "google/embeddinggemma-2",
+ "threshold": 0.95,
+ "scan_threshold": 0.93,
+ "min_jaccard": 0.2,
+ "max_pairs": 500,
+ "truncated": false,
+ "stats": {
+  "articles_with_embeddings": 24,
+  "cross_newspaper_pairs": 5,
+  "semantic_pairs": 5,
+  "lexical_pairs": 0,
+  "published_pairs": 5,
+  "newspapers_involved": 5,
+  "median_day_gap": 2524
+ },
+ "histogram": {
+  "0.93": {
+   "all": 4,
+   "cross": 0,
+   "cross_lexical": 0
+  },
+  "0.94": {
+   "all": 0,
+   "cross": 0,
+   "cross_lexical": 0
+  },
+  "0.95": {
+   "all": 5,
+   "cross": 5,
+   "cross_lexical": 1
+  },
+  "0.96": {
+   "all": 0,
+   "cross": 0,
+   "cross_lexical": 0
+  },
+  "0.97": {
+   "all": 0,
+   "cross": 0,
+   "cross_lexical": 0
+  },
+  "0.98": {
+   "all": 14,
+   "cross": 0,
+   "cross_lexical": 0
+  },
+  "0.99": {
+   "all": 0,
+   "cross": 0,
+   "cross_lexical": 0
+  }
+ },
+ "newspapers": [
+  {
+   "name": "L'Écho d'Abidjan",
+   "pairs": 2,
+   "country": "Côte d'Ivoire"
+  },
+  {
+   "name": "La Gazette du Golfe",
+   "pairs": 2,
+   "country": "Bénin"
+  },
+  {
+   "name": "La Voix de Lomé",
+   "pairs": 2,
+   "country": "Togo"
+  },
+  {
+   "name": "Le Courrier du Sahel",
+   "pairs": 2,
+   "country": "Niger"
+  },
+  {
+   "name": "Le Quotidien du Faso",
+   "pairs": 2,
+   "country": "Burkina Faso"
+  }
+ ],
+ "links": [
+  [
+   "L'Écho d'Abidjan",
+   "Le Courrier du Sahel",
+   1
+  ],
+  [
+   "L'Écho d'Abidjan",
+   "Le Quotidien du Faso",
+   1
+  ],
+  [
+   "La Gazette du Golfe",
+   "La Voix de Lomé",
+   1
+  ],
+  [
+   "La Gazette du Golfe",
+   "Le Quotidien du Faso",
+   1
+  ],
+  [
+   "La Voix de Lomé",
+   "Le Courrier du Sahel",
+   1
+  ]
+ ],
+ "pairs": [
+  {
+   "similarity": 0.9563,
+   "lexical_jaccard": 0.0,
+   "test": "semantic",
+   "day_gap": 2916,
+   "a": {
+    "o_id": "5000",
+    "title": "Article de synthèse numéro 1",
+    "newspaper": "La Gazette du Golfe",
+    "country": "Bénin",
+    "date": "1996-01-01"
+   },
+   "b": {
+    "o_id": "5019",
+    "title": "Article de synthèse numéro 20",
+    "newspaper": "La Voix de Lomé",
+    "country": "Togo",
+    "date": "2003-12-26"
+   }
+  },
+  {
+   "similarity": 0.9563,
+   "lexical_jaccard": 0.0,
+   "test": "semantic",
+   "day_gap": 2524,
+   "a": {
+    "o_id": "5001",
+    "title": "Article de synthèse numéro 2",
+    "newspaper": "Le Quotidien du Faso",
+    "country": "Burkina Faso",
+    "date": "1999-06-08"
+   },
+   "b": {
+    "o_id": "5020",
+    "title": "Article de synthèse numéro 21",
+    "newspaper": "La Gazette du Golfe",
+    "country": "Bénin",
+    "date": "2006-05-06"
+   }
+  },
+  {
+   "similarity": 0.9563,
+   "lexical_jaccard": 0.2812,
+   "test": "semantic",
+   "day_gap": 2524,
+   "a": {
+    "o_id": "5002",
+    "title": "Article de synthèse numéro 3",
+    "newspaper": "L'Écho d'Abidjan",
+    "country": "Côte d'Ivoire",
+    "date": "2002-11-15"
+   },
+   "b": {
+    "o_id": "5021",
+    "title": "Article de synthèse numéro 22",
+    "newspaper": "Le Quotidien du Faso",
+    "country": "Burkina Faso",
+    "date": "2009-10-13"
+   }
+  },
+  {
+   "similarity": 0.9563,
+   "lexical_jaccard": 0.0,
+   "test": "semantic",
+   "day_gap": 2524,
+   "a": {
+    "o_id": "5003",
+    "title": "Article de synthèse numéro 4",
+    "newspaper": "Le Courrier du Sahel",
+    "country": "Niger",
+    "date": "2005-04-22"
+   },
+   "b": {
+    "o_id": "5022",
+    "title": "Article de synthèse numéro 23",
+    "newspaper": "L'Écho d'Abidjan",
+    "country": "Côte d'Ivoire",
+    "date": "2012-03-20"
+   }
+  },
+  {
+   "similarity": 0.9563,
+   "lexical_jaccard": 0.0,
+   "test": "semantic",
+   "day_gap": 2550,
+   "a": {
+    "o_id": "5004",
+    "title": "Article de synthèse numéro 5",
+    "newspaper": "La Voix de Lomé",
+    "country": "Togo",
+    "date": "2008-09-02"
+   },
+   "b": {
+    "o_id": "5023",
+    "title": "Article de synthèse numéro 24",
+    "newspaper": "Le Courrier du Sahel",
+    "country": "Niger",
+    "date": "2015-08-27"
+   }
+  }
+ ]
+}
