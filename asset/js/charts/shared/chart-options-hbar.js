@@ -259,7 +259,7 @@
                 ];
                 if (entry.first_occurrence || entry.last_occurrence) {
                     lines.push(
-                        (entry.first_occurrence || '?') + ' \u2013 ' + (entry.last_occurrence || '?')
+                        esc(entry.first_occurrence || '?') + ' \u2013 ' + esc(entry.last_occurrence || '?')
                     );
                 }
                 if (entry.countries && entry.countries.length) {
