@@ -2,8 +2,8 @@
  * IWAC Visualizations — Albani Zaria sermons: shared helpers.
  *
  * Stateless builders the section modules share: the lazy section loader,
- * the 20-minute window link, the log-ratio bar chart (collocates and
- * keyness), rates and labels. Everything hangs off `ns.albaniSermons`.
+ * the 20-minute window link, the word scatter (collocates), the
+ * recording order every matrix shares, rates and labels. Everything hangs off `ns.albaniSermons`.
  *
  * Depends on: panels.js (P), chart-options*.js (C), dashboard-core.js.
  */
@@ -139,53 +139,166 @@
     };
 
     /**
-     * Horizontal bars of log₂ rate ratio, one per term — the effect size
-     * the generator ranks by. G² is the significance gate there, and
-     * plotting it instead would only rank the corpus's commonest words.
+     * Words on two axes: how often (x, log) and how distinctive (y, log₂
+     * rate ratio — the effect size the generator ranks by), each point
+     * labelled with its word, so the standouts read without a legend. It
+     * replaces a ranked bar list, which showed only the second axis and
+     * hid that a ×50 word heard five times and a ×5 word heard fifty are
+     * different findings. G² is the significance gate in the generator;
+     * plotting it would only rank the commonest words.
      *
-     * @param {Array<Object>} terms  {w, lr, ratio, n, …}
+     * @param {Array<Object>} terms  {w, lr, ratio, n, r, …}
      * @param {Object} opts
-     * @param {string} opts.axis      axis name
+     * @param {string} opts.xName   x axis name
+     * @param {string} opts.yName   y axis name
      * @param {function(Object):string} opts.tooltip  extra tooltip line
      */
-    A.logRatioOption = function (terms, opts) {
+    A.wordScatterOption = function (terms, opts) {
         opts = opts || {};
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var maxR = 1;
+        terms.forEach(function (t) { if ((t.r || 0) > maxR) maxR = t.r; });
         return {
-            grid: C._grid({ left: 8, top: 8, bottom: 40, right: 56 }),
+            grid: C._grid({ left: 8, top: 36, bottom: 44, right: 72 }),
             tooltip: C._inPanelTooltip({
                 trigger: 'item',
                 confine: true,
                 formatter: function (p) {
                     var term = terms[p.dataIndex] || {};
                     var lines = ['<strong>' + P.escapeHtml(term.w || '') + '</strong>'];
-                    if (term.ratio != null) lines.push('×' + P.formatDecimal(term.ratio, 1));
+                    lines.push(term.ratio != null ? '×' + P.formatDecimal(term.ratio, 1) : '∞');
                     if (opts.tooltip) lines.push(opts.tooltip(term));
                     return lines.join('<br>');
                 }
             }),
-            xAxis: { type: 'value', name: opts.axis || '', nameLocation: 'middle', nameGap: 26 },
+            xAxis: {
+                type: 'log',
+                logBase: 10,
+                name: opts.xName || '',
+                nameLocation: 'middle',
+                nameGap: 28,
+                splitLine: { show: false },
+                axisLabel: { formatter: function (v) { return P.formatNumber(v); } }
+            },
             yAxis: {
-                type: 'category',
-                inverse: true,
-                axisTick: { show: false },
-                axisLabel: { width: 150, overflow: 'truncate' },
-                data: terms.map(function (t) { return t.w; })
+                type: 'value',
+                name: opts.yName || '',
+                nameLocation: 'end',
+                nameGap: 14,
+                nameTextStyle: { align: 'left' },
+                min: function (v) { return Math.max(0, Math.floor(v.min) - 1); },
+                // The ratio itself on the axis, not its log: ×2, ×4, ×8.
+                axisLabel: { formatter: function (v) { return '×' + P.formatNumber(Math.pow(2, v)); } }
             },
             series: [{
-                type: 'bar',
-                data: terms.map(function (t) { return t.lr; }),
-                barMaxWidth: 18,
-                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                type: 'scatter',
+                data: terms.map(function (t) { return [Math.max(1, t.n), t.lr]; }),
+                symbolSize: function (v, p) {
+                    var r = (terms[p.dataIndex] || {}).r || 1;
+                    return 7 + 9 * Math.sqrt(r / maxR);
+                },
+                itemStyle: {
+                    color: tokens.primary,
+                    opacity: 0.85,
+                    borderColor: tokens.panelBg || tokens.surface,
+                    borderWidth: 1
+                },
                 label: {
                     show: true,
                     position: 'right',
-                    formatter: function (p) {
-                        var term = terms[p.dataIndex] || {};
-                        return term.ratio != null ? '×' + P.formatDecimal(term.ratio, 1) : '∞';
-                    }
-                }
+                    distance: 4,
+                    fontSize: P.AXIS_FONT_SM,
+                    color: tokens.ink,
+                    formatter: function (p) { return (terms[p.dataIndex] || {}).w || ''; }
+                },
+                labelLayout: { hideOverlap: true },
+                emphasis: { focus: 'self', label: { fontWeight: 'bold' } }
             }]
         };
+    };
+
+    /**
+     * The analysed recordings in reading order — dated ones first, oldest
+     * first, then the undated by title. Every recording-by-something view
+     * (the score, the profiles, the formula strips, the signature cards)
+     * reads its rows from here, so a recording keeps its place from one
+     * view to the next.
+     */
+    A.recordingOrder = function (metadata) {
+        return ((metadata && metadata.recordings) || [])
+            .filter(function (r) { return r.st === 'analysed'; })
+            .sort(function (a, b) {
+                if (!!a.d !== !!b.d) return a.d ? -1 : 1;
+                return String(a.d || '').localeCompare(String(b.d || ''))
+                    || String(a.t || '').localeCompare(String(b.t || ''));
+            });
+    };
+
+    /** `Title (2008)`, the row label of every recording-by-something view. */
+    A.recordingLabel = function (rec) {
+        if (!rec) return '';
+        return rec.y ? rec.t + ' (' + rec.y + ')' : rec.t;
+    };
+
+    /** Words a recording contributes to a scope. */
+    A.scopeWords = function (rec, scope) {
+        if (!rec) return 0;
+        return scope === 'monologue' ? (rec.wm || 0) : (rec.w || 0);
+    };
+
+    /**
+     * Piecewise bins at the quintiles of `values` (the non-zero cells,
+     * rounded to one decimal), for a matrix whose cells span orders of
+     * magnitude: on a linear ramp one sermon on jihad at 60 per 10,000
+     * painted every other cell near the empty tint. Duplicate edges
+     * collapse, so a sparse matrix gets fewer bins rather than empty ones.
+     */
+    A.quantileBins = function (values) {
+        var sorted = values.filter(function (v) { return v > 0; }).sort(function (a, b) { return a - b; });
+        if (!sorted.length) return [];
+        var edges = [sorted[0]];
+        [0.2, 0.4, 0.6, 0.8].forEach(function (q) {
+            var v = sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
+            if (v > edges[edges.length - 1]) edges.push(v);
+        });
+        return edges.map(function (min, i) {
+            var next = edges[i + 1];
+            if (next == null) return { min: min, label: P.formatDecimal(min, 1) + '+' };
+            var max = Math.round((next - 0.1) * 10) / 10;
+            return { min: min, max: max, label: max > min
+                ? P.formatDecimal(min, 1) + '–' + P.formatDecimal(max, 1) : P.formatDecimal(min, 1) };
+        });
+    };
+
+    /**
+     * The empty cells of a matrix as their own series, in the ramp's first
+     * (empty-cell) tint, outside the visualMap — so a zero reads as "none"
+     * and the bins start at the first real value.
+     */
+    A.emptyCellSeries = function (name, cells) {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        return {
+            type: 'heatmap',
+            name: name,
+            data: cells,
+            progressive: 0,
+            animation: false,
+            itemStyle: { color: ns.heatmapRamp()[0], borderColor: tokens.surface, borderWidth: 1 }
+        };
+    };
+
+    /**
+     * Width for a matrix's recording titles: 200px where there is room, a
+     * third of the chart on a phone, where 200px left the grid a sliver.
+     */
+    A.labelWidth = function (chartEl) {
+        var width = (chartEl && chartEl.clientWidth) || 800;
+        return Math.max(90, Math.min(200, Math.round(width * 0.32)));
+    };
+
+    /** Height for a recording-by-something matrix of `rows` rows. */
+    A.matrixHeight = function (chartEl, rows, row, extra) {
+        chartEl.style.minHeight = Math.max(260, rows * (row || 22) + (extra || 110)) + 'px';
     };
 
     /**
@@ -219,7 +332,14 @@
             if (target.tooltip) target.tooltip = C._inPanelTooltip(target.tooltip);
             chart.setOption(option, true);
         }
-        ns.registerChart(built.chart, function (el, chart) { draw(chart); });
+        ns.registerChart(built.chart, function (el, chart) {
+            draw(chart);
+            // Re-bound on every (re)init: a theme swap disposes the instance.
+            if (opts.onClick) {
+                chart.off('click');
+                chart.on('click', opts.onClick);
+            }
+        });
         // The shared full-screen control, after the download and table
         // buttons registerChart attached, as on every other chart panel.
         P.addFullscreenButton(built.panel, {

@@ -2,9 +2,12 @@
  * IWAC Visualizations — Albani Zaria sermons, section 6: keyness.
  *
  * Each recording, each period and each kind of segment against the rest of
- * the corpus. By recording it is where a lesson's subject shows through its
- * vocabulary; by period it is thin (few recordings are dated) and says so;
- * by mode it is the check on what the exchange segments add.
+ * the corpus, shown as signature cards: the words it uses far more than
+ * the others, set in four sizes by how far. By recording every card is on
+ * the page at once — the point is to scan the lessons and see their
+ * subjects surface — where a picker and a bar chart showed one at a time.
+ * By period it is thin (few recordings are dated) and says so; by mode it
+ * is the check on what the dialogue segments add.
  *
  * Bundle: keyness.json, fetched when the section nears the viewport.
  *
@@ -18,30 +21,75 @@
     var P = ns.panels;
     var A = ns.albaniSermons;
 
-    function sliceOptions(keyness, facet, titles) {
+    var RECORDING_WORDS = 10;
+    var SLICE_WORDS = 18;
+    var STEPS = 4;
+
+    /**
+     * The cards of one facet, in A.recordingOrder for recordings and in
+     * their natural order (before → after, monologue → dialogue) otherwise.
+     */
+    function slices(keyness, facet, metadata) {
+        var data = keyness['by_' + facet] || {};
         var period = (keyness.period || {}).split || '';
         var date = P.formatDate ? P.formatDate(period) : period;
-        var data = keyness['by_' + facet] || {};
-        var keys = Object.keys(data);
         if (facet === 'recording') {
-            keys.sort(function (a, b) {
-                return String((titles[a] || {}).t || a).localeCompare(String((titles[b] || {}).t || b));
-            });
-            return keys.map(function (k) { return { value: k, label: (titles[k] || {}).t || k }; });
-        }
-        if (facet === 'period') {
-            return ['before', 'after'].filter(function (k) { return data[k]; }).map(function (k) {
-                return { value: k, label: P.t(k === 'before' ? 'albani_keyness_before' : 'albani_keyness_after',
-                    { date: date }) };
+            return A.recordingOrder(metadata).filter(function (r) { return data[r.o]; }).map(function (r) {
+                return { key: r.o, title: r.t, year: r.y, rec: r, terms: data[r.o] };
             });
         }
-        return ['monologue', 'exchange'].filter(function (k) { return data[k]; }).map(function (k) {
-            return { value: k, label: P.t(k === 'monologue' ? 'albani_mode_monologue' : 'albani_mode_exchange') };
+        var keys = facet === 'period' ? ['before', 'after'] : ['monologue', 'exchange'];
+        var labels = {
+            before: P.t('albani_keyness_before', { date: date }),
+            after: P.t('albani_keyness_after', { date: date }),
+            monologue: P.t('albani_mode_monologue'),
+            exchange: P.t('albani_mode_exchange')
+        };
+        return keys.filter(function (k) { return data[k]; }).map(function (k) {
+            return { key: k, title: labels[k], terms: data[k] };
         });
     }
 
-    A.renderKeyness = function (section, bundle, fetch) {
-        var titles = A.recordingsById(bundle.metadata);
+    /**
+     * Size steps by rank within the card, not by the raw ratio: ratios run
+     * from ×2 to "only here" (∞), and a linear scale would set one word
+     * huge and the rest at the floor.
+     */
+    function step(i, n) {
+        return Math.min(STEPS, Math.floor(i / Math.max(1, n) * STEPS)) + 1;
+    }
+
+    function card(slice, max, ctx) {
+        var el = P.el('article', 'iwac-vis-albani__sig');
+        var head = P.el('h4', 'iwac-vis-albani__sig-title');
+        if (slice.rec) {
+            var link = P.el('a', 'iwac-vis-albani__sig-link', slice.title);
+            link.href = A.itemHref(ctx, slice.rec.o, slice.rec.u);
+            head.appendChild(link);
+        } else {
+            head.textContent = slice.title;
+        }
+        el.appendChild(head);
+        if (slice.year) el.appendChild(P.el('p', 'iwac-vis-albani__sig-year', String(slice.year)));
+        var list = P.el('ul', 'iwac-vis-albani__sig-words');
+        var terms = slice.terms.slice(0, max);
+        terms.forEach(function (term, i) {
+            var li = P.el('li', 'iwac-vis-albani__sig-word iwac-vis-albani__sig-word--' + (STEPS + 1 - step(i, terms.length)));
+            li.appendChild(P.el('span', 'iwac-vis-albani__hausa', term.w));
+            var ratio = term.ratio != null ? '×' + P.formatDecimal(term.ratio, 1) : P.t('albani_keyness_only_here');
+            var detail = P.t('albani_keyness_tooltip', {
+                count: term.n, segments: P.formatNumber(term.s),
+                g2: P.formatNumber(Math.round(term.g2 || 0)) });
+            li.title = ratio + ' · ' + detail;
+            // The ratio for screen readers, which never see a `title`.
+            li.appendChild(P.el('span', 'iwac-vis-albani__sr', ' (' + ratio + ')'));
+            list.appendChild(li);
+        });
+        el.appendChild(list);
+        return el;
+    }
+
+    A.renderKeyness = function (section, bundle, fetch, ctx) {
         var host = P.el('div', 'iwac-vis-albani__deferred');
         section.appendChild(host);
 
@@ -51,10 +99,12 @@
                 { key: 'period', label: P.t('albani_keyness_by_period') },
                 { key: 'mode', label: P.t('albani_keyness_by_mode') }
             ];
-            var state = { facet: 'recording', slice: null };
-            var caption = P.el('p', 'iwac-vis-panel-desc iwac-vis-albani__caption');
-            var empty = A.note(P.t('albani_keyness_none'));
-            empty.hidden = true;
+            var state = { facet: 'recording' };
+            var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('albani_keyness_cards'), P.t('albani_keyness_cards_desc'), { key: 'albani-keyness' });
+            panel.chart.classList.add('iwac-vis-albani__list-host');
+            host.appendChild(panel.panel);
+
             var controls = P.el('div', 'iwac-vis-albani__controls');
             var facetControl = P.buildSegmented({
                 name: 'albani-keyness-facet',
@@ -63,24 +113,27 @@
                 options: facets,
                 onChange: function (key) {
                     state.facet = key;
-                    state.slice = null;
-                    rebuildPicker();
-                    panel.redraw();
+                    refresh();
                 }
             });
             controls.appendChild(facetControl.root);
-            var pickerHost = P.el('div', 'iwac-vis-albani__picker');
-            controls.appendChild(pickerHost);
+            var caption = P.el('p', 'iwac-vis-panel-desc iwac-vis-albani__caption');
+            var empty = A.note(P.t('albani_keyness_none'));
+            panel.panel.insertBefore(controls, panel.chart);
+            panel.panel.insertBefore(caption, panel.chart);
+            panel.panel.insertBefore(empty, panel.chart);
 
-            function rebuildPicker() {
-                pickerHost.innerHTML = '';
-                var options = sliceOptions(keyness, state.facet, titles);
-                if (!state.slice && options.length) state.slice = options[0].value;
-                if (options.length) {
-                    pickerHost.appendChild(A.select(P.t('albani_keyness_slice'), options, state.slice,
-                        function (value) { state.slice = value; panel.redraw(); },
-                        'albani-keyness-slice'));
-                }
+            var grid = P.el('div', 'iwac-vis-albani__sigs');
+            panel.chart.appendChild(grid);
+
+            function refresh() {
+                var list = slices(keyness, state.facet, bundle.metadata);
+                grid.innerHTML = '';
+                grid.classList.toggle('iwac-vis-albani__sigs--pair', state.facet !== 'recording');
+                var max = state.facet === 'recording' ? RECORDING_WORDS : SLICE_WORDS;
+                list.forEach(function (slice) { grid.appendChild(card(slice, max, ctx)); });
+                empty.hidden = list.length > 0;
+
                 var period = keyness.period || {};
                 var date = P.formatDate ? P.formatDate(period.split || '') : period.split;
                 if (state.facet === 'period') {
@@ -95,23 +148,7 @@
                     caption.hidden = true;
                 }
             }
-
-            var panel = A.chartPanel(host, P.t('albani_keyness_heading'), null, function (built) {
-                var terms = (((keyness['by_' + state.facet] || {})[state.slice]) || []).slice(0, 25);
-                empty.hidden = terms.length > 0;
-                if (!terms.length) return null;
-                A.sizeFor(built.chart, terms.length);
-                return A.logRatioOption(terms, {
-                    axis: P.t('albani_keyness_axis'),
-                    tooltip: function (term) {
-                        return P.t('albani_keyness_tooltip', {
-                            count: term.n, segments: P.formatNumber(term.s),
-                            g2: P.formatNumber(Math.round(term.g2 || 0)) });
-                    }
-                });
-            }, { wide: true, key: 'albani-keyness', before: [controls, caption, empty] });
-            rebuildPicker();
-            panel.redraw();
+            refresh();
         });
     };
 })();

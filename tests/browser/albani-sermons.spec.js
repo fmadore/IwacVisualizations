@@ -82,13 +82,13 @@ test('every chart and network offers the shared full-screen control, and fills t
     // the shared toolbar's full-screen button; tables and lists do not.
     const drawn = page.locator('.iwac-vis-albani__section .iwac-vis-panel').filter({ has: page.locator('canvas') });
     const count = await drawn.count();
-    expect(count).toBeGreaterThan(8);
+    expect(count).toBeGreaterThan(6);
     for (let i = 0; i < count; i++) {
         await expect(drawn.nth(i).getByRole('button', { name: 'Toggle fullscreen' })).toHaveCount(1);
     }
-    // A row-sized bar chart: its inline minimum height must not hold the
+    // A row-sized matrix: its inline minimum height must not hold the
     // chart at page size once the panel is expanded.
-    const panel = page.locator('[data-iwac-panel="albani-youth-intensity"]');
+    const panel = page.locator('[data-iwac-panel="albani-youth-profile"]');
     const chart = panel.locator('.iwac-vis-chart');
     const before = (await chart.boundingBox()).height;
     const viewport = page.viewportSize().height;
@@ -100,6 +100,42 @@ test('every chart and network offers the shared full-screen control, and fills t
     expect((await chart.boundingBox()).height).toBeGreaterThanOrEqual(viewport - 161);
     await button.click();
     await expect(button).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('the score has one cell per segment, and reshades by measure', async ({ page }) => {
+    await ready(page);
+    const panel = page.locator('[data-iwac-panel="albani-score"]');
+    const read = () => page.evaluate(() => {
+        const el = document.querySelector('[data-iwac-panel="albani-score"] .iwac-vis-chart');
+        const series = window.echarts.getInstanceByDom(el).getOption().series;
+        return {
+            cells: series.filter((s) => s.type === 'heatmap').reduce((n, s) => n + s.data.length, 0),
+            shaded: series[0].data.map((d) => d.value[2]),
+        };
+    });
+    // Two analysed recordings of three segments each; the last segment of
+    // each holds one meeting, built from two political terms.
+    expect(await read()).toEqual({ cells: 6, shaded: [1, 1] });
+    await panel.locator('[data-iwac-control="albani-score-measure:politics"]').click();
+    await expect.poll(read).toEqual({ cells: 6, shaded: [2, 2] });
+});
+
+test('the formulae are a ledger with one strip cell per recording', async ({ page }) => {
+    await ready(page);
+    const rows = page.locator('[data-iwac-panel="albani-formulae"] .iwac-vis-albani__ledger-row');
+    await expect(rows).toHaveCount(2);
+    await expect(rows.first().locator('.iwac-vis-albani__ledger-phrase')).toHaveText('wallahi');
+    await expect(rows.first().locator('.iwac-vis-albani__ledger-spread')).toHaveText('in 2 of 2 recordings');
+    await expect(rows.first().locator('.iwac-vis-albani__strip-cell')).toHaveCount(2);
+});
+
+test('signature words say so when no word clears the thresholds', async ({ page }) => {
+    await ready(page);
+    const panel = page.locator('[data-iwac-panel="albani-keyness"]');
+    await expect(panel.locator('.iwac-vis-albani__sig')).toHaveCount(0);
+    await expect(panel).toContainText('No word meets the thresholds');
+    await panel.locator('[data-iwac-control="albani-keyness-facet:mode"]').click();
+    await expect(panel).toContainText('No word meets the thresholds');
 });
 
 test('the counting scope is one control, reflected in the address bar', async ({ page }) => {

@@ -7,11 +7,15 @@
  *   header      who, what, and how much of it is readable today; the
  *               provenance badges (machine transcription, seed lexicon)
  *   1 corpus    every recording on a date × running-time axis, and listed
- *   2 vocabulary  Hausa exposition / Arabic citation, never pooled; formulae
- *   3 youth     the lexicon, its intensity, collocates, network, passages
+ *   2 vocabulary  Hausa exposition / Arabic citation, never pooled; the
+ *               formulae as a ledger with their spread across recordings
+ *   3 youth     the lexicon, a recording × category profile, collocates,
+ *               network, passages
  *   4 politics  the same instrument on the political lexicon
- *   5 overlap   where the two vocabularies meet
- *   6 keyness   what sets each recording, period and segment kind apart
+ *   5 overlap   the score (recording × 20-minute segment), which terms
+ *               meet, the words around them, where to listen
+ *   6 keyness   signature cards: what sets each recording, period and
+ *               segment kind apart
  *   method      how it was made, in plain terms, with its sources
  *               (albani-sermons/method.js)
  *
@@ -142,7 +146,7 @@
 
         A.renderCorpus(A.section(root, 'corpus', P.t('albani_corpus_heading')), metadata, ctx);
         A.renderVocabulary(A.section(root, 'vocabulary', P.t('albani_vocab_heading'),
-            P.t('albani_vocab_intro')), bundle.vocabulary, store);
+            P.t('albani_vocab_intro')), bundle.vocabulary, store, bundle.metadata);
 
         A.renderTheme(A.section(root, 'youth', P.t('albani_youth_heading'), P.t('albani_youth_intro')),
             'youth', bundle, store, fetch, ctx);
@@ -156,7 +160,7 @@
         A.renderOverlap(A.section(root, 'overlap', P.t('albani_overlap_heading'),
             P.t('albani_overlap_intro', { window: params.overlap_window || 10 })), bundle, store, fetch, ctx);
         A.renderKeyness(A.section(root, 'keyness', P.t('albani_keyness_heading'),
-            P.t('albani_keyness_intro')), bundle, fetch);
+            P.t('albani_keyness_intro')), bundle, fetch, ctx);
 
         var method = A.section(root, 'method', P.t('albani_method'), P.t('albani_method_lead'));
         A.renderMethod(method, metadata);

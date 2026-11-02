@@ -117,14 +117,6 @@
     margin-bottom: var(--space-3, 0.75rem);
 }
 
-/*  Recording titles run long: the picker may shrink below its content
- *  rather than push the page sideways on a phone. */
-.iwac-vis-albani__picker {
-    flex: 1 1 16rem;
-    min-width: 0;
-    max-width: 100%;
-}
-
 .iwac-vis-albani__controls select {
     max-width: 100%;
 }
@@ -158,6 +150,18 @@
 
 .iwac-vis-albani__cloud {
     height: 380px;
+}
+
+/*  The word scatters label every point, and need the room. */
+.iwac-vis-albani__scatter {
+    height: 440px;
+}
+
+/*  The score, the profiles and the pair matrix set a min-height from
+ *  their row count (A.matrixHeight); this is the floor before data. */
+.iwac-vis-albani__score,
+.iwac-vis-albani__matrix {
+    min-height: 320px;
 }
 
 /*  Tables, lists and the concordance size themselves; the chart host's
@@ -324,4 +328,188 @@
 
 .iwac-vis-albani__reference-use {
     color: var(--muted, #66696e);
+}
+
+
+/* =================================================================== */
+/*  The formulae ledger                                                  */
+/* =================================================================== */
+
+/*  One ruled row per formula: the phrase, its count, how many
+ *  recordings, and a strip with one cell per recording. */
+.iwac-vis-albani__ledger {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-albani__ledger-row {
+    display: grid;
+    grid-template-columns: minmax(10rem, 1.4fr) auto minmax(7rem, auto) minmax(10rem, 2fr);
+    align-items: center;
+    gap: var(--space-2, 0.5rem) var(--space-4, 1rem);
+    padding: var(--space-2, 0.5rem) 0;
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-albani__ledger-row:first-child {
+    border-top: 1px solid var(--border, #ced1d6);
+}
+
+.iwac-vis-albani__ledger-phrase {
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-lg, 1.1875rem);
+    font-style: italic;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-albani__ledger-count {
+    font-size: var(--text-lg, 1.1875rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-albani__ledger-spread {
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__ledger-key {
+    margin: var(--space-3, 0.75rem) 0 0;
+    max-width: var(--measure-base, 52.5rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__strip {
+    display: flex;
+    gap: 2px;
+    min-width: 0;
+}
+
+.iwac-vis-albani__strip-cell {
+    flex: 1 1 0;
+    min-width: 3px;
+    height: 16px;
+    border-radius: 1px;
+    background: var(--iwac-vis-heatmap-4, #ce4115);
+}
+
+.iwac-vis-albani__strip-cell--0 {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-albani__strip-cell--1 { background: var(--iwac-vis-heatmap-1, #f2cfc3); }
+.iwac-vis-albani__strip-cell--2 { background: var(--iwac-vis-heatmap-2, #e6a08a); }
+.iwac-vis-albani__strip-cell--3 { background: var(--iwac-vis-heatmap-3, #da704f); }
+
+@media (forced-colors: active) {
+    .iwac-vis-albani__strip-cell {
+        forced-color-adjust: none;
+        background: CanvasText;
+    }
+
+    .iwac-vis-albani__strip-cell--0 {
+        background: Canvas;
+        box-shadow: inset 0 0 0 1px CanvasText;
+    }
+}
+
+@media (max-width: 767px) { /* < md */
+    .iwac-vis-albani__ledger-row {
+        grid-template-columns: 1fr auto;
+    }
+
+    .iwac-vis-albani__ledger-spread,
+    .iwac-vis-albani__strip {
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* =================================================================== */
+/*  Signature words                                                      */
+/* =================================================================== */
+
+.iwac-vis-albani__sigs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-5, 1.25rem) var(--space-6, 1.5rem);
+}
+
+.iwac-vis-albani__sigs--pair {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.iwac-vis-albani__sig {
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 2px solid var(--ink, #13161c);
+}
+
+.iwac-vis-albani__sig-title {
+    margin: 0;
+    font-size: var(--text-base, 1.0625rem);
+    line-height: 1.3;
+}
+
+.iwac-vis-albani__sig-link {
+    color: var(--ink, #13161c);
+    text-decoration: none;
+}
+
+.iwac-vis-albani__sig-link:hover {
+    color: var(--primary, #ce4115);
+    text-decoration: underline;
+}
+
+.iwac-vis-albani__sig-year {
+    margin: var(--space-1, 0.25rem) 0 0;
+    font-size: var(--text-xs, 0.8125rem);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__sig-words {
+    margin: var(--space-3, 0.75rem) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    line-height: 1.25;
+    cursor: help;
+}
+
+.iwac-vis-albani__sig-word .iwac-vis-albani__hausa {
+    font-weight: 400;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-albani__sig-word--1 { font-size: var(--text-sm, 0.9375rem); }
+.iwac-vis-albani__sig-word--2 { font-size: var(--text-base, 1.0625rem); }
+
+.iwac-vis-albani__sig-word--3 { font-size: var(--text-lg, 1.1875rem); }
+.iwac-vis-albani__sig-word--3 .iwac-vis-albani__hausa { color: var(--ink, #13161c); }
+
+.iwac-vis-albani__sig-word--4 { font-size: var(--text-xl, 1.5rem); }
+.iwac-vis-albani__sig-word--4 .iwac-vis-albani__hausa {
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+/*  The ratio, for screen readers only: a `title` never reaches them. */
+.iwac-vis-albani__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }

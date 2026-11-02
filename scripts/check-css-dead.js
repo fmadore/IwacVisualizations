@@ -58,6 +58,8 @@ const COMPOSED_PREFIXES = [
     ['iwac-vis-sent-', 'sentiment panels compose per-model and per-axis names'],
     ['iwac-vis-embed-', 'the embed layout composes body classes in PHP'],
     ['iwac-vis-otd-clippings__plate--r', 'on-this-day/clippings.js:47 — `--r${ratio}`'],
+    ['iwac-vis-albani__strip-cell--', 'albani-sermons/vocabulary.js — `--${stripBin(rate)}`'],
+    ['iwac-vis-albani__sig-word--', 'albani-sermons/keyness.js — `--${size step}`'],
 ];
 
 /** Every file under `dir`; a directory that does not exist yields none. */

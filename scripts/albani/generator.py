@@ -3,11 +3,12 @@
 Writes ``asset/data/albani-sermons/``:
 
 ``metadata.json``     the corpus: every recording, its status and sizes
-``vocabulary.json``   frequency lists per layer (Hausa / Arabic) + formulae
+``vocabulary.json``   frequency lists per layer (Hausa / Arabic) + formulae, per recording
 ``lexicon.json``      the seed lexicons and their counts, per recording, per year
 ``collocates.json``   which words travel with each category (G² gate, log-ratio rank)
 ``network.json``      lexicon terms and their strongest collocates, as a graph
-``overlap.json``      where the youth and politics lexicons fire together
+``overlap.json``      where the youth and politics lexicons fire together, and
+                      both counted in every 20-minute segment (the "score")
 ``keyness.json``      each recording / period / mode against the rest
 ``concordance-<theme>.json``  KWIC lines — RIGHTS-GATED on ``OCR_is_public``
 
@@ -262,7 +263,7 @@ class AlbaniSermonsGenerator:
             rec_df = {HAUSA: defaultdict(set), ARABIC: defaultdict(set)}
             running = Counter()
             formulae = Counter()
-            formula_recs: Dict[str, Set[str]] = defaultdict(set)
+            formula_recs: Dict[str, Counter] = defaultdict(Counter)
             for rec, seg in self._segments(scope):
                 seen = {HAUSA: set(), ARABIC: set()}
                 for turn in seg.turns:
@@ -274,7 +275,7 @@ class AlbaniSermonsGenerator:
                             # count it once, on its first word.
                             if previous != label:
                                 formulae[fid] += 1
-                                formula_recs[fid].add(rec.o_id)
+                                formula_recs[fid][rec.o_id] += 1
                             previous = label
                             running["fx"] += 1
                             continue
@@ -305,7 +306,10 @@ class AlbaniSermonsGenerator:
                 "layers": layers,
                 "formulae": [
                     {"id": fid, "label": formula_label(fid), "n": n,
-                     "r": len(formula_recs[fid])}
+                     "r": len(formula_recs[fid]),
+                     # Per recording, for the dispersion strip beside each
+                     # formula: where it is a habit and where a one-off.
+                     "by": dict(formula_recs[fid])}
                     for fid, n in formulae.most_common()
                 ],
                 "formula_tokens": running["fx"],
@@ -619,6 +623,9 @@ class AlbaniSermonsGenerator:
             window, rest = Counter(), Counter()
             seg_df: Counter = Counter()
             rec_df: Dict[str, Set[str]] = defaultdict(set)
+            grid = []
+            positions = {id(seg): k for rec in self.analysed()
+                         for k, seg in enumerate(rec.segments)}
             for rec, seg in self._segments(scope):
                 seg_meet = seg_youth = seg_pol = 0
                 seen = set()
@@ -656,6 +663,15 @@ class AlbaniSermonsGenerator:
                 row["politics"] += seg_pol
                 row["meetings"] += seg_meet
                 row["segments_both"] += 1 if seg_youth and seg_pol else 0
+                # Every counted segment, for the block's "score": recording
+                # by 20-minute window, in listening order (`k` is the
+                # segment's position across all of the recording's parts).
+                grid.append({
+                    "o": rec.o_id, "k": positions[id(seg)], "p": seg.segment.ordinal,
+                    "s": seg.segment.start_seconds, "e": seg.segment.end_seconds,
+                    "md": seg.mode, "w": seg.n_tokens, "y": seg_youth,
+                    "pl": seg_pol, "m": seg_meet,
+                })
                 if seg_meet:
                     segments.append({
                         "o": rec.o_id, "p": seg.segment.ordinal, "i": seg.segment.index,
@@ -671,6 +687,7 @@ class AlbaniSermonsGenerator:
                 "by_recording": [dict(o=o, **{k: int(v) for k, v in row.items()})
                                  for o, row in per_rec.items()],
                 "segments": segments[:25],
+                "grid": grid,
                 "segments_with_meetings": len(segments),
                 "collocates": self._score_collocates(window, rest, seg_df, rec_df, own),
             }

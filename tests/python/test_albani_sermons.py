@@ -291,6 +291,30 @@ class CorpusTests(unittest.TestCase):
         matasa = next(e for e in lex["entries"] if e["id"] == "matasa")
         self.assertEqual(matasa["n"], {"all": 24, MONOLOGUE: 6})
 
+    def test_the_score_has_one_cell_per_segment_in_scope(self):
+        talk = " ".join(["matasa sun zo wurin malam"] * 6)
+        text = "\n".join([
+            "[Segment 1/2 | 00:00:00–00:20:00]", "[Speaker seg1-spk:0]", talk,
+            "[Segment 2/2 | 00:20:00–end]",
+            "[Speaker seg2-spk:0]", talk, "[Speaker seg2-spk:1]", talk,
+            "[Speaker seg2-spk:0]", talk,
+        ])
+        gen = generator(frame({"o:id": "1", "OCR": text}))
+        scopes = gen.build_overlap()["scopes"]
+        cells = scopes["all"]["grid"]
+        self.assertEqual([(c["k"], c["md"], c["y"]) for c in cells],
+                         [(0, MONOLOGUE, 6), (1, EXCHANGE, 18)])
+        self.assertEqual(cells[1]["s"], 1200)
+        self.assertIsNone(cells[1]["e"])
+        # The exchange segment leaves the monologue score, by position.
+        self.assertEqual([c["k"] for c in scopes[MONOLOGUE]["grid"]], [0])
+
+    def test_formula_counts_split_by_recording(self):
+        gen = generator(frame({"o:id": "1", "OCR": CURRENT}, {"o:id": "2", "OCR": CURRENT}))
+        for f in gen.build_vocabulary()["scopes"]["all"]["formulae"]:
+            self.assertEqual(sum(f["by"].values()), f["n"])
+            self.assertEqual(len(f["by"]), f["r"])
+
     def test_an_english_recording_is_listed_but_not_counted(self):
         gen = generator(frame({"o:id": "1", "OCR": CURRENT, "language": "Anglais"}))
         meta = gen.build_metadata()

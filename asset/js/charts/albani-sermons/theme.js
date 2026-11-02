@@ -5,7 +5,7 @@
  * The question each section answers is "which words travel with this
  * vocabulary in these sermons", and the panels follow the order a reader
  * checks it in: the lexicon and its counts (what is being looked for, and
- * how often it is found), where it concentrates by recording, the words
+ * how often it is found), which recordings dwell on which part of it, the words
  * near it, the graph of those relations, and the passages themselves.
  *
  * Bundles: lexicon.json and metadata.json arrive with the block; the
@@ -24,7 +24,6 @@
     var C = ns.chartOptions;
     var A = ns.albaniSermons;
 
-    var TOP_RECORDINGS = 20;
     var MIN_NETWORK_HITS = 5;
 
     /* ----------------------------------------------------------------- */
@@ -98,42 +97,76 @@
     }
 
     /* ----------------------------------------------------------------- */
-    /*  Per-recording intensity                                           */
+    /*  Profile: recording × category                                     */
     /* ----------------------------------------------------------------- */
 
-    function intensityPanel(section, theme, lexicon, metadata, store) {
-        var titles = A.recordingsById(metadata);
-        var panel = A.chartPanel(section, P.t('albani_intensity'), P.t('albani_intensity_desc'),
+    /**
+     * One row per recording, one column per category of the theme, the
+     * cell its rate per 10,000 words. A ranked bar list said which
+     * recordings use the theme most; the matrix also says WHICH part of it
+     * — the marriage lesson and the lesson on the emirate are different
+     * rows, not two bars of similar length. Rows keep A.recordingOrder, so
+     * a recording sits at the same height here as in the score below.
+     */
+    function profilePanel(section, theme, lexicon, metadata, store) {
+        var recs = A.recordingOrder(metadata);
+        var cats = ((lexicon.themes || {})[theme] || {}).categories || [];
+        var panel = A.chartPanel(section, P.t('albani_profile'), P.t('albani_profile_desc'),
             function (built) {
-                var rows = ((lexicon.by_recording || {})[store.get('scope')] || [])
-                    .filter(function (r) { return r.w > 0; })
-                    .map(function (r) {
-                        var n = (r.themes || {})[theme] || 0;
-                        return {
-                            name: (titles[r.o] || {}).t || r.o,
-                            count: A.per10k(n, r.w),
-                            raw: n,
-                            words: r.w,
-                            o_id: r.o
-                        };
-                    })
-                    .filter(function (r) { return r.raw > 0; })
-                    .sort(function (a, b) { return b.count - a.count; })
-                    .slice(0, TOP_RECORDINGS);
-                A.sizeFor(built.chart, rows.length);
-                var option = C.horizontalBar(rows, {
-                    nameKey: 'name', valueKey: 'count', maxLabelLength: 34, itemFields: ['o_id'],
-                    valueFormatter: function (v) { return P.formatDecimal(v, 1); },
+                var scope = store.get('scope');
+                var byRec = {};
+                ((lexicon.by_recording || {})[scope] || []).forEach(function (r) { byRec[r.o] = r; });
+                var rows = recs.filter(function (r) {
+                    var row = byRec[r.o];
+                    return row && row.w > 0;
+                });
+                var used = cats.filter(function (c) {
+                    return rows.some(function (r) {
+                        return ((byRec[r.o].categories || {})[theme + '.' + c.id] || 0) > 0;
+                    });
+                });
+                if (!rows.length || !used.length) return null;
+                var cells = [];
+                var empty = [];
+                rows.forEach(function (r, yi) {
+                    var row = byRec[r.o];
+                    used.forEach(function (c, xi) {
+                        var n = (row.categories || {})[theme + '.' + c.id] || 0;
+                        var rate = Math.round(A.per10k(n, row.w) * 10) / 10;
+                        // A count too small to show at one decimal still
+                        // happened: it takes the lowest bin, never "none".
+                        if (n > 0 && rate < 0.1) rate = 0.1;
+                        (n > 0 ? cells : empty).push({ value: [xi, yi, rate], n: n, w: row.w });
+                    });
+                });
+                A.matrixHeight(built.chart, rows.length, 22, 130);
+                var labels = used.map(function (c) { return A.label(c, 'label'); });
+                var option = C.heatmapMatrix({
+                    xLabels: labels,
+                    yLabels: rows.map(A.recordingLabel),
+                    cells: cells
+                }, {
+                    cellBorder: true,
+                    static: true,
+                    xLabelRotate: used.length > 6 ? 35 : 0,
+                    yLabelWidth: A.labelWidth(built.chart),
+                    grid: { bottom: 92 },
+                    ramp: ns.heatmapRamp().slice(1),
+                    pieces: A.quantileBins(cells.map(function (c) { return c.value[2]; })),
                     tooltipFormatter: function (p) {
-                        var row = rows[p.dataIndex] || {};
-                        return '<strong>' + P.escapeHtml(row.name || '') + '</strong><br>'
-                            + P.escapeHtml(P.formatDecimal(row.count, 1) + ' ' + P.t('albani_per_10k')) + '<br>'
+                        var v = p.value || [];
+                        var d = p.data || {};
+                        return '<strong>' + P.escapeHtml(A.recordingLabel(rows[v[1]])) + '</strong><br>'
+                            + P.escapeHtml(labels[v[0]] || '') + ': '
+                            + P.escapeHtml(P.formatDecimal(v[2], 1) + ' ' + P.t('albani_per_10k')) + '<br>'
                             + P.escapeHtml(P.t('albani_intensity_tooltip', {
-                                count: row.raw, words: P.formatNumber(row.words) }));
+                                count: d.n || 0, words: P.formatNumber(d.w || 0) }));
                     }
                 });
+                option.visualMap.seriesIndex = 0;
+                option.series.push(A.emptyCellSeries(P.t('albani_score_none'), empty));
                 return option;
-            }, { key: 'albani-' + theme + '-intensity' });
+            }, { wide: true, key: 'albani-' + theme + '-profile', chartClass: 'iwac-vis-albani__matrix' });
         store.subscribe(panel.redraw, { keys: ['scope'] });
     }
 
@@ -170,9 +203,9 @@
                 var terms = (payload.terms || []).slice(0, 25);
                 empty.hidden = terms.length > 0;
                 if (!terms.length) return null;
-                A.sizeFor(built.chart, terms.length);
-                return A.logRatioOption(terms, {
-                    axis: P.t('albani_collocates_axis'),
+                return A.wordScatterOption(terms, {
+                    xName: P.t('albani_scatter_x'),
+                    yName: P.t('albani_scatter_y'),
                     tooltip: function (term) {
                         var line = P.t('albani_collocates_tooltip', {
                             count: term.n, segments: P.formatNumber(term.s), recordings: P.formatNumber(term.r) });
@@ -181,7 +214,8 @@
                         return line;
                     }
                 });
-            }, { wide: true, key: 'albani-' + theme + '-collocates', before: [picker, empty] });
+            }, { wide: true, key: 'albani-' + theme + '-collocates', before: [picker, empty],
+                 chartClass: 'iwac-vis-albani__scatter' });
         store.subscribe(panel.redraw, { keys: ['scope'] });
     }
 
@@ -361,7 +395,7 @@
     A.renderTheme = function (section, theme, bundle, store, fetch, ctx) {
         var lexicon = bundle.lexicon || {};
         lexiconPanel(section, theme, lexicon, store);
-        intensityPanel(section, theme, lexicon, bundle.metadata, store);
+        profilePanel(section, theme, lexicon, bundle.metadata, store);
 
         var deferred = P.el('div', 'iwac-vis-albani__deferred');
         section.appendChild(deferred);

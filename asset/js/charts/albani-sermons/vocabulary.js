@@ -5,7 +5,8 @@
  * (a heuristic classification — the Arabic is transliterated), plus the
  * religious formulae counted as phrases. Pooled, the formulae alone would
  * top every list. The word cloud and the frequency list read the same
- * terms; the list carries the dispersion a cloud cannot show.
+ * terms; the list carries the dispersion a cloud cannot show. The formulae
+ * are a ledger, each with a strip of its rate in every recording.
  *
  * Depends on: albani-sermons/helpers.js, shared/table.js, the word-cloud
  * extension (C.wordcloud falls back to bars without it).
@@ -22,7 +23,70 @@
     var CLOUD_WORDS = 120;
     var LIST_WORDS = 40;
 
-    A.renderVocabulary = function (section, vocabulary, store) {
+    /** Rate bins (per 10,000 words) for the formula strips, on the
+     *  module's heat ramp; 0 is the empty cell. */
+    var STRIP_BINS = [1, 4, 10];
+
+    function stripBin(rate) {
+        if (!rate) return 0;
+        for (var i = 0; i < STRIP_BINS.length; i++) {
+            if (rate < STRIP_BINS[i]) return i + 1;
+        }
+        return STRIP_BINS.length + 1;
+    }
+
+    /**
+     * The formulae as a typeset ledger: the phrase, its count, and a strip
+     * with one cell per recording (A.recordingOrder), shaded by its rate
+     * there. The strip is what a bar could not say — whether a formula is
+     * the preacher's constant habit or the sound of one lesson.
+     */
+    function formulaLedger(section, metadata, store) {
+        var recs = A.recordingOrder(metadata);
+        var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_formulae'),
+            P.t('albani_formulae_desc'), { key: 'albani-formulae' });
+        panel.chart.classList.add('iwac-vis-albani__list-host');
+        section.appendChild(panel.panel);
+        var list = P.el('ol', 'iwac-vis-albani__ledger');
+        panel.chart.appendChild(list);
+        var key = P.el('p', 'iwac-vis-albani__ledger-key', P.t('albani_formulae_strip_key'));
+        panel.panel.appendChild(key);
+
+        function refresh(formulae) {
+            var scope = store.get('scope');
+            list.innerHTML = '';
+            key.hidden = !formulae.some(function (f) { return f.by; });
+            formulae.forEach(function (f) {
+                var li = P.el('li', 'iwac-vis-albani__ledger-row');
+                li.appendChild(P.el('span', 'iwac-vis-albani__ledger-phrase', f.label));
+                var count = P.el('span', 'iwac-vis-albani__ledger-count', P.formatNumber(f.n));
+                li.appendChild(count);
+                li.appendChild(P.el('span', 'iwac-vis-albani__ledger-spread',
+                    P.t('albani_formulae_spread', {
+                        count: f.r || 0, total: P.formatNumber(recs.length) })));
+                // Data built before the strips existed carries no `by`.
+                if (!f.by) {
+                    list.appendChild(li);
+                    return;
+                }
+                var strip = P.el('span', 'iwac-vis-albani__strip');
+                strip.setAttribute('aria-hidden', 'true');
+                recs.forEach(function (r) {
+                    var n = (f.by || {})[r.o] || 0;
+                    var rate = A.per10k(n, A.scopeWords(r, scope));
+                    var cell = P.el('span', 'iwac-vis-albani__strip-cell iwac-vis-albani__strip-cell--' + stripBin(rate));
+                    cell.title = A.recordingLabel(r) + ' — ' + P.t('albani_formulae_cell', {
+                        count: n, rate: P.formatDecimal(rate, 1) });
+                    strip.appendChild(cell);
+                });
+                li.appendChild(strip);
+                list.appendChild(li);
+            });
+        }
+        return { refresh: refresh };
+    }
+
+    A.renderVocabulary = function (section, vocabulary, store, metadata) {
         var scopes = (vocabulary && vocabulary.scopes) || {};
         var state = { layer: 'ha' };
 
@@ -80,14 +144,7 @@
         });
         listPanel.chart.appendChild(table.root);
 
-        var formulae = A.chartPanel(section, P.t('albani_formulae'), P.t('albani_formulae_desc'),
-            function (built) {
-                var list = current().scope.formulae || [];
-                A.sizeFor(built.chart, list.length, 26, 200);
-                return C.horizontalBar(list.map(function (f) {
-                    return { name: f.label, count: f.n };
-                }), { nameKey: 'name', valueKey: 'count' });
-            }, { wide: true, key: 'albani-formulae' });
+        var ledger = formulaLedger(section, metadata, store);
 
         function refresh() {
             var cur = current();
@@ -105,7 +162,7 @@
                 return { w: t.w, n: P.formatNumber(t.n), s: P.formatNumber(t.s), r: P.formatNumber(t.r) };
             }), 0);
             cloud.redraw();
-            formulae.redraw();
+            ledger.refresh(cur.scope.formulae || []);
         }
 
         refresh();
