@@ -13,6 +13,17 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.93.0 — the people and places of the Albani sermons (2026-11-02)
+
+**The Albani Zaria sermons block has a new section, "People and places", and now reads 40 sermons, up from 29.**
+
+- **The places named**: a map with one circle per place, sized by how often the sermons name it and coloured by kind of place (Nigeria; the Hajj and the Holy Land; the wider world). A switch moves between Nigeria and the world, and clicking a place lists the recordings that name it most. The places also open as a table from the panel toolbar.
+- **The people named**, grouped as prophets, the Prophet's household and Companions, scholars of hadith and law, the Sokoto jihad, Nigerian preachers, Nigerian rulers and politicians, and world figures. **Movements, institutions and media** are grouped the same way. Each name shows its count, how many recordings name it, and a strip of how often each recording does.
+- The names come from a list of about 200 people, places and organisations, drawn up by hand from the suggestions of a named-entity model (MasakhaNER) and linked to the IWAC index where it has the entry. Only the spellings on the list are counted. A spelling that also has another meaning is left out, so every count is a minimum. A badge and a note in the methods explain this.
+- The recently completed transcriptions are now included: 40 sermons and lessons are analysed (about a million words). One of them carried a line the data build did not recognise, which would have stopped every data update; it is now read correctly.
+
+Run "Pull latest data" after installing: the section needs the new `entities.json` file in the Albani data, and shows an error message until it arrives.
+
 ### v1.92.0 — the Albani sermons in the reader's language (2026-11-02)
 
 **The Hausa words in the Albani Zaria sermons block now carry a translation in the site's language.** Readers of the French and English sites met the collocates, the network and the term matrix as bare Hausa.
