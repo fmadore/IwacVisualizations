@@ -13,6 +13,19 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.91.0 — the Albani sermons, beyond the bar chart (2026-11-02)
+
+**The Albani Zaria sermons block reads as an exhibition rather than a dashboard.** Nine of its thirteen charts were horizontal bars; each is now a view that shows its finding directly:
+
+- **The sermons as a score.** Every analysed recording is a row of 20-minute segments in listening order, shaded by youth terms, political terms or meetings, with dialogue segments ringed. Clicking a segment opens the recording at that point. It replaces the per-recording bars in the youth, politics and meetings sections.
+- **Which part of the theme each recording dwells on.** In the youth and politics sections, a recording × category matrix (education, marriage, emirate, sharia…) takes the place of the ranked bars, so a lesson on marriage and a lesson on the emirate no longer look alike.
+- **Which terms meet** is a youth × politics matrix with the number of meetings in each cell.
+- **Words that travel with a term**, and the words around meetings, are labelled scatters: how often against how distinctive, with larger dots for words found in more recordings.
+- **Signature words** replace the keyness bars: one card per recording, all on the page at once, with its most distinctive words set larger. Periods and single-speaker versus dialogue segments are shown as pairs of cards.
+- **Religious formulae** are a typeset ledger: each phrase, its count, how many recordings use it, and a strip showing its rate in every recording.
+
+The Albani bundles gain two optional fields, every segment's counts (`overlap.json`) and each formula's counts per recording (`vocabulary.json`); the data contract is unchanged. Until the data release is rebuilt with them, the score stays hidden and the ledger shows no strips.
+
 ### v1.90.0 — data that knows its version, and checks borrowed from DRE Visualizations (2026-10-29)
 
 **Data that a site cannot read is no longer installed.** Each data release now states which version of the data format it was built for. "Pull latest data" refuses a release this version of the module cannot read and keeps the current data online; the job log says whether to upgrade the module first or wait for the next data build. Data releases published before this change keep syncing as before.
