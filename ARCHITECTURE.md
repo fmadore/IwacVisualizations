@@ -53,7 +53,7 @@ IwacVisualizations/
 │   │       └── Qwen_logo.png
 │   └── js/
 │       ├── charts/
-│       │   ├── albani-sermons/          # 8 files — panel modules
+│       │   ├── albani-sermons/          # 9 files — panel modules
 │       │   ├── article-dashboard/       # 4 files — panel modules
 │       │   ├── audiovisual-overview/    # 3 files — panel modules
 │       │   ├── collection-overview/     # 11 files — panel modules
@@ -140,6 +140,7 @@ IwacVisualizations/
 │   │   ├── __init__.py
 │   │   ├── albani_lexicon.json
 │   │   ├── corpus.py
+│   │   ├── entities.json
 │   │   ├── generator.py
 │   │   ├── glosses.json
 │   │   ├── layers.py
@@ -260,7 +261,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 55 files — Playwright specs
+│   ├── browser/                         # 56 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt

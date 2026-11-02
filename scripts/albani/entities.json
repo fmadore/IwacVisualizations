@@ -1,0 +1,2326 @@
+{
+ "status": "draft",
+ "_provenance": "People, places and organisations named in the Albani Zaria sermons. Candidates came from a named-entity model run once, offline, over the transcripts (MasakhaNER: masakhane/afroxlmr-large-ner-masakhaner-1.0_2.0, November 2026; hand-checked precision about 95% for people, 90% for places, 50% for organisations); the list below was then curated by hand and the model plays no further part. The generator counts only the aliases listed here, matched on the folded surface form (not the merged match key, which would read 'maka', for you, as Makka). An alias is kept only when its sense is settled in this corpus: bare 'isa' (also a verb), 'shehu' (any shaykh), 'albani' (the preacher or his Syrian namesake), 'nuhu', 'daura' (to tie) and 'kathir' (many) are left out, so counts are floors, not totals. Coordinates come from the IWAC index where it has the place (`iwac`), otherwise from Wikidata (`wikidata`, P625). Awaiting review by a Hausa-speaking specialist.",
+ "entities": [
+  {
+   "id": "isajesus",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Isa (Jesus)",
+   "label_fr": "Isa (Jésus)",
+   "aliases": [
+    "annabi isa",
+    "annabi isah",
+    "isa dan maryam",
+    "isa ɗan maryam"
+   ]
+  },
+  {
+   "id": "musamoses",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Musa (Moses)",
+   "label_fr": "Musa (Moïse)",
+   "aliases": [
+    "annabi musa"
+   ]
+  },
+  {
+   "id": "ibrahimabraham",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Ibrahim (Abraham)",
+   "label_fr": "Ibrahim (Abraham)",
+   "aliases": [
+    "annabi ibrahim",
+    "annabi ibrahimu"
+   ]
+  },
+  {
+   "id": "nuhunoah",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Nuhu (Noah)",
+   "label_fr": "Nuhu (Noé)",
+   "aliases": [
+    "annabi nuhu"
+   ]
+  },
+  {
+   "id": "adam",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Adam",
+   "label_fr": "Adam",
+   "aliases": [
+    "'ya'yan annabi adamu",
+    "annabi adam",
+    "annabi adamu",
+    "yayan annabi adamu"
+   ]
+  },
+  {
+   "id": "yusufjoseph",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Yusuf (Joseph)",
+   "label_fr": "Yusuf (Joseph)",
+   "aliases": [
+    "annabi yusuf",
+    "annabi yusufu"
+   ]
+  },
+  {
+   "id": "lutlot",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Lut (Lot)",
+   "label_fr": "Lut (Loth)",
+   "aliases": [
+    "annabi ludu",
+    "annabi lut",
+    "annabi luɗu"
+   ]
+  },
+  {
+   "id": "jibrilgabriel",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Jibril (Gabriel)",
+   "label_fr": "Jibril (Gabriel)",
+   "aliases": [
+    "jibril",
+    "jibrilu",
+    "mala'ika jibril"
+   ]
+  },
+  {
+   "id": "fir-awnapharaoh",
+   "type": "person",
+   "group": "prophets",
+   "label_en": "Fir'awna (Pharaoh)",
+   "label_fr": "Fir'awna (Pharaon)",
+   "aliases": [
+    "fir'auna",
+    "fir'aunan",
+    "fir'awna"
+   ]
+  },
+  {
+   "id": "abubakralsiddiq",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abu Bakr al-Siddiq",
+   "label_fr": "Abu Bakr al-Siddiq",
+   "aliases": [
+    "abubakar as-siddiq",
+    "abubakar assiddiq",
+    "abubakar sadiq",
+    "abubakar siddiq",
+    "sayyidina abubakar"
+   ]
+  },
+  {
+   "id": "umaribnalkhattab",
+   "type": "person",
+   "group": "early",
+   "label_en": "Umar ibn al-Khattab",
+   "label_fr": "Umar ibn al-Khattab",
+   "aliases": [
+    "sayyidina umar",
+    "umar bin khattab",
+    "umar dan khattab",
+    "umar ibn khattab",
+    "umar ibnul khattab",
+    "umar ɗan khattab",
+    "umaru dan khattabi"
+   ]
+  },
+  {
+   "id": "uthmanibnaffan",
+   "type": "person",
+   "group": "early",
+   "label_en": "Uthman ibn Affan",
+   "label_fr": "Uthman ibn Affan",
+   "aliases": [
+    "sayyidina usman",
+    "sayyidina uthman",
+    "usman bin affan",
+    "usman dan affan",
+    "uthman bin affan"
+   ]
+  },
+  {
+   "id": "aliibnabitalib",
+   "type": "person",
+   "group": "early",
+   "label_en": "Ali ibn Abi Talib",
+   "label_fr": "Ali ibn Abi Talib",
+   "aliases": [
+    "ali bin abi talib",
+    "ali dan abi talib",
+    "ali ibn abi talib",
+    "ali ɗan abi talib",
+    "sayyidina ali"
+   ]
+  },
+  {
+   "id": "aisha",
+   "type": "person",
+   "group": "early",
+   "label_en": "Aisha",
+   "label_fr": "Aisha",
+   "aliases": [
+    "a'isha",
+    "aisha",
+    "nana aisha",
+    "sayyida aisha"
+   ]
+  },
+  {
+   "id": "khadija",
+   "type": "person",
+   "group": "early",
+   "label_en": "Khadija",
+   "label_fr": "Khadija",
+   "aliases": [
+    "khadija",
+    "nana khadija"
+   ]
+  },
+  {
+   "id": "hafsa",
+   "type": "person",
+   "group": "early",
+   "label_en": "Hafsa",
+   "label_fr": "Hafsa",
+   "aliases": [
+    "hafsa",
+    "nana hafsa"
+   ]
+  },
+  {
+   "id": "abuhurayra",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abu Hurayra",
+   "label_fr": "Abu Hurayra",
+   "aliases": [
+    "abu huraira",
+    "abu hurairata",
+    "abu hurayra"
+   ]
+  },
+  {
+   "id": "abdullahibnumar",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abdullah ibn Umar",
+   "label_fr": "Abdullah ibn Umar",
+   "aliases": [
+    "abdul lahi dan umar",
+    "abdullah bin umar",
+    "abdullah dan umar",
+    "abdullahi dan umar",
+    "abdullahi ɗan umar",
+    "ibn umar",
+    "ibnu umar"
+   ]
+  },
+  {
+   "id": "abdullahibnabbas",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abdullah ibn Abbas",
+   "label_fr": "Abdullah ibn Abbas",
+   "aliases": [
+    "abdullahi dan abbas",
+    "abdullahi dan abbasi",
+    "ibn abbas",
+    "ibn abbasi",
+    "ibnu abbas"
+   ]
+  },
+  {
+   "id": "abdullahibnmas-ud",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abdullah ibn Mas'ud",
+   "label_fr": "Abdullah ibn Mas'ud",
+   "aliases": [
+    "abdullah bin mas'ud",
+    "abdullahi dan mas'ud",
+    "ibn mas'ud",
+    "ibnu mas'ud"
+   ]
+  },
+  {
+   "id": "anasibnmalik",
+   "type": "person",
+   "group": "early",
+   "label_en": "Anas ibn Malik",
+   "label_fr": "Anas ibn Malik",
+   "aliases": [
+    "anas",
+    "anas bin malik",
+    "anas dan malik"
+   ]
+  },
+  {
+   "id": "jabiribnabdallah",
+   "type": "person",
+   "group": "early",
+   "label_en": "Jabir ibn Abd Allah",
+   "label_fr": "Jabir ibn Abd Allah",
+   "aliases": [
+    "jabir",
+    "jabir dan abdullahi",
+    "jabiru"
+   ]
+  },
+  {
+   "id": "mu-awiya",
+   "type": "person",
+   "group": "early",
+   "label_en": "Mu'awiya",
+   "label_fr": "Mu'awiya",
+   "aliases": [
+    "mu'awiya",
+    "mu'awiyah",
+    "mu'awiyya"
+   ]
+  },
+  {
+   "id": "abusufyan",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abu Sufyan",
+   "label_fr": "Abu Sufyan",
+   "aliases": [
+    "abu sufiyana",
+    "abu sufyan",
+    "abu sufyanu"
+   ]
+  },
+  {
+   "id": "bilal",
+   "type": "person",
+   "group": "early",
+   "label_en": "Bilal",
+   "label_fr": "Bilal",
+   "aliases": [
+    "bilal",
+    "bilalu"
+   ]
+  },
+  {
+   "id": "abujahl",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abu Jahl",
+   "label_fr": "Abu Jahl",
+   "aliases": [
+    "abu jahal",
+    "abu jahl",
+    "abu jahli"
+   ]
+  },
+  {
+   "id": "abulahab",
+   "type": "person",
+   "group": "early",
+   "label_en": "Abu Lahab",
+   "label_fr": "Abu Lahab",
+   "aliases": [
+    "abu lahab",
+    "abu lahabi"
+   ]
+  },
+  {
+   "id": "alhajjajibnyusuf",
+   "type": "person",
+   "group": "early",
+   "label_en": "Al-Hajjaj ibn Yusuf",
+   "label_fr": "Al-Hajjaj ibn Yusuf",
+   "aliases": [
+    "hajjaj",
+    "hajjaju"
+   ]
+  },
+  {
+   "id": "albukhari",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Al-Bukhari",
+   "label_fr": "Al-Bukhari",
+   "aliases": [
+    "al bukhari",
+    "al-bukhari",
+    "bukhari",
+    "imam bukhari",
+    "imamu bukhari"
+   ]
+  },
+  {
+   "id": "muslimibnalhajjaj",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Muslim ibn al-Hajjaj",
+   "label_fr": "Muslim ibn al-Hajjaj",
+   "aliases": [
+    "bukhari and muslim",
+    "bukhari da muslim",
+    "imam muslim",
+    "imamu muslim",
+    "sahih muslim"
+   ]
+  },
+  {
+   "id": "abudawud",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Abu Dawud",
+   "label_fr": "Abu Dawud",
+   "aliases": [
+    "abi dauda",
+    "abu dauda",
+    "abu dawud",
+    "abu dawuda"
+   ]
+  },
+  {
+   "id": "altirmidhi",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Al-Tirmidhi",
+   "label_fr": "Al-Tirmidhi",
+   "aliases": [
+    "at-tirmizi",
+    "tirmidhi",
+    "tirmizi"
+   ]
+  },
+  {
+   "id": "alnasa-i",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Al-Nasa'i",
+   "label_fr": "Al-Nasa'i",
+   "aliases": [
+    "an-nasa'i",
+    "nasa'i"
+   ]
+  },
+  {
+   "id": "ibnmajah",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Majah",
+   "label_fr": "Ibn Majah",
+   "aliases": [
+    "ibn maja",
+    "ibn majah",
+    "ibnu maja"
+   ]
+  },
+  {
+   "id": "malikibnanas",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Malik ibn Anas",
+   "label_fr": "Malik ibn Anas",
+   "aliases": [
+    "imam malik",
+    "imamu malik",
+    "malik bin anas",
+    "malik dan anas"
+   ]
+  },
+  {
+   "id": "alshafi-i",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Al-Shafi'i",
+   "label_fr": "Al-Shafi'i",
+   "aliases": [
+    "ash-shafi'i",
+    "imam shafi'i",
+    "imamu shafi'i",
+    "shafi'i"
+   ]
+  },
+  {
+   "id": "abuhanifa",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Abu Hanifa",
+   "label_fr": "Abu Hanifa",
+   "aliases": [
+    "abu hanifa",
+    "abu hanifah",
+    "imam abu hanifa"
+   ]
+  },
+  {
+   "id": "ahmadibnhanbal",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ahmad ibn Hanbal",
+   "label_fr": "Ahmad ibn Hanbal",
+   "aliases": [
+    "ahmad bin hanbal",
+    "ahmad dan hambali",
+    "ahmad ibn hambali",
+    "ahmad ibn hanbal",
+    "imam ahmad",
+    "imamu ahmad"
+   ]
+  },
+  {
+   "id": "ibntaymiyya",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Taymiyya",
+   "label_fr": "Ibn Taymiyya",
+   "aliases": [
+    "ibn taimiya",
+    "ibn taimiyya",
+    "ibn taimiyyah",
+    "ibn taymiyya",
+    "ibnu taimiya",
+    "ibnu taimiyya"
+   ]
+  },
+  {
+   "id": "ibnqayyimaljawziyya",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Qayyim al-Jawziyya",
+   "label_fr": "Ibn Qayyim al-Jawziyya",
+   "aliases": [
+    "ibn al-qayyim",
+    "ibn qayyim",
+    "ibnu qayyim",
+    "ibnul qayyim",
+    "ibnul-qayyim"
+   ]
+  },
+  {
+   "id": "ibnkathir",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Kathir",
+   "label_fr": "Ibn Kathir",
+   "aliases": [
+    "ibn kasir",
+    "ibn kathir",
+    "ibnu kathir"
+   ]
+  },
+  {
+   "id": "ibnhajaralasqalani",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Hajar al-Asqalani",
+   "label_fr": "Ibn Hajar al-Asqalani",
+   "aliases": [
+    "ibn hajar",
+    "ibnu hajar"
+   ]
+  },
+  {
+   "id": "alnawawi",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Al-Nawawi",
+   "label_fr": "Al-Nawawi",
+   "aliases": [
+    "an-nawawi",
+    "imam nawawi",
+    "nawawi"
+   ]
+  },
+  {
+   "id": "ibnhazm",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Hazm",
+   "label_fr": "Ibn Hazm",
+   "aliases": [
+    "ibn hazm",
+    "ibn hazmin",
+    "ibnu hazm"
+   ]
+  },
+  {
+   "id": "abdalqadiraljilani",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Abd al-Qadir al-Jilani",
+   "label_fr": "Abd al-Qadir al-Jilani",
+   "aliases": [
+    "abdul kadir jilani",
+    "abdulkadir jilani",
+    "abdulqadir jilani",
+    "jilani"
+   ]
+  },
+  {
+   "id": "muhammadibnabdalwahhab",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Muhammad ibn Abd al-Wahhab",
+   "label_fr": "Muhammad ibn Abd al-Wahhab",
+   "aliases": [
+    "ibn abdulwahab",
+    "muhammad abdulwahab",
+    "muhammad bin abdulwahab",
+    "muhammad dan abdulwahab",
+    "muhammad ibn abdulwahab"
+   ]
+  },
+  {
+   "id": "muhammadnasiraldinalalbani",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Muhammad Nasir al-Din al-Albani",
+   "label_fr": "Muhammad Nasir al-Din al-Albani",
+   "aliases": [
+    "muhammad nasir din al-albani",
+    "muhammad nasiruddin al-albani",
+    "muhammad nasiruddin albani",
+    "nasir din al-albani",
+    "nasiruddeen albani",
+    "nasiruddin",
+    "nasiruddin al-albani",
+    "nasiruddin albani"
+   ]
+  },
+  {
+   "id": "ibnbaz",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Baz",
+   "label_fr": "Ibn Baz",
+   "aliases": [
+    "abdulaziz bin baz",
+    "bin baz",
+    "ibn baz",
+    "ibnu baz"
+   ]
+  },
+  {
+   "id": "ibnuthaymin",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ibn Uthaymin",
+   "label_fr": "Ibn Uthaymin",
+   "aliases": [
+    "ibn usaimin",
+    "ibn uthaimin",
+    "ibnu usaimin",
+    "usaimin",
+    "uthaimin"
+   ]
+  },
+  {
+   "id": "usmandanfodio",
+   "type": "person",
+   "group": "sokoto",
+   "label_en": "Usman dan Fodio",
+   "label_fr": "Usman dan Fodio",
+   "aliases": [
+    "dan fodio",
+    "dan hodiya",
+    "dan hodiyo",
+    "danfodiyo",
+    "fodio",
+    "fodiyo",
+    "shehu dan fodio",
+    "shehu danfodiyo",
+    "shehu usman",
+    "shehu usmanu",
+    "shehu ɗanfodiyo",
+    "usman dan fodio",
+    "usmanu dan fodio",
+    "usmanu danfodiyo",
+    "usmanu ɗan fodiyo",
+    "ɗan hodiya",
+    "ɗan hodiyo",
+    "ɗanfodiyo"
+   ]
+  },
+  {
+   "id": "abdullahigwandu",
+   "type": "person",
+   "group": "sokoto",
+   "label_en": "Abdullahi Gwandu",
+   "label_fr": "Abdullahi Gwandu",
+   "aliases": [
+    "abdullahi dan fodio",
+    "abdullahi fodio",
+    "abdullahi gwando",
+    "abdullahi gwandu",
+    "shehu abdullahi"
+   ]
+  },
+  {
+   "id": "muhammadubello",
+   "type": "person",
+   "group": "sokoto",
+   "label_en": "Muhammadu Bello",
+   "label_fr": "Muhammadu Bello",
+   "aliases": [
+    "muhammad bello",
+    "muhammadu bello",
+    "sarkin musulmi bello",
+    "sultan bello"
+   ]
+  },
+  {
+   "id": "nanaasma-u",
+   "type": "person",
+   "group": "sokoto",
+   "label_en": "Nana Asma'u",
+   "label_fr": "Nana Asma'u",
+   "aliases": [
+    "asma'u",
+    "nana asma'u"
+   ]
+  },
+  {
+   "id": "yunfa",
+   "type": "person",
+   "group": "sokoto",
+   "label_en": "Yunfa",
+   "label_fr": "Yunfa",
+   "aliases": [
+    "yunfa"
+   ]
+  },
+  {
+   "id": "ja-afarmahmudadam",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Ja'afar Mahmud Adam",
+   "label_fr": "Ja'afar Mahmud Adam",
+   "aliases": [
+    "ja'afar adam",
+    "ja'afar mahmoud",
+    "ja'afar mahmoud adam",
+    "ja'afar mahmud",
+    "ja'afar mahmud adam",
+    "malam ja'afar",
+    "malam ja'afaru",
+    "shaikh ja'afar",
+    "sheikh ja'afar"
+   ]
+  },
+  {
+   "id": "abubakargumi",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Abubakar Gumi",
+   "label_fr": "Abubakar Gumi",
+   "aliases": [
+    "abubakar gumi",
+    "abubakar mahmoud gumi",
+    "abubakar mahmud gumi",
+    "gumi",
+    "malam gumi",
+    "shaikh gumi",
+    "sheikh gumi"
+   ]
+  },
+  {
+   "id": "muhammadyusuf",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Muhammad Yusuf",
+   "label_fr": "Muhammad Yusuf",
+   "aliases": [
+    "malam muhammad yusuf",
+    "mallam muhammad yusuf",
+    "muhammad yusuf",
+    "muhammadu yusuf"
+   ]
+  },
+  {
+   "id": "dahiruusmanbauchi",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Dahiru Usman Bauchi",
+   "label_fr": "Dahiru Usman Bauchi",
+   "aliases": [
+    "dahiru bauchi",
+    "dahiru usman bauchi",
+    "shehu dahiru"
+   ]
+  },
+  {
+   "id": "ibrahimzakzaky",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Ibrahim Zakzaky",
+   "label_fr": "Ibrahim Zakzaky",
+   "aliases": [
+    "el-zakzaky",
+    "ibrahim zakzaki",
+    "ibrahim zakzaky",
+    "zakzaki",
+    "zakzaky",
+    "zazzaki"
+   ]
+  },
+  {
+   "id": "aminudaurawa",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Aminu Daurawa",
+   "label_fr": "Aminu Daurawa",
+   "aliases": [
+    "aminu daurawa",
+    "malam aminu daurawa"
+   ]
+  },
+  {
+   "id": "ahmadubellothesardauna",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Ahmadu Bello, the Sardauna",
+   "label_fr": "Ahmadu Bello, le Sardauna",
+   "aliases": [
+    "sardauna",
+    "sardaunan sokoto",
+    "sir ahmadu bello"
+   ]
+  },
+  {
+   "id": "muhammadubuhari",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Muhammadu Buhari",
+   "label_fr": "Muhammadu Buhari",
+   "aliases": [
+    "buhari",
+    "janar buhari",
+    "muhammadu buhari"
+   ]
+  },
+  {
+   "id": "olusegunobasanjo",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Olusegun Obasanjo",
+   "label_fr": "Olusegun Obasanjo",
+   "aliases": [
+    "obasanjo",
+    "olusegun obasanjo"
+   ]
+  },
+  {
+   "id": "goodluckjonathan",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Goodluck Jonathan",
+   "label_fr": "Goodluck Jonathan",
+   "aliases": [
+    "goodluck jonathan",
+    "gudlak jonathan",
+    "jonathan"
+   ]
+  },
+  {
+   "id": "atikuabubakar",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Atiku Abubakar",
+   "label_fr": "Atiku Abubakar",
+   "aliases": [
+    "abubakar atiku",
+    "atiku",
+    "atiku abubakar"
+   ]
+  },
+  {
+   "id": "ibrahimshekarau",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Ibrahim Shekarau",
+   "label_fr": "Ibrahim Shekarau",
+   "aliases": [
+    "ibrahim shekarau",
+    "malam shekarau",
+    "shekarau"
+   ]
+  },
+  {
+   "id": "rabiukwankwaso",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Rabiu Kwankwaso",
+   "label_fr": "Rabiu Kwankwaso",
+   "aliases": [
+    "kwankwaso",
+    "rabi'u kwankwaso",
+    "rabiu kwankwaso"
+   ]
+  },
+  {
+   "id": "namadisambo",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Namadi Sambo",
+   "label_fr": "Namadi Sambo",
+   "aliases": [
+    "namadi",
+    "namadi sambo"
+   ]
+  },
+  {
+   "id": "hafizringim",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Hafiz Ringim",
+   "label_fr": "Hafiz Ringim",
+   "aliases": [
+    "hafiz ringim",
+    "ringim"
+   ]
+  },
+  {
+   "id": "georgewbush",
+   "type": "person",
+   "group": "world",
+   "label_en": "George W. Bush",
+   "label_fr": "George W. Bush",
+   "aliases": [
+    "bush",
+    "george bush"
+   ]
+  },
+  {
+   "id": "saddamhussein",
+   "type": "person",
+   "group": "world",
+   "label_en": "Saddam Hussein",
+   "label_fr": "Saddam Hussein",
+   "aliases": [
+    "saddam",
+    "saddam husaini",
+    "saddam hussein"
+   ]
+  },
+  {
+   "id": "osamabinladen",
+   "type": "person",
+   "group": "world",
+   "label_en": "Osama bin Laden",
+   "label_fr": "Osama bin Laden",
+   "aliases": [
+    "bin laden",
+    "osama bin laden",
+    "usama bin ladan",
+    "usama bin laden"
+   ]
+  },
+  {
+   "id": "nigeria",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Nigeria",
+   "label_fr": "Nigeria",
+   "aliases": [
+    "najeria",
+    "najeriya",
+    "nigeria",
+    "nigeriya",
+    "nijeriya"
+   ],
+   "iwac": 541,
+   "lat": 10.0,
+   "lon": 8.0
+  },
+  {
+   "id": "zaria",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Zaria",
+   "label_fr": "Zaria",
+   "aliases": [
+    "birnin zazzau",
+    "zaria",
+    "zariya",
+    "zazzau"
+   ],
+   "iwac": 484,
+   "lat": 11.0667,
+   "lon": 7.7
+  },
+  {
+   "id": "kano",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Kano",
+   "label_fr": "Kano",
+   "aliases": [
+    "birnin kano",
+    "kano"
+   ],
+   "iwac": 15482,
+   "lat": 12.0,
+   "lon": 8.5167
+  },
+  {
+   "id": "kaduna",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Kaduna",
+   "label_fr": "Kaduna",
+   "aliases": [
+    "kaduna"
+   ],
+   "wikidata": "Q208318",
+   "lat": 10.5105,
+   "lon": 7.4165
+  },
+  {
+   "id": "abuja",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Abuja",
+   "label_fr": "Abuja",
+   "aliases": [
+    "abuja"
+   ],
+   "iwac": 14458,
+   "wikidata": "Q3787",
+   "lat": 9.0556,
+   "lon": 7.4914
+  },
+  {
+   "id": "sokoto",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Sokoto",
+   "label_fr": "Sokoto",
+   "aliases": [
+    "sakkwato",
+    "sokoto"
+   ],
+   "iwac": 14355,
+   "lat": 13.0622,
+   "lon": 5.2339
+  },
+  {
+   "id": "maiduguri",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Maiduguri",
+   "label_fr": "Maiduguri",
+   "aliases": [
+    "maiduguri"
+   ],
+   "wikidata": "Q221436",
+   "lat": 11.8333,
+   "lon": 13.15
+  },
+  {
+   "id": "bauchi",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Bauchi",
+   "label_fr": "Bauchi",
+   "aliases": [
+    "bauchi"
+   ],
+   "wikidata": "Q811144",
+   "lat": 10.3158,
+   "lon": 9.8442
+  },
+  {
+   "id": "katsina",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Katsina",
+   "label_fr": "Katsina",
+   "aliases": [
+    "katsina"
+   ],
+   "wikidata": "Q937487",
+   "lat": 12.9889,
+   "lon": 7.6008
+  },
+  {
+   "id": "gombe",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Gombe",
+   "label_fr": "Gombe",
+   "aliases": [
+    "gombe"
+   ],
+   "wikidata": "Q591598",
+   "lat": 10.2833,
+   "lon": 11.1667
+  },
+  {
+   "id": "jos",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Jos",
+   "label_fr": "Jos",
+   "aliases": [
+    "jos"
+   ],
+   "wikidata": "Q321079",
+   "lat": 9.9333,
+   "lon": 8.8833
+  },
+  {
+   "id": "lagos",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Lagos",
+   "label_fr": "Lagos",
+   "aliases": [
+    "lagos",
+    "legas"
+   ],
+   "iwac": 488,
+   "lat": 6.45,
+   "lon": 3.4
+  },
+  {
+   "id": "yola",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Yola",
+   "label_fr": "Yola",
+   "aliases": [
+    "yola"
+   ],
+   "iwac": 485,
+   "lat": 9.2,
+   "lon": 12.4833
+  },
+  {
+   "id": "borno",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Borno",
+   "label_fr": "Borno",
+   "aliases": [
+    "barno",
+    "borno"
+   ],
+   "iwac": 127810,
+   "lat": 11.5,
+   "lon": 13.0
+  },
+  {
+   "id": "adamawa",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Adamawa",
+   "label_fr": "Adamawa",
+   "aliases": [
+    "adamawa"
+   ],
+   "wikidata": "Q337514",
+   "lat": 9.3333,
+   "lon": 12.5
+  },
+  {
+   "id": "zamfara",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Zamfara",
+   "label_fr": "Zamfara",
+   "aliases": [
+    "zamfara"
+   ],
+   "wikidata": "Q145793",
+   "lat": 12.1667,
+   "lon": 6.25
+  },
+  {
+   "id": "gusau",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Gusau",
+   "label_fr": "Gusau",
+   "aliases": [
+    "gusau"
+   ],
+   "wikidata": "Q600405",
+   "lat": 12.1628,
+   "lon": 6.6745
+  },
+  {
+   "id": "kebbi",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Kebbi",
+   "label_fr": "Kebbi",
+   "aliases": [
+    "birnin kebbi",
+    "kebbi"
+   ],
+   "wikidata": "Q748523",
+   "lat": 11.5,
+   "lon": 4.0
+  },
+  {
+   "id": "gwandu",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Gwandu",
+   "label_fr": "Gwandu",
+   "aliases": [
+    "gwandu"
+   ],
+   "wikidata": "Q1337777",
+   "lat": 12.517,
+   "lon": 4.6649
+  },
+  {
+   "id": "ilorin",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Ilorin",
+   "label_fr": "Ilorin",
+   "aliases": [
+    "ilorin"
+   ],
+   "wikidata": "Q587085",
+   "lat": 8.5,
+   "lon": 4.55
+  },
+  {
+   "id": "lokoja",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Lokoja",
+   "label_fr": "Lokoja",
+   "aliases": [
+    "lakwaja",
+    "lokoja"
+   ],
+   "wikidata": "Q994085",
+   "lat": 7.8019,
+   "lon": 6.7442
+  },
+  {
+   "id": "enugu",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Enugu",
+   "label_fr": "Enugu",
+   "aliases": [
+    "enugu",
+    "inugu"
+   ],
+   "wikidata": "Q465022",
+   "lat": 6.4403,
+   "lon": 7.4942
+  },
+  {
+   "id": "kafanchan",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Kafanchan",
+   "label_fr": "Kafanchan",
+   "aliases": [
+    "kafanchan"
+   ],
+   "wikidata": "Q6346073",
+   "lat": 9.5833,
+   "lon": 8.2925
+  },
+  {
+   "id": "gobir",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Gobir",
+   "label_fr": "Gobir",
+   "aliases": [
+    "gobir"
+   ]
+  },
+  {
+   "id": "gwoza",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Gwoza",
+   "label_fr": "Gwoza",
+   "aliases": [
+    "goza",
+    "gwoza"
+   ],
+   "wikidata": "Q5623719",
+   "lat": 11.0861,
+   "lon": 13.6914
+  },
+  {
+   "id": "nigerdelta",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Niger Delta",
+   "label_fr": "Delta du Niger",
+   "aliases": [
+    "naija delta",
+    "niger delta"
+   ],
+   "wikidata": "Q29412",
+   "lat": 4.8333,
+   "lon": 6.0
+  },
+  {
+   "id": "plateau",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Plateau",
+   "label_fr": "Plateau",
+   "aliases": [
+    "filato",
+    "plateau"
+   ],
+   "wikidata": "Q503928",
+   "lat": 9.1667,
+   "lon": 9.75
+  },
+  {
+   "id": "mecca",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Mecca",
+   "label_fr": "La Mecque",
+   "aliases": [
+    "makka",
+    "makkah",
+    "mecca"
+   ],
+   "wikidata": "Q5806",
+   "lat": 21.4225,
+   "lon": 39.8261
+  },
+  {
+   "id": "medina",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Medina",
+   "label_fr": "Médine",
+   "aliases": [
+    "madina",
+    "madinah",
+    "madinatu"
+   ],
+   "iwac": 443,
+   "lat": 24.4686,
+   "lon": 39.6142
+  },
+  {
+   "id": "thekaaba",
+   "type": "place",
+   "group": "holy",
+   "label_en": "The Kaaba",
+   "label_fr": "La Kaaba",
+   "aliases": [
+    "ka'aba",
+    "ka'abah"
+   ],
+   "wikidata": "Q29466",
+   "lat": 21.4225,
+   "lon": 39.8262
+  },
+  {
+   "id": "arafat",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Arafat",
+   "label_fr": "Arafat",
+   "aliases": [
+    "arafa",
+    "arafah",
+    "arafat"
+   ],
+   "iwac": 60469,
+   "lat": 21.3548,
+   "lon": 39.9839
+  },
+  {
+   "id": "muzdalifa",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Muzdalifa",
+   "label_fr": "Muzdalifa",
+   "aliases": [
+    "muzdalifa",
+    "muzdalifah"
+   ],
+   "iwac": 76481,
+   "lat": 21.3925,
+   "lon": 39.9378
+  },
+  {
+   "id": "mountuhud",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Mount Uhud",
+   "label_fr": "Mont Uhud",
+   "aliases": [
+    "uhud",
+    "uhudu"
+   ],
+   "wikidata": "Q1436040",
+   "lat": 24.5103,
+   "lon": 39.6139
+  },
+  {
+   "id": "jerusalem",
+   "type": "place",
+   "group": "holy",
+   "label_en": "Jerusalem",
+   "label_fr": "Jérusalem",
+   "aliases": [
+    "baitil maqdis",
+    "baitul maqdis",
+    "jerusalem",
+    "kudus"
+   ],
+   "iwac": 13522,
+   "lat": 31.7789,
+   "lon": 35.2256
+  },
+  {
+   "id": "saudiarabia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Saudi Arabia",
+   "label_fr": "Arabie saoudite",
+   "aliases": [
+    "sa'udiyya",
+    "saudi",
+    "saudi arabia",
+    "saudiya",
+    "saudiya arabia",
+    "saudiyya"
+   ],
+   "wikidata": "Q851",
+   "lat": 23.7167,
+   "lon": 44.1167
+  },
+  {
+   "id": "egypt",
+   "type": "place",
+   "group": "world",
+   "label_en": "Egypt",
+   "label_fr": "Égypte",
+   "aliases": [
+    "masar",
+    "misira",
+    "misr",
+    "misra"
+   ],
+   "wikidata": "Q79",
+   "lat": 27.0,
+   "lon": 29.0
+  },
+  {
+   "id": "sudan",
+   "type": "place",
+   "group": "world",
+   "label_en": "Sudan",
+   "label_fr": "Soudan",
+   "aliases": [
+    "sudan"
+   ],
+   "wikidata": "Q1049",
+   "lat": 15.0,
+   "lon": 32.0
+  },
+  {
+   "id": "libya",
+   "type": "place",
+   "group": "world",
+   "label_en": "Libya",
+   "label_fr": "Libye",
+   "aliases": [
+    "libiya",
+    "libya"
+   ],
+   "wikidata": "Q1016",
+   "lat": 27.0,
+   "lon": 17.0
+  },
+  {
+   "id": "algeria",
+   "type": "place",
+   "group": "world",
+   "label_en": "Algeria",
+   "label_fr": "Algérie",
+   "aliases": [
+    "algeria",
+    "aljeria",
+    "aljeriya"
+   ],
+   "wikidata": "Q262",
+   "lat": 28.0,
+   "lon": 1.0
+  },
+  {
+   "id": "tunisia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Tunisia",
+   "label_fr": "Tunisie",
+   "aliases": [
+    "tunisia",
+    "tunisiya"
+   ],
+   "wikidata": "Q948",
+   "lat": 34.0,
+   "lon": 10.0
+  },
+  {
+   "id": "niger",
+   "type": "place",
+   "group": "world",
+   "label_en": "Niger",
+   "label_fr": "Niger",
+   "aliases": [
+    "nijar"
+   ],
+   "iwac": 540,
+   "lat": 18.0,
+   "lon": 9.0
+  },
+  {
+   "id": "ghana",
+   "type": "place",
+   "group": "world",
+   "label_en": "Ghana",
+   "label_fr": "Ghana",
+   "aliases": [
+    "ghana"
+   ],
+   "iwac": 319,
+   "lat": 8.1,
+   "lon": -1.2
+  },
+  {
+   "id": "togo",
+   "type": "place",
+   "group": "world",
+   "label_en": "Togo",
+   "label_fr": "Togo",
+   "aliases": [
+    "togo"
+   ],
+   "iwac": 544,
+   "lat": 8.6667,
+   "lon": 1.0833
+  },
+  {
+   "id": "mauritania",
+   "type": "place",
+   "group": "world",
+   "label_en": "Mauritania",
+   "label_fr": "Mauritanie",
+   "aliases": [
+    "mauritania",
+    "muritaniya"
+   ],
+   "wikidata": "Q1025",
+   "lat": 21.0,
+   "lon": -11.0
+  },
+  {
+   "id": "somalia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Somalia",
+   "label_fr": "Somalie",
+   "aliases": [
+    "somalia",
+    "somaliya"
+   ],
+   "wikidata": "Q1045",
+   "lat": 6.0,
+   "lon": 47.0
+  },
+  {
+   "id": "ethiopia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Ethiopia",
+   "label_fr": "Éthiopie",
+   "aliases": [
+    "ethiopia",
+    "habasha"
+   ],
+   "wikidata": "Q115",
+   "lat": 9.0,
+   "lon": 40.0
+  },
+  {
+   "id": "kongozaria",
+   "type": "place",
+   "group": "nigeria",
+   "label_en": "Kongo (Zaria)",
+   "label_fr": "Kongo (Zaria)",
+   "aliases": [
+    "kongo"
+   ]
+  },
+  {
+   "id": "southafrica",
+   "type": "place",
+   "group": "world",
+   "label_en": "South Africa",
+   "label_fr": "Afrique du Sud",
+   "aliases": [
+    "south africa"
+   ],
+   "wikidata": "Q258",
+   "lat": -29.0,
+   "lon": 24.0
+  },
+  {
+   "id": "israel",
+   "type": "place",
+   "group": "world",
+   "label_en": "Israel",
+   "label_fr": "Israël",
+   "aliases": [
+    "isra'il",
+    "isra'ila",
+    "israel"
+   ],
+   "iwac": 408,
+   "lat": 31.5,
+   "lon": 34.75
+  },
+  {
+   "id": "iran",
+   "type": "place",
+   "group": "world",
+   "label_en": "Iran",
+   "label_fr": "Iran",
+   "aliases": [
+    "iran"
+   ],
+   "iwac": 331,
+   "lat": 32.0,
+   "lon": 53.0
+  },
+  {
+   "id": "iraq",
+   "type": "place",
+   "group": "world",
+   "label_en": "Iraq",
+   "label_fr": "Irak",
+   "aliases": [
+    "iraki",
+    "iraq",
+    "iraqi",
+    "iraƙi"
+   ],
+   "wikidata": "Q796",
+   "lat": 33.0,
+   "lon": 43.0
+  },
+  {
+   "id": "baghdad",
+   "type": "place",
+   "group": "world",
+   "label_en": "Baghdad",
+   "label_fr": "Bagdad",
+   "aliases": [
+    "bagadada",
+    "baghdad"
+   ],
+   "wikidata": "Q1530",
+   "lat": 33.3153,
+   "lon": 44.3661
+  },
+  {
+   "id": "basra",
+   "type": "place",
+   "group": "world",
+   "label_en": "Basra",
+   "label_fr": "Bassora",
+   "aliases": [
+    "basara",
+    "basra"
+   ],
+   "wikidata": "Q48195",
+   "lat": 30.515,
+   "lon": 47.81
+  },
+  {
+   "id": "kufa",
+   "type": "place",
+   "group": "world",
+   "label_en": "Kufa",
+   "label_fr": "Koufa",
+   "aliases": [
+    "kufa"
+   ],
+   "wikidata": "Q186234",
+   "lat": 32.03,
+   "lon": 44.4
+  },
+  {
+   "id": "syria",
+   "type": "place",
+   "group": "world",
+   "label_en": "Syria",
+   "label_fr": "Syrie",
+   "aliases": [
+    "sham",
+    "siriya",
+    "syria"
+   ],
+   "wikidata": "Q858",
+   "lat": 35.2167,
+   "lon": 38.5833
+  },
+  {
+   "id": "jordan",
+   "type": "place",
+   "group": "world",
+   "label_en": "Jordan",
+   "label_fr": "Jordanie",
+   "aliases": [
+    "jordan",
+    "urdun"
+   ],
+   "wikidata": "Q810",
+   "lat": 31.2,
+   "lon": 36.5
+  },
+  {
+   "id": "yemen",
+   "type": "place",
+   "group": "world",
+   "label_en": "Yemen",
+   "label_fr": "Yémen",
+   "aliases": [
+    "yaman",
+    "yemen"
+   ],
+   "iwac": 60556,
+   "lat": 15.5,
+   "lon": 48.0
+  },
+  {
+   "id": "kuwait",
+   "type": "place",
+   "group": "world",
+   "label_en": "Kuwait",
+   "label_fr": "Koweït",
+   "aliases": [
+    "kuwait"
+   ],
+   "wikidata": "Q817",
+   "lat": 29.1667,
+   "lon": 47.6
+  },
+  {
+   "id": "afghanistan",
+   "type": "place",
+   "group": "world",
+   "label_en": "Afghanistan",
+   "label_fr": "Afghanistan",
+   "aliases": [
+    "afganistan",
+    "afghanistan"
+   ],
+   "iwac": 60457,
+   "lat": 33.0,
+   "lon": 66.0
+  },
+  {
+   "id": "pakistan",
+   "type": "place",
+   "group": "world",
+   "label_en": "Pakistan",
+   "label_fr": "Pakistan",
+   "aliases": [
+    "pakistan"
+   ],
+   "iwac": 550,
+   "lat": 30.0,
+   "lon": 70.0
+  },
+  {
+   "id": "india",
+   "type": "place",
+   "group": "world",
+   "label_en": "India",
+   "label_fr": "Inde",
+   "aliases": [
+    "india",
+    "indiya"
+   ],
+   "wikidata": "Q668",
+   "lat": 22.8,
+   "lon": 83.0
+  },
+  {
+   "id": "bukhara",
+   "type": "place",
+   "group": "world",
+   "label_en": "Bukhara",
+   "label_fr": "Boukhara",
+   "aliases": [
+    "bukhara"
+   ],
+   "wikidata": "Q5764",
+   "lat": 39.7747,
+   "lon": 64.4286
+  },
+  {
+   "id": "japan",
+   "type": "place",
+   "group": "world",
+   "label_en": "Japan",
+   "label_fr": "Japon",
+   "aliases": [
+    "japan"
+   ],
+   "wikidata": "Q17",
+   "lat": 35.0,
+   "lon": 136.0
+  },
+  {
+   "id": "unitedstates",
+   "type": "place",
+   "group": "world",
+   "label_en": "United States",
+   "label_fr": "États-Unis",
+   "aliases": [
+    "america",
+    "amerika",
+    "amirka",
+    "amurka"
+   ],
+   "wikidata": "Q30",
+   "lat": 39.8282,
+   "lon": -98.5795
+  },
+  {
+   "id": "unitedkingdom",
+   "type": "place",
+   "group": "world",
+   "label_en": "United Kingdom",
+   "label_fr": "Royaume-Uni",
+   "aliases": [
+    "birtaniya",
+    "england",
+    "ingila"
+   ],
+   "wikidata": "Q145",
+   "lat": 54.6,
+   "lon": -2.0
+  },
+  {
+   "id": "london",
+   "type": "place",
+   "group": "world",
+   "label_en": "London",
+   "label_fr": "Londres",
+   "aliases": [
+    "landan",
+    "london"
+   ],
+   "iwac": 60523,
+   "lat": 51.5072,
+   "lon": -0.1275
+  },
+  {
+   "id": "france",
+   "type": "place",
+   "group": "world",
+   "label_en": "France",
+   "label_fr": "France",
+   "aliases": [
+    "faransa",
+    "france"
+   ],
+   "iwac": 312,
+   "lat": 46.0,
+   "lon": 2.0
+  },
+  {
+   "id": "germany",
+   "type": "place",
+   "group": "world",
+   "label_en": "Germany",
+   "label_fr": "Allemagne",
+   "aliases": [
+    "germany",
+    "jamus"
+   ],
+   "wikidata": "Q183",
+   "lat": 51.0,
+   "lon": 10.0
+  },
+  {
+   "id": "spain",
+   "type": "place",
+   "group": "world",
+   "label_en": "Spain",
+   "label_fr": "Espagne",
+   "aliases": [
+    "andalus",
+    "spain"
+   ],
+   "wikidata": "Q29",
+   "lat": 40.2,
+   "lon": -3.5
+  },
+  {
+   "id": "denmark",
+   "type": "place",
+   "group": "world",
+   "label_en": "Denmark",
+   "label_fr": "Danemark",
+   "aliases": [
+    "danmark",
+    "denmark"
+   ],
+   "wikidata": "Q35",
+   "lat": 56.0,
+   "lon": 10.0
+  },
+  {
+   "id": "russia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Russia",
+   "label_fr": "Russie",
+   "aliases": [
+    "rasha",
+    "russia"
+   ],
+   "wikidata": "Q159",
+   "lat": 66.4167,
+   "lon": 94.25
+  },
+  {
+   "id": "bosnia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Bosnia",
+   "label_fr": "Bosnie",
+   "aliases": [
+    "bosnia"
+   ],
+   "wikidata": "Q225",
+   "lat": 44.0,
+   "lon": 18.0
+  },
+  {
+   "id": "kosovo",
+   "type": "place",
+   "group": "world",
+   "label_en": "Kosovo",
+   "label_fr": "Kosovo",
+   "aliases": [
+    "kosovo"
+   ],
+   "wikidata": "Q1246",
+   "lat": 42.55,
+   "lon": 20.8333
+  },
+  {
+   "id": "australia",
+   "type": "place",
+   "group": "world",
+   "label_en": "Australia",
+   "label_fr": "Australie",
+   "aliases": [
+    "australia",
+    "ostireliya"
+   ],
+   "wikidata": "Q408",
+   "lat": -25.0,
+   "lon": 133.0
+  },
+  {
+   "id": "izala",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Izala",
+   "label_fr": "Izala",
+   "aliases": [
+    "izala",
+    "jama'atu izalatil bid'a",
+    "jibwis",
+    "kungiyar izala",
+    "ƙungiyar izala"
+   ]
+  },
+  {
+   "id": "ahlalsunna",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Ahl al-Sunna",
+   "label_fr": "Ahl al-Sunna",
+   "aliases": [
+    "ahlus sunna",
+    "ahlus sunnah",
+    "ahlussunna",
+    "ahlussunnah",
+    "ahlussunnat"
+   ]
+  },
+  {
+   "id": "salafiyya",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Salafiyya",
+   "label_fr": "Salafiyya",
+   "aliases": [
+    "salafiya",
+    "salafiyya"
+   ]
+  },
+  {
+   "id": "tijaniyya",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Tijaniyya",
+   "label_fr": "Tijaniyya",
+   "aliases": [
+    "darikar tijjaniya",
+    "tijaniya",
+    "tijaniyya",
+    "tijjaniya",
+    "tijjaniyya"
+   ]
+  },
+  {
+   "id": "qadiriyya",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Qadiriyya",
+   "label_fr": "Qadiriyya",
+   "aliases": [
+    "darikar kadiriyya",
+    "kadiriya",
+    "kadiriyya",
+    "qadiriyya"
+   ]
+  },
+  {
+   "id": "muslimbrotherhood",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Muslim Brotherhood",
+   "label_fr": "Frères musulmans",
+   "aliases": [
+    "ikhwan al-muslimin",
+    "ikhwanul muslimin",
+    "ikhwanul muslimuna"
+   ]
+  },
+  {
+   "id": "shi-a",
+   "type": "org",
+   "group": "movements",
+   "label_en": "Shi'a",
+   "label_fr": "Chiites",
+   "aliases": [
+    "'yan shi'a",
+    "shi'a",
+    "shi'ah",
+    "yan shi'a"
+   ]
+  },
+  {
+   "id": "bokoharam",
+   "type": "org",
+   "group": "armed",
+   "label_en": "Boko Haram",
+   "label_fr": "Boko Haram",
+   "aliases": [
+    "boko haram",
+    "jama'atu ahlissunna lidda'awati wal jihad",
+    "yusufiyya"
+   ],
+   "iwac": 576
+  },
+  {
+   "id": "alqaeda",
+   "type": "org",
+   "group": "armed",
+   "label_en": "Al-Qaeda",
+   "label_fr": "Al-Qaïda",
+   "aliases": [
+    "al qa'ida",
+    "al qaeda",
+    "al-qa'ida",
+    "al-qaeda",
+    "alqa'ida"
+   ]
+  },
+  {
+   "id": "darulhadithsalafiyya",
+   "type": "org",
+   "group": "education",
+   "label_en": "Darul Hadith Salafiyya",
+   "label_fr": "Darul Hadith Salafiyya",
+   "aliases": [
+    "darul hadis",
+    "darul hadis salafiyya",
+    "darul hadisi",
+    "darul hadith",
+    "darul hadith salafiyya"
+   ]
+  },
+  {
+   "id": "albaniscienceacademy",
+   "type": "org",
+   "group": "education",
+   "label_en": "Albani Science Academy",
+   "label_fr": "Albani Science Academy",
+   "aliases": [
+    "albani science academy"
+   ]
+  },
+  {
+   "id": "ahmadubellouniversity",
+   "type": "org",
+   "group": "education",
+   "label_en": "Ahmadu Bello University",
+   "label_fr": "Université Ahmadu Bello",
+   "aliases": [
+    "a.b.u",
+    "ahmadu bello university",
+    "jami'ar ahmadu bello"
+   ]
+  },
+  {
+   "id": "bayerouniversity",
+   "type": "org",
+   "group": "education",
+   "label_en": "Bayero University",
+   "label_fr": "Université Bayero",
+   "aliases": [
+    "bayero university",
+    "jami'ar bayero"
+   ]
+  },
+  {
+   "id": "islamicuniversityofmedina",
+   "type": "org",
+   "group": "education",
+   "label_en": "Islamic University of Medina",
+   "label_fr": "Université islamique de Médine",
+   "aliases": [
+    "islamic university",
+    "jami'al islamiyya",
+    "jami'ar islamiya",
+    "jami'ar islamiyya",
+    "jami'ar madina"
+   ]
+  },
+  {
+   "id": "alazhar",
+   "type": "org",
+   "group": "education",
+   "label_en": "Al-Azhar",
+   "label_fr": "Al-Azhar",
+   "aliases": [
+    "al-azhar",
+    "azhar",
+    "jami'ar azhar"
+   ]
+  },
+  {
+   "id": "muslimstudents-society",
+   "type": "org",
+   "group": "education",
+   "label_en": "Muslim Students' Society",
+   "label_fr": "Muslim Students' Society",
+   "aliases": [
+    "m.s.s",
+    "mss",
+    "muslim students society"
+   ]
+  },
+  {
+   "id": "pdp",
+   "type": "org",
+   "group": "state",
+   "label_en": "PDP",
+   "label_fr": "PDP",
+   "aliases": [
+    "jam'iyyar pdp",
+    "pdp"
+   ]
+  },
+  {
+   "id": "anpp",
+   "type": "org",
+   "group": "state",
+   "label_en": "ANPP",
+   "label_fr": "ANPP",
+   "aliases": [
+    "anpp"
+   ]
+  },
+  {
+   "id": "cpc",
+   "type": "org",
+   "group": "state",
+   "label_en": "CPC",
+   "label_fr": "CPC",
+   "aliases": [
+    "cpc"
+   ]
+  },
+  {
+   "id": "inec",
+   "type": "org",
+   "group": "state",
+   "label_en": "INEC",
+   "label_fr": "INEC",
+   "aliases": [
+    "inec"
+   ]
+  },
+  {
+   "id": "statesecurityservice",
+   "type": "org",
+   "group": "state",
+   "label_en": "State Security Service",
+   "label_fr": "State Security Service",
+   "aliases": [
+    "s.s.s",
+    "sss"
+   ]
+  },
+  {
+   "id": "nysc",
+   "type": "org",
+   "group": "state",
+   "label_en": "NYSC",
+   "label_fr": "NYSC",
+   "aliases": [
+    "'yan bautar ƙasa",
+    "nysc",
+    "yan bautar kasa"
+   ]
+  },
+  {
+   "id": "cia",
+   "type": "org",
+   "group": "state",
+   "label_en": "CIA",
+   "label_fr": "CIA",
+   "aliases": [
+    "cia"
+   ]
+  },
+  {
+   "id": "bbc",
+   "type": "org",
+   "group": "media",
+   "label_en": "BBC",
+   "label_fr": "BBC",
+   "aliases": [
+    "bbc"
+   ]
+  },
+  {
+   "id": "cnn",
+   "type": "org",
+   "group": "media",
+   "label_en": "CNN",
+   "label_fr": "CNN",
+   "aliases": [
+    "cnn"
+   ]
+  },
+  {
+   "id": "voiceofamerica",
+   "type": "org",
+   "group": "media",
+   "label_en": "Voice of America",
+   "label_fr": "Voice of America",
+   "aliases": [
+    "muryar amurka",
+    "voa"
+   ]
+  },
+  {
+   "id": "nta",
+   "type": "org",
+   "group": "media",
+   "label_en": "NTA",
+   "label_fr": "NTA",
+   "aliases": [
+    "nta"
+   ]
+  },
+  {
+   "id": "ditv",
+   "type": "org",
+   "group": "media",
+   "label_en": "DITV",
+   "label_fr": "DITV",
+   "aliases": [
+    "ditv"
+   ]
+  },
+  {
+   "id": "freedomradio",
+   "type": "org",
+   "group": "media",
+   "label_en": "Freedom Radio",
+   "label_fr": "Freedom Radio",
+   "aliases": [
+    "freedom radio",
+    "rediyon freedom"
+   ]
+  },
+  {
+   "id": "radiokano",
+   "type": "org",
+   "group": "media",
+   "label_en": "Radio Kano",
+   "label_fr": "Radio Kano",
+   "aliases": [
+    "gidan rediyon kano",
+    "rediyon kano"
+   ]
+  },
+  {
+   "id": "weeklytrust",
+   "type": "org",
+   "group": "media",
+   "label_en": "Weekly Trust",
+   "label_fr": "Weekly Trust",
+   "aliases": [
+    "jaridar weekly trust",
+    "weekly trust"
+   ]
+  },
+  {
+   "id": "aminiya",
+   "type": "org",
+   "group": "media",
+   "label_en": "Aminiya",
+   "label_fr": "Aminiya",
+   "aliases": [
+    "aminiya",
+    "jaridar aminiya"
+   ]
+  }
+ ]
+}

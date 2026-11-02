@@ -354,6 +354,39 @@
         return Math.max(90, Math.min(200, Math.round(width * 0.32)));
     };
 
+    /** Rate bins (per 10,000 words) for the ledger strips, on the
+     *  module's heat ramp; 0 is the empty cell. */
+    var STRIP_BINS = [1, 4, 10];
+
+    function stripBin(rate) {
+        if (!rate) return 0;
+        for (var i = 0; i < STRIP_BINS.length; i++) {
+            if (rate < STRIP_BINS[i]) return i + 1;
+        }
+        return STRIP_BINS.length + 1;
+    }
+
+    /**
+     * One cell per recording (in `recs` order), shaded by the item's rate
+     * there: the strip the formula and name ledgers share. Decorative for
+     * assistive technology — the row states the count and the spread.
+     *
+     * @param {Object} byRec  {o_id: count}
+     */
+    A.rateStrip = function (byRec, recs, scope) {
+        var strip = P.el('span', 'iwac-vis-albani__strip');
+        strip.setAttribute('aria-hidden', 'true');
+        recs.forEach(function (r) {
+            var n = (byRec || {})[r.o] || 0;
+            var rate = A.per10k(n, A.scopeWords(r, scope));
+            var cell = P.el('span', 'iwac-vis-albani__strip-cell iwac-vis-albani__strip-cell--' + stripBin(rate));
+            cell.title = A.recordingLabel(r) + ' — ' + P.t('albani_formulae_cell', {
+                count: n, rate: P.formatDecimal(rate, 1) });
+            strip.appendChild(cell);
+        });
+        return strip;
+    };
+
     /** Height for a recording-by-something matrix of `rows` rows. */
     A.matrixHeight = function (chartEl, rows, row, extra) {
         chartEl.style.minHeight = Math.max(260, rows * (row || 22) + (extra || 110)) + 'px';

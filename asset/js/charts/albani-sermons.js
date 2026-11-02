@@ -10,6 +10,8 @@
  *   1 corpus    every recording on a date × running-time axis, and listed
  *   2 vocabulary  Hausa exposition / Arabic citation, never pooled; the
  *               formulae as a ledger with their spread across recordings
+ *   people and places  a map of the places named, ledgers of the people and
+ *               organisations, from a hand-curated list (albani-sermons/entities.js)
  *   3 youth     the lexicon, a recording × category profile, collocates,
  *               network, passages
  *   4 politics  the same instrument on the political lexicon
@@ -77,6 +79,7 @@
         if (metadata.lexicon_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_seed'), P.t('albani_badge_seed_hint')));
         }
+        badges.appendChild(A.badge(P.t('albani_badge_entities'), P.t('albani_badge_entities_hint')));
         if (metadata.gloss_status && metadata.gloss_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_glosses'), P.t('albani_badge_glosses_hint')));
         }
@@ -179,6 +182,8 @@
         A.renderCorpus(A.section(root, 'corpus', P.t('albani_corpus_heading')), metadata, ctx);
         A.renderVocabulary(A.section(root, 'vocabulary', P.t('albani_vocab_heading'),
             P.t('albani_vocab_intro')), bundle.vocabulary, store, bundle.metadata);
+        A.renderEntities(A.section(root, 'entities', P.t('albani_entities_heading'),
+            P.t('albani_entities_intro')), bundle, store, fetch, ctx);
 
         A.renderTheme(A.section(root, 'youth', P.t('albani_youth_heading'), P.t('albani_youth_intro')),
             'youth', bundle, store, fetch, ctx);

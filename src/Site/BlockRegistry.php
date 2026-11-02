@@ -71,6 +71,8 @@ final class BlockRegistry
                 'assets' => [
                     'blockCss' => 'albani-sermons',
                     'needs' => [
+                        // The map of the places the sermons name.
+                        'maplibre'     => true,
                         'chartOptions' => true,
                         // The term networks: shared-d3's canvas force graph.
                         'd3'           => true,

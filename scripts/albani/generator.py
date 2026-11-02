@@ -10,6 +10,7 @@ Writes ``asset/data/albani-sermons/``:
 ``overlap.json``      where the youth and politics lexicons fire together, and
                       both counted in every 20-minute segment (the "score")
 ``keyness.json``      each recording / period / mode against the rest
+``entities.json``     the curated people, places and organisations, counted
 ``concordance-<theme>.json``  KWIC lines — RIGHTS-GATED on ``OCR_is_public``
 
 **Units.** The speaker turn is the unit of co-occurrence: a window never
@@ -52,7 +53,7 @@ from albani.corpus import (
 )
 from albani.layers import ARABIC, ENGLISH_SHARE, FORMULA_PREFIX, HAUSA, formula_label, resources
 from albani.lexicon import Entry, Hit, Lexicon
-from albani.normalize import SurfaceTable, fold, match_key
+from albani.normalize import SurfaceTable, fold, match_key, tokenize
 from albani.transcript import window_label
 
 SCOPES = ("all", MONOLOGUE)
@@ -67,6 +68,12 @@ MIN_NEIGHBOUR_QUERY = 10
 #: "no n-gram longer than a short phrase (cap at 3 tokens)").
 MAX_AGGREGATE_WORDS = 3
 
+
+#: The curated people, places and organisations, with their aliases.
+ENTITIES_PATH = Path(__file__).with_name("entities.json")
+
+#: Listening windows kept per entity: the segments that name it most.
+TOP_ENTITY_SEGMENTS = 3
 
 #: Draft English / French glosses for the non-lexicon words the block shows.
 GLOSSES_PATH = Path(__file__).with_name("glosses.json")
@@ -805,6 +812,72 @@ class AlbaniSermonsGenerator:
         }
 
     # ------------------------------------------------------------------ #
+    #  entities.json                                                       #
+    # ------------------------------------------------------------------ #
+
+    def build_entities(self) -> Dict[str, Any]:
+        """Who and where the sermons name: the curated entities of
+        ``entities.json``, counted per scope, per recording and per segment.
+
+        Aliases match on the folded SURFACE (``Token.surface``), not the
+        merged match key — the key merges geminates, and "maka" (for you)
+        would count as Makka. One mention per span and entity: nested
+        aliases ("malam aminu daurawa", "aminu daurawa") count once.
+        """
+        data = json.loads(ENTITIES_PATH.read_text(encoding="utf-8"))
+        ents = data["entities"]
+        first: Dict[str, List[Tuple[Tuple[str, ...], int]]] = defaultdict(list)
+        for idx, ent in enumerate(ents):
+            for alias in ent["aliases"]:
+                seq = tuple(t.surface for t in tokenize(alias))
+                if seq:
+                    first[seq[0]].append((seq, idx))
+        for cands in first.values():
+            cands.sort(key=lambda c: -len(c[0]))
+
+        counts = {s: Counter() for s in SCOPES}
+        by_rec = {s: defaultdict(Counter) for s in SCOPES}
+        seg_hits: Dict[int, List[Dict[str, Any]]] = defaultdict(list)
+        for scope in SCOPES:
+            for rec, seg in self._segments(scope):
+                here = Counter()
+                for turn in seg.turns:
+                    words = [t.surface for t in turn.tokens]
+                    covered: Dict[int, Set[int]] = defaultdict(set)
+                    for i, word in enumerate(words):
+                        for seq, idx in first.get(word, ()):
+                            span = range(i, i + len(seq))
+                            if tuple(words[i:i + len(seq)]) != seq or covered[idx].intersection(span):
+                                continue
+                            covered[idx].update(span)
+                            here[idx] += 1
+                for idx, n in here.items():
+                    counts[scope][idx] += n
+                    by_rec[scope][idx][rec.o_id] += n
+                    if scope == "all":
+                        seg_hits[idx].append({
+                            "o": rec.o_id, "p": seg.segment.ordinal, "s": seg.segment.start_seconds,
+                            "e": seg.segment.end_seconds, "n": n,
+                        })
+
+        out = []
+        for idx, ent in enumerate(ents):
+            if not counts["all"][idx]:
+                continue
+            row = {k: ent[k] for k in ("id", "type", "group", "label_en", "label_fr")}
+            for k in ("iwac", "wikidata", "lat", "lon"):
+                if k in ent:
+                    row[k] = ent[k]
+            row["n"] = {s: counts[s][idx] for s in SCOPES}
+            row["r"] = {s: len(by_rec[s][idx]) for s in SCOPES}
+            row["by"] = {s: dict(sorted(by_rec[s][idx].items())) for s in SCOPES}
+            row["top"] = sorted(seg_hits[idx], key=lambda h: (-h["n"], h["o"], h["p"], h["s"]))[:TOP_ENTITY_SEGMENTS]
+            out.append(row)
+        out.sort(key=lambda r: (-r["n"]["all"], r["id"]))
+        return {"generated_at": generate_timestamp(), "status": data.get("status", "draft"),
+                "entities": out}
+
+    # ------------------------------------------------------------------ #
     #  concordance.json — RIGHTS-GATED                                     #
     # ------------------------------------------------------------------ #
 
@@ -973,6 +1046,7 @@ class AlbaniSermonsGenerator:
             "network.json": self.build_network(collocates),
             "overlap.json": self.build_overlap(),
             "keyness.json": self.build_keyness(),
+            "entities.json": self.build_entities(),
             **{f"{CONCORDANCE_PREFIX}{theme}.json": self.build_concordance(theme)
                for theme in self.lexicon.themes},
         }

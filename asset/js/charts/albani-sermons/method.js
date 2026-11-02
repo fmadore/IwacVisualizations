@@ -32,12 +32,20 @@
         ['albani_method_layers', 'albani_method_layers_body'],
         ['albani_method_lexicon', 'albani_method_lexicon_body'],
         ['albani_method_glosses', 'albani_method_glosses_body'],
+        ['albani_method_entities', 'albani_method_entities_body'],
         ['albani_method_collocates', 'albani_method_collocates_body'],
         ['albani_method_rights', 'albani_method_rights_body'],
         ['albani_method_reading', 'albani_method_reading_body']
     ];
 
     var REFERENCES = [
+        {
+            text: 'Adelani, D. I. et al. (2022). MasakhaNER 2.0: Africa-centric transfer learning for named '
+                + 'entity recognition. Proceedings of EMNLP 2022. Model used: '
+                + 'masakhane/afroxlmr-large-ner-masakhaner-1.0_2.0.',
+            url: 'https://huggingface.co/masakhane/afroxlmr-large-ner-masakhaner-1.0_2.0',
+            useKey: 'albani_ref_use_ner'
+        },
         {
             text: 'Bashir, A. S., Bichi, A. A. & Adamu, A. (2024). Automatic construction of generic Hausa '
                 + 'language stop words list using term frequency-inverse document frequency. '

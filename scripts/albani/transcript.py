@@ -59,8 +59,10 @@ _LEGACY = (
 
 # A whole line in square brackets that none of the patterns above claimed:
 # an unknown marker. Inline brackets inside a text line (``[…]``, the ASR's
-# elision mark) are text, and the tokenizer skips them.
-_WHOLE_LINE_MARKER = re.compile(r"^\[[^\]]*\]$")
+# elision mark) are text, and the tokenizer skips them — and so is the
+# elision mark alone on its line (item 15854, the November 2026 pass): it
+# marks a gap in the speech, not a change of format.
+_WHOLE_LINE_MARKER = re.compile(r"^\[(?!(?:…|\.\.\.)\]$)[^\]]*\]$")
 
 
 class TranscriptFormatError(ValueError):

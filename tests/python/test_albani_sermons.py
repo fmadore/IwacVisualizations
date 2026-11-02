@@ -100,6 +100,14 @@ class ParserTests(unittest.TestCase):
         with self.assertRaises(LegacyTranscriptError):
             parse_transcript(CURRENT + "\n[00:00:18] Speaker 1: Ya ayyuha\n")
 
+    def test_an_elision_mark_alone_on_its_line_is_text(self):
+        for mark in ("[…]", "[...]"):
+            with self.subTest(mark):
+                text = CURRENT.replace("[Speaker seg1-spk:0]\n",
+                                       "[Speaker seg1-spk:0]\n" + mark + "\n", 1)
+                self.assertNotEqual(text, CURRENT)
+                parse_transcript(text)
+
     def test_anything_else_fails_loudly(self):
         broken = {
             "unknown marker": CURRENT.replace("[Speaker seg1-spk:0]", "[Narrator]"),
@@ -320,6 +328,41 @@ class CorpusTests(unittest.TestCase):
         # Spelling variants share an entry: addini and adini fold together.
         self.assertIn(N.match_key("addini"), glosses)
         self.assertEqual(glosses[N.match_key("adini")]["fr"], "religion")
+
+    def test_entities_count_once_per_span_and_never_on_the_merged_key(self):
+        entities = {"status": "draft", "entities": [
+            {"id": "mecca", "type": "place", "group": "holy", "label_en": "Mecca",
+             "label_fr": "La Mecque", "aliases": ["makka"], "lat": 21.4, "lon": 39.8},
+            {"id": "daurawa", "type": "person", "group": "nigeria", "label_en": "Aminu Daurawa",
+             "label_fr": "Aminu Daurawa", "aliases": ["aminu daurawa", "malam aminu daurawa"]},
+        ]}
+        text = "\n".join([
+            "[Segment 1/1 | 00:00:00–end]", "[Speaker seg1-spk:0]",
+            # "maka" (for you) shares Makka's merged key and must not count.
+            "Na faɗa maka cewa malam Aminu Daurawa ya je Makka, Aminu Daurawa kuma.",
+        ])
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "entities.json"
+            path.write_text(json.dumps(entities), encoding="utf-8")
+            with patch("albani.generator.ENTITIES_PATH", path):
+                out = generator(frame({"o:id": "1", "OCR": text})).build_entities()
+        rows = {e["id"]: e for e in out["entities"]}
+        self.assertEqual(rows["mecca"]["n"]["all"], 1)
+        self.assertEqual(rows["daurawa"]["n"]["all"], 2)
+        self.assertEqual(rows["daurawa"]["top"][0]["s"], 0)
+        self.assertNotIn("aliases", rows["mecca"])
+
+    def test_every_curated_entity_is_well_formed(self):
+        from albani.generator import ENTITIES_PATH
+        data = json.loads(ENTITIES_PATH.read_text(encoding="utf-8"))
+        ids = [e["id"] for e in data["entities"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        for e in data["entities"]:
+            with self.subTest(e["id"]):
+                self.assertIn(e["type"], ("person", "place", "org"))
+                self.assertTrue(e["label_en"] and e["label_fr"] and e["aliases"])
+                if "lat" in e:
+                    self.assertTrue(-90 <= e["lat"] <= 90 and -180 <= e["lon"] <= 180)
 
     def test_formula_counts_split_by_recording(self):
         gen = generator(frame({"o:id": "1", "OCR": CURRENT}, {"o:id": "2", "OCR": CURRENT}))

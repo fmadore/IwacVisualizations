@@ -15,9 +15,20 @@
     </script>
     <!-- iwac-core, then the block's own sheet (BlockRegistry: blockCss). -->
     <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-maplibre.min.css">
     <link rel="stylesheet" href="/asset/css/blocks/albani-sermons.min.css">
     <style>
         main { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+        /* What maplibre-stub.js draws needs these few rules of MapLibre's own sheet. */
+        .maplibregl-canvas-container { position: absolute; inset: 0; }
+        .maplibregl-control-container > div { position: absolute; display: flex; flex-direction: column; gap: 4px; padding: 8px; }
+        .maplibregl-ctrl-top-left { top: 0; left: 0; }
+        .maplibregl-ctrl-top-right { top: 0; right: 0; }
+        .maplibregl-ctrl-bottom-left { bottom: 0; left: 0; }
+        .maplibregl-ctrl-bottom-right { bottom: 0; right: 0; }
+        .maplibregl-popup { position: absolute; top: 0; left: 0; display: flex; pointer-events: none; }
+        .maplibregl-popup-tip { width: 0; height: 0; border: 10px solid transparent; align-self: center; }
+        .maplibregl-popup-content { position: relative; padding: 15px 10px; pointer-events: auto; }
     </style>
 </head>
 <body>
@@ -59,7 +70,9 @@
     </main>
     <!-- ECharts from the test-only npm copy, then d3's UMD modules (they share one global, so d3-force comes
          last), then the bundles in Site\AssetPlan::bundles() order for
-         chartOptions + concordance + table + d3. -->
+         chartOptions + concordance + table + maplibre + d3. -->
+    <!-- The on-view loader's parallel MapLibre import, stood in for. -->
+    <script src="/tests/browser/fixtures/maplibre-stub.js"></script>
     <script src="/node_modules/echarts/dist/echarts.min.js"></script>
     <script src="/node_modules/d3-dispatch/dist/d3-dispatch.min.js"></script>
     <script src="/node_modules/d3-quadtree/dist/d3-quadtree.min.js"></script>
@@ -70,6 +83,7 @@
     </script>
     <script src="/asset/js/dist/shared-charts.min.js"></script>
     <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <script src="/asset/js/dist/shared-map.min.js"></script>
     <script src="/asset/js/dist/shared-d3.min.js"></script>
     <script>
         document.write('<script src="/asset/js/dist/blocks/albani-sermons.' + fixtureLang + '.min.js"><\/script>');

@@ -23,18 +23,6 @@
     var CLOUD_WORDS = 120;
     var LIST_WORDS = 40;
 
-    /** Rate bins (per 10,000 words) for the formula strips, on the
-     *  module's heat ramp; 0 is the empty cell. */
-    var STRIP_BINS = [1, 4, 10];
-
-    function stripBin(rate) {
-        if (!rate) return 0;
-        for (var i = 0; i < STRIP_BINS.length; i++) {
-            if (rate < STRIP_BINS[i]) return i + 1;
-        }
-        return STRIP_BINS.length + 1;
-    }
-
     /**
      * The formulae as a typeset ledger: the phrase, its count, and a strip
      * with one cell per recording (A.recordingOrder), shaded by its rate
@@ -69,16 +57,7 @@
                     list.appendChild(li);
                     return;
                 }
-                var strip = P.el('span', 'iwac-vis-albani__strip');
-                strip.setAttribute('aria-hidden', 'true');
-                recs.forEach(function (r) {
-                    var n = (f.by || {})[r.o] || 0;
-                    var rate = A.per10k(n, A.scopeWords(r, scope));
-                    var cell = P.el('span', 'iwac-vis-albani__strip-cell iwac-vis-albani__strip-cell--' + stripBin(rate));
-                    cell.title = A.recordingLabel(r) + ' — ' + P.t('albani_formulae_cell', {
-                        count: n, rate: P.formatDecimal(rate, 1) });
-                    strip.appendChild(cell);
-                });
+                var strip = A.rateStrip(f.by, recs, scope);
                 li.appendChild(strip);
                 list.appendChild(li);
             });

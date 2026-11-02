@@ -26,7 +26,7 @@ function watch(page) {
 async function ready(page, query = '') {
     await page.goto(`${FIXTURE}?eager=1${query}`);
     await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
-    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(7);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(8);
     await expect(page.locator('[data-iwac-section="politics"] .iwac-vis-kwic-row').first()).toBeVisible();
 }
 
@@ -35,10 +35,10 @@ test('every section renders from its own bundle, without a console problem', asy
     await ready(page);
     const sections = await page.locator('.iwac-vis-albani__section').evaluateAll(
         (els) => els.map((el) => el.getAttribute('data-iwac-section')));
-    expect(sections).toEqual(['corpus', 'vocabulary', 'youth', 'politics', 'overlap', 'keyness', 'method']);
+    expect(sections).toEqual(['corpus', 'vocabulary', 'entities', 'youth', 'politics', 'overlap', 'keyness', 'method']);
     const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()).sort());
     expect(fetched).toEqual([
-        'collocates.json', 'concordance-politics.json', 'concordance-youth.json', 'keyness.json',
+        'collocates.json', 'concordance-politics.json', 'concordance-youth.json', 'entities.json', 'keyness.json',
         'lexicon.json', 'metadata.json', 'network.json', 'overlap.json', 'vocabulary.json',
     ]);
     expect(problems).toEqual([]);
@@ -66,11 +66,11 @@ test('passages come from the public transcript only, and say what was withheld',
 test('the methods are explained in plain terms, with their sources linked', async ({ page }) => {
     await ready(page);
     const method = page.locator('[data-iwac-section="method"]');
-    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(10);
+    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(11);
     await expect(method).toContainText('Bashir, Bichi and Adamu (2024)');
     await expect(method.getByRole('link', { name: 'https://doi.org/10.1186/s43067-024-00187-5' }))
         .toHaveAttribute('href', 'https://doi.org/10.1186/s43067-024-00187-5');
-    await expect(method.locator('.iwac-vis-albani__references > li')).toHaveCount(4);
+    await expect(method.locator('.iwac-vis-albani__references > li')).toHaveCount(5);
     // The header's jump link lands on the section's heading.
     const href = await page.locator('.iwac-vis-albani__jump').getAttribute('href');
     expect(href).toBe('#' + await method.locator('.iwac-vis-section-heading').getAttribute('id'));
@@ -132,8 +132,24 @@ test('one switch shows or hides the translations, and the address remembers it',
     await expect(page).toHaveURL(/albani\.glosses=off/);
     await expect.poll(async () => (await labels()).some((l) => l.includes(' · '))).toBe(false);
     // The contents link every section by a stable anchor.
-    await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(7);
+    await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(8);
     await expect(page.locator('.iwac-vis-albani__toc-link').first()).toHaveAttribute('href', '#albani-corpus');
+});
+
+test('the places named are mapped, the people and bodies listed by kind', async ({ page }) => {
+    await ready(page);
+    const section = page.locator('[data-iwac-section="entities"]');
+    // Zaria, Kaduna and Nigeria are named in the fixture transcripts; the
+    // map's source carries one feature per mapped place.
+    await expect.poll(() => page.evaluate(() => {
+        const map = (window.__fixtureMaps || [])[0];
+        const src = map && map.getSource('albani-places');
+        return src ? src._data.features.map((f) => f.properties.id).sort() : null;
+    })).toEqual(['kaduna', 'nigeria', 'zaria']);
+    await expect(section.locator('.iwac-vis-albani__map-legend-item')).toHaveCount(3);
+    const orgs = section.locator('[data-iwac-panel="albani-orgs"]');
+    await expect(orgs.locator('.iwac-vis-albani__group-title')).toHaveText(['Movements and communities', 'Schools and universities']);
+    await expect(orgs.locator('.iwac-vis-albani__ledger-row').first().locator('.iwac-vis-albani__strip-cell')).toHaveCount(2);
 });
 
 test('the formulae are a ledger with one strip cell per recording', async ({ page }) => {
