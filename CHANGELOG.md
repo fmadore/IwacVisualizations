@@ -13,6 +13,19 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.92.0 — the Albani sermons in the reader's language (2026-11-02)
+
+**The Hausa words in the Albani Zaria sermons block now carry a translation in the site's language.** Readers of the French and English sites met the collocates, the network and the term matrix as bare Hausa.
+
+- **Words that travel with the term** and **Words around the meetings** set each word's translation on a second, quieter line; **The terms and their neighbours** draws it under each name; **Which terms meet** carries it on both axes. Labels show the first sense, tooltips the whole translation.
+- **One switch, "Translations: Show / Hide"**, beside the counting scope, applies to every chart, and the page address remembers the choice.
+- The translations of the word-list terms come from the draft word lists. Those of the other words are drafts proposed by an AI assistant and await a Hausa-speaking specialist, as the word lists do; a "Draft translations" badge and a note in the methods say so. A word whose sense depends on its context, or that looks like a transcription error, is left untranslated.
+- **A numbered contents** under the header links every section, and each section has a stable address (`#albani-score`, `#albani-youth`…) that can be shared.
+- In the networks, the largest terms are labelled again: a label now moves to the left, below, above or onto its node when the space to its right is taken. This applies to every force-directed network in the module. The Albani networks' legend lists "The young" again.
+- The recordings timeline no longer draws its first and last recordings half off the plot, and the chart descriptions say what dot and circle sizes mean.
+
+The data adds the translations to the Albani bundles (optional fields; the data contract is unchanged). Until the data release is rebuilt with them, the charts show the Hausa words alone.
+
 ### v1.91.0 — the Albani sermons, beyond the bar chart (2026-11-02)
 
 **The Albani Zaria sermons block reads as an exhibition rather than a dashboard.** Nine of its thirteen charts were horizontal bars; each is now a view that shows its finding directly:
