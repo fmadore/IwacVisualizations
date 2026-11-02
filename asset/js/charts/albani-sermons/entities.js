@@ -32,7 +32,7 @@
     var LAYER_ID = 'albani-place-circles';
     var PLACE_GROUPS = ['nigeria', 'holy', 'world'];
     var PERSON_GROUPS = ['prophets', 'early', 'scholars', 'sokoto', 'nigeria', 'politics', 'world'];
-    var ORG_GROUPS = ['movements', 'armed', 'education', 'state', 'media'];
+    var ORG_GROUPS = ['movements', 'armed', 'education', 'state', 'international', 'media'];
     var POPUP_RECORDINGS = 5;
 
     function labelOf(ent) { return A.label(ent, 'label'); }
