@@ -23,6 +23,16 @@
     A.DIR = 'albani-sermons/';
     A.SCOPES = ['all', 'monologue'];
 
+    /**
+     * Whether labels carry their translation — the header's "Translations"
+     * switch, mirrored here by the orchestrator before any section draws.
+     * Tooltips keep the translation either way.
+     */
+    A.labelGlosses = true;
+
+    /** The store keys a glossed chart redraws on. */
+    A.GLOSS_KEYS = ['scope', 'glosses'];
+
     A.lang = function () {
         return ns.locale === 'fr' ? 'fr' : 'en';
     };
@@ -31,6 +41,35 @@
     A.label = function (obj, base) {
         if (!obj) return '';
         return obj[base + '_' + A.lang()] || obj[base + '_en'] || '';
+    };
+
+    /**
+     * The draft gloss of a non-lexicon word (`term.g`, from
+     * scripts/albani/glosses.json) in the page's language, or ''.
+     */
+    A.gloss = function (term) {
+        var g = term && term.g;
+        if (!g) return '';
+        return g[A.lang()] || g.en || '';
+    };
+
+    /** A lexicon entry's gloss in the page's language — the curated one. */
+    A.entryGloss = function (entry) {
+        return A.label(entry, 'gloss');
+    };
+
+    /**
+     * The first sense of a gloss, without its note: "émir, roi" from
+     * "émir, roi ; sarkin musulmi, le sultan de Sokoto". Labels on an axis
+     * or beside a node carry this; tooltips carry the whole gloss.
+     */
+    A.shortGloss = function (gloss) {
+        return String(gloss || '').split(/\s*;\s*/)[0].replace(/\s*\([^)]*\)\s*$/, '');
+    };
+
+    /** `term · gloss` for an axis or a list, the term alone when unglossed. */
+    A.withGloss = function (word, gloss) {
+        return gloss ? word + ' · ' + gloss : word;
     };
 
     A.per10k = function (n, words) {
@@ -79,7 +118,10 @@
         var section = P.el('section', 'iwac-vis-albani__section');
         section.setAttribute('data-iwac-section', key);
         var h = P.el('h3', 'iwac-vis-section-heading', heading);
-        h.id = 'iwac-vis-albani-' + key + '-' + Math.random().toString(36).slice(2, 7);
+        // A stable id, so a section can be linked from outside the page
+        // (#albani-score); a suffix only when the page holds two blocks.
+        h.id = 'albani-' + key;
+        if (document.getElementById(h.id)) h.id += '-' + Math.random().toString(36).slice(2, 7);
         section.setAttribute('aria-labelledby', h.id);
         section.appendChild(h);
         if (intro) section.appendChild(P.el('p', 'iwac-vis-albani__lead', intro));
@@ -153,6 +195,11 @@
      * @param {string} opts.yName   y axis name
      * @param {function(Object):string} opts.tooltip  extra tooltip line
      */
+    /** ECharts rich text reads `{`, `}` and `|` as markup. */
+    function richSafe(text) {
+        return String(text).replace(/[{}|]/g, ' ');
+    }
+
     A.wordScatterOption = function (terms, opts) {
         opts = opts || {};
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
@@ -166,6 +213,8 @@
                 formatter: function (p) {
                     var term = terms[p.dataIndex] || {};
                     var lines = ['<strong>' + P.escapeHtml(term.w || '') + '</strong>'];
+                    var gloss = A.gloss(term);
+                    if (gloss) lines.push('<em>' + P.escapeHtml(gloss) + '</em>');
                     lines.push(term.ratio != null ? '×' + P.formatDecimal(term.ratio, 1) : '∞');
                     if (opts.tooltip) lines.push(opts.tooltip(term));
                     return lines.join('<br>');
@@ -203,13 +252,22 @@
                     borderColor: tokens.panelBg || tokens.surface,
                     borderWidth: 1
                 },
+                // The word, and under it its draft gloss in the page's
+                // language: the reader of the French site reads French.
                 label: {
                     show: true,
                     position: 'right',
                     distance: 4,
-                    fontSize: P.AXIS_FONT_SM,
-                    color: tokens.ink,
-                    formatter: function (p) { return (terms[p.dataIndex] || {}).w || ''; }
+                    formatter: function (p) {
+                        var term = terms[p.dataIndex] || {};
+                        var gloss = A.labelGlosses ? A.shortGloss(A.gloss(term)) : '';
+                        return '{w|' + richSafe(term.w || '') + '}'
+                            + (gloss ? '\n{g|' + richSafe(gloss) + '}' : '');
+                    },
+                    rich: {
+                        w: { fontSize: P.AXIS_FONT_SM + 1, color: tokens.ink, lineHeight: 15 },
+                        g: { fontSize: P.AXIS_FONT_SM, color: tokens.muted, lineHeight: 13, fontStyle: 'italic' }
+                    }
                 },
                 labelLayout: { hideOverlap: true },
                 emphasis: { focus: 'self', label: { fontWeight: 'bold' } }

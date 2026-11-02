@@ -23,6 +23,7 @@
         untranscribed: 'albani_status_none'
     };
     var STATUS_ORDER = ['analysed', 'legacy', 'untranscribed'];
+    var YEAR_MS = 365.25 * 24 * 3600 * 1000;
 
     function dateValue(d) {
         if (!d) return null;
@@ -76,7 +77,14 @@
                         + P.escapeHtml(p.seriesName);
                 }
             }),
-            xAxis: { type: 'time', minInterval: 365 * 24 * 3600 * 1000 },
+            // Half a year of margin each side: a recording at the edge of
+            // the range was drawn half off the plot.
+            xAxis: {
+                type: 'time',
+                minInterval: YEAR_MS,
+                min: function (v) { return v.min - YEAR_MS / 2; },
+                max: function (v) { return v.max + YEAR_MS / 2; }
+            },
             yAxis: {
                 type: 'value',
                 name: P.t('albani_axis_hours'),

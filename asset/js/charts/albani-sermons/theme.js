@@ -216,7 +216,7 @@
                 });
             }, { wide: true, key: 'albani-' + theme + '-collocates', before: [picker, empty],
                  chartClass: 'iwac-vis-albani__scatter' });
-        store.subscribe(panel.redraw, { keys: ['scope'] });
+        store.subscribe(panel.redraw, { keys: A.GLOSS_KEYS });
     }
 
     /* ----------------------------------------------------------------- */
@@ -225,11 +225,21 @@
 
     function networkPanel(host, theme, lexicon, network, collocates, store) {
         var cats = ((lexicon.themes || {})[theme] || {}).categories || [];
-        var categories = cats.map(function (c) { return { name: A.label(c, 'label') }; });
+        var byId = A.entriesById(lexicon);
+        // Slot 0 is the shared graph's ego centre, which its legend never
+        // lists — this graph has none, so the slot stays empty and the
+        // lexicon's first category (the young) keeps its legend chip.
+        var categories = [{ name: '' }].concat(cats.map(function (c) { return { name: A.label(c, 'label') }; }));
         categories.push({ name: P.t('albani_node_collocate') });
         var catIndex = {};
-        cats.forEach(function (c, i) { catIndex[c.id] = i; });
+        cats.forEach(function (c, i) { catIndex[c.id] = i + 1; });
         var collocateIndex = categories.length - 1;
+
+        /** A node's gloss: the lexicon's for a term, the draft one for a word. */
+        function glossOf(n) {
+            if (n.kind === 'term') return A.entryGloss(byId[String(n.id).replace(/^e:/, '')]);
+            return A.gloss(n);
+        }
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_network'),
             P.t('albani_network_desc', { min: MIN_NETWORK_HITS, window: network.window || collocates.window }),
@@ -245,7 +255,8 @@
                     return {
                         id: n.id,
                         name: n.name,
-                        category: n.kind === 'term' ? (catIndex[n.category] || 0) : collocateIndex,
+                        sub: A.labelGlosses ? A.shortGloss(glossOf(n)) : '',
+                        category: n.kind === 'term' ? (catIndex[n.category] || 1) : collocateIndex,
                         size: 6 + 18 * Math.sqrt(n.n / max),
                         data: n
                     };
@@ -268,13 +279,15 @@
                 if (i === collocateIndex) {
                     return ((ns.getChartTokens && ns.getChartTokens()) || {}).muted;
                 }
-                return ns.getSeriesColor(i);
+                return ns.getSeriesColor(i - 1);
             },
             categoryName: function (node) { return (categories[node.category] || {}).name || ''; },
             tooltip: function (node, link) {
                 var rows = [];
                 if (node) {
                     rows.push(P.el('strong', null, node.name));
+                    var gloss = glossOf(node.data || {});
+                    if (gloss) rows.push(P.el('em', null, gloss));
                     rows.push(P.el('div', null, (categories[node.category] || {}).name || ''));
                     rows.push(P.el('div', null, P.t('albani_network_occurrences') + ': '
                         + P.formatNumber((node.data || {}).n || 0)));
@@ -286,12 +299,16 @@
             },
             cardRows: function (node) {
                 var d = node.data || {};
-                var rows = [{ label: P.t('albani_network_occurrences'), value: P.formatNumber(d.n || 0) }];
+                var rows = [];
+                var gloss = glossOf(d);
+                if (gloss) rows.push({ label: P.t('albani_col_gloss'), value: gloss });
+                rows.push({ label: P.t('albani_network_occurrences'), value: P.formatNumber(d.n || 0) });
                 if (d.lr != null) rows.push({ label: P.t('albani_network_ratio'), value: '×' + P.formatDecimal(Math.pow(2, d.lr), 1) });
                 return rows;
             },
             announce: function (node) {
-                return node.name + '. ' + ((categories[node.category] || {}).name || '') + '. '
+                var gloss = glossOf(node.data || {});
+                return node.name + (gloss ? ', ' + gloss : '') + '. ' + ((categories[node.category] || {}).name || '') + '. '
                     + P.connectionsLabel(node.deg || 0);
             },
             ariaLabel: P.t('albani_network'),
@@ -300,7 +317,7 @@
         if (!mounted) return;
         function show() { mounted.setGraph(graphFor(store.get('scope')), true); }
         show();
-        store.subscribe(show, { keys: ['scope'] });
+        store.subscribe(show, { keys: A.GLOSS_KEYS });
     }
 
     /* ----------------------------------------------------------------- */

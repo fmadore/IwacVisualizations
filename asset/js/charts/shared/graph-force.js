@@ -124,7 +124,7 @@
         // rather than being flung in from a fresh phyllotaxis seat.
         var allNodes = (spec.nodes || []).map(function (n) {
             return {
-                id: n.id, name: n.name || '', category: n.category || 0,
+                id: n.id, name: n.name || '', sub: n.sub || '', category: n.category || 0,
                 size: n.size || 22, isCenter: !!n.isCenter,
                 url: n.url || null, data: n.data || n,
                 r: (n.size || 22) / 2, deg: 0, pinned: false
@@ -254,7 +254,14 @@
          */
         function setGraph(graph, warm) {
             var nodes = (graph.nodes || [])
-                .map(function (n) { return byId[n && n.id != null ? n.id : n]; })
+                .map(function (n) {
+                    var node = byId[n && n.id != null ? n.id : n];
+                    // The second label line may change between calls (a
+                    // translation shown or hidden); position and identity
+                    // stay with the node object.
+                    if (node && n && typeof n === 'object' && 'sub' in n) node.sub = n.sub || '';
+                    return node;
+                })
                 .filter(Boolean);
             var present = {};
             nodes.forEach(function (n) { present[n.id] = true; });

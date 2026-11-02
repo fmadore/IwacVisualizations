@@ -31,6 +31,7 @@ payloads before anything is written, rather than trusting this paragraph.
 from __future__ import annotations
 
 import csv
+import json
 import logging
 import os
 import re
@@ -51,7 +52,7 @@ from albani.corpus import (
 )
 from albani.layers import ARABIC, ENGLISH_SHARE, FORMULA_PREFIX, HAUSA, formula_label, resources
 from albani.lexicon import Entry, Hit, Lexicon
-from albani.normalize import SurfaceTable, fold
+from albani.normalize import SurfaceTable, fold, match_key
 from albani.transcript import window_label
 
 SCOPES = ("all", MONOLOGUE)
@@ -65,6 +66,20 @@ MIN_NEIGHBOUR_QUERY = 10
 #: The most words any string in an aggregate bundle may hold (issue #31:
 #: "no n-gram longer than a short phrase (cap at 3 tokens)").
 MAX_AGGREGATE_WORDS = 3
+
+
+#: Draft English / French glosses for the non-lexicon words the block shows.
+GLOSSES_PATH = Path(__file__).with_name("glosses.json")
+
+
+def load_glosses(path: Path = GLOSSES_PATH) -> Tuple[str, Dict[str, Dict[str, str]]]:
+    """``(status, {match key: {"en", "fr"}})`` — keyed as the counts are, so
+    every spelling variant of a word finds its gloss."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    out: Dict[str, Dict[str, str]] = {}
+    for word, gloss in data.get("entries", {}).items():
+        out.setdefault(match_key(word), {"en": gloss["en"], "fr": gloss["fr"]})
+    return data.get("status", "draft"), out
 
 
 class RightsError(AssertionError):
@@ -112,6 +127,7 @@ class AlbaniSermonsGenerator:
         self.fetch_manifests = fetch_manifests
         self.frame = frame
         self.lexicon = Lexicon.load()
+        self.gloss_status, self.glosses = load_glosses()
         self.res = resources()
         self.surfaces = SurfaceTable()
         self.recordings: List[Recording] = []
@@ -222,6 +238,7 @@ class AlbaniSermonsGenerator:
             "generated_at": generate_timestamp(),
             "creator": "Muhammad Auwal Albani Zaria",
             "lexicon_status": self.lexicon.status,
+            "gloss_status": self.gloss_status,
             "totals": {
                 "recordings": len(recs),
                 "analysed": totals[ANALYSED],
@@ -497,11 +514,14 @@ class AlbaniSermonsGenerator:
                 continue
             if seg_df[key] < self.min_segments or len(rec_df[key]) < self.min_recordings:
                 continue
-            out.append({
+            term = {
                 "w": self._display(key), "k": key, "n": e["count"],
                 "lr": e["log_ratio"], "g2": e["g2"], "q": e["q"],
                 "ratio": e["rate_ratio"], "s": seg_df[key], "r": len(rec_df[key]),
-            })
+            }
+            if key in self.glosses:
+                term["g"] = self.glosses[key]
+            out.append(term)
             if len(out) >= self.top_collocates:
                 break
         return out
@@ -601,8 +621,11 @@ class AlbaniSermonsGenerator:
                         used.add(key)
                 for key in sorted(used, key=lambda k: -top_keys[k]["n"]):
                     t = top_keys[key]
-                    nodes.append({"id": "w:" + key, "name": t["w"], "kind": "collocate",
-                                  "n": t["n"], "lr": t["lr"]})
+                    node = {"id": "w:" + key, "name": t["w"], "kind": "collocate",
+                            "n": t["n"], "lr": t["lr"]}
+                    if key in self.glosses:
+                        node["g"] = self.glosses[key]
+                    nodes.append(node)
                 graphs[theme] = {"nodes": nodes, "links": links}
             out[scope] = graphs
         return {"generated_at": generate_timestamp(), "window": self.window,

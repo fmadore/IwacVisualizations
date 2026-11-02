@@ -66,7 +66,7 @@ test('passages come from the public transcript only, and say what was withheld',
 test('the methods are explained in plain terms, with their sources linked', async ({ page }) => {
     await ready(page);
     const method = page.locator('[data-iwac-section="method"]');
-    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(9);
+    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(10);
     await expect(method).toContainText('Bashir, Bichi and Adamu (2024)');
     await expect(method.getByRole('link', { name: 'https://doi.org/10.1186/s43067-024-00187-5' }))
         .toHaveAttribute('href', 'https://doi.org/10.1186/s43067-024-00187-5');
@@ -118,6 +118,22 @@ test('the score has one cell per segment, and reshades by measure', async ({ pag
     expect(await read()).toEqual({ cells: 6, shaded: [1, 1] });
     await panel.locator('[data-iwac-control="albani-score-measure:politics"]').click();
     await expect.poll(read).toEqual({ cells: 6, shaded: [2, 2] });
+});
+
+test('one switch shows or hides the translations, and the address remembers it', async ({ page }) => {
+    await ready(page);
+    const labels = () => page.evaluate(() => {
+        const el = document.querySelector('[data-iwac-panel="albani-overlap-pairs"] .iwac-vis-chart');
+        return window.echarts.getInstanceByDom(el).getOption().yAxis[0].data;
+    });
+    // The lexicon's gloss rides on each axis label, after a middle dot.
+    expect((await labels()).every((l) => l.includes(' · '))).toBe(true);
+    await page.locator('[data-iwac-control="albani-glosses:off"]').click();
+    await expect(page).toHaveURL(/albani\.glosses=off/);
+    await expect.poll(async () => (await labels()).some((l) => l.includes(' · '))).toBe(false);
+    // The contents link every section by a stable anchor.
+    await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(7);
+    await expect(page.locator('.iwac-vis-albani__toc-link').first()).toHaveAttribute('href', '#albani-corpus');
 });
 
 test('the formulae are a ledger with one strip cell per recording', async ({ page }) => {

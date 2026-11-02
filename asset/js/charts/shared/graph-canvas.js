@@ -361,22 +361,72 @@
                 if (scene.focusSet && !scene.focusSet[n.id] && !o.allLabels) continue;
 
                 var size = n.isCenter ? T.fontSizeTitle : T.fontSize;
-                c.font = (n.isCenter ? '700 ' : '') + size + 'px ' + T.fontFamily;
+                var font = (n.isCenter ? '700 ' : '') + size + 'px ' + T.fontFamily;
+                var subSize = Math.max(11, size - 1);
+                var subFont = subSize + 'px ' + T.fontFamily;
+                c.font = font;
                 var text = truncate(n.name, n.isCenter ? 48 : LABEL_MAX_LEN);
-                var lx = screenX(n) + Math.max(1.6, n.r * k) + 5, ly = screenY(n);
-                var box = [lx - 2, ly - size * 0.66, lx + c.measureText(text).width + 2, ly + size * 0.66];
-                if (box[2] < 0 || box[0] > o.w || box[3] < 0 || box[1] > o.h) continue;
-                if (!forced && overlaps(box, boxes)) continue;
-                if (!forced && overlapsOthers(box, nodeBoxes, i)) continue;
-                boxes.push(box);
+                var width = c.measureText(text).width;
+                // An optional second, quieter line under the name — a gloss, a
+                // role — set by the caller as `node.sub`.
+                var sub = n.sub ? truncate(n.sub, LABEL_MAX_LEN + 6) : '';
+                if (sub) {
+                    c.font = subFont;
+                    width = Math.max(width, c.measureText(sub).width);
+                    c.font = font;
+                }
+                var half = sub ? (size * 0.66 + subSize * 0.6) : size * 0.66;
+                var r = Math.max(1.6, n.r * k);
+                var cx = screenX(n), cy = screenY(n);
+                // Beside the node first, then the other side, below, above,
+                // and — for a disc wide enough to carry it — on the node
+                // itself. Right-only placement left every hub in a dense
+                // centre unnamed: its right side was always another node.
+                var spots = [
+                    [cx + r + 5, cy, 'left'],
+                    [cx - r - 5, cy, 'right'],
+                    [cx, cy + r + 4 + half, 'center'],
+                    [cx, cy - r - 4 - half, 'center']
+                ];
+                if (r >= 12) spots.push([cx, cy, 'center', true]);
+                var placed = null;
+                for (var s = 0; s < spots.length && !placed; s++) {
+                    var sx = spots[s][0], sy = spots[s][1], align = spots[s][2];
+                    var x0 = align === 'left' ? sx : align === 'right' ? sx - width : sx - width / 2;
+                    var box = [x0 - 2, sy - half, x0 + width + 2, sy + half];
+                    if (box[2] < 0 || box[0] > o.w || box[3] < 0 || box[1] > o.h) continue;
+                    if (!forced && overlaps(box, boxes)) continue;
+                    // The on-node spot sits on its own disc by design, and a
+                    // hub's disc is ringed by its neighbours: there it only
+                    // has to miss the other labels.
+                    if (!forced && !spots[s][3] && overlapsOthers(box, nodeBoxes, i)) continue;
+                    placed = { x: sx, y: sy, align: align, box: box };
+                }
+                if (!placed) {
+                    if (!forced) continue;
+                    placed = { x: spots[0][0], y: cy, align: 'left',
+                        box: [spots[0][0] - 2, cy - half, spots[0][0] + width + 2, cy + half] };
+                }
+                boxes.push(placed.box);
 
                 // Stroke the surface colour behind the glyphs so a label stays
                 // legible where it crosses an edge.
+                c.textAlign = placed.align;
+                var nameY = sub ? placed.y - subSize * 0.6 : placed.y;
+                c.font = font;
                 c.lineWidth = 3;
                 c.strokeStyle = T.surface;
-                c.strokeText(text, lx, ly);
+                c.strokeText(text, placed.x, nameY);
                 c.fillStyle = n.isCenter ? T.heading : T.text;
-                c.fillText(text, lx, ly);
+                c.fillText(text, placed.x, nameY);
+                if (sub) {
+                    var subY = placed.y + size * 0.66;
+                    c.font = subFont;
+                    c.strokeText(sub, placed.x, subY);
+                    c.fillStyle = T.textMuted;
+                    c.fillText(sub, placed.x, subY);
+                }
+                c.textAlign = 'left';
             }
             return boxes;   // handed to drawEdgeLabels so the two never collide
         }

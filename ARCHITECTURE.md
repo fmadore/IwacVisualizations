@@ -141,6 +141,7 @@ IwacVisualizations/
 │   │   ├── albani_lexicon.json
 │   │   ├── corpus.py
 │   │   ├── generator.py
+│   │   ├── glosses.json
 │   │   ├── layers.py
 │   │   ├── lexicon.py
 │   │   ├── neighbours.py

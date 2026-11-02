@@ -217,6 +217,10 @@
         var youth = top(youthTotal);
         var politics = top(politicsTotal);
         var display = function (id) { return (byId[id] || {}).display || id; };
+        // Axis labels carry the lexicon's gloss in the page's language.
+        var labelOf = function (id) {
+            return A.labelGlosses ? A.withGloss(display(id), A.shortGloss(A.entryGloss(byId[id]))) : display(id);
+        };
         var cells = [];
         pairs.forEach(function (p) {
             var yi = youth.indexOf(p.youth);
@@ -226,20 +230,22 @@
         return {
             rows: youth.length,
             option: C.heatmapMatrix({
-                xLabels: politics.map(display),
-                yLabels: youth.map(display),
+                xLabels: politics.map(labelOf),
+                yLabels: youth.map(labelOf),
                 cells: cells
             }, {
                 cellLabels: true,
                 cellBorder: true,
                 static: true,
                 xLabelRotate: 40,
-                yLabelWidth: 120,
+                yLabelWidth: A.labelGlosses ? 160 : 100,
                 grid: { bottom: 64 },
                 tooltipFormatter: function (p) {
                     var v = p.value || [];
-                    return '<strong>' + P.escapeHtml(display(youth[v[1]])) + ' × '
-                        + P.escapeHtml(display(politics[v[0]])) + '</strong><br>'
+                    var y = youth[v[1]], x = politics[v[0]];
+                    return '<strong>' + P.escapeHtml(display(y)) + ' × '
+                        + P.escapeHtml(display(x)) + '</strong><br>'
+                        + '<em>' + P.escapeHtml(A.entryGloss(byId[y]) + ' × ' + A.entryGloss(byId[x])) + '</em><br>'
                         + P.escapeHtml(P.t('albani_pairs_tooltip', { count: v[2] }));
                 }
             })
@@ -333,6 +339,10 @@
                 words.redraw();
                 refreshList();
             }, { keys: ['scope'] });
+            store.subscribe(function () {
+                pairs.redraw();
+                words.redraw();
+            }, { keys: ['glosses'] });
         });
     };
 })();

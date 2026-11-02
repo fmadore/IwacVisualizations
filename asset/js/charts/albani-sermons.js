@@ -5,7 +5,8 @@
  * instruments and a way back to the recordings.
  *
  *   header      who, what, and how much of it is readable today; the
- *               provenance badges (machine transcription, seed lexicon)
+ *               provenance badges (machine transcription, seed lexicon,
+ *               draft glosses); the contents, one link per section
  *   1 corpus    every recording on a date × running-time axis, and listed
  *   2 vocabulary  Hausa exposition / Arabic citation, never pooled; the
  *               formulae as a ledger with their spread across recordings
@@ -76,6 +77,9 @@
         if (metadata.lexicon_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_seed'), P.t('albani_badge_seed_hint')));
         }
+        if (metadata.gloss_status && metadata.gloss_status !== 'validated') {
+            badges.appendChild(A.badge(P.t('albani_badge_glosses'), P.t('albani_badge_glosses_hint')));
+        }
         // To the plain-language methods at the foot of the block; its href
         // is set once that section exists.
         badges.appendChild(P.el('a', 'iwac-vis-albani__jump', P.t('albani_method_jump')));
@@ -105,6 +109,13 @@
         }
         root.appendChild(status);
 
+        // The contents, filled once the sections exist (render()).
+        var toc = P.el('nav', 'iwac-vis-albani__toc');
+        toc.setAttribute('aria-label', P.t('albani_toc'));
+        toc.appendChild(P.el('p', 'iwac-vis-albani__toc-title', P.t('albani_toc')));
+        toc.appendChild(P.el('ol', 'iwac-vis-albani__toc-list'));
+        root.appendChild(toc);
+
         // The counting scope: every section reads it.
         var scopeRow = P.el('div', 'iwac-vis-albani__scope');
         var control = P.buildSegmented({
@@ -119,6 +130,20 @@
         });
         store.subscribe(function () { control.set(store.get('scope')); }, { keys: ['scope'] });
         scopeRow.appendChild(control.root);
+        // One switch for every chart's translations, rather than a button on
+        // each: the choice is the reader's, not the chart's.
+        var glosses = P.buildSegmented({
+            name: 'albani-glosses',
+            label: P.t('albani_glosses_label'),
+            active: store.get('glosses'),
+            options: [
+                { key: 'on', label: P.t('albani_glosses_on') },
+                { key: 'off', label: P.t('albani_glosses_off') }
+            ],
+            onChange: function (key) { store.patch({ glosses: key }); }
+        });
+        store.subscribe(function () { glosses.set(store.get('glosses')); }, { keys: ['glosses'] });
+        scopeRow.appendChild(glosses.root);
         scopeRow.appendChild(A.note(P.t('albani_scope_desc', { count: totals.segments_exchange || 0 }),
             'iwac-vis-albani__scope-desc'));
         root.appendChild(scopeRow);
@@ -130,13 +155,20 @@
         var fetch = ctx.fetchBundle || A.fetcher(ctx);
         ctx.siteBase = container.dataset.siteBase || container.dataset.embedBase || ctx.siteBase || '';
 
-        var store = P.createStore({ scope: 'all' });
+        var store = P.createStore({ scope: 'all', glosses: 'on' });
         if (P.bindUrlState) {
             P.bindUrlState(store, {
                 prefix: 'albani',
-                keys: [{ key: 'scope', values: A.SCOPES, default: 'all' }]
+                keys: [
+                    { key: 'scope', values: A.SCOPES, default: 'all' },
+                    { key: 'glosses', values: ['on', 'off'], default: 'on' }
+                ]
             });
         }
+        // Registered before any section subscribes, so every redraw the
+        // switch triggers already reads the new value.
+        A.labelGlosses = store.get('glosses') !== 'off';
+        store.subscribe(function () { A.labelGlosses = store.get('glosses') !== 'off'; }, { keys: ['glosses'] });
 
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-albani__root');
@@ -168,5 +200,15 @@
         var jump = root.querySelector('.iwac-vis-albani__jump');
         var heading = method.querySelector('.iwac-vis-section-heading');
         if (jump && heading) jump.href = '#' + heading.id;
+
+        // The contents: one link per section, in page order.
+        var list = root.querySelector('.iwac-vis-albani__toc-list');
+        root.querySelectorAll('.iwac-vis-albani__section > .iwac-vis-section-heading').forEach(function (h) {
+            var li = P.el('li', 'iwac-vis-albani__toc-item');
+            var a = P.el('a', 'iwac-vis-albani__toc-link', h.textContent);
+            a.href = '#' + h.id;
+            li.appendChild(a);
+            list.appendChild(li);
+        });
     }
 })();

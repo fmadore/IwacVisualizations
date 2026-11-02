@@ -31,6 +31,7 @@
         ['albani_method_stopwords', 'albani_method_stopwords_body'],
         ['albani_method_layers', 'albani_method_layers_body'],
         ['albani_method_lexicon', 'albani_method_lexicon_body'],
+        ['albani_method_glosses', 'albani_method_glosses_body'],
         ['albani_method_collocates', 'albani_method_collocates_body'],
         ['albani_method_rights', 'albani_method_rights_body'],
         ['albani_method_reading', 'albani_method_reading_body']

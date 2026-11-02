@@ -9,6 +9,7 @@ segment header, ``[Speaker unknown]`` and a two-voice exchange.
 ``legacy-format.txt`` is the opening of 15878 (*Shari'a*), still in the older
 format the parser must refuse.
 """
+import json
 import sys
 import tempfile
 import unittest
@@ -23,7 +24,7 @@ from albani import layers as L  # noqa: E402
 from albani.corpus import (  # noqa: E402
     ANALYSED, EXCHANGE, LEGACY, MONOLOGUE, UNTRANSCRIBED, is_albani,
 )
-from albani.generator import AlbaniSermonsGenerator, RightsError  # noqa: E402
+from albani.generator import GLOSSES_PATH, AlbaniSermonsGenerator, RightsError, load_glosses  # noqa: E402
 from albani.lexicon import Lexicon  # noqa: E402
 from albani.transcript import (  # noqa: E402
     LegacyTranscriptError, TranscriptFormatError, parse_transcript, window_label,
@@ -308,6 +309,17 @@ class CorpusTests(unittest.TestCase):
         self.assertIsNone(cells[1]["e"])
         # The exchange segment leaves the monologue score, by position.
         self.assertEqual([c["k"] for c in scopes[MONOLOGUE]["grid"]], [0])
+
+    def test_every_gloss_is_complete_and_folds_to_one_key(self):
+        raw = json.loads(GLOSSES_PATH.read_text(encoding="utf-8"))["entries"]
+        for word, gloss in raw.items():
+            with self.subTest(word=word):
+                self.assertTrue(gloss["en"].strip() and gloss["fr"].strip())
+        status, glosses = load_glosses()
+        self.assertEqual(status, "draft")
+        # Spelling variants share an entry: addini and adini fold together.
+        self.assertIn(N.match_key("addini"), glosses)
+        self.assertEqual(glosses[N.match_key("adini")]["fr"], "religion")
 
     def test_formula_counts_split_by_recording(self):
         gen = generator(frame({"o:id": "1", "OCR": CURRENT}, {"o:id": "2", "OCR": CURRENT}))
