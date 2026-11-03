@@ -33,7 +33,12 @@
     var PLACE_GROUPS = ['nigeria', 'holy', 'world'];
     var PERSON_GROUPS = ['prophets', 'early', 'scholars', 'sokoto', 'nigeria', 'politics', 'world'];
     var ORG_GROUPS = ['movements', 'armed', 'education', 'state', 'international', 'media'];
+    // The recordings a popup lists: five where the map leaves room for them
+    // without a scrollbar, three on a phone, where MapLibre's anchoring caps
+    // the popup at two thirds of a narrow map and its header wraps.
     var POPUP_RECORDINGS = 5;
+    var POPUP_RECORDINGS_SMALL = 3;
+    var POPUP_ROOMY_MAP = 480;
 
     function labelOf(ent) { return A.label(ent, 'label'); }
 
@@ -87,8 +92,13 @@
         });
         panel.panel.appendChild(legend);
         if (unmapped.length) {
-            panel.panel.appendChild(A.note(P.t('albani_places_unmapped', {
-                names: unmapped.map(labelOf).join(', ') }), 'iwac-vis-albani__map-note'));
+            var names = unmapped.map(labelOf);
+            // "Kongo (Zaria) and Gobir", in the page's language.
+            var list = typeof Intl !== 'undefined' && Intl.ListFormat
+                ? new Intl.ListFormat(ns.locale === 'fr' ? 'fr' : 'en', { type: 'conjunction' }).format(names)
+                : names.join(', ');
+            panel.panel.appendChild(A.note(P.t('albani_places_unmapped', { names: list }),
+                'iwac-vis-albani__map-note'));
         }
 
         // The places as rows: the toolbar's table and CSV, and the way to
@@ -152,19 +162,24 @@
             if (!ent) return null;
             var scope = store.get('scope');
             var by = (ent.by || {})[scope] || {};
-            var recs = Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).slice(0, POPUP_RECORDINGS);
+            var roomy = mapHost.clientHeight >= POPUP_ROOMY_MAP && mapHost.clientWidth >= POPUP_ROOMY_MAP;
+            var rows = roomy ? POPUP_RECORDINGS : POPUP_RECORDINGS_SMALL;
+            var recs = Object.keys(by).sort(function (a, b) { return by[b] - by[a]; }).slice(0, rows);
             return {
                 title: labelOf(ent),
                 titleHref: ctx.siteBase && ent.iwac ? P.itemUrl(ctx.siteBase, ent.iwac) : null,
                 subtitleLines: [P.t('albani_entity_line', { count: count(ent, scope),
                     recordings: P.formatNumber(spread(ent, scope)) })],
+                caption: recs.length ? P.t('albani_entity_top') : '',
+                // One line a recording, its count right-aligned: a ranked
+                // list short enough to fit the popup without a scrollbar.
+                layout: 'ledger',
                 articles: recs.map(function (o) {
                     var rec = titles[o] || {};
-                    return { o_id: o, title: rec.t || o,
-                        publisher: P.t('albani_entity_count', { count: by[o] }), date: rec.y ? String(rec.y) : '' };
+                    return { o_id: o, title: rec.t || o, count: by[o] };
                 }),
                 siteBase: ctx.siteBase,
-                pageSize: POPUP_RECORDINGS
+                pageSize: rows
             };
         }
 

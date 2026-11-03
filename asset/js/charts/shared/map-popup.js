@@ -48,11 +48,16 @@
      * @param {string} [config.siteBase]     Omeka site base path — required for
      *     article item links (`siteBase + '/item/' + o_id`)
      * @param {number} [config.pageSize=5]   Articles per page
+     * @param {string} [config.layout]       'ledger': one line an entry, the
+     *     title and a right-aligned `count` ({ o_id, title, count }), for a
+     *     ranked list that has to fit without scrolling
+     * @param {string} [config.caption]      A small label above the list
      * @returns {HTMLElement}
      */
     P.buildMapPopup = function (config) {
         config = config || {};
-        var root = P.el('div', 'iwac-vis-map-popup');
+        var root = P.el('div', 'iwac-vis-map-popup'
+            + (config.layout === 'ledger' ? ' iwac-vis-map-popup--ledger' : ''));
 
         // Header — title (optionally linked) + subtitle lines
         var header = P.el('div', 'iwac-vis-map-popup__header');
@@ -72,6 +77,10 @@
             header.appendChild(P.el('div', 'iwac-vis-map-popup__subtitle', String(line)));
         });
         root.appendChild(header);
+
+        if (config.caption) {
+            root.appendChild(P.el('div', 'iwac-vis-map-popup__caption', config.caption));
+        }
 
         // Article list (optional)
         if (Array.isArray(config.articles)) {
@@ -119,6 +128,14 @@
                 // stays compact enough to fit the viewport.
                 if (a.title) titleNode.title = a.title;
                 li.appendChild(titleNode);
+
+                if (config.layout === 'ledger') {
+                    if (a.count != null) {
+                        li.appendChild(P.el('span', 'iwac-vis-map-popup__count', P.formatNumber(a.count)));
+                    }
+                    body.appendChild(li);
+                    return;
+                }
 
                 var metaBits = [];
                 if (a.publisher) metaBits.push(a.publisher);

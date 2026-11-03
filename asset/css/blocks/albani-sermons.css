@@ -339,7 +339,14 @@
 
 /*  One ruled row per formula: the phrase, its count, how many
  *  recordings, and a strip with one cell per recording. */
+/*  The columns belong to the LEDGER and every row borrows them (subgrid):
+ *  with a grid per row, each row sized its `auto` columns to its own
+ *  count and spread, so the strips started 20px apart from row to row and
+ *  a recording's cell no longer sat under the same recording's cell above
+ *  it, which is the one comparison the strips exist for. */
 .iwac-vis-albani__ledger {
+    display: grid;
+    grid-template-columns: minmax(10rem, 1.4fr) auto auto minmax(10rem, 2fr);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -347,7 +354,8 @@
 
 .iwac-vis-albani__ledger-row {
     display: grid;
-    grid-template-columns: minmax(10rem, 1.4fr) auto minmax(7rem, auto) minmax(10rem, 2fr);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     align-items: center;
     gap: var(--space-2, 0.5rem) var(--space-4, 1rem);
     padding: var(--space-2, 0.5rem) 0;
@@ -421,7 +429,7 @@
 }
 
 @media (max-width: 767px) { /* < md */
-    .iwac-vis-albani__ledger-row {
+    .iwac-vis-albani__ledger {
         grid-template-columns: 1fr auto;
     }
 

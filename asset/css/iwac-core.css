@@ -1944,6 +1944,17 @@ select.iwac-vis-control:hover {
     font-size: var(--text-sm, 0.9375rem);
 }
 
+/*  The theme's base table rule sets `overflow-wrap: anywhere` on every
+ *  th and td, which lets the browser size a column below its longest word:
+ *  headers came out as "CATÉGOR / IE" and "OCCURRENC / ES", and a term as
+ *  "makaran / ta". `break-word` still breaks a run too long for any column
+ *  (a URL) but no longer counts as a break when the columns are sized. */
+.iwac-vis-table__header,
+.iwac-vis-table__cell {
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
 .iwac-vis-table__header {
     text-align: left;
     padding: 0.5rem 0.75rem;
