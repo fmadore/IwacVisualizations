@@ -86,10 +86,11 @@ foreach (BlockRegistry::BLOCKS as $slug => $row) {
     $html = $view->partial(BlockRegistry::partialFor($slug), ['block' => null, 'slug' => $slug]);
     if (empty($row['shell'])) {
         // Its own template: an embeddable one must still carry its embed
-        // slug. The timeline is not embeddable, server-renders its reading
-        // view (or an "unavailable" note without data) and loads no chart
-        // bundle, so neither a slug nor a lazy-loader manifest is required.
-        if (!empty($row['embeddable']) && strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
+        // slug. With no `$block` the timeline has no timeline to render and
+        // prints only its "unavailable" note — no wrapper to carry one; its
+        // embed is checked below, with data.
+        $unavailable = strpos($html, 'iwac-vis-timeline-unavailable') !== false;
+        if (!empty($row['embeddable']) && !$unavailable && strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
             throw new \RuntimeException($slug . ': no embed slug on its wrapper');
         }
         $rendered++;
@@ -160,4 +161,84 @@ try {
     // expected: AssetPlan refuses the flag
 }
 
+// --- Embeds -----------------------------------------------------------------
+
+// The embed routes, matched by the real router from the module's own config.
+// `/item/12` must reach the dashboard route although `/:block/:panel` would
+// also match it — which is what that route's priority is for.
+$config = require dirname(__DIR__, 2) . '/config/module.config.php';
+$router = \Laminas\Router\Http\TreeRouteStack::factory([
+    'route_plugins' => new \Laminas\Router\RoutePluginManager(new \Laminas\ServiceManager\ServiceManager()),
+    'routes' => ['iwac-embed' => $config['router']['routes']['site']['child_routes']['iwac-embed']],
+]);
+$route = static function (string $path) use ($router): ?array {
+    $request = new \Laminas\Http\Request();
+    $request->setUri('https://example.org' . $path);
+    $match = $router->match($request);
+    return $match ? ['route' => $match->getMatchedRouteName()] + $match->getParams() : null;
+};
+foreach ([
+    '/iwac-embed'                      => ['iwac-embed', 'index', []],
+    '/iwac-embed/laicite'              => ['iwac-embed/block', 'block', ['block' => 'laicite']],
+    '/iwac-embed/laicite/panel-1'      => ['iwac-embed/block/panel', 'block', ['block' => 'laicite', 'panel' => 'panel-1']],
+    '/iwac-embed/item/12'              => ['iwac-embed/resource', 'resource', ['resource' => 'item', 'id' => '12']],
+    '/iwac-embed/item/12/panel-2'      => ['iwac-embed/resource', 'resource', ['resource' => 'item', 'id' => '12', 'panel' => 'panel-2']],
+    '/iwac-embed/item-set/3'           => ['iwac-embed/resource', 'resource', ['resource' => 'item-set', 'id' => '3']],
+    // Not a number: an (unknown) block and its panel, never a dashboard.
+    '/iwac-embed/item/abc'             => ['iwac-embed/block/panel', 'block', ['block' => 'item', 'panel' => 'abc']],
+] as $path => [$name, $action, $params]) {
+    $got = $route($path);
+    if ($got === null || $got['route'] !== $name || $got['action'] !== $action) {
+        throw new \RuntimeException("$path routed to " . json_encode($got) . ", expected $name → $action");
+    }
+    foreach ($params as $key => $value) {
+        if ((string) ($got[$key] ?? '') !== $value) {
+            throw new \RuntimeException("$path: $key is " . json_encode($got[$key] ?? null) . ", expected $value");
+        }
+    }
+}
+
+// A configured block in an embed: the URL's choice becomes its variables, a
+// choice that names nothing is null (the controller's 404), and the wrapper
+// says how to embed it again — the choice, and one button for the whole.
+$pipeline = \IwacVisualizations\Site\BlockLayout\PipelineExplainer::class;
+if (array_keys($pipeline::embedVariants($helpers)) !== \IwacVisualizations\Site\PipelinePresets::ids()) {
+    throw new \RuntimeException('The pipeline embed does not list every preset');
+}
+if ($pipeline::embedVariables($helpers, 'no-such-preset') !== null || $pipeline::embedVariables($helpers, '') !== null) {
+    throw new \RuntimeException('A pipeline embed naming no preset rendered a default one');
+}
+$embedded = html_entity_decode($view->render(
+    (new \Laminas\View\Model\ViewModel([
+        'slug' => 'pipeline-explainer',
+        'variables' => $pipeline::embedVariables($helpers, 'ask-ai'),
+    ]))->setTemplate('iwac-visualizations/embed/block')
+), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+foreach (['data-preset="ask-ai"', 'data-embed-slug="pipeline-explainer"', 'data-embed-query="preset=ask-ai"', 'data-embed-whole=""'] as $needle) {
+    if (strpos($embedded, $needle) === false) {
+        throw new \RuntimeException('The pipeline embed lost ' . $needle);
+    }
+}
+
+// A dashboard in an embed: the item's title heads it, and its panels can be
+// pinned through the dashboard route. On the page it keeps "Visualisations".
+$resource = new class {
+    public function id() { return 4321; }
+    public function displayTitle() { return 'Amadou Hampâté Bâ'; }
+};
+$dashboard = html_entity_decode($view->render(
+    (new \Laminas\View\Model\ViewModel([
+        'partial' => 'common/resource-page-block-layout/visualizations/person',
+        'resource' => $resource,
+    ]))->setTemplate('iwac-visualizations/embed/resource')
+), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+if (strpos($dashboard, '<h2>Amadou Hampâté Bâ</h2>') === false || strpos($dashboard, 'data-embed-slug="item/4321"') === false) {
+    throw new \RuntimeException('The person dashboard embed lost its title or its embed slug');
+}
+$onPage = $view->partial('common/resource-page-block-layout/item-set-dashboard', ['resource' => $resource]);
+if (strpos($onPage, '<h2>Visualisations</h2>') === false || strpos($onPage, 'data-embed-slug="item-set&#x2F;4321"') === false) {
+    throw new \RuntimeException('The item-set dashboard lost its heading or its embed slug on the page');
+}
+
 echo "Real Laminas templates: {$count} block manifests, {$rendered} registered blocks and overview passed.\n";
+echo "Embeds: routes, configured-block variables and dashboard frames passed.\n";

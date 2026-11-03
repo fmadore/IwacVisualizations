@@ -26,4 +26,9 @@ echo $this->partial('common/iwac-block-shell', [
         'start-slide' => $startSlide ?? 'intro',
         'layout' => $layout ?? 'narrative',
     ],
+    // No panels to pin: one embed button for the whole timeline, whose URL
+    // names it (IwacTimeline::embedVariables()).
+    'embedSlug' => 'iwac-timeline',
+    'embedQuery' => 'timeline=' . rawurlencode($timeline['slug']),
+    'embedWhole' => true,
 ]);

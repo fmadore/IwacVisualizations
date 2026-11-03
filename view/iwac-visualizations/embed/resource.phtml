@@ -1,0 +1,19 @@
+<?php
+/**
+ * Embed content view — an item's or an item set's Visualisations dashboard.
+ *
+ * The same partial the resource page block renders, chosen by the same rule
+ * (`Visualizations::partialFor()`, `ItemSetDashboard::PARTIAL`), so an embed
+ * shows exactly what the page does. On the page the dashboard sits under the
+ * item's own title and is headed "Visualisations"; in a frame on someone
+ * else's site nothing says whose dashboard it is, so the heading becomes the
+ * resource's title.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var string $partial  The validated dashboard partial.
+ * @var \Omeka\Api\Representation\AbstractResourceEntityRepresentation $resource
+ */
+echo $this->partial($partial, [
+    'resource' => $resource,
+    'embedHeading' => (string) $resource->displayTitle(),
+]);

@@ -56,10 +56,53 @@
             + (height || 600) + 'px"></iframe>\n' + E.RESIZE_LISTENER;
     };
 
-    /** Absolute embed URL for a block (and optional panel slug). */
-    E.url = function (siteBase, slug, panelSlug) {
+    /**
+     * Absolute embed URL for a block, an optional panel slug, and an
+     * optional query string (no leading `?`) — a configured block's
+     * choice (`preset=ocr`) and the view a panel belongs to
+     * (`laicite.view=trends`).
+     */
+    E.url = function (siteBase, slug, panelSlug, query) {
         var origin = (window.location && window.location.origin) || '';
-        return origin + (siteBase || '') + '/iwac-embed/' + slug + (panelSlug ? '/' + panelSlug : '');
+        return origin + (siteBase || '') + '/iwac-embed/' + slug + (panelSlug ? '/' + panelSlug : '')
+            + (query ? '?' + query : '');
+    };
+
+    /**
+     * The query string an embed of this block needs: the configuration the
+     * server rendered it with (`data-embed-query`), then the view state the
+     * reader has reached.
+     *
+     * A block that makes its views addressable (`P.bindUrlState`, Topic
+     * Explorer's `?topic=`) names its parameters on its root in
+     * `data-url-state` — `laicite` owns `laicite.view`, `laicite.country`
+     * and the rest. Laïcité's trends chart only exists while that view is
+     * showing, so its embed without `laicite.view=trends` would frame the
+     * overview and find nothing to pin. The pairs are copied as the address
+     * bar spells them (the store keeps `,` and `:` readable); another
+     * block's parameters on the same page stay behind.
+     */
+    E.stateQuery = function (blockEl) {
+        if (!blockEl) return '';
+        var parts = [];
+        var fixed = blockEl.getAttribute('data-embed-query');
+        if (fixed) parts.push(fixed);
+        var names = (blockEl.getAttribute('data-url-state') || '').split(/\s+/).filter(Boolean);
+        var search = (window.location && window.location.search) || '';
+        if (names.length && search.length > 1) {
+            search.slice(1).split('&').forEach(function (pair) {
+                var key;
+                try { key = decodeURIComponent(pair.split('=')[0].replace(/\+/g, ' ')); }
+                catch (e) { return; }
+                for (var i = 0; i < names.length; i++) {
+                    if (key === names[i] || key.indexOf(names[i] + '.') === 0) {
+                        parts.push(pair);
+                        return;
+                    }
+                }
+            });
+        }
+        return parts.join('&');
     };
 
     /**
@@ -177,6 +220,8 @@
 
     /**
      * A copy-embed-code button. opts: { src, snippetTitle, height, label }.
+     * `src` is a URL or a function returning one, read at click time — the
+     * reader may have changed the view since the button was made.
      * With `label` it renders an icon + text (whole-block button); otherwise
      * icon-only (the dense panel toolbar). Reuses the shared `.iwac-vis-btn`
      * skin so it follows the IWAC theme like every other control.
@@ -193,7 +238,8 @@
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            E.copyToClipboard(E.snippet(opts.src, opts.snippetTitle || opts.title, opts.height))
+            var src = typeof opts.src === 'function' ? opts.src() : opts.src;
+            E.copyToClipboard(E.snippet(src, opts.snippetTitle || opts.title, opts.height))
                 .then(function () {
                     btn.classList.add('iwac-vis-embed-btn--copied');
                     renderBtn(btn, 'check', labelTxt ? t('Copied!') : '');
@@ -220,17 +266,47 @@
         return bar;
     }
 
-    function addPanelButton(panelEl, src, title) {
+    function addPanelButton(blockEl, panelEl, base, slug, title) {
         var bar = ensureToolbar(panelEl);
         if (!bar || bar.querySelector('.iwac-vis-embed-btn')) return; // idempotent
-        bar.appendChild(E.makeButton({ src: src, snippetTitle: title, height: 520 }));
+        bar.appendChild(E.makeButton({
+            // The panel's slug is re-read too: enumeration may have renamed a
+            // positional panel since this button was made.
+            src: function () {
+                return E.url(base, slug, panelEl.getAttribute('data-iwac-panel') || '', E.stateQuery(blockEl));
+            },
+            snippetTitle: title,
+            height: 520
+        }));
     }
 
     /**
-     * Add a per-panel copy-embed button to every panel of an embeddable block.
+     * The one button of a block that has no panels to pin — a Pipeline
+     * Explainer diagram, a timeline — at the block's foot. The block opts in
+     * with `data-embed-whole`; a block that will build panels must not, since
+     * it has none either while its data is still loading.
+     */
+    function addWholeButton(blockEl, base, slug) {
+        if (blockEl.querySelector(':scope > .iwac-vis-embed-whole')) return; // idempotent
+        var heading = blockEl.querySelector('h2, h3, h4');
+        var row = document.createElement('div');
+        row.className = 'iwac-vis-embed-whole';
+        row.appendChild(E.makeButton({
+            src: function () { return E.url(base, slug, '', E.stateQuery(blockEl)); },
+            snippetTitle: heading ? (heading.textContent || '').trim() : document.title,
+            label: t('Copy embed code'),
+            height: 600
+        }));
+        blockEl.appendChild(row);
+    }
+
+    /**
+     * Add a copy-embed button to every panel of an embeddable block, or the
+     * one whole-block button to a block declared `data-embed-whole`.
      * The block opts in by carrying `data-embed-slug` (+ `data-site-base`).
      * No-op inside an embed (we never offer copy buttons within a frame) or
-     * for a block with no embed slug.
+     * for a block with no embed slug. Idempotent: it runs again whenever the
+     * block's panels change (`watchPanels`).
      */
     E.addEmbedButtons = function (blockEl) {
         if (!blockEl) return;
@@ -241,8 +317,12 @@
         // back to data-site-base for safety.
         var siteBase = blockEl.getAttribute('data-embed-base')
             || blockEl.getAttribute('data-site-base') || '';
+        if (blockEl.hasAttribute('data-embed-whole')) {
+            addWholeButton(blockEl, siteBase, slug);
+            return;
+        }
         E.enumeratePanels(blockEl).forEach(function (info) {
-            addPanelButton(info.el, E.url(siteBase, slug, info.slug), info.title);
+            addPanelButton(blockEl, info.el, siteBase, slug, info.title);
         });
     };
 
@@ -279,62 +359,107 @@
         ro.observe(blockEl);
     }
 
+    // Never hidden by isolate(): they render nothing, and a stylesheet or a
+    // data island a block keeps beside its panels must keep working.
+    var INERT = /^(SCRIPT|STYLE|LINK|TEMPLATE)$/;
+
+    /**
+     * Hide everything in the block but `target` and the wrappers around it:
+     * at each step from the panel up to the block root, every sibling. That
+     * is the block's header, its figures strip, its controls row, the other
+     * sections — a single-panel embed used to hide only the other PANELS, so
+     * `/iwac-embed/laicite/panel-1` framed its table under the dossier's
+     * whole masthead, tabs and view switch. Hidden, not removed, for the
+     * reason the panels are. Idempotent: run again when content lands late.
+     */
+    function isolate(blockEl, target) {
+        for (var node = target; node && node !== blockEl; node = node.parentElement) {
+            var parent = node.parentElement;
+            if (!parent) return;
+            for (var sib = parent.firstElementChild; sib; sib = sib.nextElementSibling) {
+                if (sib === node || INERT.test(sib.tagName) || sib.style.display === 'none') continue;
+                sib.style.display = 'none';
+            }
+        }
+    }
+
     /**
      * Single-panel embed: keep only the requested panel, full-bleed. The
      * orchestrator builds the whole block (we have no per-orchestrator hook to
-     * build one panel), so we prune the rest here. Non-target panels are
-     * hidden (not removed) so their ECharts/MapLibre instances are never
-     * disposed mid-flight. Unknown slug → leave the whole block intact.
+     * build one panel), so we prune the rest here. Everything else is
+     * hidden (not removed) so ECharts/MapLibre instances are never
+     * disposed mid-flight. Unknown slug → leave the whole block intact and
+     * return false.
      */
     E.selectPanel = function (blockEl, slug) {
-        var panels = E.enumeratePanels(blockEl);
         var target = null;
-        panels.forEach(function (info) { if (info.slug === slug) target = info.el; });
-        if (!target) return;
+        E.enumeratePanels(blockEl).forEach(function (info) { if (info.slug === slug) target = info.el; });
+        if (!target) return false;
         blockEl.classList.add('iwac-vis-block--single-panel');
-        panels.forEach(function (info) {
-            if (info.el === target) {
-                info.el.setAttribute('data-iwac-panel-active', '1');
-            } else {
-                info.el.style.display = 'none';
-            }
-        });
+        target.setAttribute('data-iwac-panel-active', '1');
+        isolate(blockEl, target);
         nudgeResize(blockEl);
+        return true;
     };
 
     /* ----------------------------------------------------------------- */
     /*  Auto-init                                                         */
     /* ----------------------------------------------------------------- */
 
+    // Panels arrive in synchronous build passes; this long after the last
+    // mutation, a pass is over.
+    var SETTLE_MS = 120;
+
     /**
-     * Run `cb` once the block has rendered its panels. Panels appear
-     * asynchronously (after the orchestrator's data fetch) and in one
-     * synchronous build pass, so we debounce briefly after the first panel
-     * shows up to be sure the whole set is present.
+     * Call `cb` whenever the block's DOM has settled after a change, for as
+     * long as the page lives — and once now, if it already has panels or
+     * server-rendered content.
+     *
+     * This used to fire ONCE, 120 ms after the first panel appeared, and
+     * every panel that arrived later never got an embed button. Most panels
+     * arrive later: Albani Zaria builds eleven of its twenty as their
+     * sections scroll into view, and every view of Laïcité, Scary Terms or
+     * the Sentiment Atlas past the first is built when the reader switches
+     * to it. `cb` must be idempotent.
      */
-    function whenPanelsReady(blockEl, cb) {
-        var fired = false, timer = null, obs = null;
-        function go() {
-            if (fired) return;
-            fired = true;
-            if (obs) obs.disconnect();
-            clearTimeout(timer);
-            cb();
+    function watchBlock(blockEl, cb) {
+        var timer = null;
+        function run() { timer = null; cb(); }
+        if (typeof MutationObserver !== 'undefined') {
+            new MutationObserver(function () {
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(run, SETTLE_MS);
+            }).observe(blockEl, { childList: true, subtree: true });
         }
-        if (blockEl.querySelector('.iwac-vis-panel')) {
-            requestAnimationFrame(go);
-            return;
+        if (blockEl.querySelector('.iwac-vis-panel') || blockEl.hasAttribute('data-embed-whole')) {
+            requestAnimationFrame(run);
         }
-        obs = new MutationObserver(function () {
-            if (blockEl.querySelector('.iwac-vis-panel')) {
-                clearTimeout(timer);
-                timer = setTimeout(go, 120);
+    }
+
+    /**
+     * Single-panel embed: pin the requested panel as soon as it exists.
+     *
+     * It may not exist when the first panels do. It may sit in a section
+     * that renders on view (`P.lazyInit` — eleven of Albani Zaria's twenty
+     * panels), and nothing in a frame scrolls there; or a fetch may still
+     * be building it. So each time the block settles without it, whatever
+     * is still waiting to be seen is rendered now (`P.flushLazy`), and the
+     * next settle looks again. Once pinned, the same pass keeps the panel
+     * alone as late content lands beside it. An unknown slug leaves the
+     * whole block, as it always has.
+     */
+    function pinWhenReady(blockEl, slug) {
+        var pinned = null;
+        watchBlock(blockEl, function () {
+            if (pinned) { isolate(blockEl, pinned); return; }
+            if (!blockEl.querySelector('.iwac-vis-panel')) return;
+            if (E.selectPanel(blockEl, slug)) {
+                pinned = blockEl.querySelector('[data-iwac-panel-active]');
+                return;
             }
+            var P = ns.panels;
+            if (P && P.flushLazy) P.flushLazy(blockEl);
         });
-        obs.observe(blockEl, { childList: true, subtree: true });
-        // Safety valve: if the block errors out and never renders panels, stop
-        // observing after 15s (cb then enumerates nothing — harmless).
-        setTimeout(go, 15000);
     }
 
     function init() {
@@ -345,16 +470,15 @@
             if (body.classList.contains('iwac-embed-single')) {
                 var pslug = body.getAttribute('data-embed-panel') || '';
                 var block = document.querySelector('.iwac-vis-block');
-                if (pslug && block) {
-                    whenPanelsReady(block, function () { E.selectPanel(block, pslug); });
-                }
+                if (pslug && block) pinWhenReady(block, pslug);
             }
             return; // never add on-page copy buttons inside an embed
         }
-        // Live site: add copy-embed buttons to every embeddable block.
+        // Live site: add copy-embed buttons to every embeddable block, and
+        // to every panel it builds later.
         var blocks = document.querySelectorAll('.iwac-vis-block[data-embed-slug]');
         for (var i = 0; i < blocks.length; i++) {
-            (function (b) { whenPanelsReady(b, function () { E.addEmbedButtons(b); }); })(blocks[i]);
+            (function (b) { watchBlock(b, function () { E.addEmbedButtons(b); }); })(blocks[i]);
         }
     }
 

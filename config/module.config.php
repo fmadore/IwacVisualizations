@@ -141,6 +141,26 @@ $config = [
                                     ],
                                 ],
                             ],
+                            // An item's or an item set's Visualisations
+                            // dashboard, e.g. /iwac-embed/item/1234 or
+                            // /iwac-embed/item/1234/panel-2. Tried before
+                            // `block`, whose `/:block/:panel` would otherwise
+                            // claim `/item/1234` and 404 it as an unknown block.
+                            'resource' => [
+                                'type' => \Laminas\Router\Http\Segment::class,
+                                'priority' => 10,
+                                'options' => [
+                                    'route' => '/:resource/:id[/:panel]',
+                                    'constraints' => [
+                                        'resource' => 'item|item-set',
+                                        'id' => '[0-9]+',
+                                        'panel' => '[a-zA-Z0-9._-]+',
+                                    ],
+                                    'defaults' => [
+                                        'action' => 'resource',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],

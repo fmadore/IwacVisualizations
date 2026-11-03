@@ -50,8 +50,11 @@ final class BlockRegistry
      * A row with no `shell` renders through its own template.
      *
      * `embeddable` gates the block from the snippet gallery and the
-     * `/iwac-embed/:block` route. Configured blocks such as IWAC Timeline
-     * need `$block` data and must not appear in that zero-configuration route.
+     * `/iwac-embed/:block` route. The route renders without `$block`, so a
+     * configured block is embeddable only when its configuration is one
+     * choice the URL can name: `embedParam` is that query parameter, and
+     * its class implements `ConfiguredEmbed` to list the choices
+     * and render one (`?timeline=hajj-bf`, `?preset=ocr`).
      */
     const BLOCKS = [
         'iwac-timeline' => [
@@ -59,7 +62,8 @@ final class BlockRegistry
             'class'       => BlockLayout\IwacTimeline::class,
             'label'       => 'IWAC Timeline', // @translate
             'description' => 'Present an illustrated historical narrative with a date axis and a complete reading view.', // @translate
-            'embeddable'  => false,
+            'embeddable'  => true,
+            'embedParam'  => 'timeline',
         ],
         'albani-sermons' => [
             'invokable'   => 'albaniSermons',
@@ -340,13 +344,14 @@ final class BlockRegistry
             ],
         ],
         // Configured (a preset and a heading level), so it keeps its own
-        // template and stays out of the zero-configuration embed route.
+        // template; an embed names the preset and takes the default level.
         'pipeline-explainer' => [
             'invokable'   => 'pipelineExplainer',
             'class'       => BlockLayout\PipelineExplainer::class,
             'label'       => 'Pipeline Explainer', // @translate
             'description' => 'Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data.', // @translate
-            'embeddable'  => false,
+            'embeddable'  => true,
+            'embedParam'  => 'preset',
         ],
         'press-bylines' => [
             'invokable'   => 'pressBylines',
@@ -579,6 +584,16 @@ final class BlockRegistry
     }
 
     /**
+     * The query parameter that names a configured block's configuration in
+     * its embed URL, or null for a block that needs none.
+     */
+    public static function embedParam(string $slug): ?string
+    {
+        $param = self::get($slug)['embedParam'] ?? null;
+        return is_string($param) && $param !== '' ? $param : null;
+    }
+
+    /**
      * `slug => label` for every embeddable block — the embed whitelist and the
      * snippet gallery's listing. Doubles as the directory-traversal guard for
      * `common/block-layout/<slug>`, since only known slugs resolve.
@@ -586,7 +601,11 @@ final class BlockRegistry
     public static function embeddable(): array
     {
         $out = [];
-        foreach (self::BLOCKS as $slug => $row) {
+        // Rows read through get(), not off the constant: today every row is
+        // embeddable, and a static analyser reading BLOCKS would call this
+        // test dead — it is what keeps a future opt-out working.
+        foreach (self::slugs() as $slug) {
+            $row = self::get($slug);
             if (!empty($row['embeddable'])) {
                 $out[$slug] = $row['label'];
             }

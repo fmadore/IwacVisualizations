@@ -222,6 +222,7 @@
         // laicite.country=Togo`, `?laicite.view=concordance&laicite.q=école`.
         var url = P.bindUrlState ? P.bindUrlState(store, {
             prefix: 'laicite',
+            root: container,
             keys: [
                 { key: 'view', values: L.VIEW_KEYS },
                 { key: 'trendsCountry', param: 'country', values: trendsCountries },

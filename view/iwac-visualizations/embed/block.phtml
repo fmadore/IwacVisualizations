@@ -2,20 +2,27 @@
 /**
  * Embed content view — renders a single IWAC page block.
  *
- * The block-layout partials are zero-configuration: they read the current
- * site + base path (for the data-* hooks the JS orchestrators consume) and
- * never need `$block`, so rendering one here produces the exact same
- * markup, assets, and behaviour as on a normal site page. `$block => null`
- * is passed only to keep the partial's documented variable defined.
+ * The block-layout partials render without a `$block`: the zero-configuration
+ * ones read the current site + base path (for the data-* hooks the JS
+ * orchestrators consume), and a configured one reads the variables its
+ * `ConfiguredEmbed::embedVariables()` built from the choice in the URL. So
+ * rendering one here produces the exact same markup, assets, and behaviour as
+ * on a normal site page. `$block => null` is passed only to keep the
+ * partial's documented variable defined.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
- * @var string $slug  Validated block slug (also the embed route segment).
+ * @var string     $slug       Validated block slug (also the embed route segment).
+ * @var array|null $variables  A configured block's template variables.
  */
 use IwacVisualizations\Site\BlockRegistry;
 
-// Twenty of the twenty-two blocks share `_generic`, which reads its whole
-// declaration out of the registry (H5); `on-this-day`, which does more than
-// declare, keeps its own template. `partialFor()` is the same routing rule the
-// block layouts use. The slug is passed either way — `_generic` needs it to
-// find its row, and the specific template ignores it.
-echo $this->partial(BlockRegistry::partialFor($slug), ['block' => null, 'slug' => $slug]);
+// Twenty-one of the twenty-four blocks share `_generic`, which reads its whole
+// declaration out of the registry (H5); `on-this-day`, `iwac-timeline` and
+// `pipeline-explainer`, which do more than declare, keep their own templates.
+// `partialFor()` is the same routing rule the block layouts use. The slug is
+// passed either way — `_generic` needs it to find its row, and the specific
+// templates ignore it.
+echo $this->partial(
+    BlockRegistry::partialFor($slug),
+    ['block' => null, 'slug' => $slug] + (isset($variables) ? (array) $variables : [])
+);

@@ -87,4 +87,9 @@ echo $this->partial('common/iwac-block-shell', [
     'blockClass' => 'iwac-vis-pipeline',
     'prerendered' => $reading,
     'data' => ['instance' => $instance],
+    // One diagram, no panels: a single embed button for the whole block,
+    // whose URL names the preset (PipelineExplainer::embedVariables()).
+    'embedSlug' => 'pipeline-explainer',
+    'embedQuery' => 'preset=' . rawurlencode($content['preset']),
+    'embedWhole' => true,
 ]);

@@ -38,6 +38,15 @@
         ],
         "createdAt": "2026-10-27T09:00:54.231Z",
         "reason": "Claude: Playwright test-harness page, not product UI; its one inline rule is the page gutter around the block, and the block's spacing lives in asset/css/blocks/albani-sermons.css"
+      },
+      {
+        "rule": "monotonous-spacing",
+        "value": "*",
+        "files": [
+          "tests/browser/fixtures/embed.html"
+        ],
+        "createdAt": "2026-11-03T18:09:06.167Z",
+        "reason": "Claude: Playwright test fixture, not a design surface; its only spacing is a 4000px offset that keeps the lazy section out of view for embed.spec.js"
       }
     ]
   }

@@ -14,7 +14,9 @@
  * never as decoration. iwac-core.css is enqueued for the token layer.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
- * @var array  $blocks    slug => label
+ * @var array  $cards     one per embeddable block, and one per choice of a
+ *                        configured block: slug, label (source string),
+ *                        variant (translated, '' for none), query
  * @var string $siteSlug  current site slug
  */
 $escapeHtml = $this->plugin('escapeHtml');
@@ -72,24 +74,30 @@ $siteBase = $this->basePath() . '/s/' . $siteSlug;
         'Copy a snippet below to embed any visualisation on another website. Each iframe loads live from this site and resizes itself to fit.'
     )) ?></p>
 
-    <?php foreach ($blocks as $slug => $label): ?>
+    <?php foreach ($cards as $card): ?>
         <?php
+        $slug = $card['slug'];
+        // A configured block's card names its choice: "Pipeline Explainer —
+        // OCR with AI".
+        $title = $this->translate($card['label'])
+            . ($card['variant'] !== '' ? ' — ' . $card['variant'] : '');
         // Preview loads same-origin (relative path); the copy snippet is built
         // client-side with an absolute URL via IWACVis.embed.
         $previewSrc = $this->url('site/iwac-embed/block', [
             'site-slug' => $siteSlug,
             'block'     => $slug,
-        ]);
+        ], ['query' => $card['query']]);
         ?>
         <section class="iwac-embed-card" data-slug="<?= $escapeAttr($slug) ?>"
                  data-site-base="<?= $escapeAttr($siteBase) ?>"
-                 data-label="<?= $escapeAttr($this->translate($label)) ?>">
+                 data-query="<?= $escapeAttr(http_build_query($card['query'], '', '&', PHP_QUERY_RFC3986)) ?>"
+                 data-label="<?= $escapeAttr($title) ?>">
             <header>
-                <h2><?= $escapeHtml($this->translate($label)) ?></h2>
-                <span class="slug"><?= $escapeHtml($slug) ?></span>
+                <h2><?= $escapeHtml($title) ?></h2>
+                <span class="slug"><?= $escapeHtml($slug . ($card['query'] ? '?' . http_build_query($card['query'], '', '&', PHP_QUERY_RFC3986) : '')) ?></span>
             </header>
             <iframe class="iwac-embed-preview" src="<?= $escapeAttr($previewSrc) ?>"
-                    title="<?= $escapeAttr($this->translate($label)) ?>" loading="lazy"></iframe>
+                    title="<?= $escapeAttr($title) ?>" loading="lazy"></iframe>
             <div class="iwac-embed-code">
                 <button type="button" class="iwac-embed-copy" data-embed-block>
                     <?= $escapeHtml($this->translate('Copy')) ?>
@@ -103,6 +111,12 @@ $siteBase = $this->basePath() . '/s/' . $siteSlug;
         </section>
     <?php endforeach; ?>
 
+    <p class="iwac-embed-note"><?= $escapeHtml($this->translate(
+        'Every panel on the site has its own embed button, in its toolbar. A panel copied while another view or filter is showing embeds that view.'
+    )) ?></p>
+    <p class="iwac-embed-note"><?= $this->translate(
+        'Item dashboards can be embedded too: use the embed button on a panel of an item’s Visualisations section, or <code>/iwac-embed/item/&lt;id&gt;</code> for the whole dashboard (<code>/iwac-embed/item-set/&lt;id&gt;</code> for an item set).'
+    ) ?></p>
     <p class="iwac-embed-note"><?= $this->translate(
         'Tip: embeds render in light mode by default; append <code>?theme=dark</code> for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour.'
     ) ?></p>

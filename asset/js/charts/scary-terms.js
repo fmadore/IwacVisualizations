@@ -240,6 +240,7 @@
             .map(function (v) { return v.key; });
         var url = P.bindUrlState ? P.bindUrlState(store, {
             prefix: 'scary',
+            root: container,
             keys: [
                 { key: 'view', values: viewKeys },
                 { key: 'country', values: availableCountries },

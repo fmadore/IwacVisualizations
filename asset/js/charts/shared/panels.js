@@ -324,6 +324,9 @@
     /*  On-view lazy init                                                 */
     /* ----------------------------------------------------------------- */
 
+    /** Every `lazyInit` whose target has not been seen yet (P.flushLazy). */
+    var waiting = [];
+
     /**
      * Run `render` exactly once, the first time `target` nears the
      * viewport (IntersectionObserver with a rootMargin pre-trigger).
@@ -340,6 +343,7 @@
     P.lazyInit = function (target, render, opts) {
         var fired = false;
         var observer = null;
+        var entry = null;
         function fire() {
             if (fired) return;
             fired = true;
@@ -348,6 +352,8 @@
             // for the life of the page when the element never scrolled into
             // view, and waking once more when it did.
             if (observer) observer.disconnect();
+            var at = waiting.indexOf(entry);
+            if (at !== -1) waiting.splice(at, 1);
             render();
         }
         if (typeof IntersectionObserver === 'undefined') {
@@ -363,7 +369,27 @@
             }
         }, { rootMargin: (opts && opts.rootMargin) || '200px' });
         observer.observe(target);
+        // A view that was switched away from takes its unseen sections out
+        // of the page; don't keep them alive here.
+        waiting = waiting.filter(function (w) { return w.target.isConnected !== false; });
+        entry = { target: target, fire: fire };
+        waiting.push(entry);
         return fire;
+    };
+
+    /**
+     * Render now every section inside `root` that is still waiting to be
+     * scrolled into view. A single-panel embed calls this when the panel it
+     * was asked for is not among those rendered so far: in a frame showing
+     * one panel, the section that would build it never scrolls into view.
+     * Each render still runs once.
+     *
+     * @param {Element} [root]  only targets inside it; every one without
+     */
+    P.flushLazy = function (root) {
+        waiting.slice().forEach(function (w) {
+            if (!root || (root.contains && root.contains(w.target))) w.fire();
+        });
     };
 
     /* ----------------------------------------------------------------- */

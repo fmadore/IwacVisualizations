@@ -1158,9 +1158,17 @@ body {
     color: var(--primary, #ce4115);
 }
 
-/*  Single-panel embed (/iwac-embed/:block/:panel). embed.js hides every panel
- *  but the requested one and marks the survivor; here it spans the full grid
- *  width and sits flush at the top of the frame. */
+/*  A block with no panels to pin (Pipeline Explainer, a timeline) gets the
+ *  labelled form once, at its foot, aligned with the end of the line. */
+.iwac-vis-embed-whole {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-3, 0.75rem);
+}
+
+/*  Single-panel embed (/iwac-embed/:block/:panel). embed.js hides everything
+ *  in the block but the requested panel and marks the survivor; here it spans
+ *  the full grid width and sits flush at the top of the frame. */
 .iwac-vis-block--single-panel .iwac-vis-panel[data-iwac-panel-active] {
     grid-column: 1 / -1;
     margin: 0;

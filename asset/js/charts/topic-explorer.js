@@ -181,6 +181,9 @@
             siteBase: container.dataset.siteBase || '',
             data: data
         };
+        // A topic's panels only exist while it is open, so an embed of one
+        // carries `?topic=` (embed.js stateQuery reads this).
+        container.setAttribute('data-url-state', URL_PARAM);
 
         var body = P.el('div', 'iwac-vis-topic-explorer__body');
         container.appendChild(body);

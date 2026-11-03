@@ -15,6 +15,7 @@
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ * @var string|null $embedHeading  The resource's title, passed only by the embed route
  */
 
 echo $this->partial('common/iwac-block-shell', [
@@ -26,7 +27,10 @@ echo $this->partial('common/iwac-block-shell', [
         'bundle' => 'publication-dashboard',
     ],
     'blockClass'   => 'iwac-vis-publication',
-    'heading'      => $this->translate('Visualisations'),
+    // In an embed the frame has no item page around it, so the
+    // title says whose dashboard this is (EmbedController).
+    'heading'      => $embedHeading ?? $this->translate('Visualisations'),
+    'embedSlug'    => 'item/' . $resource->id(),
     // A section of the item page, beside the theme's "How to cite" and
     // "Linked resources": the same h2 and the same 2px section rule.
     'headingLevel' => 'h2',

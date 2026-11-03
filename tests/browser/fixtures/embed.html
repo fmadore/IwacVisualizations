@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC embed fixture</title>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+</head>
+<body>
+    <script>
+        // ?embed=<slug> stands in for the single-panel embed route, as in
+        // dashboard.html: the layout marks the body and names the panel.
+        const pinned = new URLSearchParams(location.search).get('embed');
+        if (pinned) {
+            document.body.className = 'iwac-embed-body iwac-embed-single';
+            document.body.dataset.embedPanel = pinned;
+        }
+    </script>
+    <main>
+        <!-- A multi-view block: chrome around its panels (what a single-panel
+             embed must hide), view state in the address (`data-url-state`, as
+             P.bindUrlState stamps it), and a section that renders its panel
+             only when it scrolls into view (Albani Zaria's lazy sections). -->
+        <section class="iwac-vis-block iwac-vis-fixture" data-embed-slug="laicite"
+                 data-embed-base="/s/iwac" data-url-state="laicite">
+            <header class="iwac-vis-block-header">
+                <h3 class="iwac-vis-block-header__title">Laïcité in the IWAC collection</h3>
+                <p class="iwac-vis-block-header__desc">The masthead a single-panel embed must not show.</p>
+            </header>
+            <div class="iwac-vis-fixture-controls">View: Overview</div>
+            <div class="iwac-vis-overview-grid">
+                <article class="iwac-vis-panel">
+                    <h4>By corpus</h4>
+                    <div class="iwac-vis-chart">Table placeholder</div>
+                </article>
+                <article class="iwac-vis-panel">
+                    <h4>Over time</h4>
+                    <div class="iwac-vis-chart">Chart placeholder</div>
+                </article>
+            </div>
+            <section class="iwac-vis-fixture-lazy" style="margin-top: 4000px">
+                <h3>Signature words</h3>
+            </section>
+        </section>
+
+        <!-- A block with no panels to pin, as the Pipeline Explainer and the
+             timeline render it: its configuration and one whole-block button. -->
+        <section class="iwac-vis-block iwac-vis-pipeline" data-embed-slug="pipeline-explainer"
+                 data-embed-base="/s/iwac" data-embed-query="preset=ocr" data-embed-whole="">
+            <figure class="iwac-vis-pipeline__figure">
+                <h3 class="iwac-vis-pipeline__title">How OCR with AI reads a page</h3>
+                <p>Stages placeholder</p>
+            </figure>
+        </section>
+    </main>
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.en.min.js"><\/script>');
+    </script>
+    <script>
+        // The lazy section builds its panel the first time it is seen.
+        const lazyHost = document.querySelector('.iwac-vis-fixture-lazy');
+        IWACVis.panels.lazyInit(lazyHost, function () {
+            const panel = document.createElement('article');
+            panel.className = 'iwac-vis-panel';
+            panel.setAttribute('data-iwac-panel', 'fixture-keyness');
+            panel.innerHTML = '<h4>Signature words by recording</h4><div class="iwac-vis-chart">Chart placeholder</div>';
+            lazyHost.appendChild(panel);
+        });
+    </script>
+</body>
+</html>

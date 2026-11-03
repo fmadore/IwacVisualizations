@@ -165,6 +165,7 @@
         if (P.bindUrlState) {
             P.bindUrlState(store, {
                 prefix: 'albani',
+                root: container,
                 keys: [
                     { key: 'scope', values: A.SCOPES, default: 'all' },
                     { key: 'glosses', values: ['on', 'off'], default: 'on' }

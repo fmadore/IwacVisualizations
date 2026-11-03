@@ -236,6 +236,9 @@
      *   change that should get its own history entry (navigation-like: a
      *   topic detail). Off by default — a facet click is not a page.
      * @param {boolean} [cfg.hydrate=true]  read the URL now, silently
+     * @param {Element} [cfg.root]  the block element: its `data-url-state`
+     *   gains this binding's prefix, so an embed of one of its panels can
+     *   carry the view the panel belongs to (embed.js `stateQuery`)
      * @param {Window} [cfg.window]  for tests
      * @returns {{hydrate: Function, sync: Function, href: Function, stop: Function}}
      */
@@ -244,6 +247,13 @@
         var win = cfg.window || window;
         var prefix = cfg.prefix ? cfg.prefix + '.' : '';
         var specs = (cfg.keys || []).map(normaliseKey);
+        if (cfg.root && cfg.root.setAttribute) {
+            var owned = (cfg.root.getAttribute('data-url-state') || '').split(/\s+/).filter(Boolean);
+            (cfg.prefix ? [cfg.prefix] : specs.map(function (s) { return s.param; })).forEach(function (name) {
+                if (owned.indexOf(name) === -1) owned.push(name);
+            });
+            cfg.root.setAttribute('data-url-state', owned.join(' '));
+        }
         var defaults = {};
         specs.forEach(function (s) {
             defaults[s.key] = s.hasDefault ? s.defaultValue : store.state[s.key];

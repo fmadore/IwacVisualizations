@@ -3,17 +3,61 @@ declare(strict_types=1);
 
 namespace IwacVisualizations\Site\BlockLayout;
 
+use IwacVisualizations\Site\ConfiguredEmbed;
 use IwacVisualizations\Timeline\Catalog;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\PhpRenderer;
 use Omeka\Api\Representation\SitePageBlockRepresentation;
 use Omeka\Api\Representation\SitePageRepresentation;
 use Omeka\Api\Representation\SiteRepresentation;
 
-class IwacTimeline extends AbstractIwacBlockLayout
+/**
+ * An embed names the timeline (`?timeline=hajj-bf`) and opens it in the
+ * site's language — or the other one, when the timeline has only that —
+ * on its narrative view at the title slide.
+ */
+class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
 {
     const SLUG = 'iwac-timeline';
+
+    /** `en` or `fr` from a site locale such as `fr_FR`. */
+    private static function language(string $siteLocale): string
+    {
+        return str_starts_with(strtolower($siteLocale), 'fr') ? 'fr' : 'en';
+    }
+
+    public static function embedVariants(HelperPluginManager $helpers): array
+    {
+        $language = self::language((string) $helpers->get('siteSetting')('locale', 'en'));
+        $variants = [];
+        foreach ($helpers->get('iwacTimelineData')()->entries() as $slug => $entry) {
+            $titles = array_filter(array_column($entry['locales'], 'title'), 'is_string');
+            $variants[$slug] = (string) ($entry['locales'][$language]['title'] ?? implode(' / ', $titles) ?: $slug);
+        }
+        return $variants;
+    }
+
+    public static function embedVariables(HelperPluginManager $helpers, string $value): ?array
+    {
+        if (!Catalog::validId($value)) {
+            return null;
+        }
+        $language = self::language((string) $helpers->get('siteSetting')('locale', 'en'));
+        $catalog = $helpers->get('iwacTimelineData')();
+        $timeline = $catalog->load($value, $language)
+            ?? $catalog->load($value, $language === 'fr' ? 'en' : 'fr');
+        if (!$timeline) {
+            return null;
+        }
+        return [
+            'timeline' => $timeline,
+            'instance' => 'embed-' . $value,
+            'startSlide' => 'intro',
+            'layout' => 'narrative',
+        ];
+    }
 
     public function form(PhpRenderer $view, SiteRepresentation $site,
         ?SitePageRepresentation $page = null, ?SitePageBlockRepresentation $block = null)
@@ -55,7 +99,7 @@ class IwacTimeline extends AbstractIwacBlockLayout
         $slug = (string) $block->dataValue('timeline', '');
         $locale = (string) $block->dataValue('locale', 'auto');
         if (!in_array($locale, ['en', 'fr'], true)) {
-            $locale = str_starts_with(strtolower((string) $view->siteSetting('locale', 'en')), 'fr') ? 'fr' : 'en';
+            $locale = self::language((string) $view->siteSetting('locale', 'en'));
         }
         $start = (string) $block->dataValue('start_slide', 'intro');
         return $view->partial($templateViewScript ?: $this->templateViewScript(), [

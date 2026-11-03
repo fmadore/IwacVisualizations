@@ -47,10 +47,30 @@ try {
     if (strpos($form, 'value="history" selected') === false && strpos($form, 'selected="selected" value="history"') === false) {
         throw new RuntimeException('Timeline editor did not retain the catalogue selection: ' . $form);
     }
-    if (isset(\IwacVisualizations\Site\BlockRegistry::embeddable()['iwac-timeline'])) {
-        throw new RuntimeException('Configured timeline exposed in the zero-configuration embed gallery.');
+    // The embed names the timeline in its URL (`?timeline=history`). A site
+    // request has its site settings targeted by Omeka's MVC listener; here
+    // that is done by hand, since the embed reads the site's language.
+    $services->get('Omeka\Settings\Site')->setTargetId($site->id());
+    $helpers = $services->get('ViewHelperManager');
+    $timelineEmbed = \IwacVisualizations\Site\BlockLayout\IwacTimeline::class;
+    if ($timelineEmbed::embedVariants($helpers) !== ['history' => 'A history']) {
+        throw new RuntimeException('The timeline embed gallery does not list the synced timeline: '
+            . json_encode($timelineEmbed::embedVariants($helpers)));
     }
-    echo "Native timeline: registered editor, active generation, purified reading view and asset plan passed.\n";
+    foreach (['no-such-timeline', '../history', ''] as $stranger) {
+        if ($timelineEmbed::embedVariables($helpers, $stranger) !== null) {
+            throw new RuntimeException('A timeline embed rendered for ' . json_encode($stranger));
+        }
+    }
+    $embed = html_entity_decode($renderer->partial(
+        \IwacVisualizations\Site\BlockRegistry::partialFor('iwac-timeline'),
+        ['block' => null, 'slug' => 'iwac-timeline'] + $timelineEmbed::embedVariables($helpers, 'history')
+    ), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    foreach (['data-timeline="history"', 'data-event-id="intro"', 'data-embed-slug="iwac-timeline"',
+        'data-embed-query="timeline=history"', 'data-embed-whole=""'] as $needle) {
+        if (strpos($embed, $needle) === false) throw new RuntimeException('Timeline embed missing ' . $needle);
+    }
+    echo "Native timeline: registered editor, active generation, purified reading view, asset plan and embed passed.\n";
 } finally {
     $settings->set('iwacvis_last_sync', $previousSync);
     unlink($directory . '/history.en.json');

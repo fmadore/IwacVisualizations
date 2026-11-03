@@ -43,8 +43,11 @@
         Array.prototype.forEach.call(wrap.querySelectorAll('.iwac-embed-card'), function (card) {
             var slug = card.getAttribute('data-slug');
             var siteBase = card.getAttribute('data-site-base') || '';
+            // A configured block's choice (`preset=ocr`), carried by every
+            // snippet of its card.
+            var query = card.getAttribute('data-query') || '';
             var label = card.getAttribute('data-label') || slug;
-            var blockSnippet = E.snippet(E.url(siteBase, slug), label, 600);
+            var blockSnippet = E.snippet(E.url(siteBase, slug, '', query), label, 600);
 
             // Whole-block snippet → the <pre> + its Copy button.
             var code = card.querySelector('.iwac-embed-snippet');
@@ -65,7 +68,7 @@
                 list.textContent = '';
                 panels.forEach(function (info) {
                     var title = info.title || info.slug;
-                    var snippet = E.snippet(E.url(siteBase, slug, info.slug), label + ' — ' + title, 520);
+                    var snippet = E.snippet(E.url(siteBase, slug, info.slug, query), label + ' — ' + title, 520);
                     var li = document.createElement('li');
                     var name = document.createElement('span');
                     name.className = 'iwac-embed-panel-name';
@@ -82,6 +85,30 @@
                 panelsBox.hidden = false;
             }
 
+            /**
+             * Keep the list in step with the preview. A block's first panels
+             * are not all of them: Albani Zaria renders most of its sections
+             * only as they scroll into view, which nothing does inside a
+             * preview, so those are rendered now (`flushLazy`, in the
+             * preview's own window) and the list follows as they land.
+             */
+            var followed = false;
+            function follow(block, win) {
+                if (followed) return; // `load` and the cached-load check can both get here
+                followed = true;
+                var timer = null;
+                var MO = win.MutationObserver || window.MutationObserver;
+                new MO(function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        var panels = E.enumeratePanels(block);
+                        if (panels.length > 1) renderPanels(panels);
+                    }, 300);
+                }).observe(block, { childList: true, subtree: true });
+                var P = win.IWACVis && win.IWACVis.panels;
+                if (P && P.flushLazy) P.flushLazy(block);
+            }
+
             function tryEnumerate(attemptsLeft) {
                 var doc;
                 try { doc = iframe.contentDocument; } catch (e) { return; } // cross-origin guard
@@ -89,6 +116,7 @@
                 var panels = block ? E.enumeratePanels(block) : [];
                 if (panels.length > 1) {
                     renderPanels(panels);
+                    follow(block, iframe.contentWindow);
                 } else if (attemptsLeft > 0) {
                     setTimeout(function () { tryEnumerate(attemptsLeft - 1); }, 400);
                 }

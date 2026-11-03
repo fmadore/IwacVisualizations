@@ -110,6 +110,7 @@
         // dropped on the way in; the cap applies as it does to the picker.
         var url = P.bindUrlState ? P.bindUrlState(store, {
             prefix: 'ngram',
+            root: container,
             keys: [
                 { key: 'selected', param: 'terms',
                   parse: function (raw) {

@@ -105,21 +105,21 @@ class Visualizations implements ResourcePageBlockLayoutInterface
         return ['items'];
     }
 
-    public function render(PhpRenderer $view, AbstractResourceEntityRepresentation $resource): string
+    /**
+     * The dashboard partial for this resource, or null when its template has
+     * none. Shared with the embed route (`/iwac-embed/item/<id>`), so an item
+     * embeds exactly the dashboard its page shows.
+     */
+    public static function partialFor(AbstractResourceEntityRepresentation $resource): ?string
     {
         $template = $resource->resourceTemplate();
-        if (!$template) {
-            return '';
-        }
+        $partial = $template ? (self::TEMPLATE_PARTIALS[(int) $template->id()] ?? null) : null;
+        return $partial === null ? null : 'common/resource-page-block-layout/visualizations/' . $partial;
+    }
 
-        $partial = self::TEMPLATE_PARTIALS[(int) $template->id()] ?? null;
-        if ($partial === null) {
-            return '';
-        }
-
-        return $view->partial(
-            'common/resource-page-block-layout/visualizations/' . $partial,
-            ['resource' => $resource]
-        );
+    public function render(PhpRenderer $view, AbstractResourceEntityRepresentation $resource): string
+    {
+        $partial = self::partialFor($resource);
+        return $partial === null ? '' : $view->partial($partial, ['resource' => $resource]);
     }
 }

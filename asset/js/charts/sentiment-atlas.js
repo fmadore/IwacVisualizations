@@ -837,6 +837,7 @@
         var pairCount = pairsOf(state.dimension).length;
         var url = P.bindUrlState ? P.bindUrlState(store, {
             prefix: 'sentiment',
+            root: container,
             keys: [
                 { key: 'model', values: MODELS.map(function (m) { return m.key; }) },
                 { key: 'pair', validate: function (v) {

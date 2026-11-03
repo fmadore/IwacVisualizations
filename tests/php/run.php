@@ -481,8 +481,31 @@ namespace {
     }
     check($shellRows === 21, "expected 21 generic blocks, found $shellRows");
     check($ownTemplate === 3, "expected 3 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer), found $ownTemplate");
-    check(!isset(BlockRegistry::embeddable()['pipeline-explainer']),
-        'pipeline-explainer is configured, so it must stay off the zero-configuration embed route');
+    // Every block embeds. The two configured ones name their configuration in
+    // the URL; their classes turn it into template variables, and their own
+    // templates must say so on the wrapper (embedSlug, embedQuery,
+    // embedWhole), since they have no panels to carry per-panel buttons.
+    check(count(BlockRegistry::embeddable()) === count(BlockRegistry::slugs()),
+        'a page block is not embeddable: ' . implode(', ', array_diff(BlockRegistry::slugs(), array_keys(BlockRegistry::embeddable()))));
+    check(BlockRegistry::embedParam('pipeline-explainer') === 'preset', 'the pipeline embed lost its ?preset=');
+    check(BlockRegistry::embedParam('iwac-timeline') === 'timeline', 'the timeline embed lost its ?timeline=');
+    check(BlockRegistry::embedParam('laicite') === null, 'a zero-configuration block grew an embed parameter');
+    check(BlockRegistry::embedParam('not-a-block') === null, 'embedParam() answered for an unknown slug');
+    foreach (BlockRegistry::slugs() as $slug) {
+        if (BlockRegistry::embedParam($slug) === null) {
+            continue;
+        }
+        $row = BlockRegistry::get($slug);
+        $class = substr($row['class'], strrpos($row['class'], '\\') + 1);
+        $source = (string) file_get_contents($root . '/src/Site/BlockLayout/' . $class . '.php');
+        check(preg_match('/class ' . $class . ' extends \w+ implements ConfiguredEmbed\b/', $source) === 1,
+            "$slug names an embed parameter but $class does not implement ConfiguredEmbed");
+        check(empty($row['shell']), "$slug is configured but declares a registry shell");
+        $template = (string) file_get_contents($root . '/view/common/block-layout/' . $slug . '.phtml');
+        foreach (["'embedSlug' => '$slug'", "'embedQuery' => '" . BlockRegistry::embedParam($slug) . "=' . rawurlencode(", "'embedWhole' => true"] as $needle) {
+            check(strpos($template, $needle) !== false, "$slug.phtml lost $needle");
+        }
+    }
 
     // Pipeline explainer: every stage a preset names is a drawing its Svelte
     // component draws, every string reaches the translator, and a saved
@@ -574,6 +597,25 @@ namespace {
         'photograph template no longer dispatches to minimal-item'
     );
     check($visualizations->render($view, new FakeTemplateResource(999)) === '', 'unknown template should render nothing');
+    // The embed route asks the same question: an item whose template has no
+    // dashboard is a 404 there, not an empty frame.
+    check(Visualizations::partialFor(new FakeTemplateResource(999)) === null, 'partialFor() answered for an unmapped template');
+    check(Visualizations::partialFor(new FakeTemplateResource(5))
+        === 'common/resource-page-block-layout/visualizations/person', 'partialFor() lost the person dashboard');
+
+    // Every dashboard offers its panels for embedding, and takes the title
+    // the embed route hands it instead of "Visualisations".
+    foreach (array_unique(array_merge(
+        array_map(fn ($p) => 'visualizations/' . $p, Visualizations::TEMPLATE_PARTIALS),
+        ['item-set-dashboard']
+    )) as $partial) {
+        $source = (string) file_get_contents($root . '/view/common/resource-page-block-layout/' . $partial . '.phtml');
+        $kind = $partial === 'item-set-dashboard' ? 'item-set' : 'item';
+        check(preg_match("/'embedSlug'\\s*=> '$kind\\/' \\. \\\$resource->id\\(\\),/", $source) === 1,
+            "$partial.phtml declares no $kind embed slug");
+        check(strpos($source, "\$embedHeading ?? \$this->translate('Visualisations')") !== false,
+            "$partial.phtml ignores the embed route's heading");
+    }
 
     // Class 38 spans two templates since 2026-08-12: 19 (deposited
     // recordings) and 23 (YouTube uploads). Template 23 went unmapped at

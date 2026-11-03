@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **Every panel can be embedded, not only the first ones a block draws.** Embed buttons were added once, as a block's first panels appeared, so panels drawn later had none: eleven of the Albani Zaria sermons' twenty (their sections render as they scroll into view), every Laïcité, Scary Terms and Sentiment Atlas view past the first, and Topic Explorer's topic detail. Buttons now follow the block for as long as the page is open.
+- **A panel embed keeps the view it was copied from.** Its URL now carries the block's own view and filters (`?laicite.view=trends&laicite.country=Togo`, `?topic=7`), so a panel of a second view no longer opens on the first one. Another block's settings on the same page are left out.
+- **A single-panel embed shows the panel alone.** It used to hide only the other panels, so `/iwac-embed/laicite/panel-1` showed its table under the dossier's title, figures, tabs and view switch. A panel whose section renders only when scrolled to (most of the Albani page) is now rendered for the embed instead of leaving the whole block in the frame.
+- **The Pipeline Explainer and IWAC timelines can be embedded.** Each names its content in the URL (`/iwac-embed/pipeline-explainer?preset=ocr`, `/iwac-embed/iwac-timeline?timeline=hajj-bf`); on the site, each gets one *Copy embed code* button at its foot. The `/iwac-embed` gallery lists every preset and every synced timeline.
+- **Item and item-set dashboards can be embedded.** `/iwac-embed/item/<id>` frames an item's Visualisations dashboard under the item's title, and `/iwac-embed/item-set/<id>` an item set's; each panel of a dashboard has its own embed button on the item page. Private items stay private: the embed shows only what the visitor could see on the site.
+
 ### v1.96.0 — Ask AI and press attitudes in the Pipeline Explainer (2026-11-03)
 
 - **Two more Pipeline Explainer presets.** *Ask AI* shows how an assistant connected to the IWAC MCP server answers a question: the question and the French terms it is searched as, the server's read-only tools, the research dataset that answers them, results that come back with their IWAC links and the dataset version, and an answer that cites them. *Press attitudes* shows the sentiment analysis: French- and English-language articles sent whole, one task given to every model of the panel, the three ratings and their scales, the justification saved with each rating, and the atlas comparing the models without a majority vote. They suit the Ask AI and Press attitudes (AI) pages.

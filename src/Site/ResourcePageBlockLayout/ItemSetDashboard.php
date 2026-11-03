@@ -9,6 +9,9 @@ use Omeka\Site\ResourcePageBlockLayout\ResourcePageBlockLayoutInterface;
 
 class ItemSetDashboard implements ResourcePageBlockLayoutInterface
 {
+    /** Also what the embed route renders for `/iwac-embed/item-set/<id>`. */
+    const PARTIAL = 'common/resource-page-block-layout/item-set-dashboard';
+
     public function getLabel(): string
     {
         return 'Item Set Dashboard'; // @translate
@@ -21,7 +24,7 @@ class ItemSetDashboard implements ResourcePageBlockLayoutInterface
 
     public function render(PhpRenderer $view, AbstractResourceEntityRepresentation $resource): string
     {
-        return $view->partial('common/resource-page-block-layout/item-set-dashboard', [
+        return $view->partial(self::PARTIAL, [
             'resource' => $resource,
         ]);
     }

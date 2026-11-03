@@ -4,36 +4,53 @@ declare(strict_types=1);
 namespace IwacVisualizations\Controller\Site;
 
 use IwacVisualizations\Site\BlockRegistry;
+use IwacVisualizations\Site\ResourcePageBlockLayout\ItemSetDashboard;
+use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
+use Omeka\Api\Exception\NotFoundException;
+use Omeka\Api\Exception\PermissionDeniedException;
 
 /**
- * Standalone embed endpoint for the IWAC page blocks.
+ * Standalone embed endpoint for the IWAC visualisations.
  *
- * Each IWAC page block is zero-configuration and only needs a site
- * context (current site + base path) to render — the block templates
- * never read `$block`. That lets us render any single block on its own
- * bare page, suitable for dropping into a third-party site via an
- * `<iframe>`. Because the iframe loads from this same origin, the
- * same-origin `files/iwac-visualizations/` data fetches, the module CSS, and the theme tokens
- * all resolve exactly as they do on a normal site page — no CORS, no
- * cross-origin data copy, no stylesheet collision with the host page.
+ * The page blocks render without `$block` — the zero-configuration ones read
+ * only a site context (current site + base path), and the two configured ones
+ * read the one choice their URL names (`ConfiguredEmbed`). That lets us render
+ * any single block on its own bare page, suitable for dropping into a
+ * third-party site via an `<iframe>`. The per-item dashboards render the same
+ * way from the resource the URL names. Because the iframe loads from this same
+ * origin, the same-origin `files/iwac-visualizations/` data fetches, the
+ * module CSS, and the theme tokens all resolve exactly as they do on a normal
+ * site page — no CORS, no cross-origin data copy, no stylesheet collision
+ * with the host page.
  *
  * Routes (children of Omeka's `site` route, so `__SITE__` is inherited
  * and the current site / public theme are set):
  *
- *   /s/:site-slug/iwac-embed                 → indexAction (snippet gallery)
- *   /s/:site-slug/iwac-embed/:block          → blockAction (one bare block)
- *   /s/:site-slug/iwac-embed/:block/:panel   → blockAction (one bare panel)
+ *   /s/:site-slug/iwac-embed                       → indexAction (snippet gallery)
+ *   /s/:site-slug/iwac-embed/:block                → blockAction (one bare block)
+ *   /s/:site-slug/iwac-embed/:block/:panel         → blockAction (one bare panel)
+ *   /s/:site-slug/iwac-embed/item/:id[/:panel]     → resourceAction (an item's dashboard)
+ *   /s/:site-slug/iwac-embed/item-set/:id[/:panel] → resourceAction (an item set's)
  *
- * Query params honoured by blockAction (all optional):
+ * Query params honoured by blockAction and resourceAction (all optional):
  *   ?theme=light|dark   force the colour mode (default: light)
  *   ?primary=RRGGBB     a brand SEED to derive the accent from, as the theme
  *                       derives its own (EmbedBrand); the theme's stock seed
  *                       overrides nothing
+ *   ?<embedParam>=…     a configured block's choice (`?preset=ocr`), required
+ *   ?<prefix>.<key>=…   a block's view state, read by the block's own script
+ *                       (`?laicite.view=trends`) — the server ignores it
  */
 class EmbedController extends AbstractActionController
 {
+    /** The resource route segment => its API resource name. */
+    const RESOURCES = [
+        'item'     => 'items',
+        'item-set' => 'item_sets',
+    ];
+
     /**
      * Whitelist of embeddable page blocks: slug => human label.
      *
@@ -52,15 +69,30 @@ class EmbedController extends AbstractActionController
 
     /**
      * Snippet gallery: lists every embeddable block with a live preview
-     * and a copy-paste `<iframe>` + auto-resize snippet.
+     * and a copy-paste `<iframe>` + auto-resize snippet. A configured block
+     * is listed once per choice — each Pipeline Explainer preset, each
+     * synced timeline.
      */
     public function indexAction()
     {
         $this->layout()->setTemplate('iwac-visualizations/layout/embed');
         $this->layout()->setVariable('isGallery', true);
 
+        $cards = [];
+        foreach (self::blocks() as $slug => $label) {
+            $param = BlockRegistry::embedParam($slug);
+            if ($param === null) {
+                $cards[] = ['slug' => $slug, 'label' => $label, 'variant' => '', 'query' => []];
+                continue;
+            }
+            $class = BlockRegistry::get($slug)['class'];
+            foreach ($class::embedVariants($this->viewHelpers()) as $value => $variant) {
+                $cards[] = ['slug' => $slug, 'label' => $label, 'variant' => $variant, 'query' => [$param => $value]];
+            }
+        }
+
         $view = new ViewModel([
-            'blocks'   => self::blocks(),
+            'cards'    => $cards,
             'siteSlug' => $this->currentSite()->slug(),
         ]);
         $view->setTemplate('iwac-visualizations/embed/index');
@@ -88,21 +120,23 @@ class EmbedController extends AbstractActionController
             ->addHeaderLine('Cache-Control', 'private, max-age=300');
     }
 
-    /**
-     * Render one page block on a bare page for iframe embedding.
-     */
-    public function blockAction()
+    /** The bare 404 page an unknown block, choice or resource gets. */
+    private function notFound(): ViewModel
     {
-        $slug = (string) $this->params()->fromRoute('block', '');
-        $blocks = self::blocks();
-        if (!isset($blocks[$slug])) {
-            $this->getResponse()->setStatusCode(404);
-            $view = new ViewModel();
-            $view->setTerminal(true);
-            $view->setTemplate('iwac-visualizations/embed/not-found');
-            return $view;
-        }
+        $this->getResponse()->setStatusCode(404);
+        $view = new ViewModel();
+        $view->setTerminal(true);
+        $view->setTemplate('iwac-visualizations/embed/not-found');
+        return $view;
+    }
 
+    /**
+     * Put the bare embed layout around the response, with the colour mode
+     * and accent the query asks for, the frame's `<title>`, and the pinned
+     * panel when the URL names one.
+     */
+    private function frame(string $title): void
+    {
         // Single-panel request: an optional :panel segment pins one panel of
         // a multi-panel block. The slug is opaque here (enumerated client-side
         // by embed.js); the route constraint is the only validation. Empty
@@ -127,9 +161,6 @@ class EmbedController extends AbstractActionController
             $primary = '';
         }
 
-        // The registry's labels are English source strings (`// @translate`);
-        // the French site's tab title read "Collection Overview".
-        $title = $this->translate($blocks[$slug]);
         if ($panel !== '') {
             $title .= ' — ' . $panel;
         }
@@ -139,10 +170,74 @@ class EmbedController extends AbstractActionController
         $this->layout()->setVariable('embedPrimary', $primary);
         $this->layout()->setVariable('embedTitle', $title);
         $this->layout()->setVariable('embedPanel', $panel);
-
         $this->cacheable();
-        $view = new ViewModel(['slug' => $slug]);
+    }
+
+    /**
+     * Render one page block on a bare page for iframe embedding.
+     */
+    public function blockAction()
+    {
+        $slug = (string) $this->params()->fromRoute('block', '');
+        $blocks = self::blocks();
+        if (!isset($blocks[$slug])) {
+            return $this->notFound();
+        }
+
+        // The registry's labels are English source strings (`// @translate`);
+        // the French site's tab title read "Collection Overview".
+        $title = $this->translate($blocks[$slug]);
+
+        // A configured block renders the choice its URL names, and nothing
+        // else: no default preset for a typo, no first timeline for a
+        // missing one.
+        $variables = [];
+        $param = BlockRegistry::embedParam($slug);
+        if ($param !== null) {
+            $value = (string) $this->params()->fromQuery($param, '');
+            $class = BlockRegistry::get($slug)['class'];
+            $variables = $value === '' ? null : $class::embedVariables($this->viewHelpers(), $value);
+            if ($variables === null) {
+                return $this->notFound();
+            }
+            $title .= ' — ' . ($class::embedVariants($this->viewHelpers())[$value] ?? $value);
+        }
+
+        $this->frame($title);
+        $view = new ViewModel(['slug' => $slug, 'variables' => $variables]);
         $view->setTemplate('iwac-visualizations/embed/block');
+        return $view;
+    }
+
+    /**
+     * Render an item's (or an item set's) Visualisations dashboard on a bare
+     * page — the one its page shows, under the resource's title.
+     *
+     * The API read applies Omeka's visibility rules: a private resource is
+     * not found for a visitor who could not see its page either. A resource
+     * whose template has no dashboard is a 404 too, rather than an empty
+     * frame.
+     */
+    public function resourceAction()
+    {
+        $type = (string) $this->params()->fromRoute('resource', '');
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!isset(self::RESOURCES[$type]) || $id < 1) {
+            return $this->notFound();
+        }
+        try {
+            $resource = $this->api()->read(self::RESOURCES[$type], $id)->getContent();
+        } catch (NotFoundException | PermissionDeniedException $e) {
+            return $this->notFound();
+        }
+        $partial = $type === 'item' ? Visualizations::partialFor($resource) : ItemSetDashboard::PARTIAL;
+        if ($partial === null) {
+            return $this->notFound();
+        }
+
+        $this->frame((string) $resource->displayTitle());
+        $view = new ViewModel(['partial' => $partial, 'resource' => $resource]);
+        $view->setTemplate('iwac-visualizations/embed/resource');
         return $view;
     }
 }

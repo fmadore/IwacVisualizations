@@ -78,6 +78,13 @@
  *                                 see embed.js) plus data-embed-base — the
  *                                 site root the embed URL is built from,
  *                                 emitted even when $siteBase is false.
+ *                                 A resource dashboard passes
+ *                                 `item/<id>` or `item-set/<id>`.
+ * @var string|null $embedQuery    Query string (no `?`) every embed URL of
+ *                                 this block carries — a configured block's
+ *                                 choice, e.g. `preset=ocr`.
+ * @var bool|null   $embedWhole    The block has no panels to pin: embed.js
+ *                                 offers one button for the whole block.
  */
 
 // The assets partial enqueues the head assets and hands back this block's
@@ -103,6 +110,8 @@ $append       = isset($append)       ? (string) $append : '';
 $noscript     = isset($noscript)     ? (string) $noscript : '';
 $withSiteBase = !isset($siteBase) || $siteBase;
 $embedSlug    = isset($embedSlug)    ? (string) $embedSlug : '';
+$embedQuery   = isset($embedQuery)   ? (string) $embedQuery : '';
+$embedWhole   = !empty($embedWhole);
 
 $basePath = $this->basePath();
 $siteSlug = $this->currentSite()->slug();
@@ -133,6 +142,12 @@ if ($this->getHelperPluginManager()->has('setting')) {
 if ($embedSlug !== '') {
     $attrs['embed-slug'] = $embedSlug;
     $attrs['embed-base'] = $basePath . '/s/' . $siteSlug;
+    if ($embedQuery !== '') {
+        $attrs['embed-query'] = $embedQuery;
+    }
+    if ($embedWhole) {
+        $attrs['embed-whole'] = '';
+    }
 }
 foreach ($extraData as $key => $value) {
     $attrs[$key] = $value;

@@ -18,6 +18,7 @@
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemSetRepresentation $resource
+ * @var string|null $embedHeading  The resource's title, passed only by the embed route
  */
 
 echo $this->partial('common/iwac-block-shell', [
@@ -28,7 +29,10 @@ echo $this->partial('common/iwac-block-shell', [
         'bundle' => 'item-set-dashboard',
     ],
     'blockClass'   => 'iwac-vis-item-set',
-    'heading'      => $this->translate('Visualisations'),
+    // In an embed the frame has no item page around it, so the
+    // title says whose dashboard this is (EmbedController).
+    'heading'      => $embedHeading ?? $this->translate('Visualisations'),
+    'embedSlug'    => 'item-set/' . $resource->id(),
     // An item-set page's next section heading is an <h2>, so the default <h3>
     // here made the outline run h1 → h3 → h2. Level is an outline decision;
     // the rendered look is unchanged.

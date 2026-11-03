@@ -186,6 +186,7 @@
         var picks = P.createStore({ A: defaults.A, B: defaults.B });
         var url = P.bindUrlState ? P.bindUrlState(picks, {
             prefix: 'cmp',
+            root: container,
             keys: SIDES.map(function (side) {
                 return {
                     key: side,

@@ -256,6 +256,7 @@ IwacVisualizations/
 │   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
 │   │   ├── AssetPlan.php
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
+│   │   ├── ConfiguredEmbed.php          # How a configured block embeds: ?preset=, ?timeline=
 │   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; theme webfont URL
 │   │   └── PipelinePresets.php          # The Pipeline explainer's words, once, for PHP and Svelte
 │   ├── Timeline/
@@ -265,7 +266,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 60 files — Playwright specs
+│   ├── browser/                         # 62 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt
@@ -321,7 +322,8 @@ IwacVisualizations/
 │       ├── embed/
 │       │   ├── block.phtml
 │       │   ├── index.phtml
-│       │   └── not-found.phtml
+│       │   ├── not-found.phtml
+│       │   └── resource.phtml
 │       └── layout/
 │           └── embed.phtml
 ├── .stylelintrc.json
@@ -376,7 +378,7 @@ IwacVisualizations/
 ],
 ```
 
-The other flags are `timeline` and `concordance` (shared-ui), `layout` (shared-layout: the dashboard layout registry and every shared renderer), `d3` (the d3-force CDN modules + shared-d3) and `echarts`, the one that defaults on and is only ever passed as `false`. `BlockRegistry::partialFor($slug)` is the routing rule — `_generic` for a row with a `shell`, `common/block-layout/<slug>` for one without — and the block layouts, the embed view and the integration suite all call it. A row without a `shell` is for a block that does more than declare: today `on-this-day`, which reads its layout setting and builds a noscript slot, and `iwac-timeline`, which server-renders its whole reading view. Resource-page blocks (`view/common/resource-page-block-layout/**`) call `common/iwac-block-shell` with the same `assets` array directly.
+The other flags are `timeline` and `concordance` (shared-ui), `layout` (shared-layout: the dashboard layout registry and every shared renderer), `d3` (the d3-force CDN modules + shared-d3) and `echarts`, the one that defaults on and is only ever passed as `false`. `BlockRegistry::partialFor($slug)` is the routing rule — `_generic` for a row with a `shell`, `common/block-layout/<slug>` for one without — and the block layouts, the embed view and the integration suite all call it. A row without a `shell` is for a block that does more than declare: today `on-this-day`, which reads its layout setting and builds a noscript slot, `iwac-timeline`, which server-renders its whole reading view, and `pipeline-explainer`, which server-renders its preset's words. Resource-page blocks (`view/common/resource-page-block-layout/**`) call `common/iwac-block-shell` with the same `assets` array directly.
 
 The partial:
 
@@ -389,6 +391,7 @@ The partial:
 Consequences for contributors:
 
 - **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable and the `shell`. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes, the templates and the bundle manifest stop agreeing, and `tests/php/run.php` fails on a `shell` or `assets` key that nothing reads (a `blockCss` one level too high is silently dropped — Periodicals Overview shipped without its stylesheet that way) and on a `blockCss` with no sheet on disk.
+- **Everything embeds.** `/s/:site/iwac-embed/:block[/:panel]` renders any page block on a bare page (a configured one from the choice its `embedParam` names — `?preset=`, `?timeline=` — through `Site\ConfiguredEmbed`), and `/iwac-embed/item/:id[/:panel]` / `/iwac-embed/item-set/:id[/:panel]` an item's or item set's dashboard, through the partial its resource page block uses. `embed.js` watches each block for as long as the page lives, so a panel built late (a lazy section, a view switch) gets its button; the button's URL carries the block's view state from `data-url-state` (stamped by `P.bindUrlState`); a single-panel frame hides everything around the panel and calls `P.flushLazy()` when the panel has not been built yet.
 - **Name the bundle, not the files** — `'bundle' => '<name>'`; the block's panel modules and orchestrator are listed, in order, under `blocks.<name>` in `asset/js/bundles.json`, and `npm run lint:blocks` fails on a template that still lists `panels` or `orchestrator`. Don't write raw `$this->headScript()` calls in a block template.
 - Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.
 - A truly new shared primitive goes into the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file listed in the right shared bundle; a new shared bundle also needs a flag in `AssetPlan::FLAGS` and its group in `AssetPlan::bundles()`.

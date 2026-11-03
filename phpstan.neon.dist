@@ -54,7 +54,7 @@ parameters:
         # Controller plugins (Omeka + Laminas), via AbstractActionController::__call.
         -
             identifier: method.notFound
-            message: '#::(api|settings|messenger|jobDispatcher|currentSite|paginator|translate|status|logger)#'
+            message: '#::(api|settings|messenger|jobDispatcher|currentSite|paginator|translate|status|logger|viewHelpers)#'
             path: src/Controller
         # View helpers, via PhpRenderer::__call.
         -
