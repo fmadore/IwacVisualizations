@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.95.0 — tables of contents in the Pipeline Explainer (2026-11-03)
 
 - **A fifth Pipeline Explainer preset: Tables of contents for Islamic publications.** It shows how a digitised magazine issue gets its table of contents: the issue split into pages, the articles a model lists on each page (title as printed, section, authors, a short summary; covers and advertisements set aside), the continuation markers that send an article on to a later page, the consolidation that merges its parts, and the index saved to the issue's Table of contents field with the model that wrote it. The drawings follow one invented article across pages 3 and 7. It suits the AI metadata enrichment page, in its section on tables of contents.
 - The entity preset's closing line no longer points to "the example on IWAC's AI metadata enrichment page", which read oddly on that very page: the name variants are now "those of a real person in the IWAC index".
