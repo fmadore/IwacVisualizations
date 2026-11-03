@@ -573,3 +573,327 @@ msgstr "Voir le lieu"
 
 msgid "Open linked media"
 msgstr "Ouvrir le média associé"
+
+msgid "Workflow"
+msgstr "Chaîne de traitement"
+
+msgid "Which processing workflow the diagram explains."
+msgstr "La chaîne de traitement que le schéma explique."
+
+msgid "Title heading level"
+msgstr "Niveau de titre"
+
+msgid "Match the page outline: one level below the heading of the section the block sits in."
+msgstr "Suivez le plan de la page : un niveau sous le titre de la section où se trouve le bloc."
+
+msgid "Pipeline Explainer"
+msgstr "Explication d’une chaîne de traitement"
+
+msgid "Topic modelling (LDA)"
+msgstr "Modélisation thématique (LDA)"
+
+msgid "OCR with AI"
+msgstr "OCR par IA"
+
+msgid "Entity extraction and metadata enrichment"
+msgstr "Extraction d’entités et enrichissement des métadonnées"
+
+msgid "How topic modelling finds themes in the articles"
+msgstr "Comment la modélisation thématique repère des thèmes dans les articles"
+
+msgid "IWAC trains a statistical topic model, Latent Dirichlet Allocation (LDA), on the text of its newspaper articles. The model is never told what the topics are: it finds groups of words that tend to appear in the same articles."
+msgstr "IWAC entraîne un modèle thématique statistique, l’allocation de Dirichlet latente (LDA), sur le texte de ses articles de presse. On n’indique jamais au modèle quels sont les thèmes : il repère des groupes de mots qui tendent à apparaître dans les mêmes articles."
+
+msgid "Articles"
+msgstr "Articles"
+
+msgid "The input is the OCR text of each French-language newspaper article."
+msgstr "Le point de départ est le texte OCR de chaque article de presse en français."
+
+msgid "Islamic publications and scholarly references have models of their own."
+msgstr "Les publications islamiques et les références scientifiques ont leurs propres modèles."
+
+msgid "Text preparation"
+msgstr "Préparation du texte"
+
+msgid "Words are reduced to their dictionary form, and very common words are removed."
+msgstr "Les mots sont ramenés à leur forme de dictionnaire et les mots très courants sont retirés."
+
+msgid "Place names and other terms that would dominate every topic are set aside; frequent word pairs such as al_azhar stay together."
+msgstr "Les noms de lieux et d’autres termes qui domineraient tous les thèmes sont mis de côté ; les paires de mots fréquentes, comme al_azhar, restent liées."
+
+msgid "Word counts"
+msgstr "Comptage des mots"
+
+msgid "Each article becomes a count of the words it uses; word order is discarded."
+msgstr "Chaque article devient le décompte des mots qu’il emploie ; l’ordre des mots est abandonné."
+
+msgid "Words found in very few articles, or in a large share of them, are left out."
+msgstr "Les mots présents dans très peu d’articles, ou dans une grande part d’entre eux, sont écartés."
+
+msgid "Topic discovery"
+msgstr "Découverte des thèmes"
+
+msgid "LDA infers 30 topics, each a list of words weighted by how strongly they belong to it."
+msgstr "La LDA infère 30 thèmes, chacun étant une liste de mots pondérés selon leur appartenance au thème."
+
+msgid "A topic’s label is simply its most characteristic words."
+msgstr "L’intitulé d’un thème se compose simplement de ses mots les plus caractéristiques."
+
+msgid "Topic mixtures"
+msgstr "Mélanges de thèmes"
+
+msgid "Each article receives a share of several topics; IWAC keeps its main topic and its three strongest."
+msgstr "Chaque article reçoit une part de plusieurs thèmes ; IWAC conserve son thème principal et ses trois thèmes les plus forts."
+
+msgid "The Topic Explorer follows each topic across years, countries and newspapers."
+msgstr "L’explorateur de thèmes suit chaque thème selon les années, les pays et les journaux."
+
+msgid "Topics are patterns inferred from words that occur together, not subjects assigned by a cataloguer. They need interpretation: read the articles behind a topic before naming it, and remember that most articles combine several topics."
+msgstr "Les thèmes sont des régularités déduites des mots qui apparaissent ensemble, et non des sujets attribués par un catalogueur. Ils demandent une interprétation : lisez les articles qui composent un thème avant de le nommer, et gardez à l’esprit que la plupart des articles combinent plusieurs thèmes."
+
+msgid "Illustrative example: the words and proportions in the drawings are invented to show the method, not taken from the IWAC model."
+msgstr "Exemple illustratif : les mots et les proportions des dessins sont inventés pour montrer la méthode et ne proviennent pas du modèle d’IWAC."
+
+msgid "How AI turns scanned pages into searchable text"
+msgstr "Comment l’IA transforme des pages numérisées en texte consultable"
+
+msgid "IWAC uses one of two routes, depending on what a document already has. New scans go to a multimodal model that reads the page image itself; noisy text from conventional OCR can be corrected instead. A document takes one route, not both."
+msgstr "IWAC emprunte l’une de deux voies, selon ce dont dispose déjà un document. Les nouvelles numérisations sont confiées à un modèle multimodal qui lit lui-même l’image de la page ; un texte bruité issu d’un OCR classique peut plutôt être corrigé. Un document suit une seule voie, pas les deux."
+
+msgid "Direct extraction, the current workflow"
+msgstr "Extraction directe, la chaîne actuelle"
+
+msgid "Scanned page"
+msgstr "Page numérisée"
+
+msgid "The document’s PDF goes to a multimodal model: Gemini reads it page by page, Mistral Document AI in a single request."
+msgstr "Le PDF du document est confié à un modèle multimodal : Gemini le lit page par page, Mistral Document AI en une seule requête."
+
+msgid "Reading order"
+msgstr "Ordre de lecture"
+
+msgid "The instructions set the order: main columns left to right and top to bottom, then headings, captions and sidebars."
+msgstr "Les consignes fixent l’ordre : les colonnes principales de gauche à droite et de haut en bas, puis les titres, légendes et encadrés."
+
+msgid "The model reads layout and text in one pass; the steps are drawn apart here."
+msgstr "Le modèle lit la mise en page et le texte d’un seul passage ; les étapes sont séparées ici pour le dessin."
+
+msgid "Transcription"
+msgstr "Transcription"
+
+msgid "The model writes out the text, rejoining lines and words that the columns broke, and keeps the source wording."
+msgstr "Le modèle écrit le texte, en raccordant les lignes et les mots coupés par les colonnes, et conserve la formulation de la source."
+
+msgid "Assembled text"
+msgstr "Texte assemblé"
+
+msgid "The pages are joined with page markers and, after a preview, saved to the record with the name of the model."
+msgstr "Les pages sont réunies avec des repères de page puis, après un aperçu, enregistrées dans la notice avec le nom du modèle."
+
+msgid "The scan stays beside the text: an unusual layout can still come out in the wrong order."
+msgstr "La numérisation reste à côté du texte : une mise en page inhabituelle peut encore sortir dans le mauvais ordre."
+
+msgid "Post-correction of noisy OCR"
+msgstr "Post-correction d’un OCR bruité"
+
+msgid "Noisy OCR text"
+msgstr "Texte OCR bruité"
+
+msgid "Text from conventional OCR, with its misread characters, broken words and encoding errors."
+msgstr "Un texte issu d’un OCR classique, avec ses caractères mal lus, ses mots coupés et ses erreurs d’encodage."
+
+msgid "Sections"
+msgstr "Sections"
+
+msgid "A very long text is cut into sections that the model can correct in one request."
+msgstr "Un texte très long est découpé en sections que le modèle peut corriger en une requête."
+
+msgid "Context across a cut can be lost."
+msgstr "Le contexte peut se perdre d’une section à l’autre."
+
+msgid "AI correction"
+msgstr "Correction par IA"
+
+msgid "A language model fixes recognition errors and restores accents, without translating or modernising the text."
+msgstr "Un modèle de langage corrige les erreurs de reconnaissance et rétablit les accents, sans traduire ni moderniser le texte."
+
+msgid "Corrected text"
+msgstr "Texte corrigé"
+
+msgid "The corrected version becomes the searchable full text; the original OCR is kept for comparison."
+msgstr "La version corrigée devient le texte intégral consultable ; l’OCR d’origine est conservé pour comparaison."
+
+msgid "Historical names and spellings are kept as printed."
+msgstr "Les noms et graphies historiques sont conservés tels qu’imprimés."
+
+msgid "Fluent output is not proof of accuracy. A model can modernise an unusual spelling, guess a missing word or skip part of a page, and an error in fluent text is harder to spot than garbled characters. Check quotations and proper names against the scan."
+msgstr "Un texte fluide n’est pas une preuve d’exactitude. Un modèle peut moderniser une graphie inhabituelle, deviner un mot manquant ou omettre une partie de la page, et une erreur dans un texte fluide se repère plus difficilement que des caractères brouillés. Vérifiez les citations et les noms propres sur la numérisation."
+
+msgid "Illustrative example: the page and its misreadings are invented to show the method."
+msgstr "Exemple illustratif : la page et ses erreurs de lecture sont inventées pour montrer la méthode."
+
+msgid "How names in articles become links to authority records"
+msgstr "Comment les noms cités dans les articles deviennent des liens vers des notices d’autorité"
+
+msgid "An AI model reads each newspaper article and lists the persons, organisations, places and subjects it mentions. A name is only a mention until it is matched with IWAC’s authority files, which gather variant spellings under one record."
+msgstr "Un modèle d’IA lit chaque article de presse et relève les personnes, organisations, lieux et sujets qu’il mentionne. Un nom n’est qu’une mention tant qu’il n’est pas rapproché des fichiers d’autorité d’IWAC, qui réunissent les variantes orthographiques sous une même notice."
+
+msgid "Extraction and normalisation"
+msgstr "Extraction et normalisation"
+
+msgid "The model lists the names it finds, without titles such as El Hadj and with acronyms written out in full."
+msgstr "Le modèle relève les noms qu’il trouve, sans titres comme El Hadj et avec les sigles écrits en toutes lettres."
+
+msgid "Subjects are chosen from IWAC’s own vocabulary."
+msgstr "Les sujets sont choisis dans le vocabulaire propre à IWAC."
+
+msgid "Reconciliation"
+msgstr "Réconciliation"
+
+msgid "Each name is compared with the authority records and their alternative forms: exact matches are accepted, close spellings only suggested."
+msgstr "Chaque nom est comparé aux notices d’autorité et à leurs formes alternatives : les correspondances exactes sont retenues, les graphies proches seulement suggérées."
+
+msgid "A name that fits several records is set aside rather than guessed."
+msgstr "Un nom qui correspond à plusieurs notices est mis de côté plutôt que deviné."
+
+msgid "Review"
+msgstr "Vérification"
+
+msgid "A researcher checks ambiguous names, close spellings and unknown entities, and accepts, corrects or rejects each proposal."
+msgstr "Un chercheur ou une chercheuse examine les noms ambigus, les graphies proches et les entités inconnues, puis accepte, corrige ou rejette chaque proposition."
+
+msgid "A name with no record waits for a new authority record, created after curation."
+msgstr "Un nom sans notice attend une nouvelle notice d’autorité, créée après examen."
+
+msgid "Linking"
+msgstr "Liaison"
+
+msgid "Confirmed matches are added to the article as links: places under Spatial coverage, everything else under Subject."
+msgstr "Les correspondances confirmées sont ajoutées à l’article sous forme de liens : les lieux dans Couverture spatiale, tout le reste dans Sujet."
+
+msgid "Each link records the model that proposed it; an update only adds links, after a backup."
+msgstr "Chaque lien garde la trace du modèle qui l’a proposé ; une mise à jour ne fait qu’ajouter des liens, après une sauvegarde."
+
+msgid "A highlighted name is a mention, not yet a link. A model can miss a name or match it to the wrong record, and the renamings and splits of organisations need historical knowledge, so uncertain matches are reviewed and every update can be reversed."
+msgstr "Un nom surligné est une mention, pas encore un lien. Un modèle peut manquer un nom ou le rapprocher de la mauvaise notice, et les changements de nom et scissions des organisations demandent une connaissance historique : les correspondances incertaines sont donc vérifiées et chaque mise à jour peut être annulée."
+
+msgid "Illustrative example: the name variants come from the example on IWAC’s AI metadata enrichment page; the sentence around them is invented."
+msgstr "Exemple illustratif : les variantes du nom viennent de l’exemple donné sur la page d’IWAC consacrée à l’enrichissement des métadonnées par IA ; la phrase qui les entoure est inventée."
+
+msgid "Article"
+msgstr "Article"
+
+msgid "Topic"
+msgstr "Thème"
+
+msgid "Person"
+msgstr "Personne"
+
+msgid "Organisation"
+msgstr "Organisation"
+
+msgid "Place"
+msgstr "Lieu"
+
+msgid "Subject"
+msgstr "Sujet"
+
+msgid "Authority record"
+msgstr "Notice d’autorité"
+
+msgid "Needs review"
+msgstr "À vérifier"
+
+msgid "Accepted"
+msgstr "Acceptée"
+
+msgid "New record"
+msgstr "Nouvelle notice"
+
+msgid "Spatial coverage"
+msgstr "Couverture spatiale"
+
+msgid "Scan"
+msgstr "Numérisation"
+
+msgid "Text"
+msgstr "Texte"
+
+msgid "OCR"
+msgstr "OCR"
+
+msgid "Corrected"
+msgstr "Corrigé"
+
+msgid "Kept as printed"
+msgstr "Conservé tel qu’imprimé"
+
+msgid "Replay animation"
+msgstr "Rejouer l’animation"
+
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, or the Albani Zaria sermons analysis — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, ou l’analyse des sermons d’Albani Zaria — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
+
+msgid "Albani Zaria sermons: from recordings to figures"
+msgstr "Sermons d’Albani Zaria : des enregistrements aux chiffres"
+
+msgid "How the Albani Zaria sermons become figures"
+msgstr "Comment les sermons d’Albani Zaria deviennent des chiffres"
+
+msgid "The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording."
+msgstr "L’exposition consacrée à Albani Zaria compte des mots, des termes et des noms dans les sermons et leçons transcrits du cheikh Muhammad Auwal Albani Zaria. Chaque chiffre renvoie à un passage, et chaque passage à son enregistrement."
+
+msgid "Recordings and transcripts"
+msgstr "Enregistrements et transcriptions"
+
+msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking."
+msgstr "La reconnaissance vocale transcrit chaque enregistrement mot à mot, par segments de 20 minutes, et estime qui parle."
+
+msgid "Both can be wrong, so every passage links back to the recording."
+msgstr "Les deux peuvent se tromper : chaque passage renvoie donc à l’enregistrement."
+
+msgid "Counting words"
+msgstr "Compter les mots"
+
+msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out."
+msgstr "Les graphies avec et sans les lettres crochetées (ɓ, ɗ, ƙ, ƴ) comptent pour un seul mot, et les mots les plus courants sont écartés."
+
+msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa."
+msgstr "Les mots vides sont ceux publiés par Bashir, Bichi et Adamu (2024) ; une règle simple distingue les passages en arabe du haoussa."
+
+msgid "Terms and their neighbours"
+msgstr "Les termes et leurs voisins"
+
+msgid "Terms for youth and for politics are found in the text, with the words that occur unusually often near them."
+msgstr "Les termes désignant la jeunesse et la politique sont repérés dans le texte, avec les mots qui apparaissent anormalement souvent à proximité."
+
+msgid "The word lists are a draft that a Hausa-speaking specialist will check."
+msgstr "Les listes de mots sont une ébauche qu’un ou une spécialiste du haoussa vérifiera."
+
+msgid "People and places"
+msgstr "Personnes et lieux"
+
+msgid "A named-entity model proposed names once; only a list of names and spellings curated by hand is counted."
+msgstr "Un modèle de reconnaissance d’entités nommées a proposé des noms une seule fois ; seule une liste de noms et de graphies établie à la main est comptée."
+
+msgid "A spelling with another meaning, such as shehu, is left out, so the counts are floors."
+msgstr "Une graphie qui a un autre sens, comme shehu, est écartée : les décomptes sont donc des minimums."
+
+msgid "Figures and passages"
+msgstr "Chiffres et passages"
+
+msgid "The counts become the page’s charts and maps; passages are quoted only from transcripts that are public."
+msgstr "Les décomptes deviennent les graphiques et les cartes de la page ; les passages ne sont cités que depuis des transcriptions publiques."
+
+msgid "A count shows where to look; the passage and the recording are the evidence."
+msgstr "Un décompte indique où regarder ; le passage et l’enregistrement constituent la preuve."
+
+msgid "The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review."
+msgstr "Les chiffres ne décrivent que ces enregistrements : un seul prédicateur, la part de son enseignement transcrite à ce jour, et les erreurs que contient la transcription. Les listes de mots et les traductions sont des ébauches qui attendent l’examen d’un ou d’une spécialiste."
+
+msgid "Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations."
+msgstr "Exemple illustratif : les dessins montrent la méthode avec des mots cités dans la section méthodologique de l’exposition ; les passages sont des traits, pas des citations."
+
+msgid "Left out"
+msgstr "Écarté"

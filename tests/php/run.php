@@ -130,6 +130,7 @@ namespace {
     use IwacVisualizations\Sentiment\Subjectivite;
     use IwacVisualizations\Site\AssetPlan;
     use IwacVisualizations\Site\BlockRegistry;
+    use IwacVisualizations\Site\PipelinePresets;
     use IwacVisualizations\Site\EmbedBrand;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
@@ -150,6 +151,7 @@ namespace {
     $coldModule = new \IwacVisualizations\Module();
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/AssetPlan.php';
+    require $root . '/src/Site/PipelinePresets.php';
     require $root . '/src/Site/EmbedBrand.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
@@ -409,7 +411,7 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 23, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 24, 'page-block registry count drifted');
     check(BlockRegistry::get('albani-sermons')['invokable'] === 'albaniSermons', 'albani-sermons registry entry drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
@@ -478,7 +480,70 @@ namespace {
         }
     }
     check($shellRows === 21, "expected 21 generic blocks, found $shellRows");
-    check($ownTemplate === 2, "expected 2 blocks with their own template (on-this-day, iwac-timeline), found $ownTemplate");
+    check($ownTemplate === 3, "expected 3 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer), found $ownTemplate");
+    check(!isset(BlockRegistry::embeddable()['pipeline-explainer']),
+        'pipeline-explainer is configured, so it must stay off the zero-configuration embed route');
+
+    // Pipeline explainer: every stage a preset names is a drawing its Svelte
+    // component draws, every string reaches the translator, and a saved
+    // setting the block no longer knows falls back instead of failing.
+    $artFiles = [
+        'topic-modelling'   => 'TopicArt.svelte',
+        'ocr'               => 'OcrArt.svelte',
+        'entity-enrichment' => 'EntityArt.svelte',
+        'albani-sermons'    => 'AlbaniArt.svelte',
+    ];
+    check(array_keys($artFiles) === PipelinePresets::ids(), 'a pipeline preset has no drawing component');
+    check(array_keys(PipelinePresets::LABELS) === PipelinePresets::ids(), 'every pipeline preset needs an admin label');
+    foreach (PipelinePresets::PRESETS as $id => $preset) {
+        $svelte = (string) @file_get_contents($root . '/asset/js/svelte/pipeline-explainer/' . ($artFiles[$id] ?? ''));
+        preg_match_all("/kind === '([a-z-]+)'/", $svelte, $drawn);
+        $arts = [];
+        foreach ($preset['routes'] as $route) {
+            check(count($route['stages']) >= 3 && count($route['stages']) <= 5,
+                "$id/{$route['id']}: a route has 3 to 5 stages, or its columns stop fitting");
+            check(count($preset['routes']) === 1 || isset($route['title']),
+                "$id/{$route['id']}: a preset with several routes titles each one");
+            foreach ($route['stages'] as $stage) {
+                check(in_array($stage['art'], $drawn[1], true),
+                    "$id: stage art '{$stage['art']}' is not drawn by {$artFiles[$id]}");
+                check(!isset($arts[$stage['art']]), "$id: stage art '{$stage['art']}' is used twice");
+                $arts[$stage['art']] = true;
+            }
+        }
+        foreach (array_unique($drawn[1]) as $kind) {
+            check(isset($arts[$kind]), "$id: {$artFiles[$id]} draws '$kind', which no stage uses");
+        }
+    }
+    $marked = static fn (string $text): string => '«' . $text . '»';
+    $content = PipelinePresets::content('ocr', 'h2', $marked);
+    check($content['preset'] === 'ocr' && $content['headingLevel'] === 'h2' && $content['routeHeadingLevel'] === 'h3',
+        'pipeline content: preset or heading levels drifted');
+    $strings = [$content['title'], $content['lede'], $content['caveat'], $content['example']];
+    foreach ($content['routes'] as $route) {
+        $strings[] = $route['title'];
+        foreach ($route['stages'] as $stage) {
+            array_push($strings, $stage['name'], $stage['caption']);
+            if ($stage['note'] !== '') $strings[] = $stage['note'];
+        }
+    }
+    foreach ($content['labels'] as $label) $strings[] = $label;
+    $untranslated = array_filter($strings, static fn ($s) => !preg_match('/^«.+»$/u', $s));
+    check(!$untranslated, 'pipeline content: strings that bypass translate(): ' . implode(' | ', $untranslated));
+    check(PipelinePresets::content('retired-preset', '<script>', $marked)['preset'] === PipelinePresets::DEFAULT_PRESET,
+        'pipeline content: an unknown preset must fall back to the default');
+    check(PipelinePresets::headingLevel('<script>') === PipelinePresets::DEFAULT_HEADING_LEVEL,
+        'pipeline content: the heading level is printed unescaped, so it must be whitelisted');
+    // The browser spec drives fixtures rendered from the template; a stale one
+    // would test markup the site no longer prints.
+    foreach (['en', 'fr'] as $locale) {
+        $fixture = $root . "/tests/browser/fixtures/pipeline-explainer.$locale.html";
+        $fresh = shell_exec(escapeshellarg(PHP_BINARY) . ' '
+            . escapeshellarg($root . '/tests/browser/render-pipeline-explainer.php') . ' ' . $locale);
+        check(is_string($fresh) && is_readable($fixture)
+            && str_replace("\r\n", "\n", $fresh) === str_replace("\r\n", "\n", (string) file_get_contents($fixture)),
+            "pipeline-explainer.$locale.html is stale — php tests/browser/render-pipeline-explainer.php $locale > tests/browser/fixtures/pipeline-explainer.$locale.html");
+    }
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
         '_generic.phtml is missing — twenty-one blocks render through it');
     // The periodicals sheet, specifically: the row that lost it.

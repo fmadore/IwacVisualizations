@@ -37,24 +37,42 @@
  * loader requests the one matching the page, so an English page no longer
  * downloads the French half of every dictionary, and vice versa.
  *
+ * A block entry may also name a Svelte entry — `{ svelte:
+ * "svelte/<block>/index.js", files: [...] }` — an ES module under
+ * asset/js/svelte/ whose `.svelte` components are compiled here with
+ * `svelte/compiler` and bundled, with the Svelte runtime, ahead of the
+ * block's own files. It is not an application: no router, no SvelteKit, one
+ * bundle per block, mounted by the block's ordinary orchestrator. Two rules
+ * keep it inside the module's gates. A component may not carry a `<style>`:
+ * the block's sheet stays in asset/css/blocks/, where stylelint, the theme
+ * token guard and the dead-class check read it. And any compiler warning —
+ * most of them accessibility checks — fails the build. Every file under
+ * asset/js/svelte/ must be reached from some entry, or the build fails, as
+ * an unbundled classic source does.
+ *
  * Usage: node scripts/build-js.js
  */
 
 const { readFileSync, statSync, mkdirSync, rmSync, existsSync, writeFileSync } = require('fs');
-const { join, relative } = require('path');
+const { join, relative, dirname } = require('path');
 const esbuild = require('esbuild');
 const { sourceFiles, posixRelative } = require('./lib/fs');
-const { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets } = require('./lib/manifest');
+const { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets, svelteEntry } = require('./lib/manifest');
 const { fail } = require('./lib/report');
 const { LOCALES, hasDictionaries, keepLocale } = require('./i18n-strip');
 
 const ROOT = join(__dirname, '..');
 const SRC_DIR = join(ROOT, 'asset', 'js');
 const DIST_DIR = join(SRC_DIR, 'dist');
+const SVELTE_DIR = join(SRC_DIR, 'svelte');
 
-/** Every bundleable source under asset/js/, as manifest-relative paths. */
+/**
+ * Every bundleable classic source under asset/js/, as manifest-relative
+ * paths. asset/js/svelte/ is not walked: its modules are reached through a
+ * Svelte entry's imports, and `svelteCoverage` checks them after the build.
+ */
 function walk() {
-    return sourceFiles(SRC_DIR, '.js', { skipDir: (p) => p === DIST_DIR })
+    return sourceFiles(SRC_DIR, '.js', { skipDir: (p) => p === DIST_DIR || p === SVELTE_DIR })
         .map((p) => posixRelative(SRC_DIR, p));
 }
 
@@ -100,7 +118,16 @@ function readManifest() {
         if (files.length && files[files.length - 1] !== `charts/${name}.js`) {
             problems.push(`blocks.${name}: the orchestrator charts/${name}.js must be the LAST entry`);
         }
+        const svelte = svelteEntry(entry);
+        if (svelte !== null) {
+            if (!svelte.startsWith(`svelte/${name}/`) || !svelte.endsWith('.js')) {
+                problems.push(`blocks.${name}: svelte entry ${svelte} must be a .js module under svelte/${name}/`);
+            } else if (!existsSync(join(SRC_DIR, svelte))) {
+                problems.push(`blocks.${name}: svelte entry ${svelte} does not exist under asset/js/`);
+            }
+        }
         add(`blocks/${name}`, join(DIST_DIR, 'blocks', `${name}.min.js`), files);
+        if (svelte !== null) bundles[bundles.length - 1].svelte = svelte;
     }
     for (const f of sources) {
         if (!seen.has(f)) problems.push(`${f} is in no bundle — add it to asset/js/bundles.json (or delete it)`);
@@ -126,18 +153,77 @@ function localePlugin(locale) {
     };
 }
 
+/**
+ * An esbuild plugin that compiles `.svelte` components with Svelte's own
+ * compiler. Warnings are errors, and so is a `<style>` block (see the file
+ * header for why both).
+ */
+function sveltePlugin() {
+    // Loaded only for a bundle with a Svelte entry: the compiler is ESM-only
+    // and large, and most bundles never need it.
+    const compiler = import('svelte/compiler');
+    return {
+        name: 'iwac-svelte',
+        setup(build) {
+            build.onLoad({ filter: /\.svelte$/ }, async (args) => {
+                const { compile } = await compiler;
+                const filename = posixRelative(ROOT, args.path);
+                let compiled;
+                try {
+                    compiled = compile(readFileSync(args.path, 'utf8'), {
+                        filename,
+                        generate: 'client',
+                        dev: false,
+                        css: 'external',
+                        runes: true,
+                        // No `window.__svelte` version registry on the host page.
+                        discloseVersion: false,
+                    });
+                } catch (err) {
+                    const at = err.start ? { file: filename, line: err.start.line, column: err.start.column } : { file: filename };
+                    return { errors: [{ text: err.message, location: at }] };
+                }
+                const errors = compiled.warnings.map((w) => ({
+                    text: `${w.code}: ${w.message}`,
+                    location: w.start ? { file: filename, line: w.start.line, column: w.start.column } : { file: filename },
+                }));
+                if (compiled.css && compiled.css.code.trim()) {
+                    errors.push({
+                        text: 'a component carries a <style> block — block styles live in asset/css/blocks/, where the lints read them',
+                        location: { file: filename },
+                    });
+                }
+                if (errors.length) return { errors };
+                return {
+                    contents: `${compiled.js.code}\n//# sourceMappingURL=${compiled.js.map.toUrl()}`,
+                    loader: 'js',
+                    resolveDir: dirname(args.path),
+                };
+            });
+        },
+    };
+}
+
 async function buildBundle(bundle, locale) {
-    const entry = bundle.files.map((f) => `import './${f}';`).join('\n');
+    const imports = bundle.svelte ? [bundle.svelte, ...bundle.files] : bundle.files;
+    const entry = imports.map((f) => `import './${f}';`).join('\n');
     const outfile = locale ? bundle.outfile.replace(/\.min\.js$/, `.${locale}.min.js`) : bundle.outfile;
+    const plugins = locale ? [localePlugin(locale)] : [];
+    if (bundle.svelte) plugins.push(sveltePlugin());
     const result = await esbuild.build({
         stdin: { contents: entry, resolveDir: SRC_DIR, sourcefile: `${bundle.name}.entry.js` },
-        plugins: locale ? [localePlugin(locale)] : [],
+        plugins,
         bundle: true,
         minify: true,
         sourcemap: true,
         // Nothing is lowered — the sources are ES5 — but the target caps what
         // the minifier may emit, so the bundles run wherever the sources did.
-        target: ['es2015'],
+        // A Svelte bundle is the exception: the Svelte 5 runtime needs a
+        // modern browser anyway (it is built on Proxy), so lowering its
+        // syntax to ES2015 would only add bytes.
+        target: [bundle.svelte ? 'es2020' : 'es2015'],
+        // The Svelte runtime's production build, without its dev checks.
+        conditions: bundle.svelte ? ['svelte', 'production'] : [],
         charset: 'utf8',
         legalComments: 'none',
         logLevel: 'silent',
@@ -149,7 +235,26 @@ async function buildBundle(bundle, locale) {
         for (const w of result.warnings) console.warn(`  warning (${bundle.name}): ${w.text}`);
     }
     const out = Object.entries(result.metafile.outputs).find(([k]) => k.endsWith('.min.js'));
-    return { outfile, bytes: out ? out[1].bytes : statSync(outfile).size };
+    return { outfile, bytes: out ? out[1].bytes : statSync(outfile).size, inputs: Object.keys(result.metafile.inputs) };
+}
+
+/**
+ * Files under asset/js/svelte/ that no Svelte bundle compiled — the Svelte
+ * twin of the manifest's "in no bundle" check, read off esbuild's metafile
+ * (whose input paths are relative to the working directory, the repo root).
+ */
+function svelteCoverage(inputs) {
+    if (!existsSync(SVELTE_DIR)) return [];
+    const reached = new Set([...inputs].map((p) => posixRelative(ROOT, join(process.cwd(), p))));
+    const orphans = [];
+    for (const ext of ['.js', '.svelte']) {
+        for (const file of sourceFiles(SVELTE_DIR, ext)) {
+            if (!reached.has(posixRelative(ROOT, file))) {
+                orphans.push(`${posixRelative(SRC_DIR, file)} is reached by no Svelte entry in asset/js/bundles.json (or delete it)`);
+            }
+        }
+    }
+    return orphans;
 }
 
 (async () => {
@@ -163,8 +268,9 @@ async function buildBundle(bundle, locale) {
     let bytesIn = 0;
     let bytesOut = 0;
     const localized = [];
+    const svelteInputs = new Set();
     for (const bundle of bundles) {
-        const inBytes = bundle.files.reduce((n, f) => n + statSync(join(SRC_DIR, f)).size, 0);
+        let inBytes = bundle.files.reduce((n, f) => n + statSync(join(SRC_DIR, f)).size, 0);
         let builds;
         try {
             const perLocale = bundle.files.some((f) => hasDictionaries(readFileSync(join(SRC_DIR, f), 'utf8'), f));
@@ -176,15 +282,28 @@ async function buildBundle(bundle, locale) {
             process.exitCode = 1;
             continue;
         }
+        if (bundle.svelte) {
+            for (const input of builds[0].inputs) svelteInputs.add(input);
+            // What the module wrote, components included; the Svelte runtime
+            // it bundles is what the output adds on top.
+            inBytes = builds[0].inputs
+                .filter((p) => !p.startsWith('node_modules/') && existsSync(join(process.cwd(), p)))
+                .reduce((n, p) => n + statSync(join(process.cwd(), p)).size, 0);
+        }
         // Totals count what one page downloads: one variant of each bundle.
         bytesIn += inBytes;
         bytesOut += builds[0].bytes;
         for (const { outfile, bytes } of builds) {
-            const pct = ((1 - bytes / inBytes) * 100).toFixed(1);
+            // Signed: a Svelte bundle grows, because it carries the runtime.
+            const change = ((bytes / inBytes - 1) * 100).toFixed(1);
             console.log(
-                `${relative(ROOT, outfile).padEnd(52)} ${String(bundle.files.length).padStart(3)} files ${String(inBytes).padStart(7)}B -> ${String(bytes).padStart(6)}B  (-${pct}%)`
+                `${relative(ROOT, outfile).padEnd(52)} ${String(bundle.files.length).padStart(3)} files ${String(inBytes).padStart(7)}B -> ${String(bytes).padStart(6)}B  (${change > 0 ? '+' : ''}${change}%)`
             );
         }
+    }
+    for (const orphan of svelteCoverage(svelteInputs)) {
+        console.error(`FAIL ${orphan}`);
+        process.exitCode = 1;
     }
     // Which bundles the partial must request per locale. Generated, committed
     // with the bundles, and read by Site\AssetPlan — so the PHP side cannot

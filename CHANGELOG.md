@@ -15,8 +15,12 @@ link to the historical documents preserved in Git.
 
 ### Unreleased
 
+- **New page block: Pipeline Explainer.** A short animated diagram that explains one IWAC workflow among the text of a page, chosen in the block form: topic modelling (LDA), OCR with AI (direct extraction by a multimodal model, or post-correction of noisy OCR — two separate routes), entity extraction and metadata enrichment, or the analysis behind the Albani Zaria sermons exhibition. Each step has its own caption, and each preset says where uncertainty lies and where people review the output; the examples in the drawings are illustrative. It plays once when it scrolls into view, offers Replay, stays still under reduced motion, and reads in full without JavaScript, in English and French. It requests no data. A title heading level setting fits it to the page outline. Adding it to the OCR, AI metadata enrichment, topic-modelling and Albani pages is a separate content step. See `docs/PIPELINE-EXPLAINER.md`.
+- The build can now compile a Svelte component into a block's bundle (`blocks.<name>.svelte` in `asset/js/bundles.json`); the Pipeline Explainer is the first. Svelte 5.57.3 is a new development dependency.
 - **Demokuradiyyah and Shari'a are now counted.** Both recordings have been re-transcribed, so the Albani Zaria block analyses 42 of its 45 recordings (about 1.09 million words), up from 40. Demokuradiyyah is the recording most concerned with democracy: *demokuraɗiyya* now occurs 263 times instead of 62, and *siyasa* (politics) 439 times instead of 281. The warning that conclusions about democracy should wait for it disappears from the politics section. The three recordings still to be transcribed are Sawtul-Hikmah, Ilimin Hadisi and Jilbab.
+- **Acronyms are spelled out** in the lists of organisations: "PDP — Peoples Democratic Party" in English, "Parti démocratique populaire" in French, and likewise for APC, ANPP, CPC, INEC, NYSC, EFCC, NEPA, CIA, BBC, CNN, NTA and DITV. The acronym stays the name and its full form follows it in grey.
 - Part of the new Shari'a transcript is cut every 10 minutes rather than every 20. Those 10-minute pieces are joined in pairs, so a segment is 20 minutes of listening in every recording. A transcript from the earlier method is still left out until it has been redone: that method could invent text where it heard none.
+
 
 Run "Pull latest data" once the data rebuild has finished for the new figures to appear.
 

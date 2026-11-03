@@ -17,6 +17,7 @@ $config = [
             'orgCooccurrence' => Site\BlockLayout\OrgCooccurrence::class,
             'periodicalsLandscape' => Site\BlockLayout\PeriodicalsLandscape::class,
             'periodicalsOverview' => Site\BlockLayout\PeriodicalsOverview::class,
+            'pipelineExplainer' => Site\BlockLayout\PipelineExplainer::class,
             'pressBylines' => Site\BlockLayout\PressBylines::class,
             'pressReprints' => Site\BlockLayout\PressReprints::class,
             'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,

@@ -30,7 +30,7 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                      # 52 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                      # 54 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css                # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
 │   │   ├── iwac-embed-tokens.css
@@ -94,6 +94,7 @@ IwacVisualizations/
 │       │   ├── org-cooccurrence.js
 │       │   ├── periodicals-overview.js
 │       │   ├── person-dashboard.js
+│       │   ├── pipeline-explainer.js
 │       │   ├── press-bylines.js
 │       │   ├── press-reprints.js
 │       │   ├── publication-dashboard.js
@@ -106,7 +107,8 @@ IwacVisualizations/
 │       │   ├── term-trends.js
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                        # 135 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── dist/                        # 137 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── svelte/                      # 6 files — Svelte components, compiled into their block bundle by build-js.js
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js
@@ -133,6 +135,7 @@ IwacVisualizations/
 │   │   ├── timeline-dark.png
 │   │   ├── timeline-light.png
 │   │   └── timeline-mobile.png
+│   ├── PIPELINE-EXPLAINER.md
 │   └── TIMELINES.md
 ├── language/                            # 4 files — template.pot + fr.po + the compiled fr.mo
 ├── scripts/
@@ -249,11 +252,12 @@ IwacVisualizations/
 │   │   └── ViewHelper/
 │   │       └── TimelineDataFactory.php
 │   ├── Site/
-│   │   ├── BlockLayout/                 # 24 files — one `const SLUG` each; BlockRegistry.php is the truth
+│   │   ├── BlockLayout/                 # 25 files — one `const SLUG` each; BlockRegistry.php is the truth
 │   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
 │   │   ├── AssetPlan.php
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
-│   │   └── EmbedBrand.php               # Embed brand seeds → accent overrides; theme webfont URL
+│   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; theme webfont URL
+│   │   └── PipelinePresets.php          # The Pipeline explainer's words, once, for PHP and Svelte
 │   ├── Timeline/
 │   │   ├── Catalog.php
 │   │   └── Migration.php
@@ -261,7 +265,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 56 files — Playwright specs
+│   ├── browser/                         # 60 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt
@@ -297,7 +301,7 @@ IwacVisualizations/
 │       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/                # 3 files — one per registered block, filename === slug
+│   │   ├── block-layout/                # 4 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── article.phtml
@@ -668,6 +672,8 @@ naming 6 `BlockLayout` classes out of 21.
 **Bundles that carry translations are built once per locale.** A page is read in one language, so a bundle containing a dictionary — `shared-core` (the shared `iwac-i18n.js`) and every block with an `addTranslations` file — is written as `<name>.en.min.js` and `<name>.fr.min.js`, each with the other locale's tables emptied by `scripts/i18n-strip.js`, and listed in the generated `dist/locales.json`. `Site\AssetPlan::bundlePath()` hands the loader both URLs; the loader requests the one matching `<html lang>` and publishes its choice as `IWACVisLazy.locale`, which `iwac-i18n.js` adopts, so the language `t()` uses is always the one whose strings were fetched. Emptying the other tables changes nothing `t()` can observe — `lint:i18n` requires every `en` key to exist in `fr` — and `tests/js/i18n-locales.test.js` proves it for every key of all twenty-six dictionaries. Dictionaries must stay inline object literals (`ns.addTranslations('fr', { … })`); the build fails on a call it cannot strip.
 
 **A string lives in the dictionary of the only bundle that reads it.** The shared `iwac-i18n.js` ships in `shared-core` on every page carrying *any* block, so it holds only strings read by shared code, by templates, or by more than one block. A string one block alone reads goes in that block's `charts/<block>/i18n.js`, first in its bundle. Until v1.73.0 the shared dictionary also carried 146 single-block keys — about 27 KB of both locales' strings that every page downloaded for blocks it did not have; moving them took `shared-core` from 105 to 89 KB (French) and from 93 to 81 KB (English).
+
+**A block may carry a compiled Svelte component** — so far only the Pipeline explainer. Its manifest entry is `{ "svelte": "svelte/<block>/index.js", "files": ["charts/<block>.js"] }`: an ES module under `asset/js/svelte/<block>/` whose `.svelte` imports `build-js.js` compiles with `svelte/compiler` and bundles, with the Svelte runtime, ahead of the block's ordinary orchestrator, into the same `dist/blocks/<block>.min.js`. Nothing else changes: the loader, `AssetPlan` and the templates see one more block bundle, and there is no SvelteKit, router or second build tool. Three rules keep these components inside the module's gates. **No `<style>` in a component** — the build refuses one, so the block's sheet stays in `asset/css/blocks/`, where Stylelint, the theme-token guard and the dead-class check read it (that check reads `.svelte` markup too). **Every compiler warning fails the build**, most of them Svelte's accessibility checks. **Every file under `asset/js/svelte/` must be reached from an entry**, read off esbuild's metafile, as an unbundled classic source fails the manifest check. A Svelte bundle targets ES2020 rather than ES2015, since its runtime needs a modern browser anyway. The runtime is most of its weight: the Pipeline explainer bundle is ~95 KB minified (~33 KB gzipped), loaded only on a page carrying the block, when the block nears the viewport.
 
 `node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 

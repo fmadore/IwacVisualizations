@@ -88,6 +88,15 @@ module.exports = [
         languageOptions: { ecmaVersion: 2020, sourceType: 'script' },
     },
     {
+        // A Svelte entry (asset/js/svelte/<block>/index.js) is an ES module:
+        // it imports the Svelte runtime and its components, and the bundler
+        // compiles it for the modern browsers Svelte 5 needs. The `.svelte`
+        // components are checked by the Svelte compiler instead — the build
+        // fails on any of its warnings (scripts/build-js.js).
+        files: ['asset/js/svelte/**/*.js'],
+        languageOptions: { ecmaVersion: 2022, sourceType: 'module' },
+    },
+    {
         files: ['scripts/**/*.js', 'tests/**/*.js', 'playwright.config.js', 'eslint.config.js'],
         languageOptions: {
             ecmaVersion: 2022,

@@ -22,7 +22,9 @@ const CORE = join(JS, 'iwac-i18n.js');
 function sources(dir, out = []) {
     for (const name of readdirSync(dir)) {
         const path = join(dir, name);
-        if (statSync(path).isDirectory()) { if (name !== 'dist') sources(path, out); }
+        // svelte/: ES modules that carry no dictionaries — their words come
+        // from PHP — and that a script parser cannot read.
+        if (statSync(path).isDirectory()) { if (name !== 'dist' && name !== 'svelte') sources(path, out); }
         else if (name.endsWith('.js')) out.push(path);
     }
     return out;

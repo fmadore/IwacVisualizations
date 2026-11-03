@@ -339,6 +339,15 @@ final class BlockRegistry
                 'loading'    => 'Loading periodicals overview', // @translate
             ],
         ],
+        // Configured (a preset and a heading level), so it keeps its own
+        // template and stays out of the zero-configuration embed route.
+        'pipeline-explainer' => [
+            'invokable'   => 'pipelineExplainer',
+            'class'       => BlockLayout\PipelineExplainer::class,
+            'label'       => 'Pipeline Explainer', // @translate
+            'description' => 'Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, or the Albani Zaria sermons analysis — as a short animated diagram with captions. It uses illustrative examples and requests no data.', // @translate
+            'embeddable'  => false,
+        ],
         'press-bylines' => [
             'invokable'   => 'pressBylines',
             'class'       => BlockLayout\PressBylines::class,

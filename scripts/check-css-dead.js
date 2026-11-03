@@ -93,7 +93,8 @@ function haystack() {
     let text = '';
     for (const dir of SEARCH_DIRS) {
         for (const file of walk(dir)) {
-            if (/\.(js|phtml|php|json|html)$/.test(file) && !file.endsWith('.min.js')) {
+            // `.svelte`: a component's markup writes its classes like a template.
+            if (/\.(js|svelte|phtml|php|json|html)$/.test(file) && !file.endsWith('.min.js')) {
                 text += readFileSync(file, 'utf8') + '\n';
             }
         }

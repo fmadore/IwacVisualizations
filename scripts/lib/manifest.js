@@ -5,8 +5,8 @@
  * Three scripts parsed it three ways: the bundler read a block entry's own
  * `files`, the i18n guard expanded its `uses` panel sets as well, and the
  * registry guard only looked at the `blocks` keys. The entry has two shapes —
- * a plain list, or `{ uses: [panel sets], files: [...] }` — and every reader
- * had to remember both. These helpers are that memory.
+ * a plain list, or `{ uses: [panel sets], svelte: entry, files: [...] }` —
+ * and every reader had to remember both. These helpers are that memory.
  */
 
 const { existsSync, readFileSync } = require('fs');
@@ -36,6 +36,16 @@ function usedPanelSets(entry) {
 }
 
 /**
+ * The Svelte entry a block entry compiles before its own files, or null.
+ * `{ svelte: "svelte/<block>/index.js", files: [...] }` — an ES module under
+ * asset/js/svelte/ whose imports (components and helpers) esbuild follows.
+ */
+function svelteEntry(entry) {
+    if (Array.isArray(entry) || !entry || typeof entry.svelte !== 'string') return null;
+    return entry.svelte;
+}
+
+/**
  * Every source a page that loads `entry` executes for it: its own files,
  * then the files of each panel set it uses. (The shared bundles are not
  * included — they are loaded by `$needs`, not by the entry.)
@@ -46,4 +56,4 @@ function bundleSources(manifest, entry) {
     return out;
 }
 
-module.exports = { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets, bundleSources };
+module.exports = { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets, svelteEntry, bundleSources };

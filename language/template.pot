@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: config/module.config.php:56 view/iwac-visualizations/admin/data/index.phtml:20
+#: config/module.config.php:57 view/iwac-visualizations/admin/data/index.phtml:20
 msgid "IWAC Visualizations"
 msgstr ""
 
@@ -167,6 +167,22 @@ msgstr ""
 msgid "Which layout the block opens on. Visitors can switch between all three; their choice is remembered."
 msgstr ""
 
+#: src/Site/BlockLayout/PipelineExplainer.php:34
+msgid "Workflow"
+msgstr ""
+
+#: src/Site/BlockLayout/PipelineExplainer.php:35
+msgid "Which processing workflow the diagram explains."
+msgstr ""
+
+#: src/Site/BlockLayout/PipelineExplainer.php:44
+msgid "Title heading level"
+msgstr ""
+
+#: src/Site/BlockLayout/PipelineExplainer.php:45
+msgid "Match the page outline: one level below the heading of the section the block sits in."
+msgstr ""
+
 #: src/Site/BlockRegistry.php:60
 msgid "IWAC Timeline"
 msgstr ""
@@ -207,235 +223,647 @@ msgstr ""
 msgid "Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:131
+#: src/Site/BlockRegistry.php:130
 msgid "Loading collection overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:137
+#: src/Site/BlockRegistry.php:136
 msgid "Compare Newspapers"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:138
+#: src/Site/BlockRegistry.php:137
 msgid "Compare two selections of newspaper articles or Islamic periodical issues by publication year, catalogue tags, vocabulary and available AI ratings. Choose a country or a single publication for each selection."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:156
+#: src/Site/BlockRegistry.php:154
 msgid "Loading newspaper comparison"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:162
+#: src/Site/BlockRegistry.php:160
 msgid "Distinctive Vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:163
+#: src/Site/BlockRegistry.php:161
 msgid "Find words used at higher relative rates in one country or decade than in the remaining newspaper articles. A second view identifies periods of increased use of subject tags. Statistical thresholds are explained alongside the charts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:176
+#: src/Site/BlockRegistry.php:174
 msgid "Loading distinctive vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:182
+#: src/Site/BlockRegistry.php:180
 msgid "Entity Networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:183
+#: src/Site/BlockRegistry.php:181
 msgid "Explore links between people, organisations, places, subjects and events recorded on the same items. Shared records indicate catalogue associations, which require interpretation through the sources."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:195
+#: src/Site/BlockRegistry.php:193
 msgid "Loading entity networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:201
+#: src/Site/BlockRegistry.php:199
 msgid "Index Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:202
+#: src/Site/BlockRegistry.php:200
 msgid "Explore the catalogue index and the use of subject and place tags over time. Counts describe recorded associations rather than word occurrences in the original texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:217
+#: src/Site/BlockRegistry.php:215
 msgid "Loading index overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:223
+#: src/Site/BlockRegistry.php:221
 msgid "Laïcité"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:224
+#: src/Site/BlockRegistry.php:222
 msgid "Explore a dossier selected through the Laïcité subject tag and vocabulary in titles and available full text, including YouTube transcripts. Compare source types, terms in context, associated entries and AI ratings. Descriptive fields are excluded from vocabulary counts; extracts follow each field’s public status."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:260
+#: src/Site/BlockRegistry.php:258
 msgid "Loading laïcité dossier"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:267
+#: src/Site/BlockRegistry.php:265
 msgid "Press Language"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:268
+#: src/Site/BlockRegistry.php:266
 msgid "Compare estimated reading ease, vocabulary diversity and article length over time and by newspaper. Measures use extracted text; the charts explain the scores and their limitations."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:278
+#: src/Site/BlockRegistry.php:276
 msgid "Loading press language metrics"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:284
+#: src/Site/BlockRegistry.php:282
 msgid "On This Day"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:285
+#: src/Site/BlockRegistry.php:283
 msgid "Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade and clipping layouts. Only records with suitable dates can appear."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:291
+#: src/Site/BlockRegistry.php:289
 msgid "Islamic Organisations Co-occurrence"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:292
+#: src/Site/BlockRegistry.php:290
 msgid "Compare pairs of words found near the names of selected Islamic organisations in newspaper articles. Darker cells indicate pairs found together in more articles."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:303
+#: src/Site/BlockRegistry.php:301
 msgid "Loading organisation co-occurrences"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:309
+#: src/Site/BlockRegistry.php:307
 msgid "Periodicals Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:310
+#: src/Site/BlockRegistry.php:308
 msgid "Explore Islamic periodical issues arranged by an AI comparison of their tables of contents. Nearby points suggest issues to compare; positions and distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:323 src/Site/BlockRegistry.php:450
+#: src/Site/BlockRegistry.php:321 src/Site/BlockRegistry.php:455
 msgid "Loading semantic landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:329
+#: src/Site/BlockRegistry.php:327
 msgid "Periodicals Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:330
+#: src/Site/BlockRegistry.php:328
 msgid "Explore Islamic periodical holdings by year, publication, country, language and catalogue subject, with vocabulary and statistically modelled themes. Gaps in the collection do not establish gaps in publication."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:342
+#: src/Site/BlockRegistry.php:339
 msgid "Loading periodicals overview"
 msgstr ""
 
+#: src/Site/BlockRegistry.php:347
+msgid "Pipeline Explainer"
+msgstr ""
+
 #: src/Site/BlockRegistry.php:348
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, or the Albani Zaria sermons analysis — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:354
 msgid "Press Bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:349
+#: src/Site/BlockRegistry.php:355
 msgid "Explore recorded journalists and press agencies, the share of articles with a byline, and their representation over time. A missing byline may reflect incomplete cataloguing."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:360
+#: src/Site/BlockRegistry.php:366
 msgid "Loading press bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:366
+#: src/Site/BlockRegistry.php:372
 msgid "Press Reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:367
+#: src/Site/BlockRegistry.php:373
 msgid "Find articles from different newspapers with highly similar AI text representations. These candidate pairs may indicate shared dispatches, communiqués or reprints; read both articles before concluding that copying occurred."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:379
+#: src/Site/BlockRegistry.php:385
 msgid "Loading press reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:385
+#: src/Site/BlockRegistry.php:391
 msgid "References Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:386
+#: src/Site/BlockRegistry.php:392
 msgid "Explore the bibliography by publication date, type, language, associated country, author and subject. Additional views show authorship links, available full text, modelled themes and text similarity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:399
+#: src/Site/BlockRegistry.php:405
 msgid "Loading references overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:405
+#: src/Site/BlockRegistry.php:411
 msgid "Scary Terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:406
+#: src/Site/BlockRegistry.php:412
 msgid "Explore selected vocabulary associated with radicalism and extremism in newspaper articles: occurrences, trends, countries, term pairs, surrounding vocabulary and tagged places. Counts describe language use, not the extremism of the people discussed."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:429
+#: src/Site/BlockRegistry.php:434
 msgid "Loading scary terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:436
+#: src/Site/BlockRegistry.php:441
 msgid "Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:437
+#: src/Site/BlockRegistry.php:442
 msgid "Explore newspaper articles arranged by an AI comparison of their full texts, with colours for country, decade or modelled topic. Nearby points suggest texts to compare; distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:456
+#: src/Site/BlockRegistry.php:461
 msgid "Sentiment Atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:457
+#: src/Site/BlockRegistry.php:462
 msgid "Compare AI assessments of tone towards Islam and Muslims, their prominence in articles, and subjectivity. Views show changes over time, differences between sources and model agreement. Ratings require checking against the texts, especially for subjectivity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:469
+#: src/Site/BlockRegistry.php:474
 msgid "Loading sentiment atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:475
+#: src/Site/BlockRegistry.php:480
 msgid "Spatial Exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:476
+#: src/Site/BlockRegistry.php:481
 msgid "Map places linked through catalogue records, with filters for countries and associated people, organisations, subjects or events. Only places with coordinates appear; the map does not include every location mentioned in the texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:487
+#: src/Site/BlockRegistry.php:492
 msgid "Loading spatial exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:493
+#: src/Site/BlockRegistry.php:498
 msgid "Term Trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:494
+#: src/Site/BlockRegistry.php:499
 msgid "Compare the number or share of dated newspaper articles containing selected words. Search the frequent-word vocabulary and compare up to eight terms. Each word counts once per article, and only articles with usable processed text enter the calculation."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:505
+#: src/Site/BlockRegistry.php:510
 msgid "Loading term trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:511
+#: src/Site/BlockRegistry.php:516
 msgid "Topic Explorer"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:512
+#: src/Site/BlockRegistry.php:517
 msgid "Explore the themes a statistical topic model identifies in newspaper articles. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:533
+#: src/Site/BlockRegistry.php:538
 msgid "Loading Topic Explorer"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:37
+msgid "Topic modelling (LDA)"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:38
+msgid "OCR with AI"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:39
+msgid "Entity extraction and metadata enrichment"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:40
+msgid "Albani Zaria sermons: from recordings to figures"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:45
+msgid "How topic modelling finds themes in the articles"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:46
+msgid "IWAC trains a statistical topic model, Latent Dirichlet Allocation (LDA), on the text of its newspaper articles. The model is never told what the topics are: it finds groups of words that tend to appear in the same articles."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:52
+msgid "Articles"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:53
+msgid "The input is the OCR text of each French-language newspaper article."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:54
+msgid "Islamic publications and scholarly references have models of their own."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:58
+msgid "Text preparation"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:59
+msgid "Words are reduced to their dictionary form, and very common words are removed."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:60
+msgid "Place names and other terms that would dominate every topic are set aside; frequent word pairs such as al_azhar stay together."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:64
+msgid "Word counts"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:65
+msgid "Each article becomes a count of the words it uses; word order is discarded."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:66
+msgid "Words found in very few articles, or in a large share of them, are left out."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:70
+msgid "Topic discovery"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:71
+msgid "LDA infers 30 topics, each a list of words weighted by how strongly they belong to it."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:72
+msgid "A topic’s label is simply its most characteristic words."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:76
+msgid "Topic mixtures"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:77
+msgid "Each article receives a share of several topics; IWAC keeps its main topic and its three strongest."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:78
+msgid "The Topic Explorer follows each topic across years, countries and newspapers."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:82
+msgid "Topics are patterns inferred from words that occur together, not subjects assigned by a cataloguer. They need interpretation: read the articles behind a topic before naming it, and remember that most articles combine several topics."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:83
+msgid "Illustrative example: the words and proportions in the drawings are invented to show the method, not taken from the IWAC model."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:86
+msgid "How AI turns scanned pages into searchable text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:87
+msgid "IWAC uses one of two routes, depending on what a document already has. New scans go to a multimodal model that reads the page image itself; noisy text from conventional OCR can be corrected instead. A document takes one route, not both."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:91
+msgid "Direct extraction, the current workflow"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:95
+msgid "Scanned page"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:96
+msgid "The document’s PDF goes to a multimodal model: Gemini reads it page by page, Mistral Document AI in a single request."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:100
+msgid "Reading order"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:101
+msgid "The instructions set the order: main columns left to right and top to bottom, then headings, captions and sidebars."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:102
+msgid "The model reads layout and text in one pass; the steps are drawn apart here."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:106
+msgid "Transcription"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:107
+msgid "The model writes out the text, rejoining lines and words that the columns broke, and keeps the source wording."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:111
+msgid "Assembled text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:112
+msgid "The pages are joined with page markers and, after a preview, saved to the record with the name of the model."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:113
+msgid "The scan stays beside the text: an unusual layout can still come out in the wrong order."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:119
+msgid "Post-correction of noisy OCR"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:123
+msgid "Noisy OCR text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:124
+msgid "Text from conventional OCR, with its misread characters, broken words and encoding errors."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:128
+msgid "Sections"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:129
+msgid "A very long text is cut into sections that the model can correct in one request."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:130
+msgid "Context across a cut can be lost."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:134
+msgid "AI correction"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:135
+msgid "A language model fixes recognition errors and restores accents, without translating or modernising the text."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:139
+msgid "Corrected text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:140
+msgid "The corrected version becomes the searchable full text; the original OCR is kept for comparison."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:141
+msgid "Historical names and spellings are kept as printed."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:146
+msgid "Fluent output is not proof of accuracy. A model can modernise an unusual spelling, guess a missing word or skip part of a page, and an error in fluent text is harder to spot than garbled characters. Check quotations and proper names against the scan."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:147
+msgid "Illustrative example: the page and its misreadings are invented to show the method."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:150
+msgid "How names in articles become links to authority records"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:151
+msgid "An AI model reads each newspaper article and lists the persons, organisations, places and subjects it mentions. A name is only a mention until it is matched with IWAC’s authority files, which gather variant spellings under one record."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:157
+msgid "Extraction and normalisation"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:158
+msgid "The model lists the names it finds, without titles such as El Hadj and with acronyms written out in full."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:159
+msgid "Subjects are chosen from IWAC’s own vocabulary."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:163
+msgid "Reconciliation"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:164
+msgid "Each name is compared with the authority records and their alternative forms: exact matches are accepted, close spellings only suggested."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:165
+msgid "A name that fits several records is set aside rather than guessed."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:169
+msgid "Review"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:170
+msgid "A researcher checks ambiguous names, close spellings and unknown entities, and accepts, corrects or rejects each proposal."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:171
+msgid "A name with no record waits for a new authority record, created after curation."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:175
+msgid "Linking"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:176
+msgid "Confirmed matches are added to the article as links: places under Spatial coverage, everything else under Subject."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:177
+msgid "Each link records the model that proposed it; an update only adds links, after a backup."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:181
+msgid "A highlighted name is a mention, not yet a link. A model can miss a name or match it to the wrong record, and the renamings and splits of organisations need historical knowledge, so uncertain matches are reviewed and every update can be reversed."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:182
+msgid "Illustrative example: the name variants come from the example on IWAC’s AI metadata enrichment page; the sentence around them is invented."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:189
+msgid "How the Albani Zaria sermons become figures"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:190
+msgid "The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:196
+msgid "Recordings and transcripts"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:197
+msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:198
+msgid "Both can be wrong, so every passage links back to the recording."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:202
+msgid "Counting words"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:203
+msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:204
+msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:208
+msgid "Terms and their neighbours"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:209
+msgid "Terms for youth and for politics are found in the text, with the words that occur unusually often near them."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:210
+msgid "The word lists are a draft that a Hausa-speaking specialist will check."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:214
+msgid "People and places"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:215
+msgid "A named-entity model proposed names once; only a list of names and spellings curated by hand is counted."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:216
+msgid "A spelling with another meaning, such as shehu, is left out, so the counts are floors."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:220
+msgid "Figures and passages"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:221
+msgid "The counts become the page’s charts and maps; passages are quoted only from transcripts that are public."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:222
+msgid "A count shows where to look; the passage and the recording are the evidence."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:226
+msgid "The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:227
+msgid "Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:236
+msgid "Article"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:237
+msgid "Topic"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:238
+msgid "Person"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:239
+msgid "Organisation"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:240
+msgid "Place"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:241
+msgid "Subject"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:242
+msgid "Authority record"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:243
+msgid "Needs review"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:244
+msgid "Accepted"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:245
+msgid "New record"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:246
+msgid "Spatial coverage"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:247
+msgid "Scan"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:248
+msgid "Text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:249
+msgid "OCR"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:250
+msgid "Corrected"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:251
+msgid "Kept as printed"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:252
+msgid "Left out"
 msgstr ""
 
 #: src/Site/ResourcePageBlockLayout/ItemSetDashboard.php:14
 msgid "Item Set Dashboard"
 msgstr ""
 
-#: src/Site/ResourcePageBlockLayout/Visualizations.php:100 view/common/resource-page-block-layout/item-set-dashboard.phtml:32 view/common/resource-page-block-layout/visualizations/article.phtml:285 view/common/resource-page-block-layout/visualizations/entity.phtml:41 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:127 view/common/resource-page-block-layout/visualizations/person.phtml:39 view/common/resource-page-block-layout/visualizations/publication.phtml:30 view/common/resource-page-block-layout/visualizations/reference.phtml:43
+#: src/Site/ResourcePageBlockLayout/Visualizations.php:100 view/common/resource-page-block-layout/item-set-dashboard.phtml:31 view/common/resource-page-block-layout/visualizations/article.phtml:285 view/common/resource-page-block-layout/visualizations/entity.phtml:41 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:127 view/common/resource-page-block-layout/visualizations/person.phtml:39 view/common/resource-page-block-layout/visualizations/publication.phtml:29 view/common/resource-page-block-layout/visualizations/reference.phtml:43
 msgid "Visualisations"
 msgstr ""
 
@@ -455,15 +883,19 @@ msgstr ""
 msgid "Loading on this day"
 msgstr ""
 
-#: view/common/iwac-assets.phtml:345
+#: view/common/block-layout/pipeline-explainer.phtml:63
+msgid "Replay animation"
+msgstr ""
+
+#: view/common/iwac-assets.phtml:338
 msgid "The visualization could not load."
 msgstr ""
 
-#: view/common/iwac-assets.phtml:346
+#: view/common/iwac-assets.phtml:339
 msgid "Retry"
 msgstr ""
 
-#: view/common/resource-page-block-layout/item-set-dashboard.phtml:37 view/common/resource-page-block-layout/visualizations/article.phtml:289 view/common/resource-page-block-layout/visualizations/entity.phtml:45 view/common/resource-page-block-layout/visualizations/person.phtml:43
+#: view/common/resource-page-block-layout/item-set-dashboard.phtml:36 view/common/resource-page-block-layout/visualizations/article.phtml:289 view/common/resource-page-block-layout/visualizations/entity.phtml:45 view/common/resource-page-block-layout/visualizations/person.phtml:43
 msgid "Loading dashboard"
 msgstr ""
 
@@ -503,7 +935,7 @@ msgstr ""
 msgid "Show reasoning"
 msgstr ""
 
-#: view/common/resource-page-block-layout/visualizations/minimal-item.phtml:131 view/common/resource-page-block-layout/visualizations/publication.phtml:34 view/common/resource-page-block-layout/visualizations/reference.phtml:47
+#: view/common/resource-page-block-layout/visualizations/minimal-item.phtml:131 view/common/resource-page-block-layout/visualizations/publication.phtml:33 view/common/resource-page-block-layout/visualizations/reference.phtml:47
 msgid "Loading visualisations"
 msgstr ""
 

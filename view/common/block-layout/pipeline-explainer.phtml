@@ -1,0 +1,79 @@
+<?php
+/**
+ * Pipeline explainer page block.
+ *
+ * The server renders the whole explanation — title, lede, one ordered list
+ * of stages per route, the caveat — so the block reads completely with
+ * scripting off, in print, and before its bundle arrives. The Svelte diagram
+ * (asset/js/svelte/pipeline-explainer/) replaces this reading with the same
+ * words plus the drawings, mounted by charts/pipeline-explainer.js; it reads
+ * those words from the JSON island below rather than from a dictionary of its
+ * own, so the text has one source (`PipelinePresets`) and one translation.
+ *
+ * The class names are the Svelte component's too: one stylesheet
+ * (css/blocks/pipeline-explainer.css) lays out both, and the static reading
+ * is simply the diagram without its art and Replay control.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ * @var array  $content   PipelinePresets::content(), already translated.
+ * @var string $instance  Unique per block on the page, for the heading ids.
+ */
+
+$escapeHtml = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+$level = $content['headingLevel'];
+$routeLevel = $content['routeHeadingLevel'];
+$titleId = $instance . '-title';
+$several = count($content['routes']) > 1;
+
+ob_start();
+?>
+<figure class="iwac-vis-pipeline__figure" data-preset="<?= $escapeAttr($content['preset']) ?>" aria-labelledby="<?= $escapeAttr($titleId) ?>">
+    <div class="iwac-vis-pipeline__head">
+        <<?= $level ?> class="iwac-vis-pipeline__title" id="<?= $escapeAttr($titleId) ?>"><?= $escapeHtml($content['title']) ?></<?= $level ?>>
+    </div>
+    <p class="iwac-vis-pipeline__lede"><?= $escapeHtml($content['lede']) ?></p>
+    <div class="iwac-vis-pipeline__routes">
+<?php foreach ($content['routes'] as $route): ?>
+        <section class="iwac-vis-pipeline__route"<?php if ($several): ?> aria-labelledby="<?= $escapeAttr($instance . '-' . $route['id']) ?>"<?php endif; ?>>
+<?php if ($several): ?>
+            <<?= $routeLevel ?> class="iwac-vis-pipeline__route-title" id="<?= $escapeAttr($instance . '-' . $route['id']) ?>"><?= $escapeHtml($route['title']) ?></<?= $routeLevel ?>>
+<?php endif; ?>
+            <ol class="iwac-vis-pipeline__stages">
+<?php foreach ($route['stages'] as $stage): ?>
+                <li class="iwac-vis-pipeline__stage">
+                    <p class="iwac-vis-pipeline__name"><?= $escapeHtml($stage['name']) ?></p>
+                    <p class="iwac-vis-pipeline__caption"><?= $escapeHtml($stage['caption']) ?></p>
+<?php if ($stage['note'] !== ''): ?>
+                    <p class="iwac-vis-pipeline__note"><?= $escapeHtml($stage['note']) ?></p>
+<?php endif; ?>
+                </li>
+<?php endforeach; ?>
+            </ol>
+        </section>
+<?php endforeach; ?>
+    </div>
+    <figcaption class="iwac-vis-pipeline__foot">
+        <p class="iwac-vis-pipeline__caveat"><?= $escapeHtml($content['caveat']) ?></p>
+        <p class="iwac-vis-pipeline__example"><?= $escapeHtml($content['example']) ?></p>
+    </figcaption>
+</figure>
+<script type="application/json" class="iwac-vis-pipeline__content"><?= json_encode(
+    $content + ['replay' => $this->translate('Replay animation')],
+    JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+) ?></script>
+<?php
+$reading = ob_get_clean();
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'pipeline-explainer',
+        // No chart library: the diagram is SVG and HTML drawn by Svelte.
+        'needs' => ['echarts' => false],
+        'bundle' => 'pipeline-explainer',
+    ],
+    'blockClass' => 'iwac-vis-pipeline',
+    'prerendered' => $reading,
+    'data' => ['instance' => $instance],
+]);
