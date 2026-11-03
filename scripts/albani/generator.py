@@ -865,7 +865,8 @@ class AlbaniSermonsGenerator:
             if not counts["all"][idx]:
                 continue
             row = {k: ent[k] for k in ("id", "type", "group", "label_en", "label_fr")}
-            for k in ("iwac", "wikidata", "lat", "lon"):
+            # `full_*` spells out an acronym (PDP, INEC, NTA…) beside it.
+            for k in ("full_en", "full_fr", "iwac", "wikidata", "lat", "lon"):
                 if k in ent:
                     row[k] = ent[k]
             row["n"] = {s: counts[s][idx] for s in SCOPES}

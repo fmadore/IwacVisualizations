@@ -655,6 +655,20 @@ a.iwac-vis-albani__ledger-name:hover {
     text-decoration-color: currentColor;
 }
 
+/*  An acronym's expansion, after the short form it is listed by. */
+.iwac-vis-albani__ledger-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--space-2, 0.5rem);
+    min-width: 0;
+}
+
+.iwac-vis-albani__ledger-full {
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
 .iwac-vis-albani__ledger--names .iwac-vis-albani__ledger-count {
     font-size: var(--text-base, 1.0625rem);
 }

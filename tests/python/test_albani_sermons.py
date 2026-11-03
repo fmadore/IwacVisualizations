@@ -356,11 +356,14 @@ class CorpusTests(unittest.TestCase):
              "label_fr": "La Mecque", "aliases": ["makka"], "lat": 21.4, "lon": 39.8},
             {"id": "daurawa", "type": "person", "group": "nigeria", "label_en": "Aminu Daurawa",
              "label_fr": "Aminu Daurawa", "aliases": ["aminu daurawa", "malam aminu daurawa"]},
+            {"id": "pdp", "type": "org", "group": "state", "label_en": "PDP", "label_fr": "PDP",
+             "full_en": "Peoples Democratic Party", "full_fr": "Parti démocratique populaire",
+             "aliases": ["pdp"]},
         ]}
         text = "\n".join([
             "[Segment 1/1 | 00:00:00–end]", "[Speaker seg1-spk:0]",
             # "maka" (for you) shares Makka's merged key and must not count.
-            "Na faɗa maka cewa malam Aminu Daurawa ya je Makka, Aminu Daurawa kuma.",
+            "Na faɗa maka cewa malam Aminu Daurawa ya je Makka, Aminu Daurawa kuma, ba PDP ba.",
         ])
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "entities.json"
@@ -372,6 +375,9 @@ class CorpusTests(unittest.TestCase):
         self.assertEqual(rows["daurawa"]["n"]["all"], 2)
         self.assertEqual(rows["daurawa"]["top"][0]["s"], 0)
         self.assertNotIn("aliases", rows["mecca"])
+        # An acronym travels with its expansion; a plain name has none.
+        self.assertEqual(rows["pdp"]["full_fr"], "Parti démocratique populaire")
+        self.assertNotIn("full_en", rows["mecca"])
 
     def test_every_curated_entity_is_well_formed(self):
         from albani.generator import ENTITIES_PATH
@@ -384,6 +390,10 @@ class CorpusTests(unittest.TestCase):
                 self.assertTrue(e["label_en"] and e["label_fr"] and e["aliases"])
                 if "lat" in e:
                     self.assertTrue(-90 <= e["lat"] <= 90 and -180 <= e["lon"] <= 180)
+                # An acronym is spelled out in both languages or not at all.
+                self.assertEqual("full_en" in e, "full_fr" in e)
+                if "full_en" in e:
+                    self.assertTrue(e["full_en"] and e["full_fr"])
 
     def test_formula_counts_split_by_recording(self):
         gen = generator(frame({"o:id": "1", "OCR": CURRENT}, {"o:id": "2", "OCR": CURRENT}))

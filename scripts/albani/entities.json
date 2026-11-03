@@ -1,6 +1,6 @@
 {
  "status": "draft",
- "_provenance": "People, places and organisations named in the Albani Zaria sermons. Candidates came from a named-entity model run once, offline, over the transcripts (MasakhaNER: masakhane/afroxlmr-large-ner-masakhaner-1.0_2.0, November 2026; hand-checked precision about 95% for people, 90% for places, 50% for organisations); the list below was then curated by hand and the model plays no further part. The generator counts only the aliases listed here, matched on the folded surface form (not the merged match key, which would read 'maka', for you, as Makka). An alias is kept only when its sense is settled in this corpus: bare 'isa' (also a verb), 'shehu' (any shaykh), 'albani' (the preacher or his Syrian namesake), 'nuhu', 'daura' (to tie) and 'kathir' (many) are left out, so counts are floors, not totals. Coordinates come from the IWAC index where it has the place (`iwac`), otherwise from Wikidata (`wikidata`, P625). Awaiting review by a Hausa-speaking specialist.",
+ "_provenance": "People, places and organisations named in the Albani Zaria sermons. Candidates came from a named-entity model run once, offline, over the transcripts (MasakhaNER: masakhane/afroxlmr-large-ner-masakhaner-1.0_2.0, November 2026, and again over the re-transcribed Demokuradiyyah and Shari'a; hand-checked precision about 95% for people, 90% for places, 50% for organisations); the list below was then curated by hand and the model plays no further part. The generator counts only the aliases listed here, matched on the folded surface form (not the merged match key, which would read 'maka', for you, as Makka). An alias is kept only when its sense is settled in this corpus: bare 'isa' (also a verb), 'shehu' (any shaykh), 'albani' (the preacher or his Syrian namesake), 'nuhu', 'daura' (to tie) and 'kathir' (many) are left out, so counts are floors, not totals. Coordinates come from the IWAC index where it has the place (`iwac`), otherwise from Wikidata (`wikidata`, P625). Awaiting review by a Hausa-speaking specialist.",
  "entities": [
   {
    "id": "isajesus",
@@ -616,11 +616,14 @@
    "label_en": "Ibn Uthaymin",
    "label_fr": "Ibn Uthaymin",
    "aliases": [
+    "al-uthaymin",
     "ibn usaimin",
     "ibn uthaimin",
+    "ibn uthaymin",
     "ibnu usaimin",
     "usaimin",
-    "uthaimin"
+    "uthaimin",
+    "uthaymin"
    ]
   },
   {
@@ -887,6 +890,18 @@
    "aliases": [
     "hafiz ringim",
     "ringim"
+   ]
+  },
+  {
+   "id": "aguiyiironsi",
+   "type": "person",
+   "group": "politics",
+   "label_en": "Johnson Aguiyi-Ironsi",
+   "label_fr": "Johnson Aguiyi-Ironsi",
+   "aliases": [
+    "agui ironsi",
+    "aguiyi ironsi",
+    "ironsi"
    ]
   },
   {
@@ -2025,9 +2040,11 @@
    "label_en": "Muslim Brotherhood",
    "label_fr": "Frères musulmans",
    "aliases": [
+    "'yan ikhwan",
     "ikhwan al-muslimin",
     "ikhwanul muslimin",
-    "ikhwanul muslimuna"
+    "ikhwanul muslimuna",
+    "yan ikhwan"
    ]
   },
   {
@@ -2162,6 +2179,8 @@
    "group": "state",
    "label_en": "PDP",
    "label_fr": "PDP",
+   "full_en": "Peoples Democratic Party",
+   "full_fr": "Parti démocratique populaire",
    "aliases": [
     "jam'iyyar pdp",
     "pdp"
@@ -2173,6 +2192,8 @@
    "group": "state",
    "label_en": "ANPP",
    "label_fr": "ANPP",
+   "full_en": "All Nigeria Peoples Party",
+   "full_fr": "Parti populaire de tout le Nigeria",
    "aliases": [
     "anpp"
    ]
@@ -2183,6 +2204,8 @@
    "group": "state",
    "label_en": "CPC",
    "label_fr": "CPC",
+   "full_en": "Congress for Progressive Change",
+   "full_fr": "Congrès pour le changement progressiste",
    "aliases": [
     "cpc"
    ]
@@ -2193,6 +2216,8 @@
    "group": "state",
    "label_en": "INEC",
    "label_fr": "INEC",
+   "full_en": "Independent National Electoral Commission",
+   "full_fr": "Commission électorale nationale indépendante",
    "aliases": [
     "inec"
    ]
@@ -2214,6 +2239,8 @@
    "group": "state",
    "label_en": "NYSC",
    "label_fr": "NYSC",
+   "full_en": "National Youth Service Corps",
+   "full_fr": "Service national de la jeunesse",
    "aliases": [
     "'yan bautar ƙasa",
     "nysc",
@@ -2226,6 +2253,8 @@
    "group": "state",
    "label_en": "CIA",
    "label_fr": "CIA",
+   "full_en": "Central Intelligence Agency",
+   "full_fr": "Agence centrale de renseignement des États-Unis",
    "aliases": [
     "cia"
    ]
@@ -2236,6 +2265,8 @@
    "group": "media",
    "label_en": "BBC",
    "label_fr": "BBC",
+   "full_en": "British Broadcasting Corporation",
+   "full_fr": "British Broadcasting Corporation",
    "aliases": [
     "bbc"
    ]
@@ -2246,6 +2277,8 @@
    "group": "media",
    "label_en": "CNN",
    "label_fr": "CNN",
+   "full_en": "Cable News Network",
+   "full_fr": "Cable News Network",
    "aliases": [
     "cnn"
    ]
@@ -2267,6 +2300,8 @@
    "group": "media",
    "label_en": "NTA",
    "label_fr": "NTA",
+   "full_en": "Nigerian Television Authority",
+   "full_fr": "Télévision publique du Nigeria",
    "aliases": [
     "nta"
    ]
@@ -2277,6 +2312,8 @@
    "group": "media",
    "label_en": "DITV",
    "label_fr": "DITV",
+   "full_en": "Desmims Independent Television, Kaduna",
+   "full_fr": "Desmims Independent Television, Kaduna",
    "aliases": [
     "ditv"
    ]
@@ -2350,6 +2387,17 @@
    ]
   },
   {
+   "id": "amribnalas",
+   "type": "person",
+   "group": "early",
+   "label_en": "Amr ibn al-As",
+   "label_fr": "Amr ibn al-As",
+   "aliases": [
+    "amr ibn al-as",
+    "amru bin al-as"
+   ]
+  },
+  {
    "id": "ibnaljawzi",
    "type": "person",
    "group": "scholars",
@@ -2369,10 +2417,23 @@
    "label_en": "Al-Sha'bi",
    "label_fr": "Al-Sha'bi",
    "aliases": [
+    "al-sha'abi",
     "ash-sha'bi",
     "imam sha'abi",
     "imamu sha'abi",
     "sha'abi"
+   ]
+  },
+  {
+   "id": "alihasanalhalabi",
+   "type": "person",
+   "group": "scholars",
+   "label_en": "Ali Hasan al-Halabi",
+   "label_fr": "Ali Hasan al-Halabi",
+   "aliases": [
+    "ali hasan al-halabi",
+    "ali hassan",
+    "ali hassan al-halabi"
    ]
   },
   {
@@ -2388,6 +2449,16 @@
    ]
   },
   {
+   "id": "abbakoki",
+   "type": "person",
+   "group": "nigeria",
+   "label_en": "Abba Koki",
+   "label_fr": "Abba Koki",
+   "aliases": [
+    "abba koki"
+   ]
+  },
+  {
    "id": "billgates",
    "type": "person",
    "group": "world",
@@ -2396,6 +2467,65 @@
    "aliases": [
     "bill gate",
     "bill gates"
+   ]
+  },
+  {
+   "id": "khomeini",
+   "type": "person",
+   "group": "world",
+   "label_en": "Ruhollah Khomeini",
+   "label_fr": "Rouhollah Khomeini",
+   "aliases": [
+    "imam khumaini",
+    "khumaini"
+   ]
+  },
+  {
+   "id": "sayyidqutb",
+   "type": "person",
+   "group": "world",
+   "label_en": "Sayyid Qutb",
+   "label_fr": "Sayyid Qutb",
+   "aliases": [
+    "sayyid qutb",
+    "sayyid qutub",
+    "sayyidi qutub"
+   ]
+  },
+  {
+   "id": "hassanalbanna",
+   "type": "person",
+   "group": "world",
+   "label_en": "Hassan al-Banna",
+   "label_fr": "Hassan el-Banna",
+   "aliases": [
+    "hasan al banna",
+    "hasan al-banna",
+    "hasanal banna",
+    "hassan al banna",
+    "hassan al-banna"
+   ]
+  },
+  {
+   "id": "gamalabdelnasser",
+   "type": "person",
+   "group": "world",
+   "label_en": "Gamal Abdel Nasser",
+   "label_fr": "Gamal Abdel Nasser",
+   "aliases": [
+    "jamal abdul nasir",
+    "jamal abdun nasir"
+   ]
+  },
+  {
+   "id": "barackobama",
+   "type": "person",
+   "group": "world",
+   "label_en": "Barack Obama",
+   "label_fr": "Barack Obama",
+   "aliases": [
+    "barack obama",
+    "obama"
    ]
   },
   {
@@ -2483,6 +2613,34 @@
    "lon": -9.75
   },
   {
+   "id": "palestine",
+   "type": "place",
+   "group": "world",
+   "label_en": "Palestine",
+   "label_fr": "Palestine",
+   "aliases": [
+    "falasdinu",
+    "falastinu",
+    "palestine"
+   ],
+   "wikidata": "Q23792",
+   "lat": 31.6253,
+   "lon": 35.1453
+  },
+  {
+   "id": "oman",
+   "type": "place",
+   "group": "world",
+   "label_en": "Oman",
+   "label_fr": "Oman",
+   "aliases": [
+    "oman"
+   ],
+   "wikidata": "Q842",
+   "lat": 21.0,
+   "lon": 57.0
+  },
+  {
    "id": "sunnahtv",
    "type": "org",
    "group": "media",
@@ -2509,6 +2667,8 @@
    "group": "state",
    "label_en": "APC",
    "label_fr": "APC",
+   "full_en": "All Progressives Congress",
+   "full_fr": "Congrès de tous les progressistes",
    "aliases": [
     "apc",
     "jam'iyyar apc"
@@ -2520,6 +2680,8 @@
    "group": "state",
    "label_en": "EFCC",
    "label_fr": "EFCC",
+   "full_en": "Economic and Financial Crimes Commission",
+   "full_fr": "Commission des crimes économiques et financiers",
    "aliases": [
     "efcc"
    ]
@@ -2530,6 +2692,8 @@
    "group": "state",
    "label_en": "NEPA",
    "label_fr": "NEPA",
+   "full_en": "National Electric Power Authority",
+   "full_fr": "Régie nationale de l’électricité",
    "aliases": [
     "nepa"
    ]

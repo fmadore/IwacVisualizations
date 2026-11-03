@@ -265,6 +265,15 @@
                     } else {
                         name = P.el('span', 'iwac-vis-albani__ledger-name', labelOf(e));
                     }
+                    // An acronym keeps its short form as the name and is
+                    // spelled out beside it: "PDP  Peoples Democratic Party".
+                    var full = A.label(e, 'full');
+                    if (full) {
+                        var label = P.el('span', 'iwac-vis-albani__ledger-label');
+                        label.appendChild(name);
+                        label.appendChild(P.el('span', 'iwac-vis-albani__ledger-full', full));
+                        name = label;
+                    }
                     li.appendChild(name);
                     li.appendChild(P.el('span', 'iwac-vis-albani__ledger-count', P.formatNumber(count(e, scope))));
                     li.appendChild(P.el('span', 'iwac-vis-albani__ledger-spread', P.t('albani_formulae_spread', {
