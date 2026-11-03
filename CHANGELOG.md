@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.97.0 — every visualisation embeds (2026-11-03)
 
 - **Every panel can be embedded, not only the first ones a block draws.** Embed buttons were added once, as a block's first panels appeared, so panels drawn later had none: eleven of the Albani Zaria sermons' twenty (their sections render as they scroll into view), every Laïcité, Scary Terms and Sentiment Atlas view past the first, and Topic Explorer's topic detail. Buttons now follow the block for as long as the page is open.
 - **A panel embed keeps the view it was copied from.** Its URL now carries the block's own view and filters (`?laicite.view=trends&laicite.country=Togo`, `?topic=7`), so a panel of a second view no longer opens on the first one. Another block's settings on the same page are left out.
