@@ -22,6 +22,17 @@
 
 $escapeHtml = $this->plugin('escapeHtml');
 $escapeAttr = $this->plugin('escapeHtmlAttr');
+// Rendered without the layout's variables (a theme override that calls the
+// partial itself, or tests/integration/block_assets.php, which renders every
+// registry block with only `block` and `slug`): the default preset, rather
+// than a fatal "undefined variable".
+if (!isset($content)) {
+    $content = \IwacVisualizations\Site\PipelinePresets::content('', '',
+        fn (string $text): string => $this->translate($text));
+}
+if (!isset($instance)) {
+    $instance = 'pipeline-' . (isset($block) && $block ? $block->id() : 'default');
+}
 $level = $content['headingLevel'];
 $routeLevel = $content['routeHeadingLevel'];
 $titleId = $instance . '-title';
