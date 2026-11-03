@@ -778,8 +778,8 @@ msgstr "Chaque lien garde la trace du modèle qui l’a proposé ; une mise à
 msgid "A highlighted name is a mention, not yet a link. A model can miss a name or match it to the wrong record, and the renamings and splits of organisations need historical knowledge, so uncertain matches are reviewed and every update can be reversed."
 msgstr "Un nom surligné est une mention, pas encore un lien. Un modèle peut manquer un nom ou le rapprocher de la mauvaise notice, et les changements de nom et scissions des organisations demandent une connaissance historique : les correspondances incertaines sont donc vérifiées et chaque mise à jour peut être annulée."
 
-msgid "Illustrative example: the name variants come from the example on IWAC’s AI metadata enrichment page; the sentence around them is invented."
-msgstr "Exemple illustratif : les variantes du nom viennent de l’exemple donné sur la page d’IWAC consacrée à l’enrichissement des métadonnées par IA ; la phrase qui les entoure est inventée."
+msgid "Illustrative example: the name variants are those of a real person in the IWAC index; the sentence around them is invented."
+msgstr "Exemple illustratif : les variantes du nom sont celles d’une personne réelle de l’index d’IWAC ; la phrase qui les entoure est inventée."
 
 msgid "Article"
 msgstr "Article"
@@ -832,8 +832,8 @@ msgstr "Conservé tel qu’imprimé"
 msgid "Replay animation"
 msgstr "Rejouer l’animation"
 
-msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, or the Albani Zaria sermons analysis — as a short animated diagram with captions. It uses illustrative examples and requests no data."
-msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, ou l’analyse des sermons d’Albani Zaria — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, or tables of contents for Islamic publications — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, analyse des sermons d’Albani Zaria ou tables des matières des publications islamiques — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
 
 msgid "Albani Zaria sermons: from recordings to figures"
 msgstr "Sermons d’Albani Zaria : des enregistrements aux chiffres"
@@ -897,3 +897,66 @@ msgstr "Exemple illustratif : les dessins montrent la méthode avec des mots ci
 
 msgid "Left out"
 msgstr "Écarté"
+
+msgid "Tables of contents for Islamic publications"
+msgstr "Tables des matières des publications islamiques"
+
+msgid "How an issue of an Islamic magazine gets its table of contents"
+msgstr "Comment un numéro de magazine islamique reçoit sa table des matières"
+
+msgid "Digitised Islamic magazines were first searchable only as whole issues. An AI model reads each issue page by page, follows every article across the pages it spans, and writes a table of contents that makes each article findable on its own."
+msgstr "Les magazines islamiques numérisés n’étaient d’abord consultables que numéro par numéro. Un modèle d’IA lit chaque numéro page par page, suit chaque article sur les pages qu’il occupe et rédige une table des matières qui rend chaque article repérable à lui seul."
+
+msgid "Issue"
+msgstr "Numéro"
+
+msgid "Each digitised issue is split into single pages, and each page goes to a vision model on its own: Gemini, Claude or Mistral OCR."
+msgstr "Chaque numéro numérisé est découpé en pages, et chaque page est confiée séparément à un modèle de vision : Gemini, Claude ou Mistral OCR."
+
+msgid "The issue itself stays whole in the collection."
+msgstr "Le numéro lui-même reste entier dans la collection."
+
+msgid "Articles on each page"
+msgstr "Les articles de chaque page"
+
+msgid "The model lists every article on the page: its title as printed, with its section in brackets, its authors and a short summary of what the page shows."
+msgstr "Le modèle relève chaque article de la page : son titre tel qu’imprimé, avec sa rubrique entre crochets, ses auteurs et un bref résumé de ce que montre la page."
+
+msgid "Covers, advertisements and short notices are set aside; Arabic terms read correctly are kept."
+msgstr "Couvertures, publicités et brèves sont écartées ; les termes arabes bien lus sont conservés."
+
+msgid "Continuations"
+msgstr "Suites"
+
+msgid "Markers such as “suite page 7” or “à suivre” are noted, so the parts of an article printed apart can be found again."
+msgstr "Les mentions comme « suite page 7 » ou « à suivre » sont relevées, pour retrouver les parties d’un article imprimées séparément."
+
+msgid "An article that ends on a later page is listed there too, under its title or as a continuation."
+msgstr "Un article qui se termine sur une page ultérieure y est aussi relevé, sous son titre ou comme suite."
+
+msgid "Consolidation"
+msgstr "Consolidation"
+
+msgid "A second pass merges the parts of each article, gathers its pages and authors, and writes one summary of four to six sentences."
+msgstr "Un second passage fusionne les parties de chaque article, réunit ses pages et ses auteurs, et rédige un seul résumé de quatre à six phrases."
+
+msgid "Parts are joined by title, by continuation markers and by subject; a long series in several parts may not merge correctly."
+msgstr "Les parties sont rapprochées par le titre, les mentions de suite et le sujet ; une longue série en plusieurs parties peut être mal fusionnée."
+
+msgid "Table of contents"
+msgstr "Table des matières"
+
+msgid "The index is saved to the issue’s Table of contents field: one entry per article, with its pages, title, authors and summary."
+msgstr "L’index est enregistré dans le champ Table des matières du numéro : une entrée par article, avec ses pages, son titre, ses auteurs et son résumé."
+
+msgid "The model that wrote it is recorded with the field; an update changes nothing else, after a backup and a confirmation."
+msgstr "Le modèle qui l’a rédigé est consigné avec le champ ; la mise à jour ne touche à rien d’autre, après une sauvegarde et une confirmation."
+
+msgid "A table of contents read by a model guides a reader through the issue; it is not a catalogue record. An unusual layout can hide an article or turn an advertisement into one, a decorative heading can pass for a title, and every summary is selective: read the pages before citing an article."
+msgstr "Une table des matières lue par un modèle guide le lecteur dans le numéro ; ce n’est pas une notice de catalogue. Une mise en page inhabituelle peut masquer un article ou faire passer une publicité pour un article, un titre décoratif peut être pris pour un titre, et chaque résumé est sélectif : lisez les pages avant de citer un article."
+
+msgid "Illustrative example: the issue, its titles and its pages are invented to show the method."
+msgstr "Exemple illustratif : le numéro, ses titres et ses pages sont inventés pour montrer la méthode."
+
+msgid "Advertisement"
+msgstr "Publicité"

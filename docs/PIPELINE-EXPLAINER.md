@@ -17,6 +17,7 @@ viewing it needs no access to the private dataset.
    | OCR with AI | two separate routes: direct extraction by a multimodal model, and post-correction of noisy OCR | *Optical character recognition* (`/page/ocr`) |
    | Entity extraction and metadata enrichment | extraction and normalisation → reconciliation → review → linking | *AI metadata enrichment* (`/page/ai-metadata-enrichment`) |
    | Albani Zaria sermons: from recordings to figures | recordings and transcripts → counting words → terms and neighbours → people and places → figures and passages | the Albani Zaria exhibition page, above or below its block |
+   | Tables of contents for Islamic publications | issue → articles on each page → continuations → consolidation → table of contents | *AI metadata enrichment*, in its section on tables of contents (title heading level H3 under that section's H2) |
 
 3. **Title heading level**: one level below the heading of the section the
    block sits in (an H3 under an H2 section, the default). Routes, in the OCR
@@ -69,6 +70,7 @@ The captions describe the pipelines as their code stands:
 | OCR with AI | iwac-ai-pipelines: `AI_ocr_extraction/` (Gemini page by page or Mistral Document AI whole-PDF, the reading-order prompt, page markers, `iwac:ocrModel`, preview before write) and `AI_ocr_correction/` (raw OCR from `extracttext:extracted_text`, chunking at `--max-length`, corrected text to `bibo:content`, raw OCR kept) |
 | Entity extraction | iwac-ai-pipelines: `AI_NER/` (persons, organisations, places, subjects; titles stripped; exact matches against titles and `dcterms:alternative`, ambiguous names set aside, fuzzy matches suggested only), `AI_authority_curation/`, `common/link_update_cli.py` (places → `dcterms:spatial`, the rest → `dcterms:subject`, add-only, backed up, `iwac:nerModel`) |
 | Albani Zaria sermons | the exhibition's own method section (`asset/js/charts/albani-sermons/method.js`) and iwac-ai-pipelines `AI_audio_summary/` |
+| Tables of contents | iwac-ai-pipelines `AI_summary_issue/`: each page sent alone to a vision model (Gemini, Claude or Mistral OCR), `summary_prompt_issue.md` (title as printed with its section in brackets, authors, a 2–3-sentence summary, continuation markers, covers and advertisements set aside, Arabic terms kept), `consolidation_prompt_issue.md` (parts merged by title, markers and subject; pages and authors gathered; a 4–6-sentence summary), `03_update_omeka_toc.py` (`dcterms:tableOfContents` only, `iwac:summaryModel`, backup and confirmation) |
 
 Two points differ from the original brief (issue #36). The NER pipeline uses
 no OpenRefine: its review is the validation interface plus authority

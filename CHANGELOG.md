@@ -13,6 +13,11 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **A fifth Pipeline Explainer preset: Tables of contents for Islamic publications.** It shows how a digitised magazine issue gets its table of contents: the issue split into pages, the articles a model lists on each page (title as printed, section, authors, a short summary; covers and advertisements set aside), the continuation markers that send an article on to a later page, the consolidation that merges its parts, and the index saved to the issue's Table of contents field with the model that wrote it. The drawings follow one invented article across pages 3 and 7. It suits the AI metadata enrichment page, in its section on tables of contents.
+- The entity preset's closing line no longer points to "the example on IWAC's AI metadata enrichment page", which read oddly on that very page: the name variants are now "those of a real person in the IWAC index".
+
 ### v1.94.0 — Demokuradiyyah counted, and the Pipeline Explainer (2026-11-03)
 
 - **New page block: Pipeline Explainer.** A short animated diagram that explains one IWAC workflow among the text of a page, chosen in the block form: topic modelling (LDA), OCR with AI (direct extraction by a multimodal model, or post-correction of noisy OCR — two separate routes), entity extraction and metadata enrichment, or the analysis behind the Albani Zaria sermons exhibition. Each step has its own caption, and each preset says where uncertainty lies and where people review the output; the examples in the drawings are illustrative. It plays once when it scrolls into view, offers Replay, stays still under reduced motion, and reads in full without JavaScript, in English and French. It requests no data. A title heading level setting fits it to the page outline. Adding it to the OCR, AI metadata enrichment, topic-modelling and Albani pages is a separate content step. See `docs/PIPELINE-EXPLAINER.md`.

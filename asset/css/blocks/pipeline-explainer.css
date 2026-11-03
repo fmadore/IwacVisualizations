@@ -786,6 +786,118 @@
 }
 
 
+/*  Tables of contents for Islamic publications */
+
+/*  Page numbers, set like the index's own: mono, quiet, never wrapped. */
+.iwac-vis-pipeline__pages {
+    flex: none;
+    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
+    color: var(--ink-light, #3f4349);
+    white-space: nowrap;
+}
+
+/*  An article found on a page: a DASHED frame, like the reading zones —
+ *  found, not yet an entry. */
+.iwac-vis-pipeline__toc-found {
+    display: grid;
+    gap: 2px;
+    padding: 2px 3px;
+    border: 1px dashed var(--ink-light, #3f4349);
+    border-radius: 2px;
+}
+
+.iwac-vis-pipeline__toc-title {
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-pipeline__rubric {
+    font-weight: 400;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-pipeline__toc-author {
+    font-style: italic;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-pipeline__toc-aside {
+    color: var(--ink-light, #3f4349);
+}
+
+/*  The continuation marker the model reads: primary, framed, so it is a
+ *  shape as well as a colour. */
+.iwac-vis-pipeline__marker-box {
+    fill: color-mix(in oklab, var(--primary, #ce4115) 16%, transparent);
+    stroke: var(--primary, #ce4115);
+    stroke-width: 0.75;
+}
+
+/*  Printed words, so the body face: the mono numbers are the drawing's own. */
+.iwac-vis-pipeline__marker-text {
+    font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    fill: var(--ink-strong, #05070c);
+    text-anchor: middle;
+}
+
+.iwac-vis-pipeline__fragment {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0 3px;
+    border: 1px dashed var(--ink-light, #3f4349);
+    border-radius: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*  The merged entry: a SOLID frame — one article, all its pages. */
+.iwac-vis-pipeline__entry {
+    display: grid;
+    gap: 2px;
+    width: 100%;
+    padding: 2px var(--space-1, 0.25rem);
+    border: 1px solid var(--ink, #13161c);
+    border-radius: var(--radius-sm, 0.375rem);
+    background: var(--surface-raised, #faf8f6);
+}
+
+.iwac-vis-pipeline__entry-head,
+.iwac-vis-pipeline__toc-entry {
+    display: flex;
+    gap: 3px;
+    min-width: 0;
+}
+
+.iwac-vis-pipeline__entry-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*  An index line wraps under its own title, the pages hanging beside it. */
+.iwac-vis-pipeline__toc-entry-title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.iwac-vis-pipeline__entry-title,
+.iwac-vis-pipeline__toc-entry--merged .iwac-vis-pipeline__toc-entry-title {
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-pipeline__toc {
+    display: grid;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
 /* ------------------------------------------------------------------- */
 /*  Narrow blocks                                                       */
 /* ------------------------------------------------------------------- */

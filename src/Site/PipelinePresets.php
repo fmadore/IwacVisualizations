@@ -22,7 +22,7 @@ namespace IwacVisualizations\Site;
  * sometimes summarised: LDA preprocessing in IWAC-Hugging-Face
  * (`lemmatize_update_hf.py`, `post-processing/lda_topic_modeling/`), OCR and
  * NER in iwac-ai-pipelines (`AI_ocr_extraction/`, `AI_ocr_correction/`,
- * `AI_NER/`, `AI_authority_curation/`). Change a caption when the pipeline
+ * `AI_NER/`, `AI_authority_curation/`, `AI_summary_issue/`). Change a caption when the pipeline
  * changes, not when the prose elsewhere does.
  *
  * Every translatable literal sits on its own line ending in `// @translate`,
@@ -38,6 +38,7 @@ final class PipelinePresets
         'ocr'               => 'OCR with AI', // @translate
         'entity-enrichment' => 'Entity extraction and metadata enrichment', // @translate
         'albani-sermons'    => 'Albani Zaria sermons: from recordings to figures', // @translate
+        'issue-contents'    => 'Tables of contents for Islamic publications', // @translate
     ];
 
     const PRESETS = [
@@ -179,7 +180,7 @@ final class PipelinePresets
                 ],
             ]],
             'caveat' => 'A highlighted name is a mention, not yet a link. A model can miss a name or match it to the wrong record, and the renamings and splits of organisations need historical knowledge, so uncertain matches are reviewed and every update can be reversed.', // @translate
-            'example' => 'Illustrative example: the name variants come from the example on IWAC’s AI metadata enrichment page; the sentence around them is invented.', // @translate
+            'example' => 'Illustrative example: the name variants are those of a real person in the IWAC index; the sentence around them is invented.', // @translate
         ],
         // Follows the Albani Zaria sermons block's own method section
         // (asset/js/charts/albani-sermons/method.js) and the transcription
@@ -226,6 +227,52 @@ final class PipelinePresets
             'caveat' => 'The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review.', // @translate
             'example' => 'Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations.', // @translate
         ],
+        // Follows iwac-ai-pipelines `AI_summary_issue/`: the page prompt
+        // (summary_prompt_issue.md), the consolidation prompt
+        // (consolidation_prompt_issue.md) and the updater
+        // (03_update_omeka_toc.py), which writes `dcterms:tableOfContents`
+        // with an `iwac:summaryModel` annotation.
+        'issue-contents' => [
+            'title' => 'How an issue of an Islamic magazine gets its table of contents', // @translate
+            'lede' => 'Digitised Islamic magazines were first searchable only as whole issues. An AI model reads each issue page by page, follows every article across the pages it spans, and writes a table of contents that makes each article findable on its own.', // @translate
+            'routes' => [[
+                'id' => 'contents',
+                'stages' => [
+                    [
+                        'art' => 'issue',
+                        'name' => 'Issue', // @translate
+                        'caption' => 'Each digitised issue is split into single pages, and each page goes to a vision model on its own: Gemini, Claude or Mistral OCR.', // @translate
+                        'note' => 'The issue itself stays whole in the collection.', // @translate
+                    ],
+                    [
+                        'art' => 'page',
+                        'name' => 'Articles on each page', // @translate
+                        'caption' => 'The model lists every article on the page: its title as printed, with its section in brackets, its authors and a short summary of what the page shows.', // @translate
+                        'note' => 'Covers, advertisements and short notices are set aside; Arabic terms read correctly are kept.', // @translate
+                    ],
+                    [
+                        'art' => 'continuation',
+                        'name' => 'Continuations', // @translate
+                        'caption' => 'Markers such as “suite page 7” or “à suivre” are noted, so the parts of an article printed apart can be found again.', // @translate
+                        'note' => 'An article that ends on a later page is listed there too, under its title or as a continuation.', // @translate
+                    ],
+                    [
+                        'art' => 'merge',
+                        'name' => 'Consolidation', // @translate
+                        'caption' => 'A second pass merges the parts of each article, gathers its pages and authors, and writes one summary of four to six sentences.', // @translate
+                        'note' => 'Parts are joined by title, by continuation markers and by subject; a long series in several parts may not merge correctly.', // @translate
+                    ],
+                    [
+                        'art' => 'contents',
+                        'name' => 'Table of contents', // @translate
+                        'caption' => 'The index is saved to the issue’s Table of contents field: one entry per article, with its pages, title, authors and summary.', // @translate
+                        'note' => 'The model that wrote it is recorded with the field; an update changes nothing else, after a backup and a confirmation.', // @translate
+                    ],
+                ],
+            ]],
+            'caveat' => 'A table of contents read by a model guides a reader through the issue; it is not a catalogue record. An unusual layout can hide an article or turn an advertisement into one, a decorative heading can pass for a title, and every summary is selective: read the pages before citing an article.', // @translate
+            'example' => 'Illustrative example: the issue, its titles and its pages are invented to show the method.', // @translate
+        ],
     ];
 
     /**
@@ -250,6 +297,8 @@ final class PipelinePresets
         'corrected'    => 'Corrected', // @translate
         'kept'         => 'Kept as printed', // @translate
         'leftOut'      => 'Left out', // @translate
+        'advert'       => 'Advertisement', // @translate
+        'contents'     => 'Table of contents', // @translate
     ];
 
     /** Heading levels an editor may give the block title; routes go one below. */

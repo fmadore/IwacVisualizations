@@ -15,6 +15,7 @@
 	import OcrArt from './OcrArt.svelte';
 	import EntityArt from './EntityArt.svelte';
 	import AlbaniArt from './AlbaniArt.svelte';
+	import IssueArt from './IssueArt.svelte';
 
 	let { content, instance } = $props();
 
@@ -22,7 +23,8 @@
 		'topic-modelling': TopicArt,
 		ocr: OcrArt,
 		'entity-enrichment': EntityArt,
-		'albani-sermons': AlbaniArt
+		'albani-sermons': AlbaniArt,
+		'issue-contents': IssueArt
 	};
 	const Art = $derived(ART[content.preset]);
 	const several = $derived(content.routes.length > 1);

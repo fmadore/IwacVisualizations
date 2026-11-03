@@ -6,8 +6,8 @@
 	// A MENTION is drawn with a dashed outline and a LINK as a solid chip with
 	// a link mark — the difference the captions explain, kept visible. Each
 	// category has its theme colour (--type-entity-*) and its name beside it.
-	// The variants are the ones IWAC's AI metadata enrichment page cites; the
-	// sentence around them is invented.
+	// The variants are those of a real IWAC index entry (the one the AI
+	// metadata enrichment page cites); the sentence around them is invented.
 	let { kind, labels } = $props();
 
 	const CATEGORIES = ['person', 'organisation', 'place', 'subject'];

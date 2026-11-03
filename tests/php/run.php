@@ -492,6 +492,7 @@ namespace {
         'ocr'               => 'OcrArt.svelte',
         'entity-enrichment' => 'EntityArt.svelte',
         'albani-sermons'    => 'AlbaniArt.svelte',
+        'issue-contents'    => 'IssueArt.svelte',
     ];
     check(array_keys($artFiles) === PipelinePresets::ids(), 'a pipeline preset has no drawing component');
     check(array_keys(PipelinePresets::LABELS) === PipelinePresets::ids(), 'every pipeline preset needs an admin label');

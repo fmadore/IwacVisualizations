@@ -4,7 +4,7 @@
  * diagram over it, its single play and Replay, reduced motion, keyboard,
  * phone layout, both themes and both languages — on fixtures rendered from
  * the production template (tests/browser/render-pipeline-explainer.php),
- * with all four presets on one page.
+ * with all five presets on one page.
  */
 const { test, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
@@ -17,6 +17,7 @@ const PRESETS = [
     ['pipeline-2', 'ocr', [4, 4]],
     ['pipeline-3', 'entity-enrichment', [4]],
     ['pipeline-4', 'albani-sermons', [5]],
+    ['pipeline-5', 'issue-contents', [5]],
 ];
 
 /** A tokens.json hex colour as getComputedStyle prints it. */
