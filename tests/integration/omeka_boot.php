@@ -229,7 +229,11 @@ $embedController = $controllers->get('IwacVisualizations\Controller\Site\Embed')
 // registers `translate` (core config, 4.0+); the per-dispatch manager below
 // does not.
 $translatePlugin = $services->get('ControllerPluginManager')->get('translate');
-$dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedController, $translatePlugin) {
+// Likewise `viewHelpers()`, through which a configured block (a preset, a
+// timeline) turns its URL's choice into template variables. Stateless: it
+// hands back the shared view-helper manager.
+$viewHelpersPlugin = $services->get('ControllerPluginManager')->get('viewHelpers');
+$dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedController, $translatePlugin, $viewHelpersPlugin) {
     $request = new Request();
     $request->setQuery(new \Laminas\Stdlib\Parameters($queryParams));
     $response = new Response();
@@ -254,19 +258,30 @@ $dispatchEmbed = function (array $routeParams, array $queryParams) use ($embedCo
     // manager. It is stateless (a translator wrapper), unlike `Layout`.
     $embedPlugins = new \Laminas\Mvc\Controller\PluginManager(new \Laminas\ServiceManager\ServiceManager());
     $embedPlugins->setService('translate', $translatePlugin);
+    $embedPlugins->setService('viewHelpers', $viewHelpersPlugin);
     $embedController->setPluginManager($embedPlugins);
 
     $view = $embedController->dispatch($request, $response);
     return [
-        'status'   => $response->getStatusCode(),
-        'template' => $view->getTemplate(),
-        'slug'     => $view->getVariable('slug'),
+        'status'    => $response->getStatusCode(),
+        'template'  => $view->getTemplate(),
+        'slug'      => $view->getVariable('slug'),
+        'variables' => $view->getVariable('variables'),
         'layout'   => $event->getViewModel()->getVariables(),
         'headers'  => $response->getHeaders(),
     ];
 };
 
-$firstEmbeddable = array_key_first(BlockRegistry::embeddable());
+// The plain case is a block that needs nothing in its URL. The configured
+// ones (a preset, a timeline) 404 without their choice - section 6 - so the
+// registry's first row, the timeline since 1.97.0, cannot stand in for it.
+$firstEmbeddable = null;
+foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+    if (BlockRegistry::embedParam($slug) === null) {
+        $firstEmbeddable = $slug;
+        break;
+    }
+}
 checkIntegration(is_string($firstEmbeddable) && $firstEmbeddable !== '', 'no embeddable block to dispatch');
 
 // 1. A whitelisted slug, no panel, no query: the plain case.
@@ -403,8 +418,15 @@ checkIntegration(
 // 6. The whitelist and the registry are the same list, in both directions -
 // this is the guard that stopped v1.21 from shipping a 500ing embed.
 foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+    $param = BlockRegistry::embedParam($slug);
     $got = $dispatchEmbed(['block' => $slug], []);
-    checkIntegration($got['status'] === 200, "registry block '{$slug}' is not dispatchable as an embed");
+    if ($param === null) {
+        checkIntegration($got['status'] === 200, "registry block '{$slug}' is not dispatchable as an embed");
+    } else {
+        // A configured block renders the choice its URL names and nothing
+        // else: no default preset, no first timeline.
+        checkIntegration($got['status'] === 404, "configured block '{$slug}' rendered without its ?{$param}=");
+    }
     // The partial the embed view will actually reach for. Since H5 that is
     // `_generic` for the twenty blocks whose registry row declares a shell,
     // and a per-slug template for the one that does more than declare -
@@ -419,6 +441,22 @@ foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
     );
 }
 
+// The pipeline with its preset: 200, the preset's words handed to the
+// template, and the preset named in the frame's title. A preset that does
+// not exist is a 404, not the default diagram.
+$got = $dispatchEmbed(['block' => 'pipeline-explainer'], ['preset' => 'ocr']);
+checkIntegration($got['status'] === 200, 'the pipeline embed with ?preset=ocr did not return 200');
+checkIntegration(
+    (($got['variables'] ?? [])['content']['preset'] ?? null) === 'ocr',
+    'the pipeline embed did not hand its template the requested preset'
+);
+checkIntegration(
+    strpos((string) ($got['layout']['embedTitle'] ?? ''), ' — ') !== false,
+    'the pipeline embed title does not name its preset'
+);
+$got = $dispatchEmbed(['block' => 'pipeline-explainer'], ['preset' => 'no-such-preset']);
+checkIntegration($got['status'] === 404, 'a pipeline embed naming an unknown preset did not 404');
+
 // 7. The snippet gallery: indexAction, dispatched and RENDERED. It was the
 // one action nothing exercised, and the one that broke - after the bundling
 // commit its helper script was a 404, `IWACVis.embed` never existed, and the
@@ -430,6 +468,9 @@ $galleryPlugins = new \Laminas\Mvc\Controller\PluginManager(new \Laminas\Service
 $galleryCurrentSite = new \Omeka\Mvc\Controller\Plugin\CurrentSite();
 $galleryCurrentSite->setSite($site);
 $galleryPlugins->setService('currentSite', $galleryCurrentSite);
+// A configured block is listed once per choice, which it is asked for
+// through the view helpers.
+$galleryPlugins->setService('viewHelpers', $viewHelpersPlugin);
 $galleryController->setPluginManager($galleryPlugins);
 // What Omeka's MvcListeners do for every /s/<site>/ route before the
 // controller runs: point the site-settings service at the site, so the
@@ -447,9 +488,32 @@ checkIntegration(
     $galleryView->getTemplate() === 'iwac-visualizations/embed/index',
     'the embed gallery rendered the wrong template: ' . var_export($galleryView->getTemplate(), true)
 );
+// One card per zero-configuration block, and one per choice of a configured
+// block: each Pipeline Explainer preset, each synced timeline (none here,
+// unless the fixture site has a data generation with timelines).
+$galleryCards = array_map(
+    static fn (array $card): string => $card['slug'] . ($card['query'] ? '?' . http_build_query($card['query']) : ''),
+    (array) $galleryView->getVariable('cards')
+);
+$expectedCards = [];
+foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+    $param = BlockRegistry::embedParam($slug);
+    if ($param === null) {
+        $expectedCards[] = $slug;
+        continue;
+    }
+    $class = BlockRegistry::get($slug)['class'];
+    foreach (array_keys($class::embedVariants($services->get('ViewHelperManager'))) as $value) {
+        $expectedCards[] = $slug . '?' . http_build_query([$param => $value]);
+    }
+}
 checkIntegration(
-    $galleryView->getVariable('blocks') === BlockRegistry::embeddable(),
-    'the embed gallery does not list exactly the embeddable registry blocks'
+    $galleryCards === $expectedCards,
+    'the embed gallery does not list exactly the embeddable blocks and their choices: ' . json_encode($galleryCards)
+);
+checkIntegration(
+    in_array('pipeline-explainer?preset=ocr', $galleryCards, true),
+    'the embed gallery lost the Pipeline Explainer presets'
 );
 checkIntegration($galleryView->getVariable('siteSlug') === $site->slug(), 'the embed gallery lost its site slug');
 checkIntegration(
@@ -466,10 +530,12 @@ try {
         'the embed gallery emits inline script, which a `script-src \'self\'` policy refuses');
     checkIntegration(strpos($galleryHtml, 'data-label-copy=') !== false,
         'the embed gallery lost the translated labels its script reads');
-    foreach (array_keys(BlockRegistry::embeddable()) as $slug) {
+    foreach (array_unique(array_column((array) $galleryView->getVariable('cards'), 'slug')) as $slug) {
         checkIntegration(strpos($galleryHtml, 'data-slug="' . $slug . '"') !== false,
             "the embed gallery has no card for '{$slug}'");
     }
+    checkIntegration(strpos($galleryHtml, 'data-query="preset=ocr"') !== false,
+        'the embed gallery cards do not carry their configured choice');
     // Attribute values are entity-escaped (`/` as `&#x2F;`); compare decoded.
     $galleryScripts = html_entity_decode(
         (string) $renderer->plugin('headScript')->toString(),
