@@ -192,23 +192,19 @@ final class PipelinePresets
             'routes' => [[
                 'id' => 'sermons',
                 'stages' => [
+                    // In the order of the block's own sections, under their
+                    // names, so the diagram doubles as a map of the page.
                     [
                         'art' => 'recording',
-                        'name' => 'Recordings and transcripts', // @translate
-                        'caption' => 'Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking.', // @translate
+                        'name' => 'The recordings', // @translate
+                        'caption' => 'Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out.', // @translate
                         'note' => 'Both can be wrong, so every passage links back to the recording.', // @translate
                     ],
                     [
                         'art' => 'normalise',
-                        'name' => 'Counting words', // @translate
-                        'caption' => 'Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out.', // @translate
-                        'note' => 'The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa.', // @translate
-                    ],
-                    [
-                        'art' => 'terms',
-                        'name' => 'Terms and their neighbours', // @translate
-                        'caption' => 'Terms for youth and for politics are found in the text, with the words that occur unusually often near them.', // @translate
-                        'note' => 'The word lists are a draft that a Hausa-speaking specialist will check.', // @translate
+                        'name' => 'Vocabulary', // @translate
+                        'caption' => 'Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out.', // @translate
+                        'note' => 'The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa.', // @translate
                     ],
                     [
                         'art' => 'names',
@@ -217,9 +213,15 @@ final class PipelinePresets
                         'note' => 'A spelling with another meaning, such as shehu, is left out, so the counts are floors.', // @translate
                     ],
                     [
+                        'art' => 'terms',
+                        'name' => 'Youth and politics', // @translate
+                        'caption' => 'Terms for youth and for politics are found in the text, with the words that occur unusually often near them and the places where the two themes meet.', // @translate
+                        'note' => 'The word lists are a draft that a Hausa-speaking specialist will check.', // @translate
+                    ],
+                    [
                         'art' => 'figures',
                         'name' => 'Figures and passages', // @translate
-                        'caption' => 'The counts become the page’s charts and maps; passages are quoted only from transcripts that are public.', // @translate
+                        'caption' => 'The counts become the page’s charts, its map and the words that set each recording apart; passages are quoted only from transcripts that are public.', // @translate
                         'note' => 'A count shows where to look; the passage and the recording are the evidence.', // @translate
                     ],
                 ],

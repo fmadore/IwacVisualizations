@@ -176,19 +176,14 @@
         <section class="iwac-vis-pipeline__route">
             <ol class="iwac-vis-pipeline__stages">
                 <li class="iwac-vis-pipeline__stage">
-                    <p class="iwac-vis-pipeline__name">Recordings and transcripts</p>
-                    <p class="iwac-vis-pipeline__caption">Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking.</p>
+                    <p class="iwac-vis-pipeline__name">The recordings</p>
+                    <p class="iwac-vis-pipeline__caption">Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out.</p>
                     <p class="iwac-vis-pipeline__note">Both can be wrong, so every passage links back to the recording.</p>
                 </li>
                 <li class="iwac-vis-pipeline__stage">
-                    <p class="iwac-vis-pipeline__name">Counting words</p>
-                    <p class="iwac-vis-pipeline__caption">Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out.</p>
-                    <p class="iwac-vis-pipeline__note">The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa.</p>
-                </li>
-                <li class="iwac-vis-pipeline__stage">
-                    <p class="iwac-vis-pipeline__name">Terms and their neighbours</p>
-                    <p class="iwac-vis-pipeline__caption">Terms for youth and for politics are found in the text, with the words that occur unusually often near them.</p>
-                    <p class="iwac-vis-pipeline__note">The word lists are a draft that a Hausa-speaking specialist will check.</p>
+                    <p class="iwac-vis-pipeline__name">Vocabulary</p>
+                    <p class="iwac-vis-pipeline__caption">Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out.</p>
+                    <p class="iwac-vis-pipeline__note">The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa.</p>
                 </li>
                 <li class="iwac-vis-pipeline__stage">
                     <p class="iwac-vis-pipeline__name">People and places</p>
@@ -196,8 +191,13 @@
                     <p class="iwac-vis-pipeline__note">A spelling with another meaning, such as shehu, is left out, so the counts are floors.</p>
                 </li>
                 <li class="iwac-vis-pipeline__stage">
+                    <p class="iwac-vis-pipeline__name">Youth and politics</p>
+                    <p class="iwac-vis-pipeline__caption">Terms for youth and for politics are found in the text, with the words that occur unusually often near them and the places where the two themes meet.</p>
+                    <p class="iwac-vis-pipeline__note">The word lists are a draft that a Hausa-speaking specialist will check.</p>
+                </li>
+                <li class="iwac-vis-pipeline__stage">
                     <p class="iwac-vis-pipeline__name">Figures and passages</p>
-                    <p class="iwac-vis-pipeline__caption">The counts become the page’s charts and maps; passages are quoted only from transcripts that are public.</p>
+                    <p class="iwac-vis-pipeline__caption">The counts become the page’s charts, its map and the words that set each recording apart; passages are quoted only from transcripts that are public.</p>
                     <p class="iwac-vis-pipeline__note">A count shows where to look; the passage and the recording are the evidence.</p>
                 </li>
             </ol>
@@ -208,7 +208,7 @@
         <p class="iwac-vis-pipeline__example">Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations.</p>
     </figcaption>
 </figure>
-<script type="application/json" class="iwac-vis-pipeline__content">{"preset":"albani-sermons","headingLevel":"h3","routeHeadingLevel":"h4","title":"How the Albani Zaria sermons become figures","lede":"The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording.","routes":[{"id":"sermons","title":"","stages":[{"art":"recording","name":"Recordings and transcripts","caption":"Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking.","note":"Both can be wrong, so every passage links back to the recording."},{"art":"normalise","name":"Counting words","caption":"Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out.","note":"The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa."},{"art":"terms","name":"Terms and their neighbours","caption":"Terms for youth and for politics are found in the text, with the words that occur unusually often near them.","note":"The word lists are a draft that a Hausa-speaking specialist will check."},{"art":"names","name":"People and places","caption":"A named-entity model proposed names once; only a list of names and spellings curated by hand is counted.","note":"A spelling with another meaning, such as shehu, is left out, so the counts are floors."},{"art":"figures","name":"Figures and passages","caption":"The counts become the page’s charts and maps; passages are quoted only from transcripts that are public.","note":"A count shows where to look; the passage and the recording are the evidence."}]}],"caveat":"The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review.","example":"Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations.","labels":{"article":"Article","topic":"Topic","person":"Person","organisation":"Organisation","place":"Place","subject":"Subject","record":"Authority record","review":"Needs review","accepted":"Accepted","newRecord":"New record","spatial":"Spatial coverage","scan":"Scan","text":"Text","ocr":"OCR","corrected":"Corrected","kept":"Kept as printed","leftOut":"Left out","advert":"Advertisement","contents":"Table of contents"},"replay":"Replay animation"}</script>
+<script type="application/json" class="iwac-vis-pipeline__content">{"preset":"albani-sermons","headingLevel":"h3","routeHeadingLevel":"h4","title":"How the Albani Zaria sermons become figures","lede":"The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording.","routes":[{"id":"sermons","title":"","stages":[{"art":"recording","name":"The recordings","caption":"Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out.","note":"Both can be wrong, so every passage links back to the recording."},{"art":"normalise","name":"Vocabulary","caption":"Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out.","note":"The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa."},{"art":"names","name":"People and places","caption":"A named-entity model proposed names once; only a list of names and spellings curated by hand is counted.","note":"A spelling with another meaning, such as shehu, is left out, so the counts are floors."},{"art":"terms","name":"Youth and politics","caption":"Terms for youth and for politics are found in the text, with the words that occur unusually often near them and the places where the two themes meet.","note":"The word lists are a draft that a Hausa-speaking specialist will check."},{"art":"figures","name":"Figures and passages","caption":"The counts become the page’s charts, its map and the words that set each recording apart; passages are quoted only from transcripts that are public.","note":"A count shows where to look; the passage and the recording are the evidence."}]}],"caveat":"The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review.","example":"Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations.","labels":{"article":"Article","topic":"Topic","person":"Person","organisation":"Organisation","place":"Place","subject":"Subject","record":"Authority record","review":"Needs review","accepted":"Accepted","newRecord":"New record","spatial":"Spatial coverage","scan":"Scan","text":"Text","ocr":"OCR","corrected":"Corrected","kept":"Kept as printed","leftOut":"Left out","advert":"Advertisement","contents":"Table of contents"},"replay":"Replay animation"}</script>
 
 </div>
     <div class="fixture-gap"></div>

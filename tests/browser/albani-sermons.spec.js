@@ -61,6 +61,33 @@ test('the transcripts still being redone are named, and the democracy caveat wai
     await expect(page.locator('.iwac-vis-albani__caveat')).toContainText('Demokuradiyyah');
 });
 
+test('once nothing is being re-transcribed, neither the timeline nor the method says so', async ({ page }) => {
+    const legend = () => page.evaluate(() => {
+        const el = document.querySelector('[data-iwac-panel="albani-corpus-timeline"] .iwac-vis-chart');
+        return window.echarts.getInstanceByDom(el).getOption().series.map((s) => s.name);
+    });
+    const scope = page.locator('[data-iwac-section="method"] .iwac-vis-albani__method-item').nth(1);
+    await ready(page);
+    await expect(scope).toContainText('until it has been redone');
+
+    // The live corpus since 2026-11-03: every transcript in the current format.
+    await page.route('**/albani-sermons/metadata.json*', async (route) => {
+        const response = await route.fetch();
+        const metadata = await response.json();
+        metadata.recordings.forEach((r) => {
+            if (r.st === 'legacy') { r.st = 'analysed'; r.d = r.d || '2010'; r.dur = r.dur || 3600; }
+        });
+        await route.fulfill({ response, json: metadata });
+    });
+    await ready(page);
+    const names = await legend();
+    expect(names).not.toContain('Being re-transcribed');
+    expect(names).toContain('Analysed');
+    await expect(scope).toContainText('Every transcript is counted.');
+    await expect(scope).not.toContainText('redone');
+    await expect(page.locator('.iwac-vis-albani__status')).not.toContainText("Shari'a");
+});
+
 test('passages come from the public transcript only, and say what was withheld', async ({ page }) => {
     await ready(page);
     const politics = page.locator('[data-iwac-section="politics"]');

@@ -62,7 +62,10 @@
                     borderWidth: 1
                 }
             };
-        });
+        // A status no recording has would still take a legend entry: once
+        // the last re-transcription landed, "Being re-transcribed" stayed
+        // in the legend with no dot behind it.
+        }).filter(function (s) { return s.data.length; });
         return {
             grid: C._grid({ left: 8, right: 16, top: 56, bottom: 32 }),
             legend: C._legend({ top: 0 }),

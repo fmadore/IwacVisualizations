@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.95.1 — the Albani page after the last re-transcription (2026-11-03)
+
+- **"Being re-transcribed" is gone from the Albani recordings timeline.** The chart gave every status a legend entry, so once the last earlier-format transcript was redone, "Being re-transcribed" stayed in the legend with no dot behind it. A status no recording has now takes no entry.
+- **"Which recordings count" follows the corpus.** It explained earlier-format transcripts that are listed but not counted, which no recording is any more. It now says that every transcript is counted and that recordings not yet transcribed and passages in English are left out; the earlier wording returns only while such a transcript exists.
+- **The Albani Pipeline Explainer follows the page.** Its stages now take the block's own section names and order: The recordings, Vocabulary, People and places, Youth and politics, Figures and passages. The captions add what the method section says and the diagram left out: untranscribed recordings and English passages are left out, the speaker's fillers are removed, religious formulae are counted as whole phrases, and the counts include the words that set each recording apart.
+
 ### v1.95.0 — tables of contents in the Pipeline Explainer (2026-11-03)
 
 - **A fifth Pipeline Explainer preset: Tables of contents for Islamic publications.** It shows how a digitised magazine issue gets its table of contents: the issue split into pages, the articles a model lists on each page (title as printed, section, authors, a short summary; covers and advertisements set aside), the continuation markers that send an article on to a later page, the consolidation that merges its parts, and the index saved to the issue's Table of contents field with the model that wrote it. The drawings follow one invented article across pages 3 and 7. It suits the AI metadata enrichment page, in its section on tables of contents.

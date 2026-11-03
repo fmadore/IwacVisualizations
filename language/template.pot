@@ -727,219 +727,219 @@ msgstr ""
 msgid "The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:197
-msgid "Recordings and transcripts"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:198
-msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking."
-msgstr ""
-
 #: src/Site/PipelinePresets.php:199
+msgid "The recordings"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:200
+msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:201
 msgid "Both can be wrong, so every passage links back to the recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:203
-msgid "Counting words"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:204
-msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word, and the commonest words are left out."
-msgstr ""
-
 #: src/Site/PipelinePresets.php:205
-msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); a simple rule tells Arabic passages from Hausa."
+msgid "Vocabulary"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:209
-msgid "Terms and their neighbours"
+#: src/Site/PipelinePresets.php:206
+msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:210
-msgid "Terms for youth and for politics are found in the text, with the words that occur unusually often near them."
+#: src/Site/PipelinePresets.php:207
+msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:211
-msgid "The word lists are a draft that a Hausa-speaking specialist will check."
-msgstr ""
-
-#: src/Site/PipelinePresets.php:215
 msgid "People and places"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:216
+#: src/Site/PipelinePresets.php:212
 msgid "A named-entity model proposed names once; only a list of names and spellings curated by hand is counted."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:217
+#: src/Site/PipelinePresets.php:213
 msgid "A spelling with another meaning, such as shehu, is left out, so the counts are floors."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:221
-msgid "Figures and passages"
+#: src/Site/PipelinePresets.php:217
+msgid "Youth and politics"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:222
-msgid "The counts become the page’s charts and maps; passages are quoted only from transcripts that are public."
+#: src/Site/PipelinePresets.php:218
+msgid "Terms for youth and for politics are found in the text, with the words that occur unusually often near them and the places where the two themes meet."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:219
+msgid "The word lists are a draft that a Hausa-speaking specialist will check."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:223
+msgid "Figures and passages"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:224
+msgid "The counts become the page’s charts, its map and the words that set each recording apart; passages are quoted only from transcripts that are public."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:225
 msgid "A count shows where to look; the passage and the recording are the evidence."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:227
+#: src/Site/PipelinePresets.php:229
 msgid "The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:228
+#: src/Site/PipelinePresets.php:230
 msgid "Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:236
+#: src/Site/PipelinePresets.php:238
 msgid "How an issue of an Islamic magazine gets its table of contents"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:237
+#: src/Site/PipelinePresets.php:239
 msgid "Digitised Islamic magazines were first searchable only as whole issues. An AI model reads each issue page by page, follows every article across the pages it spans, and writes a table of contents that makes each article findable on its own."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:243
+#: src/Site/PipelinePresets.php:245
 msgid "Issue"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:244
+#: src/Site/PipelinePresets.php:246
 msgid "Each digitised issue is split into single pages, and each page goes to a vision model on its own: Gemini, Claude or Mistral OCR."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:245
+#: src/Site/PipelinePresets.php:247
 msgid "The issue itself stays whole in the collection."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:249
+#: src/Site/PipelinePresets.php:251
 msgid "Articles on each page"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:250
+#: src/Site/PipelinePresets.php:252
 msgid "The model lists every article on the page: its title as printed, with its section in brackets, its authors and a short summary of what the page shows."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:251
+#: src/Site/PipelinePresets.php:253
 msgid "Covers, advertisements and short notices are set aside; Arabic terms read correctly are kept."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:255
+#: src/Site/PipelinePresets.php:257
 msgid "Continuations"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:256
+#: src/Site/PipelinePresets.php:258
 msgid "Markers such as “suite page 7” or “à suivre” are noted, so the parts of an article printed apart can be found again."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:257
+#: src/Site/PipelinePresets.php:259
 msgid "An article that ends on a later page is listed there too, under its title or as a continuation."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:261
+#: src/Site/PipelinePresets.php:263
 msgid "Consolidation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:262
+#: src/Site/PipelinePresets.php:264
 msgid "A second pass merges the parts of each article, gathers its pages and authors, and writes one summary of four to six sentences."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:263
+#: src/Site/PipelinePresets.php:265
 msgid "Parts are joined by title, by continuation markers and by subject; a long series in several parts may not merge correctly."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:267 src/Site/PipelinePresets.php:301
+#: src/Site/PipelinePresets.php:269 src/Site/PipelinePresets.php:303
 msgid "Table of contents"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:268
+#: src/Site/PipelinePresets.php:270
 msgid "The index is saved to the issue’s Table of contents field: one entry per article, with its pages, title, authors and summary."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:269
+#: src/Site/PipelinePresets.php:271
 msgid "The model that wrote it is recorded with the field; an update changes nothing else, after a backup and a confirmation."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:273
+#: src/Site/PipelinePresets.php:275
 msgid "A table of contents read by a model guides a reader through the issue; it is not a catalogue record. An unusual layout can hide an article or turn an advertisement into one, a decorative heading can pass for a title, and every summary is selective: read the pages before citing an article."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:274
+#: src/Site/PipelinePresets.php:276
 msgid "Illustrative example: the issue, its titles and its pages are invented to show the method."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:283
+#: src/Site/PipelinePresets.php:285
 msgid "Article"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:284
+#: src/Site/PipelinePresets.php:286
 msgid "Topic"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:285
+#: src/Site/PipelinePresets.php:287
 msgid "Person"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:286
+#: src/Site/PipelinePresets.php:288
 msgid "Organisation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:287
+#: src/Site/PipelinePresets.php:289
 msgid "Place"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:288
+#: src/Site/PipelinePresets.php:290
 msgid "Subject"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:289
+#: src/Site/PipelinePresets.php:291
 msgid "Authority record"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:290
+#: src/Site/PipelinePresets.php:292
 msgid "Needs review"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:291
+#: src/Site/PipelinePresets.php:293
 msgid "Accepted"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:292
+#: src/Site/PipelinePresets.php:294
 msgid "New record"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:293
+#: src/Site/PipelinePresets.php:295
 msgid "Spatial coverage"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:294
+#: src/Site/PipelinePresets.php:296
 msgid "Scan"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:295
+#: src/Site/PipelinePresets.php:297
 msgid "Text"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:296
+#: src/Site/PipelinePresets.php:298
 msgid "OCR"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:297
+#: src/Site/PipelinePresets.php:299
 msgid "Corrected"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:298
+#: src/Site/PipelinePresets.php:300
 msgid "Kept as printed"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:299
+#: src/Site/PipelinePresets.php:301
 msgid "Left out"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:300
+#: src/Site/PipelinePresets.php:302
 msgid "Advertisement"
 msgstr ""
 

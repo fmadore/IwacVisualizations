@@ -77,10 +77,13 @@
     A.renderMethod = function (section, metadata) {
         var params = (metadata && metadata.params) || {};
         var grid = P.el('div', 'iwac-vis-albani__method-grid');
+        // Earlier-format transcripts are explained only while one is left.
+        var legacy = ((metadata && metadata.recordings) || []).some(function (r) { return r.st === 'legacy'; });
         ITEMS.forEach(function (item) {
+            var body = item[1] === 'albani_method_scope_body' && legacy ? 'albani_method_scope_body_legacy' : item[1];
             var block = P.el('div', 'iwac-vis-albani__method-item');
             block.appendChild(P.el('h4', null, P.t(item[0])));
-            block.appendChild(P.el('p', null, P.t(item[1], {
+            block.appendChild(P.el('p', null, P.t(body, {
                 window: params.window || 5,
                 minutes: params.segment_minutes || 20
             })));
