@@ -898,6 +898,180 @@
 }
 
 
+/*  Ask AI */
+
+.iwac-vis-pipeline__ask {
+    display: grid;
+    justify-items: start;
+    gap: 3px;
+    width: 100%;
+    max-width: min(9.5rem, 100%);
+}
+
+.iwac-vis-pipeline__ask p {
+    margin: 0;
+}
+
+/*  The reader's question: a speech bubble, its tail at the lower left. */
+.iwac-vis-pipeline__bubble {
+    position: relative;
+    margin-bottom: 4px;
+    padding: 3px var(--space-2, 0.5rem);
+    border: 1px solid var(--border-strong, #aeb1b7);
+    border-radius: var(--radius-sm, 0.375rem);
+    background: var(--surface-raised, #faf8f6);
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-pipeline__bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 10px;
+    width: 7px;
+    height: 7px;
+    border-right: 1px solid var(--border-strong, #aeb1b7);
+    border-bottom: 1px solid var(--border-strong, #aeb1b7);
+    background: var(--surface-raised, #faf8f6);
+    transform: rotate(45deg);
+}
+
+.iwac-vis-pipeline__ask-terms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px;
+}
+
+.iwac-vis-pipeline__call {
+    overflow: hidden;
+    color: var(--ink-strong, #05070c);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.iwac-vis-pipeline__call::before {
+    content: "\2192\00a0";
+    color: var(--primary, #ce4115);
+}
+
+/*  The dataset's drum: hairline bands, no fill of their own. */
+.iwac-vis-pipeline__band {
+    fill: none;
+    stroke: var(--border-strong, #aeb1b7);
+    stroke-width: 1;
+}
+
+.iwac-vis-pipeline__result {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    min-width: 0;
+}
+
+.iwac-vis-pipeline__result-title {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-strong, #05070c);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.iwac-vis-pipeline__card-foot {
+    padding-top: 2px;
+    border-top: 1px solid var(--border, #ced1d6);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-pipeline__answer-line {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/*  A citation: the number of the source it points to, as a small link chip. */
+.iwac-vis-pipeline__cite {
+    flex: none;
+    padding: 0 3px;
+    border: 1px solid var(--primary, #ce4115);
+    border-radius: 2px;
+    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
+    line-height: 1.2;
+    color: var(--ink-strong, #05070c);
+}
+
+
+/*  Press attitudes */
+
+.iwac-vis-pipeline__line--title {
+    width: 70%;
+    height: 4px;
+    margin-bottom: 2px;
+    background: var(--ink, #13161c);
+}
+
+.iwac-vis-pipeline__scale {
+    display: grid;
+    gap: 1px;
+}
+
+.iwac-vis-pipeline__scale-name {
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-pipeline__steps {
+    display: flex;
+    gap: 3px;
+}
+
+/*  A step on a rating scale: outlined, and the chosen one filled. */
+.iwac-vis-pipeline__step {
+    flex: 1 1 0;
+    height: 8px;
+    border: 1px solid var(--border-strong, #aeb1b7);
+    border-radius: 1px;
+}
+
+.iwac-vis-pipeline__step--on {
+    border-color: var(--ink, #13161c);
+    background: var(--ink, #13161c);
+}
+
+.iwac-vis-pipeline__stack {
+    display: grid;
+    width: 100%;
+    max-width: min(9.5rem, 100%);
+}
+
+.iwac-vis-pipeline__stack > .iwac-vis-pipeline__card {
+    grid-area: 1 / 1;
+}
+
+/*  The other models' ratings, kept apart behind this one. */
+.iwac-vis-pipeline__card--behind {
+    transform: translate(5px, -5px);
+}
+
+.iwac-vis-pipeline__quote {
+    font-style: italic;
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-pipeline__cell {
+    fill: var(--primary, #ce4115);
+}
+
+.iwac-vis-pipeline__cell--self {
+    fill: var(--ink, #13161c);
+}
+
+.iwac-vis-pipeline__num--start {
+    text-anchor: start;
+}
+
+
 /* ------------------------------------------------------------------- */
 /*  Narrow blocks                                                       */
 /* ------------------------------------------------------------------- */

@@ -832,8 +832,8 @@ msgstr "Conservé tel qu’imprimé"
 msgid "Replay animation"
 msgstr "Rejouer l’animation"
 
-msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, or tables of contents for Islamic publications — as a short animated diagram with captions. It uses illustrative examples and requests no data."
-msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, analyse des sermons d’Albani Zaria ou tables des matières des publications islamiques — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, analyse des sermons d’Albani Zaria, tables des matières des publications islamiques, interrogation avec l’IA ou attitudes de la presse — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
 
 msgid "Albani Zaria sermons: from recordings to figures"
 msgstr "Sermons d’Albani Zaria : des enregistrements aux chiffres"
@@ -960,3 +960,144 @@ msgstr "Exemple illustratif : le numéro, ses titres et ses pages sont inventé
 
 msgid "Advertisement"
 msgstr "Publicité"
+
+msgid "Ask AI: from a question to a cited answer"
+msgstr "Interroger avec l’IA : de la question à une réponse sourcée"
+
+msgid "Press attitudes: how language models rate the articles"
+msgstr "Attitudes de la presse : comment des modèles de langage évaluent les articles"
+
+msgid "How an AI assistant answers a question with IWAC"
+msgstr "Comment un assistant d’IA répond à une question avec IWAC"
+
+msgid "The IWAC MCP server lets an AI assistant you already use search the collection for you. The server supplies records and figures, read-only; the assistant plans the searches, reads what comes back and writes the answer."
+msgstr "Le serveur MCP d’IWAC permet à un assistant d’IA que vous utilisez déjà d’interroger la collection pour vous. Le serveur fournit des notices et des chiffres, en lecture seule ; l’assistant planifie les recherches, lit les résultats et rédige la réponse."
+
+msgid "Your question"
+msgstr "Votre question"
+
+msgid "You ask in any language, in Claude, ChatGPT or another assistant connected to IWAC; the assistant decides which IWAC tools to call."
+msgstr "Vous posez votre question dans la langue de votre choix, dans Claude, ChatGPT ou un autre assistant connecté à IWAC ; l’assistant choisit les outils d’IWAC à appeler."
+
+msgid "Most sources are in French, so the instructions have it search in French, with spelling variants, whatever language you write in."
+msgstr "La plupart des sources sont en français : les instructions lui font donc chercher en français, avec les variantes orthographiques, quelle que soit votre langue."
+
+msgid "Tool calls"
+msgstr "Appels d’outils"
+
+msgid "The server offers 39 read-only tools: search the collection, read one record, look up a person or a place, count over time, compare countries."
+msgstr "Le serveur propose 39 outils en lecture seule : chercher dans la collection, lire une notice, retrouver une personne ou un lieu, compter dans le temps, comparer les pays."
+
+msgid "Built-in instructions, and an optional research skill, tell the assistant how to search, read and cite."
+msgstr "Des instructions intégrées, et une compétence de recherche facultative, indiquent à l’assistant comment chercher, lire et citer."
+
+msgid "The dataset"
+msgstr "Le jeu de données"
+
+msgid "Each call is answered from IWAC’s research dataset on Hugging Face; the Claude Desktop extension keeps a copy on your computer."
+msgstr "Chaque appel est traité à partir du jeu de données de recherche d’IWAC sur Hugging Face ; l’extension Claude Desktop en garde une copie sur votre ordinateur."
+
+msgid "Search matches the words of the metadata and the OCR text, so a misread word stays hidden."
+msgstr "La recherche porte sur les mots des métadonnées et du texte OCR : un mot mal reconnu reste donc introuvable."
+
+msgid "Results with their sources"
+msgstr "Des résultats avec leurs sources"
+
+msgid "Each result comes back with the link to its IWAC record, and each call records the version of the dataset that answered it."
+msgstr "Chaque résultat revient avec le lien vers sa notice d’IWAC, et chaque appel consigne la version du jeu de données qui y a répondu."
+
+msgid "A warning says when a list was cut short or a kind of material could not be searched."
+msgstr "Un avertissement signale une liste tronquée ou un type de document qui n’a pas pu être interrogé."
+
+msgid "The answer"
+msgstr "La réponse"
+
+msgid "The assistant may search again or open records, then writes the answer, citing each source by its IWAC link."
+msgstr "L’assistant peut relancer une recherche ou ouvrir des notices, puis rédige la réponse en citant chaque source par son lien vers IWAC."
+
+msgid "The wording is the model’s, not IWAC’s: follow the links before relying on a claim."
+msgstr "La formulation est celle du modèle, non d’IWAC : suivez les liens avant de vous fier à une affirmation."
+
+msgid "The server returns records; the assistant interprets them. A count describes what IWAC holds, not everything that was ever published, and an assistant can miss a spelling variant or misread a source: open the linked records before quoting them."
+msgstr "Le serveur renvoie des notices ; l’assistant les interprète. Un comptage décrit ce que contient IWAC, non tout ce qui a été publié, et un assistant peut manquer une variante orthographique ou mal lire une source : ouvrez les notices liées avant de les citer."
+
+msgid "Illustrative example: the question, the tool calls and the results in the drawings are invented to show the method."
+msgstr "Exemple illustratif : la question, les appels d’outils et les résultats des dessins sont inventés pour montrer la méthode."
+
+msgid "How language models rate the press’s portrayal of Islam"
+msgstr "Comment des modèles de langage évaluent l’image de l’islam dans la presse"
+
+msgid "Several large language models read the same newspaper articles, and each rates on its own how central Islam and Muslims are to an article, how positively or negatively they are portrayed, and how subjective the writing is."
+msgstr "Plusieurs grands modèles de langage lisent les mêmes articles de presse, et chacun évalue séparément la place de l’islam et des musulmans dans l’article, la manière plus ou moins favorable dont ils sont présentés et la subjectivité du texte."
+
+msgid "The OCR text of each French- or English-language newspaper article is sent whole, one article at a time."
+msgstr "Le texte OCR de chaque article de presse en français ou en anglais est envoyé en entier, un article à la fois."
+
+msgid "Articles in Ewé, Kabiyè or Dendi, or with no language recorded, are left out: a few dozen in all."
+msgstr "Les articles en éwé, en kabiyè ou en dendi, ou sans langue renseignée, sont écartés : quelques dizaines en tout."
+
+msgid "One task, several models"
+msgstr "Une tâche, plusieurs modèles"
+
+msgid "Every model receives the same instructions, in French, and rates the article independently of the others."
+msgstr "Chaque modèle reçoit les mêmes instructions, en français, et évalue l’article indépendamment des autres."
+
+msgid "Their settings are not identical: temperature and reasoning effort follow each provider."
+msgstr "Leurs réglages ne sont pas identiques : la température et l’effort de raisonnement suivent chaque fournisseur."
+
+msgid "Three ratings"
+msgstr "Trois évaluations"
+
+msgid "Centrality runs from very central to not addressed, polarity from very positive to very negative, subjectivity from very objective to very subjective."
+msgstr "La centralité va de « très central » à « non abordé », la polarité de « très positif » à « très négatif », la subjectivité de « très objectif » à « très subjectif »."
+
+msgid "When Islam is not addressed, polarity is “not applicable” and subjectivity is left empty."
+msgstr "Quand l’islam n’est pas abordé, la polarité est « non applicable » et la subjectivité reste vide."
+
+msgid "Justifications"
+msgstr "Justifications"
+
+msgid "Each rating comes with a sentence or two citing the article, and every model’s ratings are saved to the article’s record, apart."
+msgstr "Chaque évaluation s’accompagne d’une ou deux phrases citant l’article, et les évaluations de chaque modèle sont enregistrées séparément dans la notice de l’article."
+
+msgid "An article’s page shows each model’s reasoning beside its rating."
+msgstr "La page d’un article montre le raisonnement de chaque modèle à côté de son évaluation."
+
+msgid "Comparison"
+msgstr "Comparaison"
+
+msgid "The atlas follows each model across years, countries, topics and newspapers, and measures how often the models agree."
+msgstr "L’atlas suit chaque modèle selon les années, les pays, les thèmes et les journaux, et mesure la fréquence de leurs accords."
+
+msgid "The atlas takes no majority vote: where the models disagree, the disagreement is shown."
+msgstr "L’atlas ne procède à aucun vote majoritaire : là où les modèles divergent, la divergence est montrée."
+
+msgid "The ratings are model outputs, not facts about the articles. The models agree most on centrality and least on subjectivity, one model reads centrality differently from the rest, and a model asked again can change its answer: read the article and the justification before drawing a conclusion."
+msgstr "Les évaluations sont des productions de modèles, non des faits établis sur les articles. Les modèles s’accordent le plus sur la centralité et le moins sur la subjectivité, un modèle lit la centralité autrement que les autres, et un modèle interrogé de nouveau peut changer de réponse : lisez l’article et la justification avant de conclure."
+
+msgid "Illustrative example: the article, the ratings and the agreement in the drawings are invented to show the method."
+msgstr "Exemple illustratif : l’article, les évaluations et les accords des dessins sont inventés pour montrer la méthode."
+
+msgid "How did the press in Benin cover Tabaski?"
+msgstr "Comment la presse béninoise a-t-elle couvert la Tabaski ?"
+
+msgid "Searched as"
+msgstr "Cherché sous"
+
+msgid "IWAC dataset"
+msgstr "Données d’IWAC"
+
+msgid "Dataset version recorded"
+msgstr "Version des données consignée"
+
+msgid "Answer"
+msgstr "Réponse"
+
+msgid "Model"
+msgstr "Modèle"
+
+msgid "Agree"
+msgstr "Accord"
+
+msgid "Disagree"
+msgstr "Désaccord"

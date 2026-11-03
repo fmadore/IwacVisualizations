@@ -348,7 +348,7 @@ msgid "Pipeline Explainer"
 msgstr ""
 
 #: src/Site/BlockRegistry.php:348
-msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, or tables of contents for Islamic publications — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data."
 msgstr ""
 
 #: src/Site/BlockRegistry.php:354
@@ -475,472 +475,672 @@ msgstr ""
 msgid "Tables of contents for Islamic publications"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:46
+#: src/Site/PipelinePresets.php:42
+msgid "Ask AI: from a question to a cited answer"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:43
+msgid "Press attitudes: how language models rate the articles"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:48
 msgid "How topic modelling finds themes in the articles"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:47
+#: src/Site/PipelinePresets.php:49
 msgid "IWAC trains a statistical topic model, Latent Dirichlet Allocation (LDA), on the text of its newspaper articles. The model is never told what the topics are: it finds groups of words that tend to appear in the same articles."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:53
+#: src/Site/PipelinePresets.php:55 src/Site/PipelinePresets.php:341
 msgid "Articles"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:54
+#: src/Site/PipelinePresets.php:56
 msgid "The input is the OCR text of each French-language newspaper article."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:55
+#: src/Site/PipelinePresets.php:57
 msgid "Islamic publications and scholarly references have models of their own."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:59
+#: src/Site/PipelinePresets.php:61
 msgid "Text preparation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:60
+#: src/Site/PipelinePresets.php:62
 msgid "Words are reduced to their dictionary form, and very common words are removed."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:61
+#: src/Site/PipelinePresets.php:63
 msgid "Place names and other terms that would dominate every topic are set aside; frequent word pairs such as al_azhar stay together."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:65
+#: src/Site/PipelinePresets.php:67
 msgid "Word counts"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:66
+#: src/Site/PipelinePresets.php:68
 msgid "Each article becomes a count of the words it uses; word order is discarded."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:67
+#: src/Site/PipelinePresets.php:69
 msgid "Words found in very few articles, or in a large share of them, are left out."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:71
+#: src/Site/PipelinePresets.php:73
 msgid "Topic discovery"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:72
+#: src/Site/PipelinePresets.php:74
 msgid "LDA infers 30 topics, each a list of words weighted by how strongly they belong to it."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:73
+#: src/Site/PipelinePresets.php:75
 msgid "A topic’s label is simply its most characteristic words."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:77
+#: src/Site/PipelinePresets.php:79
 msgid "Topic mixtures"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:78
+#: src/Site/PipelinePresets.php:80
 msgid "Each article receives a share of several topics; IWAC keeps its main topic and its three strongest."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:79
+#: src/Site/PipelinePresets.php:81
 msgid "The Topic Explorer follows each topic across years, countries and newspapers."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:83
+#: src/Site/PipelinePresets.php:85
 msgid "Topics are patterns inferred from words that occur together, not subjects assigned by a cataloguer. They need interpretation: read the articles behind a topic before naming it, and remember that most articles combine several topics."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:84
+#: src/Site/PipelinePresets.php:86
 msgid "Illustrative example: the words and proportions in the drawings are invented to show the method, not taken from the IWAC model."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:87
+#: src/Site/PipelinePresets.php:89
 msgid "How AI turns scanned pages into searchable text"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:88
+#: src/Site/PipelinePresets.php:90
 msgid "IWAC uses one of two routes, depending on what a document already has. New scans go to a multimodal model that reads the page image itself; noisy text from conventional OCR can be corrected instead. A document takes one route, not both."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:92
+#: src/Site/PipelinePresets.php:94
 msgid "Direct extraction, the current workflow"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:96
+#: src/Site/PipelinePresets.php:98
 msgid "Scanned page"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:97
+#: src/Site/PipelinePresets.php:99
 msgid "The document’s PDF goes to a multimodal model: Gemini reads it page by page, Mistral Document AI in a single request."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:101
+#: src/Site/PipelinePresets.php:103
 msgid "Reading order"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:102
+#: src/Site/PipelinePresets.php:104
 msgid "The instructions set the order: main columns left to right and top to bottom, then headings, captions and sidebars."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:103
+#: src/Site/PipelinePresets.php:105
 msgid "The model reads layout and text in one pass; the steps are drawn apart here."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:107
+#: src/Site/PipelinePresets.php:109
 msgid "Transcription"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:108
+#: src/Site/PipelinePresets.php:110
 msgid "The model writes out the text, rejoining lines and words that the columns broke, and keeps the source wording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:112
+#: src/Site/PipelinePresets.php:114
 msgid "Assembled text"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:113
+#: src/Site/PipelinePresets.php:115
 msgid "The pages are joined with page markers and, after a preview, saved to the record with the name of the model."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:114
+#: src/Site/PipelinePresets.php:116
 msgid "The scan stays beside the text: an unusual layout can still come out in the wrong order."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:120
+#: src/Site/PipelinePresets.php:122
 msgid "Post-correction of noisy OCR"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:124
+#: src/Site/PipelinePresets.php:126
 msgid "Noisy OCR text"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:125
+#: src/Site/PipelinePresets.php:127
 msgid "Text from conventional OCR, with its misread characters, broken words and encoding errors."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:129
+#: src/Site/PipelinePresets.php:131
 msgid "Sections"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:130
+#: src/Site/PipelinePresets.php:132
 msgid "A very long text is cut into sections that the model can correct in one request."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:131
+#: src/Site/PipelinePresets.php:133
 msgid "Context across a cut can be lost."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:135
+#: src/Site/PipelinePresets.php:137
 msgid "AI correction"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:136
+#: src/Site/PipelinePresets.php:138
 msgid "A language model fixes recognition errors and restores accents, without translating or modernising the text."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:140
+#: src/Site/PipelinePresets.php:142
 msgid "Corrected text"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:141
+#: src/Site/PipelinePresets.php:143
 msgid "The corrected version becomes the searchable full text; the original OCR is kept for comparison."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:142
+#: src/Site/PipelinePresets.php:144
 msgid "Historical names and spellings are kept as printed."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:147
+#: src/Site/PipelinePresets.php:149
 msgid "Fluent output is not proof of accuracy. A model can modernise an unusual spelling, guess a missing word or skip part of a page, and an error in fluent text is harder to spot than garbled characters. Check quotations and proper names against the scan."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:148
+#: src/Site/PipelinePresets.php:150
 msgid "Illustrative example: the page and its misreadings are invented to show the method."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:151
+#: src/Site/PipelinePresets.php:153
 msgid "How names in articles become links to authority records"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:152
+#: src/Site/PipelinePresets.php:154
 msgid "An AI model reads each newspaper article and lists the persons, organisations, places and subjects it mentions. A name is only a mention until it is matched with IWAC’s authority files, which gather variant spellings under one record."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:158
+#: src/Site/PipelinePresets.php:160
 msgid "Extraction and normalisation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:159
+#: src/Site/PipelinePresets.php:161
 msgid "The model lists the names it finds, without titles such as El Hadj and with acronyms written out in full."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:160
+#: src/Site/PipelinePresets.php:162
 msgid "Subjects are chosen from IWAC’s own vocabulary."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:164
+#: src/Site/PipelinePresets.php:166
 msgid "Reconciliation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:165
+#: src/Site/PipelinePresets.php:167
 msgid "Each name is compared with the authority records and their alternative forms: exact matches are accepted, close spellings only suggested."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:166
+#: src/Site/PipelinePresets.php:168
 msgid "A name that fits several records is set aside rather than guessed."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:170
+#: src/Site/PipelinePresets.php:172
 msgid "Review"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:171
+#: src/Site/PipelinePresets.php:173
 msgid "A researcher checks ambiguous names, close spellings and unknown entities, and accepts, corrects or rejects each proposal."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:172
+#: src/Site/PipelinePresets.php:174
 msgid "A name with no record waits for a new authority record, created after curation."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:176
+#: src/Site/PipelinePresets.php:178
 msgid "Linking"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:177
+#: src/Site/PipelinePresets.php:179
 msgid "Confirmed matches are added to the article as links: places under Spatial coverage, everything else under Subject."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:178
+#: src/Site/PipelinePresets.php:180
 msgid "Each link records the model that proposed it; an update only adds links, after a backup."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:182
+#: src/Site/PipelinePresets.php:184
 msgid "A highlighted name is a mention, not yet a link. A model can miss a name or match it to the wrong record, and the renamings and splits of organisations need historical knowledge, so uncertain matches are reviewed and every update can be reversed."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:183
+#: src/Site/PipelinePresets.php:185
 msgid "Illustrative example: the name variants are those of a real person in the IWAC index; the sentence around them is invented."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:190
+#: src/Site/PipelinePresets.php:192
 msgid "How the Albani Zaria sermons become figures"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:191
+#: src/Site/PipelinePresets.php:193
 msgid "The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:199
+#: src/Site/PipelinePresets.php:201
 msgid "The recordings"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:200
+#: src/Site/PipelinePresets.php:202
 msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:201
+#: src/Site/PipelinePresets.php:203
 msgid "Both can be wrong, so every passage links back to the recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:205
+#: src/Site/PipelinePresets.php:207
 msgid "Vocabulary"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:206
+#: src/Site/PipelinePresets.php:208
 msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:207
+#: src/Site/PipelinePresets.php:209
 msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:211
+#: src/Site/PipelinePresets.php:213
 msgid "People and places"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:212
+#: src/Site/PipelinePresets.php:214
 msgid "A named-entity model proposed names once; only a list of names and spellings curated by hand is counted."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:213
+#: src/Site/PipelinePresets.php:215
 msgid "A spelling with another meaning, such as shehu, is left out, so the counts are floors."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:217
+#: src/Site/PipelinePresets.php:219
 msgid "Youth and politics"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:218
+#: src/Site/PipelinePresets.php:220
 msgid "Terms for youth and for politics are found in the text, with the words that occur unusually often near them and the places where the two themes meet."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:219
+#: src/Site/PipelinePresets.php:221
 msgid "The word lists are a draft that a Hausa-speaking specialist will check."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:223
+#: src/Site/PipelinePresets.php:225
 msgid "Figures and passages"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:224
+#: src/Site/PipelinePresets.php:226
 msgid "The counts become the page’s charts, its map and the words that set each recording apart; passages are quoted only from transcripts that are public."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:225
+#: src/Site/PipelinePresets.php:227
 msgid "A count shows where to look; the passage and the recording are the evidence."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:229
+#: src/Site/PipelinePresets.php:231
 msgid "The figures describe these recordings only: one preacher, the part of his teaching transcribed so far, and the errors the transcription contains. The word lists and translations are drafts awaiting a specialist’s review."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:230
+#: src/Site/PipelinePresets.php:232
 msgid "Illustrative example: the drawings show the method with words the exhibition’s method section cites; the passages are lines, not quotations."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:238
+#: src/Site/PipelinePresets.php:240
 msgid "How an issue of an Islamic magazine gets its table of contents"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:239
+#: src/Site/PipelinePresets.php:241
 msgid "Digitised Islamic magazines were first searchable only as whole issues. An AI model reads each issue page by page, follows every article across the pages it spans, and writes a table of contents that makes each article findable on its own."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:245
+#: src/Site/PipelinePresets.php:247
 msgid "Issue"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:246
+#: src/Site/PipelinePresets.php:248
 msgid "Each digitised issue is split into single pages, and each page goes to a vision model on its own: Gemini, Claude or Mistral OCR."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:247
+#: src/Site/PipelinePresets.php:249
 msgid "The issue itself stays whole in the collection."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:251
+#: src/Site/PipelinePresets.php:253
 msgid "Articles on each page"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:252
+#: src/Site/PipelinePresets.php:254
 msgid "The model lists every article on the page: its title as printed, with its section in brackets, its authors and a short summary of what the page shows."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:253
+#: src/Site/PipelinePresets.php:255
 msgid "Covers, advertisements and short notices are set aside; Arabic terms read correctly are kept."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:257
+#: src/Site/PipelinePresets.php:259
 msgid "Continuations"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:258
+#: src/Site/PipelinePresets.php:260
 msgid "Markers such as “suite page 7” or “à suivre” are noted, so the parts of an article printed apart can be found again."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:259
+#: src/Site/PipelinePresets.php:261
 msgid "An article that ends on a later page is listed there too, under its title or as a continuation."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:263
+#: src/Site/PipelinePresets.php:265
 msgid "Consolidation"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:264
+#: src/Site/PipelinePresets.php:266
 msgid "A second pass merges the parts of each article, gathers its pages and authors, and writes one summary of four to six sentences."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:265
+#: src/Site/PipelinePresets.php:267
 msgid "Parts are joined by title, by continuation markers and by subject; a long series in several parts may not merge correctly."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:269 src/Site/PipelinePresets.php:303
+#: src/Site/PipelinePresets.php:271 src/Site/PipelinePresets.php:399
 msgid "Table of contents"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:270
+#: src/Site/PipelinePresets.php:272
 msgid "The index is saved to the issue’s Table of contents field: one entry per article, with its pages, title, authors and summary."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:271
+#: src/Site/PipelinePresets.php:273
 msgid "The model that wrote it is recorded with the field; an update changes nothing else, after a backup and a confirmation."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:275
+#: src/Site/PipelinePresets.php:277
 msgid "A table of contents read by a model guides a reader through the issue; it is not a catalogue record. An unusual layout can hide an article or turn an advertisement into one, a decorative heading can pass for a title, and every summary is selective: read the pages before citing an article."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:276
+#: src/Site/PipelinePresets.php:278
 msgid "Illustrative example: the issue, its titles and its pages are invented to show the method."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:285
-msgid "Article"
-msgstr ""
-
 #: src/Site/PipelinePresets.php:286
-msgid "Topic"
+msgid "How an AI assistant answers a question with IWAC"
 msgstr ""
 
 #: src/Site/PipelinePresets.php:287
-msgid "Person"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:288
-msgid "Organisation"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:289
-msgid "Place"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:290
-msgid "Subject"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:291
-msgid "Authority record"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:292
-msgid "Needs review"
+msgid "The IWAC MCP server lets an AI assistant you already use search the collection for you. The server supplies records and figures, read-only; the assistant plans the searches, reads what comes back and writes the answer."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:293
-msgid "Accepted"
+msgid "Your question"
 msgstr ""
 
 #: src/Site/PipelinePresets.php:294
-msgid "New record"
+msgid "You ask in any language, in Claude, ChatGPT or another assistant connected to IWAC; the assistant decides which IWAC tools to call."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:295
-msgid "Spatial coverage"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:296
-msgid "Scan"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:297
-msgid "Text"
-msgstr ""
-
-#: src/Site/PipelinePresets.php:298
-msgid "OCR"
+msgid "Most sources are in French, so the instructions have it search in French, with spelling variants, whatever language you write in."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:299
-msgid "Corrected"
+msgid "Tool calls"
 msgstr ""
 
 #: src/Site/PipelinePresets.php:300
-msgid "Kept as printed"
+msgid "The server offers 39 read-only tools: search the collection, read one record, look up a person or a place, count over time, compare countries."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:301
+msgid "Built-in instructions, and an optional research skill, tell the assistant how to search, read and cite."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:305
+msgid "The dataset"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:306
+msgid "Each call is answered from IWAC’s research dataset on Hugging Face; the Claude Desktop extension keeps a copy on your computer."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:307
+msgid "Search matches the words of the metadata and the OCR text, so a misread word stays hidden."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:311
+msgid "Results with their sources"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:312
+msgid "Each result comes back with the link to its IWAC record, and each call records the version of the dataset that answered it."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:313
+msgid "A warning says when a list was cut short or a kind of material could not be searched."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:317
+msgid "The answer"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:318
+msgid "The assistant may search again or open records, then writes the answer, citing each source by its IWAC link."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:319
+msgid "The wording is the model’s, not IWAC’s: follow the links before relying on a claim."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:323
+msgid "The server returns records; the assistant interprets them. A count describes what IWAC holds, not everything that was ever published, and an assistant can miss a spelling variant or misread a source: open the linked records before quoting them."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:324
+msgid "Illustrative example: the question, the tool calls and the results in the drawings are invented to show the method."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:334
+msgid "How language models rate the press’s portrayal of Islam"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:335
+msgid "Several large language models read the same newspaper articles, and each rates on its own how central Islam and Muslims are to an article, how positively or negatively they are portrayed, and how subjective the writing is."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:342
+msgid "The OCR text of each French- or English-language newspaper article is sent whole, one article at a time."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:343
+msgid "Articles in Ewé, Kabiyè or Dendi, or with no language recorded, are left out: a few dozen in all."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:347
+msgid "One task, several models"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:348
+msgid "Every model receives the same instructions, in French, and rates the article independently of the others."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:349
+msgid "Their settings are not identical: temperature and reasoning effort follow each provider."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:353
+msgid "Three ratings"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:354
+msgid "Centrality runs from very central to not addressed, polarity from very positive to very negative, subjectivity from very objective to very subjective."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:355
+msgid "When Islam is not addressed, polarity is “not applicable” and subjectivity is left empty."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:359
+msgid "Justifications"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:360
+msgid "Each rating comes with a sentence or two citing the article, and every model’s ratings are saved to the article’s record, apart."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:361
+msgid "An article’s page shows each model’s reasoning beside its rating."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:365
+msgid "Comparison"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:366
+msgid "The atlas follows each model across years, countries, topics and newspapers, and measures how often the models agree."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:367
+msgid "The atlas takes no majority vote: where the models disagree, the disagreement is shown."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:371
+msgid "The ratings are model outputs, not facts about the articles. The models agree most on centrality and least on subjectivity, one model reads centrality differently from the rest, and a model asked again can change its answer: read the article and the justification before drawing a conclusion."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:372
+msgid "Illustrative example: the article, the ratings and the agreement in the drawings are invented to show the method."
+msgstr ""
+
+#: src/Site/PipelinePresets.php:381
+msgid "Article"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:382
+msgid "Topic"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:383
+msgid "Person"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:384
+msgid "Organisation"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:385
+msgid "Place"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:386
+msgid "Subject"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:387
+msgid "Authority record"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:388
+msgid "Needs review"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:389
+msgid "Accepted"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:390
+msgid "New record"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:391
+msgid "Spatial coverage"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:392
+msgid "Scan"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:393
+msgid "Text"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:394
+msgid "OCR"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:395
+msgid "Corrected"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:396
+msgid "Kept as printed"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:397
 msgid "Left out"
 msgstr ""
 
-#: src/Site/PipelinePresets.php:302
+#: src/Site/PipelinePresets.php:398
 msgid "Advertisement"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:400
+msgid "How did the press in Benin cover Tabaski?"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:401
+msgid "Searched as"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:402
+msgid "IWAC dataset"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:403
+msgid "Dataset version recorded"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:404
+msgid "Answer"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:405 view/common/resource-page-block-layout/visualizations/article.phtml:66
+msgid "Centrality"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:406 view/common/resource-page-block-layout/visualizations/article.phtml:57
+msgid "Polarity"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:407 view/common/resource-page-block-layout/visualizations/article.phtml:75
+msgid "Subjectivity"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:408
+msgid "Model"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:409
+msgid "Agree"
+msgstr ""
+
+#: src/Site/PipelinePresets.php:410
+msgid "Disagree"
 msgstr ""
 
 #: src/Site/ResourcePageBlockLayout/ItemSetDashboard.php:14
@@ -981,18 +1181,6 @@ msgstr ""
 
 #: view/common/resource-page-block-layout/item-set-dashboard.phtml:36 view/common/resource-page-block-layout/visualizations/article.phtml:289 view/common/resource-page-block-layout/visualizations/entity.phtml:45 view/common/resource-page-block-layout/visualizations/person.phtml:43
 msgid "Loading dashboard"
-msgstr ""
-
-#: view/common/resource-page-block-layout/visualizations/article.phtml:57
-msgid "Polarity"
-msgstr ""
-
-#: view/common/resource-page-block-layout/visualizations/article.phtml:66
-msgid "Centrality"
-msgstr ""
-
-#: view/common/resource-page-block-layout/visualizations/article.phtml:75
-msgid "Subjectivity"
 msgstr ""
 
 #: view/common/resource-page-block-layout/visualizations/article.phtml:117

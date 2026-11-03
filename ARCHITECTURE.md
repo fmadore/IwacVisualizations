@@ -108,7 +108,7 @@ IwacVisualizations/
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
 │       ├── dist/                        # 137 files — built by scripts/build-js.js from bundles.json; committed
-│       ├── svelte/                      # 7 files — Svelte components, compiled into their block bundle by build-js.js
+│       ├── svelte/                      # 9 files — Svelte components, compiled into their block bundle by build-js.js
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js

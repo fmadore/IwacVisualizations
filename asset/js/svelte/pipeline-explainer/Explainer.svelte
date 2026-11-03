@@ -16,6 +16,8 @@
 	import EntityArt from './EntityArt.svelte';
 	import AlbaniArt from './AlbaniArt.svelte';
 	import IssueArt from './IssueArt.svelte';
+	import AskArt from './AskArt.svelte';
+	import SentimentArt from './SentimentArt.svelte';
 
 	let { content, instance } = $props();
 
@@ -24,7 +26,9 @@
 		ocr: OcrArt,
 		'entity-enrichment': EntityArt,
 		'albani-sermons': AlbaniArt,
-		'issue-contents': IssueArt
+		'issue-contents': IssueArt,
+		'ask-ai': AskArt,
+		'press-attitudes': SentimentArt
 	};
 	const Art = $derived(ART[content.preset]);
 	const several = $derived(content.routes.length > 1);

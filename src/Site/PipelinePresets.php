@@ -39,6 +39,8 @@ final class PipelinePresets
         'entity-enrichment' => 'Entity extraction and metadata enrichment', // @translate
         'albani-sermons'    => 'Albani Zaria sermons: from recordings to figures', // @translate
         'issue-contents'    => 'Tables of contents for Islamic publications', // @translate
+        'ask-ai'            => 'Ask AI: from a question to a cited answer', // @translate
+        'press-attitudes'   => 'Press attitudes: how language models rate the articles', // @translate
     ];
 
     const PRESETS = [
@@ -275,6 +277,100 @@ final class PipelinePresets
             'caveat' => 'A table of contents read by a model guides a reader through the issue; it is not a catalogue record. An unusual layout can hide an article or turn an advertisement into one, a decorative heading can pass for a title, and every summary is selective: read the pages before citing an article.', // @translate
             'example' => 'Illustrative example: the issue, its titles and its pages are invented to show the method.', // @translate
         ],
+        // Follows the iwac-mcp-server repository: the tool registry
+        // (39 read-only tools, `readOnlyHint`), the handshake instructions
+        // and prompts, the dataset loader (public Hugging Face dataset by
+        // default, ~265 MB cached by the Desktop extension) and the
+        // provenance every successful call carries.
+        'ask-ai' => [
+            'title' => 'How an AI assistant answers a question with IWAC', // @translate
+            'lede' => 'The IWAC MCP server lets an AI assistant you already use search the collection for you. The server supplies records and figures, read-only; the assistant plans the searches, reads what comes back and writes the answer.', // @translate
+            'routes' => [[
+                'id' => 'mcp',
+                'stages' => [
+                    [
+                        'art' => 'question',
+                        'name' => 'Your question', // @translate
+                        'caption' => 'You ask in any language, in Claude, ChatGPT or another assistant connected to IWAC; the assistant decides which IWAC tools to call.', // @translate
+                        'note' => 'Most sources are in French, so the instructions have it search in French, with spelling variants, whatever language you write in.', // @translate
+                    ],
+                    [
+                        'art' => 'tools',
+                        'name' => 'Tool calls', // @translate
+                        'caption' => 'The server offers 39 read-only tools: search the collection, read one record, look up a person or a place, count over time, compare countries.', // @translate
+                        'note' => 'Built-in instructions, and an optional research skill, tell the assistant how to search, read and cite.', // @translate
+                    ],
+                    [
+                        'art' => 'dataset',
+                        'name' => 'The dataset', // @translate
+                        'caption' => 'Each call is answered from IWAC’s research dataset on Hugging Face; the Claude Desktop extension keeps a copy on your computer.', // @translate
+                        'note' => 'Search matches the words of the metadata and the OCR text, so a misread word stays hidden.', // @translate
+                    ],
+                    [
+                        'art' => 'results',
+                        'name' => 'Results with their sources', // @translate
+                        'caption' => 'Each result comes back with the link to its IWAC record, and each call records the version of the dataset that answered it.', // @translate
+                        'note' => 'A warning says when a list was cut short or a kind of material could not be searched.', // @translate
+                    ],
+                    [
+                        'art' => 'answer',
+                        'name' => 'The answer', // @translate
+                        'caption' => 'The assistant may search again or open records, then writes the answer, citing each source by its IWAC link.', // @translate
+                        'note' => 'The wording is the model’s, not IWAC’s: follow the links before relying on a claim.', // @translate
+                    ],
+                ],
+            ]],
+            'caveat' => 'The server returns records; the assistant interprets them. A count describes what IWAC holds, not everything that was ever published, and an assistant can miss a spelling variant or misread a source: open the linked records before quoting them.', // @translate
+            'example' => 'Illustrative example: the question, the tool calls and the results in the drawings are invented to show the method.', // @translate
+        ],
+        // Follows iwac-ai-pipelines `AI_sentiment_analysis/` (the eligible
+        // languages, the prompt and its label scales, the consistency rule
+        // for "Non abordé", the per-model Omeka properties) and this
+        // module's Sentiment Atlas (`generate_sentiment_atlas.py`: every
+        // model kept apart, agreement measured, no majority label). The
+        // panel is `config/sentiment-models.json` `active`; name no count
+        // in a caption that the next model would make false.
+        'press-attitudes' => [
+            'title' => 'How language models rate the press’s portrayal of Islam', // @translate
+            'lede' => 'Several large language models read the same newspaper articles, and each rates on its own how central Islam and Muslims are to an article, how positively or negatively they are portrayed, and how subjective the writing is.', // @translate
+            'routes' => [[
+                'id' => 'sentiment',
+                'stages' => [
+                    [
+                        'art' => 'article',
+                        'name' => 'Articles', // @translate
+                        'caption' => 'The OCR text of each French- or English-language newspaper article is sent whole, one article at a time.', // @translate
+                        'note' => 'Articles in Ewé, Kabiyè or Dendi, or with no language recorded, are left out: a few dozen in all.', // @translate
+                    ],
+                    [
+                        'art' => 'panel',
+                        'name' => 'One task, several models', // @translate
+                        'caption' => 'Every model receives the same instructions, in French, and rates the article independently of the others.', // @translate
+                        'note' => 'Their settings are not identical: temperature and reasoning effort follow each provider.', // @translate
+                    ],
+                    [
+                        'art' => 'ratings',
+                        'name' => 'Three ratings', // @translate
+                        'caption' => 'Centrality runs from very central to not addressed, polarity from very positive to very negative, subjectivity from very objective to very subjective.', // @translate
+                        'note' => 'When Islam is not addressed, polarity is “not applicable” and subjectivity is left empty.', // @translate
+                    ],
+                    [
+                        'art' => 'reasons',
+                        'name' => 'Justifications', // @translate
+                        'caption' => 'Each rating comes with a sentence or two citing the article, and every model’s ratings are saved to the article’s record, apart.', // @translate
+                        'note' => 'An article’s page shows each model’s reasoning beside its rating.', // @translate
+                    ],
+                    [
+                        'art' => 'compare',
+                        'name' => 'Comparison', // @translate
+                        'caption' => 'The atlas follows each model across years, countries, topics and newspapers, and measures how often the models agree.', // @translate
+                        'note' => 'The atlas takes no majority vote: where the models disagree, the disagreement is shown.', // @translate
+                    ],
+                ],
+            ]],
+            'caveat' => 'The ratings are model outputs, not facts about the articles. The models agree most on centrality and least on subjectivity, one model reads centrality differently from the rest, and a model asked again can change its answer: read the article and the justification before drawing a conclusion.', // @translate
+            'example' => 'Illustrative example: the article, the ratings and the agreement in the drawings are invented to show the method.', // @translate
+        ],
     ];
 
     /**
@@ -301,6 +397,17 @@ final class PipelinePresets
         'leftOut'      => 'Left out', // @translate
         'advert'       => 'Advertisement', // @translate
         'contents'     => 'Table of contents', // @translate
+        'question'     => 'How did the press in Benin cover Tabaski?', // @translate
+        'searchTerms'  => 'Searched as', // @translate
+        'dataset'      => 'IWAC dataset', // @translate
+        'version'      => 'Dataset version recorded', // @translate
+        'answer'       => 'Answer', // @translate
+        'centrality'   => 'Centrality', // @translate
+        'polarity'     => 'Polarity', // @translate
+        'subjectivity' => 'Subjectivity', // @translate
+        'model'        => 'Model', // @translate
+        'agree'        => 'Agree', // @translate
+        'disagree'     => 'Disagree', // @translate
     ];
 
     /** Heading levels an editor may give the block title; routes go one below. */

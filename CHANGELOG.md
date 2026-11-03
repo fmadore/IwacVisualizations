@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **Two more Pipeline Explainer presets.** *Ask AI* shows how an assistant connected to the IWAC MCP server answers a question: the question and the French terms it is searched as, the server's read-only tools, the research dataset that answers them, results that come back with their IWAC links and the dataset version, and an answer that cites them. *Press attitudes* shows the sentiment analysis: French- and English-language articles sent whole, one task given to every model of the panel, the three ratings and their scales, the justification saved with each rating, and the atlas comparing the models without a majority vote. They suit the Ask AI and Press attitudes (AI) pages.
+
 ### v1.95.1 — the Albani page after the last re-transcription (2026-11-03)
 
 - **"Being re-transcribed" is gone from the Albani recordings timeline.** The chart gave every status a legend entry, so once the last earlier-format transcript was redone, "Being re-transcribed" stayed in the legend with no dot behind it. A status no recording has now takes no entry.

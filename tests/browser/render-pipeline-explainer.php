@@ -7,7 +7,7 @@
  *     php tests/browser/render-pipeline-explainer.php en > tests/browser/fixtures/pipeline-explainer.en.html
  *     php tests/browser/render-pipeline-explainer.php fr > tests/browser/fixtures/pipeline-explainer.fr.html
  *
- * All five presets on one page — the spec checks that instances do not
+ * All seven presets on one page — the spec checks that instances do not
  * share state — with French read from language/fr.po, as Omeka would.
  * `iwac-block-shell` is stood in for by the part of it this block uses: the
  * wrapper and its `prerendered` slot. Its asset enqueueing is replaced by
@@ -100,7 +100,7 @@ $view = new PipelineFixtureView($locale === 'fr' ? poCatalogue(__DIR__ . '/../..
     <button id="theme" type="button">Theme</button>
     <h2>Methodology</h2>
     <p>Page text the editor wrote above the block.</p>
-<?php foreach (['topic-modelling' => 'pipeline-1', 'ocr' => 'pipeline-2', 'entity-enrichment' => 'pipeline-3', 'albani-sermons' => 'pipeline-4', 'issue-contents' => 'pipeline-5'] as $preset => $instance): ?>
+<?php foreach (['topic-modelling' => 'pipeline-1', 'ocr' => 'pipeline-2', 'entity-enrichment' => 'pipeline-3', 'albani-sermons' => 'pipeline-4', 'issue-contents' => 'pipeline-5', 'ask-ai' => 'pipeline-6', 'press-attitudes' => 'pipeline-7'] as $preset => $instance): ?>
     <?= $view->render($preset, 'h3', $instance) ?>
     <div class="fixture-gap"></div>
 <?php endforeach; ?>
