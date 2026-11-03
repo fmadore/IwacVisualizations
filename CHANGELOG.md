@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.93.1 — map popups that fit, and aligned ledgers (2026-11-03)
 
 - **Map popups no longer scroll.** On the Albani "People and places" map, clicking a place now lists the recordings that name it most as a short ranked list, one line each with its count, and fits without a scrollbar (three recordings on a phone, five elsewhere). Every map popup in the module that still has to scroll now does so with a thin scrollbar in the theme's colours instead of the wide grey Windows one, which covered the text.
 - **The strips in the Albani ledgers line up.** In the formulae and the lists of people and organisations, each recording's cell now sits directly below the same recording's cell in the row above, so a column can be read from top to bottom.
