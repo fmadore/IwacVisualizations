@@ -132,6 +132,27 @@ class ParserTests(unittest.TestCase):
         self.assertEqual([window_label(s) for s in tr.segments],
                          ["00:00–00:20", "00:20–end", "00:00–end"])
 
+    def test_ten_minute_windows_are_joined_into_twenty_minute_segments(self):
+        # Part 4 of 15878 (the November 2026 re-transcription) is cut every
+        # ten minutes; the block counts and links 20-minute segments.
+        text = "\n".join(
+            "[Segment {i}/5 | {s}–{e}]\n[Speaker seg{i}-spk:0]\nmatasa {i}".format(
+                i=i, s="00:{:02d}:00".format((i - 1) * 10) if i < 7 else "01:00:00",
+                e="00:{:02d}:00".format(i * 10) if i < 5 else "end")
+            for i in range(1, 6))
+        tr = parse_transcript(text)
+        self.assertEqual([window_label(s) for s in tr.segments],
+                         ["00:00–00:20", "00:20–00:40", "00:40–end"])
+        self.assertEqual([(s.index, s.total) for s in tr.segments], [(1, 3), (2, 3), (3, 3)])
+        self.assertEqual([text[t.start:t.end] for t in tr.segments[0].turns],
+                         ["matasa 1", "matasa 2"])
+        # Ten minutes is the only other window: a part keeps the one it opens with.
+        with self.assertRaises(TranscriptFormatError):
+            parse_transcript(text.replace("[Segment 2/5 | 00:10:00–00:20:00]",
+                                          "[Segment 2/5 | 00:10:00–00:30:00]"))
+        with self.assertRaises(TranscriptFormatError):
+            parse_transcript(CURRENT.replace("00:00:00–00:20:00", "00:00:00–00:15:00"))
+
 
 class NormalizeTests(unittest.TestCase):
     def test_fold_unhooks_and_unifies_apostrophes(self):

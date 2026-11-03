@@ -17,16 +17,23 @@ Two variations are part of the format, not exceptions to it:
   implicit segment, ``1/1 | 00:00:00–end``.
 * ``[Speaker unknown]`` is a turn the diariser could not attribute. It may
   stand wherever a speaker label may.
+* A part may be cut into **10-minute** windows instead (Part 4 of item 15878,
+  the November 2026 re-transcription). The first segment of a part sets its
+  window, 20 or 10 minutes and nothing else, and every check runs against
+  it. Ten-minute windows are then joined in pairs into the 20-minute
+  segments the rest of the pipeline counts, links and draws, so a segment
+  means the same stretch of listening in every recording.
 
 The parser is strict by instruction (curator, issue #31): anything else is a
 ``TranscriptFormatError``, never a best-effort parse. An unread line of
 markup would otherwise be counted as Hausa, and *segment*, *speaker* and
 *spk* would become the corpus's top words. The older Gemini format (items
-15850 and 15878 until they are re-transcribed — per-turn ``[hh:mm:ss]``
-times that reset each segment, ``[Segment N]`` without a total) is detected
-first and raised as ``LegacyTranscriptError``, a subclass, so the generator
-can keep those two out of the statistics by name while any OTHER failure
-still stops the run.
+15850 and 15878 until their November 2026 re-transcription — per-turn
+``[hh:mm:ss]`` times that reset each segment, ``[Segment N]`` without a
+total) is detected first and raised as ``LegacyTranscriptError``, a
+subclass, so the generator keeps such a transcript out of the statistics
+while any OTHER failure still stops the run. It is never parsed: the old
+15850 pass contained a whole invented English "mock transcript".
 
 Offsets are kept into the original text, so a concordance line is cut out of
 the transcript exactly as it was written.
@@ -40,6 +47,9 @@ from typing import List, Optional
 #: The length of one window, in seconds. Asserted, not assumed: a segment
 #: whose start is not ``(n - 1) × WINDOW_SECONDS`` is a format error.
 WINDOW_SECONDS = 20 * 60
+
+#: The one other window a part may use; its segments are joined in pairs.
+HALF_WINDOW_SECONDS = WINDOW_SECONDS // 2
 
 _BANNER = re.compile(r"^=+$")
 _PART = re.compile(r"^\[Part (\d+)\]$")
@@ -94,6 +104,7 @@ class Segment:
     end_seconds: Optional[int]   # None for the "…–end" window
     explicit: bool               # False for a short part's implicit window
     turns: List[Turn] = field(default_factory=list)
+    window: int = WINDOW_SECONDS  # as written; 10-minute windows get joined
 
 
 @dataclass
@@ -137,6 +148,7 @@ def parse_transcript(text: str) -> Transcript:
     turn: Optional[Turn] = None
     prev_marker = ""         # the previous non-blank line's kind, for banners
     pending_banner = False   # a banner seen, waiting for its [Part N]
+    window = WINDOW_SECONDS  # the current part's window, set by its first segment
 
     def fail(lineno: int, why: str) -> None:
         raise TranscriptFormatError(f"line {lineno}: {why}")
@@ -217,16 +229,23 @@ def parse_transcript(text: str) -> Transcript:
                 fail(lineno, f"segment total changes from {previous.total} to {total}")
             if index > total:
                 fail(lineno, f"segment {index} of {total}")
-            if start != (index - 1) * WINDOW_SECONDS:
+            if previous is None:
+                # The part's first window sets its length: the 20-minute
+                # standard, or 10 minutes, joined in pairs at the end.
+                window = (HALF_WINDOW_SECONDS
+                          if index == 1 and total > 1 and end == HALF_WINDOW_SECONDS
+                          else WINDOW_SECONDS)
+            if start != (index - 1) * window:
                 fail(lineno, f"segment {index} starts at {start}s, not "
-                             f"{(index - 1) * WINDOW_SECONDS}s")
+                             f"{(index - 1) * window}s")
             if previous and previous.end_seconds != start:
                 fail(lineno, "segment windows are not contiguous")
             if end is None and index != total:
                 fail(lineno, f"'–end' on segment {index} of {total}")
-            if end is not None and (index == total or end != start + WINDOW_SECONDS):
+            if end is not None and (index == total or end != start + window):
                 fail(lineno, f"segment {index}/{total} ends at {end}s")
-            segment = Segment(part, ordinal, index, total, start, end, explicit=True)
+            segment = Segment(part, ordinal, index, total, start, end, explicit=True,
+                              window=window)
             segments.append(segment)
             turn = None
             prev_marker = "segment"
@@ -282,7 +301,38 @@ def parse_transcript(text: str) -> Transcript:
         # Drop turns with no text (a label followed directly by the next
         # label); they carry no words, and an offset of -1 would slice wrong.
         seg.turns = [t for t in seg.turns if t.start >= 0]
-    return Transcript(parts=ordinal, segments=segments)
+    return Transcript(parts=ordinal, segments=_join_half_windows(segments))
+
+
+def _join_half_windows(segments: List[Segment]) -> List[Segment]:
+    """Join each part's 10-minute windows in pairs into 20-minute segments.
+
+    Windows 1+2 become segment 1 (00:00–00:20), 3+4 segment 2, and an odd
+    last window stands alone as the final one, ``…–end`` if it was. The
+    turns keep their labels: a diariser's ``spk:0`` in two neighbouring
+    halves is most often the same voice, the preacher's, and telling them
+    apart would mark every joined monologue as an exchange.
+    """
+    out: List[Segment] = []
+    i = 0
+    while i < len(segments):
+        seg = segments[i]
+        if seg.window != HALF_WINDOW_SECONDS:
+            out.append(seg)
+            i += 1
+            continue
+        halves = [s for s in segments[i:] if s.part == seg.part]
+        total = (len(halves) + 1) // 2
+        for k in range(total):
+            pair = halves[2 * k:2 * k + 2]
+            joined = Segment(seg.part, seg.ordinal, k + 1, total,
+                             pair[0].start_seconds, pair[-1].end_seconds,
+                             explicit=True)
+            for half in pair:
+                joined.turns.extend(half.turns)
+            out.append(joined)
+        i += len(halves)
+    return out
 
 
 def window_label(segment: Segment) -> str:

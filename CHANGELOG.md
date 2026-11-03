@@ -13,6 +13,13 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **Demokuradiyyah and Shari'a are now counted.** Both recordings have been re-transcribed, so the Albani Zaria block analyses 42 of its 45 recordings (about 1.09 million words), up from 40. Demokuradiyyah is the recording most concerned with democracy: *demokuraɗiyya* now occurs 263 times instead of 62, and *siyasa* (politics) 439 times instead of 281. The warning that conclusions about democracy should wait for it disappears from the politics section. The three recordings still to be transcribed are Sawtul-Hikmah, Ilimin Hadisi and Jilbab.
+- Part of the new Shari'a transcript is cut every 10 minutes rather than every 20. Those 10-minute pieces are joined in pairs, so a segment is 20 minutes of listening in every recording. A transcript from the earlier method is still left out until it has been redone: that method could invent text where it heard none.
+
+Run "Pull latest data" once the data rebuild has finished for the new figures to appear.
+
 ### v1.93.1 — map popups that fit, and aligned ledgers (2026-11-03)
 
 - **Map popups no longer scroll.** On the Albani "People and places" map, clicking a place now lists the recordings that name it most as a short ranked list, one line each with its count, and fits without a scrollbar (three recordings on a phone, five elsewhere). Every map popup in the module that still has to scroll now does so with a thin scrollbar in the theme's colours instead of the wide grey Windows one, which covered the text.

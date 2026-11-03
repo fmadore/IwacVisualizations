@@ -44,9 +44,20 @@ test('every section renders from its own bundle, without a console problem', asy
     expect(problems).toEqual([]);
 });
 
-test('the transcripts still being redone are named, and the democracy caveat shows', async ({ page }) => {
+test('the transcripts still being redone are named, and the democracy caveat waits on Demokuradiyyah alone', async ({ page }) => {
+    // The fixture holds back Shari'a only: the caveat names Demokuradiyyah,
+    // so it must not show for another recording's re-transcription.
     await ready(page);
     await expect(page.locator('.iwac-vis-albani__status')).toContainText("Shari'a");
+    await expect(page.locator('.iwac-vis-albani__caveat')).toHaveCount(0);
+
+    await page.route('**/albani-sermons/metadata.json*', async (route) => {
+        const response = await route.fetch();
+        const metadata = await response.json();
+        metadata.recordings.push({ o: '15850', t: 'Demokuradiyyah', st: 'legacy', lang: ['Haoussa'] });
+        await route.fulfill({ response, json: metadata });
+    });
+    await ready(page);
     await expect(page.locator('.iwac-vis-albani__caveat')).toContainText('Demokuradiyyah');
 });
 

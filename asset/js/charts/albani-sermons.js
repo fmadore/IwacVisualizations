@@ -45,6 +45,9 @@
     var P = ns.panels;
     var A = ns.albaniSermons;
 
+    /** The recording the politics caveat is about: Demokuradiyyah. */
+    var DEMOCRACY_RECORDING = '15850';
+
     P.bootBlock({
         selector:       '.iwac-vis-albani',
         warnLabel:      'IWACVis.albaniSermons',
@@ -189,7 +192,9 @@
             'youth', bundle, store, fetch, ctx);
 
         var politics = A.section(root, 'politics', P.t('albani_politics_heading'), P.t('albani_politics_intro'));
-        if ((metadata.recordings || []).some(function (r) { return r.st === 'legacy'; })) {
+        // The caveat names Demokuradiyyah (15850), so it waits on that
+        // recording alone, not on any re-transcription in progress.
+        if ((metadata.recordings || []).some(function (r) { return r.o === DEMOCRACY_RECORDING && r.st !== 'analysed'; })) {
             politics.appendChild(A.note(P.t('albani_politics_caveat'), 'iwac-vis-albani__caveat'));
         }
         A.renderTheme(politics, 'politics', bundle, store, fetch, ctx);
