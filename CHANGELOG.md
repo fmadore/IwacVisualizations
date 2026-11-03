@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.96.0 — Ask AI and press attitudes in the Pipeline Explainer (2026-11-03)
 
 - **Two more Pipeline Explainer presets.** *Ask AI* shows how an assistant connected to the IWAC MCP server answers a question: the question and the French terms it is searched as, the server's read-only tools, the research dataset that answers them, results that come back with their IWAC links and the dataset version, and an answer that cites them. *Press attitudes* shows the sentiment analysis: French- and English-language articles sent whole, one task given to every model of the panel, the three ratings and their scales, the justification saved with each rating, and the atlas comparing the models without a majority vote. They suit the Ask AI and Press attitudes (AI) pages.
 
