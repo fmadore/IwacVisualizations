@@ -13,6 +13,13 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.98.1 — a tidier On This Day footer (2026-11-04)
+
+- **On This Day: the copy-embed button sits in the footer row,** beside the see-all toggle, instead of alone on a line under the whole almanac. The embed snippet now frames the whole block (`/iwac-embed/on-this-day`) rather than its one panel, which shows the same thing.
+- **The see-all toggle is a button like the block's other controls:** the module's quiet outlined button, with a chevron that turns when the list is open, rather than a bare uppercase text link.
+- **The footer's figures agree.** It read "55 more items carry this date" beside "See all 61"; it now reads "6 of the 61 items in the collection that carry this date" beside "See all". With the list open, the line describes the list ("All 61 items…"); when the layout already shows the whole day, there is no toggle.
+- **Unscanned documents no longer repeat their source.** The stand-in plate printed the newspaper's name, which the metadata line beside it already gives (and a screen reader announced twice inside one link). It now shows a quiet newspaper or periodical glyph.
+
 ### v1.98.0 — the timeline's sources, and only the theme's own fonts in embeds (2026-11-04)
 
 - **The timeline's introduction shows the clippings it cites.** The opening slide was a heading and two lines of prose over an empty stage as tall as the largest event. It now lays out up to nine of the events' images beside the prose (under it on a phone), spread over the whole chronology, each over its date and each a link to its event. A timeline without images gets no collage. (#30)
