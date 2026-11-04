@@ -4,6 +4,28 @@
     var P = ns.panels;
     var M = ns.timelineModel;
 
+    /**
+     * The whole timeline's copy-embed button, or null inside an embed, on a
+     * block that is not embeddable, or where embed.js did not load.
+     */
+    function embedButton(root) {
+        var E = ns.embed;
+        if (!E || !E.makeButton) return null;
+        if (document.body && document.body.classList.contains('iwac-embed-body')) return null;
+        var block = root.closest('[data-embed-slug]');
+        if (!block) return null;
+        var slug = block.getAttribute('data-embed-slug');
+        var base = block.getAttribute('data-embed-base') || block.getAttribute('data-site-base') || '';
+        var heading = root.querySelector('.iwac-vis-timeline__header h2');
+        var btn = E.makeButton({
+            src: function () { return E.url(base, slug, '', E.stateQuery(block)); },
+            snippetTitle: heading ? heading.textContent.trim() : document.title,
+            height: 900
+        });
+        btn.classList.add('iwac-vis-timeline__embed');
+        return btn;
+    }
+
     ns.enhanceTimeline = function (root) {
         if (root.dataset.timelineReady) return;
         var articles = Array.from(root.querySelectorAll('[data-event-id]'));
@@ -57,7 +79,13 @@
         var copyLink = P.iconButton('link', ns.t('timeline_copy_link'), null, 'iwac-vis-timeline__copy-link');
         var fullscreen = P.iconButton('maximize', ns.t('Toggle fullscreen'), null, 'iwac-vis-timeline__fullscreen');
         var actions = P.el('div', 'iwac-vis-timeline__actions');
-        actions.append(copyLink, fullscreen);
+        actions.append(copyLink);
+        // The copy-embed control rides the toolbar with the other actions
+        // (the template sets `data-embed-own`, so embed.js adds none at the
+        // block's foot, under the axis and the source list).
+        var embed = embedButton(root);
+        if (embed) actions.append(embed);
+        actions.append(fullscreen);
         toolbar.append(views, pager, actions);
         section.insertBefore(toolbar, stage);
 

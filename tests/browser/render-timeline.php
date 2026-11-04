@@ -54,7 +54,7 @@ $sources = Sources::cards($timeline, new FakeApi([
     <h1>Islam West Africa Collection</h1>
     <button id="theme" type="button" onclick="document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark'">Theme</button>
     <?php foreach (['block-1', 'block-2'] as $instance): ?>
-    <div class="iwac-vis-block iwac-vis-timeline fixture-separator" data-timeline="<?= $timeline['slug'] ?>" data-instance="<?= $instance ?>" data-layout="narrative" data-start-slide="intro">
+    <div class="iwac-vis-block iwac-vis-timeline fixture-separator" data-timeline="<?= $timeline['slug'] ?>" data-instance="<?= $instance ?>" data-layout="narrative" data-start-slide="intro"<?php if ($instance === 'block-1'): // the first block is embeddable, as on a site page ?> data-embed-slug="iwac-timeline" data-embed-base="/s/iwac" data-embed-query="timeline=<?= $timeline['slug'] ?>" data-embed-whole="" data-embed-own="1"<?php endif; ?>>
         <?= $view->render($timeline, $instance) ?>
         <?= $view->renderSources($sources, $instance) ?>
     </div>

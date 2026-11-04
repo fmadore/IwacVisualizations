@@ -126,7 +126,8 @@ test('the toolbar copies the current event’s link; the permalink stays for the
     const toolbar = root.locator('.iwac-vis-timeline__controls');
     await toolbar.getByRole('button', { name: 'Next event', exact: true }).click();
     // Beside fullscreen, and no longer at the end of the narrative's copy.
-    await expect(root.locator('.iwac-vis-timeline__actions > button')).toHaveCount(2);
+    // The event's link, the embed code (block-1 is embeddable) and fullscreen.
+    await expect(root.locator('.iwac-vis-timeline__actions > button')).toHaveCount(3);
     await expect(root.locator('.iwac-vis-timeline__event.is-current .iwac-vis-timeline__permalink')).toBeHidden();
     await toolbar.getByRole('button', { name: 'Copy link to this event', exact: true }).click();
     const page_ = page.url().split('#')[0];
@@ -137,6 +138,30 @@ test('the toolbar copies the current event’s link; the permalink stays for the
     await expect(toolbar.getByRole('button', { name: 'Copy link to this event', exact: true })).toBeVisible({ timeout: 4000 });
     await root.getByRole('button', { name: 'All events', exact: true }).click();
     await expect(root.locator('.iwac-vis-timeline__permalink').first()).toBeVisible();
+});
+
+test('the copy-embed button sits in the toolbar, not at the block’s foot', async ({ page }) => {
+    await page.addInitScript(() => {
+        window.copied = [];
+        Object.defineProperty(navigator, 'clipboard', {
+            configurable: true,
+            value: { writeText: text => { window.copied.push(text); return Promise.resolve(); } },
+        });
+    });
+    const root = await ready(page);
+    const actions = root.locator('.iwac-vis-timeline__controls .iwac-vis-timeline__actions');
+    const embed = actions.getByRole('button', { name: 'Copy embed code', exact: true });
+    await expect(embed).toBeVisible();
+    // Between the event's link and fullscreen.
+    expect(await actions.locator('button').evaluateAll(buttons => buttons.map(b => b.getAttribute('aria-label'))))
+        .toEqual(['Copy link to this event', 'Copy embed code', 'Toggle fullscreen']);
+    await expect(root.locator('.iwac-vis-embed-whole')).toHaveCount(0);
+    // A block that is not embeddable gets no button.
+    await expect(page.locator('[data-instance="block-2"] .iwac-vis-embed-btn')).toHaveCount(0);
+    await embed.click();
+    const snippet = (await page.evaluate(() => window.copied))[0];
+    expect(snippet).toContain('/s/iwac/iwac-embed/iwac-timeline?timeline=history');
+    expect(snippet).toContain('title="A history in the sources"');
 });
 
 test('the introduction shows the clippings the events cite, each a link to its event', async ({ page }) => {
@@ -195,6 +220,9 @@ test('mobile targets, swipe, reduced motion and no horizontal page overflow', as
         const box = node.getBoundingClientRect(); return { w: box.width, h: box.height };
     }));
     expect(targets.every(box => box.w >= 44 && box.h >= 44)).toBe(true);
+    // The two views keep one line beside the three actions.
+    expect(await root.locator('.iwac-vis-timeline__view').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height)))
+        .toEqual([44, 44]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await root.locator('[data-timeline-marker="later"]').evaluate(node => parseFloat(getComputedStyle(node).transitionDuration))).toBeLessThanOrEqual(0.001);
 });

@@ -28,6 +28,11 @@ check(Catalog::thumbnail(['type' => 'image', 'url' => 'https://example.org/a.jpg
     === 'https://example.org/t.jpg', "another host's image must use the sheet's thumbnail");
 check(Catalog::thumbnail(['type' => 'map', 'url' => 'https://www.google.com/maps/x']) === '', 'a map has no thumbnail');
 check(Catalog::thumbnail(null) === '', 'no media, no thumbnail');
+check(Catalog::leadImage(['type' => 'image', 'url' => 'https://islam.zmo.de/files/medium/abc.jpg'])
+    === 'https://islam.zmo.de/files/large/abc.jpg', 'the lead clipping must use the large derivative');
+check(Catalog::leadImage(['type' => 'image', 'url' => 'https://example.org/a.jpg', 'thumbnail' => 'https://example.org/t.jpg'])
+    === 'https://example.org/a.jpg', "another host's lead image must be the image itself, not its thumbnail");
+check(Catalog::leadImage(['type' => 'map', 'url' => 'https://www.google.com/maps/x']) === '', 'a map has no lead image');
 $pictured = static function (int $count, int $plain = 0) use ($image) {
     $events = [];
     for ($i = 0; $i < $count; $i++) {
@@ -38,9 +43,9 @@ $pictured = static function (int $count, int $plain = 0) use ($image) {
 };
 check(Catalog::collage([['id' => 'a', 'media' => null], ['id' => 'b', 'media' => ['type' => 'link', 'url' => 'https://x.org']]]) === [],
     'a timeline without images must have no collage');
-foreach ([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 4, 6 => 6, 8 => 6, 9 => 9, 15 => 9] as $available => $expected) {
+foreach ([1 => 1, 2 => 2, 3 => 3, 4 => 3, 5 => 3, 6 => 6, 8 => 6, 9 => 9, 15 => 9] as $available => $expected) {
     check(count(Catalog::collage($pictured($available, 3))) === $expected,
-        "$available images must make a collage of $expected (a full grid)");
+        "$available images must make a collage of $expected (a mosaic without a hole)");
 }
 $spread = array_column(Catalog::collage($pictured(15)), 'id');
 check(count(array_unique($spread)) === 9 && $spread[0] === 'e0' && end($spread) === 'e14',

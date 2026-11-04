@@ -181,12 +181,29 @@ class Catalog
     }
 
     /**
+     * The lead clipping's image: Omeka's large derivative where the image is
+     * an IWAC item file — the lead tile spans two columns and two rows, where
+     * the 200px square would be upscaled past legibility — else the image.
+     */
+    public static function leadImage(?array $media): string
+    {
+        if (!$media || ($media['type'] ?? '') !== 'image') {
+            return '';
+        }
+        $url = (string) $media['url'];
+        return preg_match('#^https://islam\.zmo\.de/files/(?:large|medium|square)/#', $url)
+            ? (string) preg_replace('#/files/(?:medium|square)/#', '/files/large/', $url, 1)
+            : $url;
+    }
+
+    /**
      * The events whose images make the introduction's collage: at most nine,
      * spread evenly over the chronology (the first and the last always in), in
-     * the order given. The count is one that fills its grid — 9 or 6 in rows
-     * of three, 4 in two rows of two, or all of three or fewer — so the
-     * collage never ends on a ragged row. An empty list when no event has an
-     * image: the introduction then has no collage and reserves no room for it.
+     * the order given. The count is one the front-page mosaic tiles without a
+     * hole: 9 (a lead, two beside it, a row of six under the lede), 6 (two rows
+     * of three beside the lede), 3 (a lead and two), or all of two or fewer.
+     * An empty list when no event has an image: the introduction then has no
+     * collage and reserves no room for it.
      *
      * @param array[] $events dated events, chronological
      * @return array[]
@@ -197,7 +214,7 @@ class Catalog
             return self::thumbnail($event['media'] ?? null) !== '';
         }));
         $available = count($images);
-        $count = $available >= 9 ? 9 : ($available >= 6 ? 6 : ($available >= 4 ? 4 : $available));
+        $count = $available >= 9 ? 9 : ($available >= 6 ? 6 : ($available >= 3 ? 3 : $available));
         if ($count <= 1) {
             return $images;
         }

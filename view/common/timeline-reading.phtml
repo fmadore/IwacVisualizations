@@ -51,14 +51,26 @@ $linkIcon = '<svg class="iwac-vis-icon" viewBox="0 0 24 24" aria-hidden="true" f
             <div class="iwac-vis-timeline__collage">
                 <p class="iwac-vis-timeline__collage-label" id="<?= $attr($eventAnchor) ?>-collage"><?= $escape($this->translate('Documents in this timeline')) ?></p>
                 <ul aria-labelledby="<?= $attr($eventAnchor) ?>-collage">
-                <?php foreach ($collage as $cited):
+                <?php foreach ($collage as $index => $cited):
                     $citedDate = Catalog::eventDate($cited, $locale);
+                    $citedHeadline = $cited['headline'] ?: $citedDate;
                     // The visible dateline begins the name (WCAG 2.5.3).
-                    $citedName = $citedDate . ' · ' . ($cited['headline'] ?: $citedDate);
+                    $citedName = $citedDate . ' · ' . $citedHeadline;
+                    // The first clipping leads the front page at twice the size,
+                    // so it gets the large derivative and its headline.
+                    $lead = $index === 0;
+                    // Wide tiles (the nine-clipping front page's 3rd, 6th and
+                    // 8th) span two columns: they may take the large image too.
+                    $wide = count($collage) === 9 && in_array($index, [2, 5, 7], true);
+                    $square = Catalog::thumbnail($cited['media']);
+                    $large = Catalog::leadImage($cited['media']);
                 ?>
                     <li><a href="#<?= $attr($instance . '-' . $cited['id']) ?>" data-event-link="<?= $attr($cited['id']) ?>" aria-label="<?= $attr($citedName) ?>" title="<?= $attr($citedName) ?>">
-                        <span class="iwac-vis-timeline__collage-frame"><img src="<?= $attr(Catalog::thumbnail($cited['media'])) ?>" alt="" width="200" height="200" loading="lazy" decoding="async"></span>
-                        <span class="iwac-vis-timeline__collage-date"><?= $escape($citedDate) ?></span>
+                        <span class="iwac-vis-timeline__collage-frame"><img src="<?= $attr($lead ? $large : $square) ?>"<?php if (!$lead && $large !== $square): ?> srcset="<?= $attr($square) ?> 200w, <?= $attr($large) ?> 800w" sizes="<?= $wide ? '(min-width: 768px) 20rem, 66vw' : '(min-width: 768px) 10rem, 33vw' ?>"<?php endif; ?> alt="" width="<?= $lead ? 400 : 200 ?>" height="<?= $lead ? 400 : 200 ?>" loading="lazy" decoding="async"></span>
+                        <span class="iwac-vis-timeline__collage-caption">
+                            <span class="iwac-vis-timeline__collage-date"><?= $escape($citedDate) ?></span>
+                            <?php if ($lead): ?><span class="iwac-vis-timeline__collage-headline"><?= $escape($citedHeadline) ?></span><?php endif; ?>
+                        </span>
                     </a></li>
                 <?php endforeach; ?>
                 </ul>
