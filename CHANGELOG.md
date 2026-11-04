@@ -13,6 +13,15 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.97.1 — every visualisation embeds, published (2026-11-04)
+
+- **The first published release of the v1.97.0 changes.** v1.97.0 was tagged but never published: its release stopped at an integration test that still treated the timeline as a block needing nothing in its URL. The test is fixed; the module is the same as v1.97.0, whose entry below describes it in full. In short:
+  - every panel can be embedded, including panels drawn after the first ones (most of the Albani Zaria page, every view of Laïcité, Scary Terms and the Sentiment Atlas past the first, Topic Explorer's topic detail);
+  - a panel embed keeps the view and filters it was copied from;
+  - a single-panel embed shows the panel alone, without the block's title, figures and controls;
+  - the Pipeline Explainer (`?preset=`) and IWAC timelines (`?timeline=`) can be embedded, each with one *Copy embed code* button on the site;
+  - item and item-set dashboards embed at `/iwac-embed/item/<id>` and `/iwac-embed/item-set/<id>`, with an embed button on each dashboard panel.
+
 ### v1.97.0 — every visualisation embeds (2026-11-03)
 
 - **Every panel can be embedded, not only the first ones a block draws.** Embed buttons were added once, as a block's first panels appeared, so panels drawn later had none: eleven of the Albani Zaria sermons' twenty (their sections render as they scroll into view), every Laïcité, Scary Terms and Sentiment Atlas view past the first, and Topic Explorer's topic detail. Buttons now follow the block for as long as the page is open.
