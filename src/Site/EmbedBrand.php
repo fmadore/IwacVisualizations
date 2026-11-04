@@ -22,25 +22,15 @@ namespace IwacVisualizations\Site;
 final class EmbedBrand
 {
     /**
-     * The webfont request IWAC-theme's `view/layout/layout.phtml` made before
-     * 2.31 — Besley 500/600/800, Public Sans, Source Serif 4 — on Bunny Fonts,
-     * the theme's GDPR-safe Google Fonts mirror. Now only the fallback when the
-     * site's theme does not ship themeFontsAsset(). `tests/js/embed-brand.test.js`
-     * checks the families and weights against `tokens.json`'s `fonts`.
-     */
-    public const WEBFONT_URL = 'https://fonts.bunny.net/css?family=besley:500,600,800|public-sans:ital,wght@0,400..700;1,400|source-serif-4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&display=swap';
-
-    public const WEBFONT_ORIGIN = 'https://fonts.bunny.net';
-
-    /**
      * The theme's own webfont stylesheet, as a path for `assetUrl()` (relative
      * to the theme's `asset/`), or null when the site's theme does not ship it.
      *
      * Since 2.31 IWAC-theme self-hosts its fonts and publishes the stylesheet
      * holding only their `@font-face` rules as tokens.json `fontsCss`
      * (`asset/css/fonts.css`, copied into config/theme-seeds.php). Loading it
-     * keeps the embed on its own origin; Bunny (webfontUrl()) is the fallback
-     * for a site on another theme, or on an IWAC-theme older than 2.31.
+     * keeps the embed on its own origin. A site on another theme, or on an
+     * IWAC-theme older than 2.31, gets null and the system font stack: the
+     * Bunny Fonts fallback went once both IWAC sites ran 2.31 (issue #34).
      *
      * @param string|null $themeRoot The site theme's directory on disk
      * @param array{fontsCss?: string}|null $seeds
@@ -56,19 +46,9 @@ final class EmbedBrand
     }
 
     /**
-     * The webfont request: tokens.json's `fontsUrl` when the synced contract
-     * carries it (copied into config/theme-seeds.php), else the constant.
-     */
-    public static function webfontUrl(): string
-    {
-        $url = self::seeds()['fontsUrl'] ?? '';
-        return is_string($url) && strpos($url, self::WEBFONT_ORIGIN . '/') === 0 ? $url : self::WEBFONT_URL;
-    }
-
-    /**
      * The theme's seeds, from the file `npm run build:embed-tokens` writes.
      *
-     * @return array{primary?: string, secondary?: string, fontsCss?: string, fontsUrl?: string}
+     * @return array{primary?: string, secondary?: string, fontsCss?: string}
      */
     public static function seeds(): array
     {

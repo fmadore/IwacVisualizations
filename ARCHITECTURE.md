@@ -257,7 +257,7 @@ IwacVisualizations/
 │   │   ├── AssetPlan.php
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
 │   │   ├── ConfiguredEmbed.php          # How a configured block embeds: ?preset=, ?timeline=
-│   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; theme webfont URL
+│   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; the theme's fonts.css
 │   │   └── PipelinePresets.php          # The Pipeline explainer's words, once, for PHP and Svelte
 │   ├── Timeline/
 │   │   ├── Catalog.php

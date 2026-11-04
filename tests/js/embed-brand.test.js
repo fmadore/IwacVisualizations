@@ -4,10 +4,10 @@
  * The embed route's brand and type, against the theme's contract.
  *
  * The route renders without the theme's stylesheet, so two things it needs
- * are restated in this module: the webfont request (src/Site/EmbedBrand.php)
- * and the seed-to-token derivation (asset/css/iwac-embed.css). Neither can
- * read tokens.json at runtime — it does not ship — so these tests hold the
- * copies to it.
+ * come from the theme's contract: the webfont stylesheet (tokens.json
+ * `fontsCss`, copied into config/theme-seeds.php) and the seed-to-token
+ * derivation (asset/css/iwac-embed.css). Neither can read tokens.json at
+ * runtime — it does not ship — so these tests hold the copies to it.
  */
 
 const assert = require('node:assert/strict');
@@ -20,53 +20,18 @@ const tokens = JSON.parse(readFileSync(join(ROOT, 'tokens.json'), 'utf8'));
 const brand = readFileSync(join(ROOT, 'src', 'Site', 'EmbedBrand.php'), 'utf8');
 const embedCss = readFileSync(join(ROOT, 'asset', 'css', 'iwac-embed.css'), 'utf8');
 
-/** Bunny/Google v1 family list → { family: { normal: [[lo, hi]], italic: [[lo, hi]] } }. */
-function parseFamilies(url) {
-    const query = new URL(url).searchParams.get('family');
-    const out = {};
-    for (const spec of query.split('|')) {
-        const [name, axes] = spec.split(':');
-        const entry = { normal: [], italic: [] };
-        if (!axes.includes('@')) {
-            for (const w of axes.split(',')) entry.normal.push([Number(w), Number(w)]);
-        } else {
-            const [names, tuples] = axes.split('@');
-            const keys = names.split(',');
-            for (const tuple of tuples.split(';')) {
-                const values = tuple.split(',');
-                const ital = keys.includes('ital') ? values[keys.indexOf('ital')] === '1' : false;
-                const wght = values[keys.indexOf('wght')];
-                const [lo, hi = lo] = wght.split('..').map(Number);
-                (ital ? entry.italic : entry.normal).push([lo, hi]);
-            }
-        }
-        out[name] = entry;
-    }
-    return out;
-}
-
-test('the embed loads exactly the faces and weights the theme loads', () => {
-    const url = /WEBFONT_URL = '([^']+)'/.exec(brand)[1];
-    const loaded = parseFamilies(url);
-    for (const font of Object.values(tokens.fonts)) {
-        const key = font.family.toLowerCase().replace(/\s+/g, '-');
-        assert.ok(loaded[key], `${font.family} is not requested by the embed`);
-        assert.deepEqual(loaded[key].normal, font.normal, `${font.family} upright weights`);
-        assert.deepEqual(loaded[key].italic, font.italic, `${font.family} italic weights`);
-    }
-    assert.equal(Object.keys(loaded).length, Object.keys(tokens.fonts).length,
-        'the embed requests a family the theme does not load');
-    // Once the theme publishes its request verbatim (tokens.json `fontsUrl`),
-    // the constant must be that request.
-    if (tokens.fontsUrl) assert.equal(url, tokens.fontsUrl);
-});
-
-test('the embed prefers the theme’s self-hosted font stylesheet', () => {
+test('the embed loads the theme’s self-hosted font stylesheet, and nothing else', () => {
     const seeds = readFileSync(join(ROOT, 'config', 'theme-seeds.php'), 'utf8');
     assert.equal(tokens.fontsCss, 'asset/css/fonts.css');
     assert.match(seeds, new RegExp(`'fontsCss'\\s*=> '${tokens.fontsCss}'`));
     const layout = readFileSync(join(ROOT, 'view', 'iwac-visualizations', 'layout', 'embed.phtml'), 'utf8');
     assert.match(layout, /EmbedBrand::themeFontsAsset\(/, 'the embed layout no longer asks for the theme fonts');
+    // No third-party font request is left, on any path: a theme without
+    // fonts.css gets the system stack (issue #34).
+    for (const [name, source] of [['embed.phtml', layout], ['EmbedBrand.php', brand], ['theme-seeds.php', seeds]]) {
+        assert.doesNotMatch(source, /fonts\.bunny\.net|fonts\.googleapis\.com/, `${name} requests a third-party font`);
+    }
+    assert.doesNotMatch(seeds, /'fontsUrl'/, 'theme-seeds.php still carries the deprecated fontsUrl');
 });
 
 test('the embed derives its accent from a seed with the theme’s own mixes', () => {

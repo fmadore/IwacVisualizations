@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **Embeds no longer request fonts from Bunny Fonts.** An embedded block loads the IWAC theme's self-hosted `fonts.css` (IWAC-theme 2.31 or later, which both IWAC sites run). The Bunny Fonts fallback for other themes is gone: a site whose theme ships no `fonts.css` shows its embeds in the system font stack. `config/theme-seeds.php` no longer carries `fontsUrl`, which unblocks its removal from the theme's `tokens.json`. (#34)
+
 ### v1.97.1 — every visualisation embeds, published (2026-11-04)
 
 - **The first published release of the v1.97.0 changes.** v1.97.0 was tagged but never published: its release stopped at an integration test that still treated the timeline as a block needing nothing in its URL. The test is fixed; the module is the same as v1.97.0, whose entry below describes it in full. In short:

@@ -63,8 +63,8 @@ $accents   = EmbedBrand::accents(
 $primary   = $accents['primary'];
 $secondary = $accents['secondary'];
 
-// The theme's self-hosted webfonts when the site's theme ships them, so the
-// embed makes no third-party request; else the Bunny request (EmbedBrand).
+// The theme's self-hosted webfonts when the site's theme ships them; else the
+// system font stack. The embed makes no third-party font request (EmbedBrand).
 $themeFonts = EmbedBrand::themeFontsAsset(
     $site && defined('OMEKA_PATH') ? OMEKA_PATH . '/themes/' . $site->theme() : null
 );
@@ -99,9 +99,6 @@ if ($secondary !== '') $accent .= '--iwac-vis-embed-secondary: ' . $secondary . 
     // asset/fonts/.
     if ($themeFonts !== null): ?>
     <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl($themeFonts)) ?>">
-    <?php else: ?>
-    <link rel="preconnect" href="<?= $escapeAttr(EmbedBrand::WEBFONT_ORIGIN) ?>" crossorigin>
-    <link rel="stylesheet" href="<?= $escapeAttr(EmbedBrand::webfontUrl()) ?>">
     <?php endif; ?>
     <?php
     // The theme's tokens, light and dark, as generated literals: this route

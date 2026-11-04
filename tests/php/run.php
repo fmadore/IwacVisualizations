@@ -806,27 +806,27 @@ namespace {
     check(EmbedBrand::accents('', '#123456', '#abc')['secondary'] === '#aabbcc', 'a short secondary must expand');
     check(EmbedBrand::accents('#0a0b0c', '#123456', '')['primary'] === '#0a0b0c', '?primary= must win over the setting');
     check(EmbedBrand::accents('', 'red; color: x', '')['primary'] === '', 'a non-hex setting must be refused');
-    check(strpos(EmbedBrand::webfontUrl(), 'https://fonts.bunny.net/css?family=') === 0,
-        'the embed webfont request lost its origin');
 
-    // The theme's self-hosted fonts.css wins over Bunny, but only when the
-    // site's theme actually ships it.
+    // The embed loads the theme's self-hosted fonts.css when the site's theme
+    // ships it, and otherwise no webfont at all (the system stack; #34).
     check(($seeds['fontsCss'] ?? '') === 'asset/css/fonts.css', 'config/theme-seeds.php lost the theme fontsCss');
+    check(!array_key_exists('fontsUrl', $seeds), 'config/theme-seeds.php still carries the deprecated fontsUrl');
     $themeRoot = sys_get_temp_dir() . '/iwac-vis-theme-' . getmypid();
     @mkdir($themeRoot . '/asset/css', 0777, true);
-    check(EmbedBrand::themeFontsAsset($themeRoot) === null, 'a theme without fonts.css must fall back to Bunny');
+    check(EmbedBrand::themeFontsAsset($themeRoot) === null, 'a theme without fonts.css must load no webfont');
     file_put_contents($themeRoot . '/asset/css/fonts.css', '');
     check(EmbedBrand::themeFontsAsset($themeRoot) === 'css/fonts.css',
         "the embed must load the theme's own fonts.css when the theme ships it");
-    check(EmbedBrand::themeFontsAsset(null) === null, 'no site theme must fall back to Bunny');
+    check(EmbedBrand::themeFontsAsset(null) === null, 'no site theme must load no webfont');
     check(EmbedBrand::themeFontsAsset($themeRoot, ['fontsCss' => 'asset/../config.php']) === null,
         'a fontsCss outside asset/css/ must be refused');
     unlink($themeRoot . '/asset/css/fonts.css');
     rmdir($themeRoot . '/asset/css');
     rmdir($themeRoot . '/asset');
     rmdir($themeRoot);
-    check(strpos(EmbedBrand::WEBFONT_URL, 'https://fonts.bunny.net/css?family=besley:') === 0,
-        "the embed webfont request is not the theme's");
+    $embedLayout = (string) file_get_contents($root . '/view/iwac-visualizations/layout/embed.phtml');
+    check(strpos($embedLayout, 'fonts.bunny.net') === false && strpos($embedLayout, 'WEBFONT_') === false,
+        'the embed layout must make no third-party font request');
 
     // V-15: embeds carry Omeka's session cookie, so a shared cache must not
     // keep them.
