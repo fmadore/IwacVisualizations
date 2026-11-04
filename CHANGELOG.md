@@ -13,8 +13,11 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### v1.99.0 — the timeline opens on a front page (2026-11-04)
+### v1.99.1 — the timeline opens on a front page (2026-11-04)
 
+v1.99.0 was tagged but never published: a check of the phone toolbar failed on the release build, and this version ships the same changes with that fixed.
+
+- **On a phone, the timeline's toolbar wraps its buttons, never a label.** With the new embed button there are three actions beside the two views; where they do not fit, the actions move to a line of their own instead of breaking "All events" over two lines.
 - **The timeline's introduction is laid out as a front page.** The clippings sat as a three-by-three contact sheet beside the introduction, which left the text two lines tall in a column as high as the tallest event: the opening slide still showed an empty half-page. The introduction text now takes one column of the top row, and the clippings tile every other cell of the stage, which they fill to the height of the tallest event. The first clipping leads at twice the size with its headline, and wide tiles show the top of a page, where its masthead is. Each date is set on its clipping as a caption slug. On a phone the text comes first, then the lead clipping and the rest in rows of three. A timeline with four or five images now shows three, and one with seven or eight shows six, so the mosaic never has a hole. (#30)
 - **The timeline's "Copy embed code" button is in its toolbar,** beside the event's link and fullscreen, instead of under the axis and the source list at the foot of the block.
 
