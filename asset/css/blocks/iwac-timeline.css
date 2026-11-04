@@ -654,13 +654,15 @@
 .iwac-vis-timeline--fullscreen .iwac-vis-timeline__event { scroll-margin-top: var(--space-20, 5rem); }
 
 @container iwac-timeline (max-width: 767px) {
-    .iwac-vis-timeline__controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-2, 0.5rem); }
-    .iwac-vis-timeline__pager { grid-column: 1 / -1; grid-row: 1; }
-    .iwac-vis-timeline__views { flex-wrap: nowrap; min-width: 0; }
-    .iwac-vis-timeline .iwac-vis-timeline__view { flex: 1 1 auto; min-width: 0; padding-inline: var(--space-2, 0.5rem); }
-    /* Three 44px actions beside the two views on a phone: tighter gaps and
-     * view padding keep "All events" on one line on a 390px screen. */
-    .iwac-vis-timeline__actions { gap: var(--space-1, 0.25rem); }
+    /* The pager takes the first line; the views and the three actions share
+     * the next, and where the face or the text size leaves no room the
+     * actions wrap to a line of their own rather than breaking a view's
+     * label over two lines. */
+    .iwac-vis-timeline__controls { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: var(--space-2, 0.5rem); }
+    .iwac-vis-timeline__pager { order: -1; flex: 1 1 100%; }
+    .iwac-vis-timeline__views { flex-wrap: nowrap; }
+    .iwac-vis-timeline .iwac-vis-timeline__view { flex: 0 0 auto; padding-inline: var(--space-2, 0.5rem); white-space: nowrap; }
+    .iwac-vis-timeline__actions { gap: var(--space-1, 0.25rem); margin-inline-start: auto; }
     .iwac-vis-timeline__menu { flex: 1 1 auto; }
     .iwac-vis-timeline__menu-panel { left: 0; right: 0; width: auto; transform: none; }
     .iwac-vis-timeline__navigation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }

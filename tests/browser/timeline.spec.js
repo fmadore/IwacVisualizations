@@ -220,7 +220,7 @@ test('mobile targets, swipe, reduced motion and no horizontal page overflow', as
         const box = node.getBoundingClientRect(); return { w: box.width, h: box.height };
     }));
     expect(targets.every(box => box.w >= 44 && box.h >= 44)).toBe(true);
-    // The two views keep one line beside the three actions.
+    // The views never break a label over two lines; the actions wrap instead.
     expect(await root.locator('.iwac-vis-timeline__view').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height)))
         .toEqual([44, 44]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
