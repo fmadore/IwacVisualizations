@@ -539,9 +539,11 @@
     transform: rotate(180deg);
 }
 
+/*  Spaced off the footer: the list opens under the toggle and the embed
+ *  button, and with no gap its first rule ran against their bottom edge. */
 .iwac-vis-otd-index {
     list-style: none;
-    margin: 0;
+    margin: var(--space-3, 0.75rem) 0 0;
     padding: 0;
 }
 

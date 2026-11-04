@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **On This Day: the full-day list no longer touches the footer buttons.** Opened, its first row ran against the bottom edge of the toggle and embed buttons; it now starts a `--space-3` gap below them, the same gap the footer keeps above.
+
 ### v1.98.1 — a tidier On This Day footer (2026-11-04)
 
 - **On This Day: the copy-embed button sits in the footer row,** beside the see-all toggle, instead of alone on a line under the whole almanac. The embed snippet now frames the whole block (`/iwac-embed/on-this-day`) rather than its one panel, which shows the same thing.
