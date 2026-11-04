@@ -48,7 +48,8 @@
 }
 
 .iwac-vis-timeline__views,
-.iwac-vis-timeline__pager {
+.iwac-vis-timeline__pager,
+.iwac-vis-timeline__actions {
     display: flex;
     align-items: center;
     gap: var(--space-2, 0.5rem);
@@ -77,8 +78,9 @@
 .iwac-vis-timeline button:hover:not(:disabled) { background: var(--surface-sunken, #f4f1ef); }
 .iwac-vis-timeline button[aria-pressed="true"] { border-color: var(--primary, #ce4115); background: var(--selection-bg, rgba(206, 65, 21, 0.14)); }
 
-/* Icon-only squares: the toolbar's steps and fullscreen. */
+/* Icon-only squares: the toolbar's steps, the event's link and fullscreen. */
 .iwac-vis-timeline button.iwac-vis-timeline__step,
+.iwac-vis-timeline button.iwac-vis-timeline__copy-link,
 .iwac-vis-timeline button.iwac-vis-timeline__fullscreen {
     display: inline-flex;
     align-items: center;
@@ -216,7 +218,7 @@
     scroll-margin-top: var(--space-40, 10rem);
 }
 
-.iwac-vis-timeline__event:not(:has(.iwac-vis-timeline__media)) { grid-template-columns: minmax(0, 1fr); }
+.iwac-vis-timeline__event:not(:has(.iwac-vis-timeline__media, .iwac-vis-timeline__collage)) { grid-template-columns: minmax(0, 1fr); }
 .iwac-vis-timeline__copy { min-width: 0; }
 .iwac-vis-timeline__dateline {
     margin: 0 0 var(--space-3, 0.75rem);
@@ -259,6 +261,11 @@
 
 .iwac-vis-timeline__permalink .iwac-vis-icon { width: 1em; height: 1em; }
 
+/* The narrative view copies the event's link from the toolbar; the link at
+ * the end of the copy stays for the list view and for a page without JS. */
+.iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__permalink { display: none; }
+.iwac-vis-timeline button.iwac-vis-timeline__copy-link.is-copied { color: var(--success, #2e9052); }
+
 /* A fixed frame: an image's own proportions never set the event's height,
  * before it loads or after. */
 .iwac-vis-timeline__media { margin: 0; min-width: 0; }
@@ -281,6 +288,64 @@
 }
 
 .iwac-vis-timeline__credit { margin-top: var(--space-2, 0.5rem); }
+
+/* The introduction's collage: the clippings the events cite, as a contact
+ * sheet — square crops on hairline frames, each over its dateline, in rows
+ * of three (two when there are two or four, one alone). No rotation and no
+ * shadow: an index of documents, not a scrapbook. */
+.iwac-vis-timeline__collage { min-width: 0; max-width: 30rem; }
+.iwac-vis-timeline__collage-label {
+    margin: 0 0 var(--space-3, 0.75rem);
+    padding-top: var(--space-2, 0.5rem);
+    border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-timeline__collage ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3, 0.75rem) var(--space-2, 0.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-timeline__collage ul:has(> li:nth-child(2):last-child),
+.iwac-vis-timeline__collage ul:has(> li:nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.iwac-vis-timeline__collage:has(li:only-child) { max-width: 12rem; }
+.iwac-vis-timeline__collage ul:has(> li:only-child) { grid-template-columns: minmax(0, 1fr); }
+
+.iwac-vis-timeline__collage a { display: grid; gap: var(--space-1, 0.25rem); color: inherit; text-decoration: none; }
+
+.iwac-vis-timeline__collage-frame {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--border, #ced1d6);
+    background: var(--surface-sunken, #f4f1ef);
+    transition: border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-timeline__collage img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.iwac-vis-timeline__collage-date {
+    overflow: hidden;
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    line-height: var(--line-height-tight, 1.25);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--ink-light, #3f4349);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.iwac-vis-timeline__collage a:hover .iwac-vis-timeline__collage-frame { border-color: var(--primary, #ce4115); }
+.iwac-vis-timeline__collage a:hover .iwac-vis-timeline__collage-date { color: var(--ink-strong, #05070c); }
 .iwac-vis-timeline__external { display: inline-flex; align-items: center; min-height: var(--size-control-lg, 2.75rem); }
 .iwac-vis-timeline__progress { color: var(--ink-light, #3f4349); font-size: var(--text-xs, 0.8125rem); font-variant-numeric: tabular-nums; }
 .iwac-vis-timeline[data-view="list"] .iwac-vis-timeline__step { display: none; }
@@ -378,6 +443,39 @@
 .iwac-vis-timeline__range { position: absolute; height: var(--accent-line-sm, 2px); background: var(--border-strong, #aeb1b7); pointer-events: none; }
 .iwac-vis-timeline__range.is-current { background: var(--primary, #ce4115); }
 .iwac-vis-timeline__status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* -------------------------------------------------------------------
+ *  Sources — the documents the events cite, under the axis. The cards
+ *  and the masonry wall are IWAC-theme's own (the Media embed block's
+ *  "Masonry" template), so only the section's head is set here: the
+ *  same 2px ink rule and Besley head that open the timeline.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-timeline__sources { margin-top: var(--space-12, 3rem); }
+
+.iwac-vis-timeline__sources > h2 {
+    margin: 0 0 var(--space-6, 1.5rem);
+    padding-top: var(--space-4, 1rem);
+    border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+    color: var(--ink-strong, #05070c);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-weight: 600;
+    font-size: var(--text-2xl, 1.875rem);
+    line-height: var(--line-height-tight, 1.25);
+    letter-spacing: var(--tracking-display, -0.01em);
+    font-feature-settings: "kern", "liga", "lnum";
+}
+
+/* One adjustment to the theme's card: a press clipping can be a single
+ * column half a metre long, and on the Hajj wall two of them stood twice
+ * the height of their neighbours. The image is capped and keeps its top —
+ * the headline — in view. Five classes, so it outranks the theme's own
+ * image rule, which this sheet loads after. */
+.iwac-vis-timeline__sources .media-embed .item.resource > a:first-child img {
+    max-height: 24rem;
+    object-fit: cover;
+    object-position: top;
+}
 
 /* -------------------------------------------------------------------
  *  Fullscreen — the block takes the viewport (natively, or as the

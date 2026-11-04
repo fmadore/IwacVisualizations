@@ -1,0 +1,51 @@
+<?php
+/**
+ * The documents a timeline draws on, under it, as a masonry wall of cards.
+ *
+ * The markup is IWAC-theme's own: the Media embed block's "Masonry" template
+ * (view/common/block-template/media-masonry.phtml), whose cards
+ * common/block-layout/file.phtml renders — thumbnail, linked title, caption.
+ * So the cards are the ones on the Hajj exhibit's other walls, styled by the
+ * theme's stylesheet (CSS columns) and packed by its media-masonry.js. The
+ * thumbnail link repeats the title's, so it is out of the keyboard and
+ * accessibility trees, as the theme's is.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array[]  $sources  IwacVisualizations\Timeline\Sources::cards()
+ * @var string   $instance the block instance, to name the heading
+ * @var string[] $scripts  Sources::themeScripts(): the theme's masonry scripts
+ */
+$escape = $this->plugin('escapeHtml');
+$attr = $this->plugin('escapeHtmlAttr');
+foreach ($scripts as $script) {
+    // No module: assetUrl() resolves against the site's theme. The theme's
+    // own masonry template appends the same URLs; inlineScript() keeps one.
+    $this->inlineScript()->appendFile($this->assetUrl($script));
+}
+?>
+<section class="iwac-vis-timeline__sources" aria-labelledby="<?= $attr($instance) ?>-sources">
+    <h2 id="<?= $attr($instance) ?>-sources"><?= $escape($this->translate('Sources')) ?></h2>
+    <div class="media-embed media-display-thumbnail multiple-attachments layout-masonry">
+    <?php foreach ($sources as $source):
+        $lang = $source['lang'] !== '' ? ' lang="' . $attr($source['lang']) . '" dir="auto"' : '';
+        // Author(s), newspaper, date: the citation the timeline's captions use.
+        $byline = array_map($escape, $source['creators']);
+        if ($source['publisher'] !== '') {
+            $byline[] = '<i>' . $escape($source['publisher']) . '</i>';
+        }
+        if ($source['date'] !== '') {
+            $byline[] = $escape($source['date']);
+        }
+    ?>
+        <div class="item resource">
+            <?php if ($source['thumbnail'] !== ''): ?>
+            <a href="<?= $attr($source['url']) ?>" tabindex="-1" aria-hidden="true"><img src="<?= $attr($source['thumbnail']) ?>" alt="" loading="lazy" decoding="async"></a>
+            <?php endif; ?>
+            <h3<?= $lang ?>><a href="<?= $attr($source['url']) ?>"><?= $escape($source['title']) ?></a></h3>
+            <?php if ($byline): ?>
+            <div class="caption"><p><?= implode(', ', $byline) ?></p></div>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+    </div>
+</section>

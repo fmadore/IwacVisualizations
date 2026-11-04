@@ -1,6 +1,13 @@
 <?php
-/** Regenerate the committed browser fixture from the production PHP partial. */
+/** Regenerate the committed browser fixture from the production PHP partials. */
 require_once __DIR__ . '/../../src/Timeline/Catalog.php';
+require_once __DIR__ . '/../../src/Timeline/Sources.php';
+require_once __DIR__ . '/../lib/fake-items.php';
+
+use IwacVisualizations\Tests\FakeApi;
+use IwacVisualizations\Tests\FakeItem;
+use IwacVisualizations\Tests\FakeValue;
+use IwacVisualizations\Timeline\Sources;
 
 class TimelineFixtureView
 {
@@ -11,10 +18,25 @@ class TimelineFixtureView
         include __DIR__ . '/../../view/common/timeline-reading.phtml';
         return ob_get_clean();
     }
+    /** The source list the block template appends (no theme scripts: the fixture has no theme). */
+    public function renderSources(array $sources, $instance) {
+        $scripts = [];
+        ob_start();
+        include __DIR__ . '/../../view/common/timeline-sources.phtml';
+        return ob_get_clean();
+    }
 }
 $timeline = json_decode(file_get_contents($argv[1] ?? __DIR__ . '/../fixtures/timeline.json'), true);
 $view = new TimelineFixtureView();
 $locale = $timeline['locale'];
+// The item the fixture's one caption cites (item/42), as the API returns it.
+$sources = Sources::cards($timeline, new FakeApi([
+    new FakeItem(42, 'Archival document', [
+        'dcterms:date' => [new FakeValue('1970-03-14')],
+        'dcterms:publisher' => [new FakeValue('Carrefour africain')],
+        'dcterms:creator' => [new FakeValue('A. Reporter')],
+    ], 'https://example.org/archive-page.jpg'),
+]), $locale);
 ?>
 <!doctype html>
 <html lang="<?= $locale ?>">
@@ -34,6 +56,7 @@ $locale = $timeline['locale'];
     <?php foreach (['block-1', 'block-2'] as $instance): ?>
     <div class="iwac-vis-block iwac-vis-timeline fixture-separator" data-timeline="<?= $timeline['slug'] ?>" data-instance="<?= $instance ?>" data-layout="narrative" data-start-slide="intro">
         <?= $view->render($timeline, $instance) ?>
+        <?= $view->renderSources($sources, $instance) ?>
     </div>
     <?php endforeach; ?>
 </main>

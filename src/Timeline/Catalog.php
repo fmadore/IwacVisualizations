@@ -163,6 +163,51 @@ class Catalog
             : $month . ' ' . (int) $parts[2] . ', ' . $parts[0];
     }
 
+    /**
+     * An image's small square: Omeka's 200px square derivative where the image
+     * is an IWAC item file (the axis cards and the introduction's collage
+     * share it, so it downloads once), else the sheet's thumbnail or the image.
+     * '' for media that is not an image.
+     */
+    public static function thumbnail(?array $media): string
+    {
+        if (!$media || ($media['type'] ?? '') !== 'image') {
+            return '';
+        }
+        $url = (string) $media['url'];
+        return preg_match('#^https://islam\.zmo\.de/files/(?:large|medium)/#', $url)
+            ? (string) preg_replace('#/files/(?:large|medium)/#', '/files/square/', $url, 1)
+            : ((string) ($media['thumbnail'] ?? '') ?: $url);
+    }
+
+    /**
+     * The events whose images make the introduction's collage: at most nine,
+     * spread evenly over the chronology (the first and the last always in), in
+     * the order given. The count is one that fills its grid — 9 or 6 in rows
+     * of three, 4 in two rows of two, or all of three or fewer — so the
+     * collage never ends on a ragged row. An empty list when no event has an
+     * image: the introduction then has no collage and reserves no room for it.
+     *
+     * @param array[] $events dated events, chronological
+     * @return array[]
+     */
+    public static function collage(array $events): array
+    {
+        $images = array_values(array_filter($events, static function ($event) {
+            return self::thumbnail($event['media'] ?? null) !== '';
+        }));
+        $available = count($images);
+        $count = $available >= 9 ? 9 : ($available >= 6 ? 6 : ($available >= 4 ? 4 : $available));
+        if ($count <= 1) {
+            return $images;
+        }
+        $picked = [];
+        for ($i = 0; $i < $count; $i++) {
+            $picked[] = $images[(int) round($i * ($available - 1) / ($count - 1))];
+        }
+        return $picked;
+    }
+
     public static function eventDate(array $event, string $locale): string
     {
         if (!empty($event['displayDate'])) {

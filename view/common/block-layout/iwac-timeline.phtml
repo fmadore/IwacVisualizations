@@ -11,6 +11,13 @@ $reading = $this->partial('common/timeline-reading', [
     'timeline' => $timeline,
     'instance' => $instance,
 ]);
+// The documents the events cite, under the timeline. A page block only: an
+// embed carries no theme stylesheet to lay the theme's cards out.
+$sourceList = empty($sources) ? '' : $this->partial('common/timeline-sources', [
+    'sources' => $sources,
+    'instance' => $instance,
+    'scripts' => $sourceScripts ?? [],
+]);
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'iwac-timeline',
@@ -19,6 +26,7 @@ echo $this->partial('common/iwac-block-shell', [
     ],
     'blockClass' => 'iwac-vis-timeline',
     'prerendered' => $reading,
+    'append' => $sourceList,
     'data' => [
         'timeline' => $timeline['slug'],
         'timeline-locale' => $timeline['locale'],

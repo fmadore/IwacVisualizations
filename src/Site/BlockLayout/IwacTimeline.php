@@ -5,6 +5,7 @@ namespace IwacVisualizations\Site\BlockLayout;
 
 use IwacVisualizations\Site\ConfiguredEmbed;
 use IwacVisualizations\Timeline\Catalog;
+use IwacVisualizations\Timeline\Sources;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Text;
 use Laminas\View\HelperPluginManager;
@@ -102,12 +103,31 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
             $locale = self::language((string) $view->siteSetting('locale', 'en'));
         }
         $start = (string) $block->dataValue('start_slide', 'intro');
+        $timeline = Catalog::validId($slug) ? $view->iwacTimelineData()->load($slug, $locale) : null;
         return $view->partial($templateViewScript ?: $this->templateViewScript(), [
             'block' => $block,
-            'timeline' => Catalog::validId($slug) ? $view->iwacTimelineData()->load($slug, $locale) : null,
+            'timeline' => $timeline,
             'instance' => 'block-' . $block->id(),
             'startSlide' => Catalog::validId($start) ? $start : 'intro',
             'layout' => $block->dataValue('layout', 'narrative') === 'list' ? 'list' : 'narrative',
-        ]);
+        ] + ($timeline ? self::sourceVariables($view, $timeline) : []));
+    }
+
+    /**
+     * The source list under the timeline: the items the events' captions
+     * cite, read through the API (so a private item stays out), and the
+     * site theme's masonry scripts when it ships them.
+     */
+    private static function sourceVariables(PhpRenderer $view, array $timeline): array
+    {
+        $helpers = $view->getHelperPluginManager();
+        // IWAC-theme's ResourceLanguage tags a French title on the English
+        // site; another theme has no such helper, and the titles go untagged.
+        $language = $helpers->has('ResourceLanguage') ? $helpers->get('ResourceLanguage') : null;
+        $site = $view->currentSite();
+        return [
+            'sources' => Sources::cards($timeline, $view->api(), $timeline['locale'], $language),
+            'sourceScripts' => Sources::themeScripts($site && defined('OMEKA_PATH') ? OMEKA_PATH . '/themes/' . $site->theme() : null),
+        ];
     }
 }

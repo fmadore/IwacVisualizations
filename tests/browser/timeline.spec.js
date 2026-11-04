@@ -114,6 +114,59 @@ test('stable stage, event picker, fullscreen and new-tab links', async ({ page }
     await expect(root.locator('.iwac-vis-timeline__marker img')).toHaveCount(0);
 });
 
+test('the toolbar copies the current event’s link; the permalink stays for the list view', async ({ page }) => {
+    await page.addInitScript(() => {
+        window.copied = [];
+        Object.defineProperty(navigator, 'clipboard', {
+            configurable: true,
+            value: { writeText: text => { window.copied.push(text); return Promise.resolve(); } },
+        });
+    });
+    const root = await ready(page);
+    const toolbar = root.locator('.iwac-vis-timeline__controls');
+    await toolbar.getByRole('button', { name: 'Next event', exact: true }).click();
+    // Beside fullscreen, and no longer at the end of the narrative's copy.
+    await expect(root.locator('.iwac-vis-timeline__actions > button')).toHaveCount(2);
+    await expect(root.locator('.iwac-vis-timeline__event.is-current .iwac-vis-timeline__permalink')).toBeHidden();
+    await toolbar.getByRole('button', { name: 'Copy link to this event', exact: true }).click();
+    const page_ = page.url().split('#')[0];
+    expect(await page.evaluate(() => window.copied)).toEqual([`${page_}#timeline=history&slide=later&block=block-1`]);
+    // The module's confirmation: a check for a moment, read out by the status region.
+    await expect(toolbar.getByRole('button', { name: 'Link copied', exact: true })).toBeVisible();
+    await expect(root.locator('[role="status"]')).toHaveText('Link copied');
+    await expect(toolbar.getByRole('button', { name: 'Copy link to this event', exact: true })).toBeVisible({ timeout: 4000 });
+    await root.getByRole('button', { name: 'All events', exact: true }).click();
+    await expect(root.locator('.iwac-vis-timeline__permalink').first()).toBeVisible();
+});
+
+test('the introduction shows the clippings the events cite, each a link to its event', async ({ page }) => {
+    const root = await ready(page);
+    const intro = root.locator('#block-1-intro');
+    await expect(intro.getByRole('list', { name: 'Documents in this timeline' })).toBeVisible();
+    const tiles = intro.locator('.iwac-vis-timeline__collage a');
+    // The fixture has one image, so one tile; Catalog::collage() picks up to nine.
+    await expect(tiles).toHaveCount(1);
+    await expect(tiles.first()).toHaveAccessibleName('1970 – 1980 · An overlapping period');
+    await tiles.first().click();
+    await expect(root.locator('[data-event-id]:visible')).toHaveAttribute('data-event-id', 'range');
+    await expect(page).toHaveURL(/#timeline=history&slide=range&block=block-1$/);
+});
+
+test('the source list follows the timeline in the theme’s masonry markup', async ({ page }) => {
+    const root = await ready(page);
+    const sources = root.getByRole('region', { name: 'Sources', exact: true });
+    await expect(sources).toBeVisible();
+    expect(await root.evaluate(node => Boolean(node.querySelector('.iwac-vis-timeline__axis')
+        .compareDocumentPosition(node.querySelector('.iwac-vis-timeline__sources')) & Node.DOCUMENT_POSITION_FOLLOWING)))
+        .toBe(true);
+    const cards = sources.locator('.media-embed.layout-masonry > .item.resource');
+    await expect(cards).toHaveCount(1);
+    // The thumbnail repeats the title's link, so only the title is reachable.
+    await expect(cards.getByRole('link')).toHaveCount(1);
+    await expect(cards.getByRole('heading', { level: 3, name: 'Archival document' })).toBeVisible();
+    await expect(cards.locator('.caption')).toHaveText('A. Reporter, Carrefour africain, March 14, 1970');
+});
+
 test('deep links distinguish repeated instances and respond to hash changes', async ({ page }) => {
     const first = await ready(page, '#timeline=history&slide=first&block=block-2');
     const second = page.locator('[data-instance="block-2"]');

@@ -59,7 +59,7 @@ parameters:
         # View helpers, via PhpRenderer::__call.
         -
             identifier: method.notFound
-            message: '#PhpRenderer::(iwacTimelineData|siteSetting|translate|formRow|partial|escapeHtml|url|assetUrl|blockThumbnail)#'
+            message: '#PhpRenderer::(iwacTimelineData|siteSetting|translate|formRow|partial|escapeHtml|url|assetUrl|blockThumbnail|api|currentSite)#'
         # `MvcEvent::getRequest()` / `getResponse()` are typed to the Stdlib
         # interfaces; under HTTP they are always the Http\Request / Http\Response
         # that carry these. Omeka has no non-HTTP dispatch path.

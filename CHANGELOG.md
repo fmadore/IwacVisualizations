@@ -15,6 +15,9 @@ link to the historical documents preserved in Git.
 
 ### Unreleased
 
+- **The timeline's introduction shows the clippings it cites.** The opening slide was a heading and two lines of prose over an empty stage as tall as the largest event. It now lays out up to nine of the events' images beside the prose (under it on a phone), spread over the whole chronology, each over its date and each a link to its event. A timeline without images gets no collage. (#30)
+- **A source list under each timeline.** A *Sources* section (*Documents cités*) lists the documents the events' image captions cite, as a masonry wall of the IWAC theme's own cards (thumbnail, title, author, newspaper, date), in date order. The items are read through Omeka, so a private one stays out. Embeds show no source list. (#30)
+- **"Copy link to this event" moved into the timeline's toolbar,** beside fullscreen, as an icon button that copies the event's full address and confirms with a check. The text link at the end of each event, which moved with the length of the prose, now shows only in the all-events view and without JavaScript. (#30)
 - **Embeds no longer request fonts from Bunny Fonts.** An embedded block loads the IWAC theme's self-hosted `fonts.css` (IWAC-theme 2.31 or later, which both IWAC sites run). The Bunny Fonts fallback for other themes is gone: a site whose theme ships no `fonts.css` shows its embeds in the system font stack. `config/theme-seeds.php` no longer carries `fontsUrl`, which unblocks its removal from the theme's `tokens.json`. (#34)
 
 ### v1.97.1 — every visualisation embeds, published (2026-11-04)

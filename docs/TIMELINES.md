@@ -89,7 +89,9 @@ readers so through `aria-describedby`. The known trailing
 `<blockquote>` typo is repaired when its meaning is unambiguous; ambiguous
 unbalanced quotations fail for an author to correct. `relatedResources`
 extracts IWAC item/item-set IDs from the preserved links for future cross-links;
-the importer does not read or join the Hugging Face dataset.
+the importer does not read or join the Hugging Face dataset. The source list
+under the block does not use it (see below): it needs the caption's links
+only, not the prose's, which point at index entries.
 
 ## Editor, reading and interaction
 
@@ -102,11 +104,21 @@ stays visible in the editor until the corresponding data is imported.
 PHP renders all text, media and native event anchors. JavaScript enhances this
 into a narrative viewer. One toolbar above the event carries every control a
 reader uses repeatedly: the Narrative / All events switch, previous and next,
-the event picker and fullscreen, so none of them moves when the event changes.
+the event picker, **Copy link to this event** and fullscreen, so none of them
+moves when the event changes.
 The picker is the exhibit's table of contents, each event's date over its
 headline, the current one marked; it opens from a button, takes the arrow keys,
 Home and End, and closes on Escape or outside. In the all-events view it scrolls
 to the event instead.
+
+The introduction lays out the clippings the events cite beside its prose (under
+it on a phone): square crops on hairline frames, each over its dateline and
+each a link to its event, under the label *Documents in this timeline*.
+`Catalog::collage()` picks at most nine, spread over the whole chronology, and
+a count that fills its grid (9 or 6 in rows of three, 4 in rows of two, or all
+of three or fewer). The crops are the axis's `files/square/` thumbnails, so they
+download once. A sheet without images gets no collage and no room for one, and
+an image the sheet gives the title row itself takes precedence.
 
 From a 768px-wide block, every event of the narrative shares one grid cell, so
 the stage is as tall as the longest event and nothing below it (the closing
@@ -132,7 +144,11 @@ event, while vertical scrolling remains available. Controls and axis targets
 are at least 44 px. Status changes are announced without moving focus into the
 article. Print and JavaScript-disabled pages show the complete reading view.
 
-Share an event with its **Link to this event** anchor:
+Share an event with the toolbar's **Copy link to this event** button, which
+copies the page address with the event's fragment and turns into a check for a
+moment ("Link copied", also announced). The **Link to this event** anchor at the
+end of each event's text stays for the all-events view and for a page without
+JavaScript; the narrative view hides it. The fragment:
 
 ```text
 #timeline=aeemb-burkina&slide=event-03&block=block-123
@@ -142,6 +158,27 @@ The optional `block` parameter disambiguates repeated instances. Without it,
 the first instance of that exhibit handles the link. Unknown IDs leave the
 current event intact. Native `#block-123-event-03` anchors also work, including
 without JavaScript. Block IDs are preserved by the migration below.
+
+## Sources under the timeline
+
+Below the axis, a **Sources** section (*Documents cités* in French) lists the
+documents the timeline draws on as a masonry wall of cards: thumbnail, linked
+title, then author, newspaper and date. The sheet stores no item IDs, but each
+image's **Media Caption** cites its document with a link to the IWAC item
+(`https://islam.zmo.de/s/…/item/8397`); `Sources::itemIds()` collects those,
+and `Sources::cards()` reads the items through Omeka's API in one search, so a
+private or deleted item drops out. Cards are ordered by the item's own
+`dcterms:date`, a dateless one last. Titles carry the record's language through
+IWAC-theme's `ResourceLanguage` helper when the site runs that theme.
+
+The markup is IWAC-theme's own: its Media embed block's "Masonry" template and
+the cards `common/block-layout/file.phtml` renders. The theme's stylesheet lays
+the wall out in CSS columns, and the block enqueues the theme's MiniMasonry and
+`media-masonry.js` when the site's theme ships them, so the cards match the
+exhibit's other walls. The one module rule caps a card's image at 24rem and
+keeps its top in view, since a single newspaper column made cards twice the
+height of their neighbours. An embed has no theme stylesheet and shows no
+source list; a timeline whose captions cite no item has none either.
 
 The visual design follows IWAC-theme 2.22's press-archive direction: Besley
 headings, Source Serif 4 prose, Public Sans controls, ink rules, paper surfaces
@@ -184,7 +221,8 @@ This repository change does not itself modify the live Omeka installation.
 
 Run `npm run build`, `npm test`, `php tests/php/run.php`, Python unittest
 discovery under `tests/python`, and `npx playwright test timeline.spec.js`.
-The browser fixture is rendered from the production reading partial:
+The browser fixture is rendered from the production reading and source-list
+partials (`php tests/php/run.php` fails on a stale one):
 
 ```sh
 php tests/browser/render-timeline.php > tests/browser/fixtures/timeline.html

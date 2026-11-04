@@ -32,8 +32,9 @@
         }
 
         /*  One toolbar above the stage carries every control a reader uses
-         *  repeatedly — the view, the step buttons, the event picker and
-         *  fullscreen — so none of them moves when an event changes. */
+         *  repeatedly — the view, the step buttons, the event picker, the
+         *  event's link and fullscreen — so none of them moves when an
+         *  event changes. */
         var toolbar = P.el('div', 'iwac-vis-timeline__controls');
         var views = P.el('div', 'iwac-vis-timeline__views');
         views.setAttribute('role', 'group');
@@ -49,8 +50,15 @@
                 : { id: ids[i], date: article.dataset.dateLabel, headline: headline(article) };
         }), function (id) { choose(id, true, view === 'list' ? 'list' : 'top'); });
         pager.append(previous, menu.element, next);
+        // The event's address, copied as an absolute URL. It replaces the
+        // "Link to this event" at the end of the copy in the narrative view,
+        // which moved with the length of the prose; the list view and a page
+        // without JavaScript keep that link (CSS hides it here).
+        var copyLink = P.iconButton('link', ns.t('timeline_copy_link'), null, 'iwac-vis-timeline__copy-link');
         var fullscreen = P.iconButton('maximize', ns.t('Toggle fullscreen'), null, 'iwac-vis-timeline__fullscreen');
-        toolbar.append(views, pager, fullscreen);
+        var actions = P.el('div', 'iwac-vis-timeline__actions');
+        actions.append(copyLink, fullscreen);
+        toolbar.append(views, pager, actions);
         section.insertBefore(toolbar, stage);
 
         // The same steps after the event, for a reader who has scrolled to its end.
@@ -138,6 +146,34 @@
             choose(ids[Math.max(0, Math.min(ids.length - 1, current + delta))], true, origin);
         }
 
+        /**
+         * Copy the current event's address and confirm it the module's way: the
+         * link icon turns into a check for a moment. The button is icon-only, so
+         * its name carries the confirmation and the block's status region reads
+         * it out.
+         */
+        var copiedTimer = null;
+        function copyEventLink() {
+            var url = location.href.split('#')[0] + M.fragment(slug, ids[current], instance);
+            var done = function () {
+                var label = ns.t('Link copied');
+                P.setIcon(copyLink, 'check');
+                copyLink.setAttribute('aria-label', label);
+                copyLink.title = label;
+                copyLink.classList.add('is-copied');
+                status.textContent = label;
+                clearTimeout(copiedTimer);
+                copiedTimer = setTimeout(function () {
+                    P.setIcon(copyLink, 'link');
+                    copyLink.setAttribute('aria-label', ns.t('timeline_copy_link'));
+                    copyLink.title = ns.t('timeline_copy_link');
+                    copyLink.classList.remove('is-copied');
+                }, 1800);
+            };
+            // embed.js (shared core) falls back to execCommand off HTTPS.
+            ns.embed.copyToClipboard(url).then(done, done);
+        }
+
         function followHash() {
             var first = Array.from(document.querySelectorAll('.iwac-vis-timeline'))
                 .find(function (el) { return el.dataset.timeline === slug; }) === root;
@@ -148,14 +184,20 @@
         next.addEventListener('click', function () { step(1, 'top'); });
         previousEnd.addEventListener('click', function () { step(-1, 'below'); });
         nextEnd.addEventListener('click', function () { step(1, 'below'); });
+        copyLink.addEventListener('click', copyEventLink);
         narrative.addEventListener('click', function () { view = 'narrative'; render(false); });
         all.addEventListener('click', function () { view = 'list'; render(false); });
+        // The permalinks and the introduction's collage. A collage tile turns
+        // the page like the closing steps do: on a phone it sits below the
+        // prose, and the event it opens should be read from its start.
         root.querySelectorAll('[data-event-link]').forEach(function (link) {
+            var origin = link.closest('.iwac-vis-timeline__collage') ? 'below' : undefined;
             link.href = M.fragment(slug, link.dataset.eventLink, instance);
             link.addEventListener('click', function (event) {
                 if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
                 event.preventDefault();
-                choose(link.dataset.eventLink, true);
+                if (origin) view = 'narrative';
+                choose(link.dataset.eventLink, true, origin);
             });
         });
         root.addEventListener('keydown', function (event) {
@@ -201,6 +243,6 @@
         followHash();
         render(false);
         // Page blocks are normally static; tests/admin previews can dispose explicitly.
-        return { destroy: function () { axis.destroy(); menu.close(false); window.removeEventListener('hashchange', followHash); } };
+        return { destroy: function () { axis.destroy(); menu.close(false); clearTimeout(copiedTimer); window.removeEventListener('hashchange', followHash); } };
     };
 }());

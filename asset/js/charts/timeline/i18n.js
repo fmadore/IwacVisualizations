@@ -12,7 +12,8 @@
         'timeline_axis_hint': 'Each card stands on its event’s date; a line runs on to the end of a period. Scroll to explore the chronology.',
         'timeline_progress': 'Event {current} of {total}',
         'timeline_views': 'Timeline view',
-        'timeline_new_tab': 'Opens in a new tab'
+        'timeline_new_tab': 'Opens in a new tab',
+        'timeline_copy_link': 'Copy link to this event'
     });
     ns.addTranslations('fr', {
         'timeline_narrative': 'Récit',
@@ -25,6 +26,7 @@
         'timeline_axis_hint': 'Chaque carte se place à la date de son événement\u202f; une ligne prolonge les périodes jusqu’à leur fin. Faites défiler pour explorer la chronologie.',
         'timeline_progress': 'Événement {current} sur {total}',
         'timeline_views': 'Vue de la chronologie',
-        'timeline_new_tab': 'S’ouvre dans un nouvel onglet'
+        'timeline_new_tab': 'S’ouvre dans un nouvel onglet',
+        'timeline_copy_link': 'Copier le lien vers cet événement'
     });
 }());

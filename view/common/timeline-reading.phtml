@@ -9,6 +9,9 @@ usort($events, static function ($a, $b) {
     return strcmp($a['start']['value'], $b['start']['value'])
         ?: ($a['sourceOrder'] <=> $b['sourceOrder']);
 });
+// The introduction lays out the clippings the events cite, each a link to
+// its event, so the opening slide is not a heading over an empty stage.
+$collage = Catalog::collage($events);
 $events = array_merge([$timeline['title']], $events);
 // Lucide "link", the icon the module's copy-link buttons draw (P.ICONS.link).
 $linkIcon = '<svg class="iwac-vis-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
@@ -27,14 +30,8 @@ $linkIcon = '<svg class="iwac-vis-icon" viewBox="0 0 24 24" aria-hidden="true" f
         $eventAnchor = $instance . '-' . $event['id'];
         $fragment = '#' . $eventAnchor;
         $media = $event['media'];
-        // The axis card's thumbnail: Omeka's 200px square derivative where
-        // the image is an item file, else the sheet's thumbnail or the image.
-        $thumb = '';
-        if ($media && $media['type'] === 'image') {
-            $thumb = preg_match('#^https://islam\.zmo\.de/files/(?:large|medium)/#', $media['url'])
-                ? (string) preg_replace('#/files/(?:large|medium)/#', '/files/square/', $media['url'], 1)
-                : ($media['thumbnail'] ?: $media['url']);
-        }
+        // The axis card's thumbnail.
+        $thumb = Catalog::thumbnail($media);
     ?>
         <article class="iwac-vis-timeline__event" id="<?= $attr($eventAnchor) ?>"
                  data-event-id="<?= $attr($event['id']) ?>" data-order="<?= $intro ? '-1' : (int) $event['sourceOrder'] ?>"
@@ -50,7 +47,23 @@ $linkIcon = '<svg class="iwac-vis-icon" viewBox="0 0 24 24" aria-hidden="true" f
                 <div class="iwac-vis-timeline__prose"><?= $event['textHtml'] ?></div>
                 <a class="iwac-vis-timeline__permalink" href="<?= $attr($fragment) ?>" data-event-link="<?= $attr($event['id']) ?>"><?= $linkIcon ?><span><?= $escape($this->translate('Link to this event')) ?></span></a>
             </div>
-            <?php if ($media): ?>
+            <?php if ($intro && !$media && $collage): // an image the sheet gives the title row wins ?>
+            <div class="iwac-vis-timeline__collage">
+                <p class="iwac-vis-timeline__collage-label" id="<?= $attr($eventAnchor) ?>-collage"><?= $escape($this->translate('Documents in this timeline')) ?></p>
+                <ul aria-labelledby="<?= $attr($eventAnchor) ?>-collage">
+                <?php foreach ($collage as $cited):
+                    $citedDate = Catalog::eventDate($cited, $locale);
+                    // The visible dateline begins the name (WCAG 2.5.3).
+                    $citedName = $citedDate . ' · ' . ($cited['headline'] ?: $citedDate);
+                ?>
+                    <li><a href="#<?= $attr($instance . '-' . $cited['id']) ?>" data-event-link="<?= $attr($cited['id']) ?>" aria-label="<?= $attr($citedName) ?>" title="<?= $attr($citedName) ?>">
+                        <span class="iwac-vis-timeline__collage-frame"><img src="<?= $attr(Catalog::thumbnail($cited['media'])) ?>" alt="" width="200" height="200" loading="lazy" decoding="async"></span>
+                        <span class="iwac-vis-timeline__collage-date"><?= $escape($citedDate) ?></span>
+                    </a></li>
+                <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php elseif ($media): ?>
             <figure class="iwac-vis-timeline__media">
                 <?php if ($media['type'] === 'image'): ?>
                 <a href="<?= $attr($media['url']) ?>" class="iwac-vis-timeline__image-link" target="_blank" rel="noopener">
