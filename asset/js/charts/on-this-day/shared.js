@@ -337,12 +337,15 @@
     }
 
     /**
-     * The scan, or a catalogue-slip stand-in bearing the source name.
+     * The scan, or a stand-in for an unscanned document.
      *
      * More than half the fully-dated articles have no primary media, so the
-     * image-forward layouts need a fallback with the same footprint. A grey
-     * rectangle reads as a failure; a typographic slip reads as an entry
-     * that simply has not been scanned.
+     * image-forward layouts need a fallback with the same footprint. A bare
+     * grey rectangle reads as a failure. The stand-in used to carry the
+     * source name, but every layout already prints the source in the
+     * metadata line beside it, so the name appeared twice — and a screen
+     * reader announced it twice inside one link. It now carries a decorative
+     * glyph of the document type (newspaper / periodical issue) instead.
      *
      * `className` carries the layout's own sizing — this helper never sets
      * dimensions, so the plate and its stand-in always share a box.
@@ -350,7 +353,8 @@
     function plate(ctx, item, className, size) {
         if (!item.thumb) {
             var slip = P.el('div', className + ' iwac-vis-otd-plate--empty');
-            slip.appendChild(P.el('span', 'iwac-vis-otd-plate__slip', item.source || ''));
+            var glyph = P.icon && P.icon(item.type === 'p' ? 'book-open' : 'newspaper');
+            if (glyph) slip.appendChild(glyph);
             return slip;
         }
         var img = document.createElement('img');

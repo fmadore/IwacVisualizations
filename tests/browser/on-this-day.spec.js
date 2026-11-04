@@ -66,7 +66,7 @@ test('switches are outlined chips, never pills', async ({ page }) => {
     await expect(page.locator('.iwac-vis-otd-body--clippings')).toHaveCount(1);
 });
 
-test('opens on the section rule, without a panel box, and keeps the embed control off it', async ({ page }) => {
+test('opens on the section rule, without a panel box, and puts the embed control in the footer row', async ({ page }) => {
     await page.goto(FIXTURE);
     await expect(page.locator('.iwac-vis-otd-panel')).toBeVisible();
     const box = await page.evaluate(() => {
@@ -83,16 +83,18 @@ test('opens on the section rule, without a panel box, and keeps the embed contro
     expect(box.shadow).toBe('none');
     expect(box.rule).toBe('2px');
 
-    // The copy-embed control closes the block instead of sitting on the rule.
-    const toolbar = page.locator('.iwac-vis-otd-panel > .iwac-vis-panel-toolbar');
-    await expect(toolbar).toHaveCount(1);
-    const geometry = await page.evaluate(() => {
-        const panel = document.querySelector('.iwac-vis-otd-panel');
-        const rule = panel.querySelector(':scope > h2').getBoundingClientRect();
-        const bar = panel.querySelector(':scope > .iwac-vis-panel-toolbar').getBoundingClientRect();
-        return { ruleTop: rule.top, barTop: bar.top, barBottom: bar.bottom, ruleBottom: rule.bottom };
+    // No floating panel toolbar: the copy-embed control sits in the footer
+    // row, beside the see-all toggle, not on the rule or on a line of its own.
+    await expect(page.locator('.iwac-vis-otd-panel > .iwac-vis-panel-toolbar')).toHaveCount(0);
+    const actions = page.locator('.iwac-vis-otd-foot__actions');
+    await expect(actions.locator('.iwac-vis-otd-foot__toggle')).toHaveCount(1);
+    await expect(actions.locator('.iwac-vis-embed-btn')).toHaveCount(1);
+    const rows = await page.evaluate(() => {
+        const a = document.querySelector('.iwac-vis-otd-foot__toggle').getBoundingClientRect();
+        const b = document.querySelector('.iwac-vis-otd-foot__actions .iwac-vis-embed-btn').getBoundingClientRect();
+        return { a: a.top + a.height / 2, b: b.top + b.height / 2 };
     });
-    expect(geometry.barTop).toBeGreaterThan(geometry.ruleBottom);
+    expect(Math.abs(rows.a - rows.b)).toBeLessThanOrEqual(2);
 });
 
 test('the French page loads the French bundle and its switches', async ({ page }) => {

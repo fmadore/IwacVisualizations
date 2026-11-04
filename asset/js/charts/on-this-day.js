@@ -58,10 +58,12 @@
             'otd.view_register':  'Register',
             'otd.view_decades':   'Decades',
             'otd.view_clippings': 'Clippings',
-            'otd.more':       '{count} more items in the collection carry this date.',
-            'otd.more_one':   '{count} more item in the collection carries this date.',
-            'otd.more_other': '{count} more items in the collection carry this date.',
-            'otd.show_all':   'See all {count}',
+            'otd.shown':      '{shown} of the {count} items in the collection that carry this date.',
+            'otd.all_shown':        'The {count} items in the collection that carry this date.',
+            'otd.all_shown_one':    'The only item in the collection that carries this date.',
+            'otd.all_shown_other':  'The {count} items in the collection that carry this date.',
+            'otd.listed':           'All {count} items in the collection that carry this date.',
+            'otd.show_all':   'See all',
             'otd.collapse':   'Close the list',
             'otd.err':        'Couldn’t load today’s items.',
             'otd.retry':      'Try again'
@@ -83,10 +85,12 @@
             'otd.view_register':  'Registre',
             'otd.view_decades':   'Décennies',
             'otd.view_clippings': 'Coupures',
-            'otd.more':       '{count} autres documents de la collection portent cette date.',
-            'otd.more_one':   '{count} autre document de la collection porte cette date.',
-            'otd.more_other': '{count} autres documents de la collection portent cette date.',
-            'otd.show_all':   'Tout voir ({count})',
+            'otd.shown':      '{shown} des {count} documents de la collection qui portent cette date.',
+            'otd.all_shown':        'Les {count} documents de la collection qui portent cette date.',
+            'otd.all_shown_one':    'Le seul document de la collection qui porte cette date.',
+            'otd.all_shown_other':  'Les {count} documents de la collection qui portent cette date.',
+            'otd.listed':           'Les {count} documents de la collection qui portent cette date.',
+            'otd.show_all':   'Tout voir',
             'otd.collapse':   'Fermer la liste',
             'otd.err':        'Impossible de charger les documents du jour.',
             'otd.retry':      'Réessayer'
@@ -194,24 +198,70 @@
         return list;
     }
 
-    function buildFooter(items, shown, ctx, mode) {
-        var rest = items.length - shown;
+    /**
+     * The copy-embed control, placed by the block itself (the template sets
+     * `data-embed-own`, so embed.js adds none). It sits in the footer row
+     * beside the see-all toggle: the panel toolbar's floating corner is this
+     * block's section rule, and moved into the flow it became a lone button
+     * on a line of its own under the whole almanac. Null inside an embed and
+     * wherever embed.js did not load.
+     */
+    function buildEmbedButton(container) {
+        var E = ns.embed;
+        if (!E || !E.makeButton) return null;
+        if (document.body && document.body.classList.contains('iwac-embed-body')) return null;
+        var slug = container.getAttribute('data-embed-slug');
+        if (!slug) return null;
+        var base = container.getAttribute('data-embed-base')
+            || container.getAttribute('data-site-base') || '';
+        return E.makeButton({
+            src: function () { return E.url(base, slug, '', E.stateQuery(container)); },
+            snippetTitle: P.t('otd.title'),
+            height: 720
+        });
+    }
+
+    function buildFooter(container, items, shown, ctx, mode) {
         var foot = P.el('div', 'iwac-vis-otd-foot');
 
-        foot.appendChild(P.el('span', 'iwac-vis-otd-foot__count',
-            rest > 0 ? P.t('otd.more', { count: rest }) : ''));
+        // One figure pair the reader can check at a glance — "6 of the 61"
+        // beside "See all" — rather than "55 more" beside "See all 61",
+        // which made them do the subtraction. With the list open the line
+        // describes the list instead.
+        var all = shown >= items.length;
+        var count = P.el('span', 'iwac-vis-otd-foot__count',
+            all ? P.t('otd.all_shown', { count: items.length })
+                : P.t('otd.shown', { shown: shown, count: items.length }));
+        foot.appendChild(count);
 
+        // Nothing to reveal when the layout already shows the whole day.
+        if (all) {
+            var lone = buildEmbedButton(container);
+            if (lone) {
+                var only = P.el('div', 'iwac-vis-otd-foot__actions');
+                only.appendChild(lone);
+                foot.appendChild(only);
+            }
+            return foot;
+        }
+
+        var actions = P.el('div', 'iwac-vis-otd-foot__actions');
+
+        // The module's quiet outlined control — what a bare <button> renders
+        // as in the theme — not a bare uppercase text link: the block's other
+        // controls are all buttons, and this one was the odd one out.
         var panel = null;
-        var btn = P.el('button', 'iwac-vis-otd-foot__toggle',
-            P.t('otd.show_all', { count: items.length }));
+        var btn = P.el('button', 'iwac-vis-btn iwac-vis-otd-foot__toggle');
         btn.type = 'button';
         btn.setAttribute('aria-expanded', 'false');
+        P.setIcon(btn, 'chevron-down', P.t('otd.show_all'));
         btn.addEventListener('click', function () {
             var open = btn.getAttribute('aria-expanded') === 'true';
             if (open) {
                 if (panel) panel.hidden = true;
                 btn.setAttribute('aria-expanded', 'false');
-                btn.textContent = P.t('otd.show_all', { count: items.length });
+                P.setIcon(btn, 'chevron-down', P.t('otd.show_all'));
+                count.textContent = P.t('otd.shown', { shown: shown, count: items.length });
                 return;
             }
             if (!panel) {
@@ -222,10 +272,15 @@
             }
             panel.hidden = false;
             btn.setAttribute('aria-expanded', 'true');
-            btn.textContent = P.t('otd.collapse');
+            P.setIcon(btn, 'chevron-down', P.t('otd.collapse'));
+            count.textContent = P.t('otd.listed', { count: items.length });
         });
-        foot.appendChild(btn);
+        actions.appendChild(btn);
 
+        var embed = buildEmbedButton(container);
+        if (embed) actions.appendChild(embed);
+
+        foot.appendChild(actions);
         return foot;
     }
 
@@ -337,7 +392,7 @@
             body.innerHTML = '';
             body.className = 'iwac-vis-otd-body iwac-vis-otd-body--' + state.layout;
             layout.render(body, shown, ctx, mode);
-            body.appendChild(buildFooter(items, shown.length, ctx, mode));
+            body.appendChild(buildFooter(container, items, shown.length, ctx, mode));
         }
 
         draw();

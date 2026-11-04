@@ -317,6 +317,9 @@
         // back to data-site-base for safety.
         var siteBase = blockEl.getAttribute('data-embed-base')
             || blockEl.getAttribute('data-site-base') || '';
+        // A block that places its own copy-embed control (On This Day puts it
+        // in its footer row, beside the see-all toggle) gets none from here.
+        if (blockEl.hasAttribute('data-embed-own')) return;
         if (blockEl.hasAttribute('data-embed-whole')) {
             addWholeButton(blockEl, siteBase, slug);
             return;
