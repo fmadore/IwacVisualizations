@@ -13,6 +13,11 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v1.99.0 — the timeline opens on a front page (2026-11-04)
+
+- **The timeline's introduction is laid out as a front page.** The clippings sat as a three-by-three contact sheet beside the introduction, which left the text two lines tall in a column as high as the tallest event: the opening slide still showed an empty half-page. The introduction text now takes one column of the top row, and the clippings tile every other cell of the stage, which they fill to the height of the tallest event. The first clipping leads at twice the size with its headline, and wide tiles show the top of a page, where its masthead is. Each date is set on its clipping as a caption slug. On a phone the text comes first, then the lead clipping and the rest in rows of three. A timeline with four or five images now shows three, and one with seven or eight shows six, so the mosaic never has a hole. (#30)
+- **The timeline's "Copy embed code" button is in its toolbar,** beside the event's link and fullscreen, instead of under the axis and the source list at the foot of the block.
+
 ### v1.98.2 — On This Day: room under the footer buttons (2026-11-04)
 
 - **On This Day: the full-day list no longer touches the footer buttons.** Opened, its first row ran against the bottom edge of the toggle and embed buttons; it now starts a `--space-3` gap below them, the same gap the footer keeps above.
