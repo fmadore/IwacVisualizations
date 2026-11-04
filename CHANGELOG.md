@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.98.2 — On This Day: room under the footer buttons (2026-11-04)
 
 - **On This Day: the full-day list no longer touches the footer buttons.** Opened, its first row ran against the bottom edge of the toggle and embed buttons; it now starts a `--space-3` gap below them, the same gap the footer keeps above.
 
