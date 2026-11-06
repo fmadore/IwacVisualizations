@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+The next release is **2.0.0**, not 1.101.0: the version number restarts its minor count after a hundred milestones. Nothing breaks and nothing needs migrating; 2.0.0 is simply the release after 1.100.0, and every later milestone goes 2.1.0, 2.2.0, and so on.
+
 ### v1.100.0 — embeds that open on their panel (2026-11-06)
 
 - **A single-panel embed shows its panel from the first paint.** A frame such as `/iwac-embed/albani-sermons/albani-overlap-pairs` used to paint the whole block first, then hide everything but the panel, and it told its host page to grow to the whole block's height on the way: 26 833, then 31 169, then 34 458 px before it settled on 605. Every block's frame now stays unpainted until its panel is pinned, showing only its loading state, and sends its host one height, the panel's. When the panel cannot be found (an unknown slug, a block that failed to load) the frame shows the whole block, as before. A frame whose scripts never settle is shown as it is after 30 seconds.
