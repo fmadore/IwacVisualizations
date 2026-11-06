@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v1.100.0 — embeds that open on their panel (2026-11-06)
 
 - **A single-panel embed shows its panel from the first paint.** A frame such as `/iwac-embed/albani-sermons/albani-overlap-pairs` used to paint the whole block first, then hide everything but the panel, and it told its host page to grow to the whole block's height on the way: 26 833, then 31 169, then 34 458 px before it settled on 605. Every block's frame now stays unpainted until its panel is pinned, showing only its loading state, and sends its host one height, the panel's. When the panel cannot be found (an unknown slug, a block that failed to load) the frame shows the whole block, as before. A frame whose scripts never settle is shown as it is after 30 seconds.
 - **Albani Zaria embeds build only the panel's section.** A panel embed of the exhibition builds the one section that holds the panel, from the bundles that section reads: `albani-score` fetches the metadata, the lexicon and the overlap bundle, `albani-corpus-timeline` the metadata alone. Before, it built the header and all eight sections and fetched all ten bundles. Each section declares its panel keys next to the code that builds those panels, and the browser suite fails when a panel and its declaration disagree. An unknown key still builds the whole exhibition.
