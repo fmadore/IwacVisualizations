@@ -23,6 +23,9 @@
     var P = ns.panels;
     var A = ns.albaniSermons;
 
+    /** No panels: prose and sources (A.claimPanels). */
+    A.claimPanels('method', {});
+
     /** The explanations, in reading order: [title key, body key]. */
     var ITEMS = [
         ['albani_method_source', 'albani_method_source_body'],

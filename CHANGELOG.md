@@ -13,6 +13,12 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **A single-panel embed shows its panel from the first paint.** A frame such as `/iwac-embed/albani-sermons/albani-overlap-pairs` used to paint the whole block first, then hide everything but the panel, and it told its host page to grow to the whole block's height on the way: 26 833, then 31 169, then 34 458 px before it settled on 605. Every block's frame now stays unpainted until its panel is pinned, showing only its loading state, and sends its host one height, the panel's. When the panel cannot be found (an unknown slug, a block that failed to load) the frame shows the whole block, as before. A frame whose scripts never settle is shown as it is after 30 seconds.
+- **Albani Zaria embeds build only the panel's section.** A panel embed of the exhibition builds the one section that holds the panel, from the bundles that section reads: `albani-score` fetches the metadata, the lexicon and the overlap bundle, `albani-corpus-timeline` the metadata alone. Before, it built the header and all eight sections and fetched all ten bundles. Each section declares its panel keys next to the code that builds those panels, and the browser suite fails when a panel and its declaration disagree. An unknown key still builds the whole exhibition.
+- **Looking for a panel no longer renders every deferred part of a block.** When a frame's panel waits in a section that renders on view, only the sections that could hold it are rendered now. A section that declares other panels is skipped, and so is a map or word cloud waiting inside its own panel. Before, every deferred section of the block was rendered, with its fetch.
+
 ### v1.99.1 — the timeline opens on a front page (2026-11-04)
 
 v1.99.0 was tagged but never published: a check of the phone toolbar failed on the release build, and this version ships the same changes with that fixed.

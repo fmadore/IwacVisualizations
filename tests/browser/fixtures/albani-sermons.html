@@ -12,6 +12,12 @@
         // IntersectionObserver path), for a check that must see all six
         // sections without scrolling a real viewport through them.
         if (fixtureParams.get('eager')) window.IntersectionObserver = undefined;
+        // ?embed=<panel> stands in for the single-panel embed route: the
+        // embed layout's own sheet (which keeps the block unpainted until its
+        // panel is pinned) and, below, its body classes and height reporter.
+        if (fixtureParams.get('embed')) {
+            document.write('<link rel="stylesheet" href="/asset/css/iwac-embed.min.css">');
+        }
     </script>
     <!-- iwac-core, then the block's own sheet (BlockRegistry: blockCss). -->
     <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
@@ -32,6 +38,12 @@
     </style>
 </head>
 <body>
+    <script>
+        if (fixtureParams.get('embed')) {
+            document.body.className = 'iwac-embed-body iwac-embed-single';
+            document.body.dataset.embedPanel = fixtureParams.get('embed');
+        }
+    </script>
     <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
     <script>
         // The bundles come from files/iwac-visualizations/albani-sermons/.
@@ -87,6 +99,9 @@
     <script src="/asset/js/dist/shared-d3.min.js"></script>
     <script>
         document.write('<script src="/asset/js/dist/blocks/albani-sermons.' + fixtureLang + '.min.js"><\/script>');
+        if (fixtureParams.get('embed')) {
+            document.write('<script src="/asset/js/dist/shared-embed-height.min.js" defer><\/script>');
+        }
     </script>
 </body>
 </html>

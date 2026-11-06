@@ -20,6 +20,13 @@
     var C = ns.chartOptions;
     var A = ns.albaniSermons;
 
+    /** This section's panels (A.claimPanels). */
+    var KEY = A.claimPanels('vocabulary', {
+        formulae: 'albani-formulae',
+        cloud: 'albani-vocab-cloud',
+        list: 'albani-vocab-list'
+    });
+
     var CLOUD_WORDS = 120;
     var LIST_WORDS = 40;
 
@@ -32,7 +39,7 @@
     function formulaLedger(section, metadata, store) {
         var recs = A.recordingOrder(metadata);
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_formulae'),
-            P.t('albani_formulae_desc'), { key: 'albani-formulae' });
+            P.t('albani_formulae_desc'), { key: KEY.formulae });
         panel.chart.classList.add('iwac-vis-albani__list-host');
         section.appendChild(panel.panel);
         var list = P.el('ol', 'iwac-vis-albani__ledger');
@@ -102,10 +109,10 @@
         var cloud = A.chartPanel(grid, P.t('albani_vocab_cloud'), null, function (built) {
             var terms = current().layer.terms || [];
             return C.wordcloud(terms.slice(0, CLOUD_WORDS).map(function (t) { return [t.w, t.n]; }), built.chart);
-        }, { key: 'albani-vocab-cloud', before: [cloudDesc], chartClass: 'iwac-vis-albani__cloud' });
+        }, { key: KEY.cloud, before: [cloudDesc], chartClass: 'iwac-vis-albani__cloud' });
 
         var listPanel = P.buildPanel('iwac-vis-panel', P.t('albani_vocab_list'),
-            P.t('albani_vocab_list_desc'), { key: 'albani-vocab-list' });
+            P.t('albani_vocab_list_desc'), { key: KEY.list });
         listPanel.chart.classList.add('iwac-vis-albani__table-host');
         grid.appendChild(listPanel.panel);
         var table = P.buildTable({

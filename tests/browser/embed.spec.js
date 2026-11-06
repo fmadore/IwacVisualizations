@@ -37,11 +37,11 @@ const laicite = (page) => page.locator('.iwac-vis-fixture');
 test('a panel that renders after the first ones still gets its embed button', async ({ page }) => {
     await page.goto(FIXTURE);
     const buttons = laicite(page).locator('.iwac-vis-panel .iwac-vis-embed-btn');
-    await expect(buttons).toHaveCount(2);
+    await expect(buttons).toHaveCount(3);
 
     // Scrolling the lazy section into view builds its panel.
     await page.locator('.iwac-vis-fixture-lazy').scrollIntoViewIfNeeded();
-    await expect(buttons).toHaveCount(3);
+    await expect(buttons).toHaveCount(4);
     await page.locator('[data-iwac-panel="fixture-keyness"]').getByRole('button', { name: 'Copy embed code' }).click();
     expect(await copied(page)).toContain('/s/iwac/iwac-embed/laicite/fixture-keyness"');
 });
@@ -94,4 +94,36 @@ test('a single-panel embed renders the section its panel waits in', async ({ pag
     await expect(page.locator('.iwac-vis-block-header')).toBeHidden();
     // Its section heading sits beside the panel, not around it.
     await expect(page.locator('.iwac-vis-fixture-lazy > h3')).toBeHidden();
+});
+
+test('a single-panel embed renders only the lazy sections that could hold its panel', async ({ page }) => {
+    // The unnamed section might hold anything; the named one says it holds
+    // `fixture-named` only, so a frame after `fixture-keyness` skips it.
+    await page.goto(`${FIXTURE}?embed=fixture-keyness`);
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('[data-iwac-panel="fixture-keyness"]')).toHaveAttribute('data-iwac-panel-active', '1');
+    expect(await page.evaluate(() => window.__namedRendered)).toBe(false);
+    // Nor a map waiting inside a panel of its own: it builds no other panel.
+    expect(await page.evaluate(() => window.__mapRendered)).toBe(false);
+
+    await page.goto(`${FIXTURE}?embed=fixture-named`);
+    await expect(page.locator('[data-iwac-panel="fixture-named"]')).toHaveAttribute('data-iwac-panel-active', '1');
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+});
+
+test('a single-panel embed is revealed only once its panel is pinned, or found missing', async ({ page }) => {
+    await page.goto(`${FIXTURE}?embed=panel-1`);
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('[data-iwac-panel="panel-1"]')).toHaveAttribute('data-iwac-panel-active', '1');
+
+    // An unknown slug: every section that might hold it rendered, nothing
+    // pinned, the whole block shown as it always was. The section that
+    // names other panels cannot hold it, and waits to be scrolled to like
+    // any section of the block.
+    await page.goto(`${FIXTURE}?embed=no-such-panel`);
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('[data-iwac-panel-active]')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-block-header')).toBeVisible();
+    await expect(page.locator('[data-iwac-panel="fixture-keyness"]')).toHaveCount(1);
+    expect(await page.evaluate(() => window.__namedRendered)).toBe(false);
 });

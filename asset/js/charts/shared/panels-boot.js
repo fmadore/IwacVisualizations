@@ -60,6 +60,26 @@
     }
 
     /**
+     * The panel a single-panel embed asks for (`/iwac-embed/<block>/<panel>`,
+     * stamped on <body> by layout/embed.phtml), or '' anywhere else.
+     *
+     * An orchestrator that can tell which of its parts builds that panel may
+     * build only that part, with its fetches, and skip the rest: the frame
+     * shows one panel, and embed.js hides whatever else is built anyway. One
+     * that cannot builds the whole block, as before; the panel is found and
+     * isolated either way. A key it does not know must fall back to the
+     * whole block too, so a positional slug (`panel-3`) or a stale one still
+     * finds what the full build would have found.
+     *
+     * @returns {string}
+     */
+    P.embedPanel = function () {
+        var body = document.body;
+        if (!body || !body.classList.contains('iwac-embed-single')) return '';
+        return body.getAttribute('data-embed-panel') || '';
+    };
+
+    /**
      * Boot a page block: wait for the DOM (and ECharts), find every matching
      * container, read its data-* attributes, fetch the block's bundle, hand it
      * to `render`, and show the shared error banner when the fetch fails.
@@ -121,7 +141,9 @@
                 container: container,
                 basePath: basePath,
                 siteBase: container.dataset.siteBase || '',
-                dataBase: basePath + P.DATA_BASE
+                dataBase: basePath + P.DATA_BASE,
+                // The one panel a single-panel embed shows (P.embedPanel).
+                embedPanel: P.embedPanel()
             };
             // One attempt, spinner included — also the retry button's whole
             // job. A custom `load` owns its own fetch and may not be

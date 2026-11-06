@@ -17,6 +17,12 @@
     var C = ns.chartOptions;
     var A = ns.albaniSermons;
 
+    /** This section's panels (A.claimPanels). */
+    var KEY = A.claimPanels('corpus', {
+        timeline: 'albani-corpus-timeline',
+        table: 'albani-corpus-table'
+    });
+
     var STATUS_KEY = {
         analysed: 'albani_status_analysed',
         legacy: 'albani_status_legacy_short',
@@ -111,11 +117,11 @@
         A.chartPanel(section, P.t('albani_corpus_timeline'),
             P.t('albani_corpus_timeline_desc', { count: undated }),
             function () { return timelineOption(recordings); },
-            { wide: true, key: 'albani-corpus-timeline', chartClass: 'iwac-vis-albani__timeline' });
+            { wide: true, key: KEY.timeline, chartClass: 'iwac-vis-albani__timeline' });
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('albani_corpus_table'), P.t('albani_corpus_table_desc'),
-            { key: 'albani-corpus-table' });
+            { key: KEY.table });
         panel.chart.classList.add('iwac-vis-albani__table-host');
         section.appendChild(panel.panel);
 

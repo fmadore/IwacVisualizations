@@ -28,6 +28,13 @@
     var P = ns.panels;
     var A = ns.albaniSermons;
 
+    /** This section's panels (A.claimPanels). */
+    var KEY = A.claimPanels('entities', {
+        places: 'albani-places',
+        people: 'albani-people',
+        orgs: 'albani-orgs'
+    });
+
     var SOURCE_ID = 'albani-places';
     var LAYER_ID = 'albani-place-circles';
     var PLACE_GROUPS = ['nigeria', 'holy', 'world'];
@@ -61,7 +68,7 @@
         var state = { view: 'nigeria' };
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_places'),
-            P.t('albani_places_desc'), { key: 'albani-places' });
+            P.t('albani_places_desc'), { key: KEY.places });
         host.appendChild(panel.panel);
         var controls = P.el('div', 'iwac-vis-albani__controls');
         var view = P.buildSegmented({
@@ -297,11 +304,11 @@
             var of = function (type) { return ents.filter(function (e) { return e.type === type; }); };
             placesPanel(host, of('place'), bundle.metadata, store, ctx);
             ledgerPanel(host, {
-                key: 'albani-people', title: 'albani_people', desc: 'albani_people_desc',
+                key: KEY.people, title: 'albani_people', desc: 'albani_people_desc',
                 groups: PERSON_GROUPS, prefix: 'albani_person_group_'
             }, of('person'), bundle.metadata, store, ctx);
             ledgerPanel(host, {
-                key: 'albani-orgs', title: 'albani_orgs', desc: 'albani_orgs_desc',
+                key: KEY.orgs, title: 'albani_orgs', desc: 'albani_orgs_desc',
                 groups: ORG_GROUPS, prefix: 'albani_org_group_'
             }, of('org'), bundle.metadata, store, ctx);
         });

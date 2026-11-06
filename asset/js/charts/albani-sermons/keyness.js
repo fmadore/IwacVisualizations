@@ -21,6 +21,9 @@
     var P = ns.panels;
     var A = ns.albaniSermons;
 
+    /** This section's panels (A.claimPanels). */
+    var KEY = A.claimPanels('keyness', { cards: 'albani-keyness' });
+
     var RECORDING_WORDS = 10;
     var SLICE_WORDS = 18;
     var STEPS = 4;
@@ -101,7 +104,7 @@
             ];
             var state = { facet: 'recording' };
             var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('albani_keyness_cards'), P.t('albani_keyness_cards_desc'), { key: 'albani-keyness' });
+                P.t('albani_keyness_cards'), P.t('albani_keyness_cards_desc'), { key: KEY.cards });
             panel.chart.classList.add('iwac-vis-albani__list-host');
             host.appendChild(panel.panel);
 

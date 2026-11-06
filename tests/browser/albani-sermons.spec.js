@@ -225,3 +225,106 @@ test('the French site reads French', async ({ page }) => {
     await expect(page.locator('[data-iwac-section="youth"] .iwac-vis-section-heading')).toHaveText('La jeunesse');
     expect(problems).toEqual([]);
 });
+
+/* --------------------------------------------------------------------- */
+/*  The single-panel embed: only the panel's section, only its bundles    */
+/* --------------------------------------------------------------------- */
+
+test('every panel the page builds is claimed by the section that builds it', async ({ page }) => {
+    // The single-panel embed builds the section a key is claimed by; a panel
+    // added without a claim would embed as the whole exhibition, and a
+    // claim no panel answers would embed as one empty section.
+    await ready(page);
+    await expect(page.locator('[data-iwac-section="entities"] [data-iwac-panel="albani-orgs"]')).toHaveCount(1);
+    const { built, claimed } = await page.evaluate(() => {
+        const out = {};
+        document.querySelectorAll('.iwac-vis-albani__section').forEach((section) => {
+            out[section.getAttribute('data-iwac-section')] = Array.from(
+                section.querySelectorAll('.iwac-vis-panel[data-iwac-panel]'),
+                (p) => p.getAttribute('data-iwac-panel')).sort();
+        });
+        const panels = window.IWACVis.albaniSermons.PANELS;
+        const keys = {};
+        Object.keys(panels).forEach((s) => { keys[s] = Object.values(panels[s]).sort(); });
+        return { built: out, claimed: keys };
+    });
+    expect(built).toEqual(claimed);
+    // Nothing outside a section is a panel the embed could be asked for.
+    await expect(page.locator('.iwac-vis-albani__root > .iwac-vis-panel')).toHaveCount(0);
+});
+
+const SINGLE = [
+    { key: 'albani-score', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
+    { key: 'albani-overlap-pairs', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
+    { key: 'albani-youth-kwic', section: 'youth',
+        bundles: ['collocates.json', 'concordance-youth.json', 'lexicon.json', 'metadata.json', 'network.json'] },
+    { key: 'albani-places', section: 'entities', bundles: ['entities.json', 'metadata.json'] },
+    { key: 'albani-people', section: 'entities', bundles: ['entities.json', 'metadata.json'] },
+    { key: 'albani-corpus-timeline', section: 'corpus', bundles: ['metadata.json'] },
+];
+
+for (const { key, section, bundles } of SINGLE) {
+    test(`the ${key} embed builds its own section alone, from its own bundles`, async ({ page }) => {
+        const problems = watch(page);
+        // No ?eager: a frame showing one panel never scrolls to its section.
+        await page.goto(`${FIXTURE}?embed=${key}`);
+        await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+        const target = page.locator(`[data-iwac-panel="${key}"]`);
+        await expect(target).toHaveAttribute('data-iwac-panel-active', '1');
+        await expect(target).toBeVisible();
+        await expect(page.locator('.iwac-vis-panel:visible')).toHaveCount(1);
+        const sections = await page.locator('.iwac-vis-albani__section').evaluateAll(
+            (els) => els.map((el) => el.getAttribute('data-iwac-section')));
+        expect(sections).toEqual([section]);
+        await expect(page.locator('.iwac-vis-albani__header')).toHaveCount(0);
+        await expect(page.locator('.iwac-vis-albani__section .iwac-vis-section-heading')).toBeHidden();
+        const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()).sort());
+        expect(fetched).toEqual(bundles);
+        expect(problems).toEqual([]);
+    });
+}
+
+test('a frame keeps the block unpainted until its panel is pinned', async ({ page }) => {
+    // Hold the section's bundle back: the frame has its section, its
+    // spinner, and nothing else to show.
+    let release;
+    const held = new Promise((resolve) => { release = resolve; });
+    await page.route('**/albani-sermons/overlap.json*', async (route) => {
+        await held;
+        await route.continue();
+    });
+    await page.goto(`${FIXTURE}?embed=albani-overlap-pairs`);
+    await expect(page.locator('[data-iwac-section="overlap"]')).toHaveCount(1);
+    await expect(page.locator('body')).not.toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('.iwac-vis-albani')).toHaveCSS('visibility', 'hidden');
+    await expect(page.locator('[data-iwac-section="overlap"] .iwac-vis-section-heading')).toBeHidden();
+    // Its loading state is the one thing that shows.
+    await expect(page.locator('[data-iwac-section="overlap"] .iwac-vis-loading')).toBeVisible();
+
+    release();
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('.iwac-vis-albani')).toHaveCSS('visibility', 'visible');
+    await expect(page.locator('[data-iwac-panel="albani-overlap-pairs"]')).toBeVisible();
+});
+
+test('a framed panel tells its host one height, the panel’s', async ({ page }) => {
+    const src = encodeURIComponent(`${FIXTURE}?embed=albani-overlap-pairs`);
+    await page.goto(`/tests/browser/fixtures/embed-host.html?src=${src}`);
+    const frame = page.frameLocator('#frame');
+    await expect(frame.locator('[data-iwac-panel="albani-overlap-pairs"]')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__heights.length)).toBeGreaterThan(0);
+    const heights = await page.evaluate(() => window.__heights);
+    // The whole exhibition is tens of thousands of pixels; the panel is not.
+    expect(Math.max(...heights)).toBeLessThan(1500);
+    const panelHeight = await frame.locator('[data-iwac-panel="albani-overlap-pairs"]')
+        .evaluate((el) => el.getBoundingClientRect().height);
+    expect(heights[0]).toBeGreaterThanOrEqual(Math.floor(panelHeight));
+});
+
+test('a panel key no section claims frames the whole exhibition', async ({ page }) => {
+    await page.goto(`${FIXTURE}?embed=albani-no-such-panel`);
+    await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(8);
+    await expect(page.locator('.iwac-vis-albani__header')).toBeVisible();
+    await expect(page.locator('[data-iwac-panel-active]')).toHaveCount(0);
+});

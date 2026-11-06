@@ -387,9 +387,10 @@
     }
 
     /**
-     * Single-panel embed: keep only the requested panel, full-bleed. The
-     * orchestrator builds the whole block (we have no per-orchestrator hook to
-     * build one panel), so we prune the rest here. Everything else is
+     * Single-panel embed: keep only the requested panel, full-bleed. An
+     * orchestrator may build only the part that holds it (`ctx.embedPanel`,
+     * P.embedPanel); most build the whole block, so we prune the rest
+     * here either way. Everything else is
      * hidden (not removed) so ECharts/MapLibre instances are never
      * disposed mid-flight. Unknown slug → leave the whole block intact and
      * return false.
@@ -440,28 +441,76 @@
     }
 
     /**
+     * Show a single-panel frame: the pinned panel, or the whole block when
+     * the panel is not to be found.
+     *
+     * Until then iwac-embed.css keeps the block invisible (laid out, so its
+     * charts measure, but not painted) and iwac-embed-height.js holds its
+     * height messages. A frame used to paint the whole block first and hide
+     * the rest afterwards: `/iwac-embed/albani-sermons/albani-overlap-pairs`
+     * showed the exhibition's masthead and every section, and told its host
+     * to grow to 26 833, then 31 169, then 34 458 px before settling on 605.
+     */
+    function reveal() {
+        var body = document.body;
+        if (body && !body.classList.contains('iwac-embed-ready')) body.classList.add('iwac-embed-ready');
+    }
+    E.reveal = reveal;
+
+    var LOADING = '.iwac-vis-loading';
+
+    /**
+     * Whether something in the block is still on its way: a loading state
+     * that is not a placeholder in a section waiting to be seen (Albani's
+     * sections show theirs from the start, and those never resolve in a
+     * frame unless something renders them).
+     */
+    function busy(blockEl) {
+        var P = ns.panels;
+        var parked = P && P.lazyTargets ? P.lazyTargets(blockEl) : [];
+        var states = blockEl.querySelectorAll(LOADING);
+        for (var i = 0; i < states.length; i++) {
+            var inParked = false;
+            for (var k = 0; k < parked.length; k++) {
+                if (parked[k].contains(states[i])) { inParked = true; break; }
+            }
+            if (!inParked) return true;
+        }
+        return false;
+    }
+
+    /**
      * Single-panel embed: pin the requested panel as soon as it exists.
      *
      * It may not exist when the first panels do. It may sit in a section
-     * that renders on view (`P.lazyInit` — eleven of Albani Zaria's twenty
-     * panels), and nothing in a frame scrolls there; or a fetch may still
-     * be building it. So each time the block settles without it, whatever
-     * is still waiting to be seen is rendered now (`P.flushLazy`), and the
-     * next settle looks again. Once pinned, the same pass keeps the panel
-     * alone as late content lands beside it. An unknown slug leaves the
-     * whole block, as it always has.
+     * that renders on view (`P.lazyInit`), and nothing in a frame scrolls
+     * there; or a fetch may still be building it. So each time the block
+     * settles without it, the sections still waiting to be seen that could
+     * hold it are rendered now (`P.flushLazy(block, slug)` — a section that
+     * names its panels and not this one keeps its fetch), and the next
+     * settle looks again. Once pinned, the same pass keeps the panel alone
+     * as late content lands beside it.
+     *
+     * The frame is revealed when the panel is pinned, or when it cannot be:
+     * a block with no panels to pin (`data-embed-whole`), or a settle with
+     * nothing left to render and nothing loading — a block that failed to
+     * load, or an unknown slug, which leaves the whole block as it always
+     * has. The watch goes on, so a panel that lands even later is still
+     * pinned.
      */
     function pinWhenReady(blockEl, slug) {
         var pinned = null;
         watchBlock(blockEl, function () {
             if (pinned) { isolate(blockEl, pinned); return; }
-            if (!blockEl.querySelector('.iwac-vis-panel')) return;
-            if (E.selectPanel(blockEl, slug)) {
+            if (blockEl.hasAttribute('data-embed-whole')) { reveal(); return; }
+            if (blockEl.querySelector('.iwac-vis-panel') && E.selectPanel(blockEl, slug)) {
                 pinned = blockEl.querySelector('[data-iwac-panel-active]');
+                reveal();
                 return;
             }
             var P = ns.panels;
-            if (P && P.flushLazy) P.flushLazy(blockEl);
+            var fired = P && P.flushLazy ? P.flushLazy(blockEl, slug) : 0;
+            if (!fired && !busy(blockEl)) reveal();
         });
     }
 
@@ -474,6 +523,7 @@
                 var pslug = body.getAttribute('data-embed-panel') || '';
                 var block = document.querySelector('.iwac-vis-block');
                 if (pslug && block) pinWhenReady(block, pslug);
+                else reveal(); // nothing to pin: show what there is
             }
             return; // never add on-page copy buttons inside an embed
         }

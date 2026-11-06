@@ -45,6 +45,20 @@
         .iwac-embed-source a { color: var(--ink-light, #3f4349); text-decoration: none; }
         .iwac-embed-source a:hover { color: var(--primary, #ce4115); text-decoration: underline; }
 
+        /* A single-panel frame stays unpainted until embed.js has pinned its
+           panel, or fallen back to the whole block, and marked the body
+           ready. `visibility`, not `display`: the block is still laid out,
+           so the charts it builds meanwhile measure their real size. Only
+           its loading states show, so the frame reads as loading rather
+           than blank; iwac-embed-height.js holds its messages meanwhile. */
+        body.iwac-embed-single:not(.iwac-embed-ready) .iwac-vis-block,
+        body.iwac-embed-single:not(.iwac-embed-ready) .iwac-embed-source {
+            visibility: hidden;
+        }
+        body.iwac-embed-single:not(.iwac-embed-ready) .iwac-vis-block .iwac-vis-loading {
+            visibility: visible;
+        }
+
 
 /* ===================================================================
  *  Brand-accent override

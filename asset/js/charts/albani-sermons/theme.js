@@ -24,6 +24,21 @@
     var C = ns.chartOptions;
     var A = ns.albaniSermons;
 
+    /**
+     * The panels of the two sections this module builds, youth and
+     * politics (A.claimPanels).
+     */
+    var KEY = {};
+    ['youth', 'politics'].forEach(function (theme) {
+        KEY[theme] = A.claimPanels(theme, {
+            lexicon: 'albani-' + theme + '-lexicon',
+            profile: 'albani-' + theme + '-profile',
+            collocates: 'albani-' + theme + '-collocates',
+            network: 'albani-' + theme + '-network',
+            kwic: 'albani-' + theme + '-kwic'
+        });
+    });
+
     var MIN_NETWORK_HITS = 5;
 
     /* ----------------------------------------------------------------- */
@@ -33,7 +48,7 @@
     function lexiconPanel(section, theme, lexicon, store) {
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('albani_lexicon_table'), P.t('albani_lexicon_table_desc'),
-            { key: 'albani-' + theme + '-lexicon' });
+            { key: KEY[theme].lexicon });
         panel.chart.classList.add('iwac-vis-albani__table-host');
         section.appendChild(panel.panel);
         var entries = (lexicon.entries || []).filter(function (e) { return e.theme === theme; });
@@ -166,7 +181,7 @@
                 option.visualMap.seriesIndex = 0;
                 option.series.push(A.emptyCellSeries(P.t('albani_score_none'), empty));
                 return option;
-            }, { wide: true, key: 'albani-' + theme + '-profile', chartClass: 'iwac-vis-albani__matrix' });
+            }, { wide: true, key: KEY[theme].profile, chartClass: 'iwac-vis-albani__matrix' });
         store.subscribe(panel.redraw, { keys: ['scope'] });
     }
 
@@ -214,7 +229,7 @@
                         return line;
                     }
                 });
-            }, { wide: true, key: 'albani-' + theme + '-collocates', before: [picker, empty],
+            }, { wide: true, key: KEY[theme].collocates, before: [picker, empty],
                  chartClass: 'iwac-vis-albani__scatter' });
         store.subscribe(panel.redraw, { keys: A.GLOSS_KEYS });
     }
@@ -243,7 +258,7 @@
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_network'),
             P.t('albani_network_desc', { min: MIN_NETWORK_HITS, window: network.window || collocates.window }),
-            { key: 'albani-' + theme + '-network' });
+            { key: KEY[theme].network });
         host.appendChild(panel.panel);
 
         function graphFor(scope) {
@@ -331,7 +346,7 @@
         var desc = P.t('albani_kwic_desc');
         if (withheld) desc += ' ' + P.t('albani_kwic_withheld', { count: withheld });
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_kwic'), desc,
-            { key: 'albani-' + theme + '-kwic' });
+            { key: KEY[theme].kwic });
         host.appendChild(panel.panel);
 
         var state = { term: '', query: '' };

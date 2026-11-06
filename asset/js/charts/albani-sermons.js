@@ -30,6 +30,14 @@
  * only), lives in a P.createStore and is URL-addressable; every section
  * subscribes to it.
  *
+ * A single-panel embed (`/iwac-embed/albani-sermons/albani-score`) builds
+ * the one section that holds its panel, from the bundles that section
+ * reads, and renders its deferred part at once: no header, no other
+ * section, no other fetch. Each section module claims its panel keys
+ * (A.claimPanels), which is how the key finds its section; a key no
+ * section claims builds the whole exhibition, and embed.js finds what it
+ * can in it, as before.
+ *
  * Dependencies (in load order before this file): the block bundle in
  * asset/js/bundles.json — albani-sermons/{i18n,helpers,corpus,vocabulary,
  * theme,overlap,keyness,method}.js.
@@ -48,6 +56,48 @@
     /** The recording the politics caveat is about: Demokuradiyyah. */
     var DEMOCRACY_RECORDING = '15850';
 
+    /**
+     * The sections in page order: the block-level bundles each reads
+     * beyond metadata.json (which every one does), and how to build it.
+     * Each fetches its own deferred bundles itself (A.lazy).
+     */
+    var SECTIONS = [
+        { key: 'corpus', heading: 'albani_corpus_heading', needs: [],
+            build: function (s, b, store, fetch, ctx) { A.renderCorpus(s, b.metadata, ctx); } },
+        { key: 'vocabulary', heading: 'albani_vocab_heading', intro: 'albani_vocab_intro', needs: ['vocabulary'],
+            build: function (s, b, store) { A.renderVocabulary(s, b.vocabulary, store, b.metadata); } },
+        { key: 'entities', heading: 'albani_entities_heading', intro: 'albani_entities_intro', needs: [],
+            build: function (s, b, store, fetch, ctx) { A.renderEntities(s, b, store, fetch, ctx); } },
+        { key: 'youth', heading: 'albani_youth_heading', intro: 'albani_youth_intro', needs: ['lexicon'],
+            build: function (s, b, store, fetch, ctx) { A.renderTheme(s, 'youth', b, store, fetch, ctx); } },
+        { key: 'politics', heading: 'albani_politics_heading', intro: 'albani_politics_intro', needs: ['lexicon'],
+            build: function (s, b, store, fetch, ctx) {
+                // The caveat names Demokuradiyyah (15850), so it waits on that
+                // recording alone, not on any re-transcription in progress.
+                if ((b.metadata.recordings || []).some(function (r) {
+                    return r.o === DEMOCRACY_RECORDING && r.st !== 'analysed';
+                })) {
+                    s.appendChild(A.note(P.t('albani_politics_caveat'), 'iwac-vis-albani__caveat'));
+                }
+                A.renderTheme(s, 'politics', b, store, fetch, ctx);
+            } },
+        { key: 'overlap', heading: 'albani_overlap_heading', intro: 'albani_overlap_intro', needs: ['lexicon'],
+            build: function (s, b, store, fetch, ctx) { A.renderOverlap(s, b, store, fetch, ctx); } },
+        { key: 'keyness', heading: 'albani_keyness_heading', intro: 'albani_keyness_intro', needs: [],
+            build: function (s, b, store, fetch, ctx) { A.renderKeyness(s, b, fetch, ctx); } },
+        { key: 'method', heading: 'albani_method', intro: 'albani_method_lead', needs: [],
+            build: function (s, b) { A.renderMethod(s, b.metadata); } }
+    ];
+
+    /** The section a single-panel embed needs, or null for the whole block. */
+    function onlySection(ctx) {
+        var key = A.sectionOf(ctx.embedPanel);
+        for (var i = 0; i < SECTIONS.length; i++) {
+            if (SECTIONS[i].key === key) return SECTIONS[i];
+        }
+        return null;
+    }
+
     P.bootBlock({
         selector:       '.iwac-vis-albani',
         warnLabel:      'IWACVis.albaniSermons',
@@ -55,18 +105,19 @@
         load: function (ctx) {
             var fetch = A.fetcher(ctx);
             ctx.fetchBundle = fetch;
-            return Promise.all([
-                fetch('metadata.json'),
-                fetch('lexicon.json'),
-                fetch('vocabulary.json')
-            ]);
+            var only = onlySection(ctx);
+            var names = ['metadata', 'lexicon', 'vocabulary'].filter(function (name) {
+                return name === 'metadata' || !only || only.needs.indexOf(name) !== -1;
+            });
+            return Promise.all(names.map(function (name) { return fetch(name + '.json'); }))
+                .then(function (results) {
+                    var bundle = {};
+                    names.forEach(function (name, i) { bundle[name] = results[i]; });
+                    return bundle;
+                });
         },
-        render: function (container, results, ctx) {
-            render(container, {
-                metadata: results[0],
-                lexicon: results[1],
-                vocabulary: results[2]
-            }, ctx);
+        render: function (container, bundle, ctx) {
+            render(container, bundle, ctx);
         }
     });
 
@@ -156,7 +207,7 @@
     }
 
     function render(container, bundle, ctx) {
-        var metadata = bundle.metadata || {};
+        var metadata = bundle.metadata = bundle.metadata || {};
         var params = metadata.params || {};
         var fetch = ctx.fetchBundle || A.fetcher(ctx);
         ctx.siteBase = container.dataset.siteBase || container.dataset.embedBase || ctx.siteBase || '';
@@ -181,35 +232,29 @@
         var root = P.el('div', 'iwac-vis-albani__root');
         container.appendChild(root);
 
-        header(root, metadata, store);
-
-        A.renderCorpus(A.section(root, 'corpus', P.t('albani_corpus_heading')), metadata, ctx);
-        A.renderVocabulary(A.section(root, 'vocabulary', P.t('albani_vocab_heading'),
-            P.t('albani_vocab_intro')), bundle.vocabulary, store, bundle.metadata);
-        A.renderEntities(A.section(root, 'entities', P.t('albani_entities_heading'),
-            P.t('albani_entities_intro')), bundle, store, fetch, ctx);
-
-        A.renderTheme(A.section(root, 'youth', P.t('albani_youth_heading'), P.t('albani_youth_intro')),
-            'youth', bundle, store, fetch, ctx);
-
-        var politics = A.section(root, 'politics', P.t('albani_politics_heading'), P.t('albani_politics_intro'));
-        // The caveat names Demokuradiyyah (15850), so it waits on that
-        // recording alone, not on any re-transcription in progress.
-        if ((metadata.recordings || []).some(function (r) { return r.o === DEMOCRACY_RECORDING && r.st !== 'analysed'; })) {
-            politics.appendChild(A.note(P.t('albani_politics_caveat'), 'iwac-vis-albani__caveat'));
+        function section(def) {
+            var s = A.section(root, def.key, P.t(def.heading),
+                def.intro ? P.t(def.intro, { window: params.overlap_window || 10 }) : '');
+            def.build(s, bundle, store, fetch, ctx);
+            return s;
         }
-        A.renderTheme(politics, 'politics', bundle, store, fetch, ctx);
 
-        A.renderOverlap(A.section(root, 'overlap', P.t('albani_overlap_heading'),
-            P.t('albani_overlap_intro', { window: params.overlap_window || 10 })), bundle, store, fetch, ctx);
-        A.renderKeyness(A.section(root, 'keyness', P.t('albani_keyness_heading'),
-            P.t('albani_keyness_intro')), bundle, fetch, ctx);
+        // A single-panel embed: its section alone, its deferred part
+        // rendered now — nothing in a frame scrolls it into view. The scope
+        // and translation switches live in the header it skips; the URL
+        // still sets both.
+        var only = onlySection(ctx);
+        if (only) {
+            P.flushLazy(section(only));
+            return;
+        }
 
-        var method = A.section(root, 'method', P.t('albani_method'), P.t('albani_method_lead'));
-        A.renderMethod(method, metadata);
-        // The header's jump link, now that the section has its id.
+        header(root, metadata, store);
+        SECTIONS.forEach(section);
+
+        // The header's jump link, now that the method section has its id.
         var jump = root.querySelector('.iwac-vis-albani__jump');
-        var heading = method.querySelector('.iwac-vis-section-heading');
+        var heading = root.querySelector('[data-iwac-section="method"] > .iwac-vis-section-heading');
         if (jump && heading) jump.href = '#' + heading.id;
 
         // The contents: one link per section, in page order.

@@ -28,6 +28,14 @@
     var C = ns.chartOptions;
     var A = ns.albaniSermons;
 
+    /** This section's panels (A.claimPanels). */
+    var KEY = A.claimPanels('overlap', {
+        score: 'albani-score',
+        pairs: 'albani-overlap-pairs',
+        words: 'albani-overlap-words',
+        segments: 'albani-overlap-segments'
+    });
+
     var TOP_TERMS = 15;
 
     /**
@@ -187,7 +195,7 @@
             return scoreOption(rows, payload.grid || [], measure, scope, built.chart);
         }, {
             wide: true,
-            key: 'albani-score',
+            key: KEY.score,
             before: [controls],
             chartClass: 'iwac-vis-albani__score',
             onClick: function (p) {
@@ -302,7 +310,7 @@
                     var built2 = pairsOption(list, byId);
                     A.matrixHeight(built.chart, built2.rows, 30, 150);
                     return built2.option;
-                }, { wide: true, key: 'albani-overlap-pairs', chartClass: 'iwac-vis-albani__matrix' });
+                }, { wide: true, key: KEY.pairs, chartClass: 'iwac-vis-albani__matrix' });
 
             var words = A.chartPanel(host, P.t('albani_overlap_words'), P.t('albani_overlap_words_desc'),
                 function () {
@@ -316,10 +324,10 @@
                                 count: term.n, segments: P.formatNumber(term.s), recordings: P.formatNumber(term.r) });
                         }
                     });
-                }, { wide: true, key: 'albani-overlap-words', chartClass: 'iwac-vis-albani__scatter' });
+                }, { wide: true, key: KEY.words, chartClass: 'iwac-vis-albani__scatter' });
 
             var listPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('albani_overlap_segments'), '', { key: 'albani-overlap-segments' });
+                P.t('albani_overlap_segments'), '', { key: KEY.segments });
             var listDesc = listPanel.panel.querySelector('.iwac-vis-panel-desc')
                 || P.el('p', 'iwac-vis-panel-desc');
             listPanel.panel.insertBefore(listDesc, listPanel.chart);

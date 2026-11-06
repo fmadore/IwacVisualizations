@@ -336,7 +336,13 @@
      *
      * @param {Element}  target  element to observe
      * @param {Function} render  called exactly once
-     * @param {Object}   [opts]  { rootMargin: '200px' }
+     * @param {Object}   [opts]  { rootMargin: '200px', panels: ['key', …] }
+     *                           `panels` names the panel keys `render`
+     *                           builds, so a single-panel embed that is
+     *                           looking for one panel renders only the
+     *                           section that can hold it (P.flushLazy).
+     *                           Undeclared, the section is assumed to
+     *                           hold any of them.
      * @returns {Function} trigger — call to force the render immediately
      *                     (still one-shot)
      */
@@ -372,10 +378,26 @@
         // A view that was switched away from takes its unseen sections out
         // of the page; don't keep them alive here.
         waiting = waiting.filter(function (w) { return w.target.isConnected !== false; });
-        entry = { target: target, fire: fire };
+        entry = { target: target, fire: fire, panels: (opts && opts.panels) || null };
         waiting.push(entry);
         return fire;
     };
+
+    /**
+     * Whether a waiting section could build the panel `key`: it says so, or
+     * says nothing. A target that is itself a panel (a map or a word cloud
+     * that fetches its data on view) fills that panel and builds no other,
+     * so it cannot hold a panel that has not been found.
+     */
+    function couldHold(entry, key) {
+        if (!key) return true;
+        if (entry.panels) return entry.panels.indexOf(key) !== -1;
+        return !(entry.target.classList && entry.target.classList.contains('iwac-vis-panel'));
+    }
+
+    function inside(root, el) {
+        return !root || (root.contains && root.contains(el));
+    }
 
     /**
      * Render now every section inside `root` that is still waiting to be
@@ -384,12 +406,38 @@
      * one panel, the section that would build it never scrolls into view.
      * Each render still runs once.
      *
+     * With `key`, only the sections that could build that panel: those that
+     * declared it in `lazyInit`'s `panels`, and those that declared nothing
+     * and are not a panel already. A section that names its panels and not
+     * this one is left alone, with its fetch, and so is a map waiting inside
+     * a panel of its own — rendering every section of a block to find one
+     * panel fetched every bundle the block has.
+     *
      * @param {Element} [root]  only targets inside it; every one without
+     * @param {string}  [key]   only sections that could hold this panel
+     * @returns {number} how many sections were rendered
      */
-    P.flushLazy = function (root) {
+    P.flushLazy = function (root, key) {
+        var fired = 0;
         waiting.slice().forEach(function (w) {
-            if (!root || (root.contains && root.contains(w.target))) w.fire();
+            if (inside(root, w.target) && couldHold(w, key)) {
+                w.fire();
+                fired++;
+            }
         });
+        return fired;
+    };
+
+    /**
+     * The targets inside `root` still waiting to be seen. A loading state
+     * inside one of them is a placeholder, not a fetch in flight.
+     *
+     * @param {Element} [root]
+     * @returns {Element[]}
+     */
+    P.lazyTargets = function (root) {
+        return waiting.filter(function (w) { return inside(root, w.target); })
+            .map(function (w) { return w.target; });
     };
 
     /* ----------------------------------------------------------------- */

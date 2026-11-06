@@ -92,12 +92,61 @@
     };
 
     /**
+     * The panel keys each section builds: section key → { name: panel key }.
+     *
+     * Each section module claims its keys at the top of its file and builds
+     * its panels from the same object, so the map and the panels cannot
+     * name different keys. The orchestrator reads it to build only the
+     * section a single-panel embed needs (`A.sectionOf`), and the browser
+     * suite checks the full page against it, so a panel added without a
+     * claim fails there rather than embedding the whole block.
+     */
+    A.PANELS = {};
+
+    /**
+     * Claim `keys` for `section` and hand them back, for the section to
+     * build its panels from.
+     *
+     * @param {string} section  the section's `data-iwac-section` key
+     * @param {Object<string, string>} keys  name → panel key
+     * @returns {Object<string, string>} `keys`
+     */
+    A.claimPanels = function (section, keys) {
+        A.PANELS[section] = keys;
+        return keys;
+    };
+
+    /** The section that builds panel `key`, or null for a key none claims. */
+    A.sectionOf = function (key) {
+        if (!key) return null;
+        for (var section in A.PANELS) {
+            if (!Object.prototype.hasOwnProperty.call(A.PANELS, section)) continue;
+            var keys = A.PANELS[section];
+            for (var name in keys) {
+                if (Object.prototype.hasOwnProperty.call(keys, name) && keys[name] === key) return section;
+            }
+        }
+        return null;
+    };
+
+    /** Every panel key a section claims, as a list. */
+    function panelsOf(section) {
+        var keys = A.PANELS[section] || {};
+        return Object.keys(keys).map(function (name) { return keys[name]; });
+    }
+
+    /**
      * Fetch a section's bundles when it nears the viewport, then build it.
      * A failed fetch shows the shared error state in that section only.
+     *
+     * The section's claimed panels go to `P.lazyInit`, so a single-panel
+     * embed renders this part only when it is looking for one of them.
      */
     A.lazy = function (host, load, build) {
         var spinner = P.buildLoadingState();
         host.appendChild(spinner);
+        var section = host.closest ? host.closest('[data-iwac-section]') : null;
+        var key = section ? section.getAttribute('data-iwac-section') : '';
         P.lazyInit(host, function () {
             Promise.resolve()
                 .then(load)
@@ -110,7 +159,7 @@
                     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
                     host.appendChild(P.buildFetchErrorState(err));
                 });
-        });
+        }, A.PANELS[key] ? { panels: panelsOf(key) } : undefined);
     };
 
     /** One exhibition section: heading, curatorial lead, then its panels. */

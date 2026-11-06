@@ -38,8 +38,17 @@
                     <div class="iwac-vis-chart">Chart placeholder</div>
                 </article>
             </div>
+            <!-- A map that fetches its data when its own panel is seen. -->
+            <article class="iwac-vis-panel iwac-vis-fixture-map" data-iwac-panel="fixture-map"
+                     style="margin-top: 4000px">
+                <h4>Places</h4>
+                <div class="iwac-vis-chart">Map placeholder</div>
+            </article>
             <section class="iwac-vis-fixture-lazy" style="margin-top: 4000px">
                 <h3>Signature words</h3>
+            </section>
+            <section class="iwac-vis-fixture-named" style="margin-top: 4000px">
+                <h3>A section that names its panels</h3>
             </section>
         </section>
 
@@ -66,6 +75,22 @@
             panel.innerHTML = '<h4>Signature words by recording</h4><div class="iwac-vis-chart">Chart placeholder</div>';
             lazyHost.appendChild(panel);
         });
+        window.__mapRendered = false;
+        IWACVis.panels.lazyInit(document.querySelector('.iwac-vis-fixture-map'), function () {
+            window.__mapRendered = true;
+        });
+        // A lazy section that names the panels it builds: a frame looking
+        // for another panel leaves it, and its fetch, alone.
+        window.__namedRendered = false;
+        const namedHost = document.querySelector('.iwac-vis-fixture-named');
+        IWACVis.panels.lazyInit(namedHost, function () {
+            window.__namedRendered = true;
+            const panel = document.createElement('article');
+            panel.className = 'iwac-vis-panel';
+            panel.setAttribute('data-iwac-panel', 'fixture-named');
+            panel.innerHTML = '<h4>A named panel</h4><div class="iwac-vis-chart">Chart placeholder</div>';
+            namedHost.appendChild(panel);
+        }, { panels: ['fixture-named'] });
     </script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC embed host fixture</title>
+</head>
+<body>
+    <!-- A third-party page framing one embed, as the copied snippet does:
+         ?src=<fixture URL> is the frame, and every height message it posts
+         is recorded in window.__heights, in order, before being applied. -->
+    <iframe id="frame" title="Embedded visualisation" scrolling="no"
+            style="width: 960px; border: 0; height: 520px"></iframe>
+    <script>
+        window.__heights = [];
+        const frame = document.getElementById('frame');
+        window.addEventListener('message', function (e) {
+            if (!e.data || e.data.type !== 'iwac-embed-height' || e.source !== frame.contentWindow) return;
+            window.__heights.push(e.data.height);
+            frame.style.height = e.data.height + 'px';
+        });
+        frame.src = new URLSearchParams(location.search).get('src') || 'about:blank';
+    </script>
+</body>
+</html>
