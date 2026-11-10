@@ -26,6 +26,8 @@
     /*  the block, which the CSS flips to a lighter shade in dark mode.   */
     /*  Read that custom property off the live block element so the       */
     /*  ECharts / MapLibre series match the CSS swatches in BOTH themes   */
+    /*  — which holds only while callers read it at paint time (inside a  */
+    /*  registerChart callback or onStyleReady), never once per build     */
     /*  (previously colorB was a hardcoded '#394f68' literal repeated in  */
     /*  five panels, so the charts stayed dark-blue in dark mode while    */
     /*  the CSS legend dots went light — a mismatch). Falls back to the   */

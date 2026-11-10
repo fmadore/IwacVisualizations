@@ -280,28 +280,6 @@ def compute_country_distribution(
     return out
 
 
-def compute_language_distribution(
-    dataframes: Dict[str, pd.DataFrame],
-    top_n: int,
-) -> List[Dict[str, int]]:
-    """Content counts per language, top N."""
-    counter: Counter = Counter()
-    for subset in CONTENT_SUBSETS + ["publications"]:
-        # publications already in CONTENT_SUBSETS; this is a no-op guard
-        # in case the list changes.
-        df = dataframes.get(subset)
-        if df is None or df.empty or "language" not in df.columns:
-            continue
-        for value in df["language"]:
-            for lang in parse_pipe_separated(value):
-                if lang:
-                    counter[lang] += 1
-    return [
-        {"name": name, "count": int(count)}
-        for name, count in counter.most_common(top_n)
-    ]
-
-
 def compute_languages_faceted(
     dataframes: Dict[str, pd.DataFrame],
     top_n: int,

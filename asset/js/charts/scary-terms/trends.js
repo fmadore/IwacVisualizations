@@ -45,16 +45,6 @@
         return series;
     };
 
-    /** Filter the curated events to those visible for the active country
-     *  scope. Delegates to the shared implementation. */
-    S.visibleEvents = function (events, country) {
-        return P.visibleTimelineEvents(events, country);
-    };
-
-    S.eventLabel = function (e) {
-        return P.timelineEventLabel(e);
-    };
-
     /**
      * Build the ECharts option for the trends view — the shared annotated
      * timeline, with this block's family colors and value-axis label.

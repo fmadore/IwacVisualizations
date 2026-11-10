@@ -30,21 +30,34 @@ class TimelineData extends AbstractHelper
                 ? rtrim((string) $this->store->getLocalPath(''), '/\\')
                 : '';
             $directory = $local !== ''
-                ? $local . '/iwac-visualizations'
-                    . Deployment::generationPath($this->settings->get('iwacvis_last_sync'))
+                ? $local . '/' . Deployment::STORE_SUBDIR
+                    . Deployment::generationPath($this->settings->get(Deployment::SETTING_LAST_SYNC))
                 : dirname(__DIR__, 3) . '/config/no-local-file-store';
-            $config = \HTMLPurifier_Config::createDefault();
-            $config->set('HTML.Allowed', 'a[href|title],em,i,strong,b,blockquote,p,br,ul,ol,li,sup,sub');
-            $config->set('URI.AllowedSchemes', ['https' => true, 'http' => true, 'mailto' => true]);
-            // Every absolute link leaves the exhibit — mostly for an IWAC
-            // item — so it opens in a new tab and the reader keeps their
-            // place in the narrative. Fragments and mailto: are untouched.
-            $config->set('HTML.TargetBlank', true);
-            $config->set('HTML.TargetNoreferrer', false);
-            $config->set('Cache.DefinitionImpl', null);
-            $purifier = new \HTMLPurifier($config);
-            $this->catalog = new Catalog($directory, [$purifier, 'purify']);
+            // Built on the first string to purify, not with the catalogue:
+            // the embed gallery and the admin block form only list the
+            // timelines, and configuring HTML Purifier (its definition is
+            // rebuilt per request, uncached) was the cost of doing that.
+            $purifier = null;
+            $purify = static function (string $html) use (&$purifier): string {
+                $purifier ??= self::purifier();
+                return $purifier->purify($html);
+            };
+            $this->catalog = new Catalog($directory, $purify);
         }
         return $this->catalog;
+    }
+
+    private static function purifier(): \HTMLPurifier
+    {
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'a[href|title],em,i,strong,b,blockquote,p,br,ul,ol,li,sup,sub');
+        $config->set('URI.AllowedSchemes', ['https' => true, 'http' => true, 'mailto' => true]);
+        // Every absolute link leaves the exhibit — mostly for an IWAC
+        // item — so it opens in a new tab and the reader keeps their
+        // place in the narrative. Fragments and mailto: are untouched.
+        $config->set('HTML.TargetBlank', true);
+        $config->set('HTML.TargetNoreferrer', false);
+        $config->set('Cache.DefinitionImpl', null);
+        return new \HTMLPurifier($config);
     }
 }

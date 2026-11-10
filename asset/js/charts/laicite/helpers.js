@@ -29,6 +29,27 @@
         return map;
     };
 
+    /**
+     * Give an element its frame's colour, as the `--iwac-vis-frame-color`
+     * custom property its stylesheet rule paints with, and mark it so
+     * `L.repaintFrameMarks` can find it again after a theme swap.
+     */
+    L.markFrame = function (el, frame, frameColors) {
+        el.setAttribute('data-iwac-frame', frame);
+        if (frameColors && frameColors[frame]) {
+            el.style.setProperty('--iwac-vis-frame-color', frameColors[frame]);
+        }
+        return el;
+    };
+
+    /** Re-colour every marked element under `root` from `frameColors`. */
+    L.repaintFrameMarks = function (root, frameColors) {
+        var marks = root.querySelectorAll('[data-iwac-frame]');
+        for (var i = 0; i < marks.length; i++) {
+            L.markFrame(marks[i], marks[i].getAttribute('data-iwac-frame'), frameColors);
+        }
+    };
+
     /** Locale-aware label for a frame key, from the metadata bundle. */
     L.frameLabel = function (metadata, frame) {
         var spec = (metadata.frames || {})[frame];

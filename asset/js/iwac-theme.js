@@ -857,12 +857,14 @@
         // Dropped before the ECharts check: the entity colours paint canvas
         // and MapLibre graphs too, on pages that may not load ECharts.
         ns._currentEntityColors = null;
-        if (typeof echarts === 'undefined') return null;
         var tokens = readTokens();
         ns._currentTokens = tokens;
         // The palette is rebuilt here, once per theme state, and cached for
-        // ns.getPalette() — see the note there.
+        // ns.getPalette() — see the note there. Both caches are refreshed
+        // before the ECharts check: a page without ECharts (a map or canvas
+        // block alone) would otherwise keep the first theme's palette.
         ns._currentPalette = buildPalette(tokens);
+        if (typeof echarts === 'undefined') return null;
         // Same tokens power both registered names for the current mode —
         // the "other" mode will be refreshed when the user flips the toggle.
         // Registering both names keeps ECharts happy when initChart() asks

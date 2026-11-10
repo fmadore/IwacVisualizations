@@ -129,7 +129,7 @@ if ($withSiteBase) {
 // Guard the `setting` view helper: this partial renders on every block, so a
 // missing helper here would break all of them. has() keeps it safe.
 if ($this->getHelperPluginManager()->has('setting')) {
-    $lastSync = $this->setting('iwacvis_last_sync');
+    $lastSync = $this->setting(\IwacVisualizations\Data\Deployment::SETTING_LAST_SYNC);
     if (is_array($lastSync) && !empty($lastSync['time'])) {
         $attrs['version'] = (string) $lastSync['time'];
         $attrs['generation'] = ltrim(\IwacVisualizations\Data\Deployment::generationPath($lastSync), '/');

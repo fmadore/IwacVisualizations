@@ -82,12 +82,15 @@
     min-height: 560px;
 }
 
+/*  Machine-written text is marked the way the theme marks it on a record
+ *  (`.property--ai`): rules, not a box — a 2px ink rule opens the block and
+ *  the label is a quiet --ink-light eyebrow. No primary wash: the accent is
+ *  for interaction, not for provenance. */
 .iwac-vis-laicite-ai {
     margin-bottom: var(--space-4, 1rem);
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: color-mix(in oklab, var(--primary, #ce4115) 6%, var(--surface, #fdfcfb));
-    border: 1px solid color-mix(in oklab, var(--primary, #ce4115) 25%, var(--border, #ced1d6));
-    border-radius: var(--radius-md, 0.5rem);
+    padding-block: var(--space-3, 0.75rem);
+    border-block-start: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+    border-block-end: 1px solid var(--border, #ced1d6);
 }
 
 .iwac-vis-laicite-ai-head {
@@ -101,7 +104,7 @@
  *  class let this sheet, loaded last, restyle it. */
 .iwac-vis-laicite-ai-glyph {
     display: inline-flex;
-    color: var(--primary, #ce4115);
+    color: var(--ink-light, #3f4349);
 }
 
 .iwac-vis-laicite-ai-title {
@@ -109,7 +112,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--primary, #ce4115);
+    color: var(--ink-light, #3f4349);
 }
 
 .iwac-vis-laicite-ai-body,

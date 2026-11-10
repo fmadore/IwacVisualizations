@@ -49,8 +49,11 @@
     var ALL_KEY = '__all__';
     var PAGE_SIZE = 30;
 
-    function normalise(str) {
-        return String(str || '').toLowerCase();
+    // Accent-insensitive: on a francophone index "benin" must find "Bénin".
+    // Folded once per row and kept, not on every keystroke.
+    function foldedTitle(r) {
+        if (r._folded == null) r._folded = P.foldAccents(r.title);
+        return r._folded;
     }
 
     function yearsText(r) {
@@ -186,11 +189,11 @@
         panelEl.chart.appendChild(root);
 
         function filter() {
-            var q = state.query.trim().toLowerCase();
+            var q = P.foldAccents(state.query.trim());
             var t = state.type;
             rows = all.filter(function (r) {
                 if (t !== ALL_KEY && r.type !== t) return false;
-                if (q && normalise(r.title).indexOf(q) === -1) return false;
+                if (q && foldedTitle(r).indexOf(q) === -1) return false;
                 return true;
             });
             state.page = 0;

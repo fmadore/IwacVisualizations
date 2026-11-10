@@ -17,6 +17,9 @@ class Deployment
     /** Subdirectory of the Omeka file store; web-served at {basePath}/files/iwac-visualizations/. */
     const STORE_SUBDIR = 'iwac-visualizations';
 
+    /** The setting that holds the active generation: the pointer every reader follows. */
+    const SETTING_LAST_SYNC = 'iwacvis_last_sync';
+
     /**
      * The aggregate the store root keeps a copy of, for readers outside this
      * module. See `publishRootSnapshot()`.

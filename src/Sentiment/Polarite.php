@@ -66,23 +66,4 @@ enum Polarite: int
     {
         return $itemId ? self::tryFrom($itemId) : null;
     }
-
-    /**
-     * The ordinal for an English source label, 0 when unknown.
-     *
-     * The extractor resolves an id to a label first and only then asks for
-     * the number, so the label is the key it has in hand.
-     */
-    public static function ordinalForLabel(?string $label): int
-    {
-        if ($label === null || $label === '') {
-            return 0;
-        }
-        foreach (self::cases() as $case) {
-            if ($case->label() === $label) {
-                return $case->ordinal();
-            }
-        }
-        return 0;
-    }
 }

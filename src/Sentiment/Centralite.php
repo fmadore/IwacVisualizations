@@ -48,18 +48,4 @@ enum Centralite: int
     {
         return $itemId ? self::tryFrom($itemId) : null;
     }
-
-    /** The ordinal for an English source label, 0 when unknown. */
-    public static function ordinalForLabel(?string $label): int
-    {
-        if ($label === null || $label === '') {
-            return 0;
-        }
-        foreach (self::cases() as $case) {
-            if ($case->label() === $label) {
-                return $case->ordinal();
-            }
-        }
-        return 0;
-    }
 }

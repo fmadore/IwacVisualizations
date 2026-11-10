@@ -290,7 +290,7 @@
         order.forEach(function (frame) {
             var card = P.el('div', 'iwac-vis-laicite-frame-card');
             var swatch = P.el('span', 'iwac-vis-laicite-frame-swatch');
-            if (frameColors[frame]) swatch.style.backgroundColor = frameColors[frame];
+            L.markFrame(swatch, frame, frameColors);
             var head = P.el('div', 'iwac-vis-laicite-frame-head');
             head.appendChild(swatch);
             head.appendChild(P.el('span', 'iwac-vis-laicite-frame-name',

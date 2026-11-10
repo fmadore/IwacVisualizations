@@ -1,9 +1,9 @@
 /**
  * IWAC Visualizations — Responsive helpers
  *
- * Breakpoint constants (single source of truth for JS), container-width
- * utility, and reusable ECharts media-query presets that chart builders
- * merge into their option objects via R.withMedia().
+ * Breakpoint constants (single source of truth for JS) and reusable
+ * ECharts media-query presets that chart builders merge into their option
+ * objects via R.withMedia().
  *
  * Load order: after panels.js, before chart-options.js.
  */
@@ -39,33 +39,8 @@
     };
 
     /* ----------------------------------------------------------------- */
-    /*  Container width helper                                            */
-    /* ----------------------------------------------------------------- */
-
-    R.containerWidth = function (el) {
-        var parent = el && el.parentElement;
-        if (!parent) return window.innerWidth;
-        return parent.getBoundingClientRect().width || window.innerWidth;
-    };
-
-    /* ----------------------------------------------------------------- */
     /*  ECharts media presets                                              */
     /* ----------------------------------------------------------------- */
-
-    R.legendMedia = [
-        {
-            query: { maxWidth: R.below('sm') },
-            option: {
-                legend: {
-                    orient: 'horizontal',
-                    left: 'center',
-                    bottom: 0,
-                    top: null,
-                    right: null
-                }
-            }
-        }
-    ];
 
     R.gridMedia = [
         {
@@ -95,15 +70,6 @@
             }
         ];
     };
-
-    R.dataZoomMedia = [
-        {
-            query: { maxWidth: R.below('sm') },
-            option: {
-                dataZoom: [{ height: 14 }]
-            }
-        }
-    ];
 
     /* Mobile preset for vertical value charts (timeline / stacked bar).
      * Three jobs the blunt gridMedia couldn't do for these charts:

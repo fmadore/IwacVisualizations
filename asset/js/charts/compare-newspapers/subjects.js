@@ -23,9 +23,9 @@
         var host = P.el('div', 'iwac-vis-chart');
         panel.appendChild(host);
 
-        var _cc = CN.compareColors();
-        var colorA = _cc.a;
-        var colorB = _cc.b;
+        // Read inside the render callback, never here: a theme swap re-runs
+        // the callback, and both corpus colours differ between light and dark.
+        var colorA, colorB;
 
         var mapA = {}, mapB = {};
         (dataA.subjects || []).forEach(function (e) { mapA[e.name] = e.count; });
@@ -41,6 +41,9 @@
         var top = allNames.slice(0, 15).reverse();
 
         ns.registerChart(host, function (el, instance) {
+            var cc = CN.compareColors();
+            colorA = cc.a;
+            colorB = cc.b;
             instance.setOption({
                 grid: { left: 8, right: 48, top: 36, bottom: 8, containLabel: true },
                 tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },

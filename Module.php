@@ -95,7 +95,7 @@ class Module extends AbstractModule
      */
     public function uninstall(ServiceLocatorInterface $services)
     {
-        $services->get('Omeka\Settings')->delete('iwacvis_last_sync');
+        $services->get('Omeka\Settings')->delete(Data\Deployment::SETTING_LAST_SYNC);
     }
 
     /**

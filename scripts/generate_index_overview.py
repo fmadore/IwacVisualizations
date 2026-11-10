@@ -627,7 +627,9 @@ def main() -> None:
     }
     save_json(payload, output_path, minify=args.minify)
     table_path = output_path.with_name("index-overview-table.json")
-    save_json(table_payload, table_path, minify=args.minify)
+    # Always minified, whatever --minify says for the chart bundle: ~4,700
+    # rows nobody reads by eye, 1.7x larger pretty-printed.
+    save_json(table_payload, table_path, minify=True)
     logger.info(
         "Index overview written to %s (+ %s)", output_path, table_path.name
     )

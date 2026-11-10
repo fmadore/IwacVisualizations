@@ -685,11 +685,17 @@
      * "0 article" — which is why this is a lookup rather than an
      * `n === 1` test written once and wrong on one of the two sites.
      */
+    // One instance per locale: a counted t() runs per table row, per tooltip
+    // and per graph edge, and constructing the rules each time is the cost.
+    var pluralRules = {};
+
     function pluralCategory(count) {
         if (typeof count !== 'number' || !isFinite(count)) return '';
         if (typeof Intl === 'undefined' || !Intl.PluralRules) return '';
+        var tag = ns.locale === 'fr' ? 'fr-FR' : 'en-US';
         try {
-            return new Intl.PluralRules(ns.locale === 'fr' ? 'fr-FR' : 'en-US').select(count);
+            if (!pluralRules[tag]) pluralRules[tag] = new Intl.PluralRules(tag);
+            return pluralRules[tag].select(count);
         } catch (e) {
             return '';
         }

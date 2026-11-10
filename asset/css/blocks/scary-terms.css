@@ -168,16 +168,19 @@
     outline-offset: 2px;
 }
 
+/*  The block's one loud control. Its label is --ink-on-primary (the token
+ *  flips to dark ink in dark mode, where the fill is lighter) and its
+ *  hover is the theme's --primary-hover, as on the theme's own button. */
 .iwac-vis-scary-play-btn {
     background: var(--primary, #ce4115);
-    color: var(--surface, #fdfcfb);
+    color: var(--ink-on-primary, #ffffff);
     border-color: var(--primary, #ce4115);
 }
 
 .iwac-vis-scary-play-btn:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 85%, var(--ink, #13161c));
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 85%, var(--ink, #13161c));
-    color: var(--surface, #fdfcfb);
+    background: var(--primary-hover, #b03710);
+    border-color: var(--primary-hover, #b03710);
+    color: var(--ink-on-primary, #ffffff);
 }
 
 .iwac-vis-scary-year-label {
@@ -317,7 +320,7 @@
     gap: var(--space-2, 0.5rem);
     /* Reserve space on the right so the panel toolbar (download +
      * fullscreen) never collides with the badge. Token lives in core. */
-    padding-right: var(--iwac-vis-panel-toolbar-reserve, 96px);
+    padding-right: var(--iwac-vis-panel-toolbar-reserve, 10.5rem);
 }
 
 .iwac-vis-scary-chart-title {
@@ -455,7 +458,7 @@
     margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 700;
-    color: var(--primary, #ce4115);
+    color: var(--ink-strong, #05070c);
     text-transform: capitalize;
 }
 

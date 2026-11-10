@@ -35,7 +35,6 @@
         if (filter.country) return (place.by_country || {})[filter.country] || 0;
         return place.total || 0;
     }
-    S.placeCount = placeCount;
 
     function buildScaryMap(mapEl, placesData, opts) {
         var getFilter = opts.getFilter;

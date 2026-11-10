@@ -241,6 +241,10 @@
                 }).catch(function (err) {
                     if (mine !== seq[side]) return;   // our own abort, or superseded
                     inflight[side] = null;
+                    // The picker now names a corpus that did not load: keep
+                    // the previous one and the next pick on the other side
+                    // would compare against it under the wrong name.
+                    state[side] = null;
                     console.error('IWACVis compare-newspapers:', err);
                     disposeCharts(resultsRoot);
                     resultsRoot.innerHTML = '';

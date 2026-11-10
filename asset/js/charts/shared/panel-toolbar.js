@@ -514,10 +514,17 @@
             return overlay || document.fullscreenElement === target;
         }
 
+        // `fullscreenchange` is a document event: every bound panel hears
+        // every other panel's. Only the one whose state flipped has a new
+        // box to lay out.
+        var wasFull = false;
+
         function sync() {
-            var full = isFull();
+            var full = !!isFull();
             target.classList.toggle(stateClass, full);
             button.setAttribute('aria-pressed', full ? 'true' : 'false');
+            if (full === wasFull) return;
+            wasFull = full;
             if (typeof opts.onChange === 'function') {
                 setTimeout(function () { opts.onChange(full); }, 50);
             }

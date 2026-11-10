@@ -54,7 +54,7 @@ class SyncData extends AbstractJob
     const MAX_EXTRACTED_BYTES = 2147483648;  // 2 GB expanded in total
 
     /** Global setting holding the last successful sync (time/count/bytes/tag). */
-    const SETTING_LAST_SYNC = 'iwacvis_last_sync';
+    const SETTING_LAST_SYNC = Deployment::SETTING_LAST_SYNC;
 
     public function perform()
     {

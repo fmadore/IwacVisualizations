@@ -101,10 +101,12 @@
 }
 
 .iwac-vis-compare-picker__select {
-    background: var(--surface, #fdfcfb);
+    /*  Longhands: the theme's select arrow is a background-image, and the
+     *  `background` shorthand removed it (see `.iwac-vis-control`). */
+    background-color: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    padding: 0.5rem 0.75rem;
+    padding: var(--space-2, 0.5rem) var(--space-8, 2rem) var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     font-size: var(--text-sm, 0.9375rem);
     color: var(--ink, #13161c);
     min-height: var(--size-control-md, 2.5rem);
@@ -113,7 +115,7 @@
     font-family: inherit;
 }
 
-.iwac-vis-compare-picker__select:focus {
+.iwac-vis-compare-picker__select:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
@@ -150,9 +152,15 @@
     background: color-mix(in oklab, var(--primary, #ce4115) 8%, transparent);
 }
 
-.iwac-vis-compare-picker__type button[aria-pressed="true"] {
-    background: var(--primary, #ce4115);
-    color: var(--ink-on-primary, #fff);
+/*  The selected half is the outlined-chip recipe of `.iwac-vis-tab--active`
+ *  (a primary wash and an inset primary edge), never a filled-primary
+ *  button: the theme keeps the brand fill for the one submit on a page. */
+.iwac-vis-compare-picker__type button[aria-pressed="true"],
+.iwac-vis-compare-picker__type button[aria-pressed="true"]:hover {
+    background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
+    color: var(--ink-strong, #05070c);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary, #ce4115) 55%, var(--border, #ced1d6));
+    font-weight: 600;
 }
 
 

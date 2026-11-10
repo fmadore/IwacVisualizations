@@ -163,12 +163,12 @@
 
         function renderChecklist() {
             checklist.innerHTML = '';
-            var query = (searchInput.value || '').trim().toLowerCase();
+            var query = P.foldAccents((searchInput.value || '').trim());
             var selected = state.get().selected;
             var pool = currentAllKeywords();
             var matches = pool.filter(function (item) {
                 if (!query) return true;
-                return item.keyword.toLowerCase().indexOf(query) !== -1;
+                return P.foldAccents(item.keyword).indexOf(query) !== -1;
             }).slice(0, 100);
 
             matches.forEach(function (item) {

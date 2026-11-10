@@ -122,6 +122,19 @@
 
         var frames = metadata.frame_order || [];
         var frameColors = L.buildFrameColorMap(frames);
+        // The palette differs between light and dark, and every view holds
+        // this one object, so a theme swap refreshes it in place. Registered
+        // before any chart of the block, and dashboard-core repaints in
+        // registration order: each chart's render callback then reads the
+        // new colours. The legend swatches and frame chips are DOM, and are
+        // re-coloured here.
+        if (typeof ns.registerRenderer === 'function') {
+            ns.registerRenderer(container, function () {
+                var fresh = L.buildFrameColorMap(frames);
+                frames.forEach(function (frame) { frameColors[frame] = fresh[frame]; });
+                L.repaintFrameMarks(container, frameColors);
+            });
+        }
 
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-laicite-root');

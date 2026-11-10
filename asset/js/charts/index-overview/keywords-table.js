@@ -51,11 +51,11 @@
             var selectedSet = {};
             snap.selected.forEach(function (k) { selectedSet[k] = true; });
             var maxReached = snap.selected.length >= state.MAX_SELECTED;
-            var q = query.trim().toLowerCase();
+            var q = P.foldAccents(query.trim());
 
             return list
                 .filter(function (item) {
-                    return !q || item.keyword.toLowerCase().indexOf(q) !== -1;
+                    return !q || P.foldAccents(item.keyword).indexOf(q) !== -1;
                 })
                 .map(function (item) {
                     var isSelected = !!selectedSet[item.keyword];

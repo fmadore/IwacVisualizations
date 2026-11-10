@@ -38,25 +38,9 @@
  * @var string|null $embedHeading  The resource's title, passed only by the embed route
  */
 
-// Template ID → HF subset that drives the sibling context.
-//
-// Class 38 spans two templates and two populations: recordings
-// deposited on physical media (9 Audio, 19 Video recording) and videos
-// ingested from public YouTube channels (23, added 2026-08-12). Both
-// read `audiovisual`; which slice of it they read is decided by the
-// item's publisher below, not by the template — the template chooses
-// the presentation, the data boundary stays the resource class.
-//
-// documents (template 22) and images (template 15) each map to their
-// own subset. Photograph was mapped to `documents` until v1.3.0
-// (wrong: unrelated slice) and unmapped between v1.3.0 and then.
-$templateMap = [
-    9  => 'audiovisual',
-    19 => 'audiovisual',
-    23 => 'audiovisual',
-    22 => 'documents',
-    15 => 'images',
-];
+// Template ID → HF subset that drives the sibling context: declared beside
+// the template dispatch, in Visualizations::MINIMAL_SUBSETS.
+$templateMap = \IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations::MINIMAL_SUBSETS;
 
 $template   = $resource->resourceTemplate();
 $templateId = $template ? (int) $template->id() : 0;

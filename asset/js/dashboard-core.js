@@ -412,11 +412,19 @@
         if (typeof ResizeObserver !== 'undefined') {
             var ro = new ResizeObserver(debounce(function () {
                 if (!entry.instance || entry.instance.isDisposed()) return;
-                entry.instance.resize(
-                    ns.prefersReducedMotion && ns.prefersReducedMotion()
-                        ? undefined
-                        : { animation: { duration: 200, easing: 'cubicOut' } }
-                );
+                // The observer watches the PANEL, and always reports once on
+                // attach: without this check every chart ran a second full
+                // layout right after its first paint, and another whenever
+                // something beside it (a table opened under it) changed the
+                // panel's height. ECharts' resize() does not compare sizes.
+                if (el.clientWidth !== entry.instance.getWidth()
+                    || el.clientHeight !== entry.instance.getHeight()) {
+                    entry.instance.resize(
+                        ns.prefersReducedMotion && ns.prefersReducedMotion()
+                            ? undefined
+                            : { animation: { duration: 200, easing: 'cubicOut' } }
+                    );
+                }
                 // An option laid out in pixels (the word cloud) cannot be
                 // stretched to a new box: its words keep their font size, so
                 // a wider panel spreads them apart and a narrower one makes

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace IwacVisualizations\Controller\Site;
 
 use IwacVisualizations\Site\BlockRegistry;
+use IwacVisualizations\Site\EmbedBrand;
 use IwacVisualizations\Site\ResourcePageBlockLayout\ItemSetDashboard;
 use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -153,13 +154,9 @@ class EmbedController extends AbstractActionController
             $theme = '';
         }
 
-        // Brand accent override: accept a bare or #-prefixed 3/6/8-digit hex.
-        $primary = (string) $this->params()->fromQuery('primary', '');
-        if ($primary !== '' && preg_match('/^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3}([0-9a-fA-F]{2})?)?$/', $primary)) {
-            $primary = '#' . ltrim($primary, '#');
-        } else {
-            $primary = '';
-        }
+        // Brand accent override: a bare or #-prefixed 3/6/8-digit hex, by the
+        // one rule the layout derives the accent with; anything else is ''.
+        $primary = EmbedBrand::normalize((string) $this->params()->fromQuery('primary', ''));
 
         if ($panel !== '') {
             $title .= ' — ' . $panel;

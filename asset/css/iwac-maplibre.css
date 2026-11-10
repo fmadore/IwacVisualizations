@@ -44,8 +44,7 @@
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-sm, 0.375rem);
-    box-shadow: 0 6px 18px
-        var(--shadow-color);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
     padding: 0.85rem 2.5rem 0.85rem 1.1rem;
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.45;
@@ -391,8 +390,7 @@ a.iwac-vis-map-popup__item-title:hover {
 .iwac-vis-map .maplibregl-ctrl-group {
     background: var(--surface-raised, #faf8f6);
     border: 1px solid var(--border, #ced1d6);
-    box-shadow: 0 2px 8px
-        var(--shadow-color);
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06));
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button {
@@ -424,10 +422,8 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
     filter: invert(0.9);
 }
 
-/* Attribution control — subtle, matches theme. `--surface` already
- * flips to a dark value when the IWAC theme is in dark mode, so the
- * base rule handles both; the dark overrides below only adjust the
- * opacity and text color. */
+/* Attribution control — subtle, matches theme. `--surface` and
+ * `--ink-light` flip with the theme, so one rule serves both modes. */
 .iwac-vis-map .maplibregl-ctrl-attrib {
     background: color-mix(in oklab, var(--surface, #fdfcfb) 92%, transparent);
     color: var(--ink-light, #3f4349);
@@ -436,17 +432,6 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
 
 .iwac-vis-map .maplibregl-ctrl-attrib a {
     color: var(--primary, #ce4115);
-}
-
-@media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) .iwac-vis-map .maplibregl-ctrl-attrib {
-        background: color-mix(in oklab, var(--surface) 90%, transparent);
-        color: var(--ink-light);
-    }
-}
-body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
-    background: color-mix(in oklab, var(--surface) 90%, transparent);
-    color: var(--ink-light);
 }
 
 

@@ -90,12 +90,11 @@
 }
 
 /*  A coverage gap, not a footnote: the reader is being told a corpus they
- *  can see in the table is missing from this picker, so it carries the
- *  structural side-stripe the theme reserves for data markers. */
+ *  can see in the table is missing from this picker. Set off by a full
+ *  hairline rule; the theme keeps side-stripes off callouts. */
 .iwac-vis-laicite-method-dropped {
-    padding-left: var(--space-3, 0.75rem);
-    border-left: var(--accent-line-sm, 2px) solid
-        color-mix(in oklab, var(--primary, #ce4115) 40%, transparent);
+    padding-top: var(--space-2, 0.5rem);
+    border-top: 1px solid var(--border, #ced1d6);
 }
 
 

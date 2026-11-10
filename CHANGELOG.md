@@ -17,6 +17,21 @@ link to the historical documents preserved in Git.
 
 The next release is **2.0.0**, not 1.101.0: the version number restarts its minor count after a hundred milestones. Nothing breaks and nothing needs migrating; 2.0.0 is simply the release after 1.100.0, and every later milestone goes 2.1.0, 2.2.0, and so on.
 
+A review of the whole module against the theme (IWAC-theme 2.32.1), and of its code for bugs and waste:
+
+- **Charts and maps repaint in the new theme's colours after a light/dark toggle.** Four blocks read their series colours once, when they were built, so after a toggle the Compare newspapers charts and map, the Scary Terms race, trends and map, the laïcité frame lines, legend and chips, and the Albani place legend kept the other theme's palette (ten of the twenty series colours differ between the two, both leads among them). The colours are now read each time a chart or layer is painted.
+- **Dropdowns show their arrow again.** The theme draws a select's arrow as a background image and the module's control rule reset it, so every dropdown in a block rendered as a plain box.
+- **The index and keyword searches ignore accents.** Typing "benin" or "cote" in the Index overview's table, keyword table or keyword checklist now finds "Bénin" and "Côte d'Ivoire".
+- **A choropleth no longer stays on screen after switching back to bubbles** while the country shapes are still loading.
+- **Compare newspapers: a corpus that fails to load is no longer compared under the next one's name.**
+- **Closer to the theme's register.** Block and section titles set in Besley take the theme's display treatment (800, display tracking). The Compare newspapers type switch is an outlined chip, not a filled brand button. The AI-summary block in the laïcité dossier is marked with rules and a quiet label, as machine text is on a record page, instead of an orange-tinted box. Coloured side-stripes are gone from the graph selection card, three laïcité notes and the frame chips, which carry a dot. Map popups and controls use the theme's shadows. The Scary Terms play button uses the theme's label and hover colours, and its definition titles are ink, not orange.
+- **Small orange text is readable.** The "tagged" marker in concordances and the "copied" embed button were under the 4.5:1 contrast the theme asks for.
+- **Less work per chart.** A chart no longer runs a second full layout just after it is drawn, or when a table opens beneath it; entering fullscreen on one panel no longer re-lays-out every other fullscreen-capable panel; plural rules are built once per page instead of once per translated count.
+- **Timelines: HTML Purifier is set up only when a timeline is rendered,** not on the embed gallery or the block's admin form, which only list them.
+- **Data sync checks each file's JSON syntax without decoding it** on PHP 8.3 and later, which keeps memory flat across the ~18,000 files.
+- **`index-overview-table.json` is always written minified** (it was 1.7× larger pretty-printed).
+- Removed code nothing called: six JS helpers, two unused thumbnail tokens, one dead selector, the label-to-ordinal lookups of the sentiment enums and an unused language counter in the collection generator.
+
 ### v1.100.0 — embeds that open on their panel (2026-11-06)
 
 - **A single-panel embed shows its panel from the first paint.** A frame such as `/iwac-embed/albani-sermons/albani-overlap-pairs` used to paint the whole block first, then hide everything but the panel, and it told its host page to grow to the whole block's height on the way: 26 833, then 31 169, then 34 458 px before it settled on 605. Every block's frame now stays unpainted until its panel is pinned, showing only its loading state, and sends its host one height, the panel's. When the panel cannot be found (an unknown slug, a block that failed to load) the frame shows the whole block, as before. A frame whose scripts never settle is shown as it is after 30 seconds.

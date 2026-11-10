@@ -591,6 +591,10 @@
 
         function showChoropleth() {
             return ensureLayers().then(function () {
+                // The country shapes can land after the reader has gone back
+                // to bubbles; showing the fill then would leave the map in
+                // the mode the control no longer names.
+                if (mode !== 'choropleth') return;
                 if (map.getLayer(FILL))   map.setLayoutProperty(FILL,   'visibility', 'visible');
                 if (map.getLayer(STROKE)) map.setLayoutProperty(STROKE, 'visibility', 'visible');
                 bubbleLayers.forEach(function (id) {

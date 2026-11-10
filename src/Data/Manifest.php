@@ -137,7 +137,15 @@ final class Manifest
             if (!is_string($bytes) || !hash_equals($entry['sha256'], hash('sha256', $bytes))) {
                 throw new \RuntimeException('Missing or corrupted data file: ' . $path);
             }
-            json_decode($bytes, true, 512, JSON_THROW_ON_ERROR);
+            // Syntax only: json_validate (PHP 8.3) builds no array, where
+            // decoding ~18k files allocated each one to throw it away.
+            if (function_exists('json_validate')) {
+                if (!json_validate($bytes)) {
+                    throw new \JsonException('Syntax error');
+                }
+            } else {
+                json_decode($bytes, true, 512, JSON_THROW_ON_ERROR);
+            }
         }
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(
             $directory, \FilesystemIterator::SKIP_DOTS

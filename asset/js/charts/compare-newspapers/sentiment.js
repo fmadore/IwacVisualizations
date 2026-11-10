@@ -92,9 +92,11 @@
         var wrap = P.el('div', 'iwac-vis-compare-sentiment');
         panel.appendChild(wrap);
 
-        var _cc = CN.compareColors();
-        var colorA = _cc.a;
-        var colorB = _cc.b;
+        // A side's colour is read each time its chart is painted, never
+        // captured here: a theme swap repaints, and both corpus colours
+        // differ between light and dark.
+        function colorA() { return CN.compareColors().a; }
+        function colorB() { return CN.compareColors().b; }
 
         function makeSide(side, data, color) {
             var col = P.el('div', 'iwac-vis-compare-sentiment__col');
@@ -133,7 +135,7 @@
                 },
                 series: [{
                     type: 'bar',
-                    itemStyle: { color: color, borderRadius: [0, 4, 4, 0] },
+                    itemStyle: { color: color(), borderRadius: [0, 4, 4, 0] },
                     label: { show: true, position: 'right',
                              formatter: function (p) { return P.formatNumber(p.value); } },
                     data: entries.map(function (e) { return e.count; })

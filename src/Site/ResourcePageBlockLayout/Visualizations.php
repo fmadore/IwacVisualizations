@@ -95,6 +95,31 @@ class Visualizations implements ResourcePageBlockLayoutInterface
         18 => 'reference',     // Journal article
     ];
 
+    /**
+     * Template ID → the HF subset a `minimal-item` dashboard reads its
+     * sibling context from. Kept beside the dispatch above so the two cannot
+     * disagree: a template routed to `minimal-item` without a subset here
+     * renders an empty dashboard, and tests/php/run.php fails on one.
+     *
+     * Class 38 spans two templates and two populations: recordings
+     * deposited on physical media (9 Audio, 19 Video recording) and videos
+     * ingested from public YouTube channels (23, added 2026-08-12). Both
+     * read `audiovisual`; which slice of it they read is decided by the
+     * item's publisher in the partial, not by the template — the template
+     * chooses the presentation, the data boundary stays the resource class.
+     *
+     * documents (template 22) and images (template 15) each map to their
+     * own subset. Photograph was mapped to `documents` until v1.3.0
+     * (wrong: unrelated slice) and unmapped between v1.3.0 and then.
+     */
+    const MINIMAL_SUBSETS = [
+        9 => 'audiovisual',
+        19 => 'audiovisual',
+        23 => 'audiovisual',
+        22 => 'documents',
+        15 => 'images',
+    ];
+
     public function getLabel(): string
     {
         return 'Visualisations'; // @translate

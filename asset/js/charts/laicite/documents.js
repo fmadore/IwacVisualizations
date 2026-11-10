@@ -128,9 +128,7 @@
                 var chip = L.chip(
                     L.frameLabel(metadata, frame) + ' · ' + doc.frame_counts[frame],
                     'is-frame');
-                if (opts.frameColors && opts.frameColors[frame]) {
-                    chip.style.borderInlineStartColor = opts.frameColors[frame];
-                }
+                L.markFrame(chip, frame, opts.frameColors);
                 frameRow.appendChild(chip);
             });
             li.appendChild(frameRow);

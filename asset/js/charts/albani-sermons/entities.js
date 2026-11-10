@@ -88,15 +88,25 @@
         panel.panel.insertBefore(controls, panel.chart);
 
         var legend = P.el('ul', 'iwac-vis-albani__map-legend');
-        PLACE_GROUPS.forEach(function (g, i) {
+        var swatches = [];
+        // The series colours differ between light and dark; the map layer
+        // re-reads them in onStyleReady, so the legend repaints with it.
+        function paintSwatches() {
+            swatches.forEach(function (swatch, i) {
+                swatch.style.background = ns.getSeriesColor(i);
+            });
+        }
+        if (typeof ns.registerRenderer === 'function') ns.registerRenderer(legend, paintSwatches);
+        PLACE_GROUPS.forEach(function (g) {
             var li = P.el('li', 'iwac-vis-albani__map-legend-item');
             var swatch = P.el('span', 'iwac-vis-albani__map-swatch');
-            swatch.style.background = ns.getSeriesColor(i);
+            swatches.push(swatch);
             swatch.setAttribute('aria-hidden', 'true');
             li.appendChild(swatch);
             li.appendChild(P.el('span', null, P.t('albani_place_group_' + g)));
             legend.appendChild(li);
         });
+        paintSwatches();
         panel.panel.appendChild(legend);
         if (unmapped.length) {
             var names = unmapped.map(labelOf);

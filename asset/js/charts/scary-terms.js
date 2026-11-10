@@ -126,6 +126,17 @@
 
         var families = metadata.term_families || [];
         var termColors = buildTermColorMap(families);
+        // The palette differs between light and dark, and every view holds
+        // this one object, so a theme swap refreshes it in place. Registered
+        // before any chart of the block, and dashboard-core repaints in
+        // registration order: each render callback then reads the new
+        // colours.
+        if (typeof ns.registerRenderer === 'function') {
+            ns.registerRenderer(container, function () {
+                var fresh = buildTermColorMap(families);
+                Object.keys(fresh).forEach(function (term) { termColors[term] = fresh[term]; });
+            });
+        }
 
         var years = [];
         if (metadata.year_range && metadata.year_range.length === 2) {

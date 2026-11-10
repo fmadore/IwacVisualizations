@@ -176,10 +176,8 @@ body {
      * larger than the thumb to accommodate padding). */
     --iwac-vis-thumb-lg: 56px;
     --iwac-vis-thumb-md: 48px;
-    --iwac-vis-thumb-sm: 40px;
     --iwac-vis-thumb-col-lg: 72px;
     --iwac-vis-thumb-col-md: 60px;
-    --iwac-vis-thumb-col-sm: 52px;
 
     /* Panel-toolbar reservation — the width a panel's title (and a block's
      * own chart header: scary-terms, org-cooccurrence) leaves free for the
@@ -960,6 +958,20 @@ body {
     line-height: 1.15;
 }
 
+/*  Besley takes the display treatment wherever it is set: the theme's
+ *  section head is 800 / --tracking-display / --ink-strong, and
+ *  --tracking-tight clogs a slab serif (the reason v2.6 of the theme added
+ *  --tracking-display). The two classes below set the display face but left
+ *  weight, tracking and colour to `.iwac-vis-block h3`, the quiet sans
+ *  label's values — so they rendered Besley at 600 / -0.02em. Two classes
+ *  deep so the rule out-ranks that element selector. */
+.iwac-vis-block .iwac-vis-block-header__title,
+.iwac-vis-block .iwac-vis-section-heading {
+    font-weight: 800;
+    letter-spacing: var(--tracking-display, -0.01em);
+    color: var(--ink-strong, #05070c);
+}
+
 /*  The block's own description and a section's (`.iwac-vis-section-desc`,
  *  under a section heading) are one register. */
 .iwac-vis-block-header__desc,
@@ -1024,10 +1036,6 @@ body {
 /*  Dashboard layout — the per-item dashboards' async shell              */
 /*  (their `.dashboard-charts` grid is `.iwac-vis-overview-grid`, above)  */
 /* =================================================================== */
-
-.iwac-vis-block .dashboard-async-container {
-    min-height: 240px;
-}
 
 
 /* =================================================================== */
@@ -1155,7 +1163,8 @@ body {
 .iwac-vis-embed-btn--copied {
     background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
     border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
-    color: var(--primary, #ce4115);
+    /*  --primary-hover: the labelled form's text is 3.70:1 in --primary. */
+    color: var(--primary-hover, #b03710);
 }
 
 /*  A block with no panels to pin (Pipeline Explainer, a timeline) gets the
@@ -1789,7 +1798,11 @@ input.iwac-vis-control {
     margin: 0;
     padding: 0 var(--space-3, 0.75rem);
     line-height: var(--line-height-tight, 1.25);
-    background: var(--surface, #fdfcfb);
+    /*  `background-color`, never the shorthand: the theme draws a select's
+     *  arrow as a `background-image` on the element (and removes the native
+     *  one with `appearance: none`), so the shorthand reset it and every
+     *  module select rendered with no arrow at all. */
+    background-color: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
@@ -1798,6 +1811,11 @@ input.iwac-vis-control {
     transition:
         border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
         box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+/*  Room for that arrow, which the theme sets 15px in from the end edge. */
+select.iwac-vis-control {
+    padding-inline-end: var(--space-8, 2rem);
 }
 
 /*  Hover tint on selects only — a text input signals affordance by its
@@ -2249,18 +2267,15 @@ select.iwac-vis-control:hover {
      *  word alone on the second line (C2). */
     text-wrap: balance;
     /*  As with `.iwac-vis-block-header__title`: the block's `h3` rule paints
-     *  size, weight, colour, tracking and margin (19px / 600 / --ink,
-     *  measured) — at either level, since the Sentiment Atlas's <h2> section
-     *  headings are listed in it too — so this rule declares only what
-     *  renders. It used to ask for
-     *  24px at weight 700 — a Besley weight the theme does not even load
-     *  (500/600/800), which the token guard's font-weight rule now refuses. */
+     *  size and margin at either level (the Sentiment Atlas's <h2> section
+     *  headings are listed in it too), and the display rule beside the
+     *  block title paints weight, tracking and colour. */
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
     line-height: 1.2;
     /*  Newspaper section head: 2px ink rule ABOVE the title (matches the
      *  theme's h1.title grammar), no rule below. */
     padding-top: var(--space-2, 0.5rem);
-    border-top: 2px solid var(--ink-strong, #05070c);
+    border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
 }
 
 /*  `.iwac-vis-section-desc` is styled with `.iwac-vis-block-header__desc`. */
@@ -2607,7 +2622,7 @@ select.iwac-vis-control:hover {
     background: color-mix(in oklab, var(--primary, #ce4115) 14%, var(--surface, #fdfcfb));
     color: color-mix(in oklab, var(--primary, #ce4115) 80%, var(--ink-strong, #05070c));
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-similar-card__title {
@@ -2904,9 +2919,6 @@ select.iwac-vis-control:hover {
     overscroll-behavior: contain;
     padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     border: 1px solid var(--border, #ced1d6);
-    /*  The one structural side-stripe here: it marks the card as belonging
-     *  to the selected node, whose ring on the canvas is the same accent. */
-    border-left: var(--accent-line-md, 3px) solid var(--primary, #ce4115);
     border-radius: var(--radius-md, 0.5rem);
     background: var(--surface, #fdfcfb);
     box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
@@ -3248,8 +3260,9 @@ a.iwac-vis-kwic-title:hover {
     white-space: nowrap;
 }
 
+/*  --primary-hover: --primary text on this wash is 3.36:1 in light. */
 .iwac-vis-kwic-tagged {
-    color: var(--primary, #ce4115);
+    color: var(--primary-hover, #b03710);
     background: color-mix(in oklab, var(--primary, #ce4115)
                 var(--accent-mix-subtle, 25%), var(--surface, #fdfcfb));
 }

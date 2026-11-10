@@ -123,15 +123,16 @@ class SentimentExtractor
             $cenResource = self::firstValueResource($item, "iwac:{$model}Centralite");
             $subItemId   = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
 
-            $polLabel = Polarite::fromItemId($polResource ? $polResource->id() : null)?->label();
-            $cenLabel = Centralite::fromItemId($cenResource ? $cenResource->id() : null)?->label();
+            $pol = Polarite::fromItemId($polResource ? $polResource->id() : null);
+            $cen = Centralite::fromItemId($cenResource ? $cenResource->id() : null);
+            $polLabel = $pol?->label();
+            $cenLabel = $cen?->label();
             $subInfo  = Subjectivite::fromItemId($subItemId)?->info();
 
             $out[$model] = [
                 // English source labels — feed into $view->translate()
                 // for the public display in the article partial's
-                // sentiment panel, and (for polarity / centrality) into
-                // the *_numeric lookups below.
+                // sentiment panel.
                 'polarite'              => $polLabel,
                 'centralite'            => $cenLabel,
                 'subjectivite_score'    => $subInfo['score']  ?? null,
@@ -147,8 +148,8 @@ class SentimentExtractor
                 // Ordinal position on each 1-5 scale: which stop the
                 // model's marker sits on, and the input to the panel's
                 // agree / nearly-agree / disagree verdict.
-                'polarite_numeric'      => Polarite::ordinalForLabel($polLabel),
-                'centralite_numeric'    => Centralite::ordinalForLabel($cenLabel),
+                'polarite_numeric'      => $pol?->ordinal() ?? 0,
+                'centralite_numeric'    => $cen?->ordinal() ?? 0,
 
                 // Free-text rationale written by each model per axis.
                 'polarite_justification'     => self::literalValue($item, "iwac:{$model}PolariteJustification"),

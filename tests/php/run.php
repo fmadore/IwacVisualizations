@@ -291,8 +291,7 @@ namespace {
             === [78043, 78044, 78045, 78046, 78047],
         'the subjectivity item ids drifted from the controlled vocabulary'
     );
-    // Every label distinct, or `ordinalForLabel` would answer for the wrong
-    // case - it resolves by label because that is the key the extractor has.
+    // Every label distinct: the article partial keys its display on them.
     foreach ([Polarite::class, Centralite::class, Subjectivite::class] as $enum) {
         $labels = array_map(static fn ($c) => $c->label(), $enum::cases());
         check(count(array_unique($labels)) === count($labels), "$enum has duplicate labels");
@@ -320,15 +319,11 @@ namespace {
         check(Centralite::fromItemId($stranger) === null, "centrality accepted item id " . var_export($stranger, true));
         check(Subjectivite::fromItemId($stranger) === null, "subjectivity accepted item id " . var_export($stranger, true));
     }
-    check(Polarite::ordinalForLabel('nonsense') === 0, 'an unknown polarity label scored');
-    check(Polarite::ordinalForLabel(null) === 0, 'a null polarity label scored');
-    check(Centralite::ordinalForLabel('very central') === 0, 'centrality label lookup went case-insensitive');
     check(
         Subjectivite::fromItemId(78045)?->info() === ['score' => 3, 'label' => 'Mixed'],
         'the subjectivity info shape the article partial reads changed'
     );
-    check(Centralite::ordinalForLabel('Very central') === 5, 'centrality scale drifted');
-    check(Polarite::ordinalForLabel('Not applicable') === 0, 'off-scale polarity drifted');
+    check(Centralite::fromItemId(78048)?->ordinal() === 5, 'centrality scale drifted');
     // The five `Module::get*` shims these used to go through are gone, as is
     // the deprecated CSP alias, and nothing may call them back into existence.
     foreach (['getCentraliteLabel', 'getPolariteLabel', 'getSubjectiviteInfo',
@@ -645,6 +640,15 @@ namespace {
             "template $templateId did not dispatch to $partial"
         );
     }
+
+    // A template routed to the minimal dashboard needs a subset to read;
+    // the two maps sat in two files once, and a sixth minimal template
+    // would have rendered `data-subset=""`.
+    check(
+        array_keys(Visualizations::MINIMAL_SUBSETS)
+            === array_keys(Visualizations::TEMPLATE_PARTIALS, 'minimal-item', true),
+        'MINIMAL_SUBSETS and the minimal-item rows of TEMPLATE_PARTIALS name different templates'
+    );
 
     // ZIP extraction boundary.
     foreach ([

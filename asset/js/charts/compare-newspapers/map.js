@@ -115,16 +115,19 @@
         return panel;
 
         function attachMap() {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var _cc = CN.compareColors();
-            // Normalize for MapLibre — colorA may be oklab()/oklch() after
-            // theme v2.0.0; the style validator only accepts Color-3 forms.
-            // P.normalizeColorForMapLibre canvas-rasterizes to rgb().
-            var rawColorA = _cc.a;
-            var colorA = P.normalizeColorForMapLibre
-                ? P.normalizeColorForMapLibre(rawColorA)
-                : rawColorA;
-            var colorB = _cc.b;
+            // The two corpus colours, read on demand and never captured:
+            // both differ between light and dark, and a theme swap rebuilds
+            // the layers (onStyleReady) and the choropleth (which keeps the
+            // paint objects below by reference) against the new values.
+            function sideColors() {
+                var cc = CN.compareColors();
+                // Normalize for MapLibre — A may be oklab()/oklch(); the
+                // style validator only accepts Color-3 forms.
+                var a = P.normalizeColorForMapLibre
+                    ? P.normalizeColorForMapLibre(cc.a)
+                    : cc.a;
+                return { a: a, b: cc.b };
+            }
             // Parse [r,g,b] bytes from either hex or rgb()/rgba() — colorA
             // is rgb() after normalization, colorB stays hex.
             function colorToRgb(c) {
@@ -132,8 +135,6 @@
                 if (m) return [Math.round(+m[1]), Math.round(+m[2]), Math.round(+m[3])];
                 return hexToRgb(c);
             }
-            var rgbA = colorToRgb(colorA);
-            var rgbB = colorToRgb(colorB);
             function rgba(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
 
             function toGeoJSON(pts) {
@@ -302,9 +303,10 @@
                     // Rebuilt on every style load (setStyle wipes them); the
                     // click / cursor handlers below read this list live, so
                     // they follow the rebuild without being re-registered.
+                    var sc = sideColors();
                     circleLayers = [
-                        addSideLayers(m, 'a', geoA, rgbA, colorA),
-                        addSideLayers(m, 'b', geoB, rgbB, colorB)
+                        addSideLayers(m, 'a', geoA, colorToRgb(sc.a), sc.a),
+                        addSideLayers(m, 'b', geoB, colorToRgb(sc.b), sc.b)
                     ];
 
                     // Belt-and-suspenders: the container may have grown to
@@ -399,13 +401,18 @@
                     }
                 }
 
-                var paintA = { mode: 'sequential', accentColor: colorA };
-                var paintB = { mode: 'sequential', accentColor: colorB };
+                // Getters, so the choropleth resolves the current theme's
+                // colours whenever it rebuilds its fill, whichever of its
+                // style.load handler and onStyleReady runs first.
+                var paintA = { mode: 'sequential', get accentColor() { return sideColors().a; } };
+                var paintB = { mode: 'sequential', get accentColor() { return sideColors().b; } };
                 var paintDiff = {
                     mode: 'diverging',
-                    negColor: colorB,
-                    posColor: colorA,
-                    neutralColor: tokens.surface
+                    get negColor() { return sideColors().b; },
+                    get posColor() { return sideColors().a; },
+                    get neutralColor() {
+                        return ((ns.getChartTokens && ns.getChartTokens()) || {}).surface;
+                    }
                 };
 
                 var choropleth = P.attachChoroplethToggle(map, {
