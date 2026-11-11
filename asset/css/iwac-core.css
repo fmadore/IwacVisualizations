@@ -3176,6 +3176,28 @@ select.iwac-vis-control:hover {
     color: var(--ink-light, #3f4349);
 }
 
+/*  The suggestion the arrow keys have reached. Focus stays in the input
+ *  (aria-activedescendant), so `:focus-visible` never fires on an
+ *  option; this draws the same inset ring the focused row would. */
+.iwac-vis-search__item[aria-selected="true"] {
+    background: var(--surface-raised, #faf8f6);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: -2px;
+}
+
+/*  The combobox's live count ("5 suggestions available"). Visually
+ *  hidden, never display:none, which would silence the live region. */
+.iwac-vis-search__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
 
 /* =================================================================== */
 /*  Concordance (KWIC) — shared/concordance.js                           */

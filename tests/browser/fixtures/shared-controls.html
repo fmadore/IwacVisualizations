@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC shared controls fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        const fixtureLang = /^fr/i.test(fixtureParams.get('lang') || '') ? 'fr' : 'en';
+        document.documentElement.lang = fixtureLang;
+    </script>
+    <!-- The shared controls three blocks build from panels-controls.js and
+         graph-panel.js — the search combobox (Term Trends, Entity
+         Networks), the linked-filter chip (Collection Overview) and the
+         force graph's selection card — mounted on stubbed data, so their
+         keyboard and screen-reader behaviour can be driven directly. -->
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <style>
+        main { max-width: 960px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
+    <main>
+        <h1>Shared controls</h1>
+        <div class="iwac-vis-block" id="search-block">
+            <h2>Search</h2>
+            <div id="search-host"></div>
+            <p>Picked: <output id="picked"></output></p>
+            <button type="button" id="after-search">Next control</button>
+        </div>
+        <div class="iwac-vis-block" id="filter-block">
+            <h2>Linked filter</h2>
+            <div id="filter-host"></div>
+            <button type="button" id="set-filter">Filter to Bénin</button>
+        </div>
+        <div class="iwac-vis-block" id="graph-block">
+            <h2>Graph</h2>
+            <div id="graph-host"></div>
+        </div>
+    </main>
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="/node_modules/d3-dispatch/dist/d3-dispatch.min.js"></script>
+    <script src="/node_modules/d3-quadtree/dist/d3-quadtree.min.js"></script>
+    <script src="/node_modules/d3-timer/dist/d3-timer.min.js"></script>
+    <script src="/node_modules/d3-force/dist/d3-force.min.js"></script>
+    <script>
+        document.write('<script src="/asset/js/dist/shared-core.' + fixtureLang + '.min.js"><\/script>');
+    </script>
+    <script src="/asset/js/dist/shared-d3.min.js"></script>
+    <script>
+        (function () {
+            const P = IWACVis.panels;
+            const TERMS = ['imam', 'imamat', 'imams', 'islam', 'islamique', 'mosquée'];
+
+            // Search combobox.
+            window.__picks = [];
+            const search = P.buildSearchDropdown({
+                placeholder: 'Search a term',
+                getMatches: function (q) {
+                    q = q.toLowerCase();
+                    return TERMS.filter(function (t) { return t.indexOf(q) !== -1; })
+                        .map(function (t, i) { return { label: t, detail: String(10 - i) }; });
+                },
+                onPick: function (m) {
+                    window.__picks.push(m.label);
+                    document.getElementById('picked').textContent = m.label;
+                }
+            });
+            document.getElementById('search-host').appendChild(search.root);
+
+            // Linked filter chip, with one stable control in its block to
+            // hand focus to after Clear.
+            const store = P.createStore({ country: null });
+            document.getElementById('filter-host').appendChild(P.buildLinkedFilterBar({
+                store: store,
+                key: 'country'
+            }));
+            const setFilter = document.getElementById('set-filter');
+            setFilter.setAttribute('data-iwac-control', 'fixture-set-filter');
+            setFilter.addEventListener('click', function () { store.patch({ country: 'Bénin' }); });
+            window.__store = store;
+
+            // Force graph with its selection card.
+            const panelEl = P.buildPanel('iwac-vis-panel', 'Network', null, { heading: 'h3' });
+            document.getElementById('graph-host').appendChild(panelEl.panel);
+            const nodes = [
+                { id: 'a', name: 'Centre', category: 0, size: 20, isCenter: true },
+                { id: 'b', name: 'Bénin', category: 1, size: 10 },
+                { id: 'c', name: 'Togo', category: 1, size: 8 },
+                { id: 'd', name: 'Niger', category: 2, size: 6 }
+            ];
+            const mounted = P.mountForceGraph(panelEl, {
+                nodes: nodes,
+                categories: [{ name: 'Centre' }, { name: 'Country' }, { name: 'Other' }],
+                seed: 7,
+                ariaLabel: 'Fixture network'
+            });
+            mounted.setGraph({
+                nodes: nodes,
+                links: [
+                    { source: 'a', target: 'b', weight: 3 },
+                    { source: 'a', target: 'c', weight: 2 },
+                    { source: 'b', target: 'c', weight: 1 },
+                    { source: 'a', target: 'd', weight: 1 }
+                ]
+            }, false);
+            window.__graph = mounted.graph;
+        })();
+    </script>
+</body>
+</html>

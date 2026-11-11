@@ -247,6 +247,14 @@
             'and_n_more':         'and {count} more',
             'and_n_more_one':     'and {count} more',
 
+            // P.buildSearchDropdown's live status: read out as the list
+            // opens, so a screen reader hears how many suggestions wait.
+            'search_results_count':       '{count} suggestions available, use the up and down arrows to browse',
+            'search_results_count_one':   '{count} suggestion available, use the up and down arrows to browse',
+            'search_results_count_other': '{count} suggestions available, use the up and down arrows to browse',
+            // P.buildLinkedFilterBar's default label (a block may pass its own).
+            'linked_filter': 'Filtered to {value}',
+
             // Associated entities — three views, shared controls.
             'Network view': 'Network',
             'All entities': 'All',
@@ -667,6 +675,10 @@
             'Entity type':               'Type d\u2019entit\u00e9',
             'Search entities':           'Rechercher des entit\u00e9s',
             'No matches':                'Aucun r\u00e9sultat',
+            'search_results_count':       '{count} suggestions disponibles, parcourez-les avec les fl\u00e8ches haut et bas',
+            'search_results_count_one':   '{count} suggestion disponible, parcourez-la avec les fl\u00e8ches haut et bas',
+            'search_results_count_other': '{count} suggestions disponibles, parcourez-les avec les fl\u00e8ches haut et bas',
+            'linked_filter':              'Filtr\u00e9 sur {value}',
             'Places map':                'Carte des lieux',
             'Click for details':         'Cliquer pour les d\u00e9tails',
             'items':                     'documents',

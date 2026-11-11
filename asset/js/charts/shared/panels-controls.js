@@ -176,6 +176,9 @@
      * @param {Object} cfg.store
      * @param {string} [cfg.key='country']
      * @param {string} cfg.label  e.g. "Filtered to {value}", already translated
+     * @param {HTMLElement|function():HTMLElement} [cfg.focusTarget]  where
+     *   keyboard focus goes once Clear has hidden the bar; by default the
+     *   block's first visible `data-iwac-control`, else the block itself
      * @returns {HTMLElement} a host that hides itself when nothing is set
      */
     P.buildLinkedFilterBar = function (cfg) {
@@ -186,23 +189,62 @@
         host.setAttribute('role', 'status');
         host.setAttribute('aria-live', 'polite');
         if (!store) { host.hidden = true; return host; }
+        var handle = 'linked-filter-clear:' + key;
+
+        function isShown(el) {
+            return !!(el && el.getClientRects && el.getClientRects().length);
+        }
+
+        // Clear hides the bar, and the button with it: focus would fall to
+        // <body>, a page-top restart for a keyboard reader. Hand it to a
+        // control that stays.
+        function fallbackFocus() {
+            var target = typeof cfg.focusTarget === 'function'
+                ? cfg.focusTarget() : cfg.focusTarget;
+            var scope = host.closest ? host.closest('.iwac-vis-block') : null;
+            scope = scope || host.parentNode;
+            if (!target && scope) {
+                var controls = scope.querySelectorAll('[data-iwac-control]');
+                for (var i = 0; i < controls.length && !target; i++) {
+                    if (!host.contains(controls[i]) && !controls[i].disabled
+                            && isShown(controls[i])) {
+                        target = controls[i];
+                    }
+                }
+                if (!target) {
+                    target = scope;
+                    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+                }
+            }
+            if (!target) return;
+            try { target.focus({ preventScroll: true }); }
+            catch (e) { /* not focusable after all */ }
+        }
 
         function paint() {
-            var value = store.state[key];
-            host.innerHTML = '';
-            host.hidden = !value;
-            if (!value) return;
-            host.appendChild(P.el('span', 'iwac-vis-linked-filter__label',
-                P.t(cfg.labelKey || 'linked_filter', { value: value })));
-            var clear = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-linked-filter__clear',
-                P.t('Clear'));
-            clear.type = 'button';
-            clear.addEventListener('click', function () {
-                var patch = {};
-                patch[key] = null;
-                store.patch(patch);
+            var doc = host.ownerDocument || document;
+            var hadFocus = host.contains(doc.activeElement);
+            // Same filter, new value (Bénin → Togo while on Clear): the
+            // shared remount helper puts focus back on the new button.
+            P.withFocusRestored(host, function () {
+                var value = store.state[key];
+                host.innerHTML = '';
+                host.hidden = !value;
+                if (!value) return;
+                host.appendChild(P.el('span', 'iwac-vis-linked-filter__label',
+                    P.t(cfg.labelKey || 'linked_filter', { value: value })));
+                var clear = P.el('button', 'iwac-vis-btn iwac-vis-btn--sm iwac-vis-linked-filter__clear',
+                    P.t('Clear'));
+                clear.type = 'button';
+                clear.setAttribute('data-iwac-control', handle);
+                clear.addEventListener('click', function () {
+                    var patch = {};
+                    patch[key] = null;
+                    store.patch(patch);
+                });
+                host.appendChild(clear);
             });
-            host.appendChild(clear);
+            if (hadFocus && !host.contains(doc.activeElement)) fallbackFocus();
         }
 
         store.subscribe(paint, { keys: [key] });
@@ -525,8 +567,11 @@
      * term-trends and the entity-networks toolbar each hand-rolled.
      * Matching/ranking stays at the call site via `getMatches`; the
      * helper owns the shared mechanics: 120 ms debounce, empty state,
-     * item buttons (label + optional detail), Enter-picks-first,
-     * Escape-closes, and a SELF-CLEANING document-level outside-click
+     * item buttons (label + optional detail), the WAI-ARIA combobox +
+     * listbox semantics (arrow keys walk the suggestions through
+     * aria-activedescendant, Enter takes the highlighted one or else the
+     * first, Escape closes, a polite status announces the count), close on
+     * focusout, and a SELF-CLEANING document-level outside-click
      * close (it removes itself once the widget leaves the DOM, so block
      * re-inits can't stack listeners).
      *
@@ -563,22 +608,89 @@
         empty:    'iwac-vis-search__empty'
     };
 
+    var searchUid = 0;
+
     P.buildSearchDropdown = function (cfg) {
         var classes = Object.assign({}, SEARCH_CLASSES, cfg.classes || {});
+        var listId = 'iwac-vis-search-' + (++searchUid) + '-'
+            + Math.random().toString(36).slice(2, 8);
         var wrap = P.el('div', classes.root);
+        // The WAI-ARIA combobox pattern: the input keeps focus throughout
+        // and points at the highlighted suggestion with
+        // aria-activedescendant, so the options are never tab stops.
         var input = P.el('input', 'iwac-vis-control ' + classes.input);
         input.type = 'search';
         input.placeholder = cfg.placeholder;
         input.setAttribute('aria-label', cfg.placeholder);
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-expanded', 'false');
+        input.setAttribute('aria-controls', listId);
+        input.setAttribute('autocomplete', 'off');
         var dropdown = P.el('div', classes.dropdown);
+        dropdown.id = listId;
+        dropdown.setAttribute('aria-label', cfg.placeholder);
         dropdown.style.display = 'none';
+        // What a sighted reader sees as the list opens — how many
+        // suggestions, or none — said once, politely.
+        var status = P.el('div', 'iwac-vis-search__status');
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-live', 'polite');
+        status.setAttribute('aria-atomic', 'true');
         wrap.appendChild(input);
         wrap.appendChild(dropdown);
+        wrap.appendChild(status);
 
-        function close() { dropdown.style.display = 'none'; }
+        var options = [];     // the option elements of the current list
+        var active = -1;      // index of the highlighted option, -1 = none
+        var timer = null;
+
+        function isOpen() { return dropdown.style.display !== 'none'; }
+
+        function setActive(i) {
+            if (active >= 0 && options[active]) {
+                options[active].setAttribute('aria-selected', 'false');
+            }
+            active = (i >= 0 && i < options.length) ? i : -1;
+            if (active === -1) {
+                input.removeAttribute('aria-activedescendant');
+                return;
+            }
+            var opt = options[active];
+            opt.setAttribute('aria-selected', 'true');
+            input.setAttribute('aria-activedescendant', opt.id);
+            if (typeof opt.scrollIntoView === 'function') {
+                try { opt.scrollIntoView({ block: 'nearest' }); }
+                catch (e) { /* old engines: no options object */ }
+            }
+        }
+
+        function close() {
+            if (timer) { clearTimeout(timer); timer = null; }
+            setActive(-1);
+            dropdown.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            status.textContent = '';
+        }
+
+        function pick(m) {
+            input.value = '';
+            // Focus first: the option the reader activated is about to be
+            // hidden, and focus inside a hidden list falls to <body>.
+            var doc = wrap.ownerDocument || document;
+            if (doc.activeElement !== input) {
+                try { input.focus({ preventScroll: true }); }
+                catch (e) { /* detached */ }
+            }
+            close();
+            cfg.onPick(m);
+        }
 
         function renderResults() {
+            if (timer) { clearTimeout(timer); timer = null; }
             var query = (input.value || '').trim();
+            setActive(-1);
+            options = [];
             dropdown.innerHTML = '';
             if (!query) {
                 close();
@@ -586,47 +698,90 @@
             }
             var matches = cfg.getMatches(query) || [];
             if (!matches.length) {
-                dropdown.appendChild(P.el('div', classes.empty,
-                    cfg.emptyText || P.t('No matches')));
+                // No listbox to expand: a listbox must own options, so the
+                // empty row is a plain note and the status says it aloud.
+                var emptyText = cfg.emptyText || P.t('No matches');
+                dropdown.removeAttribute('role');
+                dropdown.appendChild(P.el('div', classes.empty, emptyText));
                 dropdown.style.display = '';
+                input.setAttribute('aria-expanded', 'false');
+                status.textContent = emptyText;
                 return;
             }
-            matches.forEach(function (m) {
+            dropdown.setAttribute('role', 'listbox');
+            matches.forEach(function (m, i) {
                 var item = P.el('button', classes.item);
                 item.type = 'button';
+                item.id = listId + '-opt-' + i;
+                item.tabIndex = -1;
+                item.setAttribute('role', 'option');
+                item.setAttribute('aria-selected', 'false');
                 item.appendChild(P.el('span', classes.name, m.label));
                 if (m.detail != null) {
                     item.appendChild(P.el('span', classes.count, m.detail));
                 }
-                item.addEventListener('click', function () {
-                    input.value = '';
-                    close();
-                    cfg.onPick(m);
-                });
+                // Keep focus in the input on a press: otherwise the input
+                // blurs first (WebKit does not focus a clicked button), the
+                // list closes on focusout, and the click never lands.
+                item.addEventListener('mousedown', function (e) { e.preventDefault(); });
+                item.addEventListener('click', function () { pick(m); });
                 dropdown.appendChild(item);
+                options.push(item);
             });
             dropdown.style.display = '';
+            input.setAttribute('aria-expanded', 'true');
+            status.textContent = P.t('search_results_count', { count: matches.length });
         }
 
-        var timer = null;
         input.addEventListener('input', function () {
             if (timer) clearTimeout(timer);
             timer = setTimeout(renderResults, 120);
         });
         input.addEventListener('keydown', function (e) {
+            var n;
             if (e.key === 'Enter') {
                 e.preventDefault();
-                var first = dropdown.querySelector('button');
-                if (first) first.click();
-            } else if (e.key === 'Escape' && dropdown.style.display !== 'none') {
+                // A query typed faster than the debounce, or a list closed
+                // with Escape, is matched now: Enter always means "take the
+                // highlighted suggestion, else the first".
+                if (timer || !isOpen()) renderResults();
+                var target = active >= 0 ? options[active] : options[0];
+                if (target) target.click();
+            } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!isOpen() || timer) {
+                    renderResults();
+                    if (!options.length) return;
+                    setActive(e.key === 'ArrowDown' ? 0 : options.length - 1);
+                    return;
+                }
+                n = options.length;
+                if (!n) return;
+                if (e.key === 'ArrowDown') setActive(active < 0 ? 0 : (active + 1) % n);
+                else setActive(active <= 0 ? n - 1 : active - 1);
+            } else if ((e.key === 'Home' || e.key === 'End') && isOpen() && active >= 0) {
+                // Only while browsing the list: otherwise Home/End keep
+                // moving the caret in the text, as in any search field.
+                e.preventDefault();
+                setActive(e.key === 'Home' ? 0 : options.length - 1);
+            } else if (e.key === 'Escape' && isOpen()) {
                 // An open list is the innermost thing to dismiss: Escape
                 // closes it and stops there, rather than also leaving a
-                // fullscreen overlay the widget sits in (P.bindFullscreen).
+                // fullscreen overlay the widget sits in (P.bindFullscreen),
+                // or clearing the query as a search field's Escape does.
+                e.preventDefault();
                 close();
                 e.stopPropagation();
             }
         });
         if (cfg.openOnFocus) input.addEventListener('focus', renderResults);
+
+        // Tabbing away closes the list; a press on an option keeps focus in
+        // the input (above), so relatedTarget only lands inside on purpose.
+        wrap.addEventListener('focusout', function (e) {
+            if (e.relatedTarget && wrap.contains(e.relatedTarget)) return;
+            close();
+        });
 
         document.addEventListener('click', function onDocClick(e) {
             if (!document.body.contains(wrap)) {

@@ -40,6 +40,8 @@ const FIXTURES = [
     // The v0.4.0 payload: the comparison, trend, ranking and map panels a
     // v0.3.0 bundle does not draw.
     'sentiment-atlas?bundle=v4',
+    // The search combobox, linked-filter chip and graph card on their own.
+    'shared-controls',
     'table-records',
     'topic-explorer',
 ];
