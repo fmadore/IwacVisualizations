@@ -13,9 +13,9 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.0.0 — the module in the theme's register (2026-11-11)
 
-The next release is **2.0.0**, not 1.101.0: the version number restarts its minor count after a hundred milestones. Nothing breaks and nothing needs migrating; 2.0.0 is simply the release after 1.100.0, and every later milestone goes 2.1.0, 2.2.0, and so on.
+This release is **2.0.0**, not 1.101.0: the version number restarts its minor count after a hundred milestones. Nothing needs migrating; 2.0.0 is simply the release after 1.100.0, and every later milestone goes 2.1.0, 2.2.0, and so on. One thing does change for people who embedded a single panel of an item, person or entity dashboard: see the embed-link entry below.
 
 A review of the whole module against the theme (IWAC-theme 2.32.1), and of its code for bugs and waste:
 
