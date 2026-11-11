@@ -44,7 +44,7 @@ from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
     DATASET_ID,
-    configure_logging,
+    parse_standard_args,
     find_column,
     parse_country_list,
     save_json,
@@ -300,8 +300,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_arg_parser().parse_args()
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(build_arg_parser())
 
     gen = PersonDashboardGenerator(
         output_dir=args.output_dir,

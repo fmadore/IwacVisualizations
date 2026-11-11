@@ -122,7 +122,7 @@ from iwac_utils import (
     add_standard_args,
     DATASET_ID,
     clean_str,
-    configure_logging,
+    parse_standard_args,
     create_metadata_block,
     extract_year,
     find_column,
@@ -515,10 +515,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path,
                         default=Path("asset/data/template-summary.json"),
                         help="Output JSON path")
-    args = parser.parse_args()
-
     global logger
-    logger = configure_logging(level=logging.DEBUG if args.verbose else logging.INFO)
+    args, logger = parse_standard_args(parser, with_logger=True)
 
     subsets_out: Dict[str, Any] = {}
     subset_totals: Dict[str, int] = {}

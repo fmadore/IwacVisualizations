@@ -53,7 +53,7 @@ from iwac_utils import (
     add_standard_args,
     canonicalize_country_field,
     clean_str,
-    configure_logging,
+    parse_standard_args,
     create_metadata_block,
     extract_year,
     find_column,
@@ -81,10 +81,8 @@ def main() -> int:
                         help="UMAP min_dist (default: %(default)s)")
     parser.add_argument("--max-title-len", type=int, default=DEFAULT_TITLE_LEN,
                         help="Tooltip title truncation (default: %(default)s)")
-    args = parser.parse_args()
-
     global logger
-    logger = configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args, logger = parse_standard_args(parser, with_logger=True)
 
     # Import here so `--help` works without the dependency installed.
     try:

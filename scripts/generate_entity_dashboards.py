@@ -45,7 +45,7 @@ from dashboard_aggregator import (
     DEFAULT_MIN_COOCCURRENCE,
     DashboardAggregator,
 )
-from iwac_utils import expect_item_outputs, DATASET_ID, add_standard_args, configure_logging, save_json
+from iwac_utils import expect_item_outputs, DATASET_ID, add_standard_args, parse_standard_args, save_json
 
 # Index Type values that we treat as "non-person entities" for this
 # generator. Keys are the Type values from the IWAC index; values are
@@ -244,8 +244,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_arg_parser().parse_args()
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args = parse_standard_args(build_arg_parser())
 
     gen = EntityDashboardGenerator(
         output_dir=args.output_dir,

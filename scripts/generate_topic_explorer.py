@@ -105,7 +105,7 @@ from iwac_utils import (
     aggregate_prevalence,
     clean_float,
     clean_str,
-    configure_logging,
+    parse_standard_args,
     create_metadata_block,
     extract_year,
     find_column,
@@ -410,10 +410,8 @@ def main() -> int:
                         help='Output JSON path')
     parser.add_argument('--top-articles', type=int, default=DEFAULT_TOP_ARTICLES,
                         help='Most-representative articles per topic')
-    args = parser.parse_args()
-
     global logger
-    logger = configure_logging(level=logging.DEBUG if args.verbose else logging.INFO)
+    args, logger = parse_standard_args(parser, with_logger=True)
 
     logger.info('Loading articles subset (LDA columns)…')
     df = load_dataset_safe('articles', repo_id=args.repo)

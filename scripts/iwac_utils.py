@@ -164,12 +164,17 @@ def add_standard_args(
     return parser
 
 
-def parse_standard_args(parser: "argparse.ArgumentParser") -> "argparse.Namespace":
+def parse_standard_args(parser: "argparse.ArgumentParser", with_logger: bool = False) -> Any:
     """``parse_args()`` + ``configure_logging`` keyed on ``-v`` — the
-    shared epilogue of every generator's ``main()``."""
+    shared epilogue of every generator's ``main()``.
+
+    Returns the parsed namespace, or ``(args, logger)`` with
+    ``with_logger=True`` for a generator that keeps the logger
+    ``configure_logging`` returns in a module global.
+    """
     args = parser.parse_args()
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
-    return args
+    logger = configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    return (args, logger) if with_logger else args
 
 
 # =============================================================================

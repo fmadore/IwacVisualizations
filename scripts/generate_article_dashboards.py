@@ -77,7 +77,7 @@ from iwac_utils import (
     build_entity_index,
     clean_float,
     clean_str,
-    configure_logging,
+    parse_standard_args,
     find_column,
     first_country,
     iter_records,
@@ -1005,9 +1005,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_arg_parser().parse_args()
     global logger
-    logger = configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    args, logger = parse_standard_args(build_arg_parser(), with_logger=True)
 
     gen = ArticleDashboardGenerator(
         output_dir=args.output_dir,
