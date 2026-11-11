@@ -99,7 +99,7 @@
             var meta = P.el('p', 'iwac-vis-kwic-meta');
             if (item.u || (siteBase && item.o)) {
                 var a = P.el('a', 'iwac-vis-kwic-title', item.t || item.o || '');
-                a.href = item.u || (siteBase + '/item/' + item.o);
+                a.href = item.u || P.itemUrl(siteBase, item.o);
                 meta.appendChild(a);
             } else {
                 meta.appendChild(P.el('span', 'iwac-vis-kwic-title', item.t || ''));
