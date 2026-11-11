@@ -43,6 +43,7 @@ from iwac_embeddings import coerce_embedding
 from iwac_utils import (
     add_standard_args,
     generate_timestamp,
+    is_public_flag,
     load_dataset_safe,
     parse_coordinates,
     parse_standard_args,
@@ -108,7 +109,8 @@ def _publication_metric(df: pd.DataFrame, n: int) -> List[Dict[str, Any]]:
     """
     if "OCR_is_public" not in df.columns:
         return []
-    public = int(df["OCR_is_public"].fillna(False).astype(bool).sum())
+    # The one rule for the flag: a real boolean True, nothing else.
+    public = int(df["OCR_is_public"].map(is_public_flag).astype(bool).sum())
     return [metric("Text public on islam.zmo.de", public, n)]
 
 

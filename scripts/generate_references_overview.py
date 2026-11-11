@@ -88,6 +88,7 @@ from iwac_utils import (
     parse_standard_args,
     build_entity_index,
     canonicalize_country_field,
+    clean_float,
     clean_known_str,
     clean_values,
     create_metadata_block,
@@ -170,13 +171,9 @@ def _clean_unique_list(values: List[str]) -> List[str]:
 
 
 def _topic_prob(value: Any) -> Optional[float]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    try:
-        prob = float(value)
-    except (TypeError, ValueError):
-        return None
-    return prob if 0.0 <= prob <= 1.0 else None
+    """``clean_float``, then None for anything outside [0, 1]."""
+    prob = clean_float(value)
+    return prob if prob is not None and 0.0 <= prob <= 1.0 else None
 
 
 def _ref_type(row: pd.Series) -> str:

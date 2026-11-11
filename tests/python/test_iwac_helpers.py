@@ -327,6 +327,14 @@ class TopicExplorerTests(unittest.TestCase):
             iwac_utils.read_hijri_month(pd.Series({"hy": 1445}), {"hijri_year": None})
         )
 
+    def test_hijri_reader_with_a_day_is_on_this_days_rule(self) -> None:
+        rh = iwac_utils.read_hijri
+        self.assertEqual(rh(1445.0, 9.0, 27.0), (1445, 9, 27))
+        self.assertEqual(rh(np.int64(1445), np.int64(9)), (1445, 9))
+        for bad in ((1445, 9, float("nan")), (1445, 9, None), (1445, 9, 0),
+                    (1445, 9, 31), (1445, 13, 1), (0, 9, 1), ("x", 9, 1)):
+            self.assertIsNone(rh(*bad), bad)
+
 
 class TopicMixtureTests(unittest.TestCase):
     """Contracts for the shared lda_topic_topk helpers.

@@ -126,6 +126,7 @@ from iwac_utils import (
     is_public_flag,
     load_dataset_safe,
     parse_standard_args,
+    read_hijri,
     save_json,
 )
 
@@ -329,25 +330,6 @@ def _clip(text: str) -> str:
     return cut.rstrip(" ,;:.-—–") + "…"
 
 
-def read_hijri(y_raw: Any, m_raw: Any, d_raw: Any) -> Optional[Tuple[int, int, int]]:
-    """
-    The row's stored Umm al-Qura (year, month, day), or None when the dataset
-    left it empty.
-
-    The dataset populates these wherever `pub_date` is a complete
-    YYYY-MM-DD, which is the only case this script keeps, so None here means
-    the snapshot is missing a conversion rather than the date being
-    unconvertible — count it and carry on rather than failing the run.
-    """
-    try:
-        h_year, h_month, h_day = int(y_raw), int(m_raw), int(d_raw)
-    except (TypeError, ValueError):
-        return None
-    if not (1 <= h_month <= 12 and 1 <= h_day <= 30 and h_year > 0):
-        return None
-    return h_year, h_month, h_day
-
-
 def collect_days(repo_id: str, hijri: bool = True
                  ) -> Tuple[Dict[str, List[List[Any]]], Dict[str, List[List[Any]]]]:
     """Bucket every fully-dated article / issue by its Gregorian and Hijri MM-DD."""
@@ -414,6 +396,9 @@ def collect_days(repo_id: str, hijri: bool = True
             greg[f"{month:02d}-{day:02d}"].append(row)
 
             if hijri:
+                # None means the snapshot is missing a conversion (the
+                # dataset fills these wherever pub_date is a complete
+                # YYYY-MM-DD, the only case kept here): count and go on.
                 converted = read_hijri(hy_raw, hm_raw, hd_raw)
                 if converted is None:
                     stats["hijri_missing"] += 1

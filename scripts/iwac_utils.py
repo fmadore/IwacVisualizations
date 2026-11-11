@@ -14,6 +14,7 @@ Functions:
 - extract_year: Extract year from various date formats
 - extract_month_num: Pull the 1–12 month number out of a "YYYY-MM[-DD]" date
 - read_hijri_month: The row's stored (hijri_year, hijri_month), or None
+- read_hijri: The same rule on raw cells, with an optional day
 - parse_coordinates: Parse "lat, lng" or "lat lng" strings (or tuple/list)
 - normalize_location_name: The one name-matching key (NFC, case, whitespace)
 - build_entity_index: The index subset as name / id / coordinate lookups
@@ -552,13 +553,27 @@ def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
     y_col, m_col = cols.get("hijri_year"), cols.get("hijri_month")
     if not y_col or not m_col:
         return None
+    return read_hijri(row.get(y_col), row.get(m_col))
+
+
+def read_hijri(year: Any, month: Any, *day: Any) -> Optional[Tuple[int, ...]]:
+    """Stored Hijri cells → ``(year, month)`` or, given a day, ``(year,
+    month, day)``; None when any cell is empty, garbage or out of range.
+
+    The one rule behind :func:`read_hijri_month` and On This Day's day
+    keys: each cell through ``int()`` inside the guard (see
+    ``read_hijri_month`` for why the dtype cannot be trusted), year > 0,
+    month 1-12, day 1-30.
+    """
     try:
-        h_year, h_month = int(row.get(y_col)), int(row.get(m_col))
+        parts = tuple(int(v) for v in (year, month, *day))
     except (TypeError, ValueError):
         return None
-    if not (1 <= h_month <= 12 and h_year > 0):
+    if parts[0] <= 0 or not 1 <= parts[1] <= 12:
         return None
-    return h_year, h_month
+    if len(parts) > 2 and not 1 <= parts[2] <= 30:
+        return None
+    return parts
 
 
 # =============================================================================
