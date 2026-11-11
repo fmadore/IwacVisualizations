@@ -189,6 +189,13 @@ function loadOrchestrator() {
         },
     });
 
+    // The real lazy-bundle helper (P.lazyBundles, P.fetchOptionalJSON) over
+    // the stubbed fetchJSON; the rest of panels-boot.js is put back to the
+    // stubs, so boot still only records the block's config.
+    const bootStub = P.bootBlock;
+    load(['asset/js/charts/shared/panels-boot.js'], context);
+    P.bootBlock = bootStub;
+
     load(['asset/js/charts/laicite.js'], context);
 
     const container = P.el('div', 'iwac-vis-laicite');

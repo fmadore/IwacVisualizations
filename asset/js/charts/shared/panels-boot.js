@@ -199,6 +199,87 @@
     };
 
     /* ----------------------------------------------------------------- */
+    /*  Optional and lazy bundles                                         */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Fetch a bundle that older deploys may not carry: resolves to null,
+     * never rejects, when it is absent or fails. For a block's `load`, where
+     * one missing optional bundle must not take the required ones down.
+     *
+     * @param {string} url
+     * @returns {Promise<*>}
+     */
+    P.fetchOptionalJSON = function (url) {
+        return P.fetchJSON(url).catch(function () { return null; });
+    };
+
+    /**
+     * Bundles a block fetches on first use of the view that needs them,
+     * rather than up front. scary-terms and laïcité each hand-rolled this
+     * (with a request flag per bundle, or a pending map) beside a copy of
+     * the same three-state convention:
+     *
+     *   undefined → not requested yet (or still in flight)
+     *   null      → failed or absent; never retried
+     *   object    → loaded
+     *
+     * `ensure(names)` is the whole API a draw function needs: true once
+     * every named bundle has settled, either way — the caller then reads
+     * them with `get()` and handles a null. Otherwise it requests whichever
+     * are neither loaded nor in flight and returns false; when the bundles
+     * that call named have all settled, `onReady(names)` runs, which is
+     * where the block remounts whatever the bundle feeds and redraws.
+     *
+     * @param {string} dataBase  directory URL, e.g. ctx.dataBase
+     * @param {Object<string,string>} files  bundle name → file name
+     * @param {Object} [opts]
+     * @param {string} [opts.warnLabel='IWACVis block']  console prefix
+     * @param {function(string[]):void} [opts.onRequest]  runs with the names
+     *        a call is about to fetch, before the requests start
+     * @param {function(string[]):void} [opts.onReady]  runs with the names a
+     *        requesting call passed, once all of them have settled
+     * @returns {{ensure: function(string[]):boolean, get: function(string):*}}
+     */
+    P.lazyBundles = function (dataBase, files, opts) {
+        opts = opts || {};
+        var label = opts.warnLabel || 'IWACVis block';
+        var data = {};
+        var pending = {};
+
+        function settled(names) {
+            return names.every(function (n) { return data[n] !== undefined; });
+        }
+
+        function ensure(names) {
+            var missing = names.filter(function (n) {
+                return data[n] === undefined && !pending[n];
+            });
+            if (!missing.length) return settled(names);
+            if (opts.onRequest) opts.onRequest(missing);
+            missing.forEach(function (name) {
+                pending[name] = true;
+                P.fetchJSON(dataBase + files[name])
+                    .then(function (d) { data[name] = d; })
+                    .catch(function (err) {
+                        console.warn(label + ': bundle unavailable', name, err);
+                        data[name] = null;
+                    })
+                    .then(function () {
+                        pending[name] = false;
+                        if (settled(names) && opts.onReady) opts.onReady(names);
+                    });
+            });
+            return false;
+        }
+
+        return {
+            ensure: ensure,
+            get: function (name) { return data[name]; }
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  Per-item resource-page dashboard boot                             */
     /* ----------------------------------------------------------------- */
 
