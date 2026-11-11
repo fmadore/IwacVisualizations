@@ -67,7 +67,6 @@ from iwac_embeddings import (
     EMBEDDING_COLUMNS,
     RELATED_COLUMN,
     build_normalized_matrix,
-    coerce_embedding,
     parse_related,
     rank_neighbours,
 )
@@ -207,7 +206,7 @@ class ArticleDashboardGenerator:
         # Article-o_id -> row index in self.articles_df, used to slice
         # into the embedding matrix for kNN.
         self.article_row_index: Dict[int, int] = {}
-        self.embedding_matrix: Optional[np.ndarray] = None  # (N, 768) float32, L2-normalized
+        self.embedding_matrix: Optional[np.ndarray] = None  # (N, 768) float64, L2-normalized
         self.valid_embedding_rows: Optional[np.ndarray] = None  # bool mask over articles_df
 
         # Target article ids, in deterministic order (articles_df row order).
@@ -398,7 +397,7 @@ class ArticleDashboardGenerator:
     # ------------------------------------------------------------------
 
     def build_embedding_matrix(self) -> None:
-        """Stack ``embedding_OCR`` into an (N, 768) float32 matrix and
+        """Stack ``embedding_OCR`` into an (N, 768) float64 matrix and
         L2-normalize rows. Rows with missing / all-zero / wrong-dim
         embeddings are flagged in ``valid_embedding_rows`` so the kNN
         step can skip them cleanly and emit an empty neighbour list
@@ -416,50 +415,22 @@ class ArticleDashboardGenerator:
             return
 
         N = len(df)
-        dim: Optional[int] = None
-        rows: List[np.ndarray] = []
+        # The shared stack-and-normalise (float64 rows, so cosine scores
+        # agree across CPUs far below the six decimals neighbours are ranked
+        # at — iwac_embeddings.rank_neighbours), scattered back to one row
+        # per article: invalid rows stay all-zero, so their cosine to
+        # anything is 0 and they never surface as neighbours.
+        normalized, positions = build_normalized_matrix(df, embed_col)
         valid = np.zeros(N, dtype=bool)
-
-        for i, value in enumerate(df[embed_col].values):
-            vec = coerce_embedding(value)
-            if vec is None:
-                rows.append(np.zeros(1, dtype=np.float32))  # placeholder, replaced below
-                continue
-            if dim is None:
-                dim = len(vec)
-            elif len(vec) != dim:
-                # Dimension mismatch — skip this row (shouldn't happen
-                # on the curated dataset, but defensive anyway)
-                rows.append(np.zeros(1, dtype=np.float32))
-                continue
-            rows.append(vec)
-            valid[i] = True
-
-        if dim is None:
+        if not positions:
             logger.warning("embedding_OCR column contained no usable vectors")
             self.embedding_matrix = None
             self.valid_embedding_rows = valid
             return
-
-        # Replace placeholders with zero vectors of the right dimension.
-        # Zero vectors have norm 0; we L2-normalize with a safe fallback
-        # that leaves them zero, so their cosine similarity to anything
-        # is 0 and they never surface as neighbours.
-        # float64, not the vectors' float32: cosine scores then agree across
-        # CPUs far below the six decimals neighbours are ranked at
-        # (iwac_embeddings.rank_neighbours), so every machine builds the
-        # same lists.
+        dim = normalized.shape[1]
         X = np.zeros((N, dim), dtype=np.float64)
-        for i, vec in enumerate(rows):
-            if valid[i] and len(vec) == dim:
-                X[i] = vec
-
-        norms = np.linalg.norm(X, axis=1, keepdims=True)
-        # Avoid divide-by-zero on invalid rows; they stay all-zero.
-        safe_norms = np.where(norms == 0.0, 1.0, norms)
-        X = X / safe_norms
-        # But re-zero the rows that were invalid, so dot products are zero.
-        X[~valid] = 0.0
+        X[positions] = normalized
+        valid[positions] = True
 
         self.embedding_matrix = X
         self.valid_embedding_rows = valid

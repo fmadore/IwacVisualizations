@@ -68,7 +68,7 @@ import logging
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -137,6 +137,9 @@ class ReferenceDashboardGenerator:
 
         self.df = None
         self.articles_df = None
+        # (normalized matrix, row positions) of the references' embeddings,
+        # built once and read by both neighbour directions.
+        self._reference_matrix: Optional[Tuple[np.ndarray, List[int]]] = None
 
         self.meta: Dict[int, Dict[str, Any]] = {}
         self.target_ids: List[int] = []
@@ -277,6 +280,12 @@ class ReferenceDashboardGenerator:
     # Neighbours
     # ------------------------------------------------------------------
 
+    def reference_matrix(self) -> Tuple[np.ndarray, List[int]]:
+        """The references' unit-L2 embedding matrix, built on first use."""
+        if self._reference_matrix is None:
+            self._reference_matrix = build_normalized_matrix(self.df, REFERENCES_EMBEDDING)
+        return self._reference_matrix
+
     def compute_semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K bibliography neighbours per reference."""
         result: Dict[int, List[Dict[str, Any]]] = {}
@@ -285,7 +294,7 @@ class ReferenceDashboardGenerator:
                            "neighbours skipped", REFERENCES_EMBEDDING)
             return result
 
-        X, valid = build_normalized_matrix(self.df, REFERENCES_EMBEDDING)
+        X, valid = self.reference_matrix()
         if X.shape[0] < 2:
             logger.warning("fewer than two usable reference embeddings — "
                            "scholarly neighbours skipped")
@@ -339,7 +348,7 @@ class ReferenceDashboardGenerator:
                            "neighbours skipped", ARTICLES_EMBEDDING)
             return result
 
-        R, ref_valid = build_normalized_matrix(self.df, REFERENCES_EMBEDDING)
+        R, ref_valid = self.reference_matrix()
         A, art_valid = build_normalized_matrix(self.articles_df, ARTICLES_EMBEDDING)
         if R.shape[0] == 0 or A.shape[0] == 0:
             return result

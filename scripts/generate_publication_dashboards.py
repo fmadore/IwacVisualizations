@@ -62,7 +62,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from iwac_embeddings import coerce_embedding, rank_cosine_matrix
+from iwac_embeddings import build_normalized_matrix, rank_cosine_matrix
 from iwac_utils import (
     expect_item_outputs,
     add_standard_args,
@@ -235,7 +235,7 @@ class PublicationDashboardGenerator:
     # ------------------------------------------------------------------
 
     def build_embedding_matrix(self) -> None:
-        """Stack ``embedding_tableOfContents`` into an (N, 768) float32
+        """Stack ``embedding_tableOfContents`` into an (N, 768) float64
         matrix, L2-normalized; invalid rows stay all-zero so they never
         surface as neighbours (cosine 0 against everything).
         """
@@ -250,41 +250,20 @@ class PublicationDashboardGenerator:
             return
 
         N = len(df)
-        dim: Optional[int] = None
-        vectors: List[Optional[np.ndarray]] = []
+        # The shared stack-and-normalise (float64 rows, so cosine scores
+        # agree across CPUs far below the six decimals neighbours are ranked
+        # at — iwac_embeddings.rank_neighbours), scattered back to one row
+        # per issue.
+        normalized, positions = build_normalized_matrix(df, embed_col)
         valid = np.zeros(N, dtype=bool)
-
-        for i, value in enumerate(df[embed_col].values):
-            vec = coerce_embedding(value)
-            if vec is None:
-                vectors.append(None)
-                continue
-            if dim is None:
-                dim = len(vec)
-            elif len(vec) != dim:
-                vectors.append(None)
-                continue
-            vectors.append(vec)
-            valid[i] = True
-
-        if dim is None:
+        if not positions:
             logger.warning("embedding_tableOfContents contained no usable vectors")
             self.valid_rows = valid
             return
-
-        # float64, not the vectors' float32: cosine scores then agree across
-        # CPUs far below the six decimals neighbours are ranked at
-        # (iwac_embeddings.rank_neighbours), so every machine builds the
-        # same lists.
+        dim = normalized.shape[1]
         X = np.zeros((N, dim), dtype=np.float64)
-        for i, vec in enumerate(vectors):
-            if vec is not None and len(vec) == dim:
-                X[i] = vec
-
-        norms = np.linalg.norm(X, axis=1, keepdims=True)
-        safe_norms = np.where(norms == 0.0, 1.0, norms)
-        X = X / safe_norms
-        X[~valid] = 0.0
+        X[positions] = normalized
+        valid[positions] = True
 
         self.embedding_matrix = X
         self.valid_rows = valid
