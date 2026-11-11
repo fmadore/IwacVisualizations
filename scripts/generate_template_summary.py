@@ -128,7 +128,7 @@ from iwac_utils import (
     find_column,
     first_country,
     load_dataset_safe,
-    parse_duration_seconds,
+    row_duration_seconds,
     save_json,
 )
 
@@ -236,26 +236,6 @@ def find_columns(df: pd.DataFrame, subset_name: str = "") -> Dict[str, Optional[
     }
 
 
-def row_duration_seconds(row: Any, columns: Dict[str, Optional[str]]) -> Optional[int]:
-    """Runtime of one row in seconds, or None when it has no usable value.
-
-    Reads the explicit ``duration_seconds`` column first and falls back to
-    parsing ISO 8601 ``extent``. Both are checked per row rather than
-    per subset because the two audiovisual populations were mapped at
-    different times — a snapshot can carry the column for the YouTube
-    cohort and nothing but ``extent`` for the deposited one.
-    """
-    if columns.get("duration"):
-        seconds = parse_duration_seconds(row.get(columns["duration"]))
-        if seconds:
-            return seconds
-    if columns.get("extent"):
-        seconds = parse_duration_seconds(row.get(columns["extent"]))
-        if seconds:
-            return seconds
-    return None
-
-
 def duration_summary(values: List[int]) -> Optional[Dict[str, int]]:
     """Total + median runtime over a slice, or None when nothing has one.
 
@@ -325,7 +305,7 @@ def build_item(row: Any, columns: Dict[str, Optional[str]]) -> Optional[Dict[str
         if value:
             item[key] = value
 
-    seconds = row_duration_seconds(row, columns)
+    seconds = row_duration_seconds(row, columns.get("duration"), columns.get("extent"))
     if seconds:
         item["duration"] = seconds
     return item
@@ -347,7 +327,7 @@ def slice_summary(df: pd.DataFrame, columns: Dict[str, Optional[str]]) -> Dict[s
         if year:
             year_counter[year] += 1
 
-        seconds = row_duration_seconds(row, columns)
+        seconds = row_duration_seconds(row, columns.get("duration"), columns.get("extent"))
         if seconds:
             durations.append(seconds)
 

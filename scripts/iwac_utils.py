@@ -773,6 +773,30 @@ def parse_duration_seconds(value: Any) -> Optional[int]:
     return None
 
 
+
+def row_duration_seconds(
+    row: Any,
+    dur_col: Optional[str],
+    extent_col: Optional[str],
+) -> Optional[int]:
+    """Runtime of one row in whole seconds, or None when it has none.
+
+    The explicit ``duration_seconds`` column first, ISO 8601 ``extent`` as
+    the fallback; either column may be None (absent from the subset). Both
+    go through :func:`parse_duration_seconds`, so a fractional cell rounds
+    and a zero, negative or unparseable one falls through to ``extent``.
+    Per row, not per subset: the two audiovisual populations were mapped
+    at different times, so one snapshot can carry seconds for the YouTube
+    cohort and nothing but ``extent`` for the deposited one. Callers that
+    count a missing runtime as zero apply ``or 0``.
+    """
+    for col in (dur_col, extent_col):
+        if col:
+            seconds = parse_duration_seconds(row.get(col))
+            if seconds:
+                return seconds
+    return None
+
 def is_unknown(value: Any) -> bool:
     """True for empty / 'unknown'-like labels (matches the JS-side P.isUnknown).
 

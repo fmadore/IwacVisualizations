@@ -154,6 +154,13 @@ def _audiovisual_duration_minutes(av_df: pd.DataFrame) -> float:
     it leaves at zero. Per-row rather than per-column because class 38
     holds two populations mapped at different times, so a snapshot can
     carry seconds for one and only ``extent`` for the other.
+
+    The same rule as ``iwac_utils.row_duration_seconds`` (which the
+    audiovisual overview and the template summary share), kept column-wise
+    here on purpose: it sums the seconds column as floats rather than
+    whole seconds per row, and it also accepts the prefixed ``extent``
+    spellings, so routing it through the per-row helper could move the
+    published minute total.
     """
     if av_df is None or av_df.empty:
         return 0.0
@@ -168,7 +175,7 @@ def _audiovisual_duration_minutes(av_df: pd.DataFrame) -> float:
 
     gaps = seconds <= 0
     if gaps.any():
-        text_col = _first_present_column(av_df, DURATION_COLUMN_CANDIDATES)
+        text_col = find_column(av_df, list(DURATION_COLUMN_CANDIDATES))
         if text_col is not None:
             parsed = av_df.loc[gaps, text_col].map(
                 lambda value: float(parse_duration_seconds(value) or 0)
@@ -177,16 +184,6 @@ def _audiovisual_duration_minutes(av_df: pd.DataFrame) -> float:
             seconds.loc[gaps] = parsed
 
     return float(seconds.sum()) / 60.0
-
-
-def _first_present_column(
-    df: pd.DataFrame, candidates: tuple,
-) -> Optional[str]:
-    """Return the first candidate column that exists in ``df``, or None."""
-    for col in candidates:
-        if col in df.columns:
-            return col
-    return None
 
 
 def compute_subset_summary(df: Optional[pd.DataFrame]) -> Dict[str, int]:
@@ -1094,7 +1091,7 @@ def compute_summary(
 
     references_df = dataframes.get("references")
     if references_df is not None and not references_df.empty:
-        ref_type_col = _first_present_column(references_df, DOC_TYPE_COLUMN_CANDIDATES)
+        ref_type_col = find_column(references_df, list(DOC_TYPE_COLUMN_CANDIDATES))
         if ref_type_col is not None:
             for value in references_df[ref_type_col].dropna():
                 v = str(value).strip()
@@ -1149,10 +1146,7 @@ def compute_summary(
 
 
 def _count_languages(language_distribution: Any) -> int:
-    """Count distinct languages from either the old list-of-dicts shape or
-    the new dict-with-facets shape (see compute_languages_faceted)."""
-    if isinstance(language_distribution, list):
-        return len(language_distribution)
+    """Count distinct languages in compute_languages_faceted's output."""
     if isinstance(language_distribution, dict):
         return len(language_distribution.get("global", []))
     return 0

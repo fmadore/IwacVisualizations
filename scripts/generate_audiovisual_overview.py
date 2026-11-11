@@ -80,8 +80,8 @@ from iwac_utils import (
     extract_year,
     find_column,
     load_dataset_safe,
-    parse_duration_seconds,
     parse_standard_args,
+    row_duration_seconds,
     save_json,
 )
 
@@ -119,20 +119,8 @@ COLUMNS = [
 # =============================================================================
 
 def _seconds(row: pd.Series, dur_col: Optional[str], extent_col: Optional[str]) -> int:
-    """
-    Runtime in seconds. Prefers the precomputed ``duration_seconds`` column
-    and falls back to parsing ISO-8601 ``dcterms:extent`` — deposited rows
-    carry whole-minute ``PT45M``, YouTube rows second-precision ``PT6M51S``.
-    """
-    if dur_col:
-        raw = pd.to_numeric(row.get(dur_col), errors="coerce")
-        if pd.notna(raw) and raw > 0:
-            return int(raw)
-    if extent_col:
-        parsed = parse_duration_seconds(row.get(extent_col))
-        if parsed and parsed > 0:
-            return int(parsed)
-    return 0
+    """Runtime in seconds, 0 when the row has none (``iwac_utils.row_duration_seconds``)."""
+    return row_duration_seconds(row, dur_col, extent_col) or 0
 
 
 def _bucket_key(seconds: int) -> str:

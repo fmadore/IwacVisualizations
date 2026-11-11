@@ -741,6 +741,16 @@ class DurationParsingTests(unittest.TestCase):
         for value in (None, "", "   ", "PT", "P", "nope", float("nan"), -5, True):
             self.assertIsNone(iwac_utils.parse_duration_seconds(value), value)
 
+    def test_row_runtime_prefers_seconds_and_falls_back_to_extent(self) -> None:
+        rd = iwac_utils.row_duration_seconds
+        self.assertEqual(rd({"d": 154, "e": "PT9M"}, "d", "e"), 154)
+        # Zero, negative, NaN and garbage seconds all fall through to extent.
+        for seconds in (0, -3, float("nan"), None, "nope"):
+            self.assertEqual(rd({"d": seconds, "e": "PT2M34S"}, "d", "e"), 154, seconds)
+        self.assertEqual(rd({"e": "PT45S"}, None, "e"), 45)
+        self.assertIsNone(rd({"d": 0, "e": ""}, "d", "e"))
+        self.assertIsNone(rd({"d": 12}, None, None))
+
 
 def _audiovisual_frame() -> pd.DataFrame:
     """A miniature class-38 corpus: both populations, mixed coverage.
