@@ -177,7 +177,7 @@
                     ],
                     rows: ranked.map(function (loc) {
                         return [
-                            loc.o_id && siteBase ? { text: loc.name, href: siteBase + '/item/' + loc.o_id } : loc.name,
+                            loc.o_id && siteBase ? { text: loc.name, href: P.itemUrl(siteBase, loc.o_id) } : loc.name,
                             loc.count || 0
                         ];
                     })

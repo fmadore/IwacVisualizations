@@ -75,23 +75,11 @@
     /* ----------------------------------------------------------------- */
 
     function disposeCharts(root) {
-        // The instance + map + observer teardown is dashboard-core's now
+        // The instance + map + observer teardown is dashboard-core's
         // (`ns.disposeWithin`, promoted from here in v1.59.0 so the other
-        // view-switching blocks could share it). What stays block-specific
-        // is the observer this block attaches to its own map hosts.
+        // view-switching blocks could share it). The map host needs no
+        // observer of its own: MapLibre tracks its container's size.
         if (ns.disposeWithin) ns.disposeWithin(root);
-
-        // Tear down any ResizeObservers we attached directly to map hosts
-        // so they don't fire against disposed maps when the user picks a
-        // new corpus.
-        var mapHosts = root.querySelectorAll('.iwac-vis-compare-map');
-        for (var j = 0; j < mapHosts.length; j++) {
-            var ro = mapHosts[j]._iwacResizeObserver;
-            if (ro && typeof ro.disconnect === 'function') {
-                try { ro.disconnect(); } catch (e) {}
-                mapHosts[j]._iwacResizeObserver = null;
-            }
-        }
     }
 
     function renderResults(resultsRoot, dataA, dataB, ctx) {

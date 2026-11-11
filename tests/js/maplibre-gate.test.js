@@ -238,6 +238,7 @@ function loadGraph() {
         remove() { return this; },
     });
     gate.P.attachFeatureStateHover = () => () => {};
+    gate.P.attachMapHoverPopup = () => ({ hide() {} });
     gate.P.normalizeColorForMapLibre = (c) => c;
     gate.ns.getChartTokens = () => ({});
     gate.ns.getPalette = () => ['#ce4115'];
