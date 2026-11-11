@@ -476,7 +476,7 @@
                 row.appendChild(P.el('span', 'iwac-vis-arc-list__rank', rank));
 
                 var title = P.el('a', 'iwac-vis-arc-list__name', node.title || ('#' + node.o_id));
-                title.href = ((ctx && ctx.siteBase) || '') + '/item/' + node.o_id;
+                title.href = P.itemUrl(ctx && ctx.siteBase, node.o_id);
                 title.setAttribute('aria-label',
                     (node.title || ('#' + node.o_id)) + ', ' +
                     P.t('entity_type_' + (node.type || 'Sujets')) + ', ' +
@@ -639,7 +639,7 @@
                 entity.appendChild(P.el('span', 'iwac-vis-time-matrix__rank', rank));
                 var name = P.el('a', 'iwac-vis-time-matrix__name',
                     node.title || ('#' + node.o_id));
-                name.href = ((ctx && ctx.siteBase) || '') + '/item/' + node.o_id;
+                name.href = P.itemUrl(ctx && ctx.siteBase, node.o_id);
                 name.setAttribute('aria-label',
                     (node.title || ('#' + node.o_id)) + ', ' +
                     P.t('entity_type_' + type) + ', ' +

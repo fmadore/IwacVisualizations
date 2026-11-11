@@ -474,7 +474,7 @@
                 if (!opts.siteBase || !link.id) return;
                 li.appendChild(document.createTextNode(' · '));
                 var a = P.el('a', 'iwac-vis-timeline-details-link', P.t(link.key));
-                a.href = opts.siteBase + '/item/' + link.id;
+                a.href = P.itemUrl(opts.siteBase, link.id);
                 li.appendChild(a);
             });
             list.appendChild(li);

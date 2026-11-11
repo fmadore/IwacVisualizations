@@ -107,7 +107,7 @@
 
         var card = P.el('a', 'iwac-vis-similar-card');
         if (item.id != null && ctx && ctx.siteBase) {
-            card.href = ctx.siteBase + '/item/' + encodeURIComponent(item.id);
+            card.href = P.itemUrl(ctx.siteBase, item.id);
         } else {
             card.href = '#';
             card.setAttribute('aria-disabled', 'true');

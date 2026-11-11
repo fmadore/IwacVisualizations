@@ -474,7 +474,8 @@
         }
         ns.registerChart(built.chart, function (el, chart) {
             draw(chart);
-            // Re-bound on every (re)init: a theme swap disposes the instance.
+            // Unbound first: a theme swap re-runs this callback on the same
+            // instance, and a bare .on() would stack a listener per swap.
             if (opts.onClick) {
                 chart.off('click');
                 chart.on('click', opts.onClick);

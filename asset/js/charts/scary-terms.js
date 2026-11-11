@@ -68,6 +68,9 @@
         places:       'scary-terms-places.json'
     };
 
+    // The view each lazy bundle feeds.
+    var LAZY_VIEW = { wordcloud: 'wordcloud', places: 'map' };
+
     var TOP_N = 10;
     var RACE_TICK_MS = 1000;
 
@@ -85,8 +88,7 @@
         // degrades the corresponding views.
         load:           function (ctx) {
             function optional(name) {
-                return P.fetchJSON(ctx.dataBase + DATA_FILES[name])
-                    .catch(function () { return null; });
+                return P.fetchOptionalJSON(ctx.dataBase + DATA_FILES[name]);
             }
             return Promise.all([
                 P.fetchJSON(ctx.dataBase + DATA_FILES.metadata),
@@ -265,21 +267,45 @@
             ]
         }) : null;
 
-        // Lazy bundles: undefined = not requested, null = failed / absent,
-        // object = loaded. Fetch flags stop duplicate requests.
-        var wordcloudData;
-        var placesData;
-        var wordcloudRequested = false;
-        var placesRequested = false;
+        // Lazy bundles, fetched on first activation of their view. A bundle
+        // arriving is structural (the facet bar or the selects can only be
+        // built from it), so it remounts the controls before the redraw.
+        var lazy = P.lazyBundles(dataBase, DATA_FILES, {
+            warnLabel: 'IWACVis.scaryTerms',
+            onRequest: function (names) {
+                if (names.indexOf('places') !== -1) {
+                    mapEl.innerHTML = '';
+                    mapEl.appendChild(P.buildLoadingState());
+                }
+            },
+            // Each call names one bundle, and only its own view redraws.
+            onReady: function (names) {
+                var name = names[0];
+                if (name === 'places') {
+                    var placesData = lazy.get('places');
+                    if (placesData) {
+                        var seen = {};
+                        (placesData.places || []).forEach(function (p) {
+                            Object.keys(p.by_country || {}).forEach(function (cc) {
+                                seen[cc] = true;
+                            });
+                        });
+                        mapCountries = Object.keys(seen).sort();
+                    }
+                }
+                if (state.view === LAZY_VIEW[name]) {
+                    controls.mount();
+                    draw();
+                }
+            }
+        });
         var mapController = null;
         var mapCountries = [];
 
-        // Holds the CURRENT ECharts instance. dashboard-core re-runs this
-        // render callback with a fresh instance on every theme swap
-        // (dispose + reinit), so we must capture the new instance here
-        // rather than closing over the initial return value — otherwise
-        // draw() keeps calling setOption on a disposed chart after the
-        // first light/dark toggle and the chart goes blank.
+        // The chart's ECharts instance, captured inside the callback because
+        // registerChart() runs it — and so the first draw() — before it
+        // returns the instance. A theme swap keeps the same instance:
+        // dashboard-core calls setTheme() on it and re-runs this callback.
         var currentInstance = null;
         // Whether the live option is already a race, and can be merged into.
         var racePainted = false;
@@ -430,39 +456,16 @@
         //  Word cloud view (issue #4) — lazy bundle
         // -----------------------------------------------------------------
 
-        function loadWordcloud() {
-            if (wordcloudRequested) return;
-            wordcloudRequested = true;
-            if (currentInstance && !currentInstance.isDisposed()) {
-                currentInstance.showLoading();
-            }
-            P.fetchJSON(dataBase + DATA_FILES.wordcloud)
-                .then(function (d) { wordcloudData = d; })
-                .catch(function (err) {
-                    console.warn('IWACVis.scaryTerms: wordcloud bundle unavailable', err);
-                    wordcloudData = null;
-                })
-                .then(function () {
-                    // A bundle arriving is structural (the facet bar can
-                    // only be built from it), so this is a remount.
-                    if (state.view === 'wordcloud') {
-                        controls.mount();
-                        draw();
-                    }
-                });
-        }
-
         function drawWordcloud() {
             chartTitle.textContent = P.t('scary.wordcloud_chart_title');
-            if (wordcloudData === undefined) {
+            if (!lazy.ensure(['wordcloud'])) {
                 topBadge.textContent = '';
-                loadWordcloud();
-                if (currentInstance && !currentInstance.isDisposed()
-                    && wordcloudData === undefined) {
+                if (currentInstance && !currentInstance.isDisposed()) {
                     currentInstance.showLoading();
                 }
                 return null;
             }
+            var wordcloudData = lazy.get('wordcloud');
             if (wordcloudData === null) {
                 topBadge.textContent = '';
                 return P.emptyChartOption('Visualization data is not available yet.');
@@ -490,39 +493,9 @@
             };
         }
 
-        function loadPlaces() {
-            if (placesRequested) return;
-            placesRequested = true;
-            mapEl.innerHTML = '';
-            mapEl.appendChild(P.buildLoadingState());
-            P.fetchJSON(dataBase + DATA_FILES.places)
-                .then(function (d) { placesData = d; })
-                .catch(function (err) {
-                    console.warn('IWACVis.scaryTerms: places bundle unavailable', err);
-                    placesData = null;
-                })
-                .then(function () {
-                    if (placesData) {
-                        var seen = {};
-                        (placesData.places || []).forEach(function (p) {
-                            Object.keys(p.by_country || {}).forEach(function (cc) {
-                                seen[cc] = true;
-                            });
-                        });
-                        mapCountries = Object.keys(seen).sort();
-                    }
-                    if (state.view === 'map') {
-                        controls.mount();
-                        draw();
-                    }
-                });
-        }
-
         function drawMap() {
-            if (placesData === undefined) {
-                loadPlaces();
-                return;
-            }
+            if (!lazy.ensure(['places'])) return;
+            var placesData = lazy.get('places');
             if (placesData === null) {
                 mapEl.innerHTML = '';
                 mapEl.appendChild(P.buildNoDataState());
@@ -557,8 +530,8 @@
         //  precomputed term × term matrix keyed by the canonical term
         //  order from metadata.term_families. Uses the IWAC palette
         //  primary + surface tokens for the color ramp so light / dark
-        //  theme swaps track automatically via dashboard-core's
-        //  dispose+reinit path (the registerChart callback wraps draw()).
+        //  theme swaps track automatically: dashboard-core re-runs the
+        //  registerChart callback (which wraps draw()) on the same instance.
         // -----------------------------------------------------------------
 
         function resolveMatrixSlice() {
@@ -641,8 +614,8 @@
             families: families,
             hasCooccurrence: !!cooccurrence,
             hasEvents: !!eventsData,
-            getWordcloudData: function () { return wordcloudData; },
-            getPlacesData: function () { return placesData; },
+            getWordcloudData: function () { return lazy.get('wordcloud'); },
+            getPlacesData: function () { return lazy.get('places'); },
             getMapCountries: function () { return mapCountries; },
             playback: playback,
             trailing: url && P.buildCopyLinkButton

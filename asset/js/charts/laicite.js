@@ -87,8 +87,7 @@
         requireECharts: true,
         load: function (ctx) {
             function optional(name) {
-                return P.fetchJSON(ctx.dataBase + DATA_FILES[name])
-                    .catch(function () { return null; });
+                return P.fetchOptionalJSON(ctx.dataBase + DATA_FILES[name]);
             }
             return Promise.all([
                 P.fetchJSON(ctx.dataBase + DATA_FILES.metadata),
@@ -258,48 +257,16 @@
 
         // Phase 2 bundles load on first activation of their view — the
         // block opens on the overview, and none of these are needed there.
-        // undefined = not requested, null = failed/absent, object = loaded.
-        var lazy = {};
-        var lazyPending = {};
-
-        /**
-         * True once every named bundle has settled (loaded or failed). If
-         * one is still missing, request it and return false; its arrival
-         * remounts the controls and redraws.
-         */
-        function ensure(names) {
-            var missing = names.filter(function (n) {
-                return lazy[n] === undefined && !lazyPending[n];
-            });
-            if (!missing.length) {
-                return names.every(function (n) {
-                    return lazy[n] !== undefined;
-                });
+        // A bundle arriving is structural — the selects it feeds can only
+        // be built now — so its arrival remounts the controls and redraws.
+        var lazy = P.lazyBundles(ctx.dataBase, DATA_FILES, {
+            warnLabel: 'IWACVis.laicite',
+            onReady: function () {
+                controls.mount();
+                draw();
             }
-            missing.forEach(function (name) {
-                lazyPending[name] = true;
-                P.fetchJSON(ctx.dataBase + DATA_FILES[name])
-                    .then(function (d) { lazy[name] = d; })
-                    .catch(function (err) {
-                        console.warn('IWACVis.laicite: bundle unavailable',
-                            name, err);
-                        lazy[name] = null;
-                    })
-                    .then(function () {
-                        lazyPending[name] = false;
-                        var ready = names.every(function (n) {
-                            return lazy[n] !== undefined;
-                        });
-                        if (ready) {
-                            // A bundle arriving is structural — the selects
-                            // it feeds can only be built now — so remount.
-                            controls.mount();
-                            draw();
-                        }
-                    });
-            });
-            return false;
-        }
+        });
+        var ensure = lazy.ensure;
 
         // The timeline chart is the only ECharts instance this block owns
         // directly (the lazy views register their own). dashboard-core keeps
@@ -328,24 +295,24 @@
                 return concordance.countriesFor(subset);
             },
             getCollocateSlices: function (scope) {
-                return L.collocateSlices(lazy.collocates, scope);
+                return L.collocateSlices(lazy.get('collocates'), scope);
             },
             getSeasonSubsets: function () {
-                var byS = (lazy.seasonality || {}).by_subset || {};
+                var byS = (lazy.get('seasonality') || {}).by_subset || {};
                 return Object.keys(byS).filter(function (k) {
                     // Only corpora that actually carry lunar dates: offering
                     // scholarship here would show an all-zero lunar panel.
                     return (byS[k].hijri_coverage || 0) > 0;
                 });
             },
-            getActorTypes: function () { return L.actorTypes(lazy.actors); },
-            getArenaCountries: function () { return L.arenaCountries(lazy.arenas); },
+            getActorTypes: function () { return L.actorTypes(lazy.get('actors')); },
+            getArenaCountries: function () { return L.arenaCountries(lazy.get('arenas')); },
             getSentimentModels: function () {
-                return L.sentimentModels(lazy.sentiment);
+                return L.sentimentModels(lazy.get('sentiment'));
             },
-            getPlaceCountries: function () { return L.placeCountries(lazy.places); },
+            getPlaceCountries: function () { return L.placeCountries(lazy.get('places')); },
             getReferenceTypes: function () {
-                return L.referenceTypes(lazy.references);
+                return L.referenceTypes(lazy.get('references'));
             }
         });
 
@@ -360,7 +327,7 @@
                     return;
                 }
                 currentInstance.hideLoading();
-                var season = lazy.seasonality;
+                var season = lazy.get('seasonality');
                 if (!season) {
                     currentInstance.setOption(P.emptyChartOption(),
                         { notMerge: true });
@@ -514,21 +481,21 @@
                     return;
                 }
                 viewHost.appendChild(L.buildCollocates({
-                    bundle: lazy.collocates,
-                    implicit: lazy.implicit,
+                    bundle: lazy.get('collocates'),
+                    implicit: lazy.get('implicit'),
                     state: state
                 }));
             } else if (state.view === 'corpora') {
                 mountLazy('corpora', function () {
                     return L.buildCorpora({
-                        bundle: lazy.corpora,
+                        bundle: lazy.get('corpora'),
                         metadata: metadata
                     });
                 });
             } else if (state.view === 'actors') {
                 mountLazy('actors', function () {
                     return L.buildActors({
-                        bundle: lazy.actors,
+                        bundle: lazy.get('actors'),
                         state: state,
                         siteBase: siteBase
                     });
@@ -536,7 +503,7 @@
             } else if (state.view === 'arenas') {
                 mountLazy('arenas', function () {
                     return L.buildArenas({
-                        bundle: lazy.arenas,
+                        bundle: lazy.get('arenas'),
                         metadata: metadata,
                         state: state,
                         frameColors: frameColors
@@ -545,7 +512,7 @@
             } else if (state.view === 'sentiment') {
                 mountLazy('sentiment', function () {
                     return L.buildSentiment({
-                        bundle: lazy.sentiment,
+                        bundle: lazy.get('sentiment'),
                         state: state
                     });
                 });
@@ -557,7 +524,7 @@
                 // blank. v1.59.0 stopped it leaking; this stops it churning.
                 mountParked('places', 'map', function () {
                     return L.buildMap({
-                        bundle: lazy.places,
+                        bundle: lazy.get('places'),
                         metadata: metadata,
                         state: state,
                         frameColors: frameColors,
@@ -567,7 +534,7 @@
             } else if (state.view === 'semantic') {
                 mountLazy('semantic', function () {
                     return L.buildSemantic({
-                        bundle: lazy.semantic,
+                        bundle: lazy.get('semantic'),
                         metadata: metadata,
                         state: state,
                         frameColors: frameColors,
@@ -580,18 +547,18 @@
             } else if (state.view === 'circulation') {
                 mountLazy('circulation', function () {
                     return L.buildCirculation({
-                        bundle: lazy.circulation,
+                        bundle: lazy.get('circulation'),
                         siteBase: siteBase
                     });
                 });
             } else if (state.view === 'bylines') {
                 mountLazy('bylines', function () {
-                    return L.buildBylines({ bundle: lazy.bylines });
+                    return L.buildBylines({ bundle: lazy.get('bylines') });
                 });
             } else if (state.view === 'references') {
                 mountLazy('references', function () {
                     return L.buildReferences({
-                        bundle: lazy.references,
+                        bundle: lazy.get('references'),
                         state: state,
                         siteBase: siteBase
                     });

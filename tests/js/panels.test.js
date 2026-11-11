@@ -309,3 +309,103 @@ test('index types read People / Places / Organisations / Subjects / Events, from
         assert.doesNotMatch(src, /'Persons'|'Organizations'/, `${file} keeps a private type label`);
     }
 });
+
+/* ------------------------------------------------------------------ */
+/*  P.lazyBundles / P.fetchOptionalJSON (shared/panels-boot.js)        */
+/* ------------------------------------------------------------------ */
+
+// The optional and on-first-use bundle loading that scary-terms and laïcité
+// each used to hand-roll. What matters to a reader is that a view asked for
+// twice fetches once, that a failed bundle reads as null (an empty state)
+// rather than as "still loading" forever, and that the block redraws only
+// once everything that view needs has settled.
+
+const BOOT_SOURCE = readFileSync(join(ROOT, 'asset/js/charts/shared/panels-boot.js'), 'utf8');
+
+/** panels-boot.js over a fetchJSON whose answers the test settles by hand. */
+function loadBoot() {
+    const requests = [];
+    const warnings = [];
+    const P = {
+        fetchJSON(url) {
+            return new Promise((resolve, reject) => {
+                requests.push({ url, resolve, reject });
+            });
+        },
+    };
+    const context = {
+        console: { warn(...args) { warnings.push(args); }, error() {} },
+        Promise,
+        window: { IWACVis: { panels: P } },
+    };
+    context.window.window = context.window;
+    vm.createContext(context);
+    vm.runInContext(BOOT_SOURCE, context, { filename: 'panels-boot.js' });
+    return { P, requests, warnings };
+}
+
+const settleAll = () => new Promise((r) => setImmediate(r));
+
+const LAZY_FILES = { a: 'a.json', b: 'b.json', c: 'c.json' };
+
+test('ensure requests each missing bundle once and reports ready only when all settled', async () => {
+    const { P, requests } = loadBoot();
+    const ready = [];
+    const requested = [];
+    const lazy = P.lazyBundles('/files/', LAZY_FILES, {
+        onRequest: (names) => requested.push(names.slice()),
+        onReady: (names) => ready.push(names.slice()),
+    });
+
+    assert.equal(lazy.get('a'), undefined);
+    assert.equal(lazy.ensure(['a', 'b']), false);
+    assert.deepEqual(requests.map((r) => r.url), ['/files/a.json', '/files/b.json']);
+    assert.deepEqual(requested, [['a', 'b']]);
+
+    // Asked again while in flight: no second request, still not ready.
+    assert.equal(lazy.ensure(['a', 'b']), false);
+    assert.equal(requests.length, 2);
+    assert.equal(requested.length, 1);
+
+    requests[0].resolve({ id: 'a' });
+    await settleAll();
+    assert.deepEqual(ready, [], 'one of two settled is not ready');
+    assert.deepEqual(lazy.get('a'), { id: 'a' });
+
+    requests[1].resolve({ id: 'b' });
+    await settleAll();
+    assert.deepEqual(ready, [['a', 'b']]);
+    assert.equal(lazy.ensure(['a', 'b']), true);
+    assert.equal(requests.length, 2, 'a settled bundle is never fetched again');
+});
+
+test('a failed bundle settles as null, warns once, and is not retried', async () => {
+    const { P, requests, warnings } = loadBoot();
+    const ready = [];
+    const lazy = P.lazyBundles('/files/', LAZY_FILES, {
+        warnLabel: 'IWACVis.test',
+        onReady: (names) => ready.push(names.slice()),
+    });
+
+    assert.equal(lazy.ensure(['c']), false);
+    requests[0].reject(new Error('404'));
+    await settleAll();
+
+    assert.equal(lazy.get('c'), null);
+    assert.deepEqual(ready, [['c']], 'a failure still settles, so the view can show its empty state');
+    assert.equal(warnings.length, 1);
+    assert.equal(warnings[0][0], 'IWACVis.test: bundle unavailable');
+    assert.equal(warnings[0][1], 'c');
+    assert.equal(lazy.ensure(['c']), true);
+    assert.equal(requests.length, 1);
+});
+
+test('fetchOptionalJSON resolves to null instead of rejecting', async () => {
+    const { P, requests } = loadBoot();
+    const missing = P.fetchOptionalJSON('/files/x.json');
+    const present = P.fetchOptionalJSON('/files/y.json');
+    requests[0].reject(new Error('404'));
+    requests[1].resolve({ ok: true });
+    assert.equal(await missing, null);
+    assert.deepEqual(await present, { ok: true });
+});
