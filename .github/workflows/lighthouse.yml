@@ -93,6 +93,20 @@ jobs:
       - name: Install pinned build tooling
         run: npm ci
 
+      # Chromium is ~150 MB per run otherwise. Keyed on the @playwright/test
+      # version the lockfile pins, which decides the browser build; the
+      # install below still runs, for the OS packages, and skips a cached
+      # browser.
+      - name: Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+
       # The Chromium @playwright/test pins, not the runner's own Chrome, so a
       # runner image update cannot move the scores under an unchanged tree.
       - name: Install Chromium

@@ -113,10 +113,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      # Node runs only built-in-only scripts here (the version guard and the
+      # release notes), so there is no `npm ci` and no npm cache to restore.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
-          cache: npm
 
       # The tag arrives through env, never interpolated into the script: a
       # workflow_dispatch input is free text, and `${{ … }}` inside `run:` is
@@ -153,8 +154,7 @@ jobs:
       # config/module.ini, CITATION.cff and the README citation); this adds
       # the one thing it cannot know — whether they agree with the tag being
       # released. A tag that disagrees ships a module whose admin screen lies
-      # about its version. Runs before `npm ci` so a mismatch fails in
-      # seconds; the guard needs only Node built-ins.
+      # about its version. The guard needs only Node built-ins.
       - name: Version must match every declaration
         env:
           WANT: ${{ steps.v.outputs.version }}
@@ -164,21 +164,11 @@ jobs:
           echo "tag=$WANT  config/module.ini=$INI"
           test "$INI" = "$WANT" || { echo "::error::config/module.ini says $INI, tag says $WANT"; exit 1; }
 
-      - run: npm ci
-
-      # asset/js/dist/ (the esbuild bundles + sourcemaps) and *.min.css are
-      # committed, because the production server has no Node toolchain and
-      # the templates reference only those. The gate ran this too; it runs
-      # again because the zip is assembled from THIS job's tree.
-      - name: Committed build artifacts must be current
-        run: |
-          npm run build
-          changes=$(git status --porcelain --untracked-files=all)
-          if [ -n "$changes" ]; then
-            echo "$changes"
-            echo "::error::built assets are stale or missing at this tag — run 'npm run build', commit asset/js/dist and the .min.css siblings, and retag"
-            exit 1
-          fi
+      # No rebuild here. The committed asset/js/dist/ and *.min.css must be
+      # current at this tag, and gate-build (build-check.yml, on the same ref)
+      # proves it with `npm run build` + `git status`; publish needs that gate.
+      # A rebuild in this job could not change the zip anyway: `git archive`
+      # below reads the tagged commit, not this job's working tree.
 
       # The directory name inside the zip is the Omeka S module id. Sites at
       # islam.zmo.de are configured against "IwacVisualizations", so the archive
@@ -230,8 +220,7 @@ jobs:
 
           echo "$(wc -l < /tmp/list) files, $(du -h "$ZIP" | cut -f1)"
 
-      # Written after the stale-build check, which fails on any untracked
-      # file, and outside the zip, which `git archive` builds from HEAD.
+      # Written outside the zip, which `git archive` builds from HEAD.
       - name: Release title and notes from CHANGELOG.md
         id: notes
         env:

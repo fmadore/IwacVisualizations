@@ -33,12 +33,14 @@ on:
       - "view/common/iwac-assets.phtml"
       - "scripts/check-cdn-versions.js"
       - "scripts/cdn-integrity.js"
+      - "scripts/lib/cdn.js"
       - ".github/workflows/cdn-versions.yml"
   pull_request:
     paths:
       - "view/common/iwac-assets.phtml"
       - "scripts/check-cdn-versions.js"
       - "scripts/cdn-integrity.js"
+      - "scripts/lib/cdn.js"
       - ".github/workflows/cdn-versions.yml"
   workflow_call:
     inputs:
