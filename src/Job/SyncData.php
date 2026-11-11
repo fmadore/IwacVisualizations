@@ -35,6 +35,19 @@ class SyncData extends AbstractJob
     const RELEASE_BASE = 'https://github.com/fmadore/IwacVisualizations/releases/download/';
 
     /**
+     * What a release tag may look like before it is spliced into the
+     * download URL: one path segment of URL-unreserved characters, starting
+     * and ending with a letter or digit, and never `..` (see isValidTag()).
+     *
+     * Not just the `data-build-<run>-<attempt>` shape the pointer names:
+     * regenerate-data.yml also publishes a versioned snapshot under any tag
+     * an operator types into its `tag` input, and the admin form's override
+     * exists to pull exactly those — and to roll back to an older
+     * `data-build-*`. `data` itself (the moving pointer release) matches.
+     */
+    const TAG_PATTERN = '/^[A-Za-z0-9](?:[A-Za-z0-9._-]{0,98}[A-Za-z0-9])?$/D';
+
+    /**
      * The entry checked for before extraction — guards against a
      * 404-HTML-as-zip or a truncation. The manifest, because nothing can be
      * published without it: it names and hashes every other entry.
@@ -125,7 +138,8 @@ class SyncData extends AbstractJob
             // 1. Resolve the repository-owned release URL. Do not accept an
             // arbitrary job argument here: background-job arguments can be
             // dispatched outside this controller and would otherwise create
-            // a server-side request primitive.
+            // a server-side request primitive. So the tag is validated again
+            // here (resolveTag(), releaseUrlForTag()), not only in the form.
             $tag = $this->resolveTag($tag, $workRoot . '/release-' . $jobId . '.json', $logger);
             $url = self::releaseUrlForTag($tag);
 
@@ -270,7 +284,7 @@ class SyncData extends AbstractJob
                 'time'  => gmdate('Y-m-d\TH:i:s\Z'),
                 'count' => $count,
                 'bytes' => $bytes,
-                'tag'   => $tag !== '' ? $tag : 'data',
+                'tag'   => $tag,
             ]);
 
             // 7. Refresh the root collection-overview.json the IWAC theme's
@@ -367,19 +381,37 @@ class SyncData extends AbstractJob
         return null;
     }
 
-    /** Build the only permitted download origin for a release tag. */
-    public static function releaseUrlForTag(string $tag): string
+    /** Whether `$tag` may name a release (TAG_PATTERN, and no `..`). */
+    public static function isValidTag(string $tag): bool
     {
-        $tag = trim($tag);
-        return self::RELEASE_BASE
-            . ($tag !== '' ? rawurlencode($tag) : 'data')
-            . '/' . self::ASSET_NAME;
+        return preg_match(self::TAG_PATTERN, $tag) === 1 && strpos($tag, '..') === false;
     }
 
-    /** The moving release contains only a pointer to a fully published immutable pair. */
+    /**
+     * Build the only permitted download origin for a release tag. Refuses a
+     * tag isValidTag() does not accept: the pattern admits only characters
+     * a URL path carries as they are, so the tag is one segment of the
+     * repository's own release path and nothing else.
+     */
+    public static function releaseUrlForTag(string $tag): string
+    {
+        if (!self::isValidTag($tag)) {
+            throw new \RuntimeException('Invalid data release tag.');
+        }
+        return self::RELEASE_BASE . $tag . '/' . self::ASSET_NAME;
+    }
+
+    /**
+     * The release to pull: an explicit tag as given, once validated, or —
+     * for a blank tag or the moving `data` release, which contains only a
+     * pointer — the immutable pair `data/latest.json` names.
+     */
     protected function resolveTag(string $tag, string $path, $logger): string
     {
         if ($tag !== '' && $tag !== 'data') {
+            if (!self::isValidTag($tag)) {
+                throw new \RuntimeException('Invalid data release tag.');
+            }
             return $tag;
         }
         try {
@@ -514,6 +546,11 @@ class SyncData extends AbstractJob
                 CURLOPT_FILE           => $fp,
                 CURLOPT_FOLLOWLOCATION => true,   // GitHub release asset → objects.githubusercontent.com
                 CURLOPT_MAXREDIRS      => 5,
+                // HTTPS only, on the first request and every redirect: a
+                // redirect must never downgrade to http or reach file://,
+                // ftp:// or any other scheme curl was built with.
+                CURLOPT_PROTOCOLS      => CURLPROTO_HTTPS,
+                CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS,
                 CURLOPT_CONNECTTIMEOUT => 30,
                 CURLOPT_TIMEOUT        => 600,
                 CURLOPT_FAILONERROR    => true,   // HTTP >= 400 becomes a curl error
