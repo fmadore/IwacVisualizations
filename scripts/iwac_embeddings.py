@@ -30,9 +30,10 @@ the coerce → normalize → batched-cosine stack was copy-pasted across
 ``generate_article_dashboards.py``, ``generate_publication_dashboards.py``,
 ``generate_semantic_landscape.py`` and ``generate_periodicals_landscape.py``;
 new embedding consumers (first: ``generate_reprints.py``) should import
-from here, and the four existing generators can migrate opportunistically
-(their outputs are verified byte-stable, so migrate one at a time with a
-diff check).
+from here. The article and publication dashboards moved onto
+``build_normalized_matrix`` in 2026-11; the semantic and periodicals
+landscapes (and ``laicite/semantic.py``) still normalise in float32 on
+purpose — moving them would change UMAP input in the last bits.
 
 Functions
 ---------
