@@ -224,12 +224,11 @@
             onChange: onChange,
             groupClass: 'iwac-vis-keywords-filters__group',
             labelClass: 'iwac-vis-aside__label iwac-vis-keywords-filters__label',
-            selectClass: 'iwac-vis-keywords-filters__select'
+            selectClass: 'iwac-vis-keywords-filters__select',
+            // An eyebrow reads as a heading, not a "Label:" run-in, as the
+            // segmented groups above render theirs.
+            colon: false
         });
-        // An eyebrow reads as a heading, not a "Label:" run-in: drop the
-        // colon buildSelectControl appends, as the segmented groups above
-        // (which take no colon) render theirs.
-        group.firstChild.textContent = labelText;
         parent.appendChild(group);
         return group.control;
     }

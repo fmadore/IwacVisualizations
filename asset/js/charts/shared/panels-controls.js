@@ -78,7 +78,7 @@
      * supplied because each block's stylesheet targets its own tokens.
      *
      * @param {Object} cfg
-     * @param {string} cfg.label   already-translated label (rendered "label:")
+     * @param {string} cfg.label   already-translated label (rendered "label:", or as is with `cfg.colon: false`)
      * @param {Array<{value:string, label:string}>} cfg.options
      * @param {string} [cfg.current]   option value to preselect
      * @param {function(string):void} cfg.onChange  fires with the new value
@@ -255,7 +255,9 @@
     P.buildSelectControl = function (cfg) {
         var group = P.el('div', cfg.groupClass || 'iwac-vis-select-group');
         var label = P.el('label', cfg.labelClass || 'iwac-vis-select-label',
-            P.labelColon(cfg.label));
+            // `colon: false` for a label set as a heading-style eyebrow,
+            // which takes no "Label:" run-in.
+            cfg.colon === false ? cfg.label : P.labelColon(cfg.label));
         // `.iwac-vis-control` carries the shared control skin (padding, surface,
         // radius, focus ring) from iwac-core.css; the block class that follows
         // is layout only. Core used to enumerate every block's private control

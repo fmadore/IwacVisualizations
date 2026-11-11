@@ -91,7 +91,7 @@
     function itemLink(entry, siteBase) {
         if (entry && entry.o_id) {
             var a = document.createElement('a');
-            a.href = (siteBase || '') + '/item/' + entry.o_id;
+            a.href = P.itemUrl(siteBase, entry.o_id);
             a.textContent = entry.title || ('#' + entry.o_id);
             return a;
         }

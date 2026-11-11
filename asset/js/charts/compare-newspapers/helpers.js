@@ -66,17 +66,16 @@
      * `data-iwac-control` handle, the label/id wiring and the shared
      * `.iwac-vis-control` skin — with the block's own label/row classes.
      * The label is a heading-style run-in here (uppercase in the sentiment
-     * toolbar, beside the colon-less "Type" in the picker), so the colon the
-     * builder appends is dropped.
+     * toolbar, beside the colon-less "Type" in the picker), so it takes no
+     * colon.
      *
      * @param {Object} cfg  P.buildSelectControl's config
      * @returns {HTMLElement} the group, with `.control` and `.setOptions`
      */
     function buildSelect(cfg) {
-        var group = P.buildSelectControl(cfg);
-        var label = group.querySelector('label');
-        if (label) label.textContent = cfg.label;
-        return group;
+        var own = { colon: false };
+        Object.keys(cfg).forEach(function (k) { own[k] = cfg[k]; });
+        return P.buildSelectControl(own);
     }
 
     CN.compareColors = compareColors;

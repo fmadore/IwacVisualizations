@@ -157,7 +157,7 @@
                 org: org.acronym || org.name
             });
             if (org.o_id && ctx.siteBase) {
-                recordLink.href = ctx.siteBase + '/item/' + org.o_id;
+                recordLink.href = P.itemUrl(ctx.siteBase, org.o_id);
                 recordLink.style.display = '';
             } else {
                 recordLink.style.display = 'none';

@@ -27,7 +27,7 @@
         var enriched = items.map(function (it) {
             var copy = {};
             for (var k in it) { if (Object.prototype.hasOwnProperty.call(it, k)) copy[k] = it[k]; }
-            copy.url = it.o_id != null && siteBase ? siteBase + '/item/' + it.o_id : '';
+            copy.url = it.o_id != null && siteBase ? P.itemUrl(siteBase, it.o_id) : '';
             return copy;
         });
 

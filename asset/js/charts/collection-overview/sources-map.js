@@ -82,7 +82,7 @@
             }
             return {
                 name: source.name,
-                url: source.o_id && siteBase ? siteBase + '/item/' + source.o_id : '',
+                url: source.o_id && siteBase ? P.itemUrl(siteBase, source.o_id) : '',
                 count: source.count || 0,
                 countries: countryLabel,
                 coordinates: source.lat != null && source.lng != null ? '✓' : '—'

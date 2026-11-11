@@ -287,6 +287,12 @@ test('push mode creates history entries and follows popstate', async () => {
     win.listeners.popstate.forEach((fn) => fn());
     await tick();
     assert.equal(store.state.topic, null, 'hydrated back from the address');
+
+    // Then Forward, onto the very address the block last pushed.
+    win.location.href = 'https://x.test/p?topics.topic=7';
+    win.listeners.popstate.forEach((fn) => fn());
+    await tick();
+    assert.equal(store.state.topic, '7', 'Forward onto the last pushed address is followed');
 });
 
 test('a frame that cannot write its address degrades silently', async () => {

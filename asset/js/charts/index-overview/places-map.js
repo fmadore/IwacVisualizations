@@ -86,7 +86,7 @@
                 if (state.layer !== LAYERS.MENTIONS) {
                     places.forEach(function (p) {
                         rows.push([
-                            p.o_id && siteBase ? { text: p.title, href: siteBase + '/item/' + p.o_id } : p.title,
+                            p.o_id && siteBase ? { text: p.title, href: P.itemUrl(siteBase, p.o_id) } : p.title,
                             P.t('Authority pins'),
                             p.frequency || 0
                         ]);

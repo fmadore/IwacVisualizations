@@ -72,7 +72,7 @@
             var tag;
             if (item.o_id && ctx && ctx.siteBase) {
                 tag = P.el('a', 'iwac-vis-compare-overlap__tag');
-                tag.href = ctx.siteBase + '/item/' + item.o_id;
+                tag.href = P.itemUrl(ctx.siteBase, item.o_id);
             } else {
                 tag = P.el('li', 'iwac-vis-compare-overlap__tag');
             }

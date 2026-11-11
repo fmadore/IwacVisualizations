@@ -335,7 +335,6 @@
             return store.patch(changesFromUrl(), options || { silent: true });
         }
 
-        var lastWritten = null;
         function sync(changedKeys) {
             var next = href();
             if (!next || next === win.location.href) return;
@@ -344,7 +343,6 @@
             var push = !!(cfg.push && cfg.push(changedKeys || [], store.state));
             try {
                 history[push ? 'pushState' : 'replaceState'](history.state, '', next);
-                lastWritten = next;
             } catch (e) { /* sandboxed or cross-origin frame: leave the bar alone */ }
         }
 
@@ -356,7 +354,10 @@
         var onPop = null;
         if (cfg.push && win.addEventListener) {
             onPop = function () {
-                if (win.location.href === lastWritten) return;
+                // Every pop is a navigation, and is followed. A guard here
+                // once skipped an address equal to the last one written,
+                // which is exactly where Forward lands after Back: the block
+                // stayed on the old view under the new address.
                 store.patch(changesFromUrl(true));
             };
             win.addEventListener('popstate', onPop);

@@ -202,17 +202,6 @@
             keys: [topicKey],
             push: function (keys) { return keys.indexOf('topic') !== -1; }
         });
-        // bindUrlState's own popstate handler skips an address equal to the
-        // last one it wrote, so Back then Forward onto the topic it pushed
-        // was ignored and the overview stayed up under `?topic=`. Until that
-        // guard is fixed in shared/store.js, re-read the address here too;
-        // when both run, the second patch is a no-op.
-        window.addEventListener('popstate', function () {
-            var raw;
-            try { raw = new URLSearchParams(window.location.search).get(URL_PARAM); }
-            catch (e) { return; }
-            store.set('topic', raw == null ? null : topicKey.parse(raw));
-        });
         var nav = { overview: overview, detail: detail, ctx: ctx, href: url.href };
 
         // Scroll to a topic only when the reader opened it here; on Back /

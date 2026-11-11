@@ -66,7 +66,7 @@
     function buildCard(article, badge, siteBase, metaParts) {
         var card = document.createElement('a');
         card.className = 'iwac-vis-article-card';
-        card.href = (siteBase || '') + '/item/' + article.o_id;
+        card.href = P.itemUrl(siteBase, article.o_id);
 
         var thumb = P.el('div', 'iwac-vis-article-card__thumb');
         if (article.thumbnail) {
