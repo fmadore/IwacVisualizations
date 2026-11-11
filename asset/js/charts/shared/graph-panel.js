@@ -176,9 +176,29 @@
 
         function close() { graph.select(null); }
 
+        // A rebuild removes every child, the button just pressed included;
+        // a keyboard reader inside the card would land on <body>. So a
+        // walk to a neighbour lands on the new card's title, and a close
+        // returns to the graph the card belongs to.
+        function restoreFocus(node, title) {
+            var target = title;
+            if (!node) {
+                target = card.parentNode
+                    && card.parentNode.querySelector('.iwac-vis-graph-canvas');
+            }
+            if (!target) return;
+            try { target.focus({ preventScroll: true }); }
+            catch (e) { /* not focusable after all */ }
+        }
+
         function render(node) {
+            var hadFocus = card.contains(document.activeElement);
             while (card.firstChild) card.removeChild(card.firstChild);
-            if (!node) { card.hidden = true; return; }
+            if (!node) {
+                card.hidden = true;
+                if (hadFocus) restoreFocus(null);
+                return;
+            }
 
             var closeBtn = P.setIcon(P.el('button', 'iwac-vis-graph-card__close'), 'x');
             closeBtn.type = 'button';
@@ -186,7 +206,11 @@
             closeBtn.addEventListener('click', close);
             card.appendChild(closeBtn);
 
-            card.appendChild(P.el('h4', 'iwac-vis-graph-card__title', node.name));
+            // Programmatically focusable only: the landing point after a
+            // jump, which reads the new node's name out first.
+            var title = P.el('h4', 'iwac-vis-graph-card__title', node.name);
+            title.tabIndex = -1;
+            card.appendChild(title);
 
             var kind = spec.categoryName ? spec.categoryName(node) : null;
             if (kind) card.appendChild(P.el('p', 'iwac-vis-graph-card__kind', kind));
@@ -238,6 +262,7 @@
             }
 
             card.hidden = false;
+            if (hadFocus) restoreFocus(node, title);
         }
 
         return { el: card, render: render };

@@ -60,6 +60,8 @@ class Element {
     }
     setAttribute(n, v) { this.attrs[n] = String(v); }
     getAttribute(n) { return Object.prototype.hasOwnProperty.call(this.attrs, n) ? this.attrs[n] : null; }
+    removeAttribute(n) { delete this.attrs[n]; }
+    hasAttribute(n) { return Object.prototype.hasOwnProperty.call(this.attrs, n); }
     appendChild(c) { if (c.parentNode) c.parentNode.removeChild(c); c.parentNode = this; this.children.push(c); return c; }
     removeChild(c) { const i = this.children.indexOf(c); if (i !== -1) this.children.splice(i, 1); c.parentNode = null; return c; }
     get firstChild() { return this.children[0] || null; }
@@ -404,7 +406,19 @@ test('the search dropdown wears the shared classes, and an open list keeps its E
     assert.equal(item.children[0].className, 'iwac-vis-list__name');
     assert.equal(item.children[1].className, 'iwac-vis-list-item__count');
 
+    // The combobox wiring: an expanded input pointing at its listbox.
+    assert.equal(search.input.getAttribute('role'), 'combobox');
+    assert.equal(search.input.getAttribute('aria-expanded'), 'true');
+    assert.equal(search.input.getAttribute('aria-controls'), dropdown.id);
+    assert.equal(dropdown.getAttribute('role'), 'listbox');
+    assert.equal(item.getAttribute('role'), 'option');
+    search.input.dispatch('keydown', { key: 'ArrowDown' });
+    assert.equal(search.input.getAttribute('aria-activedescendant'), item.id);
+    assert.equal(item.getAttribute('aria-selected'), 'true');
+
     const open = search.input.dispatch('keydown', { key: 'Escape' });
+    assert.equal(search.input.getAttribute('aria-expanded'), 'false');
+    assert.equal(search.input.getAttribute('aria-activedescendant'), null);
     assert.equal(dropdown.style.display, 'none');
     assert.ok(open.stopped, 'closing the list is the whole of this Escape');
     const closed = search.input.dispatch('keydown', { key: 'Escape' });
