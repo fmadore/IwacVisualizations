@@ -35,100 +35,52 @@
         host.appendChild(root);
 
         // --- Type tabs -------------------------------------------------
-        var typeTabs = P.el('div', 'iwac-vis-tabs');
-        var typeButtons = {};
-        [
-            { key: 'subject', labelKey: 'Subjects' },
-            { key: 'spatial', labelKey: 'index.place_tags' }
-        ].forEach(function (t) {
-            var btn = P.el('button', 'iwac-vis-tab', P.t(t.labelKey));
-            btn.type = 'button';
-            btn.dataset.type = t.key;
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () { state.set('type', t.key); });
-            typeButtons[t.key] = btn;
-            typeTabs.appendChild(btn);
-        });
-        root.appendChild(labeledGroup(P.t('Field'), typeTabs));
+        var typeTabs = segmentedGroup(root, P.t('Field'), 'kw-type', [
+            { key: 'subject', label: P.t('Subjects') },
+            { key: 'spatial', label: P.t('index.place_tags') }
+        ], function (key) { state.set('type', key); });
 
         // --- Facet selector --------------------------------------------
-        var facetSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
-        [
-            { key: 'global',    labelKey: 'Global' },
-            { key: 'country',   labelKey: 'By country' },
-            { key: 'newspaper', labelKey: 'By newspaper' }
-        ].forEach(function (f) {
-            var opt = P.el('option', null, P.t(f.labelKey));
-            opt.value = f.key;
-            facetSelect.appendChild(opt);
-        });
-        facetSelect.addEventListener('change', function () { state.set('facet', facetSelect.value); });
-        root.appendChild(labeledGroup(P.t('Facet by'), facetSelect));
+        var facetSelect = selectGroup(root, P.t('Facet by'), 'kw-facet', [
+            { value: 'global',    label: P.t('Global') },
+            { value: 'country',   label: P.t('By country') },
+            { value: 'newspaper', label: P.t('By newspaper') }
+        ], function (value) { state.set('facet', value); });
 
         // --- Country select (conditional) ------------------------------
         var countryWrap = P.el('div');
-        var countrySelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
-        var allCountriesOpt = P.el('option', null, P.t('All countries'));
-        allCountriesOpt.value = '';
-        countrySelect.appendChild(allCountriesOpt);
-        ((datasets.metadata && datasets.metadata.countries) || []).forEach(function (c) {
-            var opt = P.el('option', null, c);
-            opt.value = c;
-            countrySelect.appendChild(opt);
-        });
-        countrySelect.addEventListener('change', function () {
-            state.set('country', countrySelect.value || null);
-        });
-        countryWrap.appendChild(labeledGroup(P.t('Country'), countrySelect));
+        var countrySelect = selectGroup(countryWrap, P.t('Country'), 'kw-country',
+            [{ value: '', label: P.t('All countries') }].concat(
+                ((datasets.metadata && datasets.metadata.countries) || []).map(function (c) {
+                    return { value: c, label: c };
+                })),
+            function (value) { state.set('country', value || null); });
 
         // --- Newspaper select (conditional) ----------------------------
         var newspaperWrap = P.el('div');
-        var newspaperSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
-        var allNewsOpt = P.el('option', null, P.t('All newspapers'));
-        allNewsOpt.value = '';
-        newspaperSelect.appendChild(allNewsOpt);
-        ((datasets.metadata && datasets.metadata.newspapers) || []).forEach(function (n) {
-            var opt = P.el('option', null, n);
-            opt.value = n;
-            newspaperSelect.appendChild(opt);
-        });
-        newspaperSelect.addEventListener('change', function () {
-            state.set('newspaper', newspaperSelect.value || null);
-        });
-        newspaperWrap.appendChild(labeledGroup(P.t('Newspaper'), newspaperSelect));
+        var newspaperSelect = selectGroup(newspaperWrap, P.t('Newspaper'), 'kw-newspaper',
+            [{ value: '', label: P.t('All newspapers') }].concat(
+                ((datasets.metadata && datasets.metadata.newspapers) || []).map(function (n) {
+                    return { value: n, label: n };
+                })),
+            function (value) { state.set('newspaper', value || null); });
 
         root.appendChild(countryWrap);
         root.appendChild(newspaperWrap);
 
         // --- View mode toggle ------------------------------------------
-        var viewTabs = P.el('div', 'iwac-vis-tabs');
-        var viewButtons = {};
-        [
-            { key: 'top',     labelKey: 'Top frequent' },
-            { key: 'compare', labelKey: 'Compare' }
-        ].forEach(function (v) {
-            var btn = P.el('button', 'iwac-vis-tab', P.t(v.labelKey));
-            btn.type = 'button';
-            btn.dataset.view = v.key;
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () { state.set('view', v.key); });
-            viewButtons[v.key] = btn;
-            viewTabs.appendChild(btn);
-        });
-        root.appendChild(labeledGroup(P.t('View mode'), viewTabs));
+        var viewTabs = segmentedGroup(root, P.t('View mode'), 'kw-view', [
+            { key: 'top',     label: P.t('Top frequent') },
+            { key: 'compare', label: P.t('Compare') }
+        ], function (key) { state.set('view', key); });
 
         // --- Top-N picker (top mode only) ------------------------------
         var topNWrap = P.el('div');
-        var topNSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
-        TOP_N_OPTIONS.forEach(function (n) {
-            var opt = P.el('option', null, P.t('top_n_keywords', { count: n }));
-            opt.value = String(n);
-            topNSelect.appendChild(opt);
-        });
-        topNSelect.addEventListener('change', function () {
-            state.set('topN', parseInt(topNSelect.value, 10) || 5);
-        });
-        topNWrap.appendChild(labeledGroup(P.t('Number to show'), topNSelect));
+        var topNSelect = selectGroup(topNWrap, P.t('Number to show'), 'kw-topn',
+            TOP_N_OPTIONS.map(function (n) {
+                return { value: String(n), label: P.t('top_n_keywords', { count: n }) };
+            }),
+            function (value) { state.set('topN', parseInt(value, 10) || 5); });
         root.appendChild(topNWrap);
 
         // --- Compare-mode picker ---------------------------------------
@@ -207,25 +159,13 @@
             });
         }
 
-        var searchTimer = null;
-        searchInput.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(renderChecklist, 120);
-        });
+        searchInput.addEventListener('input', P.debounce(renderChecklist, 120));
 
         function applyStateToUI() {
             var snap = state.get();
 
-            Object.keys(typeButtons).forEach(function (k) {
-                var on = k === snap.type;
-                typeButtons[k].classList.toggle('iwac-vis-tab--active', on);
-                typeButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
-            Object.keys(viewButtons).forEach(function (k) {
-                var on = k === snap.view;
-                viewButtons[k].classList.toggle('iwac-vis-tab--active', on);
-                viewButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
+            typeTabs.set(snap.type);
+            viewTabs.set(snap.view);
             facetSelect.value = snap.facet;
             countrySelect.value = snap.country || '';
             newspaperSelect.value = snap.newspaper || '';
@@ -247,24 +187,51 @@
     /**
      * A control under its eyebrow label — and NAMED by it.
      *
-     * The label is a `<div>`, not a `<label for>`, so before v1.53.0 nothing
-     * connected the two: all four `<select>`s in this sidebar were reported
-     * as unnamed, and the two tab groups were unlabelled runs of buttons. The
-     * id association fixes both at the one place that builds them, so an AT
-     * reads the same word a sighted reader sees.
+     * Before v1.53.0 the eyebrow was a bare `<div>` and nothing connected it
+     * to its control: all four `<select>`s in this sidebar were reported as
+     * unnamed, and the two tab groups were unlabelled runs of buttons. Both
+     * kinds are now the shared controls (P.buildSegmented / P.buildSelectControl),
+     * which carry the `data-iwac-control` handle, the shared control skin and
+     * the segmented group's arrow keys; the eyebrow stays this sidebar's own.
      */
-    function labeledGroup(labelText, controlEl) {
-        var wrap = P.el('div', 'iwac-vis-keywords-filters__group');
-        var labelId = 'iwac-vis-kwf-label-' + (++_uid);
+    function eyebrow(labelText) {
         var label = P.el('div', 'iwac-vis-aside__label iwac-vis-keywords-filters__label', labelText);
-        label.id = labelId;
+        label.id = 'iwac-vis-kwf-label-' + (++_uid);
+        return label;
+    }
+
+    function segmentedGroup(parent, labelText, name, options, onChange) {
+        var wrap = P.el('div', 'iwac-vis-keywords-filters__group');
+        var label = eyebrow(labelText);
         wrap.appendChild(label);
-        if (controlEl.classList.contains('iwac-vis-tabs')) {
-            controlEl.setAttribute('role', 'group');
-        }
-        controlEl.setAttribute('aria-labelledby', labelId);
-        wrap.appendChild(controlEl);
-        return wrap;
+        var seg = P.buildSegmented({
+            options: options,
+            labelledBy: label.id,
+            name: name,
+            onChange: onChange
+        });
+        wrap.appendChild(seg.root);
+        parent.appendChild(wrap);
+        return seg;
+    }
+
+    function selectGroup(parent, labelText, name, options, onChange) {
+        var group = P.buildSelectControl({
+            label: labelText,
+            options: options,
+            name: name,
+            idPrefix: 'iwac-vis-kwf-',
+            onChange: onChange,
+            groupClass: 'iwac-vis-keywords-filters__group',
+            labelClass: 'iwac-vis-aside__label iwac-vis-keywords-filters__label',
+            selectClass: 'iwac-vis-keywords-filters__select'
+        });
+        // An eyebrow reads as a heading, not a "Label:" run-in: drop the
+        // colon buildSelectControl appends, as the segmented groups above
+        // (which take no colon) render theirs.
+        group.firstChild.textContent = labelText;
+        parent.appendChild(group);
+        return group.control;
     }
 
     ns.indexOverview = ns.indexOverview || {};

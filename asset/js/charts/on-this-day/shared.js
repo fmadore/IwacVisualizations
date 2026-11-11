@@ -372,47 +372,35 @@
      * Segmented control — the header uses one for the calendar and one for
      * the layout.
      *
-     * Reuses `.iwac-vis-facets__btn` so it reads as the same family as every
-     * other selection control in the module; only the grouping is local.
-     * Buttons carry `aria-pressed` because this is a set of toggles, not
-     * navigation.
+     * The shared P.buildSegmented (aria-pressed toggles in a named group,
+     * arrow keys / Home / End moving focus between them, the
+     * `data-iwac-control` handle), dressed in `.iwac-vis-facets__btn` so it
+     * reads as the same family as every other selection control in the
+     * module; only the grouping and the count hint are local.
      *
      * @param {{label:string, options:Array<{key:string,label:string,hint?:string}>,
-     *          active:string, onChange:function(string)}} cfg
+     *          active:string, onChange:function(string), name?:string}} cfg
      */
     function segmented(cfg) {
-        var root = P.el('div', 'iwac-vis-otd-switch');
-        root.setAttribute('role', 'group');
-        root.setAttribute('aria-label', cfg.label);
-
-        var buttons = {};
-        function setActive(key) {
-            Object.keys(buttons).forEach(function (k) {
-                var on = k === key;
-                buttons[k].classList.toggle('iwac-vis-facets__btn--active', on);
-                buttons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
-        }
-
+        var seg = P.buildSegmented({
+            options: cfg.options,
+            active: cfg.active,
+            ariaLabel: cfg.label,
+            name: cfg.name || 'otd-switch',
+            onChange: cfg.onChange,
+            classes: {
+                root: 'iwac-vis-otd-switch',
+                btn: 'iwac-vis-facets__btn',
+                active: 'iwac-vis-facets__btn--active'
+            }
+        });
         cfg.options.forEach(function (opt) {
-            var btn = P.el('button', 'iwac-vis-facets__btn');
-            btn.type = 'button';
-            btn.appendChild(document.createTextNode(opt.label));
             if (opt.hint != null) {
-                btn.appendChild(P.el('span', 'iwac-vis-otd-switch__hint',
+                seg.buttons[opt.key].appendChild(P.el('span', 'iwac-vis-otd-switch__hint',
                     P.formatNumber(opt.hint)));
             }
-            btn.addEventListener('click', function () {
-                if (btn.getAttribute('aria-pressed') === 'true') return;
-                setActive(opt.key);
-                cfg.onChange(opt.key);
-            });
-            buttons[opt.key] = btn;
-            root.appendChild(btn);
         });
-
-        setActive(cfg.active);
-        return { root: root, setActive: setActive };
+        return { root: seg.root, setActive: seg.set };
     }
 
     /** "il y a 60 ans" / "60 years ago"; empty in the item's own year. */

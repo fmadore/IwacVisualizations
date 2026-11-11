@@ -35,20 +35,22 @@
         host.appendChild(root);
 
         // --- Entity type tabs ------------------------------------------
-        var tabs = P.el('div', 'iwac-vis-tabs');
-        // Selected state is real state, not just a tint — `aria-pressed` on
-        // each button, and the group named by the eyebrow it sits under
-        // (`group()` wires the id association).
-        var tabButtons = {};
-        (state.data.types || []).forEach(function (type) {
-            var btn = P.el('button', 'iwac-vis-tab', P.t('entity_type_' + type));
-            btn.type = 'button';
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () { state.setType(type); });
-            tabButtons[type] = btn;
-            tabs.appendChild(btn);
+        // Selected state is real state, not just a tint — the shared
+        // segmented group puts `aria-pressed` on each button and moves focus
+        // with the arrow keys; the group is named by the eyebrow it sits
+        // under (`group()` mints the id it points at).
+        var typeGroup = group(P.t('Entity type'));
+        var tabs = P.buildSegmented({
+            options: (state.data.types || []).map(function (type) {
+                return { key: type, label: P.t('entity_type_' + type) };
+            }),
+            active: state.entityType,
+            labelledBy: typeGroup.labelId,
+            name: 'spatial-type',
+            onChange: function (type) { state.setType(type); }
         });
-        root.appendChild(group(P.t('Entity type'), tabs));
+        typeGroup.appendChild(tabs.root);
+        root.appendChild(typeGroup);
 
         // --- Search + result list --------------------------------------
         var search = P.el('input', 'iwac-vis-control iwac-vis-spatial-picker__search');
@@ -59,7 +61,8 @@
         var list = P.el('div', 'iwac-vis-spatial-picker__list');
         list.setAttribute('role', 'listbox');
 
-        var searchGroup = group(P.t('Pick an entity'), search);
+        var searchGroup = group(P.t('Pick an entity'));
+        searchGroup.appendChild(search);
         searchGroup.appendChild(list);
         root.appendChild(searchGroup);
 
@@ -76,18 +79,14 @@
         root.appendChild(placesBox);
 
         // The eyebrow is a `<div>`, so the association has to be explicit or
-        // the group it labels is anonymous to assistive tech.
-        function group(labelText, controlEl) {
+        // the group it labels is anonymous to assistive tech: the wrapper
+        // carries the eyebrow's id for a control to point at.
+        function group(labelText) {
             var wrap = P.el('div', 'iwac-vis-spatial-picker__group');
-            var labelId = 'iwac-vis-spatial-label-' + (++_uid);
             var label = P.el('div', 'iwac-vis-aside__label iwac-vis-spatial-picker__label', labelText);
-            label.id = labelId;
+            label.id = 'iwac-vis-spatial-label-' + (++_uid);
             wrap.appendChild(label);
-            if (controlEl.classList.contains('iwac-vis-tabs')) {
-                controlEl.setAttribute('role', 'group');
-                controlEl.setAttribute('aria-labelledby', labelId);
-            }
-            wrap.appendChild(controlEl);
+            wrap.labelId = label.id;
             return wrap;
         }
 
@@ -189,7 +188,7 @@
             if (state.ctx.siteBase) {
                 var link = document.createElement('a');
                 link.className = 'iwac-vis-spatial-picker__item-link';
-                link.href = state.ctx.siteBase + '/item/' + sel.id;
+                link.href = P.itemUrl(state.ctx.siteBase, sel.id);
                 link.textContent = P.t('View item page');
                 selectionBox.appendChild(link);
             }
@@ -227,24 +226,14 @@
             placesBox.style.display = places.length ? '' : 'none';
         }
 
-        function highlightTab() {
-            Object.keys(tabButtons).forEach(function (type) {
-                var on = type === state.entityType;
-                tabButtons[type].classList.toggle('iwac-vis-tab--active', on);
-                tabButtons[type].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
-        }
-
-        var searchTimer = null;
-        search.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(renderList, 120);
-        });
+        var renderListSoon = P.debounce(renderList, 120);
+        search.addEventListener('input', renderListSoon);
 
         state.subscribe(function (key) {
             if (key === 'type') {
                 search.value = '';
-                highlightTab();
+                renderListSoon.cancel();
+                tabs.set(state.entityType);
                 renderList();
             } else if (key === 'selection') {
                 syncListSelection();
@@ -255,7 +244,6 @@
             }
         });
 
-        highlightTab();
         renderList();
         renderSelection();
         renderPlaces();

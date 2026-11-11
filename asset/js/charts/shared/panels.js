@@ -838,6 +838,40 @@
     };
 
     /* ----------------------------------------------------------------- */
+    /*  Debounce                                                          */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Trailing-edge debounce: the returned function runs `fn` once, `ms`
+     * after the last call, with that call's `this` and arguments. Five
+     * filter inputs each hand-rolled the same clearTimeout/setTimeout pair.
+     * `.cancel()` drops a pending run (e.g. when the input is cleared by
+     * another control and the queued render would be stale).
+     *
+     * @param {function(...*):void} fn
+     * @param {number} [ms=120]
+     * @returns {function(...*):void} with a `.cancel()` method
+     */
+    P.debounce = function (fn, ms) {
+        var wait = typeof ms === 'number' ? ms : 120;
+        var timer = null;
+        function debounced() {
+            var self = this;
+            var args = arguments;
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function () {
+                timer = null;
+                fn.apply(self, args);
+            }, wait);
+        }
+        debounced.cancel = function () {
+            if (timer) clearTimeout(timer);
+            timer = null;
+        };
+        return debounced;
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  Item links                                                        */
     /* ----------------------------------------------------------------- */
 

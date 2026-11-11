@@ -198,7 +198,7 @@
                 columns: columns,
                 rows: nodes.map(function (n) {
                     var row = [ctx.siteBase && n.id
-                        ? { text: n.label, href: ctx.siteBase + '/item/' + n.id }
+                        ? { text: n.label, href: P.itemUrl(ctx.siteBase, n.id) }
                         : n.label];
                     if (!isGeo) {
                         var type = data.types && data.types[n.type];
@@ -335,30 +335,36 @@
         if (typeof ns.registerRenderer === 'function') ns.registerRenderer(chipsWrap, paintChips);
 
         // --- Min-weight select ----------------------------------------
-        var weightLabel = P.el('label', 'iwac-vis-toolbar__label',
-            P.t('Min. link strength'));
-        var weightSelect = P.el('select', 'iwac-vis-control iwac-vis-networks-toolbar__select');
-        weightLabel.appendChild(weightSelect);
-        toolbar.appendChild(weightLabel);
+        // The shared select (control skin, label wiring, a stable
+        // `data-iwac-control` handle) in the toolbar's inline label row.
+        var weightGroup = P.buildSelectControl({
+            label: P.t('Min. link strength'),
+            name: 'networks-weight',
+            idPrefix: 'iwac-vis-networks-weight-',
+            options: [],
+            groupClass: 'iwac-vis-toolbar__label',
+            labelClass: 'iwac-vis-networks-toolbar__label',
+            selectClass: 'iwac-vis-networks-toolbar__select',
+            onChange: function (value) {
+                activeGraph().setWeightMin(parseInt(value, 10) || 0);
+            }
+        });
+        var weightSelect = weightGroup.control;
+        toolbar.appendChild(weightGroup);
 
         function fillWeightOptions() {
-            weightSelect.innerHTML = '';
             var data = activeData() || globalData;
             var baseMin = data.weightMin;
             var values = [baseMin, 3, 5, 10, 20].filter(function (v, i, arr) {
                 return v >= baseMin && arr.indexOf(v) === i;
             });
-            values.forEach(function (value) {
-                var opt = P.el('option', null,
-                    value === baseMin ? P.t('All links') : '≥ ' + value);
-                opt.value = String(value);
-                weightSelect.appendChild(opt);
-            });
-            weightSelect.value = String(baseMin);
+            weightGroup.setOptions(values.map(function (value) {
+                return {
+                    value: String(value),
+                    label: value === baseMin ? P.t('All links') : '≥ ' + value
+                };
+            }), String(baseMin));
         }
-        weightSelect.addEventListener('change', function () {
-            activeGraph().setWeightMin(parseInt(weightSelect.value, 10) || 0);
-        });
 
         // --- Node search (shared debounced dropdown) ---------------------
         // The shared `.iwac-vis-search` skin; the root keeps a block hook

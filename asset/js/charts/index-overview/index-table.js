@@ -90,7 +90,7 @@
         var title = P.el('p', 'iwac-vis-index-ledger__title');
         if (r.o_id && siteBase) {
             var a = P.el('a', 'iwac-vis-index-ledger__link', r.title);
-            a.href = siteBase + '/item/' + r.o_id;
+            a.href = P.itemUrl(siteBase, r.o_id);
             title.appendChild(a);
         } else {
             title.textContent = r.title;
@@ -218,14 +218,10 @@
         paint();
 
         // Debounce search input (very light — big deal for 4,700 rows)
-        var searchTimer = null;
-        searchInput.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(function () {
-                state.query = searchInput.value || '';
-                filter();
-            }, 120);
-        });
+        searchInput.addEventListener('input', P.debounce(function () {
+            state.query = searchInput.value || '';
+            filter();
+        }, 120));
     }
 
     ns.indexOverview = ns.indexOverview || {};
