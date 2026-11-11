@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace IwacVisualizations\Timeline;
 
+use IwacVisualizations\Site\ItemValue;
+
 /**
  * The documents a timeline draws on, for the source list under the block.
  *
@@ -94,7 +96,7 @@ final class Sources
             if (!isset($cited[$id])) {
                 continue;
             }
-            $date = self::text($item->value('dcterms:date'));
+            $date = ItemValue::text($item->value('dcterms:date'));
             $cards[] = [
                 'id' => $id,
                 'url' => (string) $item->url(),
@@ -104,12 +106,12 @@ final class Sources
                 // keeps its own proportions in the masonry wall.
                 'thumbnail' => (string) ($item->thumbnailDisplayUrl('large') ?? ''),
                 'creators' => array_values(array_filter(array_map(
-                    [self::class, 'text'],
+                    [ItemValue::class, 'text'],
                     (array) $item->value('dcterms:creator', ['all' => true])
                 ), static function (string $name): bool {
                     return $name !== '';
                 })),
-                'publisher' => self::text($item->value('dcterms:publisher')),
+                'publisher' => ItemValue::text($item->value('dcterms:publisher')),
                 'date' => self::dateLabel($date, $locale),
                 'sortDate' => $date,
                 'events' => $cited[$id],
@@ -130,19 +132,6 @@ final class Sources
     private static function subtag(string $code): string
     {
         return preg_match('/^[a-z]{2,3}$/D', $code) ? $code : '';
-    }
-
-    /** A value's text: a linked resource's title, else the literal or the URI's label. */
-    private static function text($value): string
-    {
-        if (!is_object($value)) {
-            return '';
-        }
-        $resource = $value->valueResource();
-        if ($resource) {
-            return trim((string) $resource->displayTitle());
-        }
-        return trim((string) ($value->value() ?? $value->uri() ?? ''));
     }
 
     /** An ISO date at its own precision, in the timeline's words; anything else as given. */

@@ -85,7 +85,11 @@ HTML is sanitised with nh3 during import and HTMLPurifier at the PHP rendering
 boundary. Only narrative tags and safe links survive. HTMLPurifier also gives
 every absolute link `target="_blank" rel="noopener"`, so a link to an IWAC item
 opens in a new tab and the reader keeps their place; the viewer tells screen
-readers so through `aria-describedby`. The known trailing
+readers so through `aria-describedby`. The purified timeline is kept in
+`files/iwac-visualizations.tmp/timeline-cache/<generation>/`, keyed by the
+purifier's version and configuration and by the source file's SHA-256, so a
+page view reads it instead of purifying every event again; a miss purifies as
+before, and the cache goes with its generation when that is pruned. The known trailing
 `<blockquote>` typo is repaired when its meaning is unambiguous; ambiguous
 unbalanced quotations fail for an author to correct. `relatedResources`
 extracts IWAC item/item-set IDs from the preserved links for future cross-links;
@@ -97,9 +101,13 @@ only, not the prose's, which point at index entries.
 
 Add **IWAC Timeline** in the page block picker. Choose an exhibit, content
 language (site language by default), initial view, and optional opening event
-ID. The catalogue comes from the active, verified data generation in `files/`,
-never a glob of the module's ignored data directory. An unavailable selection
-stays visible in the editor until the corresponding data is imported.
+ID. "Site language" is the site's locale setting, else the installation's —
+the same rule the embed pages use for `<html lang>`. A timeline that exists in
+one language only is shown in that language, on the page as in an embed,
+rather than replaced by the "temporarily unavailable" note. The catalogue
+comes from the active, verified data generation in `files/`, never a glob of
+the module's ignored data directory. An unavailable selection stays visible in
+the editor until the corresponding data is imported.
 
 PHP renders all text, media and native event anchors. JavaScript enhances this
 into a narrative viewer. One toolbar above the event carries every control a

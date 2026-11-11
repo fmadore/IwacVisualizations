@@ -26,6 +26,9 @@ class Deployment
      */
     const ROOT_SNAPSHOT = 'collection-overview.json';
 
+    /** The work-root directory holding the per-generation timeline caches. */
+    const TIMELINE_CACHE = 'timeline-cache';
+
     /** @var string */
     private $live;
 
@@ -89,6 +92,21 @@ class Deployment
             '</IfModule>',
             '',
         ]));
+    }
+
+    /**
+     * Where page renders keep the purified timelines of one generation
+     * (Timeline\Catalog): inside the deny-all work root, never inside the
+     * generation itself, whose files must be exactly its manifest's
+     * (Manifest::validate() refuses an unlisted one, and a re-sync of the
+     * same generation runs it). prune() removes it with its generation.
+     */
+    public function timelineCacheDir(string $generation): string
+    {
+        if (!self::isGeneration($generation)) {
+            throw new \RuntimeException('Invalid generation digest.');
+        }
+        return $this->workDir() . '/' . self::TIMELINE_CACHE . '/' . $generation;
     }
 
     /** The permanent lock inode the job holds and the recovery control probes. */
@@ -209,6 +227,13 @@ class Deployment
                 continue;
             }
             self::removeTree($directory);
+        }
+        // The purified-timeline caches of generations no longer on disk.
+        foreach (glob($this->workDir() . '/' . self::TIMELINE_CACHE . '/*', GLOB_ONLYDIR) ?: [] as $cache) {
+            $name = basename($cache);
+            if (self::isGeneration($name) && !is_dir($this->live . '/generations/' . $name)) {
+                self::removeTree($cache);
+            }
         }
     }
 

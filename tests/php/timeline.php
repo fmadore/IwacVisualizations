@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../src/Timeline/Catalog.php';
 require_once __DIR__ . '/../../src/Timeline/Migration.php';
+require_once __DIR__ . '/../../src/Site/ItemValue.php';
 require_once __DIR__ . '/../../src/Timeline/Sources.php';
 require_once __DIR__ . '/../lib/fake-items.php';
 
@@ -137,14 +138,74 @@ try {
     check($catalog->load('history', 'de') === null, 'unknown locale accepted');
     check($catalog->load('history', 'en')['title']['id'] === 'intro', 'catalogue did not use its fixed safe filename');
     check($called >= count($payload['events']) + 1, 'render boundary did not sanitize every event');
+    // The purified-timeline cache: a second page view (a new Catalog, as a
+    // new request builds) reads what the first purified, and purifies nothing.
+    $cacheDir = $temporary . '/cache/fp';
+    $counting = static function ($html) use (&$called) { $called++; return strip_tags($html, '<p><blockquote><a>'); };
+    $called = 0;
+    $first = (new Catalog($temporary, $counting, $cacheDir))->load('history', 'en');
+    $firstCalls = $called;
+    check($firstCalls > 0 && count(glob($cacheDir . '/history.en.*.json')) === 1, 'a purified timeline was not cached');
+    check(!glob($cacheDir . '/.*.tmp'), 'the cache left a temporary file behind');
+    $called = 0;
+    $second = (new Catalog($temporary, $counting, $cacheDir))->load('history', 'en');
+    check($called === 0 && $second === $first, 'a cached timeline was purified again, or read back differently');
+    check($second === (new Catalog($temporary, $counting))->load('history', 'en'), 'the cache changed what a timeline renders');
+    // An entry that does not match the source event for event is a miss.
+    $entry = glob($cacheDir . '/history.en.*.json')[0];
+    file_put_contents($entry, json_encode(['title' => ['id' => 'intro'], 'events' => []]));
+    $called = 0;
+    check((new Catalog($temporary, $counting, $cacheDir))->load('history', 'en') === $first && $called === $firstCalls,
+        'a cache entry that does not match its source was used');
+    file_put_contents($entry, 'not json');
+    $called = 0;
+    check((new Catalog($temporary, $counting, $cacheDir))->load('history', 'en') === $first && $called === $firstCalls,
+        'a corrupt cache entry was used');
+    // A changed source is a different entry: never a stale answer.
+    $edited = $payload;
+    $edited['title']['textHtml'] = '<p>Edited</p>';
+    file_put_contents($temporary . '/timelines/history.en.json', json_encode($edited));
+    check(strpos((new Catalog($temporary, $counting, $cacheDir))->load('history', 'en')['title']['textHtml'], 'Edited') !== false,
+        'a replaced source was answered from the cache');
+    check(count(glob($cacheDir . '/history.en.*.json')) === 2, 'a replaced source did not get its own cache entry');
+    // A cache that cannot be written costs a purification, not the timeline.
+    file_put_contents($temporary . '/not-a-directory', '');
+    check((new Catalog($temporary, $counting, $temporary . '/not-a-directory/fp'))->load('history', 'en') !== null,
+        'an unwritable cache broke the timeline');
+    file_put_contents($temporary . '/timelines/history.en.json', json_encode($payload));
     $payload['events'][0]['start']['value'] = '1970-99';
     file_put_contents($temporary . '/timelines/history.en.json', json_encode($payload));
     $invalid = new Catalog($temporary, 'strip_tags');
     check($invalid->load('history', 'en') === null, 'malformed date rendered');
 } finally {
-    foreach (glob($temporary . '/timelines/*') as $path) unlink($path);
-    rmdir($temporary . '/timelines');
-    rmdir($temporary);
+    \IwacVisualizations\Data\Deployment::removeTree($temporary);
+}
+
+// The cache lives in the work root, one directory per generation, and goes
+// with its generation: prune() removes a cache whose generation is gone.
+$store = sys_get_temp_dir() . '/iwac-timeline-store-' . bin2hex(random_bytes(6));
+$kept = str_repeat('a', 64);
+$gone = str_repeat('c', 64);
+$deployment = new \IwacVisualizations\Data\Deployment($store . '/iwac-visualizations');
+try {
+    check($deployment->timelineCacheDir($kept) === $store . '/iwac-visualizations.tmp/timeline-cache/' . $kept,
+        'the timeline cache moved out of the work root');
+    try {
+        $deployment->timelineCacheDir('../x');
+        check(false, 'a timeline cache path was built from a non-generation');
+    } catch (RuntimeException $e) {
+        check(true, 'non-generation cache refused');
+    }
+    mkdir($store . '/iwac-visualizations/generations/' . $kept, 0777, true);
+    mkdir($deployment->timelineCacheDir($kept) . '/fp', 0777, true);
+    mkdir($deployment->timelineCacheDir($gone) . '/fp', 0777, true);
+    mkdir($store . '/iwac-visualizations.tmp/timeline-cache/not-a-generation', 0777, true);
+    $deployment->prune([$kept], time());
+    check(is_dir($deployment->timelineCacheDir($kept)), "prune() removed a live generation's timeline cache");
+    check(!file_exists($deployment->timelineCacheDir($gone)), "prune() kept the timeline cache of a generation that is gone");
+    check(is_dir($store . '/iwac-visualizations.tmp/timeline-cache/not-a-generation'), 'prune() removed something that is not a cache of ours');
+} finally {
+    \IwacVisualizations\Data\Deployment::removeTree($store);
 }
 
 // The browser spec drives a fixture rendered from the templates; a stale one
