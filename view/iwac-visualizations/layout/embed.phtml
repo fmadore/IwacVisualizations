@@ -21,13 +21,14 @@
  * @var bool|null   $isGallery      True on the snippet-gallery page
  */
 use IwacVisualizations\Site\EmbedBrand;
+use IwacVisualizations\Site\Locale;
 
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $escapeHtml = $this->plugin('escapeHtml');
 
-// <html lang> drives iwac-i18n's locale resolution; follow the site locale.
-$locale = (string) ($this->siteSetting('locale') ?: $this->setting('locale') ?: 'en');
-$locale = substr($locale, 0, 2) ?: 'en';
+// <html lang> drives iwac-i18n's locale resolution; follow the site locale
+// (Site\Locale: the site's setting, else the installation's).
+$locale = Locale::code($this->siteSetting('locale'), $this->setting('locale'));
 
 $embedTheme   = isset($embedTheme)   ? (string) $embedTheme : '';
 $embedPrimary = isset($embedPrimary) ? (string) $embedPrimary : '';
@@ -77,7 +78,7 @@ $themeFonts = EmbedBrand::themeFontsAsset(
 // selector — live in asset/css/iwac-embed.css.
 //
 // Both values are already strictly validated to `#` + 3/6/8 hex digits
-// (EmbedController and the $hex() closure above), so escapeHtmlAttr is safe
+// (EmbedController, and EmbedBrand::accents() above), so escapeHtmlAttr is safe
 // here in a way it is NOT inside a `<style>`: there it rewrote the leading
 // `#` to `&#x23;`, whose embedded `;` truncated the declaration and left
 // every series rendering black.

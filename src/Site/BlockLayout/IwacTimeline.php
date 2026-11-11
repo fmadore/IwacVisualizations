@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace IwacVisualizations\Site\BlockLayout;
 
 use IwacVisualizations\Site\ConfiguredEmbed;
+use IwacVisualizations\Site\Locale;
 use IwacVisualizations\Timeline\Catalog;
 use IwacVisualizations\Timeline\Sources;
 use Laminas\Form\Element\Select;
@@ -23,15 +24,30 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
 {
     const SLUG = 'iwac-timeline';
 
-    /** `en` or `fr` from a site locale such as `fr_FR`. */
-    private static function language(string $siteLocale): string
+    /**
+     * `en` or `fr`: the site's language by the rule the embed layout uses for
+     * `<html lang>` (Site\Locale — the site's setting, else the
+     * installation's), so the timeline speaks the language of the page
+     * around it.
+     */
+    private static function siteLanguage(HelperPluginManager $helpers): string
     {
-        return str_starts_with(strtolower($siteLocale), 'fr') ? 'fr' : 'en';
+        return Locale::language($helpers->get('siteSetting')('locale'), $helpers->get('setting')('locale'));
+    }
+
+    /**
+     * The timeline in `$language`, else in the other one: a timeline that
+     * exists in one language only is better read in it than replaced by the
+     * "temporarily unavailable" note. The page block and the embed share it.
+     */
+    private static function loadEither(Catalog $catalog, string $slug, string $language): ?array
+    {
+        return $catalog->load($slug, $language) ?? $catalog->load($slug, Locale::other($language));
     }
 
     public static function embedVariants(HelperPluginManager $helpers): array
     {
-        $language = self::language((string) $helpers->get('siteSetting')('locale', 'en'));
+        $language = self::siteLanguage($helpers);
         $variants = [];
         foreach ($helpers->get('iwacTimelineData')()->entries() as $slug => $entry) {
             $titles = array_filter(array_column($entry['locales'], 'title'), 'is_string');
@@ -45,10 +61,7 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
         if (!Catalog::validId($value)) {
             return null;
         }
-        $language = self::language((string) $helpers->get('siteSetting')('locale', 'en'));
-        $catalog = $helpers->get('iwacTimelineData')();
-        $timeline = $catalog->load($value, $language)
-            ?? $catalog->load($value, $language === 'fr' ? 'en' : 'fr');
+        $timeline = self::loadEither($helpers->get('iwacTimelineData')(), $value, self::siteLanguage($helpers));
         if (!$timeline) {
             return null;
         }
@@ -99,11 +112,11 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
     {
         $slug = (string) $block->dataValue('timeline', '');
         $locale = (string) $block->dataValue('locale', 'auto');
-        if (!in_array($locale, ['en', 'fr'], true)) {
-            $locale = self::language((string) $view->siteSetting('locale', 'en'));
+        if (!in_array($locale, Locale::LANGUAGES, true)) {
+            $locale = self::siteLanguage($view->getHelperPluginManager());
         }
         $start = (string) $block->dataValue('start_slide', 'intro');
-        $timeline = Catalog::validId($slug) ? $view->iwacTimelineData()->load($slug, $locale) : null;
+        $timeline = Catalog::validId($slug) ? self::loadEither($view->iwacTimelineData(), $slug, $locale) : null;
         return $view->partial($templateViewScript ?: $this->templateViewScript(), [
             'block' => $block,
             'timeline' => $timeline,
