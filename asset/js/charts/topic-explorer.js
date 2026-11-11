@@ -31,6 +31,7 @@
         return;
     }
     var P  = ns.panels;
+    var C  = ns.chartOptions;
     var DL = ns.dashboardLayout;
 
     /* ----------------------------------------------------------------- */
@@ -104,45 +105,29 @@
     // hash, because the hash is already the page's anchor namespace and
     // an Omeka page ignores query params it doesn't know.
     //
-    // Every failure mode here is non-fatal by design: a sandboxed iframe
-    // throws on pushState, `URL` may be missing on an ancient browser.
-    // In both cases the block keeps working and simply stops syncing
-    // the address bar.
+    // The binding is the shared one (P.bindUrlState): the parameter stays
+    // the bare `topic` it has always been, so links already cited keep
+    // working, and every browser-side failure — a sandboxed iframe throwing
+    // on pushState, a missing `URL` — leaves the block working and the
+    // address bar as it is.
 
     var URL_PARAM = 'topic';
 
-    function readTopicFromUrl() {
-        if (typeof URLSearchParams === 'undefined') return null;
-        try {
-            var raw = new URLSearchParams(window.location.search).get(URL_PARAM);
-            if (raw == null || raw === '') return null;
-            var id = parseInt(raw, 10);
-            return isNaN(id) ? null : id;
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function topicUrl(topicId) {
-        try {
-            var url = new URL(window.location.href);
-            if (topicId == null) url.searchParams['delete'](URL_PARAM);
-            else url.searchParams.set(URL_PARAM, String(topicId));
-            return url.toString();
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function syncUrl(topicId, replace) {
-        if (!window.history || !window.history.pushState) return;
-        var href = topicUrl(topicId);
-        if (!href || href === window.location.href) return;
-        try {
-            window.history[replace ? 'replaceState' : 'pushState'](
-                { iwacTopic: topicId }, '', href
-            );
-        } catch (e) { /* cross-origin embed — address bar stays as it is */ }
+    /**
+     * `?topic=` → the id of a topic the bundle holds, or null for the
+     * overview. Null rather than "rejected" for a bad value, so Back onto
+     * an address naming no topic shows the overview instead of leaving the
+     * last topic open under it.
+     */
+    function topicUrlKey(data) {
+        return {
+            key: 'topic',
+            param: URL_PARAM,
+            parse: function (raw) {
+                var id = parseInt(raw, 10);
+                return !isNaN(id) && findTopic(data, id) ? id : null;
+            }
+        };
     }
 
     function findTopic(data, topicId) {
@@ -181,10 +166,6 @@
             siteBase: container.dataset.siteBase || '',
             data: data
         };
-        // A topic's panels only exist while it is open, so an embed of one
-        // carries `?topic=` (embed.js stateQuery reads this).
-        container.setAttribute('data-url-state', URL_PARAM);
-
         var body = P.el('div', 'iwac-vis-topic-explorer__body');
         container.appendChild(body);
 
@@ -208,29 +189,60 @@
         body.appendChild(overview);
         body.appendChild(detail);
 
-        var nav = { overview: overview, detail: detail, ctx: ctx };
-
-        renderOverview(overview, data, function (topicId) {
-            if (!showDetail(nav, topicId, true)) return;
-            syncUrl(topicId, false);
+        // One state key, the open topic (null: the overview). Opening a
+        // topic or leaving it is a navigation, so it gets its own history
+        // entry and Back / Forward move between the overview and topics
+        // (`push`). `root` stamps `data-url-state="topic"`: a topic's panels
+        // only exist while it is open, so an embed of one carries `?topic=`
+        // (embed.js stateQuery reads this).
+        var store = P.createStore({ topic: null });
+        var topicKey = topicUrlKey(data);
+        var url = P.bindUrlState(store, {
+            root: container,
+            keys: [topicKey],
+            push: function (keys) { return keys.indexOf('topic') !== -1; }
         });
-
-        // Landing straight on ?topic=7 opens that topic. replaceState
-        // rather than push, so the entry the reader arrived on stays the
-        // topic itself and Back leaves the page instead of bouncing to
-        // an overview they never saw.
-        var deepLinked = readTopicFromUrl();
-        if (deepLinked != null && findTopic(data, deepLinked)) {
-            showDetail(nav, deepLinked, true);
-            syncUrl(deepLinked, true);
-        }
-
-        // Back / Forward move between the overview and topics.
+        // bindUrlState's own popstate handler skips an address equal to the
+        // last one it wrote, so Back then Forward onto the topic it pushed
+        // was ignored and the overview stayed up under `?topic=`. Until that
+        // guard is fixed in shared/store.js, re-read the address here too;
+        // when both run, the second patch is a no-op.
         window.addEventListener('popstate', function () {
-            var id = readTopicFromUrl();
-            if (id != null && findTopic(data, id)) showDetail(nav, id, false);
-            else showOverview(nav);
+            var raw;
+            try { raw = new URLSearchParams(window.location.search).get(URL_PARAM); }
+            catch (e) { return; }
+            store.set('topic', raw == null ? null : topicKey.parse(raw));
         });
+        var nav = { overview: overview, detail: detail, ctx: ctx, href: url.href };
+
+        // Scroll to a topic only when the reader opened it here; on Back /
+        // Forward the browser restores the scroll position itself.
+        var scrollNext = false;
+        store.subscribe(function () {
+            var id = store.state.topic;
+            var scroll = scrollNext;
+            scrollNext = false;
+            if (id == null) showOverview(nav);
+            else showDetail(nav, id, scroll);
+        }, { keys: ['topic'] });
+
+        nav.select = function (topicId) {
+            if (topicId != null && !findTopic(data, topicId)) return;
+            scrollNext = true;
+            store.set('topic', topicId);
+        };
+
+        renderOverview(overview, data, nav.select);
+
+        // Landing straight on ?topic=7 opens that topic (the binding has
+        // already read it). The address is rewritten with replaceState, not
+        // pushed, so the entry the reader arrived on stays the topic itself
+        // and Back leaves the page instead of bouncing to an overview they
+        // never saw.
+        if (store.state.topic != null) {
+            showDetail(nav, store.state.topic, true);
+            url.sync([]);
+        }
     }
 
     /* ----------------------------------------------------------------- */
@@ -340,21 +352,6 @@
     // captured mass (~85%) and the headroom to 100% *is* the missing tail.
     // Renormalising would make a partial measurement look complete.
 
-    var RIVER_TOP = 12;
-
-    /** Fold a series list past RIVER_TOP into a single "Other topics" band. */
-    function foldTail(defs, yearCount) {
-        if (defs.length <= RIVER_TOP) return defs;
-        var kept = defs.slice(0, RIVER_TOP);
-        var other = new Array(yearCount);
-        for (var i = 0; i < yearCount; i++) other[i] = 0;
-        defs.slice(RIVER_TOP).forEach(function (d) {
-            d.values.forEach(function (v, i) { other[i] += v; });
-        });
-        kept.push({ topicId: null, name: P.t('topic_other'), values: other });
-        return kept;
-    }
-
     function topicSeriesName(topic) {
         var bits = (topic.top_words || []).slice(0, 2);
         if (bits.length) return bits.join(' · ');
@@ -383,7 +380,7 @@
                 values: years.map(function (y) { return m[y] || 0; })
             };
         });
-        defs = foldTail(defs, years.length);
+        defs = C.foldTopicTail(defs, years.length);
 
         // Share of the year's classified total, so every year sums to 100%.
         var totals = years.map(function (_, i) {
@@ -419,7 +416,7 @@
                 values: (s.values || []).slice()
             };
         });
-        defs = foldTail(defs, years.length);
+        defs = C.foldTopicTail(defs, years.length);
 
         return {
             key: 'weighted',
@@ -435,7 +432,6 @@
     }
 
     function renderTopicRiver(grid, data, onTopicSelected) {
-        var C = ns.chartOptions;
         var views = {};
         var order = [];
         var dominant = dominantView(data);
@@ -483,50 +479,15 @@
         }
 
         function optionFor(view) {
-            return {
-                grid: C._grid({ left: 48, top: 40, bottom: 56 }),
+            return C.topicRiver({
+                years:     view.years,
+                defs:      view.defs,
+                plot:      view.plot,
+                rowSuffix: view.rowSuffix,
+                max:       view.max,
                 // Thirty LDA topics — the legend the selector is for.
-                legend: C._legend({ top: 0, selector: true }),
-                tooltip: {
-                    trigger: 'axis',
-                    formatter: C.sortedAxisTooltip({
-                        skip: function (p, i) {
-                            var def = view.defs[p.seriesIndex];
-                            return !def || !def.values[i];
-                        },
-                        row: function (p, i) {
-                            var def = view.defs[p.seriesIndex];
-                            return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
-                                + P.formatPercent(p.value, 1) + view.rowSuffix(def, i);
-                        }
-                    })
-                },
-                xAxis: {
-                    type: 'category',
-                    data: view.years,
-                    boundaryGap: false,
-                    name: P.t('Year')
-                },
-                yAxis: {
-                    type: 'value',
-                    min: 0,
-                    max: view.max,
-                    axisLabel: C._percentAxisLabel()
-                },
-                dataZoom: C._dataZoom(view.years.length),
-                series: view.defs.map(function (d) {
-                    return {
-                        name: d.name,
-                        type: 'line',
-                        stack: 'share',
-                        areaStyle: { opacity: 0.85 },
-                        lineStyle: { width: 0.5 },
-                        symbol: 'none',
-                        emphasis: { focus: 'series' },
-                        data: d.values.map(function (_v, i) { return view.plot(d, i); })
-                    };
-                })
-            };
+                legend:    C._legend({ top: 0, selector: true })
+            });
         }
 
         // Only offer the switch when both weightings are available — a
@@ -607,7 +568,7 @@
 
     /**
      * Swap to a topic's detail view. Returns false when the id matches no
-     * topic, so callers can skip the URL write for a bad `?topic=` value.
+     * topic.
      *
      * `scroll` is false when the move came from Back/Forward: the browser
      * restores the scroll position itself, and fighting it lands the
@@ -630,9 +591,8 @@
         detail.innerHTML = '';
 
         detail.appendChild(buildDetailHeader(topic, function back() {
-            showOverview(nav);
-            syncUrl(null, false);
-        }));
+            nav.select(null);
+        }, nav.href));
 
         // Build the slice bundle the layout's slots will read from.
         // Each key matches a slot's `dataKey`. Map topic_prob into the
@@ -676,7 +636,7 @@
         return true;
     }
 
-    function buildDetailHeader(topic, onBack) {
+    function buildDetailHeader(topic, onBack, href) {
         var header = P.el('div', 'iwac-vis-topic-detail__header');
 
         var topRow = P.el('div', 'iwac-vis-topic-detail__row');
@@ -694,24 +654,12 @@
         actions.appendChild(back);
 
         // The address bar already carries the topic URL; this just makes
-        // that discoverable. Omitted when there's no URL to hand out
-        // (no `URL` support) or no clipboard helper on the page.
-        var href = topicUrl(topic.id);
-        if (href && ns.embed && ns.embed.copyToClipboard) {
-            var copy = P.setIcon(P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__copy'),
-                'link', P.t('topic_copy_link'));
-            copy.type = 'button';
-            copy.addEventListener('click', function () {
-                ns.embed.copyToClipboard(href);
-                P.setIcon(copy, 'check', P.t('topic_link_copied'));
-                copy.classList.add('iwac-vis-embed-btn--copied');
-                setTimeout(function () {
-                    P.setIcon(copy, 'link', P.t('topic_copy_link'));
-                    copy.classList.remove('iwac-vis-embed-btn--copied');
-                }, 2000);
-            });
-            actions.appendChild(copy);
-        }
+        // that discoverable.
+        actions.appendChild(P.buildCopyLinkButton({
+            href:        href,
+            label:       P.t('topic_copy_link'),
+            copiedLabel: P.t('topic_link_copied')
+        }));
 
         topRow.appendChild(actions);
         header.appendChild(topRow);
