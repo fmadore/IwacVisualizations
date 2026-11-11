@@ -85,7 +85,7 @@ front-end can consume without any further joins:
 Usage::
 
     python scripts/generate_topic_explorer.py
-    python scripts/generate_topic_explorer.py --minify
+    python scripts/generate_topic_explorer.py --no-minify   # pretty, for diffing
     python scripts/generate_topic_explorer.py --top-articles 15
 """
 from __future__ import annotations
@@ -404,7 +404,7 @@ def build_bundle(df: pd.DataFrame, top_articles: int) -> Dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    add_standard_args(parser, minify_default=False)
+    add_standard_args(parser, minify_default=True)
     parser.add_argument('--output', type=Path,
                         default=Path('asset/data/topic-explorer.json'),
                         help='Output JSON path')

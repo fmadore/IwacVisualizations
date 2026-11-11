@@ -102,7 +102,7 @@ PHP side never has to reproduce this normalisation.
 Usage::
 
     python scripts/generate_template_summary.py
-    python scripts/generate_template_summary.py --minify -v
+    python scripts/generate_template_summary.py --no-minify -v   # pretty, for diffing
 """
 from __future__ import annotations
 
@@ -531,7 +531,7 @@ def main() -> int:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    add_standard_args(parser, minify_default=False)
+    add_standard_args(parser, minify_default=True)
     parser.add_argument("--output", type=Path,
                         default=Path("asset/data/template-summary.json"),
                         help="Output JSON path")

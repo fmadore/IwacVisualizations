@@ -1290,7 +1290,7 @@ def build_references_overview(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    add_standard_args(parser, minify_default=False)
+    add_standard_args(parser, minify_default=True)
     parser.add_argument(
         "--output",
         default="asset/data/references-overview.json",
