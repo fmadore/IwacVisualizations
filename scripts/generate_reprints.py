@@ -98,7 +98,9 @@ def generate(
     minify: bool,
 ) -> None:
     logger = logging.getLogger(__name__)
-    df = load_dataset_safe("articles", repo_id=repo_id)
+    df = load_dataset_safe("articles", repo_id=repo_id, columns=[
+        "o:id", "title", "newspaper", "country", "pub_date", "OCR", "embedding_OCR",
+    ])
     if df is None:
         raise RuntimeError("Failed to load 'articles' subset")
     if "embedding_OCR" not in df.columns:
@@ -174,15 +176,13 @@ def generate(
             continue
         test = "semantic" if sim >= threshold else "lexical"
         by_test[test] += 1
-        a = row_meta(valid[i])
-        b = row_meta(valid[j])
+        # Row positions only: the article metadata is read for the pairs
+        # that survive the cap, below, not for every candidate.
         candidates.append({
             "similarity": round(sim, 4),
             "lexical_jaccard": round(jaccard, 4) if jaccard is not None else None,
             "test": test,
-            "day_gap": _day_gap(a["date"], b["date"]),
-            "a": a,
-            "b": b,
+            "rows": (valid[i], valid[j]),
         })
 
     logger.info(f"Scan ≥ {scan_threshold}: {scanned} pairs total")
@@ -201,9 +201,19 @@ def generate(
         logger.info(f"  of the cosine-only pairs with both texts, {confirmed}/"
                     f"{len(checked)} also share wording (Jaccard ≥ {min_jaccard})")
 
-    candidates.sort(key=lambda p: -p["similarity"])
+    candidates.sort(key=lambda p: -p["similarity"])     # stable: scan order breaks ties
     truncated = len(candidates) > max_pairs
-    published = candidates[:max_pairs]
+    published = []
+    for p in candidates[:max_pairs]:
+        a, b = row_meta(p["rows"][0]), row_meta(p["rows"][1])
+        published.append({
+            "similarity": p["similarity"],
+            "lexical_jaccard": p["lexical_jaccard"],
+            "test": p["test"],
+            "day_gap": _day_gap(a["date"], b["date"]),
+            "a": a,
+            "b": b,
+        })
     if truncated:
         logger.warning(
             f"{len(candidates)} cross-newspaper pairs ≥ {threshold} — "
