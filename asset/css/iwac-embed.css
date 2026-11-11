@@ -80,8 +80,10 @@
  *  (3.82:1 on the surface) and the dark rule lightened the secondary 14 %,
  *  not the theme's 30 %.
  *
- *  The tokens composed from --primary / --secondary (focus, the lead series
- *  slots, the article and publication type colours) are literals in the
+ *  The tokens composed from --primary / --secondary (focus rings, the
+ *  selection wash, the glows, the lead series slots, the article and
+ *  publication type colours — every one the theme composes, with the
+ *  theme's own mixes from _colors.scss / _tokens.scss) are literals in the
  *  token sheet, so they are re-composed here too, at BOTH levels: a custom
  *  property holding a var() is substituted where it is declared, and the
  *  dark rule re-declares --primary on <body>.
@@ -108,6 +110,11 @@ html[style*="--iwac-vis-embed-primary"] {
     --focus-outline: 2px solid var(--focus-color); /* allow-override */
     --focus-ring-color: color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
     --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
+    --ring-focus-sm: 0 0 0 2px color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
+    --selection-bg: color-mix(in oklab, var(--primary) 14%, transparent); /* allow-override */
+    --glow-xs: 0 1px 3px 0 color-mix(in oklab, var(--primary) 20%, transparent); /* allow-override */
+    --glow-sm: 0 2px 6px -1px color-mix(in oklab, var(--primary) 25%, transparent); /* allow-override */
+    --glow-md: 0 4px 12px -2px color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
     --series-1: var(--primary); /* allow-override */
     --type-article: var(--primary); /* allow-override */
 }
@@ -125,6 +132,11 @@ html[style*="--iwac-vis-embed-primary"] body[data-theme="dark"] {
     --focus-outline: 2px solid var(--focus-color); /* allow-override */
     --focus-ring-color: color-mix(in oklab, var(--primary) 35%, transparent); /* allow-override */
     --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
+    --ring-focus-sm: 0 0 0 2px color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
+    --selection-bg: color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
+    --glow-xs: 0 1px 3px 0 color-mix(in oklab, var(--primary) 20%, transparent); /* allow-override */
+    --glow-sm: 0 2px 6px -1px color-mix(in oklab, var(--primary) 25%, transparent); /* allow-override */
+    --glow-md: 0 4px 12px -2px color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
     --series-1: var(--primary); /* allow-override */
     --type-article: var(--primary); /* allow-override */
 }

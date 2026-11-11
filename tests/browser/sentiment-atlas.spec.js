@@ -308,8 +308,8 @@ test('reads in French: labels, ratings and number formats', async ({ page }) => 
  */
 const RAMPS = {
     'polarity-by-year': [
+        'color-mix(in oklab, var(--success) 60%, var(--ink-strong))',
         'var(--success)',
-        'color-mix(in oklab, var(--success) 55%, var(--surface))',
         'var(--muted)',
         'var(--warning)',
         'var(--error)',

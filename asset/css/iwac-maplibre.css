@@ -39,12 +39,16 @@
 /*  MapLibre popup — themed content + close button                       */
 /* =================================================================== */
 
+/*  One overlay recipe across the module — the theme's tooltip
+ *  (`.tooltiptext`): --surface, --radius-md, --shadow-lg. The graph
+ *  tooltip (iwac-core.css) is the same; this popup was --surface-raised
+ *  at --radius-sm. */
 .iwac-vis-maplibre-popup .maplibregl-popup-content {
-    background: var(--surface-raised, #faf8f6);
+    background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
+    border-radius: var(--radius-md, 0.5rem);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(9, 11, 15, 0.12), 0 4px 6px -4px rgba(20, 22, 27, 0.06));
     padding: 0.85rem 2.5rem 0.85rem 1.1rem;
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.45;
@@ -123,7 +127,7 @@
 
 .iwac-vis-maplibre-popup .maplibregl-popup-close-button:hover,
 .iwac-vis-maplibre-popup .maplibregl-popup-close-button:focus-visible {
-    background: color-mix(in oklab, var(--primary, #ce4115) 14%, transparent);
+    background: var(--iwac-vis-hover-bg);
     color: var(--ink, #13161c);
     border-color: var(--border, #ced1d6);
 }
@@ -131,7 +135,7 @@
 /*  The close control keeps a real outline: the focus state used to be the
  *  hover state with `outline: none`, a tint and nothing more (X-10). */
 .iwac-vis-maplibre-popup .maplibregl-popup-close-button:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 1px;
 }
 
@@ -139,18 +143,18 @@
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
-    border-bottom-color: var(--surface-raised, #faf8f6);
+    border-bottom-color: var(--surface, #fdfcfb);
 }
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
-    border-top-color: var(--surface-raised, #faf8f6);
+    border-top-color: var(--surface, #fdfcfb);
 }
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
-    border-right-color: var(--surface-raised, #faf8f6);
+    border-right-color: var(--surface, #fdfcfb);
 }
 .iwac-vis-maplibre-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
-    border-left-color: var(--surface-raised, #faf8f6);
+    border-left-color: var(--surface, #fdfcfb);
 }
 
 
@@ -399,11 +403,11 @@ a.iwac-vis-map-popup__item-title:hover {
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
+    background: var(--iwac-vis-hover-bg);
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: -2px;
     z-index: var(--iwac-vis-z-raised, 5);
 }
@@ -469,21 +473,25 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
 }
 
 .iwac-choropleth-ctrl__btn:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 8%, transparent);
+    background: var(--iwac-vis-hover-bg);
 }
 
 .iwac-choropleth-ctrl__btn:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: -2px;
 }
 
+/*  The module's selected recipe (iwac-core.css). The primary edge is an
+ *  inset ring because the button lives inside MapLibre's control group,
+ *  whose hairlines would double a real border. */
 .iwac-choropleth-ctrl__btn--active {
-    background: color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
-    color: var(--primary, #ce4115);
+    background: var(--iwac-vis-selected-bg);
+    color: var(--iwac-vis-selected-ink);
+    box-shadow: inset 0 0 0 1px var(--iwac-vis-selected-border);
 }
 
 .iwac-choropleth-ctrl__btn--active:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 24%, transparent);
+    background: var(--iwac-vis-selected-bg-hover);
 }
 
 
@@ -546,4 +554,14 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
     height: 0.9rem;
     flex: 0 0 auto;
     border: 1px solid var(--border-light, #e2e5e8);
+}
+
+
+/*  Forced colours: the legend's scale and swatches encode the map's data
+ *  and keep their colours (see the note at the end of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-map-legend__bar,
+    .iwac-vis-map-legend__swatch {
+        forced-color-adjust: none;
+    }
 }

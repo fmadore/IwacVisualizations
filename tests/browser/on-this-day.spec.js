@@ -28,14 +28,25 @@ function contrastOf(page, selector) {
             return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
         };
         const el = document.querySelector(sel);
-        let bgEl = el;
-        let bg = 'rgba(0, 0, 0, 0)';
-        while (bgEl && /rgba\(0, 0, 0, 0\)|transparent/.test(bg)) {
-            bg = getComputedStyle(bgEl).backgroundColor;
-            bgEl = bgEl.parentElement;
+        // The ground the text actually sits on: every background from the
+        // nearest opaque ancestor inwards, composited — a selected chip's
+        // wash is translucent, and reading it alone measured the wash's hue
+        // as if it were opaque.
+        const layers = [];
+        for (let node = el; node; node = node.parentElement) {
+            const bg = getComputedStyle(node).backgroundColor;
+            if (rgba(bg)[3] === 0) continue;
+            layers.unshift(bg);
+            if (rgba(bg)[3] === 255) break;
         }
+        ctx.clearRect(0, 0, 1, 1);
+        for (const layer of layers) {
+            ctx.fillStyle = layer;
+            ctx.fillRect(0, 0, 1, 1);
+        }
+        const ground = Array.from(ctx.getImageData(0, 0, 1, 1).data);
         const style = getComputedStyle(el);
-        const [x, y] = [lum(rgba(style.color)), lum(rgba(bg))].sort((a, b) => b - a);
+        const [x, y] = [lum(rgba(style.color)), lum(ground)].sort((a, b) => b - a);
         return { ratio: (x + 0.05) / (y + 0.05), opacity: style.opacity };
     }, selector);
 }

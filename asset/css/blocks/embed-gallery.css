@@ -67,7 +67,7 @@
     font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--tracking-wide, 0.04em);
     color: var(--muted, #66696e);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-full, 9999px);
@@ -114,14 +114,16 @@
        used `outline: none` plus a box-shadow ring whose rgba() fallback —
        rgba(230, 74, 25, .4) — was the pre-v2.0.0 brand orange written in a
        form no hex-based lint rule can see. */
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 /* Confirmation is the one sanctioned use of --primary here: state, not chrome. */
 .iwac-embed-copy.copied {
-    background: color-mix(in oklab, var(--primary, #ce4115) var(--accent-mix-medium, 40%), var(--surface, #fdfcfb));
-    border-color: var(--primary, #ce4115);
-    color: var(--ink-strong, #05070c);
+    /*  The module's selected recipe (iwac-core.css, loaded on this page for
+     *  its tokens). It was a 40% wash — a near-fill. */
+    background: var(--iwac-vis-selected-bg);
+    border-color: var(--iwac-vis-selected-border);
+    color: var(--iwac-vis-selected-ink);
 }
 .iwac-embed-note {
     font-size: var(--text-sm, 0.9375rem); color: var(--ink-light, #3f4349);

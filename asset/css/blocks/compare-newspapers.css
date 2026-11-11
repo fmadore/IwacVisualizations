@@ -103,7 +103,7 @@
 .iwac-vis-compare-picker__select {
     /*  Longhands: the theme's select arrow is a background-image, and the
      *  `background` shorthand removed it (see `.iwac-vis-control`). */
-    background-color: var(--surface, #fdfcfb);
+    background-color: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-2, 0.5rem) var(--space-8, 2rem) var(--space-2, 0.5rem) var(--space-3, 0.75rem);
@@ -116,7 +116,7 @@
 }
 
 .iwac-vis-compare-picker__select:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -126,12 +126,12 @@
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
-    background: var(--surface, #fdfcfb);
+    background: var(--panel-bg, #fdfcfb);
 }
 
 .iwac-vis-compare-picker__type button {
     flex: 1;
-    padding: 0.45rem 0.75rem;
+    padding: 0.45rem var(--space-3, 0.75rem);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -149,17 +149,18 @@
 }
 
 .iwac-vis-compare-picker__type button:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 8%, transparent);
+    background: var(--iwac-vis-hover-bg);
 }
 
-/*  The selected half is the outlined-chip recipe of `.iwac-vis-tab--active`
- *  (a primary wash and an inset primary edge), never a filled-primary
- *  button: the theme keeps the brand fill for the one submit on a page. */
+/*  The selected half is the module's selected recipe (iwac-core.css — the
+ *  theme's): a primary wash, a primary edge (inset, as the halves share a
+ *  hairline) and --primary-hover text, never a filled-primary button: the
+ *  theme keeps the brand fill for the one submit on a page. */
 .iwac-vis-compare-picker__type button[aria-pressed="true"],
 .iwac-vis-compare-picker__type button[aria-pressed="true"]:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
-    color: var(--ink-strong, #05070c);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary, #ce4115) 55%, var(--border, #ced1d6));
+    background: var(--iwac-vis-selected-bg);
+    color: var(--iwac-vis-selected-ink);
+    box-shadow: inset 0 0 0 1px var(--iwac-vis-selected-border);
     font-weight: 600;
 }
 
@@ -180,14 +181,17 @@
     }
 }
 
+/*  An almanac entry, as `.iwac-vis-summary-card` is: a 2px ink rule on
+ *  top, then the figures — no card box (the theme's KPI grammar). */
 .iwac-vis-compare-metric {
-    background: var(--surface, #fdfcfb);
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
+    background: transparent;
+    border: 0;
+    border-top: 2px solid var(--ink-strong, #05070c);
+    border-radius: 0;
+    padding: var(--space-2, 0.5rem) 0;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-1, 0.25rem);
 }
 
 .iwac-vis-compare-metric__pair {
@@ -221,7 +225,7 @@
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
     white-space: normal;
-    line-height: 1.25;
+    line-height: var(--line-height-tight, 1.25);
 }
 
 /*  Corpus key: a round swatch dot before the figure (legend semantics),
@@ -271,7 +275,7 @@
 }
 
 .iwac-vis-compare-grid .iwac-vis-panel {
-    background: var(--surface, #fdfcfb);
+    background: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-4, 1rem);
@@ -314,7 +318,7 @@
 }
 
 .iwac-vis-compare-overlap__col {
-    background: color-mix(in oklab, var(--surface-raised, #faf8f6) 70%, var(--surface, #fdfcfb));
+    background: transparent;
     border: 1px solid var(--border-light, #e2e5e8);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
@@ -346,20 +350,20 @@
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 0.35rem;
+    gap: var(--space-1, 0.25rem) 0.35rem;
 }
 
 .iwac-vis-compare-overlap__tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-1, 0.25rem);
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-full, 9999px);
     border: 1px solid var(--border, #ced1d6);
-    background: var(--surface, #fdfcfb);
+    background: transparent;
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--tracking-wide, 0.04em);
     color: var(--ink-light, #3f4349);
     line-height: 1.2;
 }
@@ -483,18 +487,18 @@ a.iwac-vis-compare-overlap__tag {
     cursor: pointer;
     transition:
         border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        background    var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        transform     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+        background    var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
+/*  The chip hover — a light wash, no lift (the theme lifts only its one
+ *  filled button). */
 a.iwac-vis-compare-overlap__tag:hover,
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
-    transform: translateY(-1px);
+    background: var(--iwac-vis-hover-bg);
 }
 
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -584,11 +588,11 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .iwac-vis-compare-sentiment__toolbar select {
-    background: var(--surface, #fdfcfb);
+    background: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.35rem 0.6rem;
@@ -656,23 +660,24 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-choropleth-ctrl__btn:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 8%, transparent);
+    background: var(--iwac-vis-hover-bg);
 }
 
 .iwac-vis-compare-choropleth-ctrl__btn:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: -2px;
     z-index: var(--iwac-vis-z-raised, 5);
 }
 
 .iwac-vis-compare-choropleth-ctrl__btn--active {
-    background: color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
-    color: var(--primary, #ce4115);
+    background: var(--iwac-vis-selected-bg);
+    color: var(--iwac-vis-selected-ink);
+    box-shadow: inset 0 0 0 1px var(--iwac-vis-selected-border);
     font-weight: 600;
 }
 
 .iwac-vis-compare-choropleth-ctrl__btn--active:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 24%, transparent);
+    background: var(--iwac-vis-selected-bg-hover);
 }
 
 @media (max-width: 599px) { /* sm */
@@ -683,5 +688,17 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
         font-size: var(--text-2xs, 0.6875rem);
         padding: 0 0.4rem;
         max-width: 6rem;
+    }
+}
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-compare-picker::before,
+    .iwac-vis-compare-metric__value::before,
+    .iwac-vis-compare-map-legend__dot,
+    .iwac-vis-compare-map-legend__swatch {
+        forced-color-adjust: none;
     }
 }

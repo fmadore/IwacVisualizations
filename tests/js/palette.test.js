@@ -174,3 +174,139 @@ test('the model accents are apart for every reader, and read on both panels', ()
     }
     assert.deepEqual(failures, []);
 });
+
+/* ---- sentiment and centralité ramps ----------------------------------- */
+
+/*
+ * The two scales the AI-sentiment panels encode, read from iwac-core.css
+ * and resolved per theme the way the browser resolves them: module
+ * properties from the stylesheet's `:root, body` rule, theme tokens from
+ * tokens.json, `color-mix(in oklab, …)` mixed in OKLab. Nothing here is a
+ * copy of a colour.
+ */
+
+function fromOklab([L, a, b]) {
+    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+    const enc = (c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+    return '#' + [
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+    ].map((c) => Math.round(Math.min(1, Math.max(0, enc(c))) * 255).toString(16).padStart(2, '0')).join('');
+}
+
+/** The module's composed palette: every `--iwac-vis-*` on `:root, body`. */
+function moduleRamps() {
+    const css = readFileSync(join(ROOT, 'asset/css/iwac-core.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const block = /:root,\s*body\s*\{([^}]*)\}/.exec(css);
+    assert.ok(block, 'iwac-core.css has no `:root, body` rule');
+    const decls = {};
+    for (const m of block[1].matchAll(/(--iwac-vis-[\w-]+)\s*:\s*([^;]+);/g)) decls[m[1]] = m[2].trim();
+    return decls;
+}
+
+/** Split a function's argument list on its top-level commas. */
+function args(text) {
+    const out = [];
+    let depth = 0;
+    let cur = '';
+    for (const ch of text) {
+        if (ch === '(') depth++;
+        if (ch === ')') depth--;
+        if (ch === ',' && depth === 0) { out.push(cur.trim()); cur = ''; } else cur += ch;
+    }
+    out.push(cur.trim());
+    return out;
+}
+
+function resolve(value, theme, decls, seen = new Set()) {
+    const v = value.trim();
+    if (/^#[0-9a-f]{6}$/i.test(v)) return v.toLowerCase();
+    const fn = /^([a-z-]+)\(([\s\S]*)\)$/.exec(v);
+    assert.ok(fn, `cannot resolve "${v}"`);
+    const parts = args(fn[2]);
+    if (fn[1] === 'var') {
+        const name = parts[0];
+        if (decls[name]) {
+            assert.ok(!seen.has(name), `${name} refers to itself`);
+            return resolve(decls[name], theme, decls, new Set([...seen, name]));
+        }
+        const hex = TOKENS[theme][name];
+        if (hex) return hex.toLowerCase();
+        assert.ok(parts.length > 1, `${name} is neither a module property nor a theme colour`);
+        return resolve(parts.slice(1).join(','), theme, decls, seen);
+    }
+    assert.equal(fn[1], 'color-mix', `unsupported function ${fn[1]}()`);
+    assert.equal(parts[0], 'in oklab', 'a module ramp mixes in oklab');
+    const side = (text) => {
+        const m = /^([\s\S]*?)\s+(\d+(?:\.\d+)?)%$/.exec(text);
+        return m ? { colour: resolve(m[1], theme, decls, seen), pct: Number(m[2]) / 100 }
+            : { colour: resolve(text, theme, decls, seen), pct: null };
+    };
+    const [a, b] = [side(parts[1]), side(parts[2])];
+    const pa = a.pct ?? (b.pct === null ? 0.5 : 1 - b.pct);
+    const [x, y] = [oklab(a.colour), oklab(b.colour)];
+    return fromOklab(x.map((c, i) => c * pa + y[i] * (1 - pa)));
+}
+
+const SENTIMENT = ['pos-strong', 'pos', 'neutral', 'neg', 'neg-strong'];
+
+test('every sentiment grade reads at 3:1 on the panel, and each sits apart from the next', () => {
+    // --iwac-vis-sent-na is left out on purpose: "no rating" is drawn in
+    // --border-light, a deliberately faint non-mark.
+    const decls = moduleRamps();
+    const failures = [];
+    for (const theme of ['light', 'dark']) {
+        const scale = SENTIMENT.map((step) => resolve(`var(--iwac-vis-sent-${step})`, theme, decls));
+        scale.forEach((hex, i) => {
+            const ratio = contrast(hex, PANEL[theme]);
+            if (ratio < 3) failures.push(`${theme}: sent-${SENTIMENT[i]} ${hex} at ${ratio.toFixed(2)}:1`);
+            if (i > 0) {
+                const d = deltaE(scale[i - 1], hex);
+                if (d < 0.1) failures.push(`${theme}: sent-${SENTIMENT[i - 1]} / sent-${SENTIMENT[i]} ΔEok ${d.toFixed(3)}`);
+            }
+        });
+        // The emphatic grade is the furthest from the panel on its half.
+        if (contrast(scale[0], PANEL[theme]) <= contrast(scale[1], PANEL[theme])) {
+            failures.push(`${theme}: "très positif" reads weaker than "positif"`);
+        }
+    }
+    assert.deepEqual(failures, []);
+});
+
+test('the centralité ramp steps away from the panel, top step a 3:1 mark', () => {
+    const decls = moduleRamps();
+    const failures = [];
+    for (const theme of ['light', 'dark']) {
+        const ramp = [1, 2, 3, 4].map((n) => resolve(`var(--iwac-vis-cent-${n})`, theme, decls));
+        const top = contrast(ramp[0], PANEL[theme]);
+        if (top < 3) failures.push(`${theme}: cent-1 at ${top.toFixed(2)}:1`);
+        for (let i = 1; i < ramp.length; i++) {
+            if (contrast(ramp[i], PANEL[theme]) >= contrast(ramp[i - 1], PANEL[theme])) {
+                failures.push(`${theme}: cent-${i + 1} is no closer to the panel than cent-${i}`);
+            }
+            const dL = Math.abs(oklch(ramp[i]).L - oklch(ramp[i - 1]).L);
+            if (dL < 0.08) failures.push(`${theme}: cent-${i} / cent-${i + 1} only ${dL.toFixed(3)} apart in lightness`);
+        }
+    }
+    assert.deepEqual(failures, []);
+});
+
+test('the three sequential scales are one ramp: shared steps are aliases', () => {
+    // Centralité and subjectivité restated steps of the heatmap ramp in full
+    // until 2026-11; one decision now has one declaration.
+    const decls = moduleRamps();
+    const alias = {
+        '--iwac-vis-cent-1': '--iwac-vis-heatmap-4',
+        '--iwac-vis-cent-2': '--iwac-vis-heatmap-3',
+        '--iwac-vis-cent-3': '--iwac-vis-heatmap-2',
+        '--iwac-vis-subj-4': '--iwac-vis-heatmap-3',
+        '--iwac-vis-subj-5': '--iwac-vis-heatmap-4',
+        '--iwac-vis-sent-na': '--iwac-vis-cent-na',
+    };
+    for (const [name, target] of Object.entries(alias)) {
+        assert.equal(decls[name], `var(${target})`, `${name} should alias ${target}`);
+    }
+});

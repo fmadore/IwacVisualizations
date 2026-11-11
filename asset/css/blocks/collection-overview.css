@@ -128,7 +128,7 @@
  * pagination already caps each page at 20 rows, so there's no risk
  * of an unbounded list. No max-height → no scrollbar. */
 .iwac-vis-recent-additions .iwac-vis-table-wrapper {
-    padding: 0.25rem 0.5rem 0.5rem;
+    padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem) var(--space-2, 0.5rem);
     border-radius: var(--radius-sm, 0.375rem);
 }
 
@@ -138,13 +138,13 @@
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__header {
-    padding: 0.75rem 1rem;
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
     background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__cell {
-    padding: 0.85rem 1rem;
-    line-height: 1.4;
+    padding: 0.85rem var(--space-4, 1rem);
+    line-height: var(--line-height-snug, 1.4);
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
@@ -169,7 +169,7 @@
 }
 
 .iwac-vis-recent-additions .iwac-vis-pagination {
-    padding: 0.75rem 1rem 0.25rem;
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem) var(--space-1, 0.25rem);
 }
 
 /* Tablet: reduce padding, shrink thumbnail */
@@ -179,7 +179,7 @@
     }
     .iwac-vis-recent-additions .iwac-vis-table__header,
     .iwac-vis-recent-additions .iwac-vis-table__cell {
-        padding: 0.6rem 0.75rem;
+        padding: 0.6rem var(--space-3, 0.75rem);
     }
     .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
         width: var(--iwac-vis-thumb-col-md, 60px);

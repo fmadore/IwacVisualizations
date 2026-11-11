@@ -236,3 +236,12 @@
 }
 
 
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-laicite-spread-bar {
+        forced-color-adjust: none;
+    }
+}
