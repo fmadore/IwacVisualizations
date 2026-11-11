@@ -372,16 +372,18 @@ foreach ($themeCases as $given => $expected) {
     );
 }
 
-// 4. ?primary: a bare or #-prefixed 3/6/8-digit hex, normalised to one
-// leading `#`. Everything else is dropped - the value reaches a `style`
-// attribute, so a passthrough here would be an injection.
+// 4. ?primary: a bare or #-prefixed 3/6/8-digit hex, normalised by the one
+// rule the layout derives the accent with (EmbedBrand::normalize): one
+// leading `#`, lower case, the short form expanded. Everything else is
+// dropped - the value reaches a `style` attribute, so a passthrough here
+// would be an injection.
 $primaryCases = [
     'ce4115'    => '#ce4115',
     '#ce4115'   => '#ce4115',
-    'abc'       => '#abc',
-    '#abc'      => '#abc',
+    'abc'       => '#aabbcc',
+    '#abc'      => '#aabbcc',
     'ce4115ff'  => '#ce4115ff',
-    'CE4115'    => '#CE4115',
+    'CE4115'    => '#ce4115',
     'ce41'      => '',           // 4 digits is not a CSS hex colour
     'ce411'     => '',
     'ce4115fff' => '',
