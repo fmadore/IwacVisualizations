@@ -592,10 +592,12 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-sentiment__toolbar select {
-    background: var(--panel-bg, #fdfcfb);
+    /*  Longhand, with room at the end: the theme's select arrow is a
+     *  background-image the shorthand would remove. */
+    background-color: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    padding: 0.35rem 0.6rem;
+    padding: 0.35rem var(--space-8, 2rem) 0.35rem 0.6rem;
     font-size: var(--text-sm, 0.9375rem);
     color: var(--ink, #13161c);
     font-family: inherit;

@@ -617,7 +617,7 @@
                 // cascade and follows the light/dark switch. A literal
                 // black-at-12 % shadow and an 8px radius stood in for them
                 // and the shadow vanished on the dark surface.
-                extraCssText: 'box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06)); '
+                extraCssText: 'box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(9, 11, 15, 0.12), 0 4px 6px -4px rgba(20, 22, 27, 0.06)); '
                     + 'border-radius: var(--radius-md, 0.5rem);',
                 // Prevent hover tooltips from being clipped by panels with
                 // `overflow: hidden` (recent-additions scrollbox, grid

@@ -762,11 +762,11 @@
         "steps": [
           {
             "name": "pos-strong",
-            "formula": "var(--success)"
+            "formula": "color-mix(in oklab, var(--success) 60%, var(--ink-strong))"
           },
           {
             "name": "pos",
-            "formula": "color-mix(in oklab, var(--success) 55%, var(--surface))"
+            "formula": "var(--success)"
           },
           {
             "name": "neutral",

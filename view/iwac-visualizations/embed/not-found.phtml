@@ -22,30 +22,12 @@ $locale = \IwacVisualizations\Site\Locale::code($this->siteSetting('locale'), $t
     ?>
     <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl('css/iwac-embed-tokens.min.css', 'IwacVisualizations')) ?>">
     <?php
-    // TODO: these rules belong in asset/css/iwac-embed.css (linked like the
-    // token sheet), so a host with `style-src 'self'` renders this page as it
-    // does every other embed page.
+    // Its own rules live in asset/css/iwac-embed.css, not inline, so a host
+    // with `style-src 'self'` renders this page as it does every embed page.
     ?>
-    <style>
-        /* Token fallbacks match IWAC-theme/docs/DESIGN-SYSTEM.md. */
-        body {
-            margin: 0; min-height: 100vh;
-            display: grid; place-items: center;
-            background: var(--background, #f7f5f3);
-            color: var(--ink-light, #3f4349);
-            font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
-            font-size: var(--text-base, 1.0625rem); line-height: 1.5;
-        }
-        .iwac-embed-404 { text-align: center; padding: 2rem; }
-        .iwac-embed-404 h1 {
-            font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
-            font-weight: 600; color: var(--ink-strong, #05070c);
-            letter-spacing: var(--tracking-display, -0.01em);
-            margin: 0 0 0.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl('css/iwac-embed.min.css', 'IwacVisualizations')) ?>">
 </head>
-<body>
+<body class="iwac-embed-404-body">
     <div class="iwac-embed-404">
         <h1><?= $escapeHtml($this->translate('Visualisation not found')) ?></h1>
         <p><?= $escapeHtml($this->translate('No embeddable visualisation matches this address.')) ?></p>

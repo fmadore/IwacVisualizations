@@ -175,7 +175,7 @@ test('a network label is cut at its end, where a name stops identifying itself',
 
 test('the theme tooltip and legend take their chrome from tokens', () => {
     const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
-    assert.match(source, /extraCssText: 'box-shadow: var\(--shadow-md, /);
+    assert.match(source, /extraCssText: 'box-shadow: var\(--shadow-lg, /);
     assert.match(source, /border-radius: var\(--radius-md, 0\.5rem\);'/);
     assert.match(source, /inactiveColor: tokens\.muted/);
 });

@@ -32,6 +32,29 @@ A review of the whole module against the theme (IWAC-theme 2.32.1), and of its c
 - **`index-overview-table.json` is always written minified** (it was 1.7× larger pretty-printed).
 - Removed code nothing called: six JS helpers, two unused thumbnail tokens, one dead selector, the label-to-ordinal lookups of the sentiment enums and an unused language counter in the collection generator.
 
+The larger items the same review left open:
+
+- **Selected and pressed controls share the theme's look.** Tabs, filter chips, toolbar toggles, pickers and map mode buttons take one recipe (a light orange tint, an orange outline, an orange label) where each block drew its own. Buttons follow the theme's quiet outlined style, with no shadow.
+- **Dark mode: controls no longer read as dark holes inside panels.** Buttons, tabs, chips and fields sit on the panel's own ground.
+- **Ruled rows instead of boxed cards.** Concordance lines and the laïcité source list are ledger rows on hairlines; table headers lose their grey band; filled pill tags are outlined. Map popups and graph tooltips share the theme's tooltip style.
+- **Chart text is on the theme's type scale:** axis labels, legends and tooltips at 13 px, chart titles at 19 px, where ECharts' defaults (12 / 14 / 18) are not in the scale.
+- **The "Positive" sentiment colour is darker on light pages,** and readable as a chart mark in both themes (it was 2:1 against a light panel). "Very positive" stays the most emphatic shade.
+- **Windows High Contrast mode keeps legend swatches and data dots in their colours.** An embed with a custom accent uses it for selection and focus tints too.
+- **Embed links to one panel of an item, person or entity dashboard are named after the chart** (`/iwac-embed/item/123/entity-net`), so a link shows the same chart on every item and after a data refresh. They were numbered by position, which shifted with the data. **An older `panel-N` link to one of these dashboards now shows the whole dashboard;** copy the embed code again to pin a single panel.
+- **Search boxes work from the keyboard.** In Term Trends and Entity Networks, Up/Down move through the suggestions, Enter picks the highlighted one, Escape closes the list without clearing the query, and Tab closes it. Screen readers hear a suggestion list and how many suggestions there are.
+- **Keyboard focus is no longer lost** after closing a network graph's selection card, jumping to a neighbouring node, or clearing a linked filter.
+- **Toggle groups take the arrow keys** (Home and End too) in the Keyword Explorer, the Spatial Exploration entity tabs and the On This Day switches, and their dropdowns match every other dropdown in the module.
+- **Topic Explorer: Back then Forward reopens the topic.** The shared address-bar code ignored Forward onto the last address it had written.
+- **Compare newspapers: the map's bubbles highlight on hover** like the other maps', and a click opens the popup on the bubble. Popup page buttons have accessible names.
+- **Switching between light and dark is faster:** each chart redraws once instead of twice, charts on screen switch at once and the rest follow over the next frames.
+- **A timeline that exists in one language shows in that language on a page,** as it already did in embeds, instead of "temporarily unavailable". The site's language is resolved one way everywhere: the site's locale, else the installation's.
+- **Timeline pages render faster:** the sanitised text is cached per data generation (it cost 8–40 ms per view) and removed with old generations.
+- **Pull latest data refuses a release tag that is not a plain release name** (letters, digits, dots, hyphens, underscores), with a message in the form; the job checks it again. Downloads and their redirects are limited to HTTPS.
+- **YouTube "watch" links on video dashboards are checked more strictly:** a link carrying credentials or a port is not shown.
+- **The embed "not found" page takes the theme's colours and type,** from the stylesheet rather than an inline style.
+- **The weekly data build converts the two largest dataset subsets once per run** instead of up to six times, and loads only the country column where that is all it reads. `references-overview.json`, `topic-explorer.json` and `template-summary.json` ship minified, about half the size. No generated file's content changed.
+- Internal: one implementation each for the three windowed Gantt charts, the two "Topics over time" charts, the map hover popup, the on-demand data loader of the Scary Terms and laïcité blocks, input debouncing and the four declaration-only item dashboards (now rows of `Visualizations::DASHBOARDS`); hand-built dropdowns, toggle groups, bubble maps and item links go through the shared builders. The release workflow no longer rebuilds what the build check already proved, and CI caches the Playwright browser.
+
 ### v1.100.0 — embeds that open on their panel (2026-11-06)
 
 - **A single-panel embed shows its panel from the first paint.** A frame such as `/iwac-embed/albani-sermons/albani-overlap-pairs` used to paint the whole block first, then hide everything but the panel, and it told its host page to grow to the whole block's height on the way: 26 833, then 31 169, then 34 458 px before it settled on 605. Every block's frame now stays unpainted until its panel is pinned, showing only its loading state, and sends its host one height, the panel's. When the panel cannot be found (an unknown slug, a block that failed to load) the frame shows the whole block, as before. A frame whose scripts never settle is shown as it is after 30 seconds.
