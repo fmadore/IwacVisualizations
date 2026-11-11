@@ -138,48 +138,15 @@
      * follows, and grow the host to every row when the reader asks for it.
      */
     function renderRuns(h, runs) {
-        var disclosure = P.buildWindowDisclosure({
+        P.buildWindowedGantt({
+            host:       h.runs,
+            panel:      h.runsPanel,
+            rows:       function () { return runs; },
             windowSize: GANTT_WINDOW,
-            total:      runs.length,
             noteKey:    'periodicals.runs_window_note',
             allKey:     'periodicals.runs_window_all',
-            showTopKey: 'periodicals.runs_show_top',
-            onToggle:   redraw
+            showTopKey: 'periodicals.runs_show_top'
         });
-        if (h.runsPanel) h.runsPanel.insertBefore(disclosure.root, h.runs);
-
-        function option() {
-            return C.gantt(runs, {
-                windowSize: GANTT_WINDOW,
-                expanded:   disclosure.isExpanded()
-            });
-        }
-
-        // The host owns the height in BOTH states, always from the row count
-        // actually on screen — see collection-overview/gantt.js for why the
-        // collapsed view no longer falls back to the panel's CSS floor.
-        // `resize()` before `setOption` so ECharts lays the canvas into the
-        // new box at once rather than squashing and settling after the
-        // observer's debounce.
-        function applyHeight() {
-            var visible = disclosure.isExpanded()
-                ? runs.length
-                : Math.min(runs.length, GANTT_WINDOW);
-            h.runs.style.height = C.ganttHeight(visible) + 'px';
-        }
-
-        var chart = ns.registerChart(h.runs, function (el, instance) {
-            applyHeight();
-            instance.resize();
-            instance.setOption(option(), true);
-        });
-
-        function redraw() {
-            if (!chart || chart.isDisposed()) return;
-            applyHeight();
-            chart.resize();
-            chart.setOption(option(), true);
-        }
     }
 
     /* ----------------------------------------------------------------- */

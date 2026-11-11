@@ -27,7 +27,7 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
     var C = ns.chartOptions;
-    if (!P || !C || !P.buildFacetButtons) {
+    if (!P || !C || !P.buildFacetButtons || !P.buildWindowedGantt) {
         console.warn('IWACVis.collection-overview/gantt: missing dependencies');
         return;
     }
@@ -139,18 +139,6 @@
             }).sort(function (a, b) { return (b.total || 0) - (a.total || 0); });
         }
 
-        // Disclosure + expand control, above the chart so it is read BEFORE
-        // the truncated view, not offered as an afterthought below it.
-        var disclosure = P.buildWindowDisclosure({
-            windowSize: WINDOW_SIZE,
-            total: filtered().length,
-            noteKey:     'gantt_window_note',
-            allKey:      'gantt_window_all',
-            showTopKey:  'gantt_show_top',
-            onToggle:    function () { rerender(); }
-        });
-        panelEl.panel.insertBefore(disclosure.root, panelEl.chart);
-
         // Country key. The bars are drawn by a custom series, so ECharts
         // generates no legend for them — which left the one page element that
         // teaches the country → colour grammar (the timeline's legend, two
@@ -162,7 +150,6 @@
         // one entry rather than six, five of which are absent from the chart.
         var key = P.el('ul', 'iwac-vis-key');
         key.setAttribute('aria-label', P.t('Countries'));
-        panelEl.panel.insertBefore(key, panelEl.chart);
 
         function paintKey(rows) {
             key.innerHTML = '';
@@ -194,8 +181,8 @@
          * so a gap reads as a gap. A cell is the number of items held for
          * that title that year.
          */
-        function volumeOption(rows) {
-            var shown = disclosure.isExpanded() ? rows : rows.slice(0, WINDOW_SIZE);
+        function volumeOption(rows, expanded) {
+            var shown = expanded ? rows : rows.slice(0, WINDOW_SIZE);
             var lo = Infinity;
             var hi = -Infinity;
             shown.forEach(function (row) {
@@ -243,70 +230,32 @@
             });
         }
 
-        function optionFor(rows) {
-            if (state.view === 'volume') return volumeOption(rows);
-            return C.gantt(rows, {
-                windowSize: WINDOW_SIZE,
-                expanded: disclosure.isExpanded()
-            });
-        }
-
-        /**
-         * The host owns the height, in BOTH states, and always from the row
-         * count actually on screen.
-         *
-         * It used to fall back to the panel's CSS floor whenever it was not
-         * expanded, which decoupled the two: the collapsed view drew its 20
-         * rows into whatever 320px min-height left over — about 11px each,
-         * with an 11px font, so the titles touched. Deriving the collapsed
-         * height too costs ~130px of page and buys a row band the name
-         * comfortably fits, which is also what lets the axis turn on
-         * `hideOverlap` as a safety net without it culling rows that were
-         * never in trouble.
-         *
-         * `ganttHeight` still clamps to the floor, so a facet that narrows
-         * this to four newspapers gets the panel's min-height, not a stub.
-         *
-         * `resize()` is what makes ECharts re-lay the canvas into the new box
-         * — the ResizeObserver in registerChart also catches this, but only
-         * after its 150ms debounce, which shows as a visible squash-then-
-         * settle on an 84-row expansion.
-         */
-        function applyHeight(rowCount) {
-            var visible = disclosure.isExpanded()
-                ? rowCount
-                : Math.min(rowCount, WINDOW_SIZE);
+        // Disclosure + expand control, above the chart so it is read BEFORE
+        // the truncated view, not offered as an afterthought below it; the
+        // country key goes between the two. P.buildWindowedGantt keeps the
+        // disclosure, the host's height and the drawn window in step.
+        var gantt = P.buildWindowedGantt({
+            host:        panelEl.chart,
+            panel:       panelEl.panel,
+            rows:        filtered,
+            windowSize:  WINDOW_SIZE,
+            noteKey:     'gantt_window_note',
+            allKey:      'gantt_window_all',
+            showTopKey:  'gantt_show_top',
+            onRender:    paintKey,
+            optionFor: function (rows, expanded) {
+                if (state.view === 'volume') return volumeOption(rows, expanded);
+                return C.gantt(rows, { windowSize: WINDOW_SIZE, expanded: expanded });
+            },
             // The heatmap's bin legend sits under the year axis.
-            var legend = state.view === 'volume' ? 32 : 0;
-            panelEl.chart.style.height = (C.ganttHeight(visible) + legend) + 'px';
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            var rows = filtered();
-            paintKey(rows);
-            if (rows.length === 0) {
-                instance.clear();
-            } else {
-                applyHeight(rows.length);
-                instance.resize();
-                instance.setOption(optionFor(rows), true);
-            }
+            extraHeight: function () { return state.view === 'volume' ? 32 : 0; }
         });
+        panelEl.panel.insertBefore(key, panelEl.chart);
 
+        // `gantt` is unset while the facets are still being wired (a linked
+        // country can apply before the chart exists); the build reads state.
         function rerender() {
-            if (chart && !chart.isDisposed()) {
-                var rows = filtered();
-                disclosure.update(rows.length);
-                paintKey(rows);
-                if (rows.length === 0) {
-                    chart.clear();
-                    panelEl.chart.style.height = '';
-                } else {
-                    applyHeight(rows.length);
-                    chart.resize();
-                    chart.setOption(optionFor(rows), true);
-                }
-            }
+            if (gantt) gantt.update();
         }
     }
 

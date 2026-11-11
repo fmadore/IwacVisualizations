@@ -153,32 +153,42 @@ test('a Gantt row band is tall enough to hold a newspaper title', () => {
 // while the expanded view got the pitch above — the two states silently
 // disagreed about how tall a row is.
 //
-// No unit test of `C.gantt` can see that, because it lives in the callers. So
-// this reads them: three panels share the Gantt, and each must size its host
-// from the row count in BOTH states.
+// No unit test of `C.gantt` can see that, because it lives outside it. Three
+// panels share the Gantt, and they size the host through ONE helper,
+// P.buildWindowedGantt (shared/windowed-gantt.js): it must derive the height
+// from the row count in BOTH states, and every caller must go through it
+// rather than size the host itself again.
+test('the windowed Gantt sizes its host from the row count in both states', () => {
+    const path = 'asset/js/charts/shared/windowed-gantt.js';
+    const src = read(...path.split('/'));
+    const at = src.indexOf('function draw');
+    assert.notEqual(at, -1, `no draw found in ${path} — has it been renamed?`);
+    const close = src.indexOf('\n        }', at);
+    assert.notEqual(close, -1, `draw in ${path} is not closed at its own indent`);
+    const fn = src.slice(at, close);
+    assert.ok(/C\.ganttHeight\(/.test(fn),
+        `${path} must derive its host height from C.ganttHeight`);
+    assert.ok(!/:\s*''/.test(fn),
+        `${path} falls back to the CSS floor when collapsed — that is the `
+        + 'decoupling that squashed 84 rows into a box built for 20');
+    assert.ok(/Math\.min\(/.test(fn),
+        `${path} must clamp the collapsed height to the window size, not the full row count`);
+    assert.ok(/resize\(\)[\s\S]*setOption\(/.test(fn),
+        `${path} must resize() before setOption, or the canvas squashes and settles`);
+});
+
 const GANTT_CALLERS = [
-    ['collection-overview/gantt.js', 'asset/js/charts/collection-overview/gantt.js'],
-    ['index-overview/activity-gantt.js', 'asset/js/charts/index-overview/activity-gantt.js'],
-    ['periodicals-overview.js', 'asset/js/charts/periodicals-overview.js'],
+    'asset/js/charts/collection-overview/gantt.js',
+    'asset/js/charts/index-overview/activity-gantt.js',
+    'asset/js/charts/periodicals-overview.js',
 ];
 
-for (const [label, path] of GANTT_CALLERS) {
-    test(`${label} sizes its Gantt host from the row count in both states`, () => {
+for (const path of GANTT_CALLERS) {
+    test(`${path} draws its Gantt through P.buildWindowedGantt`, () => {
         const src = read(...path.split('/'));
-        const at = src.indexOf('function applyHeight');
-        assert.notEqual(at, -1, `no applyHeight found in ${path} — has it been renamed?`);
-        // To the closing brace at the function's own indent. The bodies are
-        // short and brace-free apart from the ternary, so this is enough.
-        const close = src.indexOf('\n        }', at);
-        assert.notEqual(close, -1, `applyHeight in ${path} is not closed at its own indent`);
-        const fn = src.slice(at, close);
-        assert.ok(/C\.ganttHeight\(/.test(fn),
-            `${path} must derive its host height from C.ganttHeight`);
-        assert.ok(!/:\s*''/.test(fn),
-            `${path} still falls back to the CSS floor when collapsed — that is the `
-            + 'decoupling that squashed 84 rows into a box built for 20');
-        assert.ok(/Math\.min\(/.test(fn),
-            `${path} must clamp the collapsed height to the window size, not the full row count`);
+        assert.ok(src.includes('P.buildWindowedGantt('), `${path} no longer uses the shared windowed Gantt`);
+        assert.ok(!/C\.ganttHeight\(/.test(src) && !src.includes('buildWindowDisclosure('),
+            `${path} sizes or discloses its Gantt by hand again`);
     });
 }
 
