@@ -162,7 +162,10 @@ def build_country_counts(repo_id: str) -> Dict[str, int]:
     """Items per canonical country across every content subset."""
     totals: Counter = Counter()
     for subset in CONTENT_SUBSETS:
-        df = load_dataset_safe(subset, repo_id=repo_id)
+        # Only the country cell is read: a projected load keeps the OCR
+        # text and the embeddings out of pandas (and is served from the
+        # wide frame when the run's frame store already holds one).
+        df = load_dataset_safe(subset, repo_id=repo_id, columns=["country"])
         if df is None or df.empty or "country" not in df.columns:
             continue
         for value in df["country"]:

@@ -88,7 +88,10 @@ def build_map(repo_id: str) -> Dict[str, Any]:
     }
     country_totals: Dict[str, Counter] = defaultdict(Counter)
     for subset, type_key in subset_to_type.items():
-        df = load_dataset_safe(subset, repo_id=repo_id)
+        # Only the country cell is read: a projected load keeps the OCR
+        # text and the embeddings out of pandas (and is served from the
+        # wide frame when the run's frame store already holds one).
+        df = load_dataset_safe(subset, repo_id=repo_id, columns=["country"])
         if df is None or df.empty or "country" not in df.columns:
             continue
         for value in df["country"]:
