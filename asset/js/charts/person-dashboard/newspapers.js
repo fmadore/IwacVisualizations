@@ -9,40 +9,18 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
     var C = ns.chartOptions;
-    if (!P || !C) {
+    if (!P || !C || !P.buildFacetedChart) {
         console.warn('IWACVis.person-dashboard/newspapers: missing deps');
         return;
     }
 
-    function render(panelEl, data, facet, ctx) {
+    function render(panelEl, data, facet) {
         var byRole = (data && data.newspapers && data.newspapers.by_role) || {};
-
-        function currentEntries() {
-            return (byRole[facet.role] || []).slice(0, 15);
-        }
-
-        function hasData() { return currentEntries().length > 0; }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            if (hasData()) {
-                instance.setOption(C.newspaper(currentEntries()), true);
-            } else {
-                instance.clear();
-            }
-        });
-
-        if (!hasData() && !chart) {
-            panelEl.chart.appendChild(P.buildEmptyState());
-        }
-
-        facet.subscribe(function () {
-            if (chart && !chart.isDisposed()) {
-                if (hasData()) {
-                    chart.setOption(C.newspaper(currentEntries()), true);
-                } else {
-                    chart.clear();
-                }
-            }
+        P.buildFacetedChart(panelEl, {
+            facet: facet,
+            getData: function () { return (byRole[facet.role] || []).slice(0, 15); },
+            hasData: function (entries) { return entries.length > 0; },
+            buildOption: function (entries) { return C.newspaper(entries); }
         });
     }
 
