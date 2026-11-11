@@ -803,7 +803,7 @@ buckets and the person header fields.
 
 Produces one JSON per non-person entity (Lieux / Organisations /
 Sujets / Événements) in the `index` subset, consumed by the
-`Visualizations` resource-page block via the `entity.phtml` partial.
+`Visualizations` resource-page block via the `entity` row of `Visualizations::DASHBOARDS`.
 Output goes to `asset/data/entity-dashboards/{o_id}.json`.
 
 ```bash

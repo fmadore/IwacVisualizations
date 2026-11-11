@@ -154,7 +154,7 @@ IwacVisualizations/
 │   │   ├── stopwords.json
 │   │   └── transcript.py
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
-│   ├── lib/                             # 4 files — file walk, bundle manifest and failure report the guards share
+│   ├── lib/                             # 5 files — file walk, bundle manifest and failure report the guards share
 │   ├── audit_laicite.py
 │   ├── build-css.js
 │   ├── build-embed-tokens.js
@@ -258,6 +258,8 @@ IwacVisualizations/
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
 │   │   ├── ConfiguredEmbed.php          # How a configured block embeds: ?preset=, ?timeline=
 │   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; the theme's fonts.css
+│   │   ├── ItemValue.php
+│   │   ├── Locale.php
 │   │   └── PipelinePresets.php          # The Pipeline explainer's words, once, for PHP and Svelte
 │   ├── Timeline/
 │   │   ├── Catalog.php
@@ -307,12 +309,9 @@ IwacVisualizations/
 │   │   ├── block-layout/                # 4 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
+│   │   │   │   ├── _dashboard.phtml
 │   │   │   │   ├── article.phtml
-│   │   │   │   ├── entity.phtml
-│   │   │   │   ├── minimal-item.phtml
-│   │   │   │   ├── person.phtml
-│   │   │   │   ├── publication.phtml
-│   │   │   │   └── reference.phtml
+│   │   │   │   └── minimal-item.phtml
 │   │   │   └── item-set-dashboard.phtml
 │   │   ├── iwac-assets.phtml            # Shared asset-loader partial — declare needs here
 │   │   ├── iwac-block-shell.phtml       # Shared block wrapper + loading scaffold
@@ -362,7 +361,7 @@ IwacVisualizations/
 
 ```php
 'collection-overview' => [
-    // invokable, class, label, description, embeddable …
+    // invokable, class, label, description …
     'shell' => [
         'assets' => [
             'blockCss' => 'collection-overview',   // css/blocks/<name>.min.css; a list for several sheets
@@ -393,7 +392,7 @@ The partial:
 
 Consequences for contributors:
 
-- **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable and the `shell`. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes, the templates and the bundle manifest stop agreeing, and `tests/php/run.php` fails on a `shell` or `assets` key that nothing reads (a `blockCss` one level too high is silently dropped — Periodicals Overview shipped without its stylesheet that way) and on a `blockCss` with no sheet on disk.
+- **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description and the `shell`. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes, the templates and the bundle manifest stop agreeing, and `tests/php/run.php` fails on a `shell` or `assets` key that nothing reads (a `blockCss` one level too high is silently dropped — Periodicals Overview shipped without its stylesheet that way) and on a `blockCss` with no sheet on disk.
 - **Everything embeds.** `/s/:site/iwac-embed/:block[/:panel]` renders any page block on a bare page (a configured one from the choice its `embedParam` names — `?preset=`, `?timeline=` — through `Site\ConfiguredEmbed`), and `/iwac-embed/item/:id[/:panel]` / `/iwac-embed/item-set/:id[/:panel]` an item's or item set's dashboard, through the partial its resource page block uses. `embed.js` watches each block for as long as the page lives, so a panel built late (a lazy section, a view switch) gets its button; the button's URL carries the block's view state from `data-url-state` (stamped by `P.bindUrlState`); a single-panel frame stays unpainted (`iwac-embed.css`) and holds its height messages (`iwac-embed-height.js`) until the panel is pinned or found missing (`body.iwac-embed-ready`), hides everything around the panel, and calls `P.flushLazy(block, panel)` when the panel has not been built yet — which renders only the deferred sections that could hold it (`P.lazyInit`'s `panels`). An orchestrator may build only the part that holds the panel from `ctx.embedPanel` (`P.embedPanel()`), falling back to the whole block for a key it does not know; Albani Zaria does, from the panel keys each section claims (`A.claimPanels`).
 - **Name the bundle, not the files** — `'bundle' => '<name>'`; the block's panel modules and orchestrator are listed, in order, under `blocks.<name>` in `asset/js/bundles.json`, and `npm run lint:blocks` fails on a template that still lists `panels` or `orchestrator`. Don't write raw `$this->headScript()` calls in a block template.
 - Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.

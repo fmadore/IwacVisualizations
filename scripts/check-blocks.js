@@ -313,6 +313,15 @@ if (!manifest || !manifest.blocks) {
             fail(`${rel}: bundle '${m[1]}' is not in asset/js/bundles.json`);
         }
     }
+    // The declaration-only item dashboards name theirs in
+    // Visualizations::DASHBOARDS, rendered by visualizations/_dashboard.phtml.
+    const dashboards = readText(join(ROOT, 'src', 'Site', 'ResourcePageBlockLayout', 'Visualizations.php'));
+    for (const m of dashboards.matchAll(/'bundle'\s*=>\s*'([^']+)'/g)) {
+        named.add(m[1]);
+        if (!(m[1] in manifest.blocks)) {
+            fail(`Visualizations::DASHBOARDS: bundle '${m[1]}' is not in asset/js/bundles.json`);
+        }
+    }
     for (const name of Object.keys(manifest.blocks)) {
         if (!named.has(name)) fail(`asset/js/bundles.json: blocks.${name} is loaded by no template`);
     }
