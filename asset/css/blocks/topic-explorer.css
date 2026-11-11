@@ -185,13 +185,6 @@
     gap: 0.35rem;
 }
 
-/* Secondary to the back button: this one hands out a URL the address
-   bar already shows, so it should not compete for the same attention. */
-.iwac-vis-topic-detail__copy {
-    font-size: var(--text-xs, 0.8125rem);
-    color: var(--ink-light, #3f4349);
-}
-
 .iwac-vis-topic-detail__words {
     display: flex;
     flex-wrap: wrap;

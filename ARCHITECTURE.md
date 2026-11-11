@@ -73,7 +73,7 @@ IwacVisualizations/
 │       │   ├── scary-terms/             # 7 files — panel modules
 │       │   ├── semantic-landscape/      # 1 file — panel module
 │       │   ├── sentiment-atlas/         # 7 files — panel modules
-│       │   ├── shared/                  # 42 files — the reusable primitives every block draws on
+│       │   ├── shared/                  # 43 files — the reusable primitives every block draws on
 │       │   ├── spatial-exploration/     # 4 files — panel modules
 │       │   ├── timeline/                # 5 files — panel modules
 │       │   ├── topic-explorer/          # 1 file — panel module
@@ -267,7 +267,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 63 files — Playwright specs
+│   ├── browser/                         # 67 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt
@@ -279,7 +279,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 38 files — node:test units
+│   ├── js/                              # 39 files — node:test units
 │   ├── lib/
 │   │   ├── fake-items.php
 │   │   └── strict-errors.php
