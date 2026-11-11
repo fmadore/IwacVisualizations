@@ -57,7 +57,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    background: var(--surface, #fdfcfb);
+    background: transparent;
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     cursor: pointer;
@@ -76,12 +76,12 @@
      *  raised surface, no shadow and no lift. These cards floated 1-2px
      *  with a drop shadow on hover, the one place the module spent
      *  elevation inside a panel. */
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
+    border-color: var(--iwac-vis-hover-border);
     background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-topic-card:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -96,7 +96,7 @@
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
 }
 
@@ -109,18 +109,21 @@
 .iwac-vis-topic-card__words {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 0.4rem;
+    gap: var(--space-1, 0.25rem) 0.4rem;
 }
 
 .iwac-vis-topic-card__word {
     font-size: var(--text-xs, 0.8125rem);
-    padding: 0.125rem 0.5rem;
+    padding: 0.125rem var(--space-2, 0.5rem);
+    /*  A word tag: the theme's `.resource-tag`, an OUTLINED pill — it was a
+     *  primary-washed one, the pastel fill the theme refuses. */
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb));
-    color: color-mix(in oklab, var(--primary, #ce4115) 70%, var(--ink-strong, #05070c));
-    line-height: 1.4;
+    background: transparent;
+    color: var(--ink-light, #3f4349);
+    line-height: var(--line-height-snug, 1.4);
     text-transform: lowercase;
-    letter-spacing: 0.02em;
+    letter-spacing: var(--tracking-normal, 0);
     white-space: nowrap;
 }
 
@@ -139,7 +142,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--surface, #fdfcfb);
+    background: transparent;
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
 }
@@ -153,19 +156,12 @@
 }
 
 /*  The open topic's title is an <h2>, the page's section while it shows.
- *  At <h3> it matched `.iwac-vis-block h3`, which out-ranked this class and
- *  painted its colour (--ink, not the --ink-strong declared here), tracking
- *  and 0.75rem bottom margin (not the `margin: 0` declared here); an <h2>
- *  this deep matches no module rule and would take the theme's h2 instead.
- *  So the class now declares what rendered at <h3>, and as a class it still
- *  out-ranks the theme's element rule. */
+ *  At <h3> it matched `.iwac-vis-block h3`; an <h2> this deep matches no
+ *  module rule and would take the theme's h2 instead. So the class joins
+ *  that block-heading rule in iwac-core.css (size, weight, colour, tracking,
+ *  margin, balance — this rule used to restate all six), and as a class it
+ *  still out-ranks the theme's element rule. Only the wrapping is its own. */
 .iwac-vis-topic-detail__title {
-    text-wrap: balance;
-    font-size: var(--text-lg, 1.1875rem);
-    font-weight: 600;
-    color: var(--ink, #13161c);
-    letter-spacing: var(--tracking-tight, -0.02em);
-    margin: 0 0 var(--space-3, 0.75rem);
     overflow-wrap: break-word;
     word-break: break-word;
 }
@@ -195,17 +191,18 @@
 .iwac-vis-topic-detail__words {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 0.4rem;
+    gap: var(--space-1, 0.25rem) 0.4rem;
 }
 
 .iwac-vis-topic-detail__word {
     font-size: var(--text-xs, 0.8125rem);
-    padding: 0.125rem 0.5rem;
+    padding: 0.125rem var(--space-2, 0.5rem);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #ce4115) 14%, var(--surface, #fdfcfb));
-    color: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--ink-strong, #05070c));
+    background: transparent;
+    color: var(--ink-light, #3f4349);
     text-transform: lowercase;
-    letter-spacing: 0.02em;
+    letter-spacing: var(--tracking-normal, 0);
     white-space: nowrap;
 }
 

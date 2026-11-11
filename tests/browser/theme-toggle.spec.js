@@ -41,9 +41,12 @@ const COMPOSED = {
     '--iwac-vis-heatmap-2': 'color-mix(in oklab, var(--primary) 50%, var(--surface))',
     '--iwac-vis-cent-4': 'color-mix(in oklab, var(--primary) 30%, var(--surface))',
     '--iwac-vis-subj-1': 'color-mix(in oklab, var(--primary) 15%, var(--surface))',
-    '--iwac-vis-sent-pos': 'color-mix(in oklab, var(--success) 55%, var(--surface))',
+    '--iwac-vis-sent-pos-strong': 'color-mix(in oklab, var(--success) 60%, var(--ink-strong))',
+    '--iwac-vis-sent-pos': 'var(--success)',
     '--iwac-vis-sent-neutral': 'var(--muted)',
     '--iwac-vis-sent-na': 'var(--border-light)',
+    '--iwac-vis-selected-bg': 'color-mix(in oklab, var(--primary) 10%, transparent)',
+    '--iwac-vis-hover-bg': 'color-mix(in oklab, var(--primary) 6%, transparent)',
 };
 
 for (const [os, toggled] of [['light', 'dark'], ['dark', 'light']]) {

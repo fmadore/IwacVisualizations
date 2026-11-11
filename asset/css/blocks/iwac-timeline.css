@@ -61,22 +61,25 @@
 .iwac-vis-timeline button {
     min-height: var(--size-control-lg, 2.75rem);
     min-width: var(--size-control-lg, 2.75rem);
-    border: 1px solid var(--border-strong, #aeb1b7);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     background: transparent;
     color: var(--ink, #13161c);
     font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
     font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
     line-height: var(--line-height-snug, 1.4);
     box-shadow: none;
     transform: none;
-    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-.iwac-vis-timeline button:disabled { opacity: 0.5; cursor: default; }
-.iwac-vis-timeline button:hover:not(:disabled) { background: var(--surface-sunken, #f4f1ef); }
-.iwac-vis-timeline button[aria-pressed="true"] { border-color: var(--primary, #ce4115); background: var(--selection-bg, rgba(206, 65, 21, 0.14)); }
+/* The quiet button's states (.iwac-vis-btn, the theme's base button) at
+ * the timeline's 44px touch target; pressed is the module's selected recipe. */
+.iwac-vis-timeline button:disabled { color: var(--muted, #66696e); opacity: 0.7; cursor: default; }
+.iwac-vis-timeline button:hover:not(:disabled) { background: var(--surface-sunken, #f4f1ef); border-color: var(--border-strong, #aeb1b7); color: var(--ink-strong, #05070c); }
+.iwac-vis-timeline button[aria-pressed="true"] { border-color: var(--iwac-vis-selected-border); background: var(--iwac-vis-selected-bg); color: var(--iwac-vis-selected-ink); }
 
 /* Icon-only squares: the toolbar's steps, the event's link, the embed code
  * and fullscreen. */
@@ -182,7 +185,7 @@
     text-wrap: pretty;
 }
 
-.iwac-vis-timeline button.iwac-vis-timeline__menu-item[aria-current="true"] { background: var(--selection-bg, rgba(206, 65, 21, 0.14)); }
+.iwac-vis-timeline button.iwac-vis-timeline__menu-item[aria-current="true"] { background: var(--iwac-vis-selected-bg); }
 .iwac-vis-timeline__menu-item[aria-current="true"] .iwac-vis-timeline__menu-headline { color: var(--ink-strong, #05070c); font-weight: 600; }
 
 /* -------------------------------------------------------------------
@@ -267,7 +270,9 @@
  * the end of the copy stays for the list view and for a page without JS. */
 .iwac-vis-timeline[data-view="narrative"] .iwac-vis-timeline__permalink { display: none; }
 .iwac-vis-timeline button.iwac-vis-timeline__copy-link.is-copied,
-.iwac-vis-timeline button.iwac-vis-timeline__embed.iwac-vis-embed-btn--copied { color: var(--success, #2e9052); }
+.iwac-vis-timeline button.iwac-vis-timeline__embed.iwac-vis-embed-btn--copied { color: var(--success, #2e9052); border-color: var(--success, #2e9052); }
+/* Both are glyph-only squares, so --success here paints a mark (3.92:1 on the
+ * light panel clears the 3:1 bar for one), never a label. */
 
 /* A fixed frame: an image's own proportions never set the event's height,
  * before it loads or after. */
@@ -686,4 +691,13 @@
     .iwac-vis-timeline__controls, .iwac-vis-timeline__navigation, .iwac-vis-timeline__axis, .iwac-vis-timeline__status { display: none; }
     .iwac-vis-timeline__event { break-inside: avoid; }
     .iwac-vis-timeline__media img { max-height: 20rem; }
+}
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-timeline__range.is-current {
+        forced-color-adjust: none;
+    }
 }

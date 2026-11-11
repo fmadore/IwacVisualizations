@@ -41,7 +41,7 @@
 .iwac-vis-article-card {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfcfb);
+    background: transparent;
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
@@ -57,7 +57,7 @@
      *  raised surface, no shadow and no lift. These cards floated 1-2px
      *  with a drop shadow on hover, the one place the module spent
      *  elevation inside a panel. */
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 45%, var(--border, #ced1d6));
+    border-color: var(--iwac-vis-hover-border);
     background: var(--surface-raised, #faf8f6);
     text-decoration: none;
 }
@@ -66,7 +66,7 @@
  *  `outline: none`, so a keyboard reader saw only the hover tint — no
  *  indicator a forced-colours mode keeps (X-10). */
 .iwac-vis-article-card:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -104,7 +104,7 @@
     position: absolute;
     top: var(--space-2, 0.5rem);
     right: var(--space-2, 0.5rem);
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem var(--space-2, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     border-radius: var(--radius-full, 9999px);
@@ -222,7 +222,7 @@
 .iwac-vis-sent-axis__verdict {
     margin: 0;
     font-size: var(--text-xs, 0.8125rem);
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
@@ -323,7 +323,7 @@
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
     color: var(--ink, #13161c);
-    line-height: 1.25;
+    line-height: var(--line-height-tight, 1.25);
     min-width: 0;
     overflow-wrap: anywhere;
 }
@@ -445,7 +445,7 @@
     color: var(--ink, #13161c);
 }
 .iwac-vis-sent-axis__why > summary:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
     border-radius: var(--radius-sm, 0.375rem);
 }
@@ -458,14 +458,14 @@
 }
 .iwac-vis-sent-why__item {
     font-size: var(--text-xs, 0.8125rem);
-    line-height: 1.5;
+    line-height: var(--line-height-normal, 1.5);
     min-width: 0;
 }
 .iwac-vis-sent-why__model {
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1, 0.25rem);
     color: var(--ink-light, #3f4349);
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
 }
@@ -541,7 +541,7 @@
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
     color: var(--muted, #66696e);
-    line-height: 1.5;
+    line-height: var(--line-height-normal, 1.5);
 }
 .iwac-vis-further__grid {
     /* Inherits .iwac-vis-article-cards */

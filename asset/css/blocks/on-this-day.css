@@ -166,6 +166,14 @@
     color: var(--muted, #66696e);
 }
 
+/*  On the selected chip the count sits on the primary wash, where --muted
+ *  reads 4.40:1 in dark. It takes the selected label's colour instead — the
+ *  theme's "active counts as primary tabular text" (`.linked-resources__facet
+ *  .is-active .linked-resources__facet-count`). */
+.iwac-vis-facets__btn--active > .iwac-vis-otd-switch__hint {
+    color: var(--iwac-vis-selected-ink);
+}
+
 
 /* ------------------------------------------------------------------- */
 /*  Shared item furniture                                               */
@@ -226,7 +234,7 @@
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: var(--line-height-normal, 1.5);
     letter-spacing: var(--tracking-normal, 0);
     text-transform: none;
     color: var(--ink-light, #3f4349);
@@ -303,7 +311,7 @@
 }
 
 .iwac-vis-otd-register__row:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: -2px;
 }
 
@@ -373,7 +381,7 @@
 }
 
 .iwac-vis-otd-decades__card:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 3px;
 }
 
@@ -422,7 +430,7 @@
 .iwac-vis-otd-decades .iwac-vis-otd-meta {
     align-items: flex-start;
     gap: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
-    line-height: 1.4;
+    line-height: var(--line-height-snug, 1.4);
 }
 
 
@@ -452,7 +460,7 @@
 }
 
 .iwac-vis-otd-clippings__cut:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 3px;
 }
 
@@ -567,7 +575,7 @@
 }
 
 .iwac-vis-otd-index__row:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: -2px;
 }
 
@@ -629,17 +637,9 @@
     color: var(--ink-light, #3f4349);
 }
 
-/*  Geometry and colour come from `.iwac-vis-btn` — the module's quiet outlined
- *  control, which is also what a bare <button> renders as since theme 2.10.
- *  Only the label's type is set here, to the same uppercase micro-label the
- *  block's other controls use. */
-.iwac-vis-otd-fallback__retry {
-    flex: none;
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
-}
+/*  `.iwac-vis-otd-fallback__retry` — geometry and colour from `.iwac-vis-btn`,
+ *  the label's type from the shared try-again rule in iwac-core.css
+ *  (`.iwac-vis-error__retry`), of which this was a verbatim copy. */
 
 
 /* ------------------------------------------------------------------- */
@@ -707,5 +707,14 @@
     .iwac-vis-otd-index__row,
     .iwac-vis-otd-foot__toggle > .iwac-vis-icon {
         transition: none;
+    }
+}
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-otd-decades__dot {
+        forced-color-adjust: none;
     }
 }

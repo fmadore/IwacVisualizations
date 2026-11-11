@@ -65,7 +65,7 @@
     border: 1px solid var(--border-light, #e2e5e8);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-2, 0.5rem);
-    background: var(--surface, #fdfcfb);
+    background: var(--panel-bg, #fdfcfb);
 }
 
 .iwac-vis-spatial-picker__places-list {
@@ -84,8 +84,9 @@
  *  where the shared row's `:hover` would otherwise out-rank it. */
 .iwac-vis-spatial-picker__item--active,
 .iwac-vis-spatial-picker__item--active:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
+    background: var(--iwac-vis-selected-bg);
+    border-color: var(--iwac-vis-selected-border);
+    color: var(--iwac-vis-selected-ink);
 }
 
 .iwac-vis-spatial-picker__selection {

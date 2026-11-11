@@ -73,9 +73,10 @@
 /* =================================================================== */
 /*  Provenance badges                                                    */
 /* =================================================================== */
-/*  Machine-derived results are marked as such, after the theme's
- *  `.property--ai` treatment: a quiet uppercase label on a sunken tint,
- *  never a brand-coloured stripe. */
+/*  Machine-derived results are marked as such: a quiet uppercase label
+ *  in an outlined chip (the theme's `.resource-tag` grammar, at the chip
+ *  radius) — never a brand-coloured stripe, never a filled pill. The words
+ *  carry the provenance; a sunken fill only made it a badge. */
 
 .iwac-vis-albani__badges {
     display: flex;
@@ -92,9 +93,9 @@
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
-    background: var(--surface-sunken, #f4f1ef);
-    border: 1px solid var(--border-light, #e2e5e8);
-    border-radius: var(--radius-full, 9999px);
+    background: transparent;
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-sm, 0.375rem);
     cursor: help;
 }
 
@@ -491,7 +492,7 @@
     align-items: baseline;
     gap: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
-    line-height: 1.25;
+    line-height: var(--line-height-tight, 1.25);
     cursor: help;
 }
 
@@ -512,17 +513,9 @@
     color: var(--ink-strong, #05070c);
 }
 
-/*  The ratio, for screen readers only: a `title` never reaches them. */
-.iwac-vis-albani__sr {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-}
+/*  `.iwac-vis-albani__sr` — the ratio, for screen readers only (a `title`
+ *  never reaches them). Visually hidden by the shared rule in iwac-core.css
+ *  (with `.iwac-vis-graph-status`), of which this was a verbatim copy. */
 
 
 /* =================================================================== */
@@ -676,5 +669,14 @@ a.iwac-vis-albani__ledger-name:hover {
 @media (max-width: 767px) { /* < md */
     .iwac-vis-albani__map {
         height: 420px;
+    }
+}
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-albani__map-swatch {
+        forced-color-adjust: none;
     }
 }

@@ -1126,25 +1126,34 @@
 /*  Each stage enters 700 ms after the one before; inside it, `--j` orders
  *  the marks. Five stages end by ~4.5 s, so the sequence needs no pause
  *  control. Every animation fills `both`, so it starts from its first frame
- *  and ends on the resting styles above. */
+ *  and ends on the resting styles above.
+ *
+ *  Durations are the theme's motion tokens (--duration-base 200ms /
+ *  --duration-slow 300ms) and its one easing, --ease-out-quart. Two are a
+ *  documented exception: the connector trace (600ms) and the fan-out
+ *  (520ms) are choreography, not a state transition — a path drawn at
+ *  300ms reads as a flash, not a line being followed — so they stay
+ *  longer than the theme's slow step. The trace keeps ease-in-out: a
+ *  pen accelerates into a stroke before it settles. The 700ms stagger and
+ *  the offsets are sequencing, not durations. */
 @media (prefers-reduced-motion: no-preference) {
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__stage {
         --iwac-vis-pipeline-at: calc(var(--iwac-vis-pipeline-i, 0) * 700ms);
-        animation: iwac-pipeline-appear 360ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) var(--iwac-vis-pipeline-at) both;
+        animation: iwac-pipeline-appear var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) var(--iwac-vis-pipeline-at) both;
     }
 
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__stage::before {
-        animation: iwac-pipeline-fade 240ms ease-out calc(var(--iwac-vis-pipeline-at) - 120ms) both;
+        animation: iwac-pipeline-fade var(--duration-base, 200ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) - 120ms) both;
     }
 
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__grow {
         transform-box: fill-box;
         transform-origin: left center;
-        animation: iwac-pipeline-grow 300ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 140ms) both;
+        animation: iwac-pipeline-grow var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 140ms) both;
     }
 
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__rise {
-        animation: iwac-pipeline-appear 300ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 160ms) both;
+        animation: iwac-pipeline-appear var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 160ms) both;
     }
 
     /*  Inline marks need a box to move in. Zero specificity, so a mark that
@@ -1165,7 +1174,7 @@
     /*  A dropped word is struck out after it appears. */
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__token--dropped .iwac-vis-pipeline__word,
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__dropped-title {
-        animation: iwac-pipeline-strike 300ms ease-out calc(var(--iwac-vis-pipeline-at) + 360ms + var(--iwac-vis-pipeline-j, 0) * 160ms) both;
+        animation: iwac-pipeline-strike var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 360ms + var(--iwac-vis-pipeline-j, 0) * 160ms) both;
     }
 
     @keyframes iwac-pipeline-appear {
@@ -1205,5 +1214,18 @@
             color: var(--ink, #13161c);
             text-decoration-color: transparent;
         }
+    }
+}
+
+
+/*  Forced colours: data marks keep their colour (see the note at the end
+ *  of iwac-core.css). */
+@media (forced-colors: active) {
+    .iwac-vis-pipeline__swatch::before,
+    .iwac-vis-pipeline__segment,
+    .iwac-vis-pipeline__bar,
+    .iwac-vis-pipeline__line,
+    .iwac-vis-pipeline__step--on {
+        forced-color-adjust: none;
     }
 }
