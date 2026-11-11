@@ -38,7 +38,7 @@ namespace IwacVisualizations\Site;
 final class BlockRegistry
 {
     /**
-     * slug => [invokable, class, label, description, embeddable, shell].
+     * slug => [invokable, class, label, description, embedParam, shell].
      *
      * `shell` is the array `_generic` hands to `common/iwac-block-shell`:
      * `assets` (forwarded to `common/iwac-assets` — `blockCss`, `needs`,
@@ -49,12 +49,12 @@ final class BlockRegistry
      * `tests/php/run.php` checks every key against what the partials read.
      * A row with no `shell` renders through its own template.
      *
-     * `embeddable` gates the block from the snippet gallery and the
-     * `/iwac-embed/:block` route. The route renders without `$block`, so a
-     * configured block is embeddable only when its configuration is one
-     * choice the URL can name: `embedParam` is that query parameter, and
-     * its class implements `ConfiguredEmbed` to list the choices
-     * and render one (`?timeline=hajj-bf`, `?preset=ocr`).
+     * Every block embeds: it is listed in the snippet gallery and served by
+     * the `/iwac-embed/:block` route (tests/php/run.php fails on one that
+     * cannot be). The route renders without `$block`, so a configured block
+     * names its configuration in the URL: `embedParam` is that query
+     * parameter, and its class implements `ConfiguredEmbed` to list the
+     * choices and render one (`?timeline=hajj-bf`, `?preset=ocr`).
      */
     const BLOCKS = [
         'iwac-timeline' => [
@@ -62,7 +62,6 @@ final class BlockRegistry
             'class'       => BlockLayout\IwacTimeline::class,
             'label'       => 'IWAC Timeline', // @translate
             'description' => 'Present an illustrated historical narrative with a date axis and a complete reading view.', // @translate
-            'embeddable'  => true,
             'embedParam'  => 'timeline',
         ],
         'albani-sermons' => [
@@ -70,7 +69,6 @@ final class BlockRegistry
             'class'       => BlockLayout\AlbaniSermons::class,
             'label'       => 'Albani Zaria Sermons', // @translate
             'description' => 'Present the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria as a guided exhibition: the recordings, their Hausa and Arabic vocabulary, the words used near terms for youth and for democracy and politics, the passages where the two meet, and the vocabulary that sets each recording apart. Passages are quoted only from public transcripts.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'albani-sermons',
@@ -88,7 +86,6 @@ final class BlockRegistry
                 ],
                 'blockClass' => 'iwac-vis-albani',
                 'loading'    => 'Loading the Albani Zaria sermons', // @translate
-                'siteBase'   => true,
             ],
         ],
         'audiovisual-overview' => [
@@ -96,7 +93,6 @@ final class BlockRegistry
             'class'       => BlockLayout\AudiovisualOverview::class,
             'label'       => 'Audiovisual Overview', // @translate
             'description' => 'Compare collected recordings by source, country, duration and publication year, and see which catalogue fields are available.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -117,7 +113,6 @@ final class BlockRegistry
             'class'       => BlockLayout\CollectionOverview::class,
             'label'       => 'Collection Overview', // @translate
             'description' => 'Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'collection-overview',
@@ -139,7 +134,6 @@ final class BlockRegistry
             'class'       => BlockLayout\CompareNewspapers::class,
             'label'       => 'Compare Newspapers', // @translate
             'description' => 'Compare two selections of newspaper articles or Islamic periodical issues by publication year, catalogue tags, vocabulary and available AI ratings. Choose a country or a single publication for each selection.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'compare-newspapers',
@@ -163,7 +157,6 @@ final class BlockRegistry
             'class'       => BlockLayout\DistinctiveVocabulary::class,
             'label'       => 'Distinctive Vocabulary', // @translate
             'description' => 'Find words used at higher relative rates in one country or decade than in the remaining newspaper articles. A second view identifies periods of increased use of subject tags. Statistical thresholds are explained alongside the charts.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'distinctive-vocabulary',
@@ -183,7 +176,6 @@ final class BlockRegistry
             'class'       => BlockLayout\EntityNetworks::class,
             'label'       => 'Entity Networks', // @translate
             'description' => 'Explore links between people, organisations, places, subjects and events recorded on the same items. Shared records indicate catalogue associations, which require interpretation through the sources.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'entity-networks',
@@ -202,7 +194,6 @@ final class BlockRegistry
             'class'       => BlockLayout\IndexOverview::class,
             'label'       => 'Index Overview', // @translate
             'description' => 'Explore the catalogue index and the use of subject and place tags over time. Counts describe recorded associations rather than word occurrences in the original texts.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'index-overview',
@@ -224,7 +215,6 @@ final class BlockRegistry
             'class'       => BlockLayout\Laicite::class,
             'label'       => 'Laïcité', // @translate
             'description' => 'Explore a dossier selected through the Laïcité subject tag and vocabulary in titles and available full text, including YouTube transcripts. Compare source types, terms in context, associated entries and AI ratings. Descriptive fields are excluded from vocabulary counts; extracts follow each field’s public status.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     // Five sheets, in cascade order: the shell every view sits
@@ -260,7 +250,6 @@ final class BlockRegistry
                 ],
                 'blockClass' => 'iwac-vis-laicite',
                 'loading'    => 'Loading laïcité dossier', // @translate
-                'siteBase'   => true,
             ],
         ],
         'lexical-metrics' => [
@@ -268,7 +257,6 @@ final class BlockRegistry
             'class'       => BlockLayout\LexicalMetrics::class,
             'label'       => 'Press Language', // @translate
             'description' => 'Compare estimated reading ease, vocabulary diversity and article length over time and by newspaper. Measures use extracted text; the charts explain the scores and their limitations.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -285,14 +273,12 @@ final class BlockRegistry
             'class'       => BlockLayout\OnThisDay::class,
             'label'       => 'On This Day', // @translate
             'description' => 'Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade and clipping layouts. Only records with suitable dates can appear.', // @translate
-            'embeddable'  => true,
         ],
         'org-cooccurrence' => [
             'invokable'   => 'orgCooccurrence',
             'class'       => BlockLayout\OrgCooccurrence::class,
             'label'       => 'Islamic Organisations Co-occurrence', // @translate
             'description' => 'Compare pairs of words found near the names of selected Islamic organisations in newspaper articles. Darker cells indicate pairs found together in more articles.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'org-cooccurrence',
@@ -310,7 +296,6 @@ final class BlockRegistry
             'class'       => BlockLayout\PeriodicalsLandscape::class,
             'label'       => 'Periodicals Semantic Landscape', // @translate
             'description' => 'Explore Islamic periodical issues arranged by an AI comparison of their tables of contents. Nearby points suggest issues to compare; positions and distances are approximate.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -330,7 +315,6 @@ final class BlockRegistry
             'class'       => BlockLayout\PeriodicalsOverview::class,
             'label'       => 'Periodicals Overview', // @translate
             'description' => 'Explore Islamic periodical holdings by year, publication, country, language and catalogue subject, with vocabulary and statistically modelled themes. Gaps in the collection do not establish gaps in publication.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'periodicals-overview',
@@ -350,7 +334,6 @@ final class BlockRegistry
             'class'       => BlockLayout\PipelineExplainer::class,
             'label'       => 'Pipeline Explainer', // @translate
             'description' => 'Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data.', // @translate
-            'embeddable'  => true,
             'embedParam'  => 'preset',
         ],
         'press-bylines' => [
@@ -358,7 +341,6 @@ final class BlockRegistry
             'class'       => BlockLayout\PressBylines::class,
             'label'       => 'Press Bylines', // @translate
             'description' => 'Explore recorded journalists and press agencies, the share of articles with a byline, and their representation over time. A missing byline may reflect incomplete cataloguing.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'press-bylines',
@@ -376,7 +358,6 @@ final class BlockRegistry
             'class'       => BlockLayout\PressReprints::class,
             'label'       => 'Press Reprints', // @translate
             'description' => 'Find articles from different newspapers with highly similar AI text representations. These candidate pairs may indicate shared dispatches, communiqués or reprints; read both articles before concluding that copying occurred.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'press-reprints',
@@ -395,7 +376,6 @@ final class BlockRegistry
             'class'       => BlockLayout\ReferencesOverview::class,
             'label'       => 'References Overview', // @translate
             'description' => 'Explore the bibliography by publication date, type, language, associated country, author and subject. Additional views show authorship links, available full text, modelled themes and text similarity.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -415,7 +395,6 @@ final class BlockRegistry
             'class'       => BlockLayout\ScaryTerms::class,
             'label'       => 'Scary Terms', // @translate
             'description' => 'Explore selected vocabulary associated with radicalism and extremism in newspaper articles: occurrences, trends, countries, term pairs, surrounding vocabulary and tagged places. Counts describe language use, not the extremism of the people discussed.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'scary-terms',
@@ -437,7 +416,6 @@ final class BlockRegistry
                 ],
                 'blockClass' => 'iwac-vis-scary',
                 'loading'    => 'Loading scary terms', // @translate
-                'siteBase'   => true,
             ],
         ],
         'semantic-landscape' => [
@@ -445,7 +423,6 @@ final class BlockRegistry
             'class'       => BlockLayout\SemanticLandscape::class,
             'label'       => 'Semantic Landscape', // @translate
             'description' => 'Explore newspaper articles arranged by an AI comparison of their full texts, with colours for country, decade or modelled topic. Nearby points suggest texts to compare; distances are approximate.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -465,7 +442,6 @@ final class BlockRegistry
             'class'       => BlockLayout\SentimentAtlas::class,
             'label'       => 'Sentiment Atlas', // @translate
             'description' => 'Compare AI assessments of tone towards Islam and Muslims, their prominence in articles, and subjectivity. Views show changes over time, differences between sources and model agreement. Ratings require checking against the texts, especially for subjectivity.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'needs' => [
@@ -484,7 +460,6 @@ final class BlockRegistry
             'class'       => BlockLayout\SpatialExploration::class,
             'label'       => 'Spatial Exploration', // @translate
             'description' => 'Map places linked through catalogue records, with filters for countries and associated people, organisations, subjects or events. Only places with coordinates appear; the map does not include every location mentioned in the texts.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'spatial-exploration',
@@ -502,7 +477,6 @@ final class BlockRegistry
             'class'       => BlockLayout\TermTrends::class,
             'label'       => 'Term Trends', // @translate
             'description' => 'Compare the number or share of dated newspaper articles containing selected words. Search the frequent-word vocabulary and compare up to eight terms. Each word counts once per article, and only articles with usable processed text enter the calculation.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'term-trends',
@@ -520,7 +494,6 @@ final class BlockRegistry
             'class'       => BlockLayout\TopicExplorer::class,
             'label'       => 'Topic Explorer', // @translate
             'description' => 'Explore the themes a statistical topic model identifies in newspaper articles. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags.', // @translate
-            'embeddable'  => true,
             'shell'       => [
                 'assets' => [
                     'blockCss' => 'topic-explorer',
@@ -594,22 +567,13 @@ final class BlockRegistry
     }
 
     /**
-     * `slug => label` for every embeddable block — the embed whitelist and the
-     * snippet gallery's listing. Doubles as the directory-traversal guard for
-     * `common/block-layout/<slug>`, since only known slugs resolve.
+     * `slug => label` for every block — all of them embed — as the embed
+     * whitelist and the snippet gallery's listing. Doubles as the
+     * directory-traversal guard for `common/block-layout/<slug>`, since only
+     * known slugs resolve.
      */
     public static function embeddable(): array
     {
-        $out = [];
-        // Rows read through get(), not off the constant: today every row is
-        // embeddable, and a static analyser reading BLOCKS would call this
-        // test dead — it is what keeps a future opt-out working.
-        foreach (self::slugs() as $slug) {
-            $row = self::get($slug);
-            if (!empty($row['embeddable'])) {
-                $out[$slug] = $row['label'];
-            }
-        }
-        return $out;
+        return array_map(static fn (array $row): string => $row['label'], self::BLOCKS);
     }
 }

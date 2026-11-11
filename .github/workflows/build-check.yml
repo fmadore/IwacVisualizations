@@ -101,6 +101,20 @@ jobs:
       - name: JavaScript behavioral contracts
         run: npm test
 
+      # Chromium is ~150 MB per run otherwise. Keyed on the @playwright/test
+      # version the lockfile pins, which decides the browser build; the
+      # install below still runs, for the OS packages, and skips a cached
+      # browser.
+      - name: Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+
       - name: Install Chromium for responsive browser contracts
         run: npx playwright install --with-deps chromium
 

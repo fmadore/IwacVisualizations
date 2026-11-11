@@ -39,23 +39,18 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
-const path = require('path');
 const zlib = require('zlib');
+const { PARTIAL, PARTIAL_REL, REGISTRY, parsePins, readPartialSource, fetchWithTimeout } = require('./lib/cdn');
 
-const ROOT = path.join(__dirname, '..');
-const PARTIAL = path.join(ROOT, 'view', 'common', 'iwac-assets.phtml');
-const PARTIAL_REL = 'view/common/iwac-assets.phtml';
-const REGISTRY = 'https://registry.npmjs.org';
 const TIMEOUT_MS = 30000;
 
 const BEGIN = '// BEGIN GENERATED INTEGRITY';
 const END = '// END GENERATED INTEGRITY';
-const URL_RE = /'(https:\/\/cdn\.jsdelivr\.net\/npm\/(@?[^@/\s']+(?:\/[^@/\s']+)?)@(\d[^/\s']*)\/([^'\s]+))'/g;
 const HASH_RE = /^sha384-[A-Za-z0-9+/]{64}$/;
 
 /** Split the partial into the generated block and everything else. */
 function readPartial() {
-    const source = fs.readFileSync(PARTIAL, 'utf8');
+    const source = readPartialSource();
     const begin = source.indexOf(BEGIN);
     const end = source.indexOf(END);
     if (begin < 0 || end < begin) {
@@ -73,15 +68,14 @@ function readPartial() {
     };
 }
 
-/** Every jsDelivr URL in `text`, once each, in order of appearance. */
+/**
+ * Every jsDelivr URL in `text` written as a whole `'https://…'` literal, once
+ * each, in order of appearance.
+ */
 function urlsIn(text) {
     const seen = new Map();
-    let m;
-    URL_RE.lastIndex = 0;
-    while ((m = URL_RE.exec(text)) !== null) {
-        if (!seen.has(m[1])) {
-            seen.set(m[1], { url: m[1], pkg: m[2], version: m[3], file: m[4] });
-        }
+    for (const { url, pkg, version, file, quoted } of parsePins(text)) {
+        if (quoted && !seen.has(url)) seen.set(url, { url, pkg, version, file });
     }
     return [...seen.values()];
 }
@@ -100,18 +94,14 @@ function sri(buffer) {
 }
 
 async function fetchBuffer(url, headers) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-    try {
-        const res = await fetch(url, { signal: controller.signal, headers: headers || {} });
-        if (!res.ok) throw new Error(`${url} responded ${res.status}`);
-        return Buffer.from(await res.arrayBuffer());
-    } catch (err) {
-        if (err && err.name === 'AbortError') throw new Error(`${url} timed out after ${TIMEOUT_MS} ms`, { cause: err });
-        throw err;
-    } finally {
-        clearTimeout(timer);
-    }
+    return fetchWithTimeout(url, {
+        timeoutMs: TIMEOUT_MS,
+        headers,
+        read: async (res) => {
+            if (!res.ok) throw new Error(`${url} responded ${res.status}`);
+            return Buffer.from(await res.arrayBuffer());
+        },
+    });
 }
 
 /**

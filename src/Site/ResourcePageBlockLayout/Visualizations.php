@@ -16,17 +16,20 @@ use Omeka\Site\ResourcePageBlockLayout\ResourcePageBlockLayoutInterface;
  * this block up once for "all items" without breaking unrelated pages.
  *
  * Add a new dashboard by appending a `template_id => 'partial-name'`
- * entry to TEMPLATE_PARTIALS and creating the matching .phtml file.
+ * entry to TEMPLATE_PARTIALS and either a DASHBOARDS row (a dashboard that
+ * only declares its shell) or a matching .phtml file (one that does more).
  */
 class Visualizations implements ResourcePageBlockLayoutInterface
 {
     /**
-     * Map of resource template ids on islam.zmo.de to the partial name
-     * (relative to common/resource-page-block-layout/visualizations/).
+     * Map of resource template ids on islam.zmo.de to the dashboard name: a
+     * DASHBOARDS row (rendered by `_dashboard.phtml`) or, failing that, the
+     * partial of that name under common/resource-page-block-layout/
+     * visualizations/.
      *
      * Persons get a dedicated partial because the role facet (subject
      * vs creator) is meaningful only for them. The four non-person
-     * entity types share `entity.phtml`, which renders the same panel
+     * entity types share the `entity` dashboard, which renders the same panel
      * set without a facet bar and reads from the precomputed JSON
      * shape that generate_entity_dashboards.py emits.
      *
@@ -52,7 +55,7 @@ class Visualizations implements ResourcePageBlockLayoutInterface
      *
      * The eight reference templates (10 Book, 11 Book chapter, 12 Book
      * review, 13 Report, 14 Thesis, 16 Blog post, 17 Communication,
-     * 18 Journal article) share `reference.phtml`. They were deliberately
+     * 18 Journal article) share the `reference` dashboard. They were deliberately
      * unmapped until 2026-07: a bibliographic record carried nothing a
      * chart could add over Omeka's own item page. The pipeline's full-text
      * pass changed that — references now have embeddings, LDA topics and
@@ -120,6 +123,138 @@ class Visualizations implements ResourcePageBlockLayoutInterface
         15 => 'images',
     ];
 
+    /** Where every dashboard partial lives. */
+    const PARTIAL_DIR = 'common/resource-page-block-layout/visualizations/';
+
+    /**
+     * The dashboards whose partial is nothing but a shell declaration, keyed
+     * by their TEMPLATE_PARTIALS name and rendered through one template,
+     * `visualizations/_dashboard.phtml` — the resource-page counterpart of
+     * the page blocks' `shell` rows in BlockRegistry. Each row is merged over
+     * `shell()`'s common keys and handed to `common/iwac-block-shell`; the
+     * loading message is translated there, so it carries the `@translate`
+     * marker `scripts/extract-pot.js` reads.
+     *
+     * `article` (the server-rendered sentiment panel) and `minimal-item`
+     * (template-derived data attributes) do more than declare, so they keep
+     * their own partials and take the common keys from `shell()`.
+     */
+    const DASHBOARDS = [
+        // The panels (self-registering IIFEs, each hanging a render function
+        // off IWACVis.personDashboard) are the panels/person bundle the entity
+        // dashboard shares; the named bundle is the orchestrator. The wrappers
+        // `dashboard-panels-bridge` registers into IWACVis.dashboardLayout ride
+        // the shared-layout bundle. File list and order: asset/js/bundles.json.
+        'person' => [
+            'assets' => [
+                'blockCss' => 'person-dashboard',
+                'needs' => [
+                    'maplibre'     => true,
+                    // Associated entities offers a d3-force canvas, a DOM/SVG
+                    // relational list, and a semantic temporal table. None is
+                    // an ECharts series.
+                    'd3'           => true,
+                    'chartOptions' => true,
+                    'facetButtons' => true,
+                    'table'        => true,
+                    'pagination'   => true,
+                    'layout'       => true,
+                ],
+                'bundle' => 'person-dashboard',
+            ],
+            'blockClass'   => 'iwac-vis-person',
+            'loading'      => 'Loading dashboard', // @translate
+            'loadingClass' => 'iwac-vis-person__loading',
+        ],
+        // Places, organisations, subjects and events reuse the person panel
+        // modules: the entity precompute wraps every section in `by_role.all`
+        // precisely so they work unchanged with a no-op facet. The manifest
+        // expresses that as `uses: ['person']`, and this bundle holds only the
+        // orchestrator. (`facet.js` rides along unused: entities have no role
+        // facet bar to mount it in.)
+        'entity' => [
+            'assets' => [
+                'blockCss' => 'person-dashboard',
+                'needs' => [
+                    'maplibre'     => true,
+                    'd3'           => true,
+                    'chartOptions' => true,
+                    'facetButtons' => true,
+                    'table'        => true,
+                    'pagination'   => true,
+                    'layout'       => true,
+                ],
+                'bundle' => 'entity-dashboard',
+            ],
+            'blockClass'   => 'iwac-vis-entity',
+            'loading'      => 'Loading dashboard', // @translate
+            'loadingClass' => 'iwac-vis-entity__loading',
+        ],
+        // Islamic periodical issues (template 21): publication-dashboards/
+        // {o_id}.json from generate_publication_dashboards.py — stat cards,
+        // the periodical-run sparkline, the nearest issues, and table-of-
+        // contents neighbours where that pipeline has coverage.
+        'publication' => [
+            'assets' => [
+                'needs' => [
+                    'chartOptions' => true,
+                    'layout'       => true,
+                ],
+                'bundle' => 'publication-dashboard',
+            ],
+            'blockClass'   => 'iwac-vis-publication',
+            'loading'      => 'Loading visualisations', // @translate
+            'loadingClass' => 'iwac-vis-publication__loading',
+        ],
+        // Bibliographic references: reference-dashboards/{o_id}.json from
+        // generate_reference_dashboards.py. Roughly half the bibliography has
+        // no extracted text, so a missing file removes the block instead of
+        // reporting an error.
+        'reference' => [
+            'assets' => [
+                'blockCss' => 'reference-dashboard',
+                'needs' => [
+                    'chartOptions' => true,
+                    'layout'       => true,
+                ],
+                'bundle' => 'reference-dashboard',
+            ],
+            'blockClass'   => 'iwac-vis-reference',
+            'loading'      => 'Loading visualisations', // @translate
+            'loadingClass' => 'iwac-vis-reference__loading',
+        ],
+    ];
+
+    /**
+     * The shell keys every resource dashboard shares, merged under the
+     * dashboard's own (`$own`). `$kind` is `item` or `item-set`: it names the
+     * embed route segment and the id attribute (`data-item-id`,
+     * `data-item-set-id`), which comes first among the data attributes.
+     *
+     * In an embed the frame has no resource page around it, so the title the
+     * embed route passes (`$embedHeading`) says whose dashboard this is. On
+     * the page the heading is an h2, a section beside the theme's "How to
+     * cite" and "Linked resources" — the same level and the same section
+     * rule, so the outline does not run h1 → h3 → h2.
+     *
+     * @param callable(string): string $translate
+     */
+    public static function shell(string $kind, int $id, ?string $embedHeading, callable $translate, array $own = []): array
+    {
+        $own['data'] = [$kind . '-id' => $id] + ($own['data'] ?? []);
+        return [
+            'heading'      => $embedHeading ?? $translate('Visualisations'),
+            'embedSlug'    => $kind . '/' . $id,
+            'headingLevel' => 'h2',
+        ] + $own;
+    }
+
+    /** The TEMPLATE_PARTIALS name for a resource template id, or null. */
+    public static function dashboardForTemplate(?int $templateId): ?string
+    {
+        return $templateId === null ? null : (self::TEMPLATE_PARTIALS[$templateId] ?? null);
+    }
+
     public function getLabel(): string
     {
         return 'Visualisations'; // @translate
@@ -138,8 +273,11 @@ class Visualizations implements ResourcePageBlockLayoutInterface
     public static function partialFor(AbstractResourceEntityRepresentation $resource): ?string
     {
         $template = $resource->resourceTemplate();
-        $partial = $template ? (self::TEMPLATE_PARTIALS[(int) $template->id()] ?? null) : null;
-        return $partial === null ? null : 'common/resource-page-block-layout/visualizations/' . $partial;
+        $name = self::dashboardForTemplate($template ? (int) $template->id() : null);
+        if ($name === null) {
+            return null;
+        }
+        return self::PARTIAL_DIR . (isset(self::DASHBOARDS[$name]) ? '_dashboard' : $name);
     }
 
     public function render(PhpRenderer $view, AbstractResourceEntityRepresentation $resource): string

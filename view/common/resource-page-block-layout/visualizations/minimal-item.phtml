@@ -38,9 +38,12 @@
  * @var string|null $embedHeading  The resource's title, passed only by the embed route
  */
 
+use IwacVisualizations\Site\ItemValue;
+use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
+
 // Template ID → HF subset that drives the sibling context: declared beside
 // the template dispatch, in Visualizations::MINIMAL_SUBSETS.
-$templateMap = \IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations::MINIMAL_SUBSETS;
+$templateMap = Visualizations::MINIMAL_SUBSETS;
 
 $template   = $resource->resourceTemplate();
 $templateId = $template ? (int) $template->id() : 0;
@@ -58,48 +61,20 @@ if ($dateValue) {
     }
 }
 
-/**
- * Display text of a value that may be a literal, a URI, or a link to
- * another item. `(string) $value` only covers the literal case — a
- * linked authority record stringifies to "" — and dcterms:publisher is
- * exactly that case here: YouTube channels are foaf:Organization items.
- */
-$displayValue = function ($value): string {
-    if (!$value) {
-        return '';
-    }
-    $linked = $value->valueResource();
-    if ($linked) {
-        return trim((string) $linked->displayTitle());
-    }
-    $literal = trim((string) $value->value());
-    return $literal !== '' ? $literal : trim((string) $value->uri());
-};
-
 // The channel / depositing body. The client normalises this the same
 // way the generator normalises its slice keys (NFC + lowercase), so
 // nothing here has to reproduce that normalisation — and an item whose
 // publisher has no slice simply falls back to the whole subset.
-$channel = $subset === 'audiovisual' ? $displayValue($resource->value('dcterms:publisher')) : '';
+// dcterms:publisher is a linked foaf:Organization item on YouTube videos,
+// which `(string) $value` would print as "" — hence ItemValue::text().
+$channel = $subset === 'audiovisual' ? ItemValue::text($resource->value('dcterms:publisher')) : '';
 
 // Canonical watch URL (fabio:hasURL on template 23). Only YouTube
 // targets are surfaced: this becomes an outbound link, so the host is
-// checked here rather than trusting whatever a record happens to hold.
-$watchUrl = '';
-if ($subset === 'audiovisual') {
-    $candidate = $displayValue($resource->value('fabio:hasURL'));
-    $parts = $candidate !== '' ? parse_url($candidate) : false;
-    if (is_array($parts)) {
-        $scheme = strtolower($parts['scheme'] ?? '');
-        $host   = strtolower($parts['host'] ?? '');
-        $hosts  = ['www.youtube.com', 'youtube.com', 'm.youtube.com', 'youtu.be'];
-        if ($scheme === 'https' && in_array($host, $hosts, true)) {
-            $watchUrl = $candidate;
-        }
-    }
-}
+// checked (ItemValue::watchUrl) rather than trusting whatever a record holds.
+$watchUrl = $subset === 'audiovisual' ? ItemValue::watchUrl(ItemValue::text($resource->value('fabio:hasURL'))) : '';
 
-echo $this->partial('common/iwac-block-shell', [
+echo $this->partial('common/iwac-block-shell', Visualizations::shell('item', (int) $resource->id(), $embedHeading ?? null, $this->plugin('translate'), [
     'assets' => [
         'blockCss' => 'minimal-item',
         'needs' => ['echarts' => false,
@@ -109,21 +84,13 @@ echo $this->partial('common/iwac-block-shell', [
         'bundle' => 'minimal-item-dashboard',
     ],
     'blockClass'   => 'iwac-vis-minimal-item',
-    // In an embed the frame has no item page around it, so the
-    // title says whose dashboard this is (EmbedController).
-    'heading'      => $embedHeading ?? $this->translate('Visualisations'),
-    'embedSlug'    => 'item/' . $resource->id(),
-    // A section of the item page, beside the theme's "How to cite" and
-    // "Linked resources": the same h2 and the same 2px section rule.
-    'headingLevel' => 'h2',
     'loading'      => $this->translate('Loading visualisations'),
     'loadingClass' => 'iwac-vis-minimal-item__loading',
     'data'         => [
-        'item-id'     => $resource->id(),
         'template-id' => $templateId,
         'subset'      => $subset,
         'pub-year'    => $pubYear,
         'channel'     => $channel,
         'watch-url'   => $watchUrl,
     ],
-]);
+]));

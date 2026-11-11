@@ -1,6 +1,7 @@
 <?php
 /** Regenerate the committed browser fixture from the production PHP partials. */
 require_once __DIR__ . '/../../src/Timeline/Catalog.php';
+require_once __DIR__ . '/../../src/Site/ItemValue.php';
 require_once __DIR__ . '/../../src/Timeline/Sources.php';
 require_once __DIR__ . '/../lib/fake-items.php';
 

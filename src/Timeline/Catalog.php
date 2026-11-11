@@ -8,12 +8,26 @@ class Catalog
 {
     private $directory;
     private $purify;
+    private $cacheDirectory;
     private $cache = [];
+    /** @var array<string, string> file name => SHA-256 of the bytes read */
+    private $hashes = [];
 
-    public function __construct(string $directory, callable $purify)
+    /**
+     * @param string|null $cacheDirectory where a purified timeline is kept,
+     *     so a page view reads it instead of purifying every event again
+     *     (HTML Purifier costs ~10–40 ms a timeline; the read, well under
+     *     one). Null keeps no cache. The caller scopes it to the generation
+     *     and the purifier's version and configuration; each entry is named
+     *     after the SHA-256 of the source file too, so a replaced source is a
+     *     miss, never a stale answer. A miss — or any failure to read or
+     *     write the cache — purifies, exactly as without one.
+     */
+    public function __construct(string $directory, callable $purify, ?string $cacheDirectory = null)
     {
         $this->directory = rtrim($directory, '/\\') . '/timelines';
         $this->purify = $purify;
+        $this->cacheDirectory = $cacheDirectory === null ? null : rtrim($cacheDirectory, '/\\');
     }
 
     public static function validId(string $value): bool
@@ -30,7 +44,9 @@ class Catalog
         if (!is_readable($path) || filesize($path) > 8 * 1024 * 1024) {
             return $this->cache[$name] = null;
         }
-        $value = json_decode((string) file_get_contents($path), true);
+        $bytes = (string) file_get_contents($path);
+        $this->hashes[$name] = hash('sha256', $bytes);
+        $value = json_decode($bytes, true);
         return $this->cache[$name] = is_array($value) && ($value['schemaVersion'] ?? null) === 1 ? $value : null;
     }
 
@@ -57,7 +73,8 @@ class Catalog
             return null;
         }
         // Never turn a filename supplied by JSON or block settings into a path.
-        $value = $this->read($slug . '.' . $locale . '.json');
+        $name = $slug . '.' . $locale . '.json';
+        $value = $this->read($name);
         if (!$value || ($value['slug'] ?? '') !== $slug || ($value['locale'] ?? '') !== $locale
             || !is_array($value['title'] ?? null) || empty($value['title']['headline'])
             || !is_array($value['events'] ?? null) || !$value['events']
@@ -92,9 +109,61 @@ class Catalog
         if (($value['title']['id'] ?? '') !== 'intro') {
             return null;
         }
-        $value['title'] = $this->cleanEvent($value['title']);
-        $value['events'] = array_map([$this, 'cleanEvent'], $value['events']);
+        $entry = $slug . '.' . $locale . '.' . ($this->hashes[$name] ?? '') . '.json';
+        $clean = $this->readClean($entry, $value);
+        if ($clean === null) {
+            $clean = [
+                'title' => $this->cleanEvent($value['title']),
+                'events' => array_map([$this, 'cleanEvent'], $value['events']),
+            ];
+            $this->writeClean($entry, $clean);
+        }
+        $value['title'] = $clean['title'];
+        $value['events'] = $clean['events'];
         return $value;
+    }
+
+    /**
+     * The purified title and events cached for this source, or null. Only an
+     * entry that matches the validated source event for event (the same ids
+     * in the same order) is used; anything else is a miss.
+     */
+    private function readClean(string $entry, array $value): ?array
+    {
+        if ($this->cacheDirectory === null) {
+            return null;
+        }
+        $path = $this->cacheDirectory . '/' . $entry;
+        $bytes = is_file($path) ? @file_get_contents($path) : false;
+        $clean = is_string($bytes) ? json_decode($bytes, true) : null;
+        if (!is_array($clean) || !is_array($clean['title'] ?? null) || !is_array($clean['events'] ?? null)
+            || ($clean['title']['id'] ?? null) !== $value['title']['id']
+            || array_column($clean['events'], 'id') !== array_column($value['events'], 'id')
+            || count($clean['events']) !== count($value['events'])
+        ) {
+            return null;
+        }
+        return $clean;
+    }
+
+    /** Keep a purified timeline, atomically; a failure only costs the next view a purification. */
+    private function writeClean(string $entry, array $clean): void
+    {
+        if ($this->cacheDirectory === null) {
+            return;
+        }
+        $directory = $this->cacheDirectory;
+        if (!is_dir($directory) && !@mkdir($directory, 0775, true) && !is_dir($directory)) {
+            return;
+        }
+        $json = json_encode($clean, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if (!is_string($json)) {
+            return;
+        }
+        $temp = $directory . '/.' . $entry . '.' . bin2hex(random_bytes(6)) . '.tmp';
+        if (@file_put_contents($temp, $json) !== strlen($json) || !@rename($temp, $directory . '/' . $entry)) {
+            @unlink($temp);
+        }
     }
 
     public static function validDate($value): bool

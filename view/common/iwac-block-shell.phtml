@@ -71,13 +71,11 @@
  *                                 already has a server-rendered answer.
  * @var array|null  $data          Extra data attributes (key => value; the
  *                                 `data-` prefix is added automatically).
- * @var bool|null   $siteBase      Emit data-site-base (default true).
  * @var string|null $embedSlug     BlockRegistry slug for this block.
  *                                 When set, emits data-embed-slug (which opts
  *                                 the block into on-page copy-embed buttons,
  *                                 see embed.js) plus data-embed-base — the
- *                                 site root the embed URL is built from,
- *                                 emitted even when $siteBase is false.
+ *                                 site root the embed URL is built from.
  *                                 A resource dashboard passes
  *                                 `item/<id>` or `item-set/<id>`.
  * @var string|null $embedQuery    Query string (no `?`) every embed URL of
@@ -108,7 +106,6 @@ $extraData    = isset($data)         ? (array) $data : [];
 $prerendered  = isset($prerendered)  ? (string) $prerendered : '';
 $append       = isset($append)       ? (string) $append : '';
 $noscript     = isset($noscript)     ? (string) $noscript : '';
-$withSiteBase = !isset($siteBase) || $siteBase;
 $embedSlug    = isset($embedSlug)    ? (string) $embedSlug : '';
 $embedQuery   = isset($embedQuery)   ? (string) $embedQuery : '';
 $embedWhole   = !empty($embedWhole);
@@ -118,10 +115,7 @@ $siteSlug = $this->currentSite()->slug();
 
 // Standard data-* hooks, in a stable order. Block-specific attributes
 // (item-id, template-id, subset, …) follow base-path / site-base.
-$attrs = ['base-path' => $basePath];
-if ($withSiteBase) {
-    $attrs['site-base'] = $basePath . '/s/' . $siteSlug;
-}
+$attrs = ['base-path' => $basePath, 'site-base' => $basePath . '/s/' . $siteSlug];
 // Data cache-buster (issue #7): the Sync Data job refreshes files/ WITHOUT a
 // module version bump, so stamp the last-sync time here. dashboard-core folds
 // it into the data-fetch ?v= so a fresh pull busts stale data caches. Absent
@@ -137,8 +131,7 @@ if ($this->getHelperPluginManager()->has('setting')) {
 }
 // Embed opt-in: data-embed-slug marks the block embeddable (embed.js adds the
 // per-panel copy buttons); data-embed-base is the site root the embed URL is
-// built from, emitted independently of data-site-base so blocks that disable
-// site-base (e.g. scary-terms) still produce valid embed URLs.
+// built from. It repeats data-site-base, and both stay: the JS reads each.
 if ($embedSlug !== '') {
     $attrs['embed-slug'] = $embedSlug;
     $attrs['embed-base'] = $basePath . '/s/' . $siteSlug;

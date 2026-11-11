@@ -36,11 +36,8 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
+const { PARTIAL, PARTIAL_REL, REGISTRY, parsePins, readPartialSource, fetchWithTimeout } = require('./lib/cdn');
 
-const PARTIAL = path.join(__dirname, '..', 'view', 'common', 'iwac-assets.phtml');
-const PARTIAL_REL = 'view/common/iwac-assets.phtml';
-const REGISTRY = 'https://registry.npmjs.org';
 const TIMEOUT_MS = 10000;
 
 const warnOnly = process.argv.includes('--warn-only');
@@ -53,22 +50,13 @@ const inActions = process.env.GITHUB_ACTIONS === 'true';
  * at both.
  */
 function readPins(source) {
-    const re = /cdn\.jsdelivr\.net\/npm\/(@?[^@/\s]+(?:\/[^@/\s]+)?)@(\d[^/\s'"]*)\//g;
-    const lines = source.split('\n');
     const pins = new Map();
-
-    lines.forEach((text, i) => {
-        let m;
-        re.lastIndex = 0;
-        while ((m = re.exec(text)) !== null) {
-            const [, pkg, version] = m;
-            if (!pins.has(pkg)) pins.set(pkg, { pkg, versions: new Map() });
-            const entry = pins.get(pkg).versions;
-            if (!entry.has(version)) entry.set(version, []);
-            entry.get(version).push(i + 1);
-        }
-    });
-
+    for (const { pkg, version, line } of parsePins(source)) {
+        if (!pins.has(pkg)) pins.set(pkg, { pkg, versions: new Map() });
+        const entry = pins.get(pkg).versions;
+        if (!entry.has(version)) entry.set(version, []);
+        entry.get(version).push(line);
+    }
     return [...pins.values()];
 }
 
@@ -100,32 +88,18 @@ function driftLevel(pinned, latest) {
 
 async function fetchLatest(pkg) {
     const url = `${REGISTRY}/${pkg.replace('/', '%2f')}/latest`;
-    // Explicit controller + cleared timer rather than AbortSignal.timeout():
-    // that helper leaves its timer live for the full TIMEOUT_MS after the fetch
-    // resolves, and tearing it down under process.exit() trips a libuv
-    // assertion on Windows (`UV_HANDLE_CLOSING`, async.c:94) — the script
-    // returned 127 instead of its real exit code.
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-    try {
-        const res = await fetch(url, {
-            signal: controller.signal,
-            headers: { accept: 'application/json' },
-        });
-        if (!res.ok) throw new Error(`registry responded ${res.status}`);
-        const body = await res.json();
-        if (!body || typeof body.version !== 'string') {
-            throw new Error('registry response had no version');
-        }
-        return body.version;
-    } catch (err) {
-        if (err && err.name === 'AbortError') {
-            throw new Error(`registry timed out after ${TIMEOUT_MS} ms`, { cause: err });
-        }
-        throw err;
-    } finally {
-        clearTimeout(timer);
-    }
+    return fetchWithTimeout(url, {
+        timeoutMs: TIMEOUT_MS,
+        headers: { accept: 'application/json' },
+        read: async (res) => {
+            if (!res.ok) throw new Error(`registry responded ${res.status}`);
+            const body = await res.json();
+            if (!body || typeof body.version !== 'string') {
+                throw new Error('registry response had no version');
+            }
+            return body.version;
+        },
+    });
 }
 
 function annotate(level, message, line) {
@@ -164,13 +138,13 @@ async function run() {
         return 1;
     }
 
-    const pins = readPins(fs.readFileSync(PARTIAL, 'utf8'));
+    const pins = readPins(readPartialSource());
 
     if (pins.length === 0) {
         console.error(
             `✗ cdn versions: no jsDelivr pins found in ${PARTIAL_REL}. ` +
             'The partial was restructured and this check is no longer checking ' +
-            'anything — update the parser in scripts/check-cdn-versions.js.'
+            'anything — update the pin parser in scripts/lib/cdn.js.'
         );
         return 1;
     }
@@ -272,7 +246,7 @@ async function run() {
 
 // `process.exitCode` + natural exit, never `process.exit()`: this script holds
 // open sockets and timers, and force-exiting out from under them is what
-// produced the libuv assertion described in fetchLatest().
+// produced the libuv assertion described in lib/cdn.js fetchWithTimeout().
 run().then(
     (code) => { process.exitCode = code; },
     (err) => {

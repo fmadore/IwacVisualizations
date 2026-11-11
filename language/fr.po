@@ -280,26 +280,26 @@ msgstr ""
 "affiché intègre cette vue."
 
 #. Embed snippet gallery
+#. %1$s and %2$s are the embed addresses, printed as code:
+#. /iwac-embed/item/<id> and /iwac-embed/item-set/<id>.
 msgid ""
 "Item dashboards can be embedded too: use the embed button on a panel of an "
-"item’s Visualisations section, or <code>/iwac-embed/item/&lt;id&gt;</code> "
-"for the whole dashboard (<code>/iwac-embed/item-set/&lt;id&gt;</code> for an "
+"item’s Visualisations section, or %1$s for the whole dashboard (%2$s for an "
 "item set)."
 msgstr ""
 "Les tableaux de bord des notices s’intègrent aussi : utilisez le bouton "
 "d’intégration d’un panneau de la section Visualisations d’une notice, ou "
-"<code>/iwac-embed/item/&lt;id&gt;</code> pour le tableau de bord entier "
-"(<code>/iwac-embed/item-set/&lt;id&gt;</code> pour une collection)."
+"%1$s pour le tableau de bord entier (%2$s pour une collection)."
 
 #. Embed snippet gallery
+#. %1$s and %2$s are query strings, printed as code: ?theme=dark and
+#. ?primary=2b6cb0.
 msgid ""
-"Tip: embeds render in light mode by default; append <code>?theme=dark</code>"
-" for dark mode, or <code>?primary=2b6cb0</code> to override the accent "
-"colour."
+"Tip: embeds render in light mode by default; append %1$s for dark mode, or "
+"%2$s to override the accent colour."
 msgstr ""
-"Astuce : les intégrations s’affichent en mode clair par défaut ; ajoutez "
-"<code>?theme=dark</code> pour le mode sombre, ou "
-"<code>?primary=2b6cb0</code> pour remplacer la couleur d’accent."
+"Astuce : les intégrations s’affichent en mode clair par défaut ; ajoutez "
+"%1$s pour le mode sombre, ou %2$s pour remplacer la couleur d’accent."
 
 #. Embed snippet gallery
 msgid "Visualisation not found"
@@ -377,6 +377,14 @@ msgstr ""
 
 msgid "Release tag (optional)"
 msgstr "Étiquette de version (facultatif)"
+
+msgid ""
+"The release tag may contain only letters, digits, dots, hyphens and "
+"underscores, and must start and end with a letter or digit."
+msgstr ""
+"L’étiquette de version ne peut contenir que des lettres, des chiffres, des "
+"points, des traits d’union et des tirets bas, et doit commencer et finir par "
+"une lettre ou un chiffre."
 
 msgid "Leave blank to pull the latest build from the moving “data” release."
 msgstr ""

@@ -47,7 +47,7 @@ $this->headLink()->appendStylesheet($this->assetUrl('css/blocks/embed-gallery.mi
 // locale's server-side — the rule layout/embed.phtml uses for `<html lang>`.
 $coreBundle = \IwacVisualizations\Site\AssetPlan::bundlePath('shared-core');
 if (is_array($coreBundle)) {
-    $locale = substr((string) ($this->siteSetting('locale') ?: $this->setting('locale') ?: 'en'), 0, 2);
+    $locale = \IwacVisualizations\Site\Locale::code($this->siteSetting('locale'), $this->setting('locale'));
     $coreBundle = $coreBundle[$locale] ?? $coreBundle['en'] ?? reset($coreBundle);
 }
 $this->headScript()->appendFile(
@@ -114,10 +114,16 @@ $siteBase = $this->basePath() . '/s/' . $siteSlug;
     <p class="iwac-embed-note"><?= $escapeHtml($this->translate(
         'Every panel on the site has its own embed button, in its toolbar. A panel copied while another view or filter is showing embeds that view.'
     )) ?></p>
-    <p class="iwac-embed-note"><?= $this->translate(
-        'Item dashboards can be embedded too: use the embed button on a panel of an item’s Visualisations section, or <code>/iwac-embed/item/&lt;id&gt;</code> for the whole dashboard (<code>/iwac-embed/item-set/&lt;id&gt;</code> for an item set).'
-    ) ?></p>
-    <p class="iwac-embed-note"><?= $this->translate(
-        'Tip: embeds render in light mode by default; append <code>?theme=dark</code> for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour.'
-    ) ?></p>
+    <?php
+    // Translated text never becomes markup (AbstractIwacBlockLayout::form()):
+    // the sentence is escaped, and only the code literals, escaped too, are
+    // wrapped in <code> here.
+    $code = static fn (string $literal): string => '<code>' . $escapeHtml($literal) . '</code>';
+    ?>
+    <p class="iwac-embed-note"><?= sprintf($escapeHtml($this->translate(
+        'Item dashboards can be embedded too: use the embed button on a panel of an item’s Visualisations section, or %1$s for the whole dashboard (%2$s for an item set).'
+    )), $code('/iwac-embed/item/<id>'), $code('/iwac-embed/item-set/<id>')) ?></p>
+    <p class="iwac-embed-note"><?= sprintf($escapeHtml($this->translate(
+        'Tip: embeds render in light mode by default; append %1$s for dark mode, or %2$s to override the accent colour.'
+    )), $code('?theme=dark'), $code('?primary=2b6cb0')) ?></p>
 </div>

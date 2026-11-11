@@ -43,6 +43,14 @@ try {
     if (strpos($html, '<a href="https://islam.zmo.de/s/westafrica/item/1" target="_blank" rel="noopener">') === false) {
         throw new RuntimeException('A link to an IWAC item does not open in a new tab.');
     }
+    // The fixture timeline exists in English only: a block set to French
+    // reads it in English rather than printing "temporarily unavailable".
+    $entity->setData(['timeline' => 'history', 'locale' => 'fr', 'layout' => 'narrative']);
+    $otherLanguage = $handler->render($renderer, new \Omeka\Api\Representation\SitePageBlockRepresentation($entity, $services));
+    if (strpos($otherLanguage, 'data-timeline="history"') === false || strpos($otherLanguage, 'iwac-vis-timeline-unavailable') !== false) {
+        throw new RuntimeException('A timeline in the other language only did not render on the page.');
+    }
+    $entity->setData(['timeline' => 'history', 'locale' => 'en', 'layout' => 'narrative']);
     $form = $handler->form($renderer, $site, $page, $block);
     if (strpos($form, 'value="history" selected') === false && strpos($form, 'selected="selected" value="history"') === false) {
         throw new RuntimeException('Timeline editor did not retain the catalogue selection: ' . $form);

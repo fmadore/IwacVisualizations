@@ -70,6 +70,20 @@ final class Manifest
      */
     public const PATH_PATTERN = '~^[a-zA-Z0-9_-]+(?:[./][a-zA-Z0-9_-]+)*\.json$~D';
 
+    /**
+     * Whether a manifest key is a path the sync may extract and serve. The
+     * pattern alone decides: every segment is one or more of
+     * `[a-zA-Z0-9_-]` and separators never touch, so neither a `..` nor a
+     * leading `/` can match it — the two extra tests each caller used to
+     * add were implied.
+     *
+     * @param mixed $path
+     */
+    public static function isPath($path): bool
+    {
+        return is_string($path) && preg_match(self::PATH_PATTERN, $path) === 1;
+    }
+
     /** A directory entry a `zip -r` archive carries: safe segments and a trailing slash. */
     private const DIRECTORY_PATTERN = '~^[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*/$~D';
 
@@ -95,7 +109,7 @@ final class Manifest
         self::assertContract($manifest);
         $allowed = [$manifestEntry => true];
         foreach (array_keys($manifest['files']) as $path) {
-            if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path) || str_contains($path, '..')) {
+            if (!self::isPath($path)) {
                 throw new \RuntimeException('Invalid manifest entry.');
             }
             $allowed[$path] = true;
@@ -123,9 +137,7 @@ final class Manifest
         }
         self::assertContract($manifest);
         foreach ($manifest['files'] as $path => $entry) {
-            if (!is_string($path) || !preg_match(self::PATH_PATTERN, $path)
-                || str_contains($path, '..') || str_starts_with($path, '/')
-                || !is_array($entry) || !is_string($entry['sha256'] ?? null)
+            if (!self::isPath($path) || !is_array($entry) || !is_string($entry['sha256'] ?? null)
                 || !self::isDigest($entry['sha256'])
             ) {
                 throw new \RuntimeException('Invalid manifest entry.');

@@ -28,8 +28,9 @@ viewing it needs no access to the private dataset.
    there is nothing to translate per page.
 
 Several Pipeline Explainers can sit on one page; each plays on its own. The
-block cannot be embedded through the snippet gallery, because it needs its
-two settings.
+block embeds like every other: the snippet gallery lists one card per preset,
+and the embed URL names it (`?preset=ocr`). The heading level, the other
+setting, takes its default in an embed.
 
 Putting the blocks on the published pages is a content step of its own, done
 in the admin once the module release carrying the block is installed.
@@ -87,7 +88,7 @@ code rather than a summary of it.
 | Piece | File |
 |---|---|
 | Block layout (form + render) | `src/Site/BlockLayout/PipelineExplainer.php` |
-| Registry row (label, description, not embeddable) | `src/Site/BlockRegistry.php` |
+| Registry row (label, description, `embedParam` → `?preset=`) | `src/Site/BlockRegistry.php` |
 | Template: text reading + JSON island | `view/common/block-layout/pipeline-explainer.phtml` |
 | Orchestrator (classic script) | `asset/js/charts/pipeline-explainer.js` |
 | Svelte entry and components | `asset/js/svelte/pipeline-explainer/` — `index.js`, `Explainer.svelte` (shell, play/Replay/reduced motion), one `*Art.svelte` per preset |

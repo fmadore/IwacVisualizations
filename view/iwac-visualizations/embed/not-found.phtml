@@ -8,8 +8,7 @@ $escapeHtml = $this->plugin('escapeHtml');
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 // The page speaks the site's language, as the embed layout does; it was
 // stamped lang="en" over a French title and message.
-$locale = (string) ($this->siteSetting('locale') ?: $this->setting('locale') ?: 'en');
-$locale = substr($locale, 0, 2) ?: 'en';
+$locale = \IwacVisualizations\Site\Locale::code($this->siteSetting('locale'), $this->setting('locale'));
 ?>
 <!doctype html>
 <html lang="<?= $escapeAttr($locale) ?>">
@@ -17,6 +16,16 @@ $locale = substr($locale, 0, 2) ?: 'en';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escapeHtml($this->translate('Visualisation not found')) ?></title>
+    <?php
+    // The theme's tokens as generated literals, as layout/embed.phtml loads
+    // them: without the sheet every var() below painted its fallback.
+    ?>
+    <link rel="stylesheet" href="<?= $escapeAttr($this->assetUrl('css/iwac-embed-tokens.min.css', 'IwacVisualizations')) ?>">
+    <?php
+    // TODO: these rules belong in asset/css/iwac-embed.css (linked like the
+    // token sheet), so a host with `style-src 'self'` renders this page as it
+    // does every other embed page.
+    ?>
     <style>
         /* Token fallbacks match IWAC-theme/docs/DESIGN-SYSTEM.md. */
         body {
@@ -31,7 +40,7 @@ $locale = substr($locale, 0, 2) ?: 'en';
         .iwac-embed-404 h1 {
             font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
             font-weight: 600; color: var(--ink-strong, #05070c);
-            letter-spacing: var(--tracking-tight, -0.02em);
+            letter-spacing: var(--tracking-display, -0.01em);
             margin: 0 0 0.5rem;
         }
     </style>

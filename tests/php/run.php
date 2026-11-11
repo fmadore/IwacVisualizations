@@ -132,6 +132,8 @@ namespace {
     use IwacVisualizations\Site\BlockRegistry;
     use IwacVisualizations\Site\PipelinePresets;
     use IwacVisualizations\Site\EmbedBrand;
+    use IwacVisualizations\Site\ItemValue;
+    use IwacVisualizations\Site\Locale;
     use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
     use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
     use Laminas\EventManager\Event;
@@ -153,6 +155,8 @@ namespace {
     require $root . '/src/Site/AssetPlan.php';
     require $root . '/src/Site/PipelinePresets.php';
     require $root . '/src/Site/EmbedBrand.php';
+    require $root . '/src/Site/ItemValue.php';
+    require $root . '/src/Site/Locale.php';
     require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
     require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
     require $root . '/src/Controller/Admin/DataController.php';
@@ -423,7 +427,7 @@ namespace {
     // `assets` instead of inside it, and so without its stylesheet.
     $shellKeys = [   // view/common/iwac-block-shell.phtml
         'assets', 'blockClass', 'heading', 'headingLevel', 'loading', 'loadingClass',
-        'prerendered', 'append', 'noscript', 'data', 'siteBase',
+        'prerendered', 'append', 'noscript', 'data',
     ];
     $assetKeys = ['blockCss', 'needs', 'bundle'];   // view/common/iwac-assets.phtml
     $shellRows = 0;
@@ -596,20 +600,53 @@ namespace {
     // dashboard is a 404 there, not an empty frame.
     check(Visualizations::partialFor(new FakeTemplateResource(999)) === null, 'partialFor() answered for an unmapped template');
     check(Visualizations::partialFor(new FakeTemplateResource(5))
-        === 'common/resource-page-block-layout/visualizations/person', 'partialFor() lost the person dashboard');
+        === 'common/resource-page-block-layout/visualizations/_dashboard', 'partialFor() lost the person dashboard');
 
     // Every dashboard offers its panels for embedding, and takes the title
-    // the embed route hands it instead of "Visualisations".
-    foreach (array_unique(array_merge(
-        array_map(fn ($p) => 'visualizations/' . $p, Visualizations::TEMPLATE_PARTIALS),
-        ['item-set-dashboard']
-    )) as $partial) {
-        $source = (string) file_get_contents($root . '/view/common/resource-page-block-layout/' . $partial . '.phtml');
-        $kind = $partial === 'item-set-dashboard' ? 'item-set' : 'item';
-        check(preg_match("/'embedSlug'\\s*=> '$kind\\/' \\. \\\$resource->id\\(\\),/", $source) === 1,
-            "$partial.phtml declares no $kind embed slug");
-        check(strpos($source, "\$embedHeading ?? \$this->translate('Visualisations')") !== false,
-            "$partial.phtml ignores the embed route's heading");
+    // the embed route hands it instead of "Visualisations": the keys come
+    // from Visualizations::shell(), so check what it returns...
+    $mark = static fn (string $s): string => '«' . $s . '»';
+    $shell = Visualizations::shell('item', 42, null, $mark, ['blockClass' => 'x', 'data' => ['subset' => 'images']]);
+    check($shell['heading'] === '«Visualisations»' && $shell['embedSlug'] === 'item/42' && $shell['headingLevel'] === 'h2',
+        'Visualizations::shell(): the page heading, embed slug or h2 drifted');
+    check($shell['data'] === ['item-id' => 42, 'subset' => 'images'] && $shell['blockClass'] === 'x',
+        "Visualizations::shell(): the id must lead the dashboard's own data attributes, which it keeps");
+    $shell = Visualizations::shell('item-set', 7, 'Sidwaya', $mark);
+    check($shell['heading'] === 'Sidwaya' && $shell['embedSlug'] === 'item-set/7' && $shell['data'] === ['item-set-id' => 7],
+        "Visualizations::shell(): an item set's embed heading, slug or id attribute drifted");
+    // ...and that every dashboard goes through it: a DASHBOARDS row through
+    // _dashboard.phtml, any other through its own partial calling shell().
+    $dashboardKeys = ['assets', 'blockClass', 'loading', 'loadingClass'];
+    foreach (array_unique(Visualizations::TEMPLATE_PARTIALS) as $name) {
+        $row = Visualizations::DASHBOARDS[$name] ?? null;
+        $file = $root . '/view/common/resource-page-block-layout/visualizations/' . $name . '.phtml';
+        if ($row !== null) {
+            check(!is_readable($file), "$name: has a DASHBOARDS row AND a $name.phtml");
+            check(array_keys($row) === $dashboardKeys, "$name: a DASHBOARDS row has exactly the keys " . implode(', ', $dashboardKeys));
+            check(isset($row['assets']['bundle']) && array_diff(array_keys($row['assets']), $assetKeys) === [],
+                "$name: DASHBOARDS assets name no bundle, or carry a key iwac-assets does not read");
+            try {
+                AssetPlan::bundles($row['assets']['needs'] ?? [], $row['assets']['bundle']);
+                check(true, "$name: asset plan accepted");
+            } catch (\RuntimeException $e) {
+                check(false, "$name: asset plan refused: " . $e->getMessage());
+            }
+            foreach ((array) ($row['assets']['blockCss'] ?? []) as $sheet) {
+                check(is_readable($root . '/asset/css/blocks/' . $sheet . '.css'), "$name: blockCss '$sheet' does not exist");
+            }
+        } else {
+            check(strpos((string) @file_get_contents($file), "Visualizations::shell('item', (int) \$resource->id(), \$embedHeading ?? null,") !== false,
+                "$name.phtml does not take its common keys (embed slug, embed heading) from Visualizations::shell()");
+        }
+    }
+    check(strpos((string) file_get_contents($root . '/view/common/resource-page-block-layout/item-set-dashboard.phtml'),
+        "Visualizations::shell('item-set', (int) \$resource->id(), \$embedHeading ?? null,") !== false,
+        'item-set-dashboard.phtml does not take its common keys from Visualizations::shell()');
+    // The loading messages reach the translator through their markers.
+    $visualizationsSource = (string) file_get_contents($root . '/src/Site/ResourcePageBlockLayout/Visualizations.php');
+    foreach (Visualizations::DASHBOARDS as $name => $row) {
+        check(strpos($visualizationsSource, "'loading'      => '" . $row['loading'] . "', // @translate") !== false,
+            "$name: the DASHBOARDS loading message lost its @translate marker");
     }
 
     // Class 38 spans two templates since 2026-08-12: 19 (deposited
@@ -632,14 +669,18 @@ namespace {
     // failure mode the block's "unmapped templates are silent" rule does
     // NOT protect against.
     foreach (Visualizations::TEMPLATE_PARTIALS as $templateId => $partial) {
-        $path = $root . '/view/common/resource-page-block-layout/visualizations/' . $partial . '.phtml';
-        check(is_readable($path), "template $templateId maps to a missing partial: $partial.phtml");
+        $file = isset(Visualizations::DASHBOARDS[$partial]) ? '_dashboard' : $partial;
+        $path = $root . '/view/common/resource-page-block-layout/visualizations/' . $file . '.phtml';
+        check(is_readable($path), "template $templateId maps to a missing partial: $file.phtml");
         check(
             $visualizations->render($view, new FakeTemplateResource((int) $templateId))
-                === 'common/resource-page-block-layout/visualizations/' . $partial,
-            "template $templateId did not dispatch to $partial"
+                === 'common/resource-page-block-layout/visualizations/' . $file,
+            "template $templateId did not dispatch to $file"
         );
+        check(Visualizations::dashboardForTemplate((int) $templateId) === $partial, "template $templateId lost its dashboard name");
     }
+    check(Visualizations::dashboardForTemplate(null) === null && Visualizations::dashboardForTemplate(999) === null,
+        'dashboardForTemplate() answered for no template or an unmapped one');
 
     // A template routed to the minimal dashboard needs a subset to read;
     // the two maps sat in two files once, and a sixth minimal template
@@ -649,6 +690,65 @@ namespace {
             === array_keys(Visualizations::TEMPLATE_PARTIALS, 'minimal-item', true),
         'MINIMAL_SUBSETS and the minimal-item rows of TEMPLATE_PARTIALS name different templates'
     );
+
+    // A value's display text: a linked resource's title, else the literal,
+    // else the URI (minimal-item's channel, the timeline's source cards).
+    $uriValue = new class {
+        public function valueResource() { return null; }
+        public function value() { return '  '; }
+        public function uri() { return ' https://example.org/a '; }
+    };
+    check(ItemValue::text(new FakeValue('', new FakeLinkedResource(1, ' Channel '))) === 'Channel',
+        "ItemValue::text(): a linked resource must read as its title");
+    check(ItemValue::text($uriValue) === 'https://example.org/a', 'ItemValue::text(): a blank label must fall back to the URI');
+    check(ItemValue::text(null) === '' && ItemValue::text('x') === '', 'ItemValue::text(): no value must read as ""');
+
+    // One rule for the site's language: the site's locale, else the
+    // installation's, else English — <html lang> keeps any language, the
+    // timeline and the UI bundles only the two the module ships.
+    check(Locale::code('fr_FR', 'en_US') === 'fr' && Locale::code('', 'fr_CA') === 'fr' && Locale::code(null, 'fr') === 'fr',
+        'Locale::code(): a blank site locale must fall through to the installation locale');
+    check(Locale::code(' ', null) === 'en' && Locale::code() === 'en' && Locale::code(false, 5) === 'en',
+        'Locale::code(): no locale must read as en');
+    check(Locale::code('de_DE') === 'de' && Locale::code('FR') === 'fr' && Locale::code('ast') === 'ast',
+        'Locale::code(): the primary subtag must be kept, lowercased');
+    check(Locale::language('', 'fr_FR') === 'fr' && Locale::language('de_DE', 'fr') === 'en' && Locale::language(null, null) === 'en',
+        'Locale::language(): must agree with code() for en/fr and fall back to en otherwise');
+    check(Locale::other('fr') === 'en' && Locale::other('en') === 'fr', 'Locale::other() drifted');
+    foreach (['view/iwac-visualizations/layout/embed.phtml', 'view/iwac-visualizations/embed/index.phtml',
+        'view/iwac-visualizations/embed/not-found.phtml', 'src/Site/BlockLayout/IwacTimeline.php'] as $file) {
+        $source = (string) file_get_contents($root . '/' . $file);
+        check(strpos($source, "'locale') ?:") === false && strpos($source, "siteSetting('locale', 'en')") === false
+            && preg_match('/Locale::(code|language)\(/', $source) === 1,
+            "$file resolves the site language by its own rule instead of Site\\Locale");
+    }
+
+    // The watch link is an outbound link: https, a YouTube host exactly,
+    // nothing a browser could parse differently from PHP.
+    foreach ([
+        'https://www.youtube.com/watch?v=abc', 'https://youtube.com/watch?v=abc', 'https://m.youtube.com/watch?v=abc',
+        'https://youtu.be/abc', 'HTTPS://WWW.YouTube.com/watch?v=abc',
+    ] as $url) {
+        check(ItemValue::watchUrl($url) === $url, "watchUrl() refused $url");
+    }
+    foreach ([
+        '', 'http://www.youtube.com/watch?v=abc', 'https://youtube.com.evil.example/watch', 'https://evilyoutube.com/x',
+        'https://www.youtube.com.evil.example/', 'https://evil.example/#@www.youtube.com/', 'https://user:pw@www.youtube.com/w',
+        'https://www.youtube.com@evil.example/', 'https://www.youtube.com\\@evil.example/', 'https://www.youtube.com:8443/w',
+        'javascript://www.youtube.com/%0aalert(1)', "https://www.youtube.com/watch?v=a\nb", 'https://www.youtube.com /x',
+        '//www.youtube.com/watch', 'www.youtube.com/watch?v=abc', 'https://youtube.com./x',
+    ] as $url) {
+        check(ItemValue::watchUrl($url) === '', 'watchUrl() accepted ' . json_encode($url));
+    }
+
+    // The manifest path rule, in one place.
+    foreach (['collection-overview.json', 'timelines/hajj-burkina.fr.json', 'on-this-day/h/01-01.json', 'a_b-c.json'] as $path) {
+        check(\IwacVisualizations\Data\Manifest::isPath($path), "manifest path refused: $path");
+    }
+    foreach (['', '.json', '../x.json', 'a/../x.json', 'a/./x.json', '/abs.json', 'a//b.json', 'a..json', '.hidden.json',
+        'x.json/', 'x.txt', 'x.JSON', 'a\\b.json', "x.json\n", 'C:/x.json', 5, null, ['x.json']] as $path) {
+        check(!\IwacVisualizations\Data\Manifest::isPath($path), 'manifest path accepted: ' . json_encode($path));
+    }
 
     // ZIP extraction boundary.
     foreach ([
@@ -674,15 +774,57 @@ namespace {
     check(!SyncData::isSafeUnixArchiveAttributes(0120777 << 16), 'ZIP symlink accepted');
     check(!SyncData::isSafeUnixArchiveAttributes(0140777 << 16), 'ZIP socket accepted');
     check(
-        SyncData::releaseUrlForTag('')
+        SyncData::releaseUrlForTag('data')
             === 'https://github.com/fmadore/IwacVisualizations/releases/download/data/iwac-data.zip',
         'default sync release URL drifted'
     );
     check(
-        SyncData::releaseUrlForTag('../foreign host')
-            === 'https://github.com/fmadore/IwacVisualizations/releases/download/..%2Fforeign%20host/iwac-data.zip',
-        'release tag was not confined to one encoded path segment'
+        SyncData::releaseUrlForTag('data-build-123-1')
+            === 'https://github.com/fmadore/IwacVisualizations/releases/download/data-build-123-1/iwac-data.zip',
+        'immutable release URL drifted'
     );
+    // Every tag regenerate-data.yml publishes: the moving pointer, the
+    // immutable run tags, and a versioned snapshot under an operator's name.
+    foreach (['data', 'data-build-123-1', 'data-build-26131785412-2', 'snapshot-2026.10', 'v2.0.0', 'Data_2026', 'a'] as $tag) {
+        check(SyncData::isValidTag($tag), "a release tag the workflow can publish was refused: $tag");
+    }
+    // An explicit tag is refused unless it is one plain path segment: it is
+    // spliced into the download URL, and job arguments can be dispatched
+    // outside the admin form.
+    foreach (['', ' data', 'data ', '../foreign host', '..', '.', 'a..b', '.hidden', 'trailing.', '-x', 'x-',
+        'data/../../evil', 'data%2F..', "data\n", 'data?x=1', 'data#x', 'a b', 'données', str_repeat('a', 101)] as $tag) {
+        check(!SyncData::isValidTag($tag), 'release tag accepted: ' . json_encode($tag));
+        try {
+            SyncData::releaseUrlForTag($tag);
+            check(false, 'a download URL was built for release tag ' . json_encode($tag));
+        } catch (\RuntimeException $e) {
+            check(true, 'invalid release tag refused');
+        }
+    }
+
+    // ...and the job refuses one itself, before any request: the form is
+    // not the only way to dispatch it.
+    $tagProbe = new class extends SyncData {
+        public function probe(string $tag): string { return $this->resolveTag($tag, '/nonexistent/release.json', null); }
+        protected function download(string $url, string $dest, $logger): void { throw new \LogicException('network: ' . $url); }
+    };
+    check($tagProbe->probe('data-build-9-1') === 'data-build-9-1', 'resolveTag() did not keep a valid explicit tag');
+    foreach (['../foreign host', 'data/../../evil', 'a..b'] as $tag) {
+        try {
+            $tagProbe->probe($tag);
+            check(false, 'resolveTag() accepted ' . json_encode($tag));
+        } catch (\RuntimeException $e) {
+            check(true, 'resolveTag() refused an invalid explicit tag');
+        } catch (\LogicException $e) {
+            check(false, 'resolveTag() made a request for ' . json_encode($tag));
+        }
+    }
+
+    // A redirect (GitHub hands the asset to another host) must stay HTTPS.
+    $syncSource = (string) file_get_contents($root . '/src/Job/SyncData.php');
+    check(preg_match('/CURLOPT_PROTOCOLS\s*=> CURLPROTO_HTTPS,/', $syncSource) === 1
+        && preg_match('/CURLOPT_REDIR_PROTOCOLS\s*=> CURLPROTO_HTTPS,/', $syncSource) === 1,
+        'the data download no longer restricts curl, and its redirects, to HTTPS');
 
     // The checksum sidecar: only a well-formed digest that names THIS archive
     // counts, in either sha256sum column format; anything else is "no digest".

@@ -85,12 +85,12 @@ $rendered = 0;
 foreach (BlockRegistry::BLOCKS as $slug => $row) {
     $html = $view->partial(BlockRegistry::partialFor($slug), ['block' => null, 'slug' => $slug]);
     if (empty($row['shell'])) {
-        // Its own template: an embeddable one must still carry its embed
-        // slug. With no `$block` the timeline has no timeline to render and
+        // Its own template: every block embeds, so it must still carry its
+        // embed slug. With no `$block` the timeline has no timeline to render and
         // prints only its "unavailable" note — no wrapper to carry one; its
         // embed is checked below, with data.
         $unavailable = strpos($html, 'iwac-vis-timeline-unavailable') !== false;
-        if (!empty($row['embeddable']) && !$unavailable && strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
+        if (!$unavailable && strpos($html, 'data-embed-slug="' . $slug . '"') === false) {
             throw new \RuntimeException($slug . ': no embed slug on its wrapper');
         }
         $rendered++;
@@ -225,14 +225,17 @@ foreach (['data-preset="ask-ai"', 'data-embed-slug="pipeline-explainer"', 'data-
 $resource = new class {
     public function id() { return 4321; }
     public function displayTitle() { return 'Amadou Hampâté Bâ'; }
+    // Template 5 (Personnes): _dashboard.phtml picks the person row by it.
+    public function resourceTemplate() { return new class { public function id() { return 5; } }; }
 };
 $dashboard = html_entity_decode($view->render(
     (new \Laminas\View\Model\ViewModel([
-        'partial' => 'common/resource-page-block-layout/visualizations/person',
+        'partial' => 'common/resource-page-block-layout/visualizations/_dashboard',
         'resource' => $resource,
     ]))->setTemplate('iwac-visualizations/embed/resource')
 ), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-if (strpos($dashboard, '<h2>Amadou Hampâté Bâ</h2>') === false || strpos($dashboard, 'data-embed-slug="item/4321"') === false) {
+if (strpos($dashboard, '<h2>Amadou Hampâté Bâ</h2>') === false || strpos($dashboard, 'data-embed-slug="item/4321"') === false
+    || strpos($dashboard, 'iwac-vis-person') === false) {
     throw new \RuntimeException('The person dashboard embed lost its title or its embed slug');
 }
 $onPage = $view->partial('common/resource-page-block-layout/item-set-dashboard', ['resource' => $resource]);

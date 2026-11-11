@@ -105,6 +105,14 @@ class DataController extends AbstractActionController
             return $this->redirect()->toRoute('admin/iwac-visualizations');
         }
 
+        // Checked before anything below acts on a running job. The job
+        // validates the tag again; this is the admin's readable answer.
+        $tag = trim((string) $form->get('tag')->getValue());
+        if ($tag !== '' && !SyncData::isValidTag($tag)) {
+            $this->messenger()->addError('The release tag may contain only letters, digits, dots, hyphens and underscores, and must start and end with a letter or digit.'); // @translate
+            return $this->redirect()->toRoute('admin/iwac-visualizations');
+        }
+
         // Refuse to start a second sync while one is active — unless the
         // admin asked to recover and no worker holds the lock, which means
         // the "running" job is a record of a process that is gone.
@@ -126,11 +134,7 @@ class DataController extends AbstractActionController
             $this->messenger()->addWarning('The interrupted sync was marked as failed: no worker held the data lock.'); // @translate
         }
 
-        $args = [];
-        $tag = trim((string) $form->get('tag')->getValue());
-        if ($tag !== '') {
-            $args['tag'] = $tag;
-        }
+        $args = $tag !== '' ? ['tag' => $tag] : [];
 
         $job = $this->jobDispatcher()->dispatch(SyncData::class, $args);
         $this->messenger()->addSuccess('Data sync started. Watch its progress below.'); // @translate

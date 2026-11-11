@@ -34,7 +34,7 @@ $health = isset($health) ? $health : null;
     <div class="iwac-data-running">
         <p>
             <strong><?= $escape($translate('A data sync is currently running.')) ?></strong>
-            <a href="<?= $escape($this->url('admin/id', [
+            <a href="<?= $escapeAttr($this->url('admin/id', [
                 'controller' => 'job', 'action' => 'show', 'id' => $running->id(),
             ])) ?>"><?= $escape($translate('View its progress')) ?></a>
         </p>

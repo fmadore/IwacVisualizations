@@ -21,7 +21,12 @@
  * @var string|null $embedHeading  The resource's title, passed only by the embed route
  */
 
-echo $this->partial('common/iwac-block-shell', [
+use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
+
+// The heading, the embed slug (`item-set/<id>`), the h2 level — an item-set
+// page's next section heading is an <h2> — and `data-item-set-id` are the
+// keys every resource dashboard shares (Visualizations::shell()).
+echo $this->partial('common/iwac-block-shell', Visualizations::shell('item-set', (int) $resource->id(), $embedHeading ?? null, $this->plugin('translate'), [
     'assets' => [
         'needs' => [
             'chartOptions' => true,
@@ -29,18 +34,9 @@ echo $this->partial('common/iwac-block-shell', [
         'bundle' => 'item-set-dashboard',
     ],
     'blockClass'   => 'iwac-vis-item-set',
-    // In an embed the frame has no item page around it, so the
-    // title says whose dashboard this is (EmbedController).
-    'heading'      => $embedHeading ?? $this->translate('Visualisations'),
-    'embedSlug'    => 'item-set/' . $resource->id(),
-    // An item-set page's next section heading is an <h2>, so the default <h3>
-    // here made the outline run h1 → h3 → h2. Level is an outline decision;
-    // the rendered look is unchanged.
-    'headingLevel' => 'h2',
     'loading'      => $this->translate('Loading dashboard'),
     'loadingClass' => 'iwac-vis-item-set__loading',
     'data'         => [
-        'item-set-id'    => $resource->id(),
         'item-set-title' => $resource->displayTitle(),
     ],
-]);
+]));

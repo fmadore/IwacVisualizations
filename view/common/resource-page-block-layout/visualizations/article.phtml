@@ -25,6 +25,7 @@
  */
 
 use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
+use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
 
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $escapeHtml = $this->plugin('escapeHtml');
@@ -250,7 +251,7 @@ if ($hasSentiment) {
     $sentimentHtml = (string) ob_get_clean();
 }
 
-echo $this->partial('common/iwac-block-shell', [
+echo $this->partial('common/iwac-block-shell', Visualizations::shell('item', (int) $resource->id(), $embedHeading ?? null, $translate, [
     'assets' => [
         // Just this block's own sheet since v1.53.0.
         //
@@ -283,15 +284,7 @@ echo $this->partial('common/iwac-block-shell', [
         'bundle' => 'article-dashboard',
     ],
     'blockClass'   => 'iwac-vis-article',
-    // In an embed the frame has no item page around it, so the
-    // title says whose dashboard this is (EmbedController).
-    'heading'      => $embedHeading ?? $this->translate('Visualisations'),
-    'embedSlug'    => 'item/' . $resource->id(),
-    // A section of the item page, beside the theme's "How to cite" and
-    // "Linked resources": the same h2 and the same 2px section rule.
-    'headingLevel' => 'h2',
     'loading'      => $this->translate('Loading dashboard'),
     'loadingClass' => 'iwac-vis-article__loading',
-    'data'         => ['item-id' => $resource->id()],
     'append'       => $sentimentHtml,
-]);
+]));
