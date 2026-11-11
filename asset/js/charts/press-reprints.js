@@ -217,10 +217,10 @@
                 words: (p.lexical_jaccard != null) ? P.formatPercent(p.lexical_jaccard * 100, 0) : '—',
                 gap: (p.day_gap != null) ? String(p.day_gap) : '—',
                 titleA: p.a.title || ('#' + p.a.o_id),
-                hrefA: ctx.siteBase ? ctx.siteBase + '/item/' + p.a.o_id : null,
+                hrefA: ctx.siteBase ? (P.itemUrl(ctx.siteBase, p.a.o_id) || null) : null,
                 paperA: p.a.newspaper,
                 titleB: p.b.title || ('#' + p.b.o_id),
-                hrefB: ctx.siteBase ? ctx.siteBase + '/item/' + p.b.o_id : null,
+                hrefB: ctx.siteBase ? (P.itemUrl(ctx.siteBase, p.b.o_id) || null) : null,
                 paperB: p.b.newspaper
             };
         });

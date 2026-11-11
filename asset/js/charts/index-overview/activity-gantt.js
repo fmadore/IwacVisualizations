@@ -17,7 +17,7 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
     var C = ns.chartOptions;
-    if (!P || !C || !P.buildFacetButtons) {
+    if (!P || !C || !P.buildFacetButtons || !P.buildWindowedGantt) {
         console.warn('IWACVis.index-overview/activity-gantt: missing dependencies');
         return;
     }
@@ -55,8 +55,7 @@
             onChange: function (evt) {
                 if (!evt.subFacet) return;
                 state.activeType = evt.subFacet;
-                disclosure.update(rows().length);
-                redraw();
+                if (gantt) gantt.update();
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
@@ -66,52 +65,19 @@
         // of 30 of a top-30 and saying none of it. Two thirds of a cap is not
         // a reading of "temporal extent"; state it, and offer the rest.
         //
-        // `update()` on every facet change: the families are not all the same
+        // `gantt.update()` on every facet change: the families are not all the same
         // size, and it collapses itself back when the remaining rows fit,
         // which keeps a 12-row family from stranding a tall empty panel.
-        var disclosure = P.buildWindowDisclosure({
+        var gantt = P.buildWindowedGantt({
+            host:       panelEl.chart,
+            panel:      panelEl.panel,
+            rows:       rows,
             windowSize: WINDOW_SIZE,
-            total:      rows().length,
             noteKey:    'activity_window_note',
-            allKey:     'activity_window_all',
-            onToggle:   redraw
-        });
-        panelEl.panel.insertBefore(disclosure.root, panelEl.chart);
-
-        function optionFor(list) {
-            return C.gantt(list, {
-                windowSize: WINDOW_SIZE,
-                expanded:   disclosure.isExpanded()
-            });
-        }
-
-        /**
-         * The host owns the height in BOTH states, always from the row count
-         * actually on screen — see collection-overview/gantt.js.
-         */
-        function applyHeight(rowCount) {
-            var visible = disclosure.isExpanded()
-                ? rowCount
-                : Math.min(rowCount, WINDOW_SIZE);
-            panelEl.chart.style.height = C.ganttHeight(visible) + 'px';
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            var list = rows();
-            applyHeight(list.length);
-            instance.resize();
-            instance.setOption(optionFor(list), true);
+            allKey:     'activity_window_all'
         });
 
-        function redraw() {
-            if (!chart || chart.isDisposed()) return;
-            var list = rows();
-            applyHeight(list.length);
-            chart.resize();
-            chart.setOption(optionFor(list), true);
-        }
-
-        P.navigateOnClick(chart, ctx && ctx.siteBase, function (params) {
+        P.navigateOnClick(gantt.chart, ctx && ctx.siteBase, function (params) {
             var entry = params.data && params.data.entry;
             return entry && entry.o_id ? entry.o_id : null;
         });

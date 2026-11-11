@@ -133,3 +133,70 @@ test('the payload carries the keys validate_data.py requires of it', () => {
     for (const key of ['topics', 'metadata']) expect(DATA).toHaveProperty(key);
     expect(DATA.metadata.total_topics).toBe(DATA.topics.length);
 });
+
+/* ------------------------------------------------------------------ */
+/*  Deep links and history — ?topic=<id>                               */
+/* ------------------------------------------------------------------ */
+
+const detailTitle = (page) => page.locator('.iwac-vis-topic-explorer__detail.is-active h2');
+const overviewActive = (page) => page.locator('.iwac-vis-topic-explorer__overview.is-active');
+
+test('a topic opened from the overview gets its own history entry; Back and Forward move between them', async ({ page }) => {
+    const problems = watch(page);
+    await ready(page);
+    expect(await page.locator('.iwac-vis-topic-explorer').getAttribute('data-url-state')).toBe('topic');
+    const before = await page.evaluate(() => history.length);
+
+    const id = DATA.topics[1].id;
+    await page.locator('.iwac-vis-topic-card').nth(1).click();
+    await expect(detailTitle(page)).toHaveText(`Topic ${id}`);
+    await expect(page).toHaveURL(new RegExp(`\\?topic=${id}$`));
+    expect(await page.evaluate(() => history.length)).toBe(before + 1);
+
+    await page.goBack();
+    await expect(overviewActive(page)).toHaveCount(1);
+    await expect(page).not.toHaveURL(/topic=/);
+
+    await page.goForward();
+    await expect(detailTitle(page)).toHaveText(`Topic ${id}`);
+    await expect(page).toHaveURL(new RegExp(`\\?topic=${id}$`));
+
+    // The detail's own Back button is a navigation too: it pushes the
+    // overview, and the browser's Back returns to the topic.
+    await page.getByRole('button', { name: 'Back to all topics' }).click();
+    await expect(overviewActive(page)).toHaveCount(1);
+    await expect(page).not.toHaveURL(/topic=/);
+    await page.goBack();
+    await expect(detailTitle(page)).toHaveText(`Topic ${id}`);
+    await page.goForward();
+    await expect(overviewActive(page)).toHaveCount(1);
+    expect(problems).toEqual([]);
+});
+
+test('landing on ?topic= opens it without adding a history entry, and a bad id is left alone', async ({ page }) => {
+    await page.goto(FIXTURE + '?topic=999');
+    await expect(page.locator('.iwac-vis-topic-explorer__loading')).toHaveCount(0);
+    await expect(overviewActive(page)).toHaveCount(1);
+    await expect(page).toHaveURL(/\?topic=999$/);
+
+    const id = DATA.topics[2].id;
+    await page.goto(FIXTURE + `?lang=en&topic=${id}`);
+    await expect(detailTitle(page)).toHaveText(`Topic ${id}`);
+    await expect(page).toHaveURL(new RegExp(`\\?lang=en&topic=${id}$`));
+    // Replaced, not pushed: Back leaves the topic for the page before it,
+    // rather than bouncing to an overview the reader never saw.
+    await page.goBack();
+    await expect(page).toHaveURL(/\?topic=999$/);
+});
+
+test('the detail’s copy-link button hands out the topic’s address', async ({ page, context, browserName }) => {
+    test.skip(browserName !== 'chromium', 'clipboard permissions are Chromium-only');
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    const id = DATA.topics[0].id;
+    await page.goto(FIXTURE + `?topic=${id}`);
+    await expect(detailTitle(page)).toHaveText(`Topic ${id}`);
+    await page.getByRole('button', { name: 'Copy link to this topic' }).click();
+    await expect(page.getByRole('button', { name: 'Link copied' })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText()))
+        .toBe(new URL(`${FIXTURE}?topic=${id}`, page.url()).href);
+});

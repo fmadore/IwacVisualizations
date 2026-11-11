@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC windowed Gantt fixture</title>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <style>
+        main { max-width: 1180px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script src="/tests/browser/fixtures/theme-stand-in.js"></script>
+    <main><div id="grid" class="iwac-vis-charts-grid"></div></main>
+    <!-- Test-only npm dependency: no CDN request and no production hosting change. -->
+    <script src="/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="/asset/js/dist/shared-core.en.min.js"></script>
+    <script src="/asset/js/dist/shared-charts.min.js"></script>
+    <script src="/asset/js/dist/shared-ui.min.js"></script>
+    <!-- The newspaper Gantt panel from the collection-overview bundle, its
+         dictionary first, driven directly with a synthetic coverage list:
+         30 press runs, 24 Burkinabè and 6 Togolese, so the default view is
+         windowed and the Togo facet is not. -->
+    <script src="/asset/js/charts/collection-overview/i18n.js"></script>
+    <script src="/asset/js/charts/collection-overview/gantt.js"></script>
+    <script>
+        (function () {
+            var P = IWACVis.panels;
+            var coverage = [];
+            for (var i = 0; i < 30; i++) {
+                coverage.push({
+                    name: 'Paper ' + i,
+                    country: i < 24 ? 'Burkina Faso' : 'Togo',
+                    type: 'article',
+                    year_min: 1960 + i,
+                    year_max: 2020,
+                    total: 100 - i,
+                    by_year: [[1960 + i, 3], [2000, 40]]
+                });
+            }
+            var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', 'Newspaper coverage', '');
+            document.getElementById('grid').appendChild(panel.panel);
+            IWACVis.collectionOverview.gantt.render(panel, { newspapers: { coverage: coverage } }, { siteBase: '/s/iwac' });
+            window.__ready = true;
+        })();
+    </script>
+</body>
+</html>

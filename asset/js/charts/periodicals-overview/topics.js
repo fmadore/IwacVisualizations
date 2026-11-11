@@ -41,10 +41,6 @@
         return;
     }
 
-    // Past a dozen bands the stack stops being readable and the legend
-    // wraps over the plot; the remainder folds into one "Other topics"
-    // band rather than being dropped. Matches the Topic Explorer's river.
-    var RIVER_TOP = 12;
     var MAX_BARS = 20;
     var MAX_CARDS = 10;
 
@@ -60,19 +56,6 @@
         return Math.round(1000 * (value || 0)) / 10;
     }
 
-    /** Fold the long tail into a single "Other topics" band. */
-    function foldTail(defs, yearCount) {
-        if (defs.length <= RIVER_TOP) return defs;
-        var kept = defs.slice(0, RIVER_TOP);
-        var other = new Array(yearCount);
-        for (var i = 0; i < yearCount; i++) other[i] = 0;
-        defs.slice(RIVER_TOP).forEach(function (d) {
-            d.values.forEach(function (v, i) { other[i] += v; });
-        });
-        kept.push({ id: null, name: P.t('topic_other'), values: other });
-        return kept;
-    }
-
     /* ----------------------------------------------------------------- */
     /*  1. Topics over time                                               */
     /* ----------------------------------------------------------------- */
@@ -81,61 +64,28 @@
         var years = (prevalence.years || []).map(String);
         var defs = (prevalence.series || []).map(function (s) {
             var topic = byId[s.id] || { id: s.id, label: s.label };
-            return { id: s.id, name: topicName(topic), values: (s.values || []).slice() };
+            return { topicId: s.id, name: topicName(topic), values: (s.values || []).slice() };
         });
-        defs = foldTail(defs, years.length);
+        // Past a dozen bands the tail folds into one "Other topics" band,
+        // at the same place as the Topic Explorer's river.
+        defs = C.foldTopicTail(defs, years.length);
 
-        return {
-            grid: C._grid({ left: 48, top: 40, bottom: 56 }),
+        // The axis stays at 100 on purpose (C.topicRiver): the gap between
+        // the top of the stack and the axis is the truncated tail, and
+        // rescaling would hide a known partial measurement.
+        return C.topicRiver({
+            years:  years,
+            defs:   defs,
+            plot:   function (d, i) { return pct(d.values[i]); },
             legend: { type: 'scroll', top: 0 },
-            tooltip: {
-                trigger: 'axis',
-                formatter: C.sortedAxisTooltip({
-                    skip: function (p, i) {
-                        var def = defs[p.seriesIndex];
-                        return !def || !def.values[i];
-                    },
-                    row: function (p) {
-                        return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — ' + P.formatPercent(p.value, 1);
-                    },
-                    // The per-year issue count is what makes a thin early
-                    // year readable as thin rather than as a real signal.
-                    footer: function (i) {
-                        return P.t('periodicals.topics_year_issues', {
-                            count: (prevalence.n_docs || [])[i] || 0
-                        });
-                    }
-                })
-            },
-            xAxis: {
-                type: 'category',
-                data: years,
-                boundaryGap: false,
-                name: P.t('Year')
-            },
-            yAxis: {
-                type: 'value',
-                min: 0,
-                // Left at 100 on purpose: the gap between the top of the
-                // stack and the axis is the truncated tail, and rescaling
-                // would hide a known partial measurement.
-                max: 100,
-                axisLabel: C._percentAxisLabel()
-            },
-            dataZoom: C._dataZoom(years.length),
-            series: defs.map(function (d) {
-                return {
-                    name: d.name,
-                    type: 'line',
-                    stack: 'mass',
-                    areaStyle: { opacity: 0.85 },
-                    lineStyle: { width: 0.5 },
-                    symbol: 'none',
-                    emphasis: { focus: 'series' },
-                    data: d.values.map(pct)
-                };
-            })
-        };
+            // The per-year issue count is what makes a thin early
+            // year readable as thin rather than as a real signal.
+            footer: function (i) {
+                return P.t('periodicals.topics_year_issues', {
+                    count: (prevalence.n_docs || [])[i] || 0
+                });
+            }
+        });
     }
 
     /* ----------------------------------------------------------------- */
@@ -217,7 +167,7 @@
         items.forEach(function (item) {
             var card = P.el('a', 'iwac-vis-similar-card');
             if (item.o_id && siteBase) {
-                card.href = siteBase + '/item/' + encodeURIComponent(item.o_id);
+                card.href = P.itemUrl(siteBase, item.o_id);
             } else {
                 card.href = '#';
                 card.setAttribute('aria-disabled', 'true');

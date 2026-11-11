@@ -58,6 +58,10 @@ function load() {
 function hostileBuilds(C) {
     const years = [2001, 2002, 2003];
     return {
+        topicRiver: () => C.topicRiver({
+            years, defs: [{ topicId: 1, name: H, values: [0.2, 0.3, 0.1] }, { topicId: 2, name: 'b', values: [0.1, 0.1, 0.4] }],
+            plot: (d, i) => d.values[i] * 100, legend: {}, rowSuffix: () => ' (3)', footer: () => 'n',
+        }),
         timeline: () => C.timeline({ years, countries: [H, 'Bénin'], series: { [H]: [1, 2, 3], 'Bénin': [3, 2, 1] } }),
         stackedBar: () => C.stackedBar({ categories: [H, 'b'], stackKeys: [H, 'k'], series: { [H]: [1, 2], k: [2, 1] } }),
         chord: () => C.chord({ names: [H, 'b', 'c'], matrix: [[0, 2, 1], [2, 0, 3], [1, 3, 0]] }),
@@ -188,7 +192,7 @@ test('every shared builder\'s tooltips escape a hostile label', () => {
 // Public chartOptions functions that return something other than a chart
 // option: tooltip pieces (itemTooltip has its own test), palettes, sizes and
 // the word-cloud layout primitives.
-const NOT_BUILDERS = ['centralityPalette', 'ganttHeight', 'itemTooltip', 'polarityPalette', 'readableInks',
+const NOT_BUILDERS = ['centralityPalette', 'foldTopicTail', 'ganttHeight', 'itemTooltip', 'polarityPalette', 'readableInks',
     'sortedAxisTooltip', 'subjectivityPalette', 'tooltipDot', 'typeColors', 'wordcloudInks', 'wordcloudLayout'];
 
 test('a new shared builder cannot skip the sweep', () => {
