@@ -174,9 +174,13 @@
      * `match` on the country name reads the same numbers out of a paint
      * expression instead, so the geometry is uploaded once for the life of
      * the map and a count change is a `setPaintProperty` and nothing else.
+     *
+     * `scale` is the already-resolved `P.choroplethScale(paintConfig,
+     * counts)` when the caller has one (an update paints the fill and the
+     * legend from the same scale); otherwise it is computed here.
      */
-    function buildFillExpression(paintConfig, counts) {
-        var scale = P.choroplethScale(paintConfig, counts);
+    function buildFillExpression(paintConfig, counts, scale) {
+        scale = scale || P.choroplethScale(paintConfig, counts);
         var names = Object.keys(counts || {});
         var countExpr;
         if (names.length) {
@@ -611,13 +615,16 @@
             });
         }
 
-        /** Paint the legend for the current scale, or hide it. */
-        function refreshLegend() {
+        /**
+         * Paint the legend for the current scale, or hide it. `scale` is the
+         * one the fill was just built from, when the caller has it.
+         */
+        function refreshLegend(scale) {
             if (!legendControl) return;
             if (mode !== 'choropleth') { legendControl.show(null); return; }
             legendControl.show(P.buildChoroplethLegend({
                 title: opts.legendTitle || P.t(labelKey),
-                stops: P.choroplethScale(currentPaint, countryCounts).stops
+                stops: (scale || P.choroplethScale(currentPaint, countryCounts)).stops
             }));
         }
 
@@ -684,13 +691,17 @@
                 if (updateOpts && Object.prototype.hasOwnProperty.call(updateOpts, 'paint')) {
                     currentPaint = updateOpts.paint;
                 }
+                // One scale for the fill and the legend: resolving it reads
+                // the heatmap ramp's tokens, and a slider calls this per tick.
+                var scale = null;
                 if (map.getLayer(FILL)) {
+                    scale = P.choroplethScale(currentPaint, countryCounts);
                     map.setPaintProperty(
                         FILL, 'fill-color',
-                        buildFillExpression(currentPaint, countryCounts)
+                        buildFillExpression(currentPaint, countryCounts, scale)
                     );
                 }
-                refreshLegend();
+                refreshLegend(scale);
             },
             destroy: function () {
                 if (control) {

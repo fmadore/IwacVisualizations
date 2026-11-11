@@ -68,7 +68,7 @@
             border:        k.border,
             surface:       k.surface,
             fontFamily:    k.fontFamily,
-            fontSize:      12,
+            fontSize:      ns.CHART_FONT,
             fontSizeTitle: 13
         };
     }
@@ -589,6 +589,7 @@
         create: create,
         theme: theme,
         truncate: truncate,
+        clamp: clamp,       // shared with graph-force.js (same d3 bundle, loads after)
         MIN_ZOOM: MIN_ZOOM,
         MAX_ZOOM: MAX_ZOOM
     };

@@ -395,3 +395,15 @@ test('the offline renderers match the production pins', () => {
         expect(assets, name).toContain(`${name}@${version}/dist/${name}.min.js`);
     }
 });
+
+// The layout's panels are named for the embed route by what they show, not by
+// position: these layouts skip slots without data, so `panel-N` named a
+// different chart on each item.
+test('each layout panel carries a stable embed key from its slot', async ({ page }) => {
+    await ready(page);
+    const keys = await page.$$eval('.iwac-vis-panel[data-iwac-panel]', (panels) => panels
+        .filter((p) => !(p.parentElement && p.parentElement.closest('.iwac-vis-panel')))
+        .map((p) => p.getAttribute('data-iwac-panel')));
+    expect(keys).toEqual(expect.arrayContaining(['article-network', 'article-further', 'article-map']));
+    expect(keys.filter((k) => /^panel-\d+$/.test(k))).toEqual([]);
+});

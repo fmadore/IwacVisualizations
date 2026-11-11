@@ -316,7 +316,7 @@
                     show: true,
                     margin: 24,
                     color: tokens.inkLight,
-                    fontSize: 12,
+                    fontSize: ns.CHART_FONT,
                     fontWeight: 600
                 },
                 // No `nameMap`: the chart's own locale (FR registered by

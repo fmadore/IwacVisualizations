@@ -356,7 +356,7 @@
      * dashboard-core repaints without remounting the panel.
      */
     C.polarityPalette = function () {
-        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        var read = ns.readColorVar || function () { return ''; };
         return {
             'Très positif':   read('--iwac-vis-sent-pos-strong'),
             'Positif':        read('--iwac-vis-sent-pos'),
@@ -379,7 +379,7 @@
      * Keys are the raw French bucket names carried by `centrality_order`.
      */
     C.centralityPalette = function () {
-        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        var read = ns.readColorVar || function () { return ''; };
         return {
             'Très central': read('--iwac-vis-cent-1'),
             'Central':      read('--iwac-vis-cent-2'),
@@ -395,7 +395,7 @@
      * itself. Keys are STRINGS, matching the level names the bundles carry.
      */
     C.subjectivityPalette = function () {
-        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        var read = ns.readColorVar || function () { return ''; };
         return {
             '1': read('--iwac-vis-subj-1'),
             '2': read('--iwac-vis-subj-2'),
@@ -529,7 +529,7 @@
     };
 
     C.typeColors = function () {
-        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        var read = ns.readColorVar || function () { return ''; };
         var out = {};
         Object.keys(TYPE_TOKENS).forEach(function (key) {
             var color = read(TYPE_TOKENS[key]);

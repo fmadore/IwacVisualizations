@@ -48,7 +48,7 @@
         return;
     }
 
-    function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+    var clamp = ns.GraphCanvas.clamp;
 
     /** Replace an element's children in one pass. */
     function setChildren(el, children) {
@@ -173,9 +173,22 @@
         var onSelectCb = null;
 
         function isVisible(n) { return !hiddenCats[n.category]; }
-        function visibleNodes() { return pass.nodes.filter(isVisible); }
+        /**
+         * The visible slice of the current pass, built once per pass or
+         * legend toggle rather than on every pointermove and paint. Shared
+         * arrays: a caller that reorders one copies it first.
+         */
+        var visCache = {};
+        function invalidateVisible() { visCache = {}; }
+        function visibleNodes() {
+            if (!visCache.nodes) visCache.nodes = pass.nodes.filter(isVisible);
+            return visCache.nodes;
+        }
         function visibleLinks() {
-            return pass.links.filter(function (l) { return isVisible(l.source) && isVisible(l.target); });
+            if (!visCache.links) {
+                visCache.links = pass.links.filter(function (l) { return isVisible(l.source) && isVisible(l.target); });
+            }
+            return visCache.links;
         }
 
         function pinnedCount() {
@@ -302,6 +315,7 @@
             });
 
             pass = { nodes: nodes, links: links, deg: deg, adj: adj };
+            invalidateVisible();
 
             // Hover state points at objects from the OLD pass — a link a facet
             // just dropped would otherwise keep a tooltip open over a line that
@@ -353,21 +367,33 @@
 
         /* ---- Tooltip -------------------------------------------------- */
 
+        // What the tooltip currently shows, and its measured box: a move
+        // within the same node or link only repositions it. Building the rows
+        // and reading offsetWidth/Height on every pointermove forced a layout
+        // per event.
+        var tipNode = null, tipLink = null, tipW = 0, tipH = 0;
+
         function hideTooltip() {
             tooltip.hidden = true;
             setChildren(tooltip);
+            tipNode = null; tipLink = null;
         }
 
         function showTooltip(px, py, node, link) {
-            var rows = spec.tooltip ? spec.tooltip(node, link) : null;
-            if (!rows || !rows.length) { hideTooltip(); return; }
-            setChildren(tooltip, rows);
-            tooltip.hidden = false;
+            if (tooltip.hidden || node !== tipNode || link !== tipLink) {
+                var rows = spec.tooltip ? spec.tooltip(node, link) : null;
+                if (!rows || !rows.length) { hideTooltip(); return; }
+                setChildren(tooltip, rows);
+                tooltip.hidden = false;
+                tipNode = node; tipLink = link;
+                tipW = tooltip.offsetWidth;
+                tipH = tooltip.offsetHeight;
+            }
             // Confine to the stage, flipping side when the pointer nears an edge.
             var W = gc.width(), H = gc.height();
             var left = px + 14, top = py + 14;
-            if (left + tooltip.offsetWidth > W - 6) left = Math.max(6, px - tooltip.offsetWidth - 14);
-            if (top + tooltip.offsetHeight > H - 6) top = Math.max(6, py - tooltip.offsetHeight - 14);
+            if (left + tipW > W - 6) left = Math.max(6, px - tipW - 14);
+            if (top + tipH > H - 6) top = Math.max(6, py - tipH - 14);
             tooltip.style.left = left + 'px';
             tooltip.style.top = top + 'px';
         }
@@ -561,7 +587,7 @@
 
         /** Nodes in a stable reading order: centre first, then by degree. */
         function keyboardOrder() {
-            return visibleNodes().sort(function (a, b) {
+            return visibleNodes().slice().sort(function (a, b) {
                 if (a.isCenter !== b.isCenter) return a.isCenter ? -1 : 1;
                 return (b.deg || 0) - (a.deg || 0) || a.name.localeCompare(b.name);
             });
@@ -686,6 +712,7 @@
             },
             toggleCategory: function (i, visible) {
                 if (visible) delete hiddenCats[i]; else hiddenCats[i] = true;
+                invalidateVisible();
                 hideTooltip();
                 requestPaint();
             },

@@ -294,15 +294,15 @@
         var direct = _convertModernColor(trimmed);
         if (direct) return direct;
 
-        return probeColor(trimmed, true);
+        return probeColor(trimmed);
     }
 
     /**
      * Compute `value` as a colour on the parked probe and return it as a
-     * legacy string: '' when the browser rejects it (guarded mode), the
-     * input unchanged when there is no probe to compute on.
+     * legacy string: '' when the browser rejects it, the input unchanged
+     * when there is no probe to compute on.
      *
-     * `guarded` is the two-sentinel invalid-value check. When `value` is NOT
+     * The two-sentinel invalid-value check: When `value` is NOT
      * a colour the browser can parse, `style.color = value` is silently
      * ignored and the probe keeps its previous value. A valid colour
      * overrides BOTH sentinels to the same resolved rgb(); an invalid one
@@ -310,25 +310,19 @@
      * CALLER's `|| fallback` fires — instead of the probe's default
      * rgb(0,0,0), which is what made a single corrupted CSS var (an embed
      * that mis-escaped `--primary` to `&#x23`) render every chart series
-     * solid black. A `var()` is accepted at parse time whatever it names, so
-     * `resolveCssVar` skips the check and pays one style read, not two.
+     * solid black. Results are cached per theme by `readColorVar`, so the
+     * second read is paid once per token, not once per render.
      */
-    function probeColor(value, guarded) {
+    function probeColor(value) {
         var probe = _getColorProbe();
         if (!probe) return value;
         try {
-            var resolved;
-            if (guarded) {
-                probe.style.color = 'rgb(1, 1, 1)';
-                probe.style.color = value;
-                resolved = getComputedStyle(probe).color;
-                probe.style.color = 'rgb(2, 2, 2)';
-                probe.style.color = value;
-                if (getComputedStyle(probe).color !== resolved) return '';   // unparseable
-            } else {
-                probe.style.color = value;
-                resolved = getComputedStyle(probe).color;
-            }
+            probe.style.color = 'rgb(1, 1, 1)';
+            probe.style.color = value;
+            var resolved = getComputedStyle(probe).color;
+            probe.style.color = 'rgb(2, 2, 2)';
+            probe.style.color = value;
+            if (getComputedStyle(probe).color !== resolved) return '';   // unparseable
             if (!resolved) return value;
             if (/^rgba?\(/i.test(resolved)) return resolved;
             // Modern Chromium can emit oklab() / oklch() / color(srgb)
@@ -339,50 +333,73 @@
             return value;
         }
     }
-    // Exposed for callers that want to convert raw strings (not only
-    // CSS variables) — e.g. tokens.primary that already came from
-    // readTokens() but is being repurposed as a MapLibre paint value.
-    ns._convertModernColor = _convertModernColor;
     // Expose for chart modules that read CSS vars directly
     // (e.g. scary-terms, map panels) via ns.resolveCssVar —
     // they should route their color reads through this so they
     // never hand ECharts an unparseable `calc()` / color-mix().
     ns.resolveCssColor = resolveCssColor;
 
-    /** Read a CSS color variable and resolve it to a parseable rgb(). */
-    function readColorVar(name) {
-        return resolveCssColor(readVar(name));
+    /**
+     * Resolved token colours for the current theme state, keyed by custom
+     * property name. Filled by `readColorVar`, dropped by `refreshThemes()`
+     * (which every light/dark swap and reduced-motion flip runs) and,
+     * defensively, whenever the mode it was filled under is no longer the
+     * current one — a read in the same task as a `data-theme` write runs
+     * before the observer that would refresh it.
+     */
+    var _colorCache = null;
+    var _colorCacheMode = null;
+
+    function clearColorCache() {
+        _colorCache = null;
+        _colorCacheMode = null;
     }
-    ns.readColorVar = readColorVar;
 
     /**
-     * Resolve a CSS custom property to a legacy `rgb()` / `rgba()`, or ''
-     * when it is unset, transparent or unresolvable.
+     * Read a CSS colour custom property from the body and resolve it to a
+     * parseable legacy `rgb()` / `rgba()`; '' when it is unset, transparent
+     * or not a colour.
      *
-     * The module's own ramps (`--iwac-vis-heatmap-*`, `--iwac-vis-cent-*`,
-     * the model accents) are `color-mix(in oklab, var(--primary), …)`
-     * expressions, which `readColorVar` would read as raw source text. Here
-     * the browser computes the expression on the parked probe, in the body's
-     * cascade, and `resolveCssColor` converts whatever Level-4 form comes
-     * back. `transparent` is the fallback so an UNSET property is
-     * distinguishable from a set one, and answers ''.
+     * The ONE colour-token resolver. `getPropertyValue` returns the
+     * property's computed value — `var()` references already substituted at
+     * the body — so a module ramp like `color-mix(in oklab, var(--primary)
+     * 30%, var(--surface))` arrives as a colour expression the guarded probe
+     * computes (`resolveCssColor`), and a corrupted value answers '' so the
+     * caller's own fallback fires.
      *
-     * This used to be a second implementation in dashboard-core.js: its own
-     * probe appended to and removed from `<body>` on every call, and without
-     * the invalid-value guard `resolveCssColor` carries.
+     * Cached per theme state: a chart asks for the same dozen tokens on every
+     * render, and the probe round trip is a forced style recalculation. An
+     * empty answer is never cached — before `<body>` or the stylesheet that
+     * declares the token exists, every read is '', and that must not stick.
      *
-     * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
+     * This used to be two functions — this one and `resolveCssVar`, which ran
+     * a single unguarded probe read — and the shared builders asked for
+     * `readColorVar || resolveCssVar`, so the second was dead at every call
+     * site that named both. `resolveCssVar` is now an alias.
+     *
+     * @param {string} name  e.g. '--primary', '--iwac-vis-heatmap-2'
      * @returns {string}
      */
-    ns.resolveCssVar = function (varName) {
+    function readColorVar(name) {
         if (typeof document === 'undefined' || !document.body) return '';
-        // The single-read path trusts `var(...)` to parse; a malformed name
-        // would not, and the probe would answer with its previous colour.
-        if (!/^--[A-Za-z0-9_-]+$/.test(String(varName))) return '';
-        var resolved = probeColor('var(' + varName + ', transparent)', false);
-        if (!resolved || /^var\(/i.test(resolved) || resolved === 'rgba(0, 0, 0, 0)') return '';
+        var key = String(name);
+        if (!/^--[A-Za-z0-9_-]+$/.test(key)) return '';
+        var mode = ns.getCurrentTheme ? ns.getCurrentTheme() : '';
+        if (!_colorCache || _colorCacheMode !== mode) {
+            _colorCache = {};
+            _colorCacheMode = mode;
+        }
+        if (Object.prototype.hasOwnProperty.call(_colorCache, key)) return _colorCache[key];
+        var resolved = resolveCssColor(readVar(key)) || '';
+        if (/^transparent$/i.test(resolved) || /^rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\)$/i.test(resolved)) {
+            resolved = '';
+        }
+        if (resolved) _colorCache[key] = resolved;
         return resolved;
-    };
+    }
+    ns.readColorVar = readColorVar;
+    // Alias kept for the block code (and the console) that names it.
+    ns.resolveCssVar = readColorVar;
 
     /**
      * Apply an alpha to an already-resolved color string. Inputs are
@@ -461,7 +478,7 @@
             // Inherits whatever the theme's body font-family is, so charts
             // never visibly clash with surrounding type. Stack fallback
             // matches theme v2.0.0 (Public Sans).
-            fontFamily:    readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+            fontFamily:    readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif'
         };
     }
 
@@ -526,6 +543,20 @@
             : value;
     }
 
+    /**
+     * Chart type sizes, in px, on the theme's type scale (IWAC-theme
+     * tokens.json `values.light` `--text-*`): 11 (--text-2xs, the floor),
+     * 13 (--text-xs), 19 (--text-lg). The scale deliberately has no 12, 14
+     * or 18 step — exactly the sizes ECharts falls back to for axis labels
+     * and legends (12), tooltips (14) and titles (18) — so the theme object
+     * below states them, and canvas or per-builder text names these rather
+     * than a literal. `P.AXIS_FONT_SM` (panels.js) is the same 11 for the
+     * compact axes.
+     */
+    ns.CHART_FONT_SM = 11;      // --text-2xs
+    ns.CHART_FONT = 13;         // --text-xs
+    ns.CHART_FONT_TITLE = 19;   // --text-lg
+
     /** Build an ECharts theme object from the IWAC tokens. */
     function buildTheme(tokens, palette) {
         var tooltipBg = tokens.surface;
@@ -557,16 +588,19 @@
             // update timing) still sets its own; the rest inherit these.
             animationDuration: 600,
             animationEasing: 'cubicOut',
+            // Base text on the theme's --text-xs; ECharts' own default is
+            // 12px, a size the theme's scale does not have.
             textStyle: {
                 color: tokens.ink,
-                fontFamily: tokens.fontFamily
+                fontFamily: tokens.fontFamily,
+                fontSize: ns.CHART_FONT
             },
             title: {
-                textStyle: { color: tokens.ink, fontWeight: 600 },
-                subtextStyle: { color: tokens.muted }
+                textStyle: { color: tokens.ink, fontWeight: 600, fontSize: ns.CHART_FONT_TITLE },
+                subtextStyle: { color: tokens.muted, fontSize: ns.CHART_FONT }
             },
             legend: {
-                textStyle: { color: tokens.inkLight },
+                textStyle: { color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 // --muted, not --border: a switched-off entry is still a
                 // label someone reads to switch it back on, and --border sat
                 // at 1.49:1 on the panel. --muted clears 4.5:1 in both themes
@@ -577,7 +611,7 @@
                 backgroundColor: tooltipBg,
                 borderColor: tokens.border,
                 borderWidth: 1,
-                textStyle: { color: tokens.ink },
+                textStyle: { color: tokens.ink, fontSize: ns.CHART_FONT },
                 // The theme's own elevation and radius, by token: the tooltip
                 // is a DOM element in the page, so `var()` resolves in its
                 // cascade and follows the light/dark switch. A literal
@@ -614,29 +648,33 @@
                 crossStyle: { color: tokens.muted }
             },
             categoryAxis: {
+                nameTextStyle: { fontSize: ns.CHART_FONT },
                 axisLine:  { show: true,  lineStyle: { color: tokens.border } },
                 axisTick:  { show: true,  lineStyle: { color: tokens.border } },
-                axisLabel: { show: true,  color: tokens.inkLight },
+                axisLabel: { show: true,  color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 splitLine: { show: false, lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
             },
             valueAxis: {
+                nameTextStyle: { fontSize: ns.CHART_FONT },
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber },
+                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber, fontSize: ns.CHART_FONT },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
             },
             logAxis: {
+                nameTextStyle: { fontSize: ns.CHART_FONT },
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber },
+                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber, fontSize: ns.CHART_FONT },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } }
             },
             timeAxis: {
+                nameTextStyle: { fontSize: ns.CHART_FONT },
                 axisLine:  { show: true, lineStyle: { color: tokens.border } },
                 axisTick:  { show: true, lineStyle: { color: tokens.border } },
-                axisLabel: { show: true, color: tokens.inkLight },
+                axisLabel: { show: true, color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 splitLine: { show: true, lineStyle: { color: [tokens.borderLight] } }
             },
             toolbox: {
@@ -796,16 +834,8 @@
      */
     ns.getEntityTypeColor = function (type, spare) {
         var token = ENTITY_TYPE_TOKENS[type];
-        if (token) {
-            var cache = ns._currentEntityColors;
-            if (!cache) {
-                cache = {};
-                // Before <body> exists every read is '' — do not keep that.
-                if (document.body) ns._currentEntityColors = cache;
-            }
-            if (!(type in cache)) cache[type] = readColorVar(token) || '';
-            if (cache[type]) return cache[type];
-        }
+        var color = token ? readColorVar(token) : '';
+        if (color) return color;
         var i = ns.ENTITY_TYPE_ORDER.indexOf(type);
         return ns.getSeriesColor(i >= 0 ? i : ns.ENTITY_TYPE_ORDER.length + (Number(spare) || 0));
     };
@@ -854,9 +884,9 @@
      * that want to inspect / extend it).
      */
     ns.refreshThemes = function () {
-        // Dropped before the ECharts check: the entity colours paint canvas
+        // Dropped before the ECharts check: the token colours paint canvas
         // and MapLibre graphs too, on pages that may not load ECharts.
-        ns._currentEntityColors = null;
+        clearColorCache();
         var tokens = readTokens();
         ns._currentTokens = tokens;
         // The palette is rebuilt here, once per theme state, and cached for

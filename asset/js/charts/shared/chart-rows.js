@@ -332,7 +332,4 @@
         });
         return '\uFEFF' + lines.join('\r\n') + '\r\n';
     };
-
-    /** The text of a cell, for callers that render rows themselves. */
-    P.cellText = cellText;
 })();

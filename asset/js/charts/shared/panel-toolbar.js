@@ -18,11 +18,11 @@
  *     fullscreen toggle in the module goes through, falls back to a
  *     class-only overlay where the API is missing — an iPhone).
  *
- * The icon-button builder, the download trigger, the composited PNG
- * export and the fullscreen binding are public (`P.iconButton`,
- * `P.triggerDownload`, `P.downloadPanelImage`, `P.bindFullscreen`) so the
- * graph toolbars, which carry their own button column, export and expand
- * exactly the way every other panel does instead of keeping a copy each.
+ * The icon-button builder, the composited PNG export and the fullscreen
+ * binding are public (`P.iconButton`, `P.downloadPanelImage`,
+ * `P.bindFullscreen`) so the graph toolbars, which carry their own button
+ * column, export and expand exactly the way every other panel does instead
+ * of keeping a copy each.
  *
  * The toolbar is auto-attached from both `dashboard-core.registerChart`
  * (ECharts) and `dashboard-core.registerMap` (MapLibre) the first time
@@ -382,8 +382,8 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Hand the browser a URL to save under `filename`. Public: the graph
-     * toolbars used to build their own throwaway anchor, twice.
+     * Hand the browser a URL to save under `filename` — the PNG export and
+     * the CSV both. The graph toolbars reach it through `P.downloadPanelImage`.
      */
     function triggerDownload(dataUrl, filename) {
         if (!dataUrl) return;
@@ -395,7 +395,6 @@
         link.click();
         document.body.removeChild(link);
     }
-    P.triggerDownload = triggerDownload;
 
     /** Filesystem-safe filename stem from the panel's title. */
     function filenameFromPanel(panelEl) {
@@ -707,14 +706,20 @@
         return option ? P.optionToRows(option) : null;
     }
 
-    /** Cheap: does the panel have anything a table could show right now? */
+    /**
+     * Does the panel have anything a table could show right now?
+     * `{ available, table }`: a chart answers from its option without
+     * building the rows (`table` null); a rows provider can only answer by
+     * building them, so the table it built comes back for the caller to
+     * render instead of asking the provider a second time.
+     */
     function hasRows(panelEl, chartEl) {
         if (typeof panelEl._iwacRows === 'function') {
             var table = rowsFor(panelEl, chartEl);
-            return !!(table && table.rows && table.rows.length);
+            return { available: !!(table && table.rows && table.rows.length), table: table };
         }
-        if (!P.hasTabularOption || !ns.lastOption) return false;
-        return P.hasTabularOption(ns.lastOption(chartEl));
+        if (!P.hasTabularOption || !ns.lastOption) return { available: false, table: null };
+        return { available: !!P.hasTabularOption(ns.lastOption(chartEl)), table: null };
     }
 
     function refreshTableButtons(panelEl) {
@@ -839,19 +844,39 @@
         csvBtn.classList.add('iwac-vis-panel-toolbar__btn--csv');
         bar.appendChild(csvBtn);
 
+        var pendingFrame = 0;
         function refresh() {
-            var available = hasRows(panelEl, chartEl);
+            if (pendingFrame) {
+                if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(pendingFrame);
+                pendingFrame = 0;
+            }
+            var state = hasRows(panelEl, chartEl);
+            var available = state.available;
             // An open table stays closable when the chart empties under it
             // (a facet with no rows): the disclosure shows the empty note
             // and its button keeps working; only a CLOSED one is disabled.
             tableBtn.disabled = !available && !open;
             csvBtn.disabled = !available;
-            if (open) renderTable(tableHost, available ? rowsFor(panelEl, chartEl) : null);
+            if (open) renderTable(tableHost, available ? (state.table || rowsFor(panelEl, chartEl)) : null);
+        }
+        /**
+         * `iwac:repaint` fires after EVERY setOption — a theme swap's
+         * render and view-state restore, a slider's merges — and an open
+         * table is up to TABLE_ROW_CAP rows of DOM. One refresh per frame
+         * reads the option the burst ended on.
+         */
+        function scheduleRefresh() {
+            if (typeof requestAnimationFrame !== 'function') { refresh(); return; }
+            if (pendingFrame) return;
+            pendingFrame = requestAnimationFrame(function () {
+                pendingFrame = 0;
+                refresh();
+            });
         }
         bar._iwacRefreshTable = refresh;
         // The chart's own repaints bubble up from its host; a map panel's
         // provider announces its changes on the panel itself.
-        panelEl.addEventListener('iwac:repaint', refresh);
+        panelEl.addEventListener('iwac:repaint', scheduleRefresh);
         refresh();
         return bar;
     };

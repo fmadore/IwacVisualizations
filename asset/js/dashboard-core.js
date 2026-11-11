@@ -788,15 +788,14 @@
      * Re-render every tracked chart against the current theme.
      *
      * For ECharts we rebuild the theme from the current CSS variables
-     * (via refreshThemes) and then call `instance.setTheme()` — supported
-     * since ECharts 6.0.0 — followed by re-running the registered render
-     * callback. setTheme alone preserves DOM state (no detach / reattach
-     * flash, no re-init cost), and re-rendering immediately afterwards
+     * (via refreshThemes), install it on the instance and re-run the
+     * registered render callback (`swapChartTheme`). The instance keeps its
+     * DOM (no detach / reattach flash, no re-init cost), and the render
      * picks up any theme tokens that callers baked into their option
-     * literal via `getChartTokens()`. The ECharts 6 caveat ("multiple
-     * setOption merge calls before setTheme are discarded") doesn't bite
-     * us because the render callback always rebuilds the option from
-     * scratch with `setOption(..., true)` — the canonical IWAC pattern.
+     * literal via `getChartTokens()`. The render callback rebuilds the
+     * option from scratch with `setOption(..., true)` — the canonical IWAC
+     * pattern — which is what lets that one paint apply the theme too.
+     * Charts on screen repaint at once; the rest one per frame.
      *
      * For MapLibre we swap the style URL. The `createIwacMap` factory
      * registers an `onStyleReady` callback that re-runs on every
@@ -830,50 +829,131 @@
         if (Object.keys(state).length) instance.setOption(state);
     }
 
+    /**
+     * Swap one ECharts instance to `themeName` and redraw it — ONE update
+     * pass, not two.
+     *
+     * `setTheme()` is not cheap in ECharts 6.1: it recreates the model under
+     * the new theme and runs a full prepare + update, and the render callback
+     * that follows rebuilds the option with `setOption(…, true)` and pays a
+     * second full pass. A not-merge `setOption` already builds its new model
+     * from the instance's `_theme`, so swapping that field first (ECharts' own
+     * `_updateTheme`, which is what `setTheme` calls before it updates) and
+     * letting the render paint is the whole theme change.
+     *
+     * Both names are internal, so the result is checked rather than assumed:
+     * unless the live model is built on the theme just installed — the
+     * render bailed out before painting, painted with a merge, or a future
+     * ECharts renamed either field — the public `setTheme()` runs after the
+     * render, which is the old two-pass behaviour with the order swapped.
+     */
+    function swapChartTheme(entry, themeName) {
+        var instance = entry.instance;
+        var render = function () {
+            // Re-create components under the new theme, even when the
+            // caller normally uses merged repaints.
+            ns.forgetShape(instance);
+            if (typeof entry.render === 'function' && entry.el) entry.render(entry.el, instance);
+        };
+        preserveChartView(instance, function () {
+            if (!themeName || typeof instance.setTheme !== 'function') { render(); return; }
+            if (typeof instance._updateTheme !== 'function') {
+                instance.setTheme(themeName);
+                render();
+                return;
+            }
+            instance._updateTheme(themeName);
+            render();
+            var model = instance._model;
+            var theme = model && typeof model.getTheme === 'function' ? model.getTheme() : null;
+            if (!instance._theme || !theme || theme.option !== instance._theme) {
+                instance.setTheme(themeName);
+            }
+        });
+    }
+
+    /** True when `el` has a box that intersects the viewport now. */
+    function inViewport(el) {
+        if (!el || !el.isConnected || typeof el.getBoundingClientRect !== 'function') return false;
+        var r = el.getBoundingClientRect();
+        if (!r.width && !r.height) return false;
+        var vw = window.innerWidth || document.documentElement.clientWidth;
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.bottom > 0 && r.right > 0 && r.top < vh && r.left < vw;
+    }
+
+    function swapEntry(entry, themeName) {
+        if (!entry.instance || entry.instance.isDisposed()) return;
+        try { swapChartTheme(entry, themeName); }
+        catch (e) { console.error('IWACVis: theme swap failed', e); }
+    }
+
+    // Bumped by every pass, so a toggle made while an earlier pass is still
+    // working through its off-screen charts abandons that queue: the new
+    // pass covers every chart again, in the newer theme.
+    var themePass = 0;
+
     ns.applyThemeToCharts = function () {
         if (typeof ns.refreshThemes === 'function') ns.refreshThemes();
         ns.pruneCharts();
+        var pass = ++themePass;
         var themeName = ns.getChartTheme ? ns.getChartTheme() : null;
-        ns._charts.forEach(function (entry) {
-            if (entry.kind === 'echarts') {
-                if (!entry.instance || entry.instance.isDisposed()) return;
-                try {
-                    preserveChartView(entry.instance, function () {
-                        if (themeName && typeof entry.instance.setTheme === 'function') {
-                            entry.instance.setTheme(themeName);
-                        }
-                        // Re-create components under the new theme, even
-                        // when the caller normally uses merged repaints.
-                        ns.forgetShape(entry.instance);
-                        if (typeof entry.render === 'function' && entry.el) {
-                            entry.render(entry.el, entry.instance);
-                        }
-                    });
-                } catch (e) {
-                    console.error('IWACVis: theme swap failed', e);
-                }
-            } else if (entry.kind === 'renderer') {
-                // refreshThemes() above already re-read the CSS variables, so
-                // the repaint picks up the new tokens. Deliberately no
-                // re-layout: a force graph's positions are the reader's.
-                try { entry.render(); }
-                catch (e) { console.error('IWACVis: renderer repaint failed', e); }
-            } else if (entry.kind === 'maplibre') {
-                try {
-                    // Route through P.setMapTheme when shared/maplibre.js
-                    // is loaded — gives us the per-map no-op cache so a
-                    // theme attribute write that didn't actually change
-                    // the value can't blow away custom layers.
-                    var maps = ns.panels;
-                    var mode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
-                    if (maps && typeof maps.setMapTheme === 'function') {
-                        maps.setMapTheme(entry.instance, mode);
-                    } else {
-                        entry.instance.setStyle(ns.getBasemapStyle());
-                    }
-                } catch (e) { console.error('IWACVis: basemap swap failed', e); }
-            }
+        var entries = ns._charts.slice();
+
+        // 1. Canvas renderers first, in registration order. Besides the force
+        //    graphs, two blocks (laicite.js, scary-terms.js) register a
+        //    renderer whose job is to refresh a colour map their charts read
+        //    at render time — it has to have run before any of those charts
+        //    repaint. refreshThemes() above already re-read the CSS
+        //    variables; deliberately no re-layout: a force graph's positions
+        //    are the reader's.
+        entries.forEach(function (entry) {
+            if (entry.kind !== 'renderer') return;
+            try { entry.render(); }
+            catch (e) { console.error('IWACVis: renderer repaint failed', e); }
         });
+
+        // 2. Basemaps: a style swap is asynchronous on MapLibre's side anyway.
+        entries.forEach(function (entry) {
+            if (entry.kind !== 'maplibre') return;
+            try {
+                // Route through P.setMapTheme when shared/maplibre.js
+                // is loaded — gives us the per-map no-op cache so a
+                // theme attribute write that didn't actually change
+                // the value can't blow away custom layers.
+                var maps = ns.panels;
+                var mode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
+                if (maps && typeof maps.setMapTheme === 'function') {
+                    maps.setMapTheme(entry.instance, mode);
+                } else {
+                    entry.instance.setStyle(ns.getBasemapStyle());
+                }
+            } catch (e) { console.error('IWACVis: basemap swap failed', e); }
+        });
+
+        // 3. ECharts: what the reader can see repaints now, in this task; the
+        //    rest one per animation frame, in registration order, so a page
+        //    of twenty charts does not freeze the toggle for the length of
+        //    twenty full rebuilds. (The same stagger the index overview
+        //    uses for its first mount.)
+        var deferred = [];
+        entries.forEach(function (entry) {
+            if (entry.kind !== 'echarts') return;
+            if (inViewport(entry.el)) swapEntry(entry, themeName);
+            else deferred.push(entry);
+        });
+        if (!deferred.length) return;
+        var schedule = typeof window.requestAnimationFrame === 'function'
+            ? function (fn) { window.requestAnimationFrame(fn); }
+            : function (fn) { setTimeout(fn, 16); };
+        (function next() {
+            schedule(function () {
+                if (pass !== themePass) return;
+                var entry = deferred.shift();
+                if (entry) swapEntry(entry, themeName);
+                if (deferred.length) next();
+            });
+        })();
     };
 
     /* ----------------------------------------------------------------- */
