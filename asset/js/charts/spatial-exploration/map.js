@@ -183,54 +183,45 @@
         var adminLevel = 'regions';
         var adminScale = 'quantile';
 
-        var modeLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Map mode'));
-        var modeSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
-        [
-            ['bubbles', P.t('Place bubbles')],
-            ['country', P.t('Country choropleth')],
-            ['admin', P.t('Administrative choropleth')]
-        ].forEach(function (entry) {
-            var opt = P.el('option', null, entry[1]);
-            opt.value = entry[0];
-            modeSelect.appendChild(opt);
-        });
-        modeLabel.appendChild(modeSelect);
-        toolbar.appendChild(modeLabel);
+        // The shared select builder, keeping the toolbar's own skin: the
+        // group takes the label-wrapper class the hand-built <label>s wore,
+        // the select its block layout class.
+        function toolbarSelect(name, label, options, onChange) {
+            var group = P.buildSelectControl({
+                name: 'spatial-' + name,
+                label: label,
+                options: options,
+                groupClass: 'iwac-vis-toolbar__label',
+                labelClass: 'iwac-vis-spatial-toolbar__label',
+                selectClass: 'iwac-vis-spatial-toolbar__select',
+                onChange: onChange
+            });
+            toolbar.appendChild(group);
+            return group;
+        }
 
-        var focusLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Country focus'));
-        var focusSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
-        focusLabel.appendChild(focusSelect);
-        var worldOpt = P.el('option', null, P.t('Whole world'));
-        worldOpt.value = '';
-        focusSelect.appendChild(worldOpt);
-        focusableCountries().forEach(function (c) {
-            var opt = P.el('option', null, c);
-            opt.value = c;
-            focusSelect.appendChild(opt);
-        });
-        focusSelect.addEventListener('change', function () {
-            state.setFocus(focusSelect.value || null);
-        });
-        toolbar.appendChild(focusLabel);
+        var modeGroup = toolbarSelect('mode', P.t('Map mode'), [
+            { value: 'bubbles', label: P.t('Place bubbles') },
+            { value: 'country', label: P.t('Country choropleth') },
+            { value: 'admin', label: P.t('Administrative choropleth') }
+        ], onModeChange);
+        var modeSelect = modeGroup.control;
 
-        var adminLevelLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Admin level'));
-        var adminLevelSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
-        adminLevelLabel.appendChild(adminLevelSelect);
-        toolbar.appendChild(adminLevelLabel);
+        var focusSelect = toolbarSelect('focus', P.t('Country focus'),
+            [{ value: '', label: P.t('Whole world') }].concat(
+                focusableCountries().map(function (c) { return { value: c, label: c }; })),
+            function (value) { state.setFocus(value || null); }).control;
 
-        var adminScaleLabel = P.el('label', 'iwac-vis-toolbar__label', P.t('Scale'));
-        var adminScaleSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
-        [
-            ['quantile', P.t('Quantile')],
-            ['linear', P.t('Linear')],
-            ['sqrt', P.t('Square root')]
-        ].forEach(function (entry) {
-            var opt = P.el('option', null, entry[1]);
-            opt.value = entry[0];
-            adminScaleSelect.appendChild(opt);
-        });
-        adminScaleLabel.appendChild(adminScaleSelect);
-        toolbar.appendChild(adminScaleLabel);
+        // Options filled per country by refreshAdminControls().
+        var adminLevelGroup = toolbarSelect('admin-level', P.t('Admin level'), [], onAdminLevelChange);
+        var adminLevelSelect = adminLevelGroup.control;
+
+        var adminScaleGroup = toolbarSelect('admin-scale', P.t('Scale'), [
+            { value: 'quantile', label: P.t('Quantile') },
+            { value: 'linear', label: P.t('Linear') },
+            { value: 'sqrt', label: P.t('Square root') }
+        ], onAdminScaleChange);
+        var adminScaleSelect = adminScaleGroup.control;
 
         var status = P.el('span', 'iwac-vis-spatial-toolbar__status');
         toolbar.appendChild(status);
@@ -347,21 +338,17 @@
         function refreshAdminControls() {
             var cfg = adminCountryConfig(currentAdminCountry());
             var levels = (cfg && cfg.levels) || [];
-            adminLevelSelect.innerHTML = '';
-            levels.forEach(function (level) {
-                var opt = P.el('option', null, P.t(level === 'prefectures' ? 'Prefectures' : 'Regions'));
-                opt.value = level;
-                adminLevelSelect.appendChild(opt);
-            });
             if (levels.indexOf(adminLevel) === -1) {
                 adminLevel = levels[0] || 'regions';
             }
-            adminLevelSelect.value = adminLevel;
+            adminLevelGroup.setOptions(levels.map(function (level) {
+                return { value: level, label: P.t(level === 'prefectures' ? 'Prefectures' : 'Regions') };
+            }), adminLevel);
             adminLevelSelect.disabled = levels.length <= 1;
 
             var showAdminControls = mode === 'admin';
-            adminLevelLabel.style.display = showAdminControls ? '' : 'none';
-            adminScaleLabel.style.display = showAdminControls ? '' : 'none';
+            adminLevelGroup.style.display = showAdminControls ? '' : 'none';
+            adminScaleGroup.style.display = showAdminControls ? '' : 'none';
             adminScaleSelect.value = adminScale;
         }
 
@@ -587,69 +574,32 @@
         }
 
         // --- Popups -------------------------------------------------------
-        var hoverPopup = null;
-        var hoverId = null;
+        var hover = null;   // P.attachMapHoverPopup's handle, once the map exists
 
-        function hoverNode(place) {
-            var node = P.el('div', 'iwac-vis-map-popup');
-            var header = P.el('div', 'iwac-vis-map-popup__header');
-            header.appendChild(P.el('strong', 'iwac-vis-map-popup__title', place.name));
+        function hoverContent(f) {
+            var place = placeById[f.properties.id];
+            if (!place) return null;
             var subtitle = [];
             if (place.country) subtitle.push(place.country);
             subtitle.push(P.t('mentions_count', { count: place.count }));
-            header.appendChild(P.el('div', 'iwac-vis-map-popup__subtitle', subtitle.join(' · ')));
-            node.appendChild(header);
-
-            if (place.articles && place.articles.length) {
-                var list = P.el('ul', 'iwac-vis-map-popup__list');
-                place.articles.slice(0, HOVER_ITEMS).forEach(function (a) {
-                    var li = P.el('li', 'iwac-vis-map-popup__item');
-                    li.appendChild(P.el('span', 'iwac-vis-map-popup__item-title', a.title));
-                    var metaBits = [];
-                    if (a.publisher) metaBits.push(a.publisher);
-                    if (a.date) metaBits.push(P.formatDate(a.date));
-                    if (metaBits.length) {
-                        li.appendChild(P.el('div', 'iwac-vis-map-popup__meta', metaBits.join(' · ')));
-                    }
-                    list.appendChild(li);
-                });
-                node.appendChild(list);
-                var extra = place.articles.length - HOVER_ITEMS;
-                node.appendChild(P.el('div', 'iwac-vis-map-popup__more',
-                    extra > 0
-                        ? P.t('more_items_click', { count: extra })
-                        : P.t('Click for details')));
-            } else {
-                node.appendChild(P.el('div', 'iwac-vis-map-popup__more', P.t('Click for details')));
-            }
-            return node;
-        }
-
-        function showHover(e) {
-            if (!mapInstance) return;
-            var f = e.features && e.features[0];
-            if (!f) return;
-            var place = placeById[f.properties.id];
-            if (!place) return;
-            if (hoverId !== place.id) {
-                hoverId = place.id;
-                if (!hoverPopup) {
-                    hoverPopup = P.createIwacPopup({
-                        closeButton: false,
-                        closeOnClick: false,
-                        offset: 10
-                    });
-                }
-                hoverPopup
-                    .setLngLat(f.geometry.coordinates.slice())
-                    .setDOMContent(hoverNode(place))
-                    .addTo(mapInstance);
-            }
+            var articles = place.articles || [];
+            var extra = articles.length - HOVER_ITEMS;
+            return {
+                title: place.name,
+                subtitleLines: [subtitle.join(' · ')],
+                // A glance, not the list: the first few titles, unlinked
+                // (no siteBase) and on one page — the pinned popup a click
+                // opens is the one to read and follow.
+                articles: articles.length ? articles.slice(0, HOVER_ITEMS) : undefined,
+                pageSize: HOVER_ITEMS,
+                more: extra > 0
+                    ? P.t('more_items_click', { count: extra })
+                    : P.t('Click for details')
+            };
         }
 
         function hideHover() {
-            hoverId = null;
-            if (hoverPopup) hoverPopup.remove();
+            if (hover) hover.hide();
         }
 
         function pinnedNode(place, articles) {
@@ -723,8 +673,11 @@
         }
         mapInstance = map;
         map.on('click', handleClick);
-        map.on('mousemove', LAYER, showHover);
-        map.on('mouseleave', LAYER, hideHover);
+        hover = P.attachMapHoverPopup(map, {
+            layer: LAYER,
+            key: function (f) { return f.properties.id; },
+            content: hoverContent
+        });
         P.attachFeatureStateHover(map, { layer: LAYER, source: SOURCE });
 
         // --- Choropleth (items per country) -------------------------------
@@ -779,18 +732,18 @@
             updateStatus();
         }
 
-        modeSelect.addEventListener('change', function () {
-            mode = modeSelect.value || 'bubbles';
+        function onModeChange(value) {
+            mode = value || 'bubbles';
             applyMode();
-        });
+        }
 
-        adminLevelSelect.addEventListener('change', function () {
-            adminLevel = adminLevelSelect.value || 'regions';
+        function onAdminLevelChange(value) {
+            adminLevel = value || 'regions';
             renderAdminLayer().then(updateStatus);
-        });
+        }
 
-        adminScaleSelect.addEventListener('change', function () {
-            adminScale = adminScaleSelect.value || 'quantile';
+        function onAdminScaleChange(value) {
+            adminScale = value || 'quantile';
             if (map.getLayer(ADMIN_FILL)) {
                 map.setPaintProperty(
                     ADMIN_FILL,
@@ -799,7 +752,7 @@
                 );
             }
             updateAdminLegend();
-        });
+        }
 
         // --- State reactions -----------------------------------------------
         function updateStatus() {
@@ -904,7 +857,7 @@
                     ],
                     rows: rows.map(function (p) {
                         return [
-                            ctx.siteBase && p.id ? { text: p.name, href: ctx.siteBase + '/item/' + p.id } : p.name,
+                            ctx.siteBase && p.id ? { text: p.name, href: P.itemUrl(ctx.siteBase, p.id) } : p.name,
                             p.country || '',
                             p.count
                         ];

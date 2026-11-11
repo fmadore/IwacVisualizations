@@ -46,12 +46,14 @@
      *     empty and `articles` is provided as `[]`, renders an empty-state line.
      *     Omit the key entirely to render a header-only popup.
      * @param {string} [config.siteBase]     Omeka site base path — required for
-     *     article item links (`siteBase + '/item/' + o_id`)
+     *     article item links (P.itemUrl)
      * @param {number} [config.pageSize=5]   Articles per page
      * @param {string} [config.layout]       'ledger': one line an entry, the
      *     title and a right-aligned `count` ({ o_id, title, count }), for a
      *     ranked list that has to fit without scrolling
      * @param {string} [config.caption]      A small label above the list
+     * @param {string} [config.more]         A closing hint line ("Click for
+     *     details") — the hover read-outs (P.attachMapHoverPopup) end on one
      * @returns {HTMLElement}
      */
     P.buildMapPopup = function (config) {
@@ -93,6 +95,10 @@
             }
         }
 
+        if (config.more) {
+            root.appendChild(P.el('div', 'iwac-vis-map-popup__more', config.more));
+        }
+
         return root;
     };
 
@@ -105,8 +111,6 @@
         var body = P.el('ul', 'iwac-vis-map-popup__list');
         root.appendChild(body);
 
-        var footer = null;
-
         function renderPage() {
             body.innerHTML = '';
             var start = page * pageSize;
@@ -118,7 +122,7 @@
                 if (a.o_id && siteBase) {
                     titleNode = document.createElement('a');
                     titleNode.className = 'iwac-vis-map-popup__item-title';
-                    titleNode.href = siteBase + '/item/' + a.o_id;
+                    titleNode.href = P.itemUrl(siteBase, a.o_id);
                     titleNode.textContent = a.title || '';
                 } else {
                     titleNode = P.el('span', 'iwac-vis-map-popup__item-title', a.title || '');
@@ -147,34 +151,20 @@
 
                 body.appendChild(li);
             });
-
-            if (footer) {
-                footer.label.textContent =
-                    P.t('Page') + ' ' + (page + 1) + ' / ' + totalPages;
-                footer.prev.disabled = page <= 0;
-                footer.next.disabled = page >= totalPages - 1;
-            }
         }
 
+        // The shared pager (pagination.js, in shared-core, so it is always
+        // loaded before this shared-map file). The popup keeps its own
+        // compact skin: `.iwac-vis-map-popup__pagination` in place of the
+        // roomier `.iwac-vis-pagination` a table's pager wears.
         if (totalPages > 1) {
-            var footerRoot = P.el('div', 'iwac-vis-map-popup__pagination');
-            var prev = P.el('button', 'iwac-vis-pagination__btn iwac-vis-pagination__btn--prev', P.t('Previous'));
-            prev.type = 'button';
-            var label = P.el('span', 'iwac-vis-pagination__indicator');
-            var next = P.el('button', 'iwac-vis-pagination__btn iwac-vis-pagination__btn--next', P.t('Next'));
-            next.type = 'button';
-            footerRoot.appendChild(prev);
-            footerRoot.appendChild(label);
-            footerRoot.appendChild(next);
-            root.appendChild(footerRoot);
-            footer = { prev: prev, next: next, label: label };
-
-            prev.addEventListener('click', function () {
-                if (page > 0) { page--; renderPage(); }
+            var pager = P.buildPagination({
+                currentPage: page,
+                totalPages: totalPages,
+                onChange: function (next) { page = next; renderPage(); }
             });
-            next.addEventListener('click', function () {
-                if (page < totalPages - 1) { page++; renderPage(); }
-            });
+            pager.root.className = 'iwac-vis-map-popup__pagination';
+            root.appendChild(pager.root);
         }
 
         renderPage();

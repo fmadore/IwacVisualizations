@@ -169,6 +169,58 @@ test('a reused popup is measured at the requested cap, not at its last width', (
     assert.equal(popup.options.maxWidth, '320px', 'and never more than the cap the caller asked for');
 });
 
+test('the hover read-out is registered once, rebuilt only for a new feature, and hidden off the layer', () => {
+    const P = loadMaplibre();
+    const handlers = {};
+    let layerPresent = true;
+    let hits = [];
+    const map = {
+        on(type, fn) { (handlers[type] ||= []).push(fn); return this; },
+        getLayer: (id) => (layerPresent && id === 'dots' ? { id } : null),
+        queryRenderedFeatures: (point, opts) => {
+            assert.deepEqual(Array.from(opts.layers), ['dots']);
+            return hits;
+        },
+    };
+    const built = [];
+    P.buildMapPopup = (cfg) => ({ nodeType: 1, cfg });
+    const hover = P.attachMapHoverPopup(map, {
+        layer: 'dots',
+        key: (f) => f.properties.id,
+        content: (f) => { built.push(f.properties.id); return { title: f.properties.name }; },
+    });
+    // Map-level listeners, not per-style ones: a theme swap cannot stack them.
+    assert.equal(handlers.mousemove.length, 1);
+    assert.equal(handlers.mouseleave.length, 1);
+    const move = (e) => handlers.mousemove[0](Object.assign({ point: { x: 1, y: 1 }, lngLat: [9, 9] }, e));
+
+    const feature = (id, name) => ({ properties: { id, name }, geometry: { type: 'Point', coordinates: [id, id] } });
+    hits = [feature(1, 'Lomé')];
+    move();
+    move();
+    assert.deepEqual(built, [1], 'moving within one bubble does not rebuild the read-out');
+
+    hits = [feature(2, 'Kara')];
+    move();
+    assert.deepEqual(built, [1, 2]);
+
+    hits = [];
+    move();
+    hits = [feature(2, 'Kara')];
+    move();
+    assert.deepEqual(built, [1, 2, 2], 'leaving and re-entering shows it again');
+
+    layerPresent = false;   // mid theme swap: the layer is being rebuilt
+    move();
+    layerPresent = true;
+    move();
+    assert.deepEqual(built, [1, 2, 2, 2], 'a missing layer hides the read-out instead of throwing');
+
+    hover.hide();
+    move();
+    assert.deepEqual(built, [1, 2, 2, 2, 2], 'hide() forgets the feature, so the next move rebuilds');
+});
+
 test('the map host is a size container and the popup bounds are map-relative', () => {
     // The guarantees the deleted JS enforced, now expressed once in CSS:
     // half the map's height minus MapLibre's 10px tip (so one of the

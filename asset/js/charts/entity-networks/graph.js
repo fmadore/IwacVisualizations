@@ -71,8 +71,7 @@
         var weightMin = 0;
         var selectedIndex = null;
 
-        var hoverPopup = null;
-        var hoverId = null;
+        var hover = null;         // P.attachMapHoverPopup's handle, once the map exists
 
         /* --------------------------------------------------------------- */
         /*  Colors — resolved at every (re)build so theme swaps flow in     */
@@ -393,10 +392,9 @@
         /*  Hover popup                                                     */
         /* --------------------------------------------------------------- */
 
-        function hoverNode(node) {
-            var root = P.el('div', 'iwac-vis-map-popup');
-            var header = P.el('div', 'iwac-vis-map-popup__header');
-            header.appendChild(P.el('strong', 'iwac-vis-map-popup__title', node.label));
+        function hoverContent(f) {
+            var node = data && data.nodes[Number(f.properties.i)];
+            if (!node) return null;
             var bits = [];
             if (data.types && node.type != null && data.types[node.type]) {
                 bits.push(P.t('entity_type_' + data.types[node.type]));
@@ -404,37 +402,15 @@
             // Numbers, not formatNumber() strings — see details.js.
             bits.push(P.t('items_count', { count: node.count }));
             bits.push(P.t('links_count', { count: node.degree }));
-            header.appendChild(P.el('div', 'iwac-vis-map-popup__subtitle', bits.join(' · ')));
-            root.appendChild(header);
-            root.appendChild(P.el('div', 'iwac-vis-map-popup__more', P.t('Click for details')));
-            return root;
-        }
-
-        function showHover(e) {
-            var f = e.features && e.features[0];
-            if (!f) return;
-            var index = Number(f.properties.i);
-            var node = data && data.nodes[index];
-            if (!node) return;
-            if (hoverId !== index) {
-                hoverId = index;
-                if (!hoverPopup) {
-                    hoverPopup = P.createIwacPopup({
-                        closeButton: false,
-                        closeOnClick: false,
-                        offset: 12
-                    });
-                }
-                hoverPopup
-                    .setLngLat([node.lng, node.lat])
-                    .setDOMContent(hoverNode(node))
-                    .addTo(map);
-            }
+            return {
+                title: node.label,
+                subtitleLines: [bits.join(' · ')],
+                more: P.t('Click for details')
+            };
         }
 
         function hideHover() {
-            hoverId = null;
-            if (hoverPopup) hoverPopup.remove();
+            if (hover) hover.hide();
         }
 
         /* --------------------------------------------------------------- */
@@ -487,8 +463,16 @@
                 select(null);
             }
         });
-        map.on('mousemove', L_NODES, showHover);
-        map.on('mouseleave', L_NODES, hideHover);
+        hover = P.attachMapHoverPopup(map, {
+            layer: L_NODES,
+            key: function (f) { return Number(f.properties.i); },
+            content: hoverContent,
+            lngLat: function (f) {
+                var node = data.nodes[Number(f.properties.i)];
+                return [node.lng, node.lat];
+            },
+            offset: 12
+        });
         P.attachFeatureStateHover(map, { layer: L_NODES, source: SRC_NODES });
 
         /* --------------------------------------------------------------- */

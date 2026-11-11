@@ -502,6 +502,79 @@
     };
 
     /**
+     * A read-out popup that follows the hovered feature of one layer.
+     *
+     * The entity network and the spatial explorer each carried the same
+     * thirty lines: a lazily created popup with no close button, a
+     * remembered id so moving within one bubble does not rebuild the DOM on
+     * every mousemove, and a hand-assembled `.iwac-vis-map-popup` header.
+     * This is that, with the body from P.buildMapPopup.
+     *
+     * Registered ONCE on the map, never inside onStyleReady, for the same
+     * reason as P.attachMapClickPopup: hits are resolved against the layer
+     * as it exists at event time, so the handler survives a theme swap and
+     * idles while the layer is being rebuilt.
+     *
+     * @param {maplibregl.Map} map
+     * @param {Object} cfg
+     *   layer — the layer id to read
+     *   key(feature) — the hovered thing's identity; the popup is rebuilt
+     *     only when it changes (default: the feature's id)
+     *   content(feature, e) — a P.buildMapPopup config, a DOM node, or null
+     *     for nothing to show
+     *   lngLat(feature, e) — the anchor (default: a point feature's own
+     *     coordinates, else the pointer)
+     *   offset — popup offset in px (default 10)
+     * @returns {{hide: function()}} closes the read-out (a pinned popup
+     *   opening, a filter change, a programmatic focus)
+     */
+    P.attachMapHoverPopup = function (map, cfg) {
+        var popup = null;
+        var current = null;
+
+        function hide() {
+            current = null;
+            if (popup) popup.remove();
+        }
+
+        if (!map || !cfg) return { hide: hide };
+
+        function keyOf(feature) {
+            return cfg.key ? cfg.key(feature) : feature.id;
+        }
+
+        map.on('mousemove', function (e) {
+            if (!map.getLayer(cfg.layer)) { hide(); return; }
+            var hits = map.queryRenderedFeatures(e.point, { layers: [cfg.layer] });
+            var feature = hits && hits[0];
+            if (!feature) { hide(); return; }
+            var key = keyOf(feature);
+            if (key != null && key === current) return;
+            var content = cfg.content(feature, e);
+            if (!content) { hide(); return; }
+            if (!popup) {
+                popup = P.createIwacPopup({
+                    closeButton: false,
+                    closeOnClick: false,
+                    offset: cfg.offset != null ? cfg.offset : 10
+                });
+                if (!popup) return;
+            }
+            current = key;
+            var at = cfg.lngLat ? cfg.lngLat(feature, e)
+                : (feature.geometry && feature.geometry.type === 'Point'
+                    ? feature.geometry.coordinates.slice() : e.lngLat);
+            popup
+                .setLngLat(at)
+                .setDOMContent(content.nodeType ? content : P.buildMapPopup(content))
+                .addTo(map);
+        });
+        map.on('mouseleave', hide);
+
+        return { hide: hide };
+    };
+
+    /**
      * @param {HTMLElement|string} container  Map container (element or id)
      * @param {Object} config
      * @param {Array<number>} [config.center=[0,0]]  [lng, lat]

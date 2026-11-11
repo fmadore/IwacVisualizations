@@ -18,14 +18,6 @@
     var P = ns.panels;
     var CN = ns.compareNewspapers = ns.compareNewspapers || {};
 
-    function hexToRgb(hex) {
-        // Accepts #rgb or #rrggbb — returns [r, g, b] for use in rgba() strings.
-        var h = String(hex || '').replace('#', '');
-        if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
-        var n = parseInt(h, 16);
-        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-    }
-
     function buildMap(dataA, dataB, ctx) {
         // Filter out each corpus's own name as a spatial tag — country-
         // scope corpora have their own country tagged on thousands of
@@ -79,7 +71,15 @@
         // point. (This used to `return null` on that check, which meant the
         // panel simply vanished on any page fast enough to render before the
         // import settled.)
-        P.withMaplibre(mapHost, function () { attachMap(); });
+        //
+        // A corpus switch before the import lands discards this panel
+        // (ns.disposeWithin + innerHTML = ''), and disposal only finds maps
+        // that exist: one built afterwards into the detached host would
+        // never be released. So a host that has left the page builds nothing.
+        P.withMaplibre(mapHost, function () {
+            if (!mapHost.isConnected) return;
+            attachMap();
+        });
 
         // Both corpora's places as rows: the toolbar's table and CSV, which
         // were offered and never had anything to show.
@@ -119,66 +119,35 @@
             // both differ between light and dark, and a theme swap rebuilds
             // the layers (onStyleReady) and the choropleth (which keeps the
             // paint objects below by reference) against the new values.
+            // Normalised for MapLibre — either may arrive as oklab()/oklch(),
+            // which the style validator rejects.
             function sideColors() {
                 var cc = CN.compareColors();
-                // Normalize for MapLibre — A may be oklab()/oklch(); the
-                // style validator only accepts Color-3 forms.
-                var a = P.normalizeColorForMapLibre
-                    ? P.normalizeColorForMapLibre(cc.a)
-                    : cc.a;
-                return { a: a, b: cc.b };
-            }
-            // Parse [r,g,b] bytes from either hex or rgb()/rgba() — colorA
-            // is rgb() after normalization, colorB stays hex.
-            function colorToRgb(c) {
-                var m = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(c);
-                if (m) return [Math.round(+m[1]), Math.round(+m[2]), Math.round(+m[3])];
-                return hexToRgb(c);
-            }
-            function rgba(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
-
-            function toGeoJSON(pts) {
                 return {
-                    type: 'FeatureCollection',
-                    features: pts.map(function (p) {
-                        return {
-                            type: 'Feature',
-                            geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
-                            properties: {
-                                name: p.name,
-                                count: p.count,
-                                o_id: p.o_id || null
-                            }
-                        };
-                    })
+                    a: P.normalizeColorForMapLibre(cc.a),
+                    b: P.normalizeColorForMapLibre(cc.b)
                 };
             }
-            var geoA = toGeoJSON(aPts);
-            var geoB = toGeoJSON(bPts);
+
+            function features(pts) {
+                return P.buildCountFeatures(pts, {
+                    minCount: 0,
+                    toProps: function (p) {
+                        return { name: p.name, count: p.count || 0, o_id: p.o_id || null };
+                    }
+                });
+            }
+            var geoA = features(aPts);
+            var geoB = features(bPts);
 
             // Shared max count across both sides so the two heatmaps + bubble
             // layers use a single weight scale — direct visual comparison.
-            var maxCount = 1;
-            aPts.concat(bPts).forEach(function (p) {
-                if (p.count > maxCount) maxCount = p.count;
-            });
-
-            // Square-root radius scaling keeps the long tail (a country
-            // centroid with 2000 mentions) from visually destroying everything
-            // else. Under linear scaling a 2000-mention bubble was ~200× bigger
-            // than a 10-mention one; sqrt makes it ~14×.
+            var maxCount = Math.max(geoA.max, geoB.max);
             var sqrtMax = Math.sqrt(maxCount);
-            function bubbleRadius() {
-                return [
-                    'interpolate', ['linear'],
-                    ['sqrt', ['max', ['get', 'count'], 1]],
-                    1, 3,
-                    sqrtMax, 16
-                ];
-            }
 
-            // Heatmap weight curve — also sqrt-squashed so the top handful of
-            // places don't saturate the heatmap and wash out the rest.
+            // Heatmap weight curve — sqrt-squashed, like the bubble radius
+            // (P.countRadius), so the top handful of places don't saturate
+            // the heatmap and wash out the rest.
             function heatWeight() {
                 return [
                     'interpolate', ['linear'],
@@ -188,14 +157,14 @@
                 ];
             }
 
-            function heatColor(rgb) {
+            function heatColor(color) {
                 return [
                     'interpolate', ['linear'], ['heatmap-density'],
-                    0,   rgba(rgb, 0),
-                    0.2, rgba(rgb, 0.25),
-                    0.5, rgba(rgb, 0.5),
-                    0.8, rgba(rgb, 0.75),
-                    1,   rgba(rgb, 0.9)
+                    0,   ns.withAlpha(color, 0),
+                    0.2, ns.withAlpha(color, 0.25),
+                    0.5, ns.withAlpha(color, 0.5),
+                    0.8, ns.withAlpha(color, 0.75),
+                    1,   ns.withAlpha(color, 0.9)
                 ];
             }
 
@@ -209,19 +178,18 @@
                 ];
             }
 
-            function addSideLayers(m, sideKey, sourceData, rgb, solidColor) {
+            var CIRCLE_LAYERS = ['compare-a-circles', 'compare-b-circles'];
+
+            function addSideLayers(m, sideKey, sourceData, color) {
                 var srcId = 'compare-' + sideKey;
                 var heatId = srcId + '-heat';
                 var circId = srcId + '-circles';
                 // Guarded, like every other consumer: `P.carryOwnSources`
                 // keeps the module's GeoJSON sources across a theme swap, so
-                // an unguarded addSource would throw on the second style —
-                // the M17 failure, in the one file that had never needed a
-                // guard because setStyle used to wipe everything.
+                // an unguarded addSource would throw on the second style.
+                // `generateId` keys the feature-state hover.
                 if (!m.getSource(srcId)) {
-                    m.addSource(srcId, { type: 'geojson', data: sourceData });
-                } else {
-                    m.getSource(srcId).setData(sourceData);
+                    m.addSource(srcId, { type: 'geojson', data: sourceData, generateId: true });
                 }
                 if (m.getLayer(heatId)) m.removeLayer(heatId);
                 if (m.getLayer(circId)) m.removeLayer(circId);
@@ -235,7 +203,7 @@
                             'interpolate', ['linear'], ['zoom'],
                             0, 0.8, 8, 2
                         ],
-                        'heatmap-color': heatColor(rgb),
+                        'heatmap-color': heatColor(color),
                         'heatmap-radius': heatRadius(),
                         // Fade the heatmap out at higher zoom so the bubble
                         // layer (which is clickable and exact) takes over.
@@ -247,46 +215,19 @@
                         ]
                     }
                 });
-                m.addLayer({
+                // The shared bubble vocabulary, in the corpus colour. Lighter
+                // than a single-corpus map's resting 0.75: two corpora overlap
+                // here, over their own heatmaps, and both have to stay legible.
+                m.addLayer(P.bubbleLayer({
                     id: circId,
-                    type: 'circle',
                     source: srcId,
-                    paint: {
-                        'circle-radius': bubbleRadius(),
-                        'circle-color': solidColor,
-                        'circle-opacity': [
-                            'interpolate', ['linear'], ['zoom'],
-                            0, 0.25,
-                            5, 0.55,
-                            8, 0.75
-                        ],
-                        'circle-stroke-color': solidColor,
-                        'circle-stroke-width': 1,
-                        'circle-stroke-opacity': 0.9
-                    }
-                });
-                return circId;
-            }
-
-            // MapLibre reads the container size at init time and only
-            // re-measures on window resize. When the block's layout hasn't
-            // settled yet (or the map host isn't attached to the DOM),
-            // MapLibre falls back to the default 400x300 canvas and never
-            // grows to fill its flex panel. A ResizeObserver on the host
-            // picks up the first real layout pass and every subsequent
-            // container-size change (window resize, flex reflow, etc.),
-            // firing map.resize() each time.
-            var _mapRef = null;
-            if (typeof ResizeObserver !== 'undefined') {
-                var ro = new ResizeObserver(function () {
-                    if (_mapRef && typeof _mapRef.resize === 'function') {
-                        try { _mapRef.resize(); } catch (e) { /* map removed mid-observe */ }
-                    }
-                });
-                ro.observe(mapHost);
-                // Stash on the element so disposeCharts() can tear it down
-                // when the user swaps corpora.
-                mapHost._iwacResizeObserver = ro;
+                    sortKey: 'count',
+                    radius: P.countRadius('count', maxCount, 2, 16),
+                    color: color,
+                    stroke: color,
+                    opacity: [0.55, 0.9],
+                    strokeWidth: [1, 2]
+                }));
             }
 
             var map = P.createIwacMap(mapHost, {
@@ -299,58 +240,36 @@
                 // far for the primary region of interest.
                 center: [0, 10],
                 zoom: 3.5,
+                // No ResizeObserver of our own: MapLibre (trackResize, on by
+                // default) observes its container and resizes itself when
+                // the panel's layout settles or reflows.
                 onStyleReady: function (m) {
-                    // Rebuilt on every style load (setStyle wipes them); the
-                    // click / cursor handlers below read this list live, so
-                    // they follow the rebuild without being re-registered.
                     var sc = sideColors();
-                    circleLayers = [
-                        addSideLayers(m, 'a', geoA, colorToRgb(sc.a), sc.a),
-                        addSideLayers(m, 'b', geoB, colorToRgb(sc.b), sc.b)
-                    ];
-
-                    // Belt-and-suspenders: the container may have grown to
-                    // its real size between createIwacMap() and now.
-                    m.resize();
+                    addSideLayers(m, 'a', geoA.collection, sc.a);
+                    addSideLayers(m, 'b', geoB.collection, sc.b);
                 }
             });
+            if (!map) return;
 
-            _mapRef = map;
-
-            // Click + cursor wiring — ONCE per map instance, OUTSIDE
-            // onStyleReady. Delegated listeners live on the Map, not on the
-            // style, so registering them inside the style-load callback
-            // stacked six more on every theme toggle: after N toggles one
-            // click opened N popups. Map-level events filtered through the
-            // live layer list (the pattern places-map.js documents) survive
-            // the swap and cost nothing while the layers are being rebuilt.
-            var circleLayers = [];
-            function liveCircleLayers() {
-                return circleLayers.filter(function (id) { return id && map.getLayer(id); });
-            }
-            map.on('click', function (e) {
-                var layers = liveCircleLayers();
-                if (!layers.length) return;
-                var hits = map.queryRenderedFeatures(e.point, { layers: layers });
-                var f = hits && hits[0];
-                if (!f) return;
-                var oid = f.properties.o_id;
-                P.createIwacPopup()
-                    .setLngLat(e.lngLat)
-                    .setDOMContent(P.buildMapPopup({
+            // Hover + click — ONCE per map instance, OUTSIDE onStyleReady:
+            // both resolve the layers live, so they follow the rebuild on a
+            // theme swap without stacking a copy per toggle.
+            P.attachFeatureStateHover(map, [
+                { layer: 'compare-b-circles', source: 'compare-b' },
+                { layer: 'compare-a-circles', source: 'compare-a' }
+            ]);
+            P.attachMapClickPopup(map, {
+                layers: CIRCLE_LAYERS,
+                content: function (f) {
+                    var oid = f.properties.o_id;
+                    return {
                         title: f.properties.name || '',
                         // The title is the link to the entity, as on every
                         // other bubble map.
                         titleHref: oid && ctx && ctx.siteBase ? P.itemUrl(ctx.siteBase, oid) : null,
                         subtitleLines: [P.formatNumber(f.properties.count || 0) + ' ' + P.t('mentions')]
-                    }))
-                    .addTo(map);
-            });
-            map.on('mousemove', function (e) {
-                var layers = liveCircleLayers();
-                var over = layers.length
-                    && map.queryRenderedFeatures(e.point, { layers: layers }).length > 0;
-                map.getCanvas().style.cursor = over ? 'pointer' : '';
+                    };
+                }
             });
 
             // Choropleth selector — 4-way segmented control replaces the
@@ -376,7 +295,7 @@
             // carried the first country whose press mentioned it, which
             // filed a Paris tag under Côte d'Ivoire. A null place has no
             // area to shade, so it stays a bubble and adds to no country.
-            if (map && typeof P.attachChoroplethToggle === 'function') {
+            if (typeof P.attachChoroplethToggle === 'function') {
                 var aCounts = {};
                 var bCounts = {};
                 aPts.forEach(function (p) {
