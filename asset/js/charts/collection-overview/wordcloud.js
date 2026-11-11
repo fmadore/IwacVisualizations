@@ -20,10 +20,7 @@
         var basePath = ctx && ctx.basePath ? ctx.basePath : '';
         var url = basePath + '/files/iwac-visualizations/collection-wordcloud.json';
 
-        var loading = P.el('div', 'iwac-vis-loading');
-        loading.appendChild(P.el('div', 'iwac-vis-spinner'));
-        loading.appendChild(P.el('span', null, P.t('Loading')));
-        panelEl.chart.appendChild(loading);
+        panelEl.chart.appendChild(P.buildLoadingState());
 
         P.lazyInit(panelEl.panel, function () {
             P.fetchJSON(url)

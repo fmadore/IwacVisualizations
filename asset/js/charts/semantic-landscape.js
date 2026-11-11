@@ -123,8 +123,12 @@
      * the map's place names, useful whichever coloring is active.
      * Publications bundles carry no per-point topic array, so this
      * returns null and the landscape stays unlabelled there.
+     *
+     * Data only — the label positions. They depend on nothing a repaint
+     * changes, so `cachedLayout` computes them once per bundle and
+     * `labelSeries` applies the two colour tokens at option time.
      */
-    function buildLabelSeries(data) {
+    function buildLabelPoints(data) {
         var pts = data.points || {};
         var topics = data.topics || [];
         if (!pts.topic || !topics.length) return null;
@@ -154,8 +158,12 @@
             if (!name) return;
             labelPoints.push({ value: [mx, my], name: name });
         });
-        if (!labelPoints.length) return null;
+        return labelPoints.length ? labelPoints : null;
+    }
 
+    /** The silent label series over `labelPoints`, in the live theme. */
+    function labelSeries(labelPoints) {
+        if (!labelPoints) return null;
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         return {
             name: '__topic_labels__',
@@ -179,12 +187,34 @@
         };
     }
 
-    function buildOption(data, facet, siteBase) {
+    /**
+     * The data-only parts of the option, computed once per bundle: the
+     * per-facet buckets (built on a facet's first visit) and the cluster
+     * label positions. A facet click, a theme toggle or a compact flip
+     * rebuilds the option from these instead of re-bucketing ~10k points.
+     * Neither is mutated downstream (C.landscape only reads them).
+     */
+    function cachedLayout(data) {
+        var groups = {};
+        var labels;
+        return {
+            groups: function (facet) {
+                if (!groups[facet]) groups[facet] = buildGroups(data, facet);
+                return groups[facet];
+            },
+            labels: function () {
+                if (labels === undefined) labels = buildLabelPoints(data);
+                return labels;
+            }
+        };
+    }
+
+    function buildOption(data, layout, facet, siteBase) {
         var pts = data.points;
         var topics = data.topics || [];
         var countries = data.countries || [];
 
-        return C.landscape(pts, buildGroups(data, facet), {
+        return C.landscape(pts, layout.groups(facet), {
             siteBase: siteBase,
             // Ten thousand points: small and translucent. NOT progressive —
             // ECharts compares `progressiveThreshold` against ONE SERIES'
@@ -209,7 +239,7 @@
                 if (t >= 0 && topics[t]) bits.push(topics[t].label);
                 return bits;
             },
-            extraSeries: [buildLabelSeries(data)]
+            extraSeries: [labelSeries(layout.labels())]
         });
     }
 
@@ -218,6 +248,7 @@
     function render(container, data, ctx) {
         var cfg = VARIANTS[variantFor(container)];
         var siteBase = ctx.siteBase;
+        var layout = cachedLayout(data);
         container.innerHTML = '';
 
         var root = P.el('div', 'iwac-vis-overview-root iwac-vis-landscape-root');
@@ -257,14 +288,14 @@
                 if (cfg.facets.indexOf(f) === -1) f = cfg.facets[0];
                 state.facet = f;
                 if (chart && !chart.isDisposed()) {
-                    chart.setOption(buildOption(data, state.facet, siteBase), true);
+                    chart.setOption(buildOption(data, layout, state.facet, siteBase), true);
                 }
             }
         });
         panel.panel.insertBefore(facetBar.root, panel.chart);
 
         var chart = ns.registerChart(panel.chart, function (el, instance) {
-            instance.setOption(buildOption(data, state.facet, siteBase), true);
+            instance.setOption(buildOption(data, layout, state.facet, siteBase), true);
         });
 
         P.navigateOnClick(chart, siteBase, function (params) {

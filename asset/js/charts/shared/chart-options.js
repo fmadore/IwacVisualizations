@@ -537,4 +537,101 @@
         });
         return out;
     };
+
+    /* ----------------------------------------------------------------- */
+    /*  Topics over time — the stacked-area river                         */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Bands a topic river draws before the rest fold into "Other topics".
+     * Past a dozen the stack stops being readable and the legend wraps
+     * over the plot. Shared by the Topic Explorer and the Periodicals
+     * Overview so the two rivers fold at the same place.
+     */
+    C.RIVER_TOP = 12;
+
+    /**
+     * Fold a river's series past `C.RIVER_TOP` into one "Other topics" band
+     * (summed per year, `topicId: null`) rather than dropping the tail.
+     *
+     * @param {Array<{topicId: *, name: string, values: number[]}>} defs  ranked
+     * @param {number} yearCount
+     * @returns {Array} `defs` itself when it already fits
+     */
+    C.foldTopicTail = function (defs, yearCount) {
+        if (defs.length <= C.RIVER_TOP) return defs;
+        var kept = defs.slice(0, C.RIVER_TOP);
+        var other = new Array(yearCount);
+        for (var i = 0; i < yearCount; i++) other[i] = 0;
+        defs.slice(C.RIVER_TOP).forEach(function (d) {
+            d.values.forEach(function (v, j) { other[j] += v; });
+        });
+        kept.push({ topicId: null, name: t('topic_other'), values: other });
+        return kept;
+    };
+
+    /**
+     * Topics over time: one stacked area band per topic def, years on x,
+     * percent on y. The axis stays at `max` (100 by default) on purpose: in
+     * a probability-weighted river the headroom above the stack is the
+     * mass the data does not carry, and rescaling would hide it.
+     *
+     * @param {Object} opts
+     * @param {string[]} opts.years
+     * @param {Array<{name: string, values: number[]}>} opts.defs  see foldTopicTail
+     * @param {function(Object, number): number} opts.plot  def, year index → percent
+     * @param {Object} opts.legend  the ECharts legend
+     * @param {number} [opts.max=100]
+     * @param {function(Object, number): string} [opts.rowSuffix]  appended to
+     *   a tooltip row (def, year index)
+     * @param {function(number): string} [opts.footer]  tooltip footer per year
+     */
+    C.topicRiver = function (opts) {
+        var defs = opts.defs;
+        var rowSuffix = opts.rowSuffix || function () { return ''; };
+        return {
+            grid: C._grid({ left: 48, top: 40, bottom: 56 }),
+            legend: opts.legend,
+            tooltip: {
+                trigger: 'axis',
+                formatter: C.sortedAxisTooltip({
+                    skip: function (p, i) {
+                        var def = defs[p.seriesIndex];
+                        return !def || !def.values[i];
+                    },
+                    row: function (p, i) {
+                        var def = defs[p.seriesIndex];
+                        return p.marker + ' ' + esc(p.seriesName) + ' — '
+                            + P.formatPercent(p.value, 1) + rowSuffix(def, i);
+                    },
+                    footer: opts.footer
+                })
+            },
+            xAxis: {
+                type: 'category',
+                data: opts.years,
+                boundaryGap: false,
+                name: t('Year')
+            },
+            yAxis: {
+                type: 'value',
+                min: 0,
+                max: opts.max != null ? opts.max : 100,
+                axisLabel: C._percentAxisLabel()
+            },
+            dataZoom: C._dataZoom(opts.years.length),
+            series: defs.map(function (d) {
+                return {
+                    name: d.name,
+                    type: 'line',
+                    stack: 'share',
+                    areaStyle: { opacity: 0.85 },
+                    lineStyle: { width: 0.5 },
+                    symbol: 'none',
+                    emphasis: { focus: 'series' },
+                    data: d.values.map(function (_v, i) { return opts.plot(d, i); })
+                };
+            })
+        };
+    };
 })();
