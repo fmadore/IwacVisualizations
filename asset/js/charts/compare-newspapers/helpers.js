@@ -1,11 +1,11 @@
 /**
  * IWAC Visualizations — Compare Newspapers block: shared helpers.
  *
- * Split out of compare-newspapers.js. Carries the two bits of state
- * shared across panel modules: the corpus side-color resolver (used by
- * the timeline, top-subjects, map, sentiment, and newspapers panels)
- * and the unique-id counter (used by the picker and the sentiment
- * toolbar). Hangs off IWACVis.compareNewspapers; must load before
+ * Split out of compare-newspapers.js. Carries what the panel modules
+ * share: the corpus side-color resolver (used by the timeline,
+ * top-subjects, map, sentiment, and newspapers panels), the unique-id
+ * counter (the picker's type-switch label) and the labelled-select
+ * builder (the picker and the sentiment toolbar). Hangs off IWACVis.compareNewspapers; must load before
  * every other compare-newspapers/ module and the orchestrator.
  */
 (function () {
@@ -16,6 +16,7 @@
         console.warn('IWACVis compare-newspapers/helpers: missing panels — check script load order');
         return;
     }
+    var P = ns.panels;
     var CN = ns.compareNewspapers = ns.compareNewspapers || {};
 
     /* ----------------------------------------------------------------- */
@@ -51,17 +52,34 @@
         return { a: tokens.primary, b: b };
     }
 
-    // One counter per block instance isn't worth the plumbing — a module-
-    // level counter guarantees each select on the page gets a unique id,
-    // even if two compare-newspapers blocks render side by side. Shared
-    // here because both the picker and the sentiment toolbar draw from
-    // the same sequence.
+    // A module-level counter keeps the type switch's label id unique even
+    // when two compare-newspapers blocks render side by side. (The selects
+    // mint their own ids in P.buildSelectControl.)
     var _uid = 0;
 
     function nextUid() {
         return ++_uid;
     }
 
+    /**
+     * A labelled select through the shared P.buildSelectControl — the
+     * `data-iwac-control` handle, the label/id wiring and the shared
+     * `.iwac-vis-control` skin — with the block's own label/row classes.
+     * The label is a heading-style run-in here (uppercase in the sentiment
+     * toolbar, beside the colon-less "Type" in the picker), so the colon the
+     * builder appends is dropped.
+     *
+     * @param {Object} cfg  P.buildSelectControl's config
+     * @returns {HTMLElement} the group, with `.control` and `.setOptions`
+     */
+    function buildSelect(cfg) {
+        var group = P.buildSelectControl(cfg);
+        var label = group.querySelector('label');
+        if (label) label.textContent = cfg.label;
+        return group;
+    }
+
     CN.compareColors = compareColors;
     CN.nextUid = nextUid;
+    CN.buildSelect = buildSelect;
 })();

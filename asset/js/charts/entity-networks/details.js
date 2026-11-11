@@ -57,7 +57,7 @@
             if (siteBase && node.id) {
                 var link = document.createElement('a');
                 link.className = 'iwac-vis-networks-details__title';
-                link.href = siteBase + '/item/' + node.id;
+                link.href = P.itemUrl(siteBase, node.id);
                 link.textContent = node.label;
                 header.appendChild(link);
             } else {

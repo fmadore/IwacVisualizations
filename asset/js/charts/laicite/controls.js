@@ -539,13 +539,9 @@
             input.value = state.kwicQuery || '';
             input.setAttribute('aria-label', P.t('laicite.concordance_search'));
             input.setAttribute('data-iwac-control', 'laicite-kwic-query');
-            var timer = null;
-            input.addEventListener('input', function () {
-                if (timer) window.clearTimeout(timer);
-                timer = window.setTimeout(function () {
-                    store.patch({ kwicQuery: input.value });
-                }, 200);
-            });
+            input.addEventListener('input', P.debounce(function () {
+                store.patch({ kwicQuery: input.value });
+            }, 200));
             searchWrap.appendChild(input);
             slot.appendChild(searchWrap);
 

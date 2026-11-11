@@ -56,36 +56,31 @@
 
         // Toolbar — axis + model picker
         var toolbar = P.el('div', 'iwac-vis-compare-sentiment__toolbar');
-        var axisLabel = P.el('label', null, P.t('Axis'));
-        axisLabel.htmlFor = 'iwac-cmp-sent-axis-' + CN.nextUid();
-        // `.iwac-vis-control` is the shared control skin (padding, surface,
-        // radius, focus ring) from iwac-core.css. These two were the last
-        // selects in the module rendering as the browser's default (S19).
-        var axisSelect = P.el('select', 'iwac-vis-control');
-        axisSelect.id = axisLabel.htmlFor;
-        [
-            { key: 'polarite',     label: P.t('Polarity') },
-            { key: 'centralite',   label: P.t('Centrality') },
-            { key: 'subjectivite', label: P.t('Subjectivity') }
-        ].forEach(function (o) {
-            var opt = P.el('option', null, o.label);
-            opt.value = o.key;
-            axisSelect.appendChild(opt);
+        // Shared selects: the `.iwac-vis-control` skin, label wiring and a
+        // stable `data-iwac-control` handle. These two were the last selects
+        // in the module rendering as the browser's default (S19).
+        var axisSelect = CN.buildSelect({
+            label: P.t('Axis'),
+            name: 'cmp-sent-axis',
+            idPrefix: 'iwac-cmp-sent-axis-',
+            options: [
+                { value: 'polarite',     label: P.t('Polarity') },
+                { value: 'centralite',   label: P.t('Centrality') },
+                { value: 'subjectivite', label: P.t('Subjectivity') }
+            ],
+            onChange: rerenderAll
+        });
+        var modelSelect = CN.buildSelect({
+            label: P.t('Model'),
+            name: 'cmp-sent-model',
+            idPrefix: 'iwac-cmp-sent-model-',
+            options: sentimentModels.map(function (key) {
+                return { value: key, label: P.sentimentModelLabel(key) };
+            }),
+            onChange: rerenderAll
         });
 
-        var modelLabel = P.el('label', null, P.t('Model'));
-        modelLabel.htmlFor = 'iwac-cmp-sent-model-' + CN.nextUid();
-        var modelSelect = P.el('select', 'iwac-vis-control');
-        modelSelect.id = modelLabel.htmlFor;
-        sentimentModels.forEach(function (key) {
-            var opt = P.el('option', null, P.sentimentModelLabel(key));
-            opt.value = key;
-            modelSelect.appendChild(opt);
-        });
-
-        toolbar.appendChild(axisLabel);
         toolbar.appendChild(axisSelect);
-        toolbar.appendChild(modelLabel);
         toolbar.appendChild(modelSelect);
         panel.appendChild(toolbar);
 
@@ -114,8 +109,8 @@
 
         function renderSentiment(instance, data, color) {
             if (!instance || instance.isDisposed()) return;
-            var axis = axisSelect.value;     // polarite | centralite
-            var model = modelSelect.value;   // one of SENTIMENT_MODELS[].key
+            var axis = axisSelect.control.value;     // polarite | centralite
+            var model = modelSelect.control.value;   // one of SENTIMENT_MODELS[].key
             var entries = (((data.sentiment || {}).models || {})[model] || {})[axis] || [];
             if (!entries.length) {
                 instance.setOption(P.emptyChartOption('Not rated'), true);
@@ -168,8 +163,6 @@
                 if (live) renderSentiment(live, s.data, s.color);
             });
         }
-        axisSelect.addEventListener('change', rerenderAll);
-        modelSelect.addEventListener('change', rerenderAll);
 
         return panel;
     }

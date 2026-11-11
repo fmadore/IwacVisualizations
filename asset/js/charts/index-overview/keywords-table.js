@@ -109,15 +109,11 @@
             td.appendChild(btn);
         }
 
-        var searchTimer = null;
-        searchInput.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(function () {
-                query = searchInput.value || '';
-                // Lightweight path: just update rows, keep current page 0
-                if (tableApi) tableApi.update(allKeywordsRows(), 0);
-            }, 120);
-        });
+        searchInput.addEventListener('input', P.debounce(function () {
+            query = searchInput.value || '';
+            // Lightweight path: just update rows, keep current page 0
+            if (tableApi) tableApi.update(allKeywordsRows(), 0);
+        }, 120));
 
         buildTable();
 

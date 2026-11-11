@@ -201,6 +201,32 @@ test('itemUrl is the one item-page build: encoded id, site-relative without a ba
     assert.equal(P.itemUrl('/s/westafrica', 0), '/s/westafrica/item/0');
 });
 
+test('debounce runs once, after the last call, with its arguments; cancel drops a pending run', async () => {
+    const { P } = loadPanels();
+    const calls = [];
+    const fn = P.debounce(function (v) { calls.push([this && this.tag, v]); }, 20);
+    const host = { tag: 'host', fn };
+    host.fn('a');
+    host.fn('b');
+    host.fn('c');
+    assert.equal(calls.length, 0, 'nothing runs synchronously');
+    await new Promise((r) => setTimeout(r, 60));
+    assert.deepEqual(calls, [['host', 'c']], 'one trailing run, last call wins, `this` kept');
+
+    fn('d');
+    fn.cancel();
+    await new Promise((r) => setTimeout(r, 60));
+    assert.equal(calls.length, 1, 'a cancelled run never fires');
+    fn.cancel(); // idempotent with nothing pending
+
+    const dflt = P.debounce(() => calls.push(['default']));
+    dflt();
+    await new Promise((r) => setTimeout(r, 60));
+    assert.equal(calls.length, 1, 'default wait is 120 ms');
+    await new Promise((r) => setTimeout(r, 100));
+    assert.equal(calls.length, 2);
+});
+
 test('navigateOnClick sends the reader to the picked item, and wires nothing without a chart or a site', () => {
     const { P, context } = loadPanels();
     context.window.location = { href: '' };

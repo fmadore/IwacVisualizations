@@ -72,61 +72,52 @@
         card.appendChild(typeRow);
 
         // --- Scope switch (country / newspaper) ----------------------
-        var scopeRow = P.el('div', 'iwac-vis-compare-picker__row');
-        var scopeLabel = P.el('label', 'iwac-vis-compare-picker__label', P.t('Scope'));
-        scopeLabel.htmlFor = 'iwac-cmp-scope-' + suffix;
-        scopeRow.appendChild(scopeLabel);
-        var scopeSelect = P.el('select', 'iwac-vis-control iwac-vis-compare-picker__select');
-        scopeSelect.id = 'iwac-cmp-scope-' + suffix;
-        scopeSelect.name = 'iwac-cmp-scope-' + suffix;
-        scopeSelect.setAttribute('data-iwac-control', 'cmp-scope-' + side);
-        scopeSelect.addEventListener('change', function () {
-            state.scope = scopeSelect.value;
-            rebuildName();
-            fire();
-        });
-        scopeRow.appendChild(scopeSelect);
+        var rowClasses = {
+            groupClass: 'iwac-vis-compare-picker__row',
+            labelClass: 'iwac-vis-compare-picker__label',
+            selectClass: 'iwac-vis-compare-picker__select'
+        };
+        var scopeRow = CN.buildSelect(Object.assign({
+            label: P.t('Scope'),
+            name: 'cmp-scope-' + side,
+            idPrefix: 'iwac-cmp-scope-' + side + '-',
+            options: [],
+            onChange: function (value) {
+                state.scope = value;
+                rebuildName();
+                fire();
+            }
+        }, rowClasses));
         card.appendChild(scopeRow);
 
         // --- Name dropdown (country / newspaper name) ----------------
-        var nameRow = P.el('div', 'iwac-vis-compare-picker__row');
-        var nameLabel = P.el('label', 'iwac-vis-compare-picker__label', P.t('Selection'));
-        nameLabel.htmlFor = 'iwac-cmp-selection-' + suffix;
-        nameRow.appendChild(nameLabel);
-        var nameSelect = P.el('select', 'iwac-vis-control iwac-vis-compare-picker__select');
-        nameSelect.id = 'iwac-cmp-selection-' + suffix;
-        nameSelect.name = 'iwac-cmp-selection-' + suffix;
-        nameSelect.setAttribute('data-iwac-control', 'cmp-selection-' + side);
-        nameSelect.addEventListener('change', function () {
-            state.slug = nameSelect.value;
-            fire();
-        });
-        nameRow.appendChild(nameSelect);
+        var nameRow = CN.buildSelect(Object.assign({
+            label: P.t('Selection'),
+            name: 'cmp-selection-' + side,
+            idPrefix: 'iwac-cmp-selection-' + side + '-',
+            options: [],
+            onChange: function (value) {
+                state.slug = value;
+                fire();
+            }
+        }, rowClasses));
         card.appendChild(nameRow);
 
         function rebuildScope() {
-            scopeSelect.innerHTML = '';
             var subset = index.subsets && index.subsets[state.type];
-            if (!subset) return;
+            if (!subset) { scopeRow.setOptions([]); return; }
             var available = [];
             if ((subset.countries || []).length) available.push('country');
             if ((subset.newspapers || []).length) available.push('newspaper');
-            available.forEach(function (s) {
-                var opt = P.el('option', null,
-                    P.t(s === 'country' ? 'Whole country' : 'Single newspaper'));
-                opt.value = s;
-                scopeSelect.appendChild(opt);
-            });
-            if (available.indexOf(state.scope) === -1) {
-                state.scope = available[0] || 'country';
-            }
-            scopeSelect.value = state.scope;
+            var picked = scopeRow.setOptions(available.map(function (s) {
+                return { value: s, label: P.t(s === 'country' ? 'Whole country' : 'Single newspaper') };
+            }), state.scope);
+            state.scope = picked || 'country';
         }
 
         function rebuildName() {
-            nameSelect.innerHTML = '';
             var subset = index.subsets && index.subsets[state.type];
-            if (!subset) return;
+            if (!subset) { nameRow.setOptions([]); return; }
             var list = state.scope === 'country'
                 ? (subset.countries || [])
                 : (subset.newspapers || []);
@@ -139,21 +130,15 @@
                     return a.name.localeCompare(b.name, ns.locale || 'fr', { sensitivity: 'base' });
                 });
             }
-            list.forEach(function (entry) {
+            var picked = nameRow.setOptions(list.map(function (entry) {
                 var label = entry.name + ' (' + P.formatNumber(entry.count) + ')';
                 if (entry.country && state.scope === 'newspaper') {
                     label = entry.name + ' \u2014 ' + entry.country
                         + ' (' + P.formatNumber(entry.count) + ')';
                 }
-                var opt = P.el('option', null, label);
-                opt.value = entry.slug;
-                nameSelect.appendChild(opt);
-            });
-            var slugs = list.map(function (e) { return e.slug; });
-            if (slugs.indexOf(state.slug) === -1) {
-                state.slug = slugs[0] || null;
-            }
-            if (state.slug) nameSelect.value = state.slug;
+                return { value: entry.slug, label: label };
+            }), state.slug || '');
+            state.slug = picked || null;
         }
 
         function fire() {
