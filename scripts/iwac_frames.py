@@ -34,7 +34,7 @@ per caller — correct rather than merely fast.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
 
@@ -82,11 +82,22 @@ class FrameStore:
             this many are held (0 = unbounded). The runner sets a small
             bound so that holding ``articles`` wide does not stack with
             ``publications`` wide while a UMAP fit is running.
+        pinned: Subset names that are never evicted and do not count
+            towards ``max_subsets``. The runner pins ``articles`` and
+            ``index``: nearly every generator reads them, and six generators
+            sweep every subset in one loop, so an LRU that may evict them
+            re-converted ``articles`` wide once per sweep.
     """
 
-    def __init__(self, repo_id: str = DATASET_ID, max_subsets: int = 0) -> None:
+    def __init__(
+        self,
+        repo_id: str = DATASET_ID,
+        max_subsets: int = 0,
+        pinned: Iterable[str] = (),
+    ) -> None:
         self.repo_id = repo_id
         self.max_subsets = max_subsets
+        self.pinned = frozenset(pinned)
         self._entries: Dict[_Key, _Entry] = {}
         self._order: List[_Key] = []          # LRU, oldest first
         self.hits = 0
@@ -103,8 +114,10 @@ class FrameStore:
     def _evict_if_needed(self) -> None:
         if not self.max_subsets:
             return
-        while len(self._order) > self.max_subsets:
-            victim = self._order.pop(0)
+        evictable = [key for key in self._order if key[1] not in self.pinned]
+        while len(evictable) > self.max_subsets:
+            victim = evictable.pop(0)          # least recently used first
+            self._order.remove(victim)
             self._entries.pop(victim, None)
             logger.debug("FrameStore: evicted '%s' from %s", victim[1], victim[0])
 

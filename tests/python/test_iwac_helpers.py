@@ -1301,6 +1301,23 @@ class FrameStoreTests(unittest.TestCase):
             [("articles", None), ("index", None), ("articles", None)],
         )
 
+    def test_pinned_subsets_survive_a_sweep_of_every_subset(self) -> None:
+        # Six generators read all seven subsets in one loop. With a plain
+        # four-slot LRU each sweep pushed `articles` out and the next reader
+        # converted it wide again; the runner pins `articles` and `index`.
+        for name in iwac_utils.SUBSETS:
+            self.frames.setdefault(name, pd.DataFrame({"o:id": [1]}))
+        iwac_utils.set_frame_store(iwac_frames.FrameStore(
+            max_subsets=run_all.DEFAULT_MAX_SUBSETS, pinned=run_all.PINNED_SUBSETS))
+        for _generator in range(3):
+            iwac_utils.load_dataset_safe("articles")
+            iwac_utils.load_dataset_safe("index")
+            for name in iwac_utils.SUBSETS:      # the sweep
+                iwac_utils.load_dataset_safe(name)
+            iwac_utils.load_dataset_safe("articles")
+        self.assertEqual(self.calls.count(("articles", None)), 1)
+        self.assertEqual(self.calls.count(("index", None)), 1)
+
 
 class GeneratorRunnerTests(unittest.TestCase):
     """P1: the runner's list is the contract CI reads."""

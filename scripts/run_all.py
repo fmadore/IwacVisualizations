@@ -97,12 +97,17 @@ GENERATORS: List[str] = [
 
 
 # Holding every subset wide at once is the one shape that could cost more
-# memory than it saves, so the store is bounded. Four covers the real access
-# pattern — nearly every generator reads `articles` and `index`, plus at most
-# a couple of others — and keeps those two resident across the whole run while
-# the rest rotate. `--max-subsets 0` lifts the bound; eviction is not lossy,
-# an evicted subset is simply reloaded on next use.
+# memory than it saves, so the store is bounded. `articles` and `index` are
+# PINNED outside that bound: nearly every generator reads them, and six
+# generators (collection_overview, world_map, index_overview, keyword_explorer,
+# spatial_exploration, corpus_health) sweep all seven subsets in one loop. A
+# plain four-slot LRU let each sweep push `articles` out, so it was converted
+# wide six times a run, not once. The bound now applies to the other five,
+# which still rotate (a sweep touches five, so they do reload). `--max-subsets
+# 0` lifts the bound; eviction is not lossy, an evicted subset is simply
+# reloaded on next use.
 DEFAULT_MAX_SUBSETS = 4
+PINNED_SUBSETS = ("articles", "index")
 
 
 def module_name(name: str) -> str:
@@ -147,8 +152,8 @@ def main() -> int:
                         help="One process, but no frame memo — for A/B timing")
     parser.add_argument("--max-subsets", type=int, default=DEFAULT_MAX_SUBSETS,
                         metavar="N",
-                        help="Subsets held at once, 0 for unbounded "
-                             "(default: %(default)s)")
+                        help="Subsets held at once besides the pinned articles "
+                             "and index, 0 for unbounded (default: %(default)s)")
     parser.add_argument("--strict", action="store_true",
                         help="Make every subset load required: a subset that fails "
                              "to load, or loads empty, stops the run instead of "
@@ -184,7 +189,8 @@ def main() -> int:
     # anchors the working directory the same way the workflow's `cd` did.
     os.chdir(SCRIPTS_DIR.parent)
 
-    store = None if args.no_share else FrameStore(max_subsets=args.max_subsets)
+    store = None if args.no_share else FrameStore(
+        max_subsets=args.max_subsets, pinned=PINNED_SUBSETS)
     previous = iwac_utils.set_frame_store(store)
     previous_strict = iwac_utils.set_strict_loads(args.strict)
 

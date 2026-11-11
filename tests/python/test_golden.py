@@ -33,6 +33,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Dict, List
+from unittest.mock import patch
 
 TESTS_DIR = Path(__file__).resolve().parent
 ROOT = TESTS_DIR.parents[1]
@@ -42,6 +43,7 @@ for path in (ROOT / "scripts", TESTS_DIR):
         sys.path.insert(0, str(path))
 
 import golden_corpus  # noqa: E402
+import iwac_frames  # noqa: E402
 import iwac_utils  # noqa: E402
 import run_all  # noqa: E402
 
@@ -220,6 +222,42 @@ class GoldenOutputTest(unittest.TestCase):
                     difference = _first_difference(expected[rel], written[rel])
                     self.assertIsNone(difference,
                                       f"{name}/{rel} differs at {difference} (UPDATE_GOLDEN=1 to accept)")
+
+    def test_the_runner_converts_articles_and_index_once(self):
+        """Replay the covered generators' loads, in run_all order, through
+        the runner's real FrameStore: `articles` and `index` must be read
+        wide exactly once, however many sweeps rotate the other subsets."""
+        requests = []
+
+        class Recorder(FixtureStore):
+            def get(self, config_name, repo_id=None, token=None, columns=None, required=False):
+                requests.append((config_name, None if columns is None else list(columns)))
+                return super().get(config_name, repo_id, token, columns, required)
+
+        for name in run_all.GENERATORS:
+            if name in COVERED:
+                run_generator(name, self.tmp / "replay" / name, Recorder(self.frames))
+
+        loads = []
+
+        def fake_load(config_name, repo_id=None, token=None, columns=None, required=False):
+            loads.append((config_name, columns is None))
+            frame = self.frames[config_name]
+            return frame if columns is None else frame[[c for c in columns if c in frame.columns]]
+
+        store = iwac_frames.FrameStore(max_subsets=run_all.DEFAULT_MAX_SUBSETS,
+                                       pinned=run_all.PINNED_SUBSETS)
+        previous = iwac_utils.set_frame_store(store)
+        try:
+            with patch.object(iwac_utils, "dataset_revision", return_value="golden"), \
+                    patch.object(iwac_utils, "_load_subset_frame", fake_load):
+                for config_name, columns in requests:
+                    iwac_utils.load_dataset_safe(config_name, columns=columns)
+        finally:
+            iwac_utils.set_frame_store(previous)
+        for pinned in ("articles", "index"):
+            self.assertEqual(loads.count((pinned, True)), 1, f"{pinned} converted wide more than once")
+            self.assertLessEqual(sum(1 for n, _wide in loads if n == pinned), 2, pinned)
 
     def test_no_golden_directory_is_left_without_a_generator(self):
         if not GOLDEN_DIR.is_dir():
