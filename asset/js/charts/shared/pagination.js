@@ -7,6 +7,11 @@
  *
  * Everything hangs off `window.IWACVis.panels` as `P.buildPagination`.
  *
+ * Bundled in `shared-core` (bundles.json), not `shared-ui`: the map
+ * popup's article list (map-popup.js, in `shared-map`) pages with it too,
+ * and a map page need not load the UI bundle. It used to carry its own
+ * copy of this control for exactly that reason.
+ *
  * Load order: after panels.js, before any block controller / panel
  * module that uses it.
  */
