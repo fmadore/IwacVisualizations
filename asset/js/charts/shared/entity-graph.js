@@ -94,7 +94,9 @@
         var catIndex = {};
         var categories = catTypes.map(function (type, i) {
             catIndex[type] = i;
-            return { name: t('entity_type_' + type), type: type };
+            // The shared label helper: a type with no translation prints
+            // as itself, not as the raw `entity_type_…` key.
+            return { name: P.entityTypeLabel(type), type: type };
         });
 
         // Unrecognised types are told apart by their rank among themselves.
@@ -118,7 +120,7 @@
                 category: catIndex[type] != null ? catIndex[type] : 0,
                 size: sizeOf(n, maxScore),
                 isCenter: type === 'center',
-                url: type === 'center' || !siteBase ? null : siteBase + '/item/' + n.o_id,
+                url: type === 'center' || !siteBase ? null : (P.itemUrl(siteBase, n.o_id) || null),
                 data: n
             };
         });

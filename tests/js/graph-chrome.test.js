@@ -235,6 +235,38 @@ test('entity types take the theme\'s --type-entity-* colours, the ones IwacSearc
     }
 });
 
+test('one colour resolver, cached per theme: empties never stick, a mode change or refresh drops it', () => {
+    const vars = { '--primary': '#ce4115' };
+    const context = loadTheme(vars);
+    const ns = context.window.IWACVis;
+    let mode = null;
+    context.document.body.getAttribute = (n) => (n === 'data-theme' ? mode : null);
+    let reads = 0;
+    const style = context.getComputedStyle;
+    context.getComputedStyle = (el) => { reads++; return style(el); };
+
+    assert.equal(ns.resolveCssVar, ns.readColorVar, 'the two names are one function');
+    assert.equal(ns.readColorVar('--primary'), '#ce4115');
+    const after = reads;
+    assert.equal(ns.readColorVar('--primary'), '#ce4115');
+    assert.equal(reads, after, 'a second read is served from the cache');
+
+    // Unset now, set later (a stylesheet that arrived): the '' is not kept.
+    assert.equal(ns.readColorVar('--late'), '');
+    vars['--late'] = '#123456';
+    assert.equal(ns.readColorVar('--late'), '#123456');
+
+    // A toggle the observer has not handled yet still reads fresh values.
+    vars['--primary'] = '#ec653f';
+    mode = 'dark';
+    assert.equal(ns.readColorVar('--primary'), '#ec653f');
+    // And refreshThemes() drops the cache outright.
+    vars['--primary'] = '#000001';
+    ns.refreshThemes();
+    assert.equal(ns.readColorVar('--primary'), '#000001');
+    assert.equal(ns.readColorVar('not-a-property'), '');
+});
+
 test('without the tokens, entity types degrade to fixed palette slots', () => {
     const ns = loadTheme().window.IWACVis;
     const palette = ns.getPalette();

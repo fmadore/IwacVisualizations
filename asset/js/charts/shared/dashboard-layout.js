@@ -29,6 +29,7 @@
  *       hasData:      function (slice) {...},      // optional, slot-level override of metadata.hasData
  *       cond:         function (slice, ctx) {...}, // optional, hard-gate before rendering
  *       className:    'iwac-vis-panel--accent',    // optional, extra class on the panel wrapper
+ *       key:          'heatmap',                   // optional, the panel's embed slug (else dataKey / chart, kebab-cased)
  *       options:      {...}                        // optional, opaque blob passed to the renderer as `slot.options`
  *     }
  *
@@ -36,12 +37,6 @@
  * dashboards never display "No data available" placeholders. The
  * predicate cascade is: `slot.cond` → `slot.hasData` →
  * `metadata[chartKey].hasData` → lenient fallback.
- *
- * Fragments — reusable sub-arrays of slots — let multiple layouts share
- * common compositions (e.g. "the standard time-series row"). Register
- * via `defineFragment(name, slots)`, reference via
- * `{ fragment: 'name' }` in any layout array; `render()` flattens
- * them at dispatch time.
  *
  * Dependencies: panels.js, dashboard-core.js, iwac-i18n.js.
  * Load order: after panels.js (always loaded), before any renderer
@@ -63,7 +58,6 @@
     DL.metadata  = DL.metadata  || {};
     DL.renderers = DL.renderers || {};
     DL.layouts   = DL.layouts   || {};
-    DL.fragments = DL.fragments || {};
 
     /* ----------------------------------------------------------------- */
     /*  Registration                                                      */
@@ -124,71 +118,6 @@
         DL.layouts[layoutKey] = layout;
     };
 
-    /**
-     * Define a reusable fragment — a named slice of slots that one or
-     * more layouts include. References are written as
-     * `{ fragment: 'fragmentName' }` and flattened at render time.
-     */
-    DL.defineFragment = function (name, slots) {
-        if (!name || !Array.isArray(slots)) return;
-        DL.fragments[name] = slots.slice();
-    };
-
-    /* ----------------------------------------------------------------- */
-    /*  Empty-payload predicates                                          */
-    /* ----------------------------------------------------------------- */
-
-    /**
-     * Shared predicates for the common "is this slice empty?" shapes.
-     * Renderers reference one of these via metadata.hasData (or wrap
-     * their own predicate around them).
-     *
-     * Keeping these centralized — rather than re-deriving "empty array"
-     * vs "empty network" vs "empty geo" inline in every orchestrator —
-     * is what kills "No data available" placeholders in practice.
-     */
-    DL.isEmpty = {
-        list: function (v) {
-            return !Array.isArray(v) || v.length === 0;
-        },
-        keyed: function (v) {
-            return v == null || typeof v !== 'object' ||
-                   Object.keys(v).length === 0;
-        },
-        timeline: function (v) {
-            return !v || !Array.isArray(v.years) || v.years.length === 0;
-        },
-        network: function (v) {
-            return !v || !Array.isArray(v.nodes) || v.nodes.length === 0 ||
-                   !Array.isArray(v.links) || v.links.length === 0;
-        },
-        chord: function (v) {
-            // A chord needs ≥ 2 nodes and ≥ 1 link to be visually
-            // meaningful — a single-node chord is just a labeled dot.
-            return !v || !Array.isArray(v.nodes) || v.nodes.length < 2 ||
-                   !Array.isArray(v.links) || v.links.length === 0;
-        },
-        graph: function (v) { return DL.isEmpty.network(v); },
-        geo: function (v) {
-            if (!v) return true;
-            if (Array.isArray(v))           return v.length === 0;
-            if (Array.isArray(v.features))  return v.features.length === 0;
-            if (Array.isArray(v.points))    return v.points.length === 0;
-            if (Array.isArray(v.locations)) return v.locations.length === 0;
-            return false;
-        },
-        hierarchical: function (v) {
-            return !v || !Array.isArray(v.children) || v.children.length === 0;
-        },
-        cells: function (v) {
-            return !v || !Array.isArray(v.cells) || v.cells.length === 0;
-        },
-        radar: function (v) {
-            return !v || !Array.isArray(v.indicators) || v.indicators.length < 3 ||
-                   !Array.isArray(v.series) || v.series.length === 0;
-        }
-    };
-
     /* ----------------------------------------------------------------- */
     /*  shouldRender                                                      */
     /* ----------------------------------------------------------------- */
@@ -240,22 +169,27 @@
     }
 
     /**
-     * Flatten `{ fragment: 'name' }` references against the registered
-     * fragments table. Non-references pass through untouched.
+     * The embed slug for a slot's panel: `slot.key` verbatim, else its
+     * `dataKey` or `chart` in kebab case without the bridge's `iwac` prefix
+     * (`iwacCoOccurrence` → `co-occurrence`, `semantic_neighbors` →
+     * `semantic-neighbors`).
+     *
+     * Without one, `embed.js` numbered the panels by position, and these
+     * layouts skip slots whose data is empty — so `/iwac-embed/item/<id>/
+     * panel-5` named a different chart on each item, and could change on the
+     * same item after a data refresh. `dataKey` comes before `chart` because
+     * a layout may use one renderer twice (the reference dashboard's two
+     * `similarItems` lists). Two slots resolving to one slug are still
+     * told apart by `enumeratePanels`' suffix.
      */
-    function expandFragments(slots) {
-        var out = [];
-        for (var i = 0; i < slots.length; i++) {
-            var s = slots[i];
-            if (!s) continue;
-            if (s.fragment && DL.fragments[s.fragment]) {
-                var frag = DL.fragments[s.fragment];
-                for (var j = 0; j < frag.length; j++) out.push(frag[j]);
-            } else {
-                out.push(s);
-            }
-        }
-        return out;
+    function panelKey(slot) {
+        if (slot.key) return String(slot.key);
+        var base = String(slot.dataKey || slot.chart || '').replace(/^iwac(?=[A-Z])/, '');
+        return base
+            .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+            .replace(/[^A-Za-z0-9.-]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .toLowerCase();
     }
 
     /* ----------------------------------------------------------------- */
@@ -293,7 +227,7 @@
         var raw = typeof def === 'function' ? def(data, ctx) : def;
         if (!Array.isArray(raw)) return null;
 
-        var slots = expandFragments(raw);
+        var slots = raw;
         var grid  = P.buildChartsGrid();
         rootEl.appendChild(grid);
 
@@ -330,7 +264,8 @@
             if (slot.tall)      classes += ' iwac-vis-panel--tall';
             if (slot.className) classes += ' ' + slot.className;
 
-            var panelEl = P.buildPanel(classes, title, desc || null, { heading: panelHeading });
+            var panelEl = P.buildPanel(classes, title, desc || null,
+                { heading: panelHeading, key: panelKey(slot) || null });
             grid.appendChild(panelEl.panel);
 
             try {

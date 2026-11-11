@@ -223,7 +223,7 @@
                 top: titleTop,
                 textAlign: 'center',
                 textStyle: {
-                    fontSize: 12, fontWeight: 600,
+                    fontSize: ns.CHART_FONT, fontWeight: 600,
                     overflow: 'truncate', width: 180
                 }
             });

@@ -210,7 +210,7 @@
                     axisTick: { show: false },
                     axisLine: { show: false },
                     animationDurationUpdate: 400,
-                    axisLabel: { width: labelWidth, overflow: 'truncate', fontSize: 12 }
+                    axisLabel: { width: labelWidth, overflow: 'truncate', fontSize: ns.CHART_FONT }
                 },
                 // The count gutter: a second category axis over the same
                 // rows, so the denominators line up with their bars instead
