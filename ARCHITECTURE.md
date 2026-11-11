@@ -426,7 +426,7 @@ Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as
 | `P.createIwacMap(container, config)` / `P.createIwacPopup(options)` / `P.buildMapPopup(config)` | The MapLibre stack: theme-aware basemap, auto-restyle on theme swap, shared popup CSS hooks, paginated article-list popup body. |
 | `P.buildFacetButtons(config)` / `P.buildTable(config)` / `P.buildPagination(config)` | Facet bar (buttons / select / subcategories), accessible HTML table with column renderers, and a reusable pagination widget. |
 | `P.setMapTheme(map, mode)` | Switch a MapLibre instance to the IWAC light/dark basemap, no-opping when the requested mode already matches. Stamps `_iwacThemeMode` on the map; `createIwacMap` initializes it. |
-| `IWACVis.dashboardLayout.{register, registerRenderer, registerMetadata, defineFragment, render, shouldRender, isEmpty}` | Declarative entity-dashboard composition. Layouts are arrays of slot objects; renderers self-register from `shared/renderers/<name>.js`; `render()` filters slots whose data fails the predicate cascade and dispatches the rest. See v0.16.0 above for the canonical example. |
+| `IWACVis.dashboardLayout.{register, registerRenderer, registerMetadata, render, shouldRender}` | Declarative entity-dashboard composition. Layouts are arrays of slot objects; renderers self-register from `shared/renderers/<name>.js`; `render()` filters slots whose data fails the predicate cascade and dispatches the rest. See v0.16.0 above for the canonical example. |
 
 ### Data strategy — hybrid
 
