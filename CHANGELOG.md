@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.1.0 — the references dashboard, redesigned (2026-11-14)
 
 The References overview, redesigned after a comparison with AMIRA's publications dashboard. Four of its panels need the regenerated data (`generate_references_overview.py` 0.5.0): after the release, run the data workflow and **Pull latest data** in the module's admin page. Until then those four keep the charts they replace, under their old titles, so nothing breaks in between.
 
