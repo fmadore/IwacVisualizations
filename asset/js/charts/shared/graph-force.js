@@ -26,9 +26,14 @@
  *
  * Usage:
  *   var graph = ns.ForceGraph.create(container, {
- *       nodes: [{ id, name, category, size, isCenter?, url?, data? }],
+ *       nodes: [{ id, name, category, size, isCenter?, prominent?, url?, data? }],
  *       categories: [{ name }],
  *       seed: 1234,
+ *
+ *   `prominent` marks a node whose name the reader should find without
+ *   hovering — a graph with no ego centre still has hubs (the references
+ *   network names each group after one). Its label is placed before the
+ *   others and may sit on its own disc whatever the zoom; see graph-canvas.js.
  *       colorOf: function (categoryIndex) { return ns.getSeriesColor(categoryIndex); },
  *       tooltip: function (node, link) { return [Element, …]; },
  *       announce: function (node) { return 'spoken description'; },
@@ -125,7 +130,7 @@
         var allNodes = (spec.nodes || []).map(function (n) {
             return {
                 id: n.id, name: n.name || '', sub: n.sub || '', category: n.category || 0,
-                size: n.size || 22, isCenter: !!n.isCenter,
+                size: n.size || 22, isCenter: !!n.isCenter, prominent: !!n.prominent,
                 url: n.url || null, data: n.data || n,
                 r: (n.size || 22) / 2, deg: 0, pinned: false
             };

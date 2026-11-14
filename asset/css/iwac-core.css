@@ -739,7 +739,9 @@ body {
         grid-template-columns: 1fr 1fr;
     }
     .iwac-vis-overview-grid .iwac-vis-panel--wide,
-    .iwac-vis-block .dashboard-charts .iwac-vis-panel--wide {
+    .iwac-vis-block .dashboard-charts .iwac-vis-panel--wide,
+    /* A half-width panel with no partner on its row (P.packChartsGrid). */
+    .iwac-vis-overview-grid > .iwac-vis-panel--solo {
         grid-column: 1 / -1;
     }
 }

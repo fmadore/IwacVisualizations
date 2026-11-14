@@ -30,8 +30,7 @@
  * extending this namespace, so this bundle — on every chart page — carries
  * only what two or more blocks share: growthBar (collection-overview/
  * growth-bar.js), scaryTerms (scary-terms/bars.js), divergingBar
- * (sentiment-atlas/diverging-bar.js), collaborationNetwork
- * (references-overview/collaboration-network.js). segmentedBar stays: the
+ * (sentiment-atlas/diverging-bar.js). segmentedBar stays: the
  * person and entity dashboards both draw it.
  *
  * Load order: after panels.js, this core file first, then the four

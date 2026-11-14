@@ -354,7 +354,6 @@
             // Breakdown panels (collection + references overviews) and year ranges
             'Content by country': 'Contenu par pays',
             'Languages represented': 'Langues repr\u00e9sent\u00e9es',
-            'Collection breakdown': 'R\u00e9partition de la collection',
             'period_covered': 'P\u00e9riode couverte\u00a0: {min} \u2013 {max}',
             'coverage_range': '{min} \u2013 {max}',
 

@@ -381,7 +381,10 @@ final class BlockRegistry
                     'needs' => [
                         'chartOptions' => true,
                         'maplibre'     => true,
-                        // "Color by" switch on the semantic-landscape panel.
+                        // The author network's force graph (shared/graph-panel.js).
+                        'd3'           => true,
+                        // "Color by" switch on the semantic-landscape panel,
+                        // language switch on the topics panel.
                         'facetButtons' => true,
                     ],
                     'bundle' => 'references-overview',

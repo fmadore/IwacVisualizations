@@ -24,10 +24,18 @@ Payload shape (top-level keys):
                                  so the JS can call P.t('lang_<x>'))
     countries                  — top-N country histogram
     authors                    — top-N author histogram
-    publishers                 — top-N publisher histogram
-    publisher_countries        — country-faceted publisher rankings
+    publishers                 — top-N publisher histogram (all types)
+    venues                     — where the works appeared, split by kind
+                                 of publication: {journals, books,
+                                 institutions}, each a top-N ranking of
+                                 the ``publisher`` field (which holds the
+                                 JOURNAL for a journal article)
     subjects                   — top-N subject histogram
-    treemap                    — country -> type breakdown
+    language_timeline          — references per decade × primary language
+    author_lifelines           — the most prolific authors, each with the
+                                 years they published in
+    subject_trends             — top subjects × publication period, with
+                                 each period's total (share = count/total)
     fulltext                   — OCR / embedding / topic coverage +
                                  OCR_is_public count + word totals +
                                  per-type OCR coverage. The denominators
@@ -111,6 +119,24 @@ TOP_N_LANGUAGES = 10
 TOP_N_COUNTRIES = 10
 TOP_N_TYPES = 10
 TOP_N_PUBLISHERS = 15
+TOP_N_LIFELINES = 20
+TOP_N_SUBJECT_TRENDS = 15
+
+# Subject-trend periods: five-year bins from TREND_START, with everything
+# earlier pooled. The bibliography holds 47 works dated before 1980 across
+# seventy years (as of 2026-11), so five-year bins there would be one or two
+# works each and every share a coin toss.
+TREND_START = 1980
+TREND_WIDTH = 5
+
+# Venue groups, keyed on the reference's resource class. `publisher` holds
+# the journal for a journal article and the publishing house for a book, so
+# one undivided ranking set "Cahiers d'études africaines" beside "Karthala".
+VENUE_GROUPS: Dict[str, Tuple[str, ...]] = {
+    "journals":     ("Article de revue", "Compte rendu"),
+    "books":        ("Livre", "Chapitre", "Ouvrage collectif"),
+    "institutions": ("Thèse", "Rapport", "Communication", "Article de blog"),
+}
 
 # Network filter — only keep authors who appear in at least this many edges.
 # 864 rows produces a long tail of one-off co-authors that bloats the graph
@@ -670,8 +696,9 @@ def compute_publisher_rankings(
     rows: pd.DataFrame,
     n: int,
     country_filter: Optional[str] = None,
+    types: Optional[Tuple[str, ...]] = None,
 ) -> List[Dict[str, Any]]:
-    """Top publishers, optionally limited to references tagged with a country."""
+    """Top publishers, optionally limited to a country tag or to resource classes."""
     publisher_refs: Dict[str, set] = defaultdict(set)
     publisher_types: Dict[str, Counter] = defaultdict(Counter)
     publisher_years: Dict[str, List[int]] = defaultdict(list)
@@ -681,6 +708,8 @@ def compute_publisher_rankings(
             countries = set(_clean_unique_list(parse_pipe_separated(row.get("country"))))
             if country_filter not in countries:
                 continue
+        if types is not None and _ref_type(row) not in types:
+            continue
 
         publishers = _clean_unique_list(parse_pipe_separated(row.get("publisher")))
         if not publishers:
@@ -717,38 +746,155 @@ def compute_publisher_rankings(
     return entries[:n]
 
 
-def compute_publisher_countries(rows: pd.DataFrame, n: int) -> Dict[str, List[Dict[str, Any]]]:
-    countries: set = set()
-    for value in rows.get("country", []):
-        countries.update(_clean_unique_list(parse_pipe_separated(value)))
+def compute_venues(rows: pd.DataFrame, n: int) -> Dict[str, List[Dict[str, Any]]]:
+    """Top venues per kind of publication (``VENUE_GROUPS``).
 
+    A group with no rows comes back as an empty list, never missing, so the
+    front end can drop its tab rather than guess.
+    """
     return {
-        country: compute_publisher_rankings(rows, n, country_filter=country)
-        for country in sorted(countries)
+        key: compute_publisher_rankings(rows, n, types=types)
+        for key, types in VENUE_GROUPS.items()
     }
 
 
-def compute_treemap(rows: pd.DataFrame) -> Dict[str, Any]:
-    """Country → type tree consumed by C.treemap."""
-    by_country: Dict[str, Counter] = defaultdict(Counter)
-    for _, row in rows.iterrows():
-        type_label = _ref_type(row)
-        for country in clean_values(parse_pipe_separated(row.get("country"))):
-            by_country[country][type_label] += 1
+def _primary_language(row: pd.Series) -> str:
+    """The FIRST listed language — the convention of the dataset's own
+    language filter. Counting every listed language would stack a bilingual
+    work twice and make a decade look larger than it is."""
+    return _first_pipe_value(row, "language")
 
-    children = []
-    for country, type_counts in by_country.items():
-        type_children = [
-            {"name": t, "value": int(c)}
-            for t, c in type_counts.most_common()
-        ]
-        children.append({
-            "name":     country,
-            "value":    int(sum(type_counts.values())),
-            "children": type_children,
+
+def compute_language_timeline(rows: pd.DataFrame) -> Dict[str, Any]:
+    """References per decade, stacked by primary language.
+
+    Shaped for ``C.stackedBar``: ``categories`` are decade starts (every
+    decade between the first and the last, empty ones included, so the axis
+    is continuous), ``stackKeys`` the raw French language labels by total
+    (the JS translates them with ``lang_<name>``), ``series`` one count list
+    per language aligned with ``categories``.
+    """
+    pairs: Counter = Counter()
+    totals: Counter = Counter()
+    for _, row in rows.iterrows():
+        year = extract_year(row.get("pub_date"))
+        language = _primary_language(row)
+        if year is None or not language:
+            continue
+        decade = (year // 10) * 10
+        pairs[(decade, language)] += 1
+        totals[language] += 1
+    if not pairs:
+        return {"categories": [], "stackKeys": [], "series": {}}
+    decades = [d for d, _ in pairs]
+    categories = list(range(min(decades), max(decades) + 1, 10))
+    keys = [name for name, _ in sorted(totals.items(), key=lambda kv: (-kv[1], kv[0]))]
+    return {
+        "categories": categories,
+        "stackKeys":  keys,
+        "series": {
+            key: [int(pairs.get((decade, key), 0)) for decade in categories]
+            for key in keys
+        },
+    }
+
+
+def compute_author_lifelines(rows: pd.DataFrame, n: int) -> Dict[str, Any]:
+    """The ``n`` most prolific authors and the years they published in.
+
+    Ranked by works in the bibliography (dated or not), then by name; listed
+    by first year, so the chart reads as a succession of generations rather
+    than a second copy of the top-authors bar. Undated works count towards
+    ``count`` but have no point on the line, and ``dated`` says how many do.
+    """
+    works: Counter = Counter()
+    years: Dict[str, Counter] = defaultdict(Counter)
+    for _, row in rows.iterrows():
+        year = extract_year(row.get("pub_date"))
+        for author in _clean_unique_list(parse_pipe_separated(row.get("author"))):
+            works[author] += 1
+            if year is not None:
+                years[author][year] += 1
+
+    ranked = sorted(works.items(), key=lambda kv: (-kv[1], kv[0]))[:n]
+    authors = []
+    for name, count in ranked:
+        by_year = years.get(name, Counter())
+        if not by_year:
+            continue
+        authors.append({
+            "name":  name,
+            "count": int(count),
+            "dated": int(sum(by_year.values())),
+            "first": int(min(by_year)),
+            "last":  int(max(by_year)),
+            "years": [[int(y), int(c)] for y, c in sorted(by_year.items())],
         })
-    children.sort(key=lambda c: -c["value"])
-    return {"name": "References", "children": children}
+    authors.sort(key=lambda a: (a["first"], -a["count"], a["name"]))
+    all_years = [y for a in authors for y, _ in a["years"]]
+    return {
+        "authors":  authors,
+        "year_min": min(all_years) if all_years else None,
+        "year_max": max(all_years) if all_years else None,
+    }
+
+
+def _trend_period(year: int, start: int, width: int) -> int:
+    """Index of ``year``'s period: 0 is everything before ``start``."""
+    if year < start:
+        return 0
+    return 1 + (year - start) // width
+
+
+def compute_subject_trends(
+    rows: pd.DataFrame,
+    n: int,
+    start: int = TREND_START,
+    width: int = TREND_WIDTH,
+) -> Dict[str, Any]:
+    """The top ``n`` subjects across publication periods.
+
+    ``periods`` are labels (``"–1979"``, ``"1980–1984"`` … the last one open,
+    ``"2025–"``, while it is still running); ``totals`` the dated references
+    in each period, ``cells`` sparse ``[periodIdx, subjectIdx, count]``. The
+    front end colours a cell by count / total — the share of that period's
+    works carrying the subject — because the bibliography grows tenfold
+    across the axis and raw counts would only ever say "more, recently".
+    """
+    subject_totals: Counter = Counter()
+    for value in rows.get("subject", []):
+        for subject in _clean_unique_list(parse_pipe_separated(value)):
+            subject_totals[subject] += 1
+    subjects = [s for s, _ in sorted(subject_totals.items(), key=lambda kv: (-kv[1], kv[0]))[:n]]
+    index = {s: i for i, s in enumerate(subjects)}
+
+    years = [y for y in (extract_year(v) for v in rows.get("pub_date", [])) if y is not None]
+    if not years or not subjects:
+        return {"periods": [], "subjects": subjects, "totals": [], "cells": []}
+    year_max = max(years)
+    last = _trend_period(year_max, start, width)
+    totals = [0] * (last + 1)
+    counts: Counter = Counter()
+    for _, row in rows.iterrows():
+        year = extract_year(row.get("pub_date"))
+        if year is None:
+            continue
+        period = _trend_period(year, start, width)
+        totals[period] += 1
+        for subject in _clean_unique_list(parse_pipe_separated(row.get("subject"))):
+            if subject in index:
+                counts[(period, index[subject])] += 1
+
+    labels = [f"\u2013{start - 1}"]
+    for p in range(1, last + 1):
+        lo = start + (p - 1) * width
+        hi = lo + width - 1
+        labels.append(f"{lo}\u2013" if hi > year_max else f"{lo}\u2013{hi}")
+    if totals[0] == 0:
+        labels, totals = labels[1:], totals[1:]
+        counts = Counter({(p - 1, s): c for (p, s), c in counts.items()})
+    cells = [[p, s, int(c)] for (p, s), c in sorted(counts.items())]
+    return {"periods": labels, "subjects": subjects, "totals": [int(t) for t in totals], "cells": cells}
 
 
 # ---------------------------------------------------------------------------
@@ -1167,6 +1313,8 @@ def build_references_overview(
     landscape_n_neighbors: int = DEFAULT_LANDSCAPE_N_NEIGHBORS,
     landscape_min_dist: float = DEFAULT_LANDSCAPE_MIN_DIST,
     landscape: bool = True,
+    top_n_lifelines: int = TOP_N_LIFELINES,
+    top_n_subject_trends: int = TOP_N_SUBJECT_TRENDS,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC references subset from %s", repo_id)
@@ -1187,9 +1335,11 @@ def build_references_overview(
     countries = top_n_pipe(df, "country", top_n_countries)
     authors = top_n_pipe(df, "author", top_n_authors)
     publishers = compute_publisher_rankings(df, top_n_publishers)
-    publisher_countries = compute_publisher_countries(df, top_n_publishers)
+    venues = compute_venues(df, top_n_publishers)
     subjects = top_n_pipe(df, "subject", top_n_subjects)
-    treemap = compute_treemap(df)
+    language_timeline = compute_language_timeline(df)
+    author_lifelines = compute_author_lifelines(df, top_n_lifelines)
+    subject_trends = compute_subject_trends(df, top_n_subject_trends)
 
     fulltext = compute_fulltext_coverage(df)
     logger.info(
@@ -1261,7 +1411,7 @@ def build_references_overview(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_references_overview.py",
-        script_version="0.4.0",
+        script_version="0.5.0",
     )
 
     return {
@@ -1273,9 +1423,11 @@ def build_references_overview(
         "countries":             countries,
         "authors":               authors,
         "publishers":            publishers,
-        "publisher_countries":    publisher_countries,
+        "venues":                venues,
         "subjects":              subjects,
-        "treemap":               treemap,
+        "language_timeline":     language_timeline,
+        "author_lifelines":      author_lifelines,
+        "subject_trends":        subject_trends,
         "fulltext":              fulltext,
         "topics":                topics,
         "semantic_landscape":     semantic_landscape,

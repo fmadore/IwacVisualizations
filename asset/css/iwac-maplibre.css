@@ -34,6 +34,14 @@
     container-name: iwac-map;
 }
 
+/* A map sharing a grid row with a chart: the chart host's 320px floor, so
+ * the two panels end level instead of the chart sitting over a band of
+ * empty panel (references overview: places of publication beside the
+ * countries studied). Fullscreen still wins (iwac-core.css). */
+.iwac-vis-map--row {
+    height: 320px;
+}
+
 
 /* =================================================================== */
 /*  MapLibre popup — themed content + close button                       */

@@ -29,7 +29,8 @@
     /**
      * The roam/drag/zoom-clamped, circular-seeded, layoutAnimation:false
      * base the remaining ECharts force graphs build on
-     * (C.collaborationNetwork, press-reprints). Two of its choices are
+     * (press-reprints; the references author network moved to the d3
+     * canvas renderer). Two of its choices are
      * load-bearing, not stylistic:
      *
      * - `initLayout: 'circular'` seeds node positions — a frozen

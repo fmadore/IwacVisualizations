@@ -1568,6 +1568,71 @@ class ReferencesNetworkTests(unittest.TestCase):
         self.assertEqual(out["edges"], [])
 
 
+class ReferencesPanelDataTests(unittest.TestCase):
+    """The references overview's period, venue and author aggregates."""
+
+    def rows(self, records):
+        return pd.DataFrame(records)
+
+    def test_a_bilingual_work_counts_once_under_its_first_language(self) -> None:
+        out = generate_references_overview.compute_language_timeline(self.rows([
+            {"pub_date": "1985", "language": "Anglais|Français"},
+            {"pub_date": "2003-04-01", "language": "Français"},
+            {"pub_date": "", "language": "Français"},
+        ]))
+        # Decades are continuous, empty ones included.
+        self.assertEqual(out["categories"], [1980, 1990, 2000])
+        self.assertEqual(sorted(out["stackKeys"]), ["Anglais", "Français"])
+        self.assertEqual(out["series"]["Anglais"], [1, 0, 0])
+        self.assertEqual(out["series"]["Français"], [0, 0, 1])
+
+    def test_venues_split_journals_from_publishing_houses(self) -> None:
+        out = generate_references_overview.compute_venues(self.rows([
+            {"o:id": 1, "o:resource_class": "Article de revue", "publisher": "Cahiers d'études africaines"},
+            {"o:id": 2, "o:resource_class": "Livre", "publisher": "Karthala"},
+            {"o:id": 3, "o:resource_class": "Chapitre", "publisher": "Karthala"},
+            {"o:id": 4, "o:resource_class": "Thèse", "publisher": "Université de Lomé"},
+        ]), 5)
+        self.assertEqual([e["name"] for e in out["journals"]], ["Cahiers d'études africaines"])
+        self.assertEqual([(e["name"], e["count"]) for e in out["books"]], [("Karthala", 2)])
+        self.assertEqual([e["name"] for e in out["institutions"]], ["Université de Lomé"])
+
+    def test_lifelines_rank_by_output_and_list_by_first_year(self) -> None:
+        out = generate_references_overview.compute_author_lifelines(self.rows([
+            {"author": "B|A", "pub_date": "2001"},
+            {"author": "B", "pub_date": "2005"},
+            {"author": "B", "pub_date": ""},
+            {"author": "A", "pub_date": "1990"},
+            {"author": "C", "pub_date": "1980"},
+        ]), 2)
+        # C is not among the two most prolific; A started first.
+        self.assertEqual([a["name"] for a in out["authors"]], ["A", "B"])
+        b = out["authors"][1]
+        self.assertEqual((b["count"], b["dated"], b["first"], b["last"]), (3, 2, 2001, 2005))
+        self.assertEqual(b["years"], [[2001, 1], [2005, 1]])
+        self.assertEqual((out["year_min"], out["year_max"]), (1990, 2005))
+
+    def test_subject_trends_pool_the_early_years_and_leave_the_last_period_open(self) -> None:
+        out = generate_references_overview.compute_subject_trends(self.rows([
+            {"subject": "Islam", "pub_date": "1950"},
+            {"subject": "Islam|Laïcité", "pub_date": "1981"},
+            {"subject": "Laïcité", "pub_date": "1987"},
+        ]), 5, start=1980, width=5)
+        self.assertEqual(out["periods"], ["–1979", "1980–1984", "1985–"])
+        self.assertEqual(out["totals"], [1, 1, 1])
+        islam = out["subjects"].index("Islam")
+        self.assertIn([0, islam, 1], out["cells"])
+        self.assertIn([1, islam, 1], out["cells"])
+
+    def test_subject_trends_drop_an_empty_early_bucket(self) -> None:
+        out = generate_references_overview.compute_subject_trends(self.rows([
+            {"subject": "Islam", "pub_date": "1982"},
+            {"subject": "Islam", "pub_date": "1989"},
+        ]), 5, start=1980, width=5)
+        self.assertEqual(out["periods"], ["1980–1984", "1985–1989"])
+        self.assertEqual(out["cells"], [[0, 0, 1], [1, 0, 1]])
+
+
 class SharedParserTests(unittest.TestCase):
     """The parsers five, four and seven generators each carried a copy of."""
 

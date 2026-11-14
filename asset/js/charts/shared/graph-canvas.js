@@ -296,6 +296,8 @@
             var p = n.deg || 0;
             if (n.isCenter) p += 10000;
             if (n.id === scene.hoverId || n.id === scene.focusId) p += 5000;
+            // Below a hover or focus, above the rest: a hub the caller named.
+            if (n.prominent) p += 3000;
             if (scene.focusSet && scene.focusSet[n.id]) p += 2000;
             if (n.pinned) p += 1000;
             return p;
@@ -388,7 +390,11 @@
                     [cx, cy + r + 4 + half, 'center'],
                     [cx, cy - r - 4 - half, 'center']
                 ];
-                if (r >= 12) spots.push([cx, cy, 'center', true]);
+                // A prominent node (graph-force.js) gets the on-node spot at
+                // any zoom: fitted to a wide graph, a hub's disc shrinks under
+                // 12px while its neighbours still ring it, so every side spot
+                // fails and the network's most connected names went unlabelled.
+                if (r >= 12 || n.prominent) spots.push([cx, cy, 'center', true]);
                 var placed = null;
                 for (var s = 0; s < spots.length && !placed; s++) {
                     var sx = spots[s][0], sy = spots[s][1], align = spots[s][2];

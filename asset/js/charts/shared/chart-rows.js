@@ -262,6 +262,11 @@
     P.hasTabularOption = function (option) {
         var base = option && (option.baseOption || option);
         if (!base) return false;
+        // Mirrors optionToRows: a builder's own rows come first. Without
+        // this a chart whose series are not tabular in themselves (the
+        // references lifelines: a custom span series beside the dots) had
+        // its table buttons disabled while optionToRows could fill them.
+        if (typeof base.iwacRows === 'function') return true;
         var series = readableSeries(base);
         return series.some(function (s) { return s.data.length > 0; });
     };

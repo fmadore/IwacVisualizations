@@ -831,10 +831,62 @@
     /**
      * Build an empty `.iwac-vis-overview-grid` that children can be
      * appended into. The CSS handles responsive columns and `--wide`
-     * full-width panels.
+     * full-width panels; `P.packChartsGrid` keeps a half-width panel from
+     * standing alone on its row, re-run whenever a panel is added, removed,
+     * hidden or shown.
      */
     P.buildChartsGrid = function () {
-        return P.el('div', 'iwac-vis-overview-grid');
+        var grid = P.el('div', 'iwac-vis-overview-grid');
+        if (typeof MutationObserver === 'function') {
+            new MutationObserver(function (records) {
+                for (var i = 0; i < records.length; i++) {
+                    var r = records[i];
+                    // Only the grid's own rows matter: a chart drawing its
+                    // canvas deep inside a panel is not a layout change.
+                    if (r.target === grid || r.target.parentNode === grid) {
+                        P.packChartsGrid(grid);
+                        return;
+                    }
+                }
+            }).observe(grid, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+        }
+        return grid;
+    };
+
+    /**
+     * Mark every half-width panel that would sit alone on its row
+     * `.iwac-vis-panel--solo`, which the stylesheet spans across the grid.
+     *
+     * A half-width panel left without a partner — its neighbour wide, hidden
+     * for want of data, or simply absent — rendered at half the width with the
+     * other column empty beside it ("Content by country" on the references
+     * dashboard, for releases). AMIRA's dashboards fixed the same thing by
+     * widening such a panel (`packWidths`); this is that rule for the grid
+     * every IWAC block builds.
+     *
+     * @param {Element} grid an `.iwac-vis-overview-grid`
+     */
+    P.packChartsGrid = function (grid) {
+        if (!grid || !grid.children) return;
+        var solo = [];
+        var pending = null;
+        Array.prototype.forEach.call(grid.children, function (el) {
+            if (el.hidden || !el.classList) return;
+            if (el.classList.contains('iwac-vis-panel--wide')) {
+                if (pending) solo.push(pending);
+                pending = null;
+            } else {
+                pending = pending ? null : el;
+            }
+        });
+        if (pending) solo.push(pending);
+        Array.prototype.forEach.call(grid.children, function (el) {
+            if (!el.classList) return;
+            var isSolo = solo.indexOf(el) !== -1;
+            if (el.classList.contains('iwac-vis-panel--solo') !== isSolo) {
+                el.classList.toggle('iwac-vis-panel--solo', isSolo);
+            }
+        });
     };
 
     /* ----------------------------------------------------------------- */

@@ -6,35 +6,48 @@
  * `scripts/generate_references_overview.py`) and renders all panels
  * from it.
  *
- * Panels (in render order):
+ * Panels (in render order), grouped as a reading path — what the
+ * bibliography is, where, who wrote it, where it appeared, what it is about,
+ * and what of it is digitised:
  *   1. Summary cards row
  *   2. "Period covered" subtitle
  *   3. Timeline — stacked bar of references per year, by type (wide)
- *   4. Reference types — horizontal bar
- *   5. Languages represented — pie
- *   6. Countries studied — horizontal bar
- *   7. Top authors — horizontal bar (wide)
- *   8. Top publishers — horizontal bar (wide)
- *   9. Top subjects — horizontal bar (wide)
- *  10. References breakdown — treemap country → type (wide)
- *  11. Full-text coverage — per-type digitisation bar (wide)
- *  12. Scholarly topics — one horizontal-bar panel per LDA model (wide)
- *  13. Reference provenance — MapLibre bubble map (wide)
- *  14. Subject co-occurrence — chord graph (wide)
- *  15. Author collaborations — force-directed network (wide)
+ *   4. Reference types — horizontal bar      | 5. Languages by decade — stacked bar
+ *   6. Countries studied — horizontal bar    | 7. Places of publication — map
+ *   8. Authors over time — lifelines: a dot per year published (wide)
+ *   9. Author collaborations — d3-force network, Louvain groups (wide)
+ *  10. Journals and publishers — ranked bars behind a kind switch (wide)
+ *  11. Subjects over time — subject × period heatmap of shares (wide)
+ *  12. Subject co-occurrence — matrix ordered by cluster (wide)
+ *  13. Full-text coverage — per-type digitisation bar (wide)
+ *  14. Scholarly topics — one bar chart per LDA model, behind a switch (wide)
+ *  15. Semantic landscape — UMAP scatter (wide)
  *
- * Panels 11–12 exist because the 2026-07 pipeline began extracting full
+ * Panels 5, 8, 10 and 11 read keys the generator added in its 0.5.0
+ * (`language_timeline`, `author_lifelines`, `venues`, `subject_trends`).
+ * Code and data ship separately — the data through the Sync Data job — so
+ * each falls back to the chart it replaced (pie, top-N bars) while the
+ * synced bundle predates them, under that chart's own title and wording.
+ *
+ * The half-width panels come in pairs on purpose. "Content by country" sat
+ * alone on its row for releases, half the grid empty beside it; the
+ * provenance map is its natural partner (countries studied vs. places of
+ * publication), and the grid also widens any half-width panel that ends up
+ * alone (`P.buildChartsGrid`). The country → type treemap is gone: it
+ * restated the countries and types panels.
+ *
+ * Panels 13–14 exist because the 2026-07 pipeline began extracting full
  * text for the bibliography (`OCR`, its own LDA run; its vector is
  * `embedding_abstract`, title + abstract, since 2026-10).
- * They are deliberately adjacent: the topic panels describe the digitised
+ * They are deliberately adjacent: the topic panel describes the digitised
  * subset, and the coverage panel immediately above states how large that
  * subset is, so the topic distribution is never read as a claim about the
  * whole bibliography.
  *
- * One topic panel PER MODEL, never a merged one: `references` is
- * topic-modelled twice (French + English) over the same `lda_topic_*`
- * columns, so topic 3 exists in both with unrelated meanings. The
- * generator keys on (lda_model_name, lda_topic_id); this file keeps that
+ * One chart PER MODEL, never a merged one: `references` is topic-modelled
+ * twice (French + English) over the same `lda_topic_*` columns, so topic 3
+ * exists in both with unrelated meanings. The generator keys on
+ * (lda_model_name, lda_topic_id); the panel's language switch keeps that
  * separation visible in the UI instead of flattening it away.
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
@@ -80,52 +93,8 @@
         });
     }
 
-    function subjectGraphToChord(graph, limit) {
-        graph = graph || {};
-        var nodes = (graph.nodes || []).slice();
-        var edges = graph.edges || [];
-        if (nodes.length < 2 || edges.length === 0) {
-            return { names: [], matrix: [] };
-        }
-
-        nodes.sort(function (a, b) {
-            var aScore = (a.strength || 0) || (a.count || 0);
-            var bScore = (b.strength || 0) || (b.count || 0);
-            return bScore - aScore || (b.count || 0) - (a.count || 0);
-        });
-        nodes = nodes.slice(0, limit || 30);
-
-        var indexById = {};
-        var names = nodes.map(function (node, index) {
-            indexById[node.id] = index;
-            return node.label || node.name || node.id;
-        });
-        var matrix = names.map(function () {
-            return names.map(function () { return 0; });
-        });
-
-        edges.forEach(function (edge) {
-            var source = indexById[edge.source];
-            var target = indexById[edge.target];
-            if (source == null || target == null || source === target) return;
-            var weight = Number(edge.weight || 0);
-            matrix[source][target] += weight;
-            matrix[target][source] += weight;
-        });
-
-        return { names: names, matrix: matrix };
-    }
-
-    function hasChordEdges(chord) {
-        if (!chord || !Array.isArray(chord.matrix)) return false;
-        for (var i = 0; i < chord.matrix.length; i++) {
-            var row = chord.matrix[i] || [];
-            for (var j = 0; j < row.length; j++) {
-                if (i !== j && row[j] > 0) return true;
-            }
-        }
-        return false;
-    }
+    /** Subjects the co-occurrence matrix shows, the most connected first. */
+    var COOCCURRENCE_LIMIT = 24;
 
     function renderProvenanceMap(panelEl, mapHost, provenanceMap, siteBase) {
         var locations = (provenanceMap && provenanceMap.locations) || [];
@@ -137,7 +106,7 @@
         }
 
         mapHost.innerHTML = '';
-        var mapEl = P.el('div', 'iwac-vis-map iwac-vis-map--references-provenance');
+        var mapEl = P.el('div', 'iwac-vis-map iwac-vis-map--references-provenance iwac-vis-map--row');
         mapHost.appendChild(mapEl);
 
         // The provenance places as rows, for the panel toolbar's table and CSV.
@@ -371,6 +340,62 @@
         };
     }
 
+    /** A model's description, with its own document and topic counts. */
+    function topicDescription(model) {
+        return P.t('references_topics_desc', {
+            count:  (model && model.n_docs) || 0,
+            topics: P.formatNumber((model && model.n_topics) || 0)
+        });
+    }
+
+    /**
+     * The topic panel: one model at a time, a language switch above the
+     * chart when there is more than one. The switch swaps the whole option
+     * (`notMerge`) and the description, whose counts are the model's own —
+     * the French and English corpora differ in size, and a description left
+     * on the first model would misstate the second.
+     */
+    function renderTopics(panel, models) {
+        var state = { index: 0 };
+        var desc = panel.panel.querySelector('.iwac-vis-panel-desc');
+
+        function languageOf(model, i) {
+            return model.language ? translateLang(model.language) : P.t('Model') + ' ' + (i + 1);
+        }
+
+        if (models.length > 1 && P.buildFacetButtons) {
+            var subFacets = {};
+            models.forEach(function (model, i) { subFacets['m' + i] = languageOf(model, i); });
+            var facetBar = P.buildFacetButtons({
+                facets: [{
+                    key: 'model',
+                    label: P.t('Language'),
+                    subFacets: subFacets,
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'model',
+                onChange: function (evt) {
+                    var i = Number(String(evt.subFacet || 'm0').slice(1));
+                    if (!(i >= 0 && i < models.length)) i = 0;
+                    state.index = i;
+                    if (desc) desc.textContent = topicDescription(models[i]);
+                    var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
+                    if (live) live.setOption(topicOption(models[i].topics), true);
+                }
+            });
+            panel.panel.insertBefore(facetBar.root, panel.chart);
+        } else if (models[0] && models[0].language) {
+            var title = P.panelTitle(panel.panel);
+            if (title) {
+                title.textContent = P.t('references_topics_title_lang', { language: languageOf(models[0], 0) });
+            }
+        }
+
+        ns.registerChart(panel.chart, function (el, chart) {
+            chart.setOption(topicOption(models[state.index].topics), true);
+        });
+    }
+
     /* ----------------------------------------------------------------- */
     /*  Semantic landscape — UMAP scatter of the embedded references       */
     /* ----------------------------------------------------------------- */
@@ -539,6 +564,304 @@
     }
 
     /* ----------------------------------------------------------------- */
+    /*  Period panels (generator 0.5.0)                                    */
+    /* ----------------------------------------------------------------- */
+
+    function hasLanguageTimeline(lt) {
+        return !!(lt && lt.categories && lt.categories.length && lt.stackKeys && lt.stackKeys.length);
+    }
+
+    /** Works per decade, stacked by first-listed language (C.stackedBar). */
+    function languageTimelineOption(lt) {
+        return C.stackedBar({
+            categories: lt.categories.map(function (d) { return P.t('references_decade', { decade: d }); }),
+            stackKeys:  lt.stackKeys,
+            series:     lt.series || {}
+        }, {
+            labelFor:     translateLang,
+            categoryName: P.t('Decade'),
+            valueName:    P.t('References')
+        });
+    }
+
+    function hasLifelines(al) {
+        return !!(al && al.authors && al.authors.length);
+    }
+
+    /**
+     * Author lifelines: one row per author, in the order the generator lists
+     * them (by first year), a hairline from their first dated work to their
+     * latest and a dot for every year they published, its area following the
+     * works that year. One hue for every dot: the rows already say who, and a
+     * colour per author would ask the reader to match twenty swatches.
+     */
+    function lifelinesOption(al) {
+        var authors = al.authors;
+        var names = authors.map(function (a) { return a.name; });
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        var maxYear = 1;
+        var dots = [];
+        authors.forEach(function (a, row) {
+            (a.years || []).forEach(function (yc) {
+                if (yc[1] > maxYear) maxYear = yc[1];
+                dots.push([yc[0], row, yc[1]]);
+            });
+        });
+        var yearLabel = function (v) { return String(Math.round(v)); };
+
+        return {
+            grid: C._grid({ left: 8, top: 16, right: 24, bottom: 32 }),
+            tooltip: C._inPanelTooltip({
+                trigger: 'item',
+                formatter: function (p) {
+                    var a = authors[p.seriesType === 'custom' ? p.dataIndex : (p.value || [])[1]] || {};
+                    if (p.seriesType === 'custom') {
+                        var lines = [P.t('references_lifeline_span', { first: a.first, last: a.last }),
+                            P.t('references_count', { count: a.count || 0 })];
+                        if (a.dated !== a.count) {
+                            lines.push(P.t('references_lifeline_undated', { count: (a.count || 0) - (a.dated || 0) }));
+                        }
+                        return C.itemTooltip(a.name, lines);
+                    }
+                    return C.itemTooltip(a.name, [String(p.value[0]) + ' \u2014 '
+                        + P.t('references_count', { count: p.value[2] })]);
+                }
+            }),
+            xAxis: {
+                type: 'value',
+                // From the decade below the first year (always a year of margin, so
+                // the first dot is not clipped, and a round label to start on).
+                min: al.year_min != null ? Math.floor((al.year_min - 1) / 10) * 10 : 'dataMin',
+                max: al.year_max != null ? al.year_max + 1 : 'dataMax',
+                minInterval: 1,
+                // The axis ends a year past the data so the last dot is not
+                // clipped; that padding year is not a date anyone published
+                // in, so its label is not drawn.
+                axisLabel: { formatter: yearLabel, showMaxLabel: false },
+                splitLine: { show: true }
+            },
+            yAxis: {
+                type: 'category',
+                data: names,
+                inverse: true,
+                axisTick: { show: false },
+                axisLabel: { interval: 0, width: 160, overflow: 'truncate' }
+            },
+            series: [{
+                type: 'custom',
+                name: P.t('references_lifeline_series'),
+                data: authors.map(function (a, row) { return [a.first, a.last, row]; }),
+                encode: { x: [0, 1], y: 2 },
+                renderItem: function (params, api) {
+                    var start = api.coord([api.value(0), api.value(2)]);
+                    var end = api.coord([api.value(1), api.value(2)]);
+                    return {
+                        type: 'line',
+                        shape: { x1: start[0], y1: start[1], x2: end[0], y2: end[1] },
+                        style: { stroke: tokens.inkLight || tokens.muted, lineWidth: 2, opacity: 0.55 }
+                    };
+                },
+                z: 1
+            }, {
+                type: 'scatter',
+                name: P.t('References'),
+                data: dots,
+                symbolSize: function (v) { return 6 + 12 * Math.sqrt(v[2] / maxYear); },
+                itemStyle: { color: palette[0], opacity: 0.9, borderColor: tokens.surface, borderWidth: 1 },
+                z: 2
+            }],
+            // "View as table": one row per author, never the dots' pixels.
+            iwacRows: function () {
+                return {
+                    columns: [
+                        { label: P.t('Author'), numeric: false },
+                        { label: P.t('References'), numeric: true },
+                        { label: P.t('references_lifeline_first'), numeric: true },
+                        { label: P.t('references_lifeline_last'), numeric: true }
+                    ],
+                    rows: authors.map(function (a) { return [a.name, a.count, a.first, a.last]; })
+                };
+            }
+        };
+    }
+
+    function hasSubjectTrends(st) {
+        return !!(st && st.periods && st.periods.length && st.subjects && st.subjects.length);
+    }
+
+    /**
+     * Subject × period heatmap. A cell is coloured by its SHARE of the
+     * period's dated works, not its count: the bibliography grows tenfold
+     * along the axis, so counts would darken every subject's right end and
+     * hide a theme that rose and fell. The tooltip carries both numbers.
+     */
+    function subjectTrendsOption(st) {
+        var totals = st.totals || [];
+        var counts = {};
+        var maxShare = 0;
+        var cells = (st.cells || []).map(function (c) {
+            var total = totals[c[0]] || 0;
+            var share = total ? c[2] / total : 0;
+            if (share > maxShare) maxShare = share;
+            counts[c[0] + ':' + c[1]] = c[2];
+            return [c[0], c[1], share];
+        });
+        var option = C.heatmapMatrix({ xLabels: st.periods, yLabels: st.subjects, cells: cells }, {
+            visualMin: 0,
+            visualMax: maxShare || 1,
+            cellBorder: true,
+            yLabelWidth: 180,
+            static: true,
+            tooltipFormatter: function (p) {
+                var v = p.value || [];
+                var total = totals[v[0]] || 0;
+                var count = counts[v[0] + ':' + v[1]] || 0;
+                return C.itemTooltip(st.subjects[v[1]] || '', [
+                    P.escapeHtml(String(st.periods[v[0]] || '')),
+                    P.t('references_trend_tooltip', {
+                        count: count,
+                        total: P.formatNumber(total),
+                        pct: total ? Math.round((count / total) * 100) : 0
+                    })
+                ]);
+            }
+        });
+        if (option.visualMap) {
+            [].concat(option.visualMap).forEach(function (vm) {
+                vm.formatter = function (value) { return Math.round(Number(value) * 100) + '\u202f%'; };
+            });
+        }
+        option.iwacRows = function () {
+            return {
+                columns: [{ label: P.t('Subject'), numeric: false }].concat(st.periods.map(function (label, i) {
+                    return { label: label + ' (' + P.formatNumber(totals[i] || 0) + ')', numeric: true };
+                })),
+                rows: st.subjects.map(function (subject, s) {
+                    return [subject].concat(st.periods.map(function (_, period) {
+                        return counts[period + ':' + s] || 0;
+                    }));
+                })
+            };
+        };
+        return option;
+    }
+
+    var VENUE_KEYS = ['journals', 'books', 'institutions'];
+    var VENUE_LABELS = {
+        journals:     'references_venue_journals',
+        books:        'references_venue_books',
+        institutions: 'references_venue_institutions'
+    };
+
+    /** Journal titles run long: give them the wider gutter. */
+    function venueOption(entries) {
+        return C.horizontalBar(entries, { maxLabelLength: 44 });
+    }
+
+    function venueKeys(venues) {
+        return VENUE_KEYS.filter(function (k) { return venues && venues[k] && venues[k].length; });
+    }
+
+    /**
+     * Journals, book publishers and degree-granting or research institutions,
+     * one ranking at a time. The `publisher` field holds the journal for an
+     * article, so a single ranking put "Cahiers d'études africaines" beside
+     * "Karthala"; the kind switch keeps the three questions apart.
+     */
+    function renderVenues(panel, venues) {
+        var keys = venueKeys(venues);
+        var state = { key: keys[0] };
+        if (keys.length > 1 && P.buildFacetButtons) {
+            var subFacets = {};
+            keys.forEach(function (k) { subFacets[k] = P.t(VENUE_LABELS[k]); });
+            var facetBar = P.buildFacetButtons({
+                facets: [{ key: 'venue', label: P.t('references_venue_kind'), subFacets: subFacets, renderAs: 'buttons' }],
+                activeKey: 'venue',
+                onChange: function (evt) {
+                    var k = keys.indexOf(evt.subFacet) !== -1 ? evt.subFacet : keys[0];
+                    state.key = k;
+                    var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
+                    if (live) live.setOption(venueOption(venues[k]), true);
+                }
+            });
+            panel.panel.insertBefore(facetBar.root, panel.chart);
+        }
+        ns.registerChart(panel.chart, function (el, chart) {
+            chart.setOption(venueOption(venues[state.key]), true);
+        });
+    }
+
+    /**
+     * The subject co-occurrence graph as an ordered adjacency matrix.
+     *
+     * A chord of thirty subjects drew thirty arcs and several hundred ribbons
+     * through one centre, which nobody could follow. A matrix keeps every pair
+     * on its own cell; ordering the rows by the clusters the subjects form
+     * (the same Louvain pass the author network uses) turns those clusters
+     * into dark blocks along the diagonal, which is the one thing a chord was
+     * supposed to show.
+     */
+    function cooccurrenceMatrix(graph, limit) {
+        graph = graph || {};
+        var nodes = (graph.nodes || []).slice();
+        var edges = graph.edges || [];
+        if (nodes.length < 2 || !edges.length) return null;
+        nodes.sort(function (a, b) {
+            var aScore = (a.strength || 0) || (a.count || 0);
+            var bScore = (b.strength || 0) || (b.count || 0);
+            return bScore - aScore || (b.count || 0) - (a.count || 0)
+                || String(a.id).localeCompare(String(b.id));
+        });
+        nodes = nodes.slice(0, limit);
+        var keep = {};
+        nodes.forEach(function (n) { keep[n.id] = n; });
+        var kept = edges.filter(function (e) {
+            return keep[e.source] && keep[e.target] && e.source !== e.target;
+        });
+        if (!kept.length) return null;
+
+        var community = P.collaborationCommunities
+            ? P.collaborationCommunities(nodes.map(function (n) { return n.id; }), kept)
+            : {};
+        var order = nodes.map(function (n, i) { return { n: n, i: i }; }).sort(function (a, b) {
+            var ca = community[a.n.id] || 0;
+            var cb = community[b.n.id] || 0;
+            return ca - cb || a.i - b.i;
+        }).map(function (o) { return o.n; });
+        var index = {};
+        order.forEach(function (n, i) { index[n.id] = i; });
+        var labels = order.map(function (n) { return n.label || n.name || n.id; });
+        var cells = [];
+        kept.forEach(function (e) {
+            var a = index[e.source];
+            var b = index[e.target];
+            var w = Number(e.weight || 0);
+            cells.push([a, b, w], [b, a, w]);
+        });
+        return { labels: labels, cells: cells, counts: order.map(function (n) { return n.count || 0; }) };
+    }
+
+    function cooccurrenceOption(m) {
+        var option = C.heatmapMatrix({ xLabels: m.labels, yLabels: m.labels, cells: m.cells }, {
+            cellBorder: true,
+            xLabelRotate: 50,
+            yLabelWidth: 170,
+            static: true,
+            tooltipFormatter: function (p) {
+                var v = p.value || [];
+                return C.itemTooltip(m.labels[v[1]] + ' \u00b7 ' + m.labels[v[0]],
+                    [P.t('references_count', { count: v[2] || 0 })]);
+            }
+        });
+        option.xAxis.axisLabel.width = 120;
+        option.xAxis.axisLabel.overflow = 'truncate';
+        // The panel has a fullscreen control: keep the tooltip in the chart.
+        option.tooltip = C._inPanelTooltip(option.tooltip);
+        return option;
+    }
+
+    /* ----------------------------------------------------------------- */
     /*  Layout composition                                                */
     /* ----------------------------------------------------------------- */
 
@@ -561,7 +884,8 @@
         });
     }
 
-    function buildLayout(container, summary, topicModels, coverage, landscape) {
+    function buildLayout(container, data, topicModels, coverage, landscape) {
+        var summary = data.summary;
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-overview-root');
         container.appendChild(root);
@@ -581,41 +905,47 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
-        var timelinePanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('References by type over time'), P.t('references.timeline_desc'));
-        var typesPanel     = P.buildPanel('iwac-vis-panel', P.t('Reference types'), P.t('references.types_desc'));
-        var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages represented'), P.t('references.languages_desc'));
-        var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Content by country'), P.t('references.countries_desc'));
-        var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'), P.t('references.authors_desc'));
-        var publishersPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top publishers'), P.t('references.publishers_desc'));
-        var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'), P.t('references.subjects_desc'));
-        var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'), P.t('references.breakdown_desc'));
-        // Nested treemap (country › source) — give it room past the 320px
-        // floor, matching the collection-overview breakdown panel.
-        treemapPanel.chart.classList.add('iwac-vis-treemap-host');
-        var coveragePanel  = P.buildPanel(
-            'iwac-vis-panel iwac-vis-panel--wide',
-            P.t('Full-text coverage'),
-            coverageDescription(coverage)
-        );
-        // One panel per LDA model. The heading names the model's language
-        // so "topic 3" in the French corpus is never mistaken for "topic 3"
-        // in the English one — they come from different models.
-        var topicPanels = (topicModels || []).map(function (model) {
-            var language = model.language ? translateLang(model.language) : '';
-            var panel = P.buildPanel(
-                'iwac-vis-panel iwac-vis-panel--wide',
-                language
-                    ? P.t('references_topics_title_lang', { language: language })
-                    : P.t('Scholarly topics'),
-                P.t('references_topics_desc', {
-                    count:  model.n_docs || 0,
-                    topics: P.formatNumber(model.n_topics || 0)
-                })
-            );
-            return { model: model, panel: panel.panel, chart: panel.chart };
-        });
-        var landscapePanel = P.buildPanel(
-            'iwac-vis-panel iwac-vis-panel--wide',
+        // Every panel is named for the embed route (`opts.key`): without a
+        // key its permalink is its position, which this layout just changed.
+        function panel(key, wide, title, desc) {
+            return P.buildPanel('iwac-vis-panel' + (wide ? ' iwac-vis-panel--wide' : ''),
+                title, desc, { key: key });
+        }
+
+        var timelinePanel   = panel('timeline', true, P.t('References by type over time'), P.t('references.timeline_desc'));
+        var typesPanel      = panel('types', false, P.t('Reference types'), P.t('references.types_desc'));
+        // Each period panel keeps its old title and wording while the synced
+        // data predates it (see the header): the words describe the chart
+        // actually drawn.
+        var languagesPanel  = hasLanguageTimeline(data.language_timeline)
+            ? panel('languages', false, P.t('references_languages_decade_title'), P.t('references_languages_decade_desc'))
+            : panel('languages', false, P.t('Languages represented'), P.t('references.languages_desc'));
+        var countriesPanel  = panel('countries', false, P.t('Content by country'), P.t('references.countries_desc'));
+        // Half width beside the countries: what the works are about vs.
+        // where they appeared. The map fits its own bounds, so the narrower
+        // frame costs nothing but a zoom step.
+        var provenancePanel = panel('provenance', false, P.t('Reference provenance'), P.t('references_provenance_desc'));
+        var authorsPanel    = hasLifelines(data.author_lifelines)
+            ? panel('authors', true, P.t('references_lifelines_title'),
+                P.t('references_lifelines_desc', { count: data.author_lifelines.authors.length }))
+            : panel('authors', true, P.t('Top authors'), P.t('references.authors_desc'));
+        var networkPanel    = panel('network', true, P.t('Author collaborations'), P.t('references.network_desc'));
+        var publishersPanel = venueKeys(data.venues).length
+            ? panel('publishers', true, P.t('references_venues_title'), P.t('references_venues_desc'))
+            : panel('publishers', true, P.t('Top publishers'), P.t('references.publishers_desc'));
+        var subjectsPanel   = hasSubjectTrends(data.subject_trends)
+            ? panel('subjects', true, P.t('references_subject_trends_title'), P.t('references_subject_trends_desc'))
+            : panel('subjects', true, P.t('Top subjects'), P.t('references.subjects_desc'));
+        var subjectCooccurrencePanel = panel('subject-cooccurrence', true,
+            P.t('Subject co-occurrence'), P.t('references_subject_matrix_desc', { count: COOCCURRENCE_LIMIT }));
+        var coveragePanel   = panel('coverage', true, P.t('Full-text coverage'), coverageDescription(coverage));
+        // ONE panel for the topic models, with a language switch: two
+        // stacked bar panels read as one long list, and the switch says
+        // plainly that these are two models, not two halves of one.
+        var topicsPanel = topicModels && topicModels.length
+            ? panel('topics', true, P.t('Scholarly topics'), topicDescription(topicModels[0]))
+            : null;
+        var landscapePanel = panel('landscape', true,
             P.t('Semantic landscape of the literature'),
             // With no projection there is nothing for the description to
             // describe — "covers 0 of 867 references" over an empty box
@@ -626,37 +956,13 @@
         // reservation rather than the 320px default, as the landscape
         // block does.
         landscapePanel.chart.classList.add('iwac-vis-graph-host');
-        var provenancePanel = P.buildPanel(
-            'iwac-vis-panel iwac-vis-panel--wide',
-            P.t('Reference provenance'),
-            P.t('references_provenance_desc')
-        );
-        var subjectCooccurrencePanel = P.buildPanel(
-            'iwac-vis-panel iwac-vis-panel--wide',
-            P.t('Subject co-occurrence'),
-            P.t('references_subject_cooccurrence_desc')
-        );
-        subjectCooccurrencePanel.chart.classList.add('iwac-vis-chord-host');
-        var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'), P.t('references.network_desc'));
-        // The collaboration network needs the same breathing room as
-        // the entity-dashboard graph host so labels on the outer ring
-        // don't clip and the force layout has somewhere to expand to.
-        networkPanel.chart.classList.add('iwac-vis-graph-host');
 
-        grid.appendChild(timelinePanel.panel);
-        grid.appendChild(typesPanel.panel);
-        grid.appendChild(languagesPanel.panel);
-        grid.appendChild(countriesPanel.panel);
-        grid.appendChild(authorsPanel.panel);
-        grid.appendChild(publishersPanel.panel);
-        grid.appendChild(subjectsPanel.panel);
-        grid.appendChild(treemapPanel.panel);
-        grid.appendChild(coveragePanel.panel);
-        topicPanels.forEach(function (entry) { grid.appendChild(entry.panel); });
-        grid.appendChild(landscapePanel.panel);
-        grid.appendChild(provenancePanel.panel);
-        grid.appendChild(subjectCooccurrencePanel.panel);
-        grid.appendChild(networkPanel.panel);
+        [timelinePanel, typesPanel, languagesPanel, countriesPanel, provenancePanel,
+         authorsPanel, networkPanel, publishersPanel,
+         subjectsPanel, subjectCooccurrencePanel,
+         coveragePanel, topicsPanel, landscapePanel].forEach(function (entry) {
+            if (entry) grid.appendChild(entry.panel);
+        });
 
         return {
             timeline:  timelinePanel.chart,
@@ -665,19 +971,18 @@
             countries: countriesPanel.chart,
             authors:   authorsPanel.chart,
             publishers: publishersPanel.chart,
+            publishersPanel: publishersPanel,
             subjects:  subjectsPanel.chart,
-            treemap:   treemapPanel.chart,
             coverage:  coveragePanel,
             coverageChart: coveragePanel.chart,
-            topicPanels: topicPanels,
+            topics:    topicsPanel,
             landscape: landscapePanel,
             landscapeChart: landscapePanel.chart,
             provenance: provenancePanel,
             provenanceChart: provenancePanel.chart,
             subjectCooccurrence: subjectCooccurrencePanel,
             subjectCooccurrenceChart: subjectCooccurrencePanel.chart,
-            network:   networkPanel,
-            networkChart: networkPanel.chart
+            network:   networkPanel
         };
     }
 
@@ -707,22 +1012,6 @@
             series:    translatedSeries
         };
 
-        // Treemap: keep country labels as-is (they're language-neutral
-        // proper nouns), but translate the inner type children.
-        var treemap = data.treemap || { children: [] };
-        var localizedTreemap = {
-            name: treemap.name,
-            children: (treemap.children || []).map(function (c) {
-                return {
-                    name: c.name,
-                    value: c.value,
-                    children: (c.children || []).map(function (t) {
-                        return { name: translateType(t.name), value: t.value };
-                    })
-                };
-            })
-        };
-
         return {
             summary:                data.summary || {},
             timeline:               localizedTimeline,
@@ -731,9 +1020,11 @@
             countries:              data.countries || [],
             authors:                data.authors || [],
             publishers:             data.publishers || [],
-            publisher_countries:     data.publisher_countries || {},
+            venues:                 data.venues || null,
             subjects:               data.subjects || [],
-            treemap:                localizedTreemap,
+            language_timeline:      data.language_timeline || null,
+            author_lifelines:       data.author_lifelines || null,
+            subject_trends:         data.subject_trends || null,
             provenance_map:          data.provenance_map || { locations: [] },
             subject_cooccurrence:    data.subject_cooccurrence || { nodes: [], edges: [], meta: {} },
             author_collaborations:  data.author_collaborations || { nodes: [], edges: [] },
@@ -766,7 +1057,7 @@
             return m && m.topics && m.topics.length > 0;
         });
         var landscape = raw.semantic_landscape || null;
-        var h = buildLayout(container, data.summary, topicModels, data.fulltext, landscape);
+        var h = buildLayout(container, data, topicModels, data.fulltext, landscape);
 
         // 1. Timeline
         if (data.timeline.years && data.timeline.years.length > 0) {
@@ -782,8 +1073,12 @@
             });
         }
 
-        // 3. Languages
-        if (data.languages.length > 0) {
+        // 3. Languages — by decade, or the share pie of an older bundle
+        if (hasLanguageTimeline(data.language_timeline)) {
+            ns.registerChart(h.languages, function (el, chart) {
+                chart.setOption(languageTimelineOption(data.language_timeline), true);
+            });
+        } else if (data.languages.length > 0) {
             ns.registerChart(h.languages, function (el, chart) {
                 chart.setOption(C.pie(data.languages));
             });
@@ -796,35 +1091,41 @@
             });
         }
 
-        // 5. Top authors
-        if (data.authors.length > 0) {
+        // 5. Authors — lifelines, or the top-N bar of an older bundle
+        if (hasLifelines(data.author_lifelines)) {
+            // One row per author: the host grows with them, as the Gantt does.
+            h.authors.style.height = C.ganttHeight(data.author_lifelines.authors.length, 320) + 'px';
+            ns.registerChart(h.authors, function (el, chart) {
+                chart.setOption(lifelinesOption(data.author_lifelines), true);
+            });
+        } else if (data.authors.length > 0) {
             ns.registerChart(h.authors, function (el, chart) {
                 chart.setOption(C.horizontalBar(data.authors));
             });
         }
 
-        // 6. Top publishers
-        if (data.publishers.length > 0) {
+        // 6. Journals and publishers, or one publisher ranking
+        if (venueKeys(data.venues).length) {
+            renderVenues(h.publishersPanel, data.venues);
+        } else if (data.publishers.length > 0) {
             ns.registerChart(h.publishers, function (el, chart) {
                 chart.setOption(C.horizontalBar(data.publishers));
             });
         }
 
-        // 7. Top subjects
-        if (data.subjects.length > 0) {
+        // 7. Subjects — over time, or the top-N bar of an older bundle
+        if (hasSubjectTrends(data.subject_trends)) {
+            h.subjects.style.height = C.ganttHeight(data.subject_trends.subjects.length, 320) + 'px';
+            ns.registerChart(h.subjects, function (el, chart) {
+                chart.setOption(subjectTrendsOption(data.subject_trends), true);
+            });
+        } else if (data.subjects.length > 0) {
             ns.registerChart(h.subjects, function (el, chart) {
                 chart.setOption(C.horizontalBar(data.subjects));
             });
         }
 
-        // 8. Treemap country → type
-        if (data.treemap.children && data.treemap.children.length > 0) {
-            ns.registerChart(h.treemap, function (el, chart) {
-                chart.setOption(C.treemap(data.treemap));
-            });
-        }
-
-        // 9. Full-text coverage per reference type
+        // 8. Full-text coverage per reference type
         var coverage = data.fulltext;
         if (coverage && coverage.by_type && coverage.by_type.length > 0) {
             ns.registerChart(h.coverageChart, function (el, chart) {
@@ -835,26 +1136,23 @@
             h.coverage.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
         }
 
-        // 10. Scholarly topics — one panel per LDA model
-        h.topicPanels.forEach(function (entry) {
-            ns.registerChart(entry.chart, function (el, chart) {
-                chart.setOption(topicOption(entry.model.topics));
-            });
-        });
+        // 9. Scholarly topics — one chart per LDA model, behind a switch
+        if (h.topics) renderTopics(h.topics, topicModels);
 
-        // 11. Semantic landscape of the embedded references
+        // 10. Semantic landscape of the embedded references
         renderLandscape(h.landscape, h.landscapeChart, landscape, siteBase);
 
-        // 12. Reference provenance map
+        // 11. Reference provenance map
         renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
 
-        // 13. Subject co-occurrence chord
-        var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
-        if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
-            var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
-                instance.setOption(C.chord(subjectChord, { minWeight: 1 }), true);
+        // 12. Subject co-occurrence — matrix ordered by cluster
+        var matrix = cooccurrenceMatrix(data.subject_cooccurrence, COOCCURRENCE_LIMIT);
+        if (matrix) {
+            h.subjectCooccurrenceChart.style.height = C.ganttHeight(matrix.labels.length, 320) + 140 + 'px';
+            var matrixChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
+                instance.setOption(cooccurrenceOption(matrix), true);
             });
-            if (subjectChart && P.addFullscreenButton) {
+            if (matrixChart && P.addFullscreenButton) {
                 P.addFullscreenButton(h.subjectCooccurrence.panel, {
                     onResize: function () {
                         var live = ns.getLiveChart && ns.getLiveChart(h.subjectCooccurrenceChart);
@@ -867,24 +1165,10 @@
             h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
         }
 
-        // 14. Author collaboration network
-        var graph = data.author_collaborations;
-        if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
-            var chart = ns.registerChart(h.networkChart, function (el, instance) {
-                instance.setOption(C.collaborationNetwork(graph), true);
-            });
-            // Wire a fullscreen toggle so the network panel can
-            // expand into the viewport for closer inspection,
-            // matching the cooccurrence chord and entity network
-            // panels on the person dashboard.
-            if (chart && P.addFullscreenButton) {
-                P.addFullscreenButton(h.network.panel, {
-                    onResize: function () {
-                        var live = ns.getLiveChart && ns.getLiveChart(h.networkChart);
-                        if (live) live.resize();
-                    }
-                });
-            }
+        // 13. Author collaboration network — the shared d3-force renderer
+        if (!P.renderCollaborationNetwork || !P.renderCollaborationNetwork(h.network, data.author_collaborations)) {
+            h.network.chart.appendChild(P.buildEmptyState());
+            h.network.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
         }
     }
 

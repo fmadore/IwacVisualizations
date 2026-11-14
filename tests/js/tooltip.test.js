@@ -115,7 +115,6 @@ test('C._inPanelTooltip keeps a tooltip inside its chart', () => {
 test('the builders behind fullscreen-capable panels keep their tooltips in-panel', () => {
     const C = loadBuilders();
     assertInPanel(C.chord({ names: ['a', 'b'], matrix: [[0, 2], [2, 0]] }).tooltip, 'chord');
-    assertInPanel(C.collaborationNetwork({ nodes: [{ id: 'a' }, { id: 'b' }], edges: [] }).tooltip, 'collaboration network');
     const landscape = C.landscape({ x: [0, 1], y: [0, 1], title: ['a', 'b'] }, { a: [0, 1] }, {});
     assertInPanel(landscape.tooltip, 'semantic landscape');
 });

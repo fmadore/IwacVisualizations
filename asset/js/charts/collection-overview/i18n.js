@@ -43,6 +43,7 @@
     });
 
     ns.addTranslations('fr', {
+        'Collection breakdown': 'Répartition de la collection',
             'collection.recent_desc': 'Notices les plus récemment ajoutées à IWAC. La date d’ajout peut être bien postérieure à la date de publication du document.',
             'collection.map_desc': 'Passez des lieux indexés, dont la taille indique la fréquence enregistrée, aux pays colorés selon le nombre de documents. Un lieu évoqué dans une source peut différer de son pays de publication. Seuls les lieux dotés de coordonnées apparaissent sous forme de points.',
             'collection.wordcloud_desc': 'Mots fréquents dans le texte disponible des articles de presse en français. Les mots les plus grands apparaissent plus souvent\u202f; les mots grammaticaux courants sont retirés. Cette vue porte sur les articles, et non sur tous les types de documents IWAC.',

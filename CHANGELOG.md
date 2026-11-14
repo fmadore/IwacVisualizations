@@ -13,6 +13,25 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+The References overview, redesigned after a comparison with AMIRA's publications dashboard. Four of its panels need the regenerated data (`generate_references_overview.py` 0.5.0): after the release, run the data workflow and **Pull latest data** in the module's admin page. Until then those four keep the charts they replace, under their old titles, so nothing breaks in between.
+
+- **Authors over time** replaces the top-authors bar: the 20 most prolific authors, listed by the year of their first work, with a dot for every year they published (larger for more works) on a line from their first dated work to their latest. Generations of scholarship read down the chart.
+- **Languages by decade** replaces the language pie: works per decade, stacked by their first-listed language, so the move from French to English is visible. A bilingual work counts once.
+- **Journals and publishers** replaces the top-publishers bar with a switch between journals, book publishers, and universities and institutions. The catalogue's publisher field holds the journal for an article, so the single ranking set "Cahiers d'études africaines" beside Karthala.
+- **Subjects over time** replaces the top-subjects bar: the 15 most frequent subjects across publication periods (everything before 1980 pooled, then five-year periods). A cell's colour is the share of that period's works carrying the subject, not the count, because the bibliography grows tenfold along the axis. The tooltip gives both.
+- **Subject co-occurrence is a matrix** instead of a chord of thirty subjects: the 24 most-connected subjects, ordered by the clusters they form, so each cluster shows as a dark block on the diagonal. This needs no new data.
+- **"View as table" no longer disables itself over a chart that supplies its own rows.** The button check ignored those rows while the table itself used them; the Authors over time panel was the first chart whose series alone could not be tabulated.
+- The data bundle no longer carries the treemap or the per-country publisher rankings, which nothing read.
+
+- **Author collaborations is a real network now.** It is drawn by the same d3-force canvas renderer as the item-page networks and the Albani Zaria block, instead of a frozen ECharts layout in which nodes overlapped and only a few hubs had a name. Colour marks groups of authors who publish together (Louvain communities, computed in the browser, so no data regeneration is needed): the five largest each get a colour and a legend chip named after their most prolific member ("Around …"), and the rest are grey "Smaller groups". The eight most prolific authors and each group's namesake always keep their labels. Solid lines join co-authors, dashed lines an author and the editor of the volume. Select an author for a card with their references, group and strongest links; drag, zoom, freeze the layout and download the image as on the other networks.
+- **No panel sits alone on half a row.** "Content by country" had the other half of its row empty; it now shares the row with the places-of-publication map, which is cut to the bar chart's height. Across every block, a half-width panel that ends up without a partner (its neighbour wide, or hidden for want of data) now spans the row.
+- **The panels follow a reading order:** the corpus (timeline, types, languages), geography (countries studied, places of publication), authors and their network, publishers, subjects and their co-occurrence, then full-text coverage, topics and the semantic map.
+- **One topics panel with a French / English switch** replaces the two stacked panels. The description follows the selected model's own counts.
+- **The country → type treemap is gone:** it repeated the countries and types panels.
+- **Every panel of the block has a named embed link** (`/iwac-embed/references-overview/network`, `…/topics`, …). Single-panel links copied before this release named a position (`…/panel-14`), and the order changed, so re-copy any you have embedded.
+
 ### v2.0.0 — the module in the theme's register (2026-11-11)
 
 This release is **2.0.0**, not 1.101.0: the version number restarts its minor count after a hundred milestones. Nothing needs migrating; 2.0.0 is simply the release after 1.100.0, and every later milestone goes 2.1.0, 2.2.0, and so on. One thing does change for people who embedded a single panel of an item, person or entity dashboard: see the embed-link entry below.

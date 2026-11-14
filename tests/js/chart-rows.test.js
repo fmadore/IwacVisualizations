@@ -145,6 +145,19 @@ test('shapes with no tabular reading yield nothing', () => {
     assert.equal(P.hasTabularOption({ series: [{ type: 'custom', data: [1] }] }), false);
 });
 
+test('a builder\'s own rows enable the table buttons, as they fill the table', () => {
+    // The references lifelines: a custom span series beside scatter dots.
+    // optionToRows reads iwacRows first; hasTabularOption must agree, or the
+    // buttons are disabled over a table that would have filled.
+    const P = load();
+    const option = {
+        series: [{ type: 'custom', data: [[1990, 2000, 0]] }, { type: 'scatter', data: [[1990, 0, 1]] }],
+        iwacRows: () => ({ columns: [{ label: 'Author', numeric: false }], rows: [['A']] }),
+    };
+    assert.equal(P.hasTabularOption(option), true);
+    assert.equal(P.optionToRows(option).rows[0][0], 'A');
+});
+
 test('CSV: BOM, CRLF, quoting, raw numbers, link cells by their text, formulas neutralised', () => {
     const P = load();
     const csv = P.rowsToCsv({
