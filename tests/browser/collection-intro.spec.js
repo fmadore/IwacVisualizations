@@ -86,14 +86,15 @@ test('every figure carries the data file’s numbers', async ({ page }) => {
     const what = block.locator('[data-chapter="what"]');
     await expect(what.locator('.iwac-vis-intro__numeral .iwac-vis-intro__count')).toHaveText(grouped(s.total_items));
     await expect(what.locator('.iwac-vis-intro__second dd .iwac-vis-intro__count')).toHaveText([grouped(s.index_entries), grouped(s.total_words)]);
-    const dated = Object.fromEntries(Object.entries(DATA.types_over_time.series_global).map(([k, v]) => [k, v.reduce((a, b) => a + b, 0)]));
     const types = what.locator('.iwac-vis-intro__ledger .iwac-vis-intro__row');
     await expect(types.locator('.iwac-vis-intro__name')).toHaveText([
         'Newspaper articles', 'Islamic periodicals', 'Audiovisual recordings', 'Archival documents', 'Scholarly references', 'Photographs',
     ]);
-    await expect(types.locator('.iwac-vis-intro__num')).toHaveText([
-        s.articles, dated.publication, dated.audiovisual, dated.document, s.references_count, s.photographs,
-    ].map(grouped));
+    // Every type from its exact summary total, so the ledger accounts for
+    // every item the numeral counts.
+    const exact = [s.articles, s.publications_count, s.audiovisual_count, s.documents_count, s.references_count, s.photographs];
+    expect(exact.reduce((a, b) => a + b, 0)).toBe(s.total_items);
+    await expect(types.locator('.iwac-vis-intro__num')).toHaveText(exact.map(grouped));
     await expect(what.locator('.iwac-vis-intro__segment')).toHaveCount(6);
 
     const where = block.locator('[data-chapter="where"]');
@@ -129,6 +130,20 @@ test('every figure carries the data file’s numbers', async ({ page }) => {
     await expect(voices.getByRole('link', { name: person.title })).toHaveAttribute('href', `/s/iwac/item/${person.o_id}`);
 
     await expect(block.locator('.iwac-vis-intro__foot')).toHaveText('Figures from the collection’s data as of January 1, 2026.');
+});
+
+test('a data file from before the exact type totals falls back to the dated counts', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const older = JSON.parse(JSON.stringify(DATA));
+    for (const key of ['publications_count', 'documents_count', 'audiovisual_count']) delete older.summary[key];
+    await page.route('**/tests/golden/collection_overview/collection-overview.json',
+        (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(older) }));
+    await open(page);
+    const s = DATA.summary;
+    const dated = Object.fromEntries(Object.entries(DATA.types_over_time.series_global).map(([k, v]) => [k, v.reduce((a, b) => a + b, 0)]));
+    await expect(page.locator(`${BLOCK} [data-chapter="what"] .iwac-vis-intro__ledger .iwac-vis-intro__num`)).toHaveText([
+        s.articles, dated.publication, dated.audiovisual, dated.document, s.references_count, s.photographs,
+    ].map(grouped));
 });
 
 test('each chapter plays once in view, Replay plays it again, and it rests on the real values', async ({ page }) => {

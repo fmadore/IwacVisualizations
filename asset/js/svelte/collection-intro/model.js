@@ -6,21 +6,24 @@
  * chapter then keeps its words and loses only its figure: the file comes
  * from a data release that can be older or newer than the module.
  *
- * Item types. `summary` gives exact totals for articles, references and
- * photographs only. Publications, documents and audiovisual come from
- * `types_over_time`, which counts dated items, so an undated record of those
- * three types is missing from its segment (36 of ~21,000 on 2026-11-14).
- * The ledger therefore shows each type's own count and its share of the
- * total, and never claims the rows add up to it.
+ * Item types. Since the generator's 0.5.0, `summary` gives an exact total
+ * for every type (`publications_count`, `documents_count` and
+ * `audiovisual_count` joined `articles`, `references_count` and
+ * `photographs`). A data release from before then has only the first three;
+ * for the others the model falls back to `types_over_time`, which counts
+ * dated items, so an undated record of those types is missing from its
+ * segment (36 of ~21,000 on 2026-11-14). The ledger therefore shows each
+ * type's own count and its share of the total, and never claims the rows
+ * add up to it — with an older file they do not.
  */
 import { nameKey, projectCountries } from './geo.js';
 
 const TYPES = [
     // key in types_over_time, exact summary key, --type-* token
     ['article', 'articles', 'article'],
-    ['publication', null, 'publication'],
-    ['audiovisual', null, 'audiovisual'],
-    ['document', null, 'document'],
+    ['publication', 'publications_count', 'publication'],
+    ['audiovisual', 'audiovisual_count', 'audiovisual'],
+    ['document', 'documents_count', 'document'],
     ['reference', 'references_count', 'reference'],
     ['image', 'photographs', 'photograph'],
 ];
@@ -65,7 +68,9 @@ function what(d, s) {
     const types = TYPES.map(([key, exact, token]) => ({
         key,
         token,
-        count: (exact && positive(s[exact])) || positive(sum(dated[key])) || 0,
+        // An exact key that is present wins even at zero: it is the count.
+        // Only an absent (or unreadable) one falls back to the dated series.
+        count: exact && num(s[exact]) !== null ? Math.max(0, num(s[exact])) : positive(sum(dated[key])) || 0,
     })).filter((t) => t.count > 0);
     const total = positive(s.total_items) || types.reduce((a, t) => a + t.count, 0);
     if (!total) return null;

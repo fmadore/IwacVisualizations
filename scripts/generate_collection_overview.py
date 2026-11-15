@@ -1134,6 +1134,19 @@ def compute_summary(
         "video_channels": len(channels),
         "references_count": counts.get("references", 0),
         "photographs": counts.get("images", 0),
+        # Exact per-type totals for the three content types that had none
+        # here, so a reader of `summary` can account for every item in
+        # `total_items` (articles + publications_count + documents_count +
+        # audiovisual_count + references_count + photographs). Before 0.5.0
+        # the Collection Introduction took these three from
+        # `types_over_time`, which counts DATED items only, and its type
+        # ledger came up 36 short of the total on live data.
+        # `publications_count` counts ITEMS (issues of Islamic periodicals),
+        # not periodical titles — the confusion the docstring above names,
+        # and the reason it carries `_count` rather than the bare key.
+        "publications_count": counts.get("publications", 0),
+        "documents_count": counts.get("documents", 0),
+        "audiovisual_count": counts.get("audiovisual", 0),
         "newspapers": newspapers.get("total", 0),
         "countries": len(country_distribution),
         "languages": _count_languages(language_distribution),
@@ -1204,7 +1217,7 @@ def build_overview(
         total_records=summary.get("articles", 0) + summary.get("index_entries", 0),
         data_source=repo_id,
         script="generate_collection_overview.py",
-        script_version="0.4.0",
+        script_version="0.5.0",
         top_n=top_n,
     )
 
