@@ -375,15 +375,19 @@ The committed `asset/js/dist/` bundles and `.min.css` sheets mean a fresh clone 
 
 | Token | Used for |
 |---|---|
-| `--primary` | First palette color + accents (dataZoom handle, hover borders, …) |
-| `--ink` | Primary text |
-| `--ink-light` | Axis labels, legend text |
-| `--muted` | Secondary text, tabs, subtitle |
-| `--surface` | Tooltip background, button background |
-| `--surface-raised` | Panel background, card background |
+| `--primary` | First palette color; the one accent — the range slider's selected window and handles, selected controls, focus |
+| `--secondary` | Second palette color |
+| `--ink` | Primary text, axis baselines and ticks |
+| `--ink-strong` | The rule a panel (a ruled section) opens on; table head rule |
+| `--ink-light` | Axis labels, legend text, the tooltip's hairline frame |
+| `--muted` | Secondary text, tabs, subtitle, the range slider's silhouette |
+| `--surface` | The page ground panels sit on; tooltip background |
+| `--panel-bg` | What a panel is measured against (aliases `--surface` in both themes) |
 | `--background` | Chart background fill |
-| `--border` | Axis lines, panel borders |
-| `--border-light` | Split lines, subtle dividers |
+| `--border` | Hairline controls, the range slider's track |
+| `--border-light` | Value-axis grid, subtle dividers |
+
+Panels are ruled sections, not cards: no fill, frame, radius or shadow of their own, an `--ink-strong` rule on top, content on the page's left edge (the theme's ink-and-spot-colour stance, IWAC-theme 2.33).
 
 If you add new theme-dependent properties, register them in `readTokens()` and provide a fallback in `FALLBACK_LIGHT` / `FALLBACK_DARK`. **Never hardcode hex values in chart code** — the IWAC theme's `--primary` is admin-configurable per site.
 
