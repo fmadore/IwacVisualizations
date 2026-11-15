@@ -13,11 +13,12 @@ use Omeka\Api\Representation\SiteRepresentation;
  * On This Day page block. Label, description and template all resolve from
  * `IwacVisualizations\Site\BlockRegistry::BLOCKS['on-this-day']`.
  *
- * The one IWAC block that takes a setting: which of its three layouts it
+ * The one IWAC block that takes a setting: which of its four layouts it
  * opens on. Readers can still switch — the block renders the same switcher
  * whatever the setting, and remembers their choice — so this is a default,
- * not a lock. A homepage usually wants the quiet register; a
- * collection-highlights page may want the clippings wall.
+ * not a lock. A homepage usually wants the quiet register or the
+ * front-page edition; a collection-highlights page may want the clippings
+ * wall.
  */
 class OnThisDay extends AbstractIwacBlockLayout
 {
@@ -28,6 +29,7 @@ class OnThisDay extends AbstractIwacBlockLayout
         'register'  => 'Register — ruled rows, six documents', // @translate
         'decades'   => 'Decades — five documents along a time axis', // @translate
         'clippings' => 'Clippings — eight documents in a mosaic', // @translate
+        'edition'   => 'Edition — the day as a front page: year spine, lead clipping, briefs', // @translate
     ];
 
     const DEFAULT_LAYOUT = 'register';
@@ -45,7 +47,7 @@ class OnThisDay extends AbstractIwacBlockLayout
         $select = new Select('o:block[__blockIndex__][o:data][layout]');
         $select->setLabel('Default layout'); // @translate
         $select->setOption('info', 'Which layout the block opens on. Visitors can '
-            . 'switch between all three; their choice is remembered.'); // @translate
+            . 'switch between all four; their choice is remembered.'); // @translate
         $select->setValueOptions($options);
         $select->setValue($this->layout($block));
 

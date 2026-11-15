@@ -9,6 +9,8 @@
 /*    register   ruled rows, six documents (default)                      */
 /*    decades    five documents pinned along the rule as an axis          */
 /*    clippings  eight documents in a three-column mosaic                 */
+/*    edition    the whole day as one front page: folio, year spine,      */
+/*               lead clipping, briefs in ruled columns                   */
 /*                                                                       */
 /*  Depends on iwac-core.css for panel chrome, the chip family            */
 /*  (.iwac-vis-facets__btn), the type badge and every token fallback.     */
@@ -144,6 +146,7 @@
  *  IWAC-theme DESIGN-SYSTEM.md §2c). */
 .iwac-vis-otd-switch {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-1, 0.25rem);
 }
@@ -498,6 +501,549 @@
 
 
 /* ------------------------------------------------------------------- */
+/*  Layout: edition                                                     */
+/* ------------------------------------------------------------------- */
+
+/*  The day as a front page. Nothing here is boxed: the masthead's 2 px ink
+ *  rule opens it, a double rule and a hairline hold the folio line, the
+ *  year spine is one hairline axis, the lead sits on a hairline and the
+ *  briefs are set in ruled columns. Primary appears only on the lead's
+ *  year (dots, axis marker) and in the dateline interpuncts. */
+
+/*  Masthead: the date steps up to headline size — this layout is the date. */
+.iwac-vis-otd-panel--edition .iwac-vis-otd-head__date {
+    font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
+    line-height: 1;
+}
+
+.iwac-vis-otd-panel--edition .iwac-vis-otd-head__sub {
+    font-size: var(--text-base, 1.0625rem);
+}
+
+/*  Folio: the newspaper's line under the nameplate — here the scale of the
+ *  day on one side and the way to other days on the other. The double rule
+ *  is the broadsheet's own: two hairlines from one 3 px border. */
+.iwac-vis-otd-folio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3, 0.75rem) var(--space-6, 1.5rem);
+    margin-top: var(--space-4, 1rem);
+    padding: var(--space-3, 0.75rem) 0;
+    border-top: var(--accent-line-md, 3px) double var(--ink-strong, #05070c);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-otd-folio__scale {
+    flex: 1 1 22rem;
+    margin: 0;
+    max-width: 62ch;
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-base, 1.0625rem);
+    line-height: var(--line-height-snug, 1.4);
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-otd-folio__note {
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-otd-folio__err {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-otd-daynav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-otd-daynav__step,
+.iwac-vis-otd-daynav__today {
+    gap: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.iwac-vis-otd-daynav__step > .iwac-vis-icon {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+/*  Inert on today itself — still in the row and still focusable, so the
+ *  folio keeps its shape and a parked focus is not dropped. */
+.iwac-vis-otd-daynav__today[aria-disabled="true"] {
+    color: var(--muted, #66696e);
+    border-color: var(--border-light, #e2e5e8);
+    cursor: default;
+}
+
+.iwac-vis-otd-daynav__today[aria-disabled="true"]:hover {
+    background: transparent;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-otd-daynav__pick {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-otd-daynav__label {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+    white-space: nowrap;
+}
+
+.iwac-vis-otd-daynav__day {
+    width: auto;
+    min-width: 4.5rem;
+}
+
+.iwac-vis-otd-daynav__month {
+    width: auto;
+    min-width: 8.5rem;
+}
+
+/*  Spine. One hairline axis from the collection's first decade to this
+ *  year; above it, a stack of dots for every year with an item on this
+ *  date. The dots are the buttons' faces; the decade figures below are
+ *  laid out through the same scale, so the two always agree. */
+.iwac-vis-otd-spine {
+    margin-top: var(--space-5, 1.25rem);
+}
+
+.iwac-vis-otd-spine__scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+}
+
+.iwac-vis-otd-spine__track {
+    position: relative;
+    height: 7.5rem;
+}
+
+.iwac-vis-otd-spine__axis {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.75rem;
+    height: 1px;
+    background: var(--ink-strong, #05070c);
+    transform-origin: left center;
+}
+
+.iwac-vis-otd-spine__scale {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.5rem;
+}
+
+.iwac-vis-otd-spine__decade {
+    position: absolute;
+    top: 0.25rem;
+    transform: translateX(-50%);
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted, #66696e);
+}
+
+/*  The decade's notch, hanging from the axis. */
+.iwac-vis-otd-spine__decade::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(-0.25rem - 1px);
+    width: 1px;
+    height: 0.3125rem;
+    background: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-otd-spine__ticks {
+    position: absolute;
+    inset: 0;
+}
+
+/*  A year: 28 px wide (WCAG's 24 plus air), standing on the axis. Never
+ *  closer than 28 px to the next — edition.js lays them out so. */
+.iwac-vis-otd-tick {
+    position: absolute;
+    bottom: 1.75rem;
+    width: 28px;
+    height: 5.25rem;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm, 0.375rem);
+    color: var(--ink-light, #3f4349);
+    font: inherit;
+    cursor: pointer;
+    scroll-snap-align: center;
+}
+
+.iwac-vis-otd-tick:focus-visible {
+    outline: var(--focus-outline, 2px solid #ce4115);
+    outline-offset: 0;
+}
+
+.iwac-vis-otd-tick__dots {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 3px;
+    padding-bottom: 5px;
+}
+
+.iwac-vis-otd-tick__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full, 9999px);
+    background: currentColor;
+    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+/*  The year itself, shown for the lead and for whatever the pointer or the
+ *  keyboard is on — the button's name says it to everyone else. */
+.iwac-vis-otd-tick__year {
+    margin-bottom: var(--space-1, 0.25rem);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    line-height: 1;
+    font-feature-settings: "kern" 1, "lnum" 1;
+    white-space: nowrap;
+    color: var(--ink-strong, #05070c);
+    visibility: hidden;
+}
+
+.iwac-vis-otd-tick:hover,
+.iwac-vis-otd-tick:focus-visible {
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-otd-tick:hover > .iwac-vis-otd-tick__year,
+.iwac-vis-otd-tick:focus-visible > .iwac-vis-otd-tick__year,
+.iwac-vis-otd-tick.is-lead > .iwac-vis-otd-tick__year {
+    visibility: visible;
+}
+
+/*  The lead's year: its dots, and a marker sitting on the axis. */
+.iwac-vis-otd-tick.is-lead {
+    color: var(--primary, #ce4115);
+}
+
+.iwac-vis-otd-tick::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    border-radius: var(--radius-full, 9999px);
+    background: transparent;
+}
+
+.iwac-vis-otd-tick.is-lead::after {
+    background: var(--primary, #ce4115);
+}
+
+/*  The lead headline, the briefs' head and their headlines are h3 / h4
+ *  under the masthead's h2, so each is chained to `.iwac-vis-otd-edition`
+ *  (0,2,0) to out-rank iwac-core's `.iwac-vis-block h3` / `h4` (0,1,1),
+ *  which would set them all as 19 px UI headings. */
+
+/*  Lead. Old and new share one grid cell while they cross-fade, so the
+ *  box holds the taller of the two (edition.js keeps that as a floor). */
+.iwac-vis-otd-lead-slot {
+    display: grid;
+    margin-top: var(--space-4, 1rem);
+    padding-top: var(--space-6, 1.5rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-otd-lead {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-8, 2rem);
+    align-items: start;
+    transition: opacity var(--transition-base, 200ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-otd-lead.is-entering,
+.iwac-vis-otd-lead.is-leaving {
+    opacity: 0;
+}
+
+.iwac-vis-otd-lead.is-leaving {
+    pointer-events: none;
+}
+
+/*  The clipping: a large derivative, top-anchored — a cutting is recognised
+ *  by its headline, which a centred crop throws away — in a hairline frame.
+ *  No shadow, no rotation, no paper texture: the scan is the texture. */
+.iwac-vis-otd-lead__plate {
+    display: block;
+    aspect-ratio: 1 / 1;
+    max-height: 30rem;
+    overflow: hidden;
+    border: 1px solid var(--border, #ced1d6);
+    background: var(--surface-sunken, #f4f1ef);
+}
+
+.iwac-vis-otd-lead__scan {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.iwac-vis-otd-lead__text {
+    min-width: 0;
+}
+
+.iwac-vis-otd-lead__kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    margin: 0 0 var(--space-3, 0.75rem);
+}
+
+.iwac-vis-otd-lead__year {
+    font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
+}
+
+.iwac-vis-otd-lead__ago,
+.iwac-vis-otd-brief__ago {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-otd-edition .iwac-vis-otd-lead__title {
+    margin: 0;
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--ink-strong, #05070c);
+    overflow-wrap: normal;
+    word-break: normal;
+    letter-spacing: var(--tracking-display, -0.01em);
+    font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
+    text-wrap: balance;
+}
+
+.iwac-vis-otd-lead__title a,
+.iwac-vis-otd-brief__title a {
+    color: var(--ink-strong, #05070c);
+    text-decoration: none;
+    transition: color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-otd-lead__title a:hover,
+.iwac-vis-otd-brief__title a:hover {
+    color: var(--primary-hover, #b03710);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-otd-lead__title a:focus-visible,
+.iwac-vis-otd-brief__title a:focus-visible {
+    outline: var(--focus-outline, 2px solid #ce4115);
+    outline-offset: 2px;
+}
+
+.iwac-vis-otd-lead__lede {
+    margin: var(--space-4, 1rem) 0 0;
+    max-width: 40em;
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-lg, 1.1875rem);
+    line-height: var(--line-height-relaxed, 1.7);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-otd-lead__dateline {
+    margin: var(--space-4, 1rem) 0 0;
+}
+
+/*  An item with no scan leads in type alone: no image slot, the year as
+ *  the page's display figure, the headline a step larger and wider. */
+.iwac-vis-otd-lead--type {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__text {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-8, 2rem);
+    align-items: start;
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__kicker {
+    grid-row: 1 / span 3;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    margin: 0;
+    padding-right: var(--space-8, 2rem);
+    border-right: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__year {
+    font-size: var(--text-5xl, clamp(3.25rem, 2.5rem + 3.2vw, 4.75rem));
+    font-weight: 800;
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__title {
+    grid-column: 2;
+    max-width: 26ch;
+    font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
+    line-height: 1.08;
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__lede,
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__dateline {
+    grid-column: 2;
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__lede {
+    font-size: var(--text-xl, 1.5rem);
+    line-height: var(--line-height-snug, 1.4);
+}
+
+/*  Briefs: typeset in newspaper columns, read down then across — which,
+ *  with a chronological list, makes each column roughly an era. */
+.iwac-vis-otd-briefs {
+    margin-top: var(--space-8, 2rem);
+}
+
+.iwac-vis-otd-edition .iwac-vis-otd-briefs__head {
+    margin: 0 0 var(--space-4, 1rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+    font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-otd-briefs__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    column-count: 3;
+    column-gap: var(--space-8, 2rem);
+    column-rule: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-otd-brief {
+    break-inside: avoid;
+    margin: 0 0 var(--space-6, 1.5rem);
+}
+
+.iwac-vis-otd-brief__stamp {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2, 0.5rem);
+    margin: 0 0 var(--space-1, 0.25rem);
+}
+
+.iwac-vis-otd-brief__year {
+    font-size: var(--text-lg, 1.1875rem);
+}
+
+.iwac-vis-otd-edition .iwac-vis-otd-brief__title {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-size: var(--text-lg, 1.1875rem);
+    font-weight: 600;
+    line-height: var(--line-height-tight, 1.25);
+    letter-spacing: var(--tracking-display, -0.01em);
+    font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
+}
+
+.iwac-vis-otd-brief .iwac-vis-otd-meta {
+    margin: 0 0 var(--space-2, 0.5rem);
+}
+
+.iwac-vis-otd-brief__copy {
+    margin: 0;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.iwac-vis-otd-panel--edition .iwac-vis-otd-foot {
+    margin-top: 0;
+}
+
+/*  First view only: the axis draws, the years rise onto it from left to
+ *  right, the lead settles — under 1.2 s in all, once (edition.js drops
+ *  `is-drawing` afterwards). Nothing loops, nothing waits on hover. */
+.iwac-vis-otd-edition.is-drawing .iwac-vis-otd-spine__axis {
+    animation: iwac-vis-otd-draw calc(var(--duration-slow, 300ms) * 2) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) both;
+}
+
+.iwac-vis-otd-edition.is-drawing .iwac-vis-otd-tick > *,
+.iwac-vis-otd-edition.is-drawing .iwac-vis-otd-tick::after {
+    animation: iwac-vis-otd-rise var(--duration-base, 200ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) both;
+    animation-delay: calc(var(--duration-slow, 300ms) * 2 * var(--iwac-vis-otd-delay, 0));
+}
+
+.iwac-vis-otd-edition.is-drawing .iwac-vis-otd-lead {
+    animation: iwac-vis-otd-settle var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) both;
+    animation-delay: var(--duration-slow, 300ms);
+}
+
+@keyframes iwac-vis-otd-draw {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+@keyframes iwac-vis-otd-rise {
+    from { opacity: 0; transform: translateY(0.375rem); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes iwac-vis-otd-settle {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to   { opacity: 1; transform: none; }
+}
+
+
+/* ------------------------------------------------------------------- */
 /*  Footer + full-day index                                             */
 /* ------------------------------------------------------------------- */
 
@@ -651,6 +1197,19 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .iwac-vis-otd-lead {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: var(--space-6, 1.5rem);
+    }
+
+    .iwac-vis-otd-lead--type {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .iwac-vis-otd-briefs__list {
+        column-count: 2;
+    }
+
     .iwac-vis-otd-clippings {
         column-count: 2;
     }
@@ -689,6 +1248,85 @@
         column-count: 1;
     }
 
+    .iwac-vis-otd-panel--edition .iwac-vis-otd-head__date {
+        font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
+    }
+
+    .iwac-vis-otd-folio__scale {
+        flex-basis: 100%;
+    }
+
+    .iwac-vis-otd-daynav {
+        width: 100%;
+    }
+
+    /*  Previous and next share the first row; the picker and "Today" the
+     *  second, so no control is left alone on a line. */
+    .iwac-vis-otd-daynav__pick {
+        order: 3;
+        flex: 1 1 auto;
+    }
+
+    .iwac-vis-otd-daynav__today {
+        order: 4;
+    }
+
+    /*  The selects keep their name (the label stays in the accessibility
+     *  tree, and the month select is self-evident); only its ink goes, so
+     *  the picker and "Today" fit one phone row. */
+    .iwac-vis-otd-daynav__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .iwac-vis-otd-daynav__step--next {
+        margin-inline-end: auto;
+    }
+
+    .iwac-vis-otd-lead {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-4, 1rem);
+    }
+
+    .iwac-vis-otd-lead__plate {
+        aspect-ratio: 4 / 3;
+    }
+
+    .iwac-vis-otd-edition .iwac-vis-otd-lead__title {
+        font-size: var(--text-2xl, 1.875rem);
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text {
+        display: block;
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__kicker {
+        flex-direction: row;
+        margin: 0 0 var(--space-3, 0.75rem);
+        padding-right: 0;
+        border-right: 0;
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__year {
+        font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__title {
+        font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__lede {
+        font-size: var(--text-lg, 1.1875rem);
+    }
+
+    .iwac-vis-otd-briefs__list {
+        column-count: 1;
+    }
+
     .iwac-vis-otd-index__row {
         grid-template-columns: 3.5rem minmax(0, 1fr);
     }
@@ -705,8 +1343,24 @@
     .iwac-vis-otd-decades__card,
     .iwac-vis-otd-clippings__cut,
     .iwac-vis-otd-index__row,
-    .iwac-vis-otd-foot__toggle > .iwac-vis-icon {
+    .iwac-vis-otd-foot__toggle > .iwac-vis-icon,
+    .iwac-vis-otd-lead,
+    .iwac-vis-otd-tick__dot,
+    .iwac-vis-otd-lead__title a,
+    .iwac-vis-otd-brief__title a {
         transition: none;
+    }
+
+    /*  The Edition is drawn complete and still. */
+    .iwac-vis-otd-edition.is-drawing .iwac-vis-otd-spine__axis,
+    .iwac-vis-otd-edition.is-drawing .iwac-vis-otd-tick > *,
+    .iwac-vis-otd-edition.is-drawing .iwac-vis-otd-tick::after,
+    .iwac-vis-otd-edition.is-drawing .iwac-vis-otd-lead {
+        animation: none;
+    }
+
+    .iwac-vis-otd-spine__scroller {
+        scroll-behavior: auto;
     }
 }
 
@@ -716,5 +1370,18 @@
 @media (forced-colors: active) {
     .iwac-vis-otd-decades__dot {
         forced-color-adjust: none;
+    }
+
+    /*  The spine is drawn with backgrounds, which a contrast theme repaints
+     *  as Canvas: restate it in system colours, the lead in Highlight. */
+    .iwac-vis-otd-spine__axis,
+    .iwac-vis-otd-spine__decade::before,
+    .iwac-vis-otd-tick__dot {
+        background: CanvasText;
+    }
+
+    .iwac-vis-otd-tick.is-lead .iwac-vis-otd-tick__dot,
+    .iwac-vis-otd-tick.is-lead::after {
+        background: Highlight;
     }
 }

@@ -5,13 +5,21 @@
  * date across the collection's decades — newspaper articles and periodical
  * issues with full publication dates.
  *
- * Two calendars, three layouts, one cast. The block fetches today's
+ * Two calendars, four layouts, one cast. The block fetches today's
  * Gregorian day file and, in parallel, the Umm al-Qura one for the same
  * moment (`on-this-day/h/{MM-DD}.json`); both are written by
  * `scripts/generate_on_this_day.py`. Each calendar picks its own documents
  * — the same lunar date across the decades is a different set of items than
  * the same solar date. The reader chooses the layout (Register / Decades /
- * Clippings); the page editor chooses which one it opens on.
+ * Clippings / Edition); the page editor chooses which one it opens on.
+ *
+ * The Edition layout adds day navigation — previous / next day, a month +
+ * day picker, "Today" — so the block can show a day other than today. The
+ * chosen day, calendar, layout and the Edition's chosen lead year are the
+ * block's URL state (`otd.day`, `otd.cal`, `otd.layout`, `otd.year`), so a
+ * view can be shared and embedded; today's own date never appears in the
+ * address. The other layouts follow a chosen day too: every dateline reads
+ * the one reference date in shared.js.
  *
  * Pure DOM — no ECharts. When the day file is ABSENT (404 — pre-first data
  * sync) or empty, the whole block removes itself silently, like the Item Set
@@ -58,6 +66,26 @@
             'otd.view_register':  'Register',
             'otd.view_decades':   'Decades',
             'otd.view_clippings': 'Clippings',
+            'otd.view_edition':   'Edition',
+            'otd.ed_scale':         '{count} items on this date, from {from} to {to}.',
+            'otd.ed_scale_same':    '{count} items on this date, all from {year}.',
+            'otd.ed_scale_single':  'One item on this date, from {year}.',
+            'otd.ed_caveat_h':      'Converted dates may differ from local lunar observations.',
+            'otd.ed_nav':           'Other dates',
+            'otd.ed_prev':          'Previous day, {date}',
+            'otd.ed_next':          'Next day, {date}',
+            'otd.ed_choose':        'Choose a date',
+            'otd.ed_month':         'Month',
+            'otd.ed_today':         'Today',
+            'otd.ed_spine':         'Years with items on {date}',
+            'otd.ed_tick':          '{year}, {count} items',
+            'otd.ed_tick_one':      '{year}, {count} item',
+            'otd.ed_tick_other':    '{year}, {count} items',
+            'otd.ed_ago_h':         '{count} Hijri years ago',
+            'otd.ed_ago_h_one':     '{count} Hijri year ago',
+            'otd.ed_ago_h_other':   '{count} Hijri years ago',
+            'otd.ed_briefs':        'Also on this date',
+            'otd.ed_err_day':       'Couldn’t load that date.',
             'otd.shown':      '{shown} of the {count} items in the collection that carry this date.',
             'otd.all_shown':        'The {count} items in the collection that carry this date.',
             'otd.all_shown_one':    'The only item in the collection that carries this date.',
@@ -85,6 +113,26 @@
             'otd.view_register':  'Registre',
             'otd.view_decades':   'Décennies',
             'otd.view_clippings': 'Coupures',
+            'otd.view_edition':   'Édition',
+            'otd.ed_scale':         '{count} documents à cette date, de {from} à {to}.',
+            'otd.ed_scale_same':    '{count} documents à cette date, tous de {year}.',
+            'otd.ed_scale_single':  'Un seul document à cette date, de {year}.',
+            'otd.ed_caveat_h':      'Les dates converties peuvent différer des observations lunaires locales.',
+            'otd.ed_nav':           'Autres dates',
+            'otd.ed_prev':          'Jour précédent, {date}',
+            'otd.ed_next':          'Jour suivant, {date}',
+            'otd.ed_choose':        'Choisir une date',
+            'otd.ed_month':         'Mois',
+            'otd.ed_today':         'Aujourd’hui',
+            'otd.ed_spine':         'Années comptant des documents le {date}',
+            'otd.ed_tick':          '{year}, {count} documents',
+            'otd.ed_tick_one':      '{year}, {count} document',
+            'otd.ed_tick_other':    '{year}, {count} documents',
+            'otd.ed_ago_h':         'il y a {count} années hégiriennes',
+            'otd.ed_ago_h_one':     'il y a {count} année hégirienne',
+            'otd.ed_ago_h_other':   'il y a {count} années hégiriennes',
+            'otd.ed_briefs':        'Également à cette date',
+            'otd.ed_err_day':       'Impossible de charger cette date.',
             'otd.shown':      '{shown} des {count} documents de la collection qui portent cette date.',
             'otd.all_shown':        'Les {count} documents de la collection qui portent cette date.',
             'otd.all_shown_one':    'Le seul document de la collection qui porte cette date.',
@@ -107,7 +155,8 @@
     var LAYOUTS = [
         { key: 'register',  labelKey: 'otd.view_register',  module: 'register' },
         { key: 'decades',   labelKey: 'otd.view_decades',   module: 'decades' },
-        { key: 'clippings', labelKey: 'otd.view_clippings', module: 'clippings' }
+        { key: 'clippings', labelKey: 'otd.view_clippings', module: 'clippings' },
+        { key: 'edition',   labelKey: 'otd.view_edition',   module: 'edition' }
     ];
     var DEFAULT_LAYOUT = 'register';
     var STORE_KEY = 'iwac-vis-otd-layout';
@@ -153,6 +202,21 @@
             if (candidates[i] && layoutFor(candidates[i])) return candidates[i];
         }
         return DEFAULT_LAYOUT;
+    }
+
+    /**
+     * The day the address asks for (`otd.day=MM-DD`), or null. Read before
+     * the first fetch, so a shared link loads its own day's files rather
+     * than today's and then a second pair; the store's URL binding reads
+     * the same parameter again once the block exists.
+     */
+    function urlDay() {
+        try {
+            var key = new URLSearchParams(window.location.search).get('otd.day');
+            return key && S.validDayKey(key) ? key : null;
+        } catch (e) {
+            return null;
+        }
     }
 
     function rememberLayout(key) {
@@ -206,7 +270,7 @@
      * on a line of its own under the whole almanac. Null inside an embed and
      * wherever embed.js did not load.
      */
-    function buildEmbedButton(container) {
+    function buildEmbedButton(container, layout) {
         var E = ns.embed;
         if (!E || !E.makeButton) return null;
         if (document.body && document.body.classList.contains('iwac-embed-body')) return null;
@@ -215,7 +279,16 @@
         var base = container.getAttribute('data-embed-base')
             || container.getAttribute('data-site-base') || '';
         return E.makeButton({
-            src: function () { return E.url(base, slug, '', E.stateQuery(container)); },
+            src: function () {
+                // The embed route renders without the block's setting, so the
+                // layout on screen travels in the URL even when the address
+                // bar does not carry it (a block configured to open on it).
+                var query = E.stateQuery(container);
+                if (layout && !/(^|&)otd\.layout=/.test(query)) {
+                    query = (query ? query + '&' : '') + 'otd.layout=' + encodeURIComponent(layout);
+                }
+                return E.url(base, slug, '', query);
+            },
             snippetTitle: P.t('otd.title'),
             height: 720
         });
@@ -236,7 +309,7 @@
 
         // Nothing to reveal when the layout already shows the whole day.
         if (all) {
-            var lone = buildEmbedButton(container);
+            var lone = buildEmbedButton(container, mode.layout);
             if (lone) {
                 var only = P.el('div', 'iwac-vis-otd-foot__actions');
                 only.appendChild(lone);
@@ -277,7 +350,7 @@
         });
         actions.appendChild(btn);
 
-        var embed = buildEmbedButton(container);
+        var embed = buildEmbedButton(container, mode.layout);
         if (embed) actions.appendChild(embed);
 
         foot.appendChild(actions);
@@ -289,15 +362,13 @@
     /* ----------------------------------------------------------------- */
 
     function render(container, data, ctx) {
-        var sets = {
-            g: (data.greg && data.greg.items) || [],
-            h: (data.hijri && data.hijri.items) || []
-        };
+        var sets = setsOf(data);
         if (!sets.g.length) {
             P.removeBlock(container);
             return;
         }
         var hasHijri = sets.h.length > 0 && data.hijriKey;
+        S.setDay(data.gregKey);
 
         container.innerHTML = '';
         var panel = P.buildPanel(
@@ -314,7 +385,35 @@
         );
         container.appendChild(panel.panel);
 
-        var state = { calendar: 'g', layout: initialLayout(container) };
+        var todayKey = S.gregKey(new Date());
+        var state = { calendar: 'g', layout: initialLayout(container), day: data.gregKey, year: 0 };
+        var store = P.createStore(state, {
+            // A new day or calendar is a new page: the lead the reader chose
+            // on the old one means nothing there.
+            reduce: function (s, keys) {
+                if ((keys.indexOf('day') !== -1 || keys.indexOf('calendar') !== -1)
+                    && keys.indexOf('year') === -1 && s.year) {
+                    return { year: 0 };
+                }
+            }
+        });
+        P.bindUrlState(store, {
+            prefix: 'otd',
+            root: container,
+            keys: [
+                { key: 'day', 'default': todayKey, validate: S.validDayKey },
+                { key: 'calendar', param: 'cal', 'default': 'g',
+                    validate: function (v) { return v === 'g' || (v === 'h' && !!hasHijri); } },
+                { key: 'layout', 'default': DEFAULT_LAYOUT,
+                    values: LAYOUTS.map(function (l) { return l.key; }) },
+                { key: 'year', 'default': 0,
+                    validate: function (v) { return v === 0 || (v >= 1900 && v <= 2100 && v % 1 === 0); } }
+            ]
+        });
+        // A link that names a day the load did not fetch cannot happen —
+        // urlDay() and the binding read the same parameter — but the
+        // fetched day is the truth either way.
+        state.day = data.gregKey;
 
         /* -- masthead ------------------------------------------------- */
         var head = P.el('div', 'iwac-vis-otd-head');
@@ -337,16 +436,18 @@
         head.appendChild(titles);
 
         var controls = P.el('div', 'iwac-vis-otd-head__controls');
+        var calendarSwitch = null;
         if (hasHijri) {
-            controls.appendChild(S.segmented({
+            calendarSwitch = S.segmented({
                 label: P.t('otd.calendar'),
-                active: 'g',
+                active: state.calendar,
                 options: [
                     { key: 'g', label: P.t('otd.cal_g'), hint: sets.g.length },
                     { key: 'h', label: P.t('otd.cal_h'), hint: sets.h.length }
                 ],
-                onChange: function (key) { state.calendar = key; draw(); }
-            }).root);
+                onChange: function (key) { store.patch({ calendar: key }); }
+            });
+            controls.appendChild(calendarSwitch.root);
         }
         controls.appendChild(S.segmented({
             label: P.t('otd.view'),
@@ -355,9 +456,8 @@
                 return { key: l.key, label: P.t(l.labelKey) };
             }),
             onChange: function (key) {
-                state.layout = key;
                 rememberLayout(key);
-                draw();
+                store.patch({ layout: key });
             }
         }).root);
         head.appendChild(controls);
@@ -372,40 +472,112 @@
         body.setAttribute('aria-live', 'polite');
         panel.chart.appendChild(body);
 
+        /* -- another day ---------------------------------------------- */
+        var daySeq = 0;
+        var firstEdition = true;
+
+        /**
+         * Fetch `key`'s two files, then show it. The page keeps the current
+         * day until the new one has arrived; a stale answer (the reader
+         * stepped on again meanwhile) is dropped. A failure leaves the day
+         * as it was, with one quiet line in the folio.
+         */
+        function goToDay(key) {
+            if (!S.validDayKey(key) || key === state.day) return;
+            var mine = ++daySeq;
+            body.setAttribute('aria-busy', 'true');
+            loadDayBounded(ctx, key).then(function (next) {
+                if (mine !== daySeq) return;
+                body.removeAttribute('aria-busy');
+                var nextSets = setsOf(next);
+                if (!nextSets.g.length) throw new Error('empty day file');
+                data = next;
+                sets = nextSets;
+                if (calendarSwitch) {
+                    if (calendarSwitch.hints.g) calendarSwitch.hints.g.textContent = P.formatNumber(sets.g.length);
+                    if (calendarSwitch.hints.h) calendarSwitch.hints.h.textContent = P.formatNumber(sets.h.length);
+                }
+                var patch = { day: key, year: 0 };
+                if (state.calendar === 'h' && !sets.h.length) {
+                    patch.calendar = 'g';
+                    if (calendarSwitch) calendarSwitch.setActive('g');
+                }
+                store.patch(patch);
+            }).catch(function (err) {
+                if (mine !== daySeq) return;
+                body.removeAttribute('aria-busy');
+                console.warn('IWACVis on this day:', err);
+                var folio = body.querySelector('.iwac-vis-otd-folio');
+                if (folio && !folio.querySelector('.iwac-vis-otd-folio__err')) {
+                    var note = P.el('p', 'iwac-vis-otd-folio__err', P.t('otd.ed_err_day'));
+                    note.setAttribute('role', 'status');
+                    folio.appendChild(note);
+                }
+            });
+        }
+
         function draw() {
-            var hijri = state.calendar === 'h';
+            S.setDay(state.day);
+            var hijri = state.calendar === 'h' && sets.h.length > 0;
             var items = hijri ? sets.h : sets.g;
+            var edition = state.layout === 'edition';
             var mode = {
-                calendar: state.calendar,
-                dayKey: hijri ? data.hijriKey : data.gregKey
+                calendar: hijri ? 'h' : 'g',
+                layout: state.layout,
+                dayKey: hijri ? data.hijriKey : data.gregKey,
+                gregKey: data.gregKey,
+                isToday: data.gregKey === todayKey,
+                leadYear: state.year,
+                onLead: function (year) { store.patch({ year: year }); },
+                nav: {
+                    go: goToDay,
+                    today: function () { goToDay(todayKey); }
+                },
+                animate: edition && firstEdition
             };
+            if (edition) firstEdition = false;
 
             headline.textContent = hijri ? S.hijriDate() : S.gregToday();
             subline.textContent = hijri ? S.gregTodayFull() : S.hijriDate();
             desc.textContent = P.t(hijri ? 'otd.desc_h' : 'otd.desc',
                 { date: hijri ? S.hijriToday() : S.gregToday() });
+            // The Edition states the day's scale in its own folio line.
+            desc.hidden = edition;
+            panel.panel.classList.toggle('iwac-vis-otd-panel--edition', edition);
 
             var layout = layoutFor(state.layout) || layoutFor(DEFAULT_LAYOUT);
-            var cast = S.pickCast(items, mode.dayKey, S.MAX_CAST);
-            var shown = S.subset(cast, layout.count);
+            var shown = layout.all
+                ? items
+                : S.subset(S.pickCast(items, mode.dayKey, S.MAX_CAST), layout.count);
 
-            body.innerHTML = '';
-            body.className = 'iwac-vis-otd-body iwac-vis-otd-body--' + state.layout;
-            layout.render(body, shown, ctx, mode);
-            body.appendChild(buildFooter(container, items, shown.length, ctx, mode));
+            P.withFocusRestored(panel.panel, function () {
+                body.innerHTML = '';
+                body.className = 'iwac-vis-otd-body iwac-vis-otd-body--' + state.layout;
+                var count = layout.render(body, shown, ctx, mode);
+                body.appendChild(buildFooter(container, items,
+                    typeof count === 'number' ? count : shown.length, ctx, mode));
+            });
         }
 
+        store.subscribe(draw, { keys: ['calendar', 'layout', 'day'] });
         draw();
+    }
+
+    function setsOf(data) {
+        return {
+            g: (data.greg && data.greg.items) || [],
+            h: (data.hijri && data.hijri.items) || []
+        };
     }
 
     /* ----------------------------------------------------------------- */
     /*  Load — and the two different ways it can fail                     */
     /* ----------------------------------------------------------------- */
 
-    /** Today's two day files. */
-    function loadDay(ctx, signal) {
-        var gregKey = S.gregKey();
-        var hijriKey = S.hijriKey();
+    /** One day's two files — `key` (MM-DD), else the address's day, else today's. */
+    function loadDay(ctx, signal, key) {
+        var gregKey = key || urlDay() || S.gregKey(new Date());
+        var hijriKey = S.hijriKey(gregKey);
         var opts = signal ? { signal: signal } : null;
         return Promise.all([
             P.fetchJSON(ctx.dataBase + 'on-this-day/' + gregKey + '.json', opts),
@@ -432,7 +604,7 @@
      * rest of the homepage is still loading. A late resolution after the
      * timeout is dropped: `settled` makes this promise answer exactly once.
      */
-    function loadDayBounded(ctx) {
+    function loadDayBounded(ctx, key) {
         var controller = typeof AbortController !== 'undefined'
             ? new AbortController()
             : null;
@@ -452,7 +624,7 @@
                     fn(value);
                 };
             }
-            loadDay(ctx, controller && controller.signal)
+            loadDay(ctx, controller && controller.signal, key)
                 .then(finish(resolve), finish(reject));
         });
     }

@@ -64,7 +64,7 @@ IwacVisualizations/
 │       │   ├── laicite/                 # 18 files — panel modules
 │       │   ├── lexical-metrics/         # 1 file — panel module
 │       │   ├── minimal-item-dashboard/  # 1 file — panel module
-│       │   ├── on-this-day/             # 4 files — panel modules
+│       │   ├── on-this-day/             # 5 files — panel modules
 │       │   ├── periodicals-overview/    # 2 files — panel modules
 │       │   ├── person-dashboard/        # 11 files — panel modules
 │       │   ├── publication-dashboard/   # 1 file — panel module
@@ -283,7 +283,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 41 files — node:test units
+│   ├── js/                              # 42 files — node:test units
 │   ├── lib/
 │   │   ├── fake-items.php
 │   │   └── strict-errors.php

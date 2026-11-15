@@ -280,7 +280,7 @@ final class BlockRegistry
             'invokable'   => 'onThisDay',
             'class'       => BlockLayout\OnThisDay::class,
             'label'       => 'On This Day', // @translate
-            'description' => 'Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade and clipping layouts. Only records with suitable dates can appear.', // @translate
+            'description' => 'Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade, clipping and front-page layouts, with day-by-day navigation in the front page. Only records with suitable dates can appear.', // @translate
         ],
         'org-cooccurrence' => [
             'invokable'   => 'orgCooccurrence',
