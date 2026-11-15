@@ -2950,6 +2950,12 @@ select.iwac-vis-control:hover {
     position: absolute;
     z-index: var(--iwac-vis-z-overlay, 6);
     max-width: 17rem;
+    /*  It follows the pointer, so its position must never transition. The
+     *  reduced-motion rule above gives every element a 0.01ms duration, and
+     *  with the default `transition-property: all` that was enough to leave
+     *  `left`/`top` one frame behind: a tooltip that had just taken a wider
+     *  node's text sat at the previous node's spot, past the panel's edge. */
+    transition-property: none;
     padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0);
