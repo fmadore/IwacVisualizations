@@ -1,5 +1,18 @@
 <?php
-/** Regenerate the committed browser fixture from the production PHP partials. */
+/**
+ * Regenerate the committed browser fixtures from the production PHP partials.
+ *
+ *     php tests/browser/render-timeline.php > tests/browser/fixtures/timeline.html
+ *     php tests/browser/render-timeline.php --local-media > tests/browser/fixtures/timeline-lighthouse.html
+ *
+ * The first cites its media on example.org, so the browser spec can exercise
+ * media that fail to load. That makes it a poor page to budget: a failing
+ * image is not cached, so each one is requested once or twice depending on
+ * timing, and scripts/check-lighthouse.js saw 9, 10 or 11 requests between
+ * runs. `--local-media` renders the same page with the two images served by
+ * the fixture server (tests/browser/fixtures/media/), which is the page
+ * Lighthouse measures.
+ */
 require_once __DIR__ . '/../../src/Timeline/Catalog.php';
 require_once __DIR__ . '/../../src/Site/ItemValue.php';
 require_once __DIR__ . '/../../src/Timeline/Sources.php';
@@ -27,7 +40,13 @@ class TimelineFixtureView
         return ob_get_clean();
     }
 }
-$timeline = json_decode(file_get_contents($argv[1] ?? __DIR__ . '/../fixtures/timeline.json'), true);
+$args = array_slice($argv, 1);
+$localMedia = in_array('--local-media', $args, true);
+$paths = array_values(array_filter($args, static fn (string $arg): bool => $arg !== '--local-media'));
+$media = static fn (string $text): string => $localMedia
+    ? str_replace(['https://example.org/', 'https:\\/\\/example.org\\/'], ['/tests/browser/fixtures/media/', '\\/tests\\/browser\\/fixtures\\/media\\/'], $text)
+    : $text;
+$timeline = json_decode($media(file_get_contents($paths[0] ?? __DIR__ . '/../fixtures/timeline.json')), true);
 $view = new TimelineFixtureView();
 $locale = $timeline['locale'];
 // The item the fixture's one caption cites (item/42), as the API returns it.
@@ -36,7 +55,7 @@ $sources = Sources::cards($timeline, new FakeApi([
         'dcterms:date' => [new FakeValue('1970-03-14')],
         'dcterms:publisher' => [new FakeValue('Carrefour africain')],
         'dcterms:creator' => [new FakeValue('A. Reporter')],
-    ], 'https://example.org/archive-page.jpg'),
+    ], $media('https://example.org/archive-page.jpg')),
 ]), $locale);
 ?>
 <!doctype html>

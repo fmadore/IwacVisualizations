@@ -234,7 +234,12 @@ partials (`php tests/php/run.php` fails on a stale one):
 
 ```sh
 php tests/browser/render-timeline.php > tests/browser/fixtures/timeline.html
+php tests/browser/render-timeline.php --local-media > tests/browser/fixtures/timeline-lighthouse.html
 ```
+
+The second is the page the Lighthouse budgets measure: the same markup with
+its two images served locally, because the first cites media on example.org
+that are meant to fail and a failing image makes the request count vary.
 
 CI also renders the registered block and editor through real Omeka/Laminas on
 the supported version matrix, checks PHP HTMLPurifier, and verifies that the

@@ -77,6 +77,15 @@ const PAGES = [
     'topic-explorer',
 ];
 
+/**
+ * A page measured on a fixture other than `<page>.html`. The timeline's own
+ * fixture cites media on example.org so the browser spec can exercise failed
+ * loads; a failing image is not cached, so its request count moved between
+ * runs (9, 10, 11). Lighthouse reads the twin whose two images are local
+ * (`php tests/browser/render-timeline.php --local-media`).
+ */
+const FIXTURES = { timeline: 'timeline-lighthouse' };
+
 const CATEGORIES = ['performance', 'accessibility', 'best-practices'];
 const BYTE_TYPES = ['script', 'stylesheet', 'image', 'font'];
 
@@ -161,7 +170,7 @@ function measure(lhr) {
 }
 
 async function runPage(lighthouse, origin, page, runs) {
-    const url = `${origin}/tests/browser/fixtures/${page}.html`;
+    const url = `${origin}/tests/browser/fixtures/${FIXTURES[page] || page}.html`;
     const results = [];
     for (let i = 0; i < runs; i++) {
         const port = await freePort();

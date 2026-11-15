@@ -215,3 +215,13 @@ $freshTimeline = shell_exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(di
 check(is_string($freshTimeline) && is_readable($timelineFixture)
     && str_replace("\r\n", "\n", $freshTimeline) === str_replace("\r\n", "\n", (string) file_get_contents($timelineFixture)),
     'timeline.html is stale — php tests/browser/render-timeline.php > tests/browser/fixtures/timeline.html');
+// Its twin with local media is the page Lighthouse budgets.
+$lighthouseFixture = dirname(__DIR__) . '/browser/fixtures/timeline-lighthouse.html';
+$freshLighthouse = shell_exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(dirname(__DIR__) . '/browser/render-timeline.php') . ' --local-media');
+check(is_string($freshLighthouse) && is_readable($lighthouseFixture)
+    && str_replace("\r\n", "\n", $freshLighthouse) === str_replace("\r\n", "\n", (string) file_get_contents($lighthouseFixture)),
+    'timeline-lighthouse.html is stale — php tests/browser/render-timeline.php --local-media > tests/browser/fixtures/timeline-lighthouse.html');
+check(strpos((string) $freshLighthouse, 'example.org') === false, 'the Lighthouse timeline fixture still cites example.org media');
+foreach (['archive.jpg', 'archive-page.jpg'] as $image) {
+    check(is_readable(dirname(__DIR__) . '/browser/fixtures/media/' . $image), "the Lighthouse timeline fixture's $image is missing");
+}
