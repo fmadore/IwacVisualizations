@@ -52,8 +52,60 @@
     /*  Calendars                                                         */
     /* ----------------------------------------------------------------- */
 
+    /**
+     * The day the block is showing — today unless the reader chose another
+     * date (the Edition layout's day navigation, or `otd.day` in the URL).
+     *
+     * Every dateline in the block derives from this one reference, so the
+     * three older layouts follow a chosen day without knowing it exists. The
+     * reference carries the CURRENT year: "15 November" is the 15 November
+     * that comes round this year, and its Hijri counterpart is converted from
+     * that date — always post-2000, where the client's Umm al-Qura agrees with
+     * the generator's (see `hijriKey`). 29 February borrows the latest leap
+     * year, since a non-leap year has no such day to convert.
+     */
+    var reference = null;
+
     function today() {
-        return new Date();
+        return reference ? new Date(reference.getTime()) : new Date();
+    }
+
+    /** True for a well-formed MM-DD that names a real calendar day (29 Feb included). */
+    function validDayKey(key) {
+        var m = /^(\d\d)-(\d\d)$/.exec(String(key || ''));
+        if (!m) return false;
+        var month = parseInt(m[1], 10), day = parseInt(m[2], 10);
+        return month >= 1 && month <= 12 && day >= 1 && day <= daysIn(month);
+    }
+
+    /** Days in a month, February counted as 29 — every one has a day file. */
+    function daysIn(month) {
+        return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1] || 31;
+    }
+
+    /** The Date a MM-DD stands for: this year's, or the latest leap year's 29 Feb. */
+    function dateFor(key) {
+        var bits = String(key).split('-');
+        var month = parseInt(bits[0], 10), day = parseInt(bits[1], 10);
+        var year = new Date().getFullYear();
+        if (month === 2 && day === 29) {
+            while (new Date(year, 1, 29).getMonth() !== 1) year--;
+        }
+        return new Date(year, month - 1, day);
+    }
+
+    /** Point the block at `key` (MM-DD), or back at today with a falsy key. */
+    function setDay(key) {
+        reference = key && validDayKey(key) && key !== gregKey(new Date()) ? dateFor(key) : null;
+        todayHijri = undefined;
+    }
+
+    /** The MM-DD `offset` days from `key` — the Edition's previous / next day. */
+    function shiftDay(key, offset) {
+        var bits = String(key).split('-');
+        // Walked in a leap year (2000), so 28 February steps to the 29th in
+        // every year: the almanac has 366 day files, not this year's 365.
+        return gregKey(new Date(2000, parseInt(bits[0], 10) - 1, parseInt(bits[1], 10) + offset));
     }
 
     /** Gregorian MM-DD — the day file to fetch. */
@@ -84,9 +136,48 @@
      * docstring). Today is always in the agreeing range; historical dates
      * are never re-converted here — they carry their Hijri year in the data.
      */
-    function hijriKey() {
-        var h = hijriParts();
+    function hijriKey(gKey) {
+        var h = gKey ? H.parts(dateFor(gKey)) : hijriParts();
         return h ? pad2(h.month) + '-' + pad2(h.day) : null;
+    }
+
+    /** "16 November" / "16 Jumada II" — a day `offset` away, in the calendar on show. */
+    function neighbourLabel(gKey, offset, calendar) {
+        var d = dateFor(shiftDay(gKey, offset));
+        if (calendar === 'h') {
+            var h = H.parts(d);
+            if (h) return H.format(h.day, h.month);
+        }
+        try {
+            return frenchFirst(d.toLocaleDateString(datelineLocale(), {
+                day: 'numeric', month: 'long'
+            }), d.getDate());
+        } catch (e) {
+            return gregKey(d);
+        }
+    }
+
+    /** Twelve month names in the dateline locale — the Edition's date picker. */
+    function monthNames() {
+        var out = [];
+        for (var m = 0; m < 12; m++) {
+            try {
+                out.push(new Date(2000, m, 1).toLocaleDateString(datelineLocale(), { month: 'long' }));
+            } catch (e) {
+                out.push(pad2(m + 1));
+            }
+        }
+        return out;
+    }
+
+    /**
+     * The Hijri year of the day on show — what the Edition counts Hijri
+     * anniversaries from. Today's when the reference is the borrowed leap
+     * year of 29 February, whose Hijri year is not this one.
+     */
+    function hijriYearNow() {
+        var h = today().getFullYear() === new Date().getFullYear() ? hijriParts() : H.parts(new Date());
+        return h ? h.year : null;
     }
 
     /**
@@ -394,13 +485,16 @@
                 active: 'iwac-vis-facets__btn--active'
             }
         });
+        var hints = {};
         cfg.options.forEach(function (opt) {
             if (opt.hint != null) {
-                seg.buttons[opt.key].appendChild(P.el('span', 'iwac-vis-otd-switch__hint',
+                hints[opt.key] = seg.buttons[opt.key].appendChild(P.el('span', 'iwac-vis-otd-switch__hint',
                     P.formatNumber(opt.hint)));
             }
         });
-        return { root: seg.root, setActive: seg.set };
+        // `hints` lets the orchestrator recount the calendars when the reader
+        // moves to another day, without rebuilding the control under focus.
+        return { root: seg.root, setActive: seg.set, hints: hints };
     }
 
     /** "il y a 60 ans" / "60 years ago"; empty in the item's own year. */
@@ -417,6 +511,13 @@
         pad2:          pad2,
         gregKey:       gregKey,
         hijriKey:      hijriKey,
+        validDayKey:   validDayKey,
+        daysIn:        daysIn,
+        setDay:        setDay,
+        shiftDay:      shiftDay,
+        neighbourLabel: neighbourLabel,
+        monthNames:    monthNames,
+        hijriYearNow:  hijriYearNow,
         gregToday:     gregToday,
         gregTodayFull: gregTodayFull,
         hijriToday:    hijriToday,

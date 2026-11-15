@@ -34,12 +34,17 @@
 
         // Today's two day files, served from memory. Rows are
         // [year, o_id, title, source, type, thumb, excerpt, hijriYear].
+        // `?thumbs=1` gives every third row a scan id (the spec routes the
+        // image requests); without it no row has one, so the Lighthouse page
+        // loads no images.
+        const withThumbs = fixtureParams.get('thumbs') === '1';
         function rows(n, offset) {
             const out = [];
             for (let i = 0; i < n; i++) {
                 const year = 1965 + ((i * 7 + offset) % 60);
+                const thumb = withThumbs && i % 3 === 0 ? ('0'.repeat(36) + String(1000 + i)) : '';
                 out.push([year, 5000 + i + offset, 'Article du ' + year + ' sur la vie associative',
-                    i % 2 ? 'Fraternité Matin' : 'Sidwaya', i % 5 === 4 ? 'p' : 'a', '',
+                    i % 2 ? 'Fraternité Matin' : 'Sidwaya', i % 5 === 4 ? 'p' : 'a', thumb,
                     'Un extrait du texte de ' + year + '.', 1385 + (i % 60)]);
             }
             return out;
