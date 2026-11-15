@@ -165,15 +165,7 @@ async function runPage(lighthouse, origin, page, runs) {
     const results = [];
     for (let i = 0; i < runs; i++) {
         const port = await freePort();
-        // The timeline fixture cites two images on example.org to exercise
-        // failed media. Left to the real network, that host answers
-        // differently from run to run (9, 10 or 11 requests on the runner),
-        // which the stability check below reports as the page's own fault.
-        // Failing the lookup makes the failure the same every time.
-        const browser = await chromium.launch({
-            channel: 'chromium',
-            args: [`--remote-debugging-port=${port}`, '--host-resolver-rules=MAP example.org ~NOTFOUND'],
-        });
+        const browser = await chromium.launch({ channel: 'chromium', args: [`--remote-debugging-port=${port}`] });
         try {
             const result = await lighthouse(url, {
                 port,
