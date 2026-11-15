@@ -21,7 +21,7 @@
 
 {#if kind === 'issue'}
 	<!-- The cover, then its pages dealt out from under it. -->
-	<svg viewBox="0 0 140 96" width="140" height="96">
+	<svg viewBox="0 0 136 96" width="136" height="96">
 		<rect class="iwac-vis-pipeline__paper" x="6" y="12" width="36" height="60" rx="2" />
 		<rect class="iwac-vis-pipeline__ink" x="10" y="16" width="28" height="6" rx="1" />
 		<rect class="iwac-vis-pipeline__photo" x="10" y="26" width="28" height="24" rx="1" />
@@ -51,38 +51,40 @@
 		<p class="iwac-vis-pipeline__toc-aside" style:--iwac-vis-pipeline-j="2"><span class="iwac-vis-pipeline__dropped-title">{labels.advert}</span></p>
 	</div>
 {:else if kind === 'continuation'}
-	<!-- Page 3 ends on its marker; the line runs to where page 7 picks the article up. -->
-	<svg viewBox="0 0 160 96" width="160" height="96">
-		<rect class="iwac-vis-pipeline__paper" x="4" y="4" width="68" height="72" rx="2" />
-		<rect class="iwac-vis-pipeline__ink" x="9" y="9" width="44" height="4" rx="1" />
+	<!-- Page 3 ends on its marker; the line runs to where page 7 picks the
+	     article up. 136 wide, a phone's art column, so the words inside stay
+	     at their own size rather than being scaled under the type floor. -->
+	<svg viewBox="0 0 136 96" width="136" height="96">
+		<rect class="iwac-vis-pipeline__paper" x="4" y="4" width="57" height="72" rx="2" />
+		<rect class="iwac-vis-pipeline__ink" x="9" y="9" width="36" height="4" rx="1" />
 		{#each { length: 9 } as _, k (k)}
-			<rect class="iwac-vis-pipeline__print" x="9" y={17 + k * 5} width={k % 4 === 3 ? 34 : 58} height="2" rx="1" />
+			<rect class="iwac-vis-pipeline__print" x="9" y={17 + k * 5} width={k % 4 === 3 ? 28 : 47} height="2" rx="1" />
 		{/each}
 		<g class="iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="0">
-			<rect class="iwac-vis-pipeline__marker-box" x="7" y="61" width="62" height="12" rx="1" />
-			<text class="iwac-vis-pipeline__marker-text" x="38" y="70.5">suite p. 7</text>
+			<rect class="iwac-vis-pipeline__marker-box" x="6.5" y="61" width="52" height="12" rx="1" />
+			<text class="iwac-vis-pipeline__marker-text" x="32.5" y="70.5">suite p. 7</text>
 		</g>
-		<rect class="iwac-vis-pipeline__paper" x="88" y="4" width="68" height="72" rx="2" />
-		<rect class="iwac-vis-pipeline__stub" x="93" y="9" width="30" height="3" rx="1" />
+		<rect class="iwac-vis-pipeline__paper" x="75" y="4" width="57" height="72" rx="2" />
+		<rect class="iwac-vis-pipeline__stub" x="80" y="9" width="26" height="3" rx="1" />
 		{#each { length: 4 } as _, k (k)}
-			<rect class="iwac-vis-pipeline__print" x="93" y={16 + k * 5} width={k === 3 ? 34 : 58} height="2" rx="1" />
+			<rect class="iwac-vis-pipeline__print" x="80" y={16 + k * 5} width={k === 3 ? 28 : 47} height="2" rx="1" />
 		{/each}
-		<rect class="iwac-vis-pipeline__ink" x="93" y="42" width="40" height="4" rx="1" />
+		<rect class="iwac-vis-pipeline__ink" x="80" y="42" width="34" height="4" rx="1" />
 		{#each { length: 5 } as _, k (k)}
-			<rect class="iwac-vis-pipeline__print iwac-vis-pipeline__print--faint" x="93" y={50 + k * 5} width="58" height="2" rx="1" />
+			<rect class="iwac-vis-pipeline__print iwac-vis-pipeline__print--faint" x="80" y={50 + k * 5} width="47" height="2" rx="1" />
 		{/each}
-		<rect class="iwac-vis-pipeline__zone iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="2" x="91" y="7" width="62" height="29" rx="1" />
+		<rect class="iwac-vis-pipeline__zone iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="2" x="78" y="7" width="51" height="29" rx="1" />
 		<path
 			class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw"
 			style:--iwac-vis-pipeline-j="1"
 			pathLength="1"
-			d="M67 67.5 C 82 67.5, 76 15, 89 15"
+			d="M58.5 67 C 70 67, 64 15, 76 15"
 		/>
 		<!-- The head is its own mark, appearing as the line reaches it: the
 		     trace ends at 220 + 200 + 600 ms, this rise starts at 220 + 5 × 160. -->
-		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="5" d="M85 12 L89 15 L85 18" />
-		<text class="iwac-vis-pipeline__num" x="38" y="90">p. 3</text>
-		<text class="iwac-vis-pipeline__num" x="122" y="90">p. 7</text>
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="5" d="M72 12 L76 15 L72 18" />
+		<text class="iwac-vis-pipeline__num" x="32.5" y="90">p. 3</text>
+		<text class="iwac-vis-pipeline__num" x="103.5" y="90">p. 7</text>
 	</svg>
 {:else if kind === 'merge'}
 	<!-- Two parts of one article, then the single entry they become. -->

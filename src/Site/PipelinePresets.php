@@ -41,6 +41,8 @@ final class PipelinePresets
         'issue-contents'    => 'Tables of contents for Islamic publications', // @translate
         'ask-ai'            => 'Ask AI: from a question to a cited answer', // @translate
         'press-attitudes'   => 'Press attitudes: how language models rate the articles', // @translate
+        'embeddings'        => 'Embeddings: similar meaning and possible reprints', // @translate
+        'places-map'        => 'Places on the map: from a linked place to a bubble', // @translate
     ];
 
     const PRESETS = [
@@ -371,6 +373,108 @@ final class PipelinePresets
             'caveat' => 'The ratings are model outputs, not facts about the articles. The models agree most on centrality and least on subjectivity, one model reads centrality differently from the rest, and a model asked again can change its answer: read the article and the justification before drawing a conclusion.', // @translate
             'example' => 'Illustrative example: the article, the ratings and the agreement in the drawings are invented to show the method.', // @translate
         ],
+        // Follows IWAC-Hugging-Face `post-processing/`: the local encoder
+        // (_gemma_encoder.py: title-and-text document prompt, query prefix,
+        // text and images in one space), the text stage (semantic_embedding.py:
+        // overlapping byte-bounded chunks, length-weighted mean), the
+        // neighbours (related_articles.py, top 10) and the reprint screen
+        // (analyses/reprint_candidates.py, docs/research-validation.md §4);
+        // and this module's Press Reprints generator (generate_reprints.py:
+        // different newspapers, 0.97 alone or 0.91 with trigram Jaccard
+        // ≥ 0.45) and Semantic Landscape (a UMAP projection). No caption
+        // names the model or its dimension: the next model would make it false.
+        'embeddings' => [
+            'title' => 'How IWAC measures similar meaning, and finds possible reprints', // @translate
+            'lede' => 'An embedding model turns each text into a vector, a long list of numbers, so that texts about the same thing sit close together. Those distances give the related articles on an article’s page, arrange the Semantic Landscape and flag possible reprints across newspapers.', // @translate
+            'routes' => [[
+                'id' => 'similarity',
+                'stages' => [
+                    [
+                        'art' => 'passages',
+                        'name' => 'Passages', // @translate
+                        'caption' => 'An article’s OCR text is read with its title; a long text is cut into overlapping passages the model can read whole.', // @translate
+                        'note' => 'Islamic publications are compared by their table of contents, references by their abstract.', // @translate
+                    ],
+                    [
+                        'art' => 'vector',
+                        'name' => 'Vector', // @translate
+                        'caption' => 'The model, run locally rather than through an online service, turns each passage into several hundred numbers; a text’s passages are averaged into one vector.', // @translate
+                        'note' => 'Photographs are placed in the same space, so a written query can find pictures as well as texts.', // @translate
+                    ],
+                    [
+                        'art' => 'space',
+                        'name' => 'Similar meaning', // @translate
+                        'caption' => 'Texts that say similar things get vectors pointing in similar directions, even when they share almost no words.', // @translate
+                        'note' => 'The real space has hundreds of dimensions; a flat picture, here or in the Semantic Landscape, is a projection that distorts distances.', // @translate
+                    ],
+                    [
+                        'art' => 'score',
+                        'name' => 'Similarity score', // @translate
+                        'caption' => 'Cosine similarity compares two directions, up to 1 for identical ones. Each article’s ten closest texts become its related articles.', // @translate
+                        'note' => 'A search is embedded the same way, marked as a query, and its results ranked by the same score.', // @translate
+                    ],
+                    [
+                        'art' => 'reprints',
+                        'name' => 'Reprint candidates', // @translate
+                        'caption' => 'Two articles from different newspapers become a candidate pair at a score of 0.97, or from 0.91 if they also share many three-word sequences.', // @translate
+                        'note' => 'The thresholds were calibrated against shared wording on test pairs; a reader decides whether a pair is a reprint.', // @translate
+                    ],
+                ],
+            ]],
+            'caveat' => 'Similarity is measured, not understood. A high score can mean a shared dispatch, a press release printed twice, or only the same subject and stock phrases, while OCR errors and abridged versions can hide a real reprint. The thresholds are choices calibrated on IWAC’s articles, not facts about the texts: read both articles before calling one a reprint.', // @translate
+            'example' => 'Illustrative example: the headlines, positions and scores in the drawings are invented to show the method.', // @translate
+        ],
+        // Follows IWAC-Hugging-Face `index/upload_index_hf.py` (a place's
+        // `curation:coordinates` read as one "lat, lng" pair, nulls for a
+        // missing, multiple or malformed value; `frequency` counts ITEMS —
+        // articles, publications, references, audiovisual — linking the
+        // authority under subject, spatial and the name fields, each item
+        // once) and this module's map generators (`generate_world_map.py`,
+        // `generate_spatial_exploration.py`: index rows of type Lieux with
+        // valid coordinates and a positive count; country fills count items
+        // by their `country`) and `P.countRadius` (radius ∝ √count). Where
+        // the coordinates come from is not in the code, so no caption says.
+        'places-map' => [
+            'title' => 'How a place gets onto IWAC’s maps', // @translate
+            'lede' => 'IWAC’s maps do not search the texts for the names of towns. They draw the places that catalogue records link to: each place is an entry in the index, and the coordinates on that entry decide where its bubble goes.', // @translate
+            'routes' => [[
+                'id' => 'places',
+                'stages' => [
+                    [
+                        'art' => 'linked',
+                        'name' => 'A linked place', // @translate
+                        'caption' => 'An item’s record links it to place entries in the index, under Spatial coverage or Subject. A town only named in the text has no link.', // @translate
+                        'note' => 'Links are made in the catalogue; some are proposed by entity extraction and confirmed by a researcher.', // @translate
+                    ],
+                    [
+                        'art' => 'entry',
+                        'name' => 'The place’s entry', // @translate
+                        'caption' => 'Each place is an authority record of its own, with its name, the larger place it is part of, and its coordinates: a latitude and a longitude.', // @translate
+                        'note' => 'Spelling variants of the name lead to the same record.', // @translate
+                    ],
+                    [
+                        'art' => 'counts',
+                        'name' => 'Items per place', // @translate
+                        'caption' => 'For each place, the maps count the items linked to it; an item counts once, even if it links the place twice.', // @translate
+                        'note' => 'The count covers articles, Islamic publications, references and audiovisual items.', // @translate
+                    ],
+                    [
+                        'art' => 'bubbles',
+                        'name' => 'Bubbles', // @translate
+                        'caption' => 'Each place becomes a bubble at its coordinates. Its radius grows with the square root of the count, so it is roughly the area that follows the number of items.', // @translate
+                        'note' => 'Nine times the items gives a bubble about three times as wide, not nine.', // @translate
+                    ],
+                    [
+                        'art' => 'absent',
+                        'name' => 'What stays off the map', // @translate
+                        'caption' => 'A place whose entry has no coordinates, or an unreadable pair, is not drawn however many items link to it; a town named only in the text is not counted.', // @translate
+                        'note' => 'Country colours, where a map shows them, count the items filed under each country, a different measure from the bubbles.', // @translate
+                    ],
+                ],
+            ]],
+            'caveat' => 'A map shows what the catalogue links, not every place the texts mention. Where indexing is fuller, places look more important, and a place without coordinates is missing however often items cite it. Read a bubble as a count of linked items, not as a measure of a town’s importance.', // @translate
+            'example' => 'Illustrative example: the towns and their approximate coordinates are real; the article, its links and the counts are invented to show the method.', // @translate
+        ],
     ];
 
     /**
@@ -408,6 +512,12 @@ final class PipelinePresets
         'model'        => 'Model', // @translate
         'agree'        => 'Agree', // @translate
         'disagree'     => 'Disagree', // @translate
+        'toCheck'      => 'To check', // @translate
+        'partOf'       => 'Part of', // @translate
+        'coordinates'  => 'Coordinates', // @translate
+        'items'        => 'Linked items', // @translate
+        'noCoordinates' => 'No coordinates', // @translate
+        'textOnly'     => 'Named in the text only', // @translate
     ];
 
     /** Heading levels an editor may give the block title; routes go one below. */

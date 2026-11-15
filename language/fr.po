@@ -867,8 +867,8 @@ msgstr "Conservé tel qu’imprimé"
 msgid "Replay animation"
 msgstr "Rejouer l’animation"
 
-msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data."
-msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, analyse des sermons d’Albani Zaria, tables des matières des publications islamiques, interrogation avec l’IA ou attitudes de la presse — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
+msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI, press attitudes, embeddings and reprint detection, or how places reach the maps — as a short animated diagram with captions. It uses illustrative examples and requests no data."
+msgstr "Expliquer une chaîne de traitement d’IWAC — modélisation thématique, OCR par IA, extraction d’entités et enrichissement des métadonnées, analyse des sermons d’Albani Zaria, tables des matières des publications islamiques, interrogation avec l’IA, attitudes de la presse, plongements vectoriels et repérage des reprises, ou placement des lieux sur les cartes — par un court schéma animé et légendé. Il s’appuie sur des exemples illustratifs et ne demande aucune donnée."
 
 msgid "Albani Zaria sermons: from recordings to figures"
 msgstr "Sermons d’Albani Zaria : des enregistrements aux chiffres"
@@ -1136,6 +1136,144 @@ msgstr "Accord"
 
 msgid "Disagree"
 msgstr "Désaccord"
+
+msgid "Embeddings: similar meaning and possible reprints"
+msgstr "Plongements vectoriels : sens voisin et reprises possibles"
+
+msgid "Places on the map: from a linked place to a bubble"
+msgstr "Lieux sur la carte : du lieu lié à la bulle"
+
+msgid "How IWAC measures similar meaning, and finds possible reprints"
+msgstr "Comment IWAC mesure la proximité de sens et repère des reprises possibles"
+
+msgid "An embedding model turns each text into a vector, a long list of numbers, so that texts about the same thing sit close together. Those distances give the related articles on an article’s page, arrange the Semantic Landscape and flag possible reprints across newspapers."
+msgstr "Un modèle de plongement transforme chaque texte en vecteur, une longue liste de nombres, de sorte que les textes qui parlent de la même chose se retrouvent proches. Ces distances donnent les articles apparentés sur la page d’un article, organisent le Paysage sémantique et signalent des reprises possibles d’un journal à l’autre."
+
+msgid "Passages"
+msgstr "Passages"
+
+msgid "An article’s OCR text is read with its title; a long text is cut into overlapping passages the model can read whole."
+msgstr "Le texte OCR d’un article est lu avec son titre ; un texte long est découpé en passages qui se chevauchent, assez courts pour que le modèle les lise en entier."
+
+msgid "Islamic publications are compared by their table of contents, references by their abstract."
+msgstr "Les publications islamiques sont comparées par leur table des matières, les références par leur résumé."
+
+msgid "Vector"
+msgstr "Vecteur"
+
+msgid "The model, run locally rather than through an online service, turns each passage into several hundred numbers; a text’s passages are averaged into one vector."
+msgstr "Le modèle, exécuté en local et non par un service en ligne, transforme chaque passage en plusieurs centaines de nombres ; les passages d’un texte sont moyennés en un seul vecteur."
+
+msgid "Photographs are placed in the same space, so a written query can find pictures as well as texts."
+msgstr "Les photographies sont placées dans le même espace : une requête écrite peut ainsi retrouver des images comme des textes."
+
+msgid "Similar meaning"
+msgstr "Sens voisin"
+
+msgid "Texts that say similar things get vectors pointing in similar directions, even when they share almost no words."
+msgstr "Des textes qui disent des choses semblables reçoivent des vecteurs orientés dans des directions proches, même s’ils n’ont presque aucun mot en commun."
+
+msgid "The real space has hundreds of dimensions; a flat picture, here or in the Semantic Landscape, is a projection that distorts distances."
+msgstr "L’espace réel compte des centaines de dimensions ; une image plane, ici ou dans le Paysage sémantique, en est une projection qui déforme les distances."
+
+msgid "Similarity score"
+msgstr "Score de similarité"
+
+msgid "Cosine similarity compares two directions, up to 1 for identical ones. Each article’s ten closest texts become its related articles."
+msgstr "La similarité cosinus compare deux directions, jusqu’à 1 pour des directions identiques. Les dix textes les plus proches de chaque article deviennent ses articles apparentés."
+
+msgid "A search is embedded the same way, marked as a query, and its results ranked by the same score."
+msgstr "Une recherche est transformée de la même façon, marquée comme requête, et ses résultats sont classés selon le même score."
+
+msgid "Reprint candidates"
+msgstr "Reprises candidates"
+
+msgid "Two articles from different newspapers become a candidate pair at a score of 0.97, or from 0.91 if they also share many three-word sequences."
+msgstr "Deux articles de journaux différents forment une paire candidate à partir d’un score de 0,97, ou de 0,91 s’ils partagent aussi de nombreuses suites de trois mots."
+
+msgid "The thresholds were calibrated against shared wording on test pairs; a reader decides whether a pair is a reprint."
+msgstr "Les seuils ont été calibrés sur le vocabulaire commun de paires de test ; c’est un lecteur qui décide si une paire est une reprise."
+
+msgid "Similarity is measured, not understood. A high score can mean a shared dispatch, a press release printed twice, or only the same subject and stock phrases, while OCR errors and abridged versions can hide a real reprint. The thresholds are choices calibrated on IWAC’s articles, not facts about the texts: read both articles before calling one a reprint."
+msgstr "La similarité est mesurée, non comprise. Un score élevé peut signaler une dépêche commune, un communiqué publié deux fois ou seulement le même sujet et des formules toutes faites, tandis que des erreurs d’OCR ou des versions abrégées peuvent masquer une vraie reprise. Les seuils sont des choix calibrés sur les articles d’IWAC, non des faits sur les textes : lisez les deux articles avant de parler de reprise."
+
+msgid "Illustrative example: the headlines, positions and scores in the drawings are invented to show the method."
+msgstr "Exemple illustratif : les titres, les positions et les scores des dessins sont inventés pour montrer la méthode."
+
+msgid "How a place gets onto IWAC’s maps"
+msgstr "Comment un lieu arrive sur les cartes d’IWAC"
+
+msgid "IWAC’s maps do not search the texts for the names of towns. They draw the places that catalogue records link to: each place is an entry in the index, and the coordinates on that entry decide where its bubble goes."
+msgstr "Les cartes d’IWAC ne cherchent pas les noms de villes dans les textes. Elles dessinent les lieux auxquels les notices du catalogue sont liées : chaque lieu est une entrée de l’index, et les coordonnées de cette entrée décident de l’emplacement de sa bulle."
+
+msgid "A linked place"
+msgstr "Un lieu lié"
+
+msgid "An item’s record links it to place entries in the index, under Spatial coverage or Subject. A town only named in the text has no link."
+msgstr "La notice d’un contenu le lie à des entrées de lieu de l’index, dans Couverture spatiale ou Sujet. Une ville seulement nommée dans le texte n’a pas de lien."
+
+msgid "Links are made in the catalogue; some are proposed by entity extraction and confirmed by a researcher."
+msgstr "Les liens sont établis dans le catalogue ; certains sont proposés par l’extraction d’entités puis confirmés par un chercheur."
+
+msgid "The place’s entry"
+msgstr "L’entrée du lieu"
+
+msgid "Each place is an authority record of its own, with its name, the larger place it is part of, and its coordinates: a latitude and a longitude."
+msgstr "Chaque lieu est une notice d’autorité à part entière, avec son nom, le lieu plus vaste dont il fait partie et ses coordonnées : une latitude et une longitude."
+
+msgid "Spelling variants of the name lead to the same record."
+msgstr "Les variantes orthographiques du nom renvoient à la même notice."
+
+msgid "Items per place"
+msgstr "Contenus par lieu"
+
+msgid "For each place, the maps count the items linked to it; an item counts once, even if it links the place twice."
+msgstr "Pour chaque lieu, les cartes comptent les contenus qui lui sont liés ; un contenu compte une fois, même s’il lie le lieu deux fois."
+
+msgid "The count covers articles, Islamic publications, references and audiovisual items."
+msgstr "Le décompte couvre les articles, les publications islamiques, les références et les contenus audiovisuels."
+
+msgid "Bubbles"
+msgstr "Bulles"
+
+msgid "Each place becomes a bubble at its coordinates. Its radius grows with the square root of the count, so it is roughly the area that follows the number of items."
+msgstr "Chaque lieu devient une bulle placée à ses coordonnées. Son rayon croît comme la racine carrée du décompte : c’est à peu près l’aire qui suit le nombre de contenus."
+
+msgid "Nine times the items gives a bubble about three times as wide, not nine."
+msgstr "Neuf fois plus de contenus donnent une bulle environ trois fois plus large, et non neuf."
+
+msgid "What stays off the map"
+msgstr "Ce qui reste hors de la carte"
+
+msgid "A place whose entry has no coordinates, or an unreadable pair, is not drawn however many items link to it; a town named only in the text is not counted."
+msgstr "Un lieu dont l’entrée n’a pas de coordonnées, ou une paire illisible, n’est pas dessiné, quel que soit le nombre de contenus liés ; une ville seulement nommée dans le texte n’est pas comptée."
+
+msgid "Country colours, where a map shows them, count the items filed under each country, a different measure from the bubbles."
+msgstr "Les couleurs des pays, quand une carte en affiche, comptent les contenus classés sous chaque pays : une autre mesure que celle des bulles."
+
+msgid "A map shows what the catalogue links, not every place the texts mention. Where indexing is fuller, places look more important, and a place without coordinates is missing however often items cite it. Read a bubble as a count of linked items, not as a measure of a town’s importance."
+msgstr "Une carte montre ce que le catalogue relie, non tous les lieux que mentionnent les textes. Là où l’indexation est plus fournie, les lieux paraissent plus importants, et un lieu sans coordonnées manque, même si de nombreux contenus le citent. Lisez une bulle comme un décompte de contenus liés, non comme une mesure de l’importance d’une ville."
+
+msgid "Illustrative example: the towns and their approximate coordinates are real; the article, its links and the counts are invented to show the method."
+msgstr "Exemple illustratif : les villes et leurs coordonnées approximatives sont réelles ; l’article, ses liens et les décomptes sont inventés pour montrer la méthode."
+
+msgid "To check"
+msgstr "À vérifier"
+
+msgid "Part of"
+msgstr "Partie de"
+
+msgid "Coordinates"
+msgstr "Coordonnées"
+
+msgid "Linked items"
+msgstr "Contenus liés"
+
+msgid "No coordinates"
+msgstr "Sans coordonnées"
+
+msgid "Named in the text only"
+msgstr "Nommé seulement dans le texte"
 
 # Collection Introduction (src/Site/CollectionIntroText.php, BlockLayout/CollectionIntro.php)
 msgid "Match the page outline: H2 when the block opens the page, one level below the heading of the section it sits in otherwise."
