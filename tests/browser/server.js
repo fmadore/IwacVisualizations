@@ -17,6 +17,7 @@ const MIME = {
     // The model logos and card thumbnails. A browser renders a PNG served as
     // octet-stream by sniffing it, but never an SVG: without this every
     // sentiment-lane logo was a broken image in the fixtures.
+    '.jpg': 'image/jpeg',
     '.png': 'image/png',
     '.svg': 'image/svg+xml',
 };
