@@ -1,5 +1,5 @@
 <script>
-	// The collection in four chapters, in reading order: each a heading, a
+	// The collection in chapters, in reading order: each a heading, a
 	// sentence or two, a display numeral and one figure.
 	//
 	// Each chapter plays once, the first time it scrolls into view, and again
@@ -9,21 +9,25 @@
 	// chapter's motion ends within two seconds, so it needs Replay but no
 	// pause control.
 	//
-	// A chapter whose data is missing keeps its words and draws no figure.
+	// A chapter whose data is missing keeps its words and draws no figure —
+	// except an `optional` one (the bibliography), which is left out whole,
+	// so a data file from before its section still reads complete.
 	import { onMount } from 'svelte';
 	import Count from './Count.svelte';
 	import TypesPlate from './TypesPlate.svelte';
 	import MapPlate from './MapPlate.svelte';
 	import YearsPlate from './YearsPlate.svelte';
 	import VoicesPlate from './VoicesPlate.svelte';
+	import ReferencesPlate from './ReferencesPlate.svelte';
 
 	let { content, model, fmt, siteBase, instance } = $props();
 
-	const PLATES = { what: TypesPlate, where: MapPlate, when: YearsPlate, voices: VoicesPlate };
+	const PLATES = { what: TypesPlate, where: MapPlate, when: YearsPlate, voices: VoicesPlate, references: ReferencesPlate };
 	const labels = $derived(content.labels);
 	const titleId = $derived(`${instance}-title`);
 	const number = (n) => fmt.number(n);
-	const drawn = $derived(content.chapters.some((chapter) => model[chapter.id]));
+	const chapters = $derived(content.chapters.filter((chapter) => !chapter.optional || model[chapter.id]));
+	const drawn = $derived(chapters.some((chapter) => model[chapter.id]));
 	const asOf = $derived(
 		model.asOf
 			? labels.asOf.replace('{date}', fmt.date(model.asOf, { year: 'numeric', month: 'long', day: 'numeric' }))
@@ -31,7 +35,7 @@
 	);
 
 	/** Times each chapter has started playing: 0 until it is first seen. */
-	let runs = $state({ what: 0, where: 0, when: 0, voices: 0 });
+	let runs = $state({ what: 0, where: 0, when: 0, voices: 0, references: 0 });
 	let reduced = $state(false);
 	const chapterEls = {};
 	const visible = {};
@@ -43,7 +47,7 @@
 	}
 
 	function replay() {
-		for (const chapter of content.chapters) {
+		for (const chapter of chapters) {
 			pending[chapter.id] = true;
 			if (visible[chapter.id]) play(chapter.id);
 		}
@@ -72,7 +76,7 @@
 				},
 				{ rootMargin: '0px 0px -25% 0px' }
 			);
-			for (const chapter of content.chapters) {
+			for (const chapter of chapters) {
 				if (!model[chapter.id] || !chapterEls[chapter.id]) continue;
 				pending[chapter.id] = true;
 				seen.observe(chapterEls[chapter.id]);
@@ -96,7 +100,7 @@
 	</div>
 	<p class="iwac-vis-intro__lede">{content.lede}</p>
 	<div class="iwac-vis-intro__chapters">
-		{#each content.chapters as chapter (chapter.id)}
+		{#each chapters as chapter (chapter.id)}
 			{@const data = model[chapter.id]}
 			{@const Plate = PLATES[chapter.id]}
 			<div
@@ -155,6 +159,21 @@
 							>
 							<span class="iwac-vis-intro__unit">{labels.languages}</span>
 						</p>
+					{:else if data && chapter.id === 'references'}
+						<p class="iwac-vis-intro__numeral">
+							<span class="iwac-vis-intro__value"
+								><Count value={data.total} run={runs.references} {reduced} format={number} /></span
+							>
+							<span class="iwac-vis-intro__unit">{labels.references}</span>
+						</p>
+						{#if data.authors}
+							<dl class="iwac-vis-intro__seconds">
+								<div class="iwac-vis-intro__second">
+									<dt>{labels.authors}</dt>
+									<dd><Count value={data.authors} run={runs.references} {reduced} format={number} /></dd>
+								</div>
+							</dl>
+						{/if}
 					{/if}
 				</div>
 				{#if data}

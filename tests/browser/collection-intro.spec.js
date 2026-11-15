@@ -48,9 +48,9 @@ test('without JavaScript the prose reading is complete', async ({ browser }) => 
     const block = page.locator(BLOCK);
     await expect(block.getByRole('heading', { level: 2, name: 'The Islam West Africa Collection' })).toBeVisible();
     await expect(block.getByRole('heading', { level: 3 })).toHaveText([
-        'What it holds', 'Where it comes from', 'The years it covers', 'Languages and subjects',
+        'What it holds', 'Where it comes from', 'The years it covers', 'Languages and subjects', 'The scholarship it gathers',
     ]);
-    await expect(block.locator('.iwac-vis-intro__sentence')).toHaveCount(4);
+    await expect(block.locator('.iwac-vis-intro__sentence')).toHaveCount(5);
     await expect(block.locator('.iwac-vis-intro__plate, .iwac-vis-intro__numeral')).toHaveCount(0);
     await expect(block.getByRole('button')).toHaveCount(0);
     await context.close();
@@ -61,8 +61,8 @@ test('mounts over the same words, with a figure per chapter and nothing else fet
     const errors = await open(page);
     const block = page.locator(BLOCK);
     await expect(block.locator('.iwac-vis-intro__figure')).toHaveCount(1);
-    await expect(block.locator('.iwac-vis-intro__plate')).toHaveCount(4);
-    await expect(block.getByRole('heading', { level: 3 })).toHaveCount(4);
+    await expect(block.locator('.iwac-vis-intro__plate')).toHaveCount(5);
+    await expect(block.getByRole('heading', { level: 3 })).toHaveCount(5);
     // The section is named by its title, at the level the editor chose.
     await expect(block.getByRole('region', { name: 'The Islam West Africa Collection' })).toBeVisible();
     // Drawings are hidden from assistive technology; their numbers are text.
@@ -129,7 +129,52 @@ test('every figure carries the data file’s numbers', async ({ page }) => {
     const person = DATA.top_entities.Personnes[0];
     await expect(voices.getByRole('link', { name: person.title })).toHaveAttribute('href', `/s/iwac/item/${person.o_id}`);
 
+    const refs = block.locator('[data-chapter="references"]');
+    const r = DATA.references;
+    expect(r.total).toBe(s.references_count);
+    await expect(refs.locator('.iwac-vis-intro__numeral .iwac-vis-intro__count')).toHaveText(grouped(r.total));
+    await expect(refs.locator('.iwac-vis-intro__numeral .iwac-vis-intro__unit')).toHaveText('scholarly references');
+    await expect(refs.locator('.iwac-vis-intro__second dd .iwac-vis-intro__count')).toHaveText(grouped(r.authors));
+    // One column a decade, its count as text; the running decade ends at the
+    // last year of publication and its tick says so.
+    const columns = refs.locator('.iwac-vis-intro__column');
+    await expect(columns.locator('.iwac-vis-intro__num')).toHaveText(r.decades.map((d) => grouped(d.count)));
+    const last = r.decades[r.decades.length - 1].decade;
+    await expect(columns.locator('.iwac-vis-intro__tick')).toHaveText(r.decades.map((d) => (
+        d.decade === last && r.year_max < last + 9 ? `${last}–${String(r.year_max).slice(-2)}` : String(d.decade))));
+    await expect(columns.locator('.iwac-vis-intro__sr').first()).toHaveText(`${r.decades[0].decade}s`);
+    await expect(refs.locator('.iwac-vis-intro__column-track').first()).toHaveAttribute('aria-hidden', 'true');
+    // Types through the module's one translation table, in the data's order.
+    const refTypes = refs.locator('.iwac-vis-intro__ledger--bars .iwac-vis-intro__row');
+    const english = { 'Article de revue': 'Journal article', Chapitre: 'Book chapter', Livre: 'Book', 'Ouvrage collectif': 'Edited volume', Rapport: 'Report', 'Thèse': 'Thesis' };
+    await expect(refTypes.locator('.iwac-vis-intro__name')).toHaveText(r.types.map((t) => english[t.name]));
+    await expect(refTypes.locator('.iwac-vis-intro__num')).toHaveText(r.types.map((t) => grouped(t.count)));
+    // The bibliography comes last, so the chapter counter numbers it fifth
+    // and leaving it out never renumbers the others.
+    expect(await block.locator('.iwac-vis-intro__chapter').evaluateAll((els) => els.map((e) => e.dataset.chapter)))
+        .toEqual(['what', 'where', 'when', 'voices', 'references']);
+
     await expect(block.locator('.iwac-vis-intro__foot')).toHaveText('Figures from the collection’s data as of January 1, 2026.');
+});
+
+test('a data file without the references section reads complete in four chapters', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const older = JSON.parse(JSON.stringify(DATA));
+    delete older.references;
+    await page.route('**/tests/golden/collection_overview/collection-overview.json',
+        (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(older) }));
+    const errors = await open(page);
+    const block = page.locator(BLOCK);
+    // Left out whole — heading, words and figure — not kept as words without
+    // a figure, and the others keep their numbers.
+    await expect(block.locator('[data-chapter="references"]')).toHaveCount(0);
+    await expect(block.getByRole('heading', { level: 3 })).toHaveText([
+        'What it holds', 'Where it comes from', 'The years it covers', 'Languages and subjects',
+    ]);
+    await expect(block.locator('.iwac-vis-intro__plate')).toHaveCount(4);
+    // The lede promises no number of chapters.
+    await expect(block.locator('.iwac-vis-intro__lede')).not.toContainText(/four|five/i);
+    expect(errors).toEqual([]);
 });
 
 test('a data file from before the exact type totals falls back to the dated counts', async ({ page }) => {
@@ -178,7 +223,7 @@ test('reduced motion shows the final state and no Replay', async ({ page }) => {
     await open(page);
     const block = page.locator(BLOCK);
     await expect(block.getByRole('button', { name: 'Replay animation' })).toHaveCount(0);
-    for (const chapter of ['what', 'where', 'when', 'voices']) {
+    for (const chapter of ['what', 'where', 'when', 'voices', 'references']) {
         const el = block.locator(`[data-chapter="${chapter}"]`);
         await el.scrollIntoViewIfNeeded();
         await expect(el).not.toHaveClass(/--playing/);
@@ -193,7 +238,7 @@ test('a phone reads one column, words before figure, with nothing overflowing', 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await open(page);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-    for (const chapter of ['what', 'where', 'when', 'voices']) {
+    for (const chapter of ['what', 'where', 'when', 'voices', 'references']) {
         const el = page.locator(`${BLOCK} [data-chapter="${chapter}"]`);
         const text = await el.locator('.iwac-vis-intro__text').boundingBox();
         const plate = await el.locator('.iwac-vis-intro__plate').boundingBox();
@@ -244,6 +289,10 @@ test('French page: the words come from fr.po, the numbers follow the page locale
     await expect(block.locator('[data-chapter="when"] .iwac-vis-intro__decade .iwac-vis-intro__sr').first()).toHaveText('années 1990');
     await expect(block.locator('[data-chapter="voices"] .iwac-vis-intro__ledger--bars .iwac-vis-intro__name').first()).toHaveText('Français');
     await expect(block.locator('[data-chapter="voices"] .iwac-vis-intro__group-name').first()).toHaveText('Personnes');
+    await expect(block.getByRole('heading', { level: 3, name: 'Les travaux qu’elle recense' })).toBeVisible();
+    await expect(block.locator('[data-chapter="references"] .iwac-vis-intro__numeral .iwac-vis-intro__unit')).toHaveText('travaux scientifiques');
+    await expect(block.locator('[data-chapter="references"] .iwac-vis-intro__ledger--bars .iwac-vis-intro__name').first()).toHaveText('Article de revue');
+    await expect(block.locator('[data-chapter="references"] .iwac-vis-intro__column .iwac-vis-intro__sr').first()).toHaveText(`années ${DATA.references.decades[0].decade}`);
     await expect(block.locator('.iwac-vis-intro__foot')).toHaveText('Chiffres tirés des données de la collection au 1 janvier 2026.');
     expect(errors).toEqual([]);
 });
@@ -274,7 +323,7 @@ test('without its data the prose reading stays, and no figure is drawn', async (
     await expect.poll(() => page.evaluate(() => window.__fetched.length)).toBeGreaterThan(0);
     await page.waitForTimeout(300);
     await expect(block).not.toHaveAttribute('data-intro-ready', 'true');
-    await expect(block.locator('.iwac-vis-intro__sentence')).toHaveCount(4);
+    await expect(block.locator('.iwac-vis-intro__sentence')).toHaveCount(5);
     await expect(block.locator('.iwac-vis-intro__plate, .iwac-vis-intro__numeral, .iwac-vis-error, [role="alert"]')).toHaveCount(0);
     expect(errors).toEqual([]);
 });

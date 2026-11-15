@@ -577,8 +577,15 @@ namespace {
     $intro = CollectionIntroText::content('h3', $marked);
     check($intro['headingLevel'] === 'h3' && $intro['chapterHeadingLevel'] === 'h4',
         'collection intro: heading levels drifted');
-    check(array_column($intro['chapters'], 'id') === ['what', 'where', 'when', 'voices'],
-        'collection intro: the chapters are what, where, when and voices, in that order');
+    check(array_column($intro['chapters'], 'id') === ['what', 'where', 'when', 'voices', 'references'],
+        'collection intro: the chapters are what, where, when, voices and references, in that order');
+    // Only the bibliography may drop out (its data section is newer than the
+    // block), and it must stay last, so leaving it out never renumbers the
+    // others; the lede must not count the chapters, a number that changes
+    // with the data.
+    check(array_keys(array_filter(array_column($intro['chapters'], 'optional', 'id'))) === ['references'],
+        'collection intro: only the references chapter is optional');
+
     $introSvelte = (string) @file_get_contents($root . '/asset/js/svelte/collection-intro/Intro.svelte');
     foreach ($intro['chapters'] as $chapter) {
         check(preg_match('/\b' . $chapter['id'] . ': \w+Plate\b/', $introSvelte) === 1,
@@ -601,6 +608,10 @@ namespace {
             check(strpos($fr[$label] ?? '', $token) !== false, "collection intro: the French for '$key' lost $token");
         }
     }
+    $frLede = $fr[CollectionIntroText::TEXT['lede']] ?? '';
+    check($frLede !== '' && !preg_match('/\b(four|five|4|5)\b/i', CollectionIntroText::TEXT['lede'])
+        && !preg_match('/\b(quatre|cinq)\b/iu', $frLede),
+        'collection intro: the lede counts its chapters, which an optional chapter makes false');
     check(CollectionIntroText::content('<script>', $marked)['headingLevel'] === CollectionIntroText::DEFAULT_HEADING_LEVEL,
         'collection intro: the heading level is printed unescaped, so it must be whitelisted');
     check(BlockRegistry::embedParam('collection-intro') === null, 'the collection intro grew an embed parameter');

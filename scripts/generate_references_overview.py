@@ -105,6 +105,7 @@ from iwac_utils import (
     load_dataset_safe,
     normalize_location_name,
     parse_pipe_separated,
+    reference_type,
     save_json,
     top_n_pipe,
 )
@@ -202,10 +203,9 @@ def _topic_prob(value: Any) -> Optional[float]:
     return prob if prob is not None and 0.0 <= prob <= 1.0 else None
 
 
-def _ref_type(row: pd.Series) -> str:
-    raw = row.get("o:resource_class") or row.get("type") or ""
-    raw = str(raw).strip()
-    return raw or "Unknown"
+# The type rule is shared with the Collection Introduction's bibliography
+# chapter (generate_collection_overview.compute_references_section).
+_ref_type = reference_type
 
 
 def _reference_id(row: pd.Series, fallback_index: Any) -> str:

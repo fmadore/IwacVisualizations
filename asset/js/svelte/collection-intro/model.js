@@ -38,6 +38,16 @@ const ENTITY_TYPES = [
 ];
 
 const ENTITIES_PER_TYPE = 5;
+/** Up to this many reference types are all listed; beyond it the tail is pooled. */
+const REF_TYPES_LISTED = 7;
+const REF_TYPES_KEPT = 6;
+/**
+ * Decade columns shown; earlier decades are pooled into the first. The
+ * bibliography reaches back decades before most of its works (a few dozen
+ * titles across the half-century before 1980), and a column per decade
+ * there would be a row of slivers too narrow for their numbers on a phone.
+ */
+const DECADES_SHOWN = 7;
 /** Up to this many languages are all listed; beyond it the tail is pooled. */
 const LANGUAGES_LISTED = 12;
 const LANGUAGES_KEPT = 10;
@@ -179,6 +189,59 @@ function voices(d, s) {
 }
 
 /**
+ * The bibliography chapter, from the `references` section (generator 0.6.0
+ * on). Null when the section is absent — a data release from before it —
+ * and the chapter is then left out entirely (it is `optional` in
+ * CollectionIntroText), so the introduction reads complete without it.
+ */
+function references(d) {
+    const r = d.references;
+    if (!r || typeof r !== 'object' || Array.isArray(r)) return null;
+    const total = positive(r.total);
+    if (!total) return null;
+    let types = list(r.types)
+        .map((t) => ({ name: String(obj(t).name || '').trim(), count: positive(obj(t).count) || 0 }))
+        .filter((t) => t.name && t.count > 0)
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+    if (types.length > REF_TYPES_LISTED) {
+        const rest = types.slice(REF_TYPES_KEPT);
+        types = types.slice(0, REF_TYPES_KEPT)
+            .concat([{ name: '', other: true, count: rest.reduce((a, t) => a + t.count, 0) }]);
+    }
+    const typeMax = types.length ? Math.max(...types.map((t) => t.count)) : 0;
+    const yearMax = num(r.year_max);
+    const decades = list(r.decades)
+        .map((c) => ({ decade: num(obj(c).decade), count: num(obj(c).count) || 0 }))
+        .filter((c) => c.decade !== null && Math.floor(c.decade) === c.decade && c.count >= 0)
+        .sort((a, b) => a.decade - b.decade);
+    if (decades.length > DECADES_SHOWN) {
+        const kept = decades.slice(decades.length - (DECADES_SHOWN - 1));
+        const pooled = decades.slice(0, decades.length - kept.length);
+        decades.splice(0, decades.length, {
+            decade: pooled[0].decade,
+            before: kept[0].decade,
+            count: pooled.reduce((a, c) => a + c.count, 0),
+        }, ...kept);
+    }
+    const decadeMax = decades.length ? Math.max(...decades.map((c) => c.count)) : 0;
+    if (!types.length && !decadeMax) return null;
+    return {
+        total,
+        authors: positive(r.authors),
+        types: types.map((t) => ({ ...t, ratio: typeMax ? t.count / typeMax : 0 })),
+        // The running decade is short: it ends at the last year of
+        // publication, and its label says so rather than leaving a low bar
+        // to read as a decline.
+        decades: decadeMax ? decades.map((c) => ({
+            ...c,
+            ratio: c.count / decadeMax,
+            end: !c.before && yearMax !== null && yearMax >= c.decade && yearMax < c.decade + 9 ? yearMax : null,
+        })) : [],
+        undated: positive(r.undated),
+    };
+}
+
+/**
  * @param {object} data  collection-overview.json
  * @param {object|null} geo  iwac-countries.geojson, or null when it failed
  */
@@ -191,6 +254,7 @@ export function buildModel(data, geo) {
         where: where(d, s, geo),
         when: when(d, s),
         voices: voices(d, s),
+        references: references(d),
         asOf: /^\d{4}-\d{2}-\d{2}/.test(generated) ? generated.slice(0, 10) : '',
     };
 }

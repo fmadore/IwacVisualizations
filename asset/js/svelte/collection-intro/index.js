@@ -25,7 +25,7 @@ ns.mountCollectionIntro = function (root, { data, geo, siteBase, format }) {
     // reading in place: it says everything but the numbers.
     const content = JSON.parse(island.textContent);
     const model = buildModel(data, geo);
-    if (!model.what && !model.where && !model.when && !model.voices) return;
+    if (!model.what && !model.where && !model.when && !model.voices && !model.references) return;
     mount(Intro, {
         target: root,
         anchor: reading,

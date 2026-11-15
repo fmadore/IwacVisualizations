@@ -3,7 +3,7 @@
 /* =================================================================== */
 /*                                                                       */
 /*  One sheet for both renderings of the block: the server's reading     */
-/*  (title, lede, four chapters of heading and sentences) and the Svelte */
+/*  (title, lede, the chapters' headings and sentences) and the Svelte   */
 /*  introduction that replaces it once the data has arrived, which is    */
 /*  the same markup plus `--drawn`, a numeral and a plate per chapter    */
 /*  and a Replay control. Every class here is written by                 */
@@ -542,6 +542,60 @@ a.iwac-vis-intro__entry-name:focus-visible {
 }
 
 
+/*  The scholarship it gathers: decade columns over a type ledger. Each
+ *  column's count sits over it as text and its tick under the axis, so
+ *  the column itself only has to carry the proportion. */
+.iwac-vis-intro__scholarship {
+    display: grid;
+    gap: var(--space-6, 1.5rem);
+}
+
+.iwac-vis-intro__columns {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: var(--space-2, 0.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-intro__column {
+    display: grid;
+    grid-template-rows: auto 7rem auto;
+    justify-items: center;
+    min-width: 0;
+}
+
+.iwac-vis-intro__column .iwac-vis-intro__num {
+    font-size: var(--text-xs, 0.8125rem);
+    text-align: center;
+}
+
+/*  The column sits narrower than its cell, as the year bars of "The years
+ *  it covers" do, so the run reads as a bar chart, not a row of blocks. */
+.iwac-vis-intro__column-track {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 1px solid var(--ink-strong, #05070c);
+}
+
+.iwac-vis-intro__column-fill {
+    display: block;
+    width: 72%;
+    min-height: 1px;
+    background-color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-intro__column .iwac-vis-intro__tick {
+    padding-top: var(--space-1, 0.25rem);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+
 /* ------------------------------------------------------------------- */
 /*  Widths                                                              */
 /* ------------------------------------------------------------------- */
@@ -591,6 +645,15 @@ a.iwac-vis-intro__entry-name:focus-visible {
         justify-items: end;
         padding-right: 0;
     }
+
+    /*  Seven decade columns share ~21rem: their counts step down too. */
+    .iwac-vis-intro__columns {
+        gap: var(--space-1, 0.25rem);
+    }
+
+    .iwac-vis-intro__column .iwac-vis-intro__num {
+        font-size: var(--text-2xs, 0.6875rem);
+    }
 }
 
 @media print {
@@ -632,6 +695,11 @@ a.iwac-vis-intro__entry-name:focus-visible {
         transform-box: fill-box;
         transform-origin: 50% 100%;
         animation: iwac-intro-grow-up 450ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) var(--iwac-vis-intro-at, 0ms) both;
+    }
+
+    .iwac-vis-intro__chapter--playing .iwac-vis-intro__column-fill {
+        transform-origin: 50% 100%;
+        animation: iwac-intro-grow-up 450ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-intro-j, 0) * 80ms) both;
     }
 
     .iwac-vis-intro__chapter--playing .iwac-vis-intro__fill {
@@ -680,7 +748,8 @@ a.iwac-vis-intro__entry-name:focus-visible {
     .iwac-vis-intro__land,
     .iwac-vis-intro__swatch,
     .iwac-vis-intro__bar,
-    .iwac-vis-intro__fill {
+    .iwac-vis-intro__fill,
+    .iwac-vis-intro__column-fill {
         forced-color-adjust: none;
     }
 }

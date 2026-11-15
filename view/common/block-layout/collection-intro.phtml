@@ -12,6 +12,12 @@
  * dictionary of its own, so the text has one source (`CollectionIntroText`)
  * and one translation.
  *
+ * Every chapter is rendered here, the bibliography's included: its words
+ * hold whatever the data says. The drawn version leaves that one chapter out
+ * when `collection-overview.json` has no `references` section (it is
+ * `optional` in CollectionIntroText), and keeps it last, so the others'
+ * numbers never move.
+ *
  * The class names are the Svelte component's too: one stylesheet
  * (css/blocks/collection-intro.css) lays out both, and the static reading is
  * simply the introduction without its figures and Replay control.

@@ -109,7 +109,7 @@ IwacVisualizations/
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
 │       ├── dist/                        # 141 files — built by scripts/build-js.js from bundles.json; committed
-│       ├── svelte/                      # 18 files — Svelte components, compiled into their block bundle by build-js.js (runtime: shared-svelte)
+│       ├── svelte/                      # 19 files — Svelte components, compiled into their block bundle by build-js.js (runtime: shared-svelte)
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js
@@ -298,6 +298,7 @@ IwacVisualizations/
 │       ├── golden_org_targets.json
 │       ├── requirements.txt
 │       ├── test_albani_sermons.py
+│       ├── test_collection_overview.py
 │       ├── test_entity_networks.py
 │       ├── test_golden.py
 │       ├── test_iwac_helpers.py

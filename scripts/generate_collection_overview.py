@@ -17,6 +17,9 @@ compact, covering:
     * top N entities per ``index`` type, ranked by the items whose subject
       or place fields carry them (``iwac_utils.compute_top_entities``)
     * source-origin map data for collection source/provenance points
+    * ``references``: the bibliography in brief (total, distinct authors,
+      types, references per decade of publication, undated count) for the
+      Collection Introduction's chapter on the scholarly references
 
 Follows the patterns from ``iwac-dashboard/scripts/generate_overview_stats.py``
 and shares its ``iwac_utils`` helpers.
@@ -61,7 +64,9 @@ from iwac_utils import (
     parse_duration_seconds,
     parse_pipe_separated,
     parse_coordinates,
+    reference_type,
     save_json,
+    clean_values,
 )
 
 # Subsets that carry dated content items. The ``index`` subset is handled
@@ -1158,6 +1163,56 @@ def compute_summary(
     return summary
 
 
+def compute_references_section(references_df: Optional[pd.DataFrame]) -> Optional[Dict[str, Any]]:
+    """The bibliography in brief, for the Collection Introduction's chapter
+    on the scholarly references: how many, by whom, of what kind, and when.
+
+    The same rules as the References Overview (generate_references_overview):
+    the type is ``iwac_utils.reference_type`` (resource class, else ``type``),
+    authors are the distinct pipe-separated ``author`` values, and the year is
+    ``extract_year(pub_date)`` with its default bounds — so a figure here
+    matches that block's. Decades run continuously from the first to the
+    last, zero-filled, so a gap in the literature reads as a gap; undated
+    references are counted apart, never folded into a decade. Nothing here
+    is counted by country (the Introduction says so in its "Where" chapter).
+
+    Returns None when the subset is absent or empty, and the payload then
+    carries no ``references`` key: the chapter omits itself.
+    """
+    if references_df is None or references_df.empty:
+        return None
+    types: Counter = Counter()
+    decades: Counter = Counter()
+    authors: set = set()
+    years: List[int] = []
+    for _, row in references_df.iterrows():
+        types[reference_type(row)] += 1
+        authors.update(clean_values(parse_pipe_separated(row.get("author"))))
+        year = extract_year(row.get("pub_date"))
+        if year is not None:
+            years.append(year)
+            decades[year // 10 * 10] += 1
+    section: Dict[str, Any] = {
+        "total": int(len(references_df)),
+        "authors": len(authors),
+        "types": [
+            {"name": name, "count": int(count)}
+            for name, count in sorted(types.items(), key=lambda kv: (-kv[1], kv[0]))
+        ],
+        "decades": [],
+        "year_min": min(years) if years else None,
+        "year_max": max(years) if years else None,
+        "undated": int(len(references_df) - len(years)),
+    }
+    if decades:
+        first, last = min(decades), max(decades)
+        section["decades"] = [
+            {"decade": decade, "count": int(decades.get(decade, 0))}
+            for decade in range(first, last + 10, 10)
+        ]
+    return section
+
+
 def _count_languages(language_distribution: Any) -> int:
     """Count distinct languages in compute_languages_faceted's output."""
     if isinstance(language_distribution, dict):
@@ -1212,16 +1267,17 @@ def build_overview(
         country_distribution, languages, newspapers_legacy,
         sources_map=sources_map,
     )
+    references = compute_references_section(dataframes.get("references"))
 
     metadata = create_metadata_block(
         total_records=summary.get("articles", 0) + summary.get("index_entries", 0),
         data_source=repo_id,
         script="generate_collection_overview.py",
-        script_version="0.5.0",
+        script_version="0.6.0",
         top_n=top_n,
     )
 
-    return {
+    overview: Dict[str, Any] = {
         "metadata": metadata,
         "summary": summary,
         "timeline": timeline,
@@ -1238,6 +1294,12 @@ def build_overview(
         "treemap": treemap,
         "recent_additions": recent,
     }
+    # Additive (0.6.0): the Collection Introduction's bibliography chapter.
+    # Absent when the references subset did not load, and the chapter then
+    # omits itself; no other consumer reads it.
+    if references is not None:
+        overview["references"] = references
+    return overview
 
 
 def main() -> None:

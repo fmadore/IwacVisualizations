@@ -860,6 +860,20 @@ def clean_values(values: Any) -> List[str]:
     return [v for v in (str(s).strip() for s in (values or [])) if v and not is_unknown(v)]
 
 
+def reference_type(row: Any) -> str:
+    """A reference's bibliographic type: its resource class, else ``type``.
+
+    The raw French label (``Article de revue``, ``Livre``, ``Thèse``…), which
+    the front end translates through ``ref_type_<label>``; ``"Unknown"`` when
+    neither field is filled. One rule for every block that counts references
+    by type — the References Overview and the Collection Introduction's
+    bibliography chapter — so the two can never disagree on a count.
+    """
+    raw = row.get("o:resource_class") or row.get("type") or ""
+    raw = str(raw).strip()
+    return raw or "Unknown"
+
+
 def top_n_pipe(rows: Any, field: str, n: Optional[int] = None) -> List[Dict[str, Any]]:
     """Histogram of a pipe-separated column as ``[{name, count}, …]``.
 

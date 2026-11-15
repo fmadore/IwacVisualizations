@@ -29,12 +29,22 @@ final class CollectionIntroText
 {
     const TEXT = [
         'title' => 'The Islam West Africa Collection', // @translate
-        'lede' => 'A digital archive of the press, periodicals, recordings and documents in which Islam and Muslims in West Africa are written about and debated, built at the Leibniz-Zentrum Moderner Orient (ZMO) in Berlin. Four short chapters say what it holds, where and when it comes from, and what it speaks of.', // @translate
+        'lede' => 'A digital archive of the press, periodicals, recordings and documents in which Islam and Muslims in West Africa are written about and debated, built at the Leibniz-Zentrum Moderner Orient (ZMO) in Berlin. The chapters below say what it holds, where and when it comes from, and what it speaks of.', // @translate
     ];
 
     /**
      * The chapters, in reading order. `id` names the figure the Svelte
      * component draws for it (asset/js/svelte/collection-intro/).
+     *
+     * An `optional` chapter is one the drawn introduction leaves out
+     * entirely — heading, words and figure — when the data has nothing for
+     * it, rather than keeping its words without a figure as the others do.
+     * The bibliography chapter is one: its section of the data file arrived
+     * after the block, and a data release from before then must still read
+     * as a complete introduction. That is also why it comes last (the
+     * chapter numbers of the others never move) and why the lede does not
+     * count the chapters. The server's reading always carries it: its words
+     * are true whatever the data holds.
      */
     const CHAPTERS = [
         [
@@ -56,6 +66,12 @@ final class CollectionIntroText
             'id' => 'voices',
             'heading' => 'Languages and subjects', // @translate
             'text' => 'Most items are in French, the language of most of the region’s press. The index tags each item with the people, organisations, places, subjects and events it concerns; the lists give those tagged most often.', // @translate
+        ],
+        [
+            'id' => 'references',
+            'optional' => true,
+            'heading' => 'The scholarship it gathers', // @translate
+            'text' => 'Beside its sources, the collection is a bibliography of the scholarship on Islam and Muslims in West Africa: books, journal articles, chapters, theses and reports, each catalogued with its authors, date and type. The bars count them by decade of publication: what the bibliography holds, not all that has been written.', // @translate
         ],
     ];
 
@@ -82,6 +98,13 @@ final class CollectionIntroText
         'byLanguage'  => 'Items by language', // @translate
         'otherLanguages' => 'Other languages', // @translate
         'entities'    => 'Most often indexed', // @translate
+        'references'  => 'scholarly references', // @translate
+        'authors'     => 'authors', // @translate
+        'refsByDecade' => 'References by decade of publication', // @translate
+        'refsByType'  => 'References by type', // @translate
+        'otherTypes'  => 'Other types', // @translate
+        'before'      => 'Before {year}', // @translate
+        'undated'     => 'Undated: {count}', // @translate
         'asOf'        => 'Figures from the collection’s data as of {date}.', // @translate
         'type.article'     => 'Newspaper articles', // @translate
         'type.publication' => 'Islamic periodicals', // @translate
@@ -118,6 +141,7 @@ final class CollectionIntroText
         foreach (self::CHAPTERS as $chapter) {
             $chapters[] = [
                 'id' => $chapter['id'],
+                'optional' => !empty($chapter['optional']),
                 'heading' => $translate($chapter['heading']),
                 'text' => $translate($chapter['text']),
             ];

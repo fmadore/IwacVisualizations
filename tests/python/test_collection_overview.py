@@ -1,6 +1,6 @@
 """generate_collection_overview: what the golden test cannot show on its
-own corpus, where every content item is dated and the dated and exact
-counts agree.
+small corpus — undated items, gaps between decades, a reference without a
+type — for the per-type totals and the bibliography section.
 """
 from __future__ import annotations
 
@@ -56,6 +56,47 @@ class TypeTotalsTests(unittest.TestCase):
         frames = golden_corpus.corpus()
         del frames["documents"]
         self.assertEqual(_summary(frames)["documents_count"], 0)
+
+
+class ReferencesSectionTests(unittest.TestCase):
+    def frame(self):
+        refs = golden_corpus.references(8).copy()
+        refs.loc[refs.index[0], "pub_date"] = "1968"          # a gap of decades before 2005
+        refs.loc[refs.index[1], "pub_date"] = ""              # undated
+        refs.loc[refs.index[2], ["o:resource_class", "type"]] = ""  # no type at all
+        return refs
+
+    def test_types_decades_and_undated(self):
+        refs = self.frame()
+        section = overview.compute_references_section(refs)
+        self.assertEqual(section["total"], 8)
+        self.assertEqual(section["undated"], 1)
+        self.assertEqual(sum(d["count"] for d in section["decades"]), 7)
+        # Continuous and zero-filled, so the gap in the literature shows.
+        self.assertEqual([d["decade"] for d in section["decades"]], [1960, 1970, 1980, 1990, 2000, 2010])
+        self.assertEqual([d["count"] for d in section["decades"]][1:4], [0, 0, 0])
+        self.assertEqual((section["year_min"], section["year_max"]), (1968, 2019))
+        self.assertEqual(sum(t["count"] for t in section["types"]), 8)
+        self.assertIn({"name": "Unknown", "count": 1}, section["types"])
+        counts = [t["count"] for t in section["types"]]
+        self.assertEqual(counts, sorted(counts, reverse=True))
+
+    def test_it_agrees_with_the_references_overview(self):
+        import generate_references_overview as references_overview
+
+        refs = self.frame()
+        section = overview.compute_references_section(refs)
+        self.assertEqual(
+            sorted((t["name"], t["count"]) for t in section["types"]),
+            sorted((t["name"], t["count"]) for t in references_overview.compute_type_distribution(refs, 100)),
+        )
+        summary = references_overview.compute_summary(refs)
+        self.assertEqual(section["authors"], summary["authors"])
+        self.assertEqual((section["year_min"], section["year_max"]), (summary["year_min"], summary["year_max"]))
+
+    def test_no_subset_no_section(self):
+        self.assertIsNone(overview.compute_references_section(None))
+        self.assertIsNone(overview.compute_references_section(golden_corpus.references(0)))
 
 
 if __name__ == "__main__":
