@@ -10,7 +10,8 @@
  * French is read from language/fr.po, as Omeka would. `iwac-block-shell` is
  * stood in for by the part of it this block uses: the wrapper with its embed
  * attributes and its `prerendered` slot. Its asset enqueueing is replaced by
- * the two bundles at the end of the page.
+ * the bundles AssetPlan plans for the block, at the end of the page
+ * (fixture-scripts.php).
  *
  * The data is the generator's golden output
  * (tests/golden/collection_overview/collection-overview.json), served in place
@@ -18,6 +19,7 @@
  * asset/geo/iwac-countries.geojson, served in place of the module path; any
  * other request is refused, so the spec sees exactly what the block fetches.
  */
+require_once __DIR__ . '/fixture-scripts.php';
 require_once __DIR__ . '/../../src/Site/CollectionIntroText.php';
 
 use IwacVisualizations\Site\CollectionIntroText;
@@ -126,7 +128,5 @@ $view = new CollectionIntroFixtureView($locale === 'fr' ? poCatalogue(__DIR__ . 
     <div class="fixture-gap"></div>
 </main>
 <script>document.getElementById('theme').addEventListener('click', function () { document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark'; });</script>
-<script src="/asset/js/dist/shared-core.<?= $locale ?>.min.js"></script>
-<script src="/asset/js/dist/blocks/collection-intro.min.js"></script>
-</body>
+<?= fixtureScripts('collection-intro', $locale) ?></body>
 </html>

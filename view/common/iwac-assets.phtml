@@ -38,7 +38,9 @@
  * asset/js/bundles.json — the ONE place the load order lives. This partial
  * decides only which bundles a block needs and their fixed order:
  * shared-core (always) → shared-charts → shared-ui → shared-layout →
- * shared-map → shared-d3 → the block's panel sets → the block bundle. What
+ * shared-map → shared-d3 → shared-svelte (any block whose manifest entry
+ * compiles Svelte — no flag; AssetPlan reads the entry) → the block's panel
+ * sets → the block bundle. What
  * each bundle contains, and in what order, is the manifest's business; the
  * build fails when a source is missing, listed twice, or in no bundle.
  * headScript/headLink de-dupe by URL, so two blocks on one page share every

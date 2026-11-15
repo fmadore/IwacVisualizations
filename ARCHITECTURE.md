@@ -108,8 +108,8 @@ IwacVisualizations/
 │       │   ├── term-trends.js
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                        # 139 files — built by scripts/build-js.js from bundles.json; committed
-│       ├── svelte/                      # 18 files — Svelte components, compiled into their block bundle by build-js.js
+│       ├── dist/                        # 141 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── svelte/                      # 18 files — Svelte components, compiled into their block bundle by build-js.js (runtime: shared-svelte)
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js
@@ -155,7 +155,7 @@ IwacVisualizations/
 │   │   ├── stopwords.json
 │   │   └── transcript.py
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
-│   ├── lib/                             # 5 files — file walk, bundle manifest and failure report the guards share
+│   ├── lib/                             # 6 files — file walk, bundle manifest, failure report, the shared Svelte runtime
 │   ├── audit_laicite.py
 │   ├── build-css.js
 │   ├── build-embed-tokens.js
@@ -271,7 +271,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 71 files — Playwright specs
+│   ├── browser/                         # 72 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt
@@ -283,7 +283,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 40 files — node:test units
+│   ├── js/                              # 41 files — node:test units
 │   ├── lib/
 │   │   ├── fake-items.php
 │   │   └── strict-errors.php
@@ -680,7 +680,9 @@ naming 6 `BlockLayout` classes out of 21.
 
 **A string lives in the dictionary of the only bundle that reads it.** The shared `iwac-i18n.js` ships in `shared-core` on every page carrying *any* block, so it holds only strings read by shared code, by templates, or by more than one block. A string one block alone reads goes in that block's `charts/<block>/i18n.js`, first in its bundle. Until v1.73.0 the shared dictionary also carried 146 single-block keys — about 27 KB of both locales' strings that every page downloaded for blocks it did not have; moving them took `shared-core` from 105 to 89 KB (French) and from 93 to 81 KB (English).
 
-**A block may carry a compiled Svelte component** — so far the Pipeline explainer and the Collection Introduction. Each bundle carries its own copy of the Svelte runtime, so a page with both downloads it twice; that is the price of keeping each block bundle self-contained. Its manifest entry is `{ "svelte": "svelte/<block>/index.js", "files": ["charts/<block>.js"] }`: an ES module under `asset/js/svelte/<block>/` whose `.svelte` imports `build-js.js` compiles with `svelte/compiler` and bundles, with the Svelte runtime, ahead of the block's ordinary orchestrator, into the same `dist/blocks/<block>.min.js`. Nothing else changes: the loader, `AssetPlan` and the templates see one more block bundle, and there is no SvelteKit, router or second build tool. Three rules keep these components inside the module's gates. **No `<style>` in a component** — the build refuses one, so the block's sheet stays in `asset/css/blocks/`, where Stylelint, the theme-token guard and the dead-class check read it (that check reads `.svelte` markup too). **Every compiler warning fails the build**, most of them Svelte's accessibility checks. **Every file under `asset/js/svelte/` must be reached from an entry**, read off esbuild's metafile, as an unbundled classic source fails the manifest check. A Svelte bundle targets ES2020 rather than ES2015, since its runtime needs a modern browser anyway. The runtime is most of its weight: the Pipeline explainer bundle is ~95 KB minified (~33 KB gzipped), loaded only on a page carrying the block, when the block nears the viewport.
+**A block may carry a compiled Svelte component** — so far the Pipeline explainer and the Collection Introduction. Its manifest entry is `{ "svelte": "svelte/<block>/index.js", "files": ["charts/<block>.js"] }`: an ES module under `asset/js/svelte/<block>/` whose `.svelte` imports `build-js.js` compiles with `svelte/compiler` and bundles ahead of the block's ordinary orchestrator, into the same `dist/blocks/<block>.min.js`. There is no SvelteKit, router or second build tool. Three rules keep these components inside the module's gates. **No `<style>` in a component** — the build refuses one, so the block's sheet stays in `asset/css/blocks/`, where Stylelint, the theme-token guard and the dead-class check read it (that check reads `.svelte` markup too). **Every compiler warning fails the build**, most of them Svelte's accessibility checks. **Every file under `asset/js/svelte/` must be reached from an entry**, read off esbuild's metafile, as an unbundled classic source fails the manifest check. A Svelte bundle targets ES2020 rather than ES2015, since its runtime needs a modern browser anyway.
+
+**The Svelte runtime ships once, in `shared-svelte`.** Until the second Svelte block, each block bundle inlined its own copy, so a page carrying both downloaded it twice and ran two reactivity systems side by side. The bundles are classic scripts, so the runtime cannot be shared by `import`; `scripts/lib/svelte-runtime.js` shares it through a global instead. The build first follows every Svelte entry with Svelte left external and scans each module it reaches — components as compiled — for what it imports from `svelte` and `svelte/*` (named imports, and the `$.name` reads off the compiler's `import * as $ from 'svelte/internal/client'`). `dist/shared-svelte.min.js` imports exactly the union of those names and publishes them as `IWACVis.svelteRuntime[entry][name]`; each block bundle resolves `svelte` and `svelte/*` to a small virtual module that reads its own names back off that object. Only what some block uses is carried — all of `svelte/internal/client` would be ~114 KB, more than either block weighed with its tree-shaken copy inside. What is maintained by hand is the list of entry points the runtime may provide, `svelteRuntime` in `bundles.json`; nothing in a template or registry row names the runtime, because `Site\AssetPlan::bundles()` loads it ahead of every block whose entry has `svelte` — a block author writes ordinary Svelte imports and cannot forget it. The build fails on an entry point the list does not have, a default import, a re-export or dynamic import of Svelte, or a namespace used as anything but `ns.name`; independently of that scan, esbuild's "no matching export" checks run against the virtual modules with every warning promoted to an error, so a name the scan missed cannot reach a page as `undefined`. Sizes when it landed (minified / gzipped): `shared-svelte` 71.7 / 26.2 KB, the Collection Introduction 22.7 / 8.4 KB (was 92.8 / 33.6 KB) and the Pipeline explainer 42.2 / 11.3 KB (was 111.4 / 36.3 KB) — a page carrying one block pays about 1.5 KB more for the split, a page carrying both about 68 KB less. Neither block is a Lighthouse fixture, so the byte budgets did not move.
 
 `node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 

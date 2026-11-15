@@ -11,8 +11,10 @@
  * share state — with French read from language/fr.po, as Omeka would.
  * `iwac-block-shell` is stood in for by the part of it this block uses: the
  * wrapper and its `prerendered` slot. Its asset enqueueing is replaced by
- * the two bundles at the end of the page.
+ * the bundles AssetPlan plans for the block, at the end of the page
+ * (fixture-scripts.php).
  */
+require_once __DIR__ . '/fixture-scripts.php';
 require_once __DIR__ . '/../../src/Site/PipelinePresets.php';
 
 use IwacVisualizations\Site\PipelinePresets;
@@ -106,7 +108,5 @@ $view = new PipelineFixtureView($locale === 'fr' ? poCatalogue(__DIR__ . '/../..
 <?php endforeach; ?>
 </main>
 <script>document.getElementById('theme').addEventListener('click', function () { document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark'; });</script>
-<script src="/asset/js/dist/shared-core.<?= $locale ?>.min.js"></script>
-<script src="/asset/js/dist/blocks/pipeline-explainer.min.js"></script>
-</body>
+<?= fixtureScripts('pipeline-explainer', $locale) ?></body>
 </html>

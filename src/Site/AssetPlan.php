@@ -112,6 +112,13 @@ final class AssetPlan
             }
         }
         if ($bundle !== null) {
+            // A block that compiles Svelte reads the runtime from the shared
+            // bundle scripts/build-js.js writes for it (scripts/lib/
+            // svelte-runtime.js). Derived from the manifest entry rather than
+            // a `needs` flag, so a Svelte block cannot be declared without it.
+            if (isset($manifest['blocks'][$bundle]['svelte'])) {
+                $names[] = 'shared-svelte';
+            }
             foreach ($manifest['blocks'][$bundle]['uses'] ?? [] as $set) {
                 if (!isset($manifest['panels'][$set])) {
                     throw new \RuntimeException('Unknown visualization panel set: ' . $set);

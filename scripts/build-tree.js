@@ -49,14 +49,14 @@ const SUMMARIZE = {
     'asset/js/charts/shared/': 'the reusable primitives every block draws on',
     'asset/js/charts/shared/renderers/': 'self-registering dashboardLayout renderers',
     'asset/js/dist/': 'built by scripts/build-js.js from bundles.json; committed',
-    'asset/js/svelte/': 'Svelte components, compiled into their block bundle by build-js.js',
+    'asset/js/svelte/': 'Svelte components, compiled into their block bundle by build-js.js (runtime: shared-svelte)',
     'asset/geo/': 'static map geometry, the only committed data',
     'language/': 'template.pot + fr.po + the compiled fr.mo',
     'tests/js/': 'node:test units',
     'tests/browser/': 'Playwright specs',
     'tests/golden/': 'generator output on the synthetic corpus; UPDATE_GOLDEN=1 rewrites it',
     'scripts/laicite/': 'one module per bundle, mirroring asset/js/charts/laicite/',
-    'scripts/lib/': 'file walk, bundle manifest and failure report the guards share',
+    'scripts/lib/': 'file walk, bundle manifest, failure report, the shared Svelte runtime',
 };
 
 /**

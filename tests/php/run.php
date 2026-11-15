@@ -958,6 +958,15 @@ namespace {
         === ['shared-core', 'shared-ui', 'shared-map'], 'asset plan lost dependency ordering or deduplication');
     check(AssetPlan::bundles(['echarts' => false, 'd3' => true], null)
         === ['shared-core', 'shared-d3'], 'the CDN-only flags changed which bundles load');
+    // A Svelte block reads the runtime from shared-svelte, loaded once per
+    // page however many Svelte blocks it carries — derived from the manifest
+    // entry, not from a flag the block could forget.
+    check(AssetPlan::bundles([], 'collection-intro') === ['shared-core', 'shared-svelte', 'blocks/collection-intro']
+        && AssetPlan::bundles([], 'pipeline-explainer') === ['shared-core', 'shared-svelte', 'blocks/pipeline-explainer'],
+        'a Svelte block no longer loads the shared Svelte runtime ahead of its bundle');
+    check(!in_array('shared-svelte', AssetPlan::bundles(['table' => true], 'index-overview'), true),
+        'a block without Svelte loads the shared Svelte runtime');
+    check(is_file($root . '/asset/js/dist/shared-svelte.min.js'), 'asset/js/dist/shared-svelte.min.js is not built');
     try {
         AssetPlan::bundles([], 'unknown-bundle');
         check(false, 'unknown bundle was accepted');
