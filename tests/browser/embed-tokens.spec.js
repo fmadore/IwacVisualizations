@@ -8,8 +8,8 @@
  * dark embed put light panels under charts that `iwac-theme.js`, seeing
  * `data-theme="dark"`, drew with its dark ink (#e7e4df): about 1.2:1.
  * asset/css/iwac-embed-tokens.css, generated from tokens.json, is the fix;
- * these tests hold the three things it has to guarantee: the panel paints the
- * theme's own value in each mode, the chart tokens and the CSS agree about the
+ * these tests hold the three things it has to guarantee: the panel sits on the
+ * theme's own ground in each mode, the chart tokens and the CSS agree about the
  * ground, and the per-request brand accent still wins over the sheet.
  */
 
@@ -34,13 +34,24 @@ for (const theme of ['light', 'dark']) {
         const seen = await page.evaluate(() => {
             const panel = document.querySelector('.iwac-vis-panel');
             const chart = window.IWACVis.getChartTokens();
+            // The ground the panel is drawn on. A panel is a ruled section
+            // with no fill of its own since the theme's 2.33; on the embed
+            // route the block paints the ground (iwac-embed.css), because
+            // the page behind the frame is the host's.
+            const ground = (el) => {
+                for (let n = el; n; n = n.parentElement) {
+                    const bg = getComputedStyle(n).backgroundColor;
+                    if (!/rgba\(.*,\s*0\)$|transparent/.test(bg)) return bg;
+                }
+                return 'transparent';
+            };
             return {
-                panelBg: getComputedStyle(panel).backgroundColor,
+                panelBg: ground(panel),
                 text: getComputedStyle(panel.querySelector('.fixture-text')).color,
                 chartInk: chart.ink,
                 chartPanelBg: chart.panelBg,
-                chartText: window.contrast(chart.ink, getComputedStyle(panel).backgroundColor),
-                sameGround: window.rgbOf(chart.panelBg).join() === window.rgbOf(getComputedStyle(panel).backgroundColor).join(),
+                chartText: window.contrast(chart.ink, ground(panel)),
+                sameGround: window.rgbOf(chart.panelBg).join() === window.rgbOf(ground(panel)).join(),
             };
         });
         expect(seen.panelBg).toBe(hexToRgb(canon(theme, '--panel-bg')));
@@ -53,9 +64,10 @@ for (const theme of ['light', 'dark']) {
 
 /**
  * A brand seed is derived the way the theme derives its own: the light
- * primary is the seed 8 % toward black, the dark one 12 % toward white. The
- * embed used to paint the raw seed, so a stock site's embeds carried #e64a19
- * beside the canonical #ce4115. Each expectation is the browser's own
+ * primary is the seed 8 % toward black, the dark one the seed re-lit to a
+ * fixed oklab lightness with its own hue and chroma (theme 2.33). The embed
+ * used to paint the raw seed, so a stock site's embeds carried the seed
+ * beside the canonical primary. Each expectation is the browser's own
  * computation of the theme's expression, read off a probe.
  */
 async function resolved(page, expression) {
@@ -80,7 +92,30 @@ test('a per-request brand seed is derived like the theme’s, in both modes', as
 
     await page.goto(`${FIXTURE}?theme=dark&primary=%23123456`);
     const dark = await resolved(page, 'var(--primary)');
-    expect(dark).toBe(await resolved(page, 'color-mix(in oklab, #123456, white 12%)'));
+    expect(dark).toBe(await resolved(page, 'color-mix(in oklab, #123456 10%, oklab(78% none none))'));
+    // Re-lit, not tinted: a deep seed mixed 12 % toward white (the old
+    // recipe) stays unreadable on the dark page.
+    expect(dark).not.toBe(await resolved(page, 'color-mix(in oklab, #123456, white 12%)'));
+    // A color-mix() serialises as oklab(), which rgbOf() cannot read: paint
+    // both through a canvas to get sRGB bytes.
+    const ratio = await page.evaluate(() => {
+        const toRgb = (css) => {
+            const ctx = document.createElement('canvas').getContext('2d');
+            ctx.fillStyle = css;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+            return `rgb(${r}, ${g}, ${b})`;
+        };
+        const probe = document.createElement('span');
+        document.body.appendChild(probe);
+        probe.style.color = 'var(--primary)';
+        const fg = getComputedStyle(probe).color;
+        probe.style.color = 'var(--surface)';
+        const bg = getComputedStyle(probe).color;
+        probe.remove();
+        return window.contrast(toRgb(fg), toRgb(bg));
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
     expect(await resolved(page, 'var(--focus-color)')).toBe(dark);
 });
 

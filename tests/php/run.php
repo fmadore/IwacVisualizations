@@ -1011,12 +1011,22 @@ namespace {
     // V-03: an embed overrides the brand only when its seed differs from the
     // theme's stock one, and always as a SEED (iwac-embed.css derives it).
     $seeds = EmbedBrand::seeds();
-    check(($seeds['primary'] ?? '') === '#e64a19', 'config/theme-seeds.php lost the stock primary seed');
-    check(($seeds['secondary'] ?? '') === '#394f68', 'config/theme-seeds.php lost the stock secondary seed');
-    check(EmbedBrand::accents('', '#E64A19', '#394f68') === ['primary' => '', 'secondary' => ''],
+    check(($seeds['primary'] ?? '') === '#1c2f9e', 'config/theme-seeds.php lost the stock primary seed');
+    check(($seeds['secondary'] ?? '') === '#85253a', 'config/theme-seeds.php lost the stock secondary seed');
+    check(EmbedBrand::accents('', '#1C2F9E', '#85253a') === ['primary' => '', 'secondary' => ''],
         'the stock seeds must not override the embed token sheet');
-    check(EmbedBrand::accents('', 'e64a19', '') === ['primary' => '', 'secondary' => ''],
+    check(EmbedBrand::accents('', '1c2f9e', '') === ['primary' => '', 'secondary' => ''],
         'a bare stock seed must not override either');
+    // The theme reads its pre-redesign defaults, stored by any settings save
+    // before 2.33, as unset (IWAC-theme BrandSeeds); so does the embed.
+    check(EmbedBrand::accents('', '#E64A19', '#394f68') === ['primary' => '', 'secondary' => ''],
+        'the legacy orange/slate settings must count as unset');
+    check(EmbedBrand::accents('', 'e64a19', '394F68') === ['primary' => '', 'secondary' => ''],
+        'bare legacy settings must count as unset too');
+    check(EmbedBrand::accents('', '#e64a1a', '')['primary'] === '#e64a1a',
+        'a value one step off the legacy orange is a deliberate choice and must override');
+    check(EmbedBrand::accents('#e64a19', '', '')['primary'] === '#e64a19',
+        'an explicit ?primary= is honoured even when it names the legacy orange');
     check(EmbedBrand::accents('', '#123456', '#abc')['primary'] === '#123456', 'a tuned seed must override');
     check(EmbedBrand::accents('', '#123456', '#abc')['secondary'] === '#aabbcc', 'a short secondary must expand');
     check(EmbedBrand::accents('#0a0b0c', '#123456', '')['primary'] === '#0a0b0c', '?primary= must win over the setting');

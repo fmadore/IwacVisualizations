@@ -6,7 +6,7 @@
 // override when a setting equals its seed: the embed token sheet already
 // carries the theme's derivation of that seed.
 return [
-    'primary'   => '#e64a19',
-    'secondary' => '#394f68',
+    'primary'   => '#1c2f9e',
+    'secondary' => '#85253a',
     'fontsCss'  => 'asset/css/fonts.css',
 ];

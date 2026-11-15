@@ -9,18 +9,30 @@ namespace IwacVisualizations\Site;
  * The embed route renders without the IWAC theme's stylesheet, so its tokens
  * come from `asset/css/iwac-embed-tokens.css`, generated from the theme's
  * `tokens.json`: the theme's OWN derivation of its brand seeds (light
- * `--primary` is the seed mixed 8 % toward black in oklab, `#ce4115` for the
- * stock `#e64a19`). The layout used to hand the raw `primary_color` setting
- * straight to `--primary`, so every live embed painted `#e64a19` — 3.82:1 on
- * the surface, and a second primary beside the canonical one its series,
+ * `--primary` is the seed mixed 8 % toward black in oklab, `#18298d` for the
+ * stock `#1c2f9e`). The layout used to hand the raw `primary_color` setting
+ * straight to `--primary`, so every live embed painted the raw seed (the old
+ * orange at 3.82:1 on the surface) beside the canonical primary its series,
  * type and focus tokens still carried.
  *
  * So a setting (or `?primary=`) that equals the theme's seed overrides
  * nothing, and any other value is treated as a SEED too: `iwac-embed.css`
  * derives `--primary` and its family from it with the theme's own mixes.
+ *
+ * The theme's settings carry one more rule, mirrored here: the defaults of
+ * the releases before the press-blue redesign (`#e64a19` burnt orange,
+ * `#394f68` slate) are what any settings save before 2.33 stored, chosen or
+ * not, so IWAC-theme's `BrandSeeds` helper reads those exact values as
+ * "unset". An embed that still overrode with them would paint the old orange
+ * inside a blue site. The rule covers the stored settings only; an explicit
+ * `?primary=` is a choice made for that one embed and is honoured.
  */
 final class EmbedBrand
 {
+    /** The theme's legacy defaults, read as "unset" (IWAC-theme BrandSeeds::LEGACY_*). */
+    public const LEGACY_PRIMARY = ['#e64a19'];
+    public const LEGACY_SECONDARY = ['#394f68'];
+
     /**
      * The theme's own webfont stylesheet, as a path for `assetUrl()` (relative
      * to the theme's `asset/`), or null when the site's theme does not ship it.
@@ -75,7 +87,8 @@ final class EmbedBrand
 
     /**
      * The seeds this embed must override: `?primary=` wins over the theme
-     * setting, and a value equal to the theme's own seed is dropped.
+     * setting, and a value equal to the theme's own seed is dropped, as is a
+     * setting still holding one of the theme's legacy defaults.
      *
      * @param array{primary?: string, secondary?: string}|null $seeds
      * @return array{primary: string, secondary: string}
@@ -86,8 +99,14 @@ final class EmbedBrand
         $primary = self::normalize($requested);
         if ($primary === '') {
             $primary = self::normalize($themePrimary);
+            if (in_array($primary, self::LEGACY_PRIMARY, true)) {
+                $primary = '';
+            }
         }
         $secondary = self::normalize($themeSecondary);
+        if (in_array($secondary, self::LEGACY_SECONDARY, true)) {
+            $secondary = '';
+        }
         if ($primary !== '' && $primary === ($seeds['primary'] ?? null)) {
             $primary = '';
         }

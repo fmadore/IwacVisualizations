@@ -26,10 +26,16 @@
         /* A little breathing room so the block isn't crammed against the
            iframe edges. box-sizing keeps the padding inside the width so it
            can never trigger a horizontal scrollbar on the host page. */
+        /* The block paints the page's ground itself. On the site the
+           panels are ruled sections on the theme's flat --surface and have
+           no fill of their own; in a frame the page behind them is the
+           HOST's, so a dark embed on a light article (or the reverse) would
+           draw its ink straight onto the wrong ground. */
         .iwac-embed-body .iwac-vis-block {
             margin: 0 auto;
             padding: var(--space-4, 1rem);
             box-sizing: border-box;
+            background: var(--surface, #fdfcfb);
         }
         /* Source-attribution footer. Styled inline (with token fallbacks) so it
            reads correctly even on this bare route before iwac-core.css lands. */
@@ -43,7 +49,7 @@
             background: var(--surface, #fdfcfb);
         }
         .iwac-embed-source a { color: var(--ink-light, #3f4349); text-decoration: none; }
-        .iwac-embed-source a:hover { color: var(--primary, #ce4115); text-decoration: underline; }
+        .iwac-embed-source a:hover { color: var(--primary, #18298d); text-decoration: underline; }
 
         /* A single-panel frame stays unpainted until embed.js has pinned its
            panel, or fallen back to the whole block, and marked the body
@@ -74,14 +80,19 @@
  *  A seed is not a token. The theme derives its working colours from it
  *  (abstracts/variables/_colors.scss) and these rules repeat that
  *  derivation: light --primary is the seed 8 % toward black in oklab, hover
- *  18 %, pressed 28 %; dark lightens 12 % / 22 % toward white and presses 4 %
- *  toward black; --secondary is the seed itself in light and 30 % toward
- *  white in dark. Until 2026-10 the light rule set --primary to the raw seed
+ *  18 %, pressed 28 %; dark RE-LIGHTS the seed rather than tinting it —
+ *  10 % of the seed mixed with an oklab colour of lightness 78 % whose a and
+ *  b are `none` (86 % for hover, 70 % pressed). Having no a/b of its own,
+ *  that colour takes the seed's, so the mix moves
+ *  lightness only and keeps the seed's hue and chroma (a deep blue seed
+ *  mixed toward white, the recipe until theme 2.33, stayed at 2:1 on the
+ *  dark page). --secondary is the seed itself in light and 30 % toward white
+ *  in dark. Until 2026-10 the light rule set --primary to the raw seed
  *  (3.82:1 on the surface) and the dark rule lightened the secondary 14 %,
  *  not the theme's 30 %.
  *
  *  The tokens composed from --primary / --secondary (focus rings, the
- *  selection wash, the glows, the lead series slots, the article and
+ *  selection wash, the lead series slots, the article and
  *  publication type colours — every one the theme composes, with the
  *  theme's own mixes from _colors.scss / _tokens.scss) are literals in the
  *  token sheet, so they are re-composed here too, at BOTH levels: a custom
@@ -112,9 +123,6 @@ html[style*="--iwac-vis-embed-primary"] {
     --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
     --ring-focus-sm: 0 0 0 2px color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
     --selection-bg: color-mix(in oklab, var(--primary) 14%, transparent); /* allow-override */
-    --glow-xs: 0 1px 3px 0 color-mix(in oklab, var(--primary) 20%, transparent); /* allow-override */
-    --glow-sm: 0 2px 6px -1px color-mix(in oklab, var(--primary) 25%, transparent); /* allow-override */
-    --glow-md: 0 4px 12px -2px color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
     --series-1: var(--primary); /* allow-override */
     --type-article: var(--primary); /* allow-override */
 }
@@ -125,18 +133,15 @@ html[style*="--iwac-vis-embed-secondary"] {
 }
 
 html[style*="--iwac-vis-embed-primary"] body[data-theme="dark"] {
-    --primary: color-mix(in oklab, var(--iwac-vis-embed-primary), white 12%); /* allow-absolute-mix allow-override */
-    --primary-hover: color-mix(in oklab, var(--iwac-vis-embed-primary), white 22%); /* allow-absolute-mix allow-override */
-    --primary-active: color-mix(in oklab, var(--iwac-vis-embed-primary), black 4%); /* allow-absolute-mix allow-override */
+    --primary: color-mix(in oklab, var(--iwac-vis-embed-primary) 10%, oklab(78% none none)); /* allow-absolute-mix allow-override allow-hex */
+    --primary-hover: color-mix(in oklab, var(--iwac-vis-embed-primary) 10%, oklab(86% none none)); /* allow-absolute-mix allow-override allow-hex */
+    --primary-active: color-mix(in oklab, var(--iwac-vis-embed-primary) 10%, oklab(70% none none)); /* allow-absolute-mix allow-override allow-hex */
     --focus-color: var(--primary); /* allow-override */
     --focus-outline: 2px solid var(--focus-color); /* allow-override */
     --focus-ring-color: color-mix(in oklab, var(--primary) 35%, transparent); /* allow-override */
     --ring-focus: 0 0 0 3px var(--focus-ring-color); /* allow-override */
     --ring-focus-sm: 0 0 0 2px color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
     --selection-bg: color-mix(in oklab, var(--primary) 22%, transparent); /* allow-override */
-    --glow-xs: 0 1px 3px 0 color-mix(in oklab, var(--primary) 20%, transparent); /* allow-override */
-    --glow-sm: 0 2px 6px -1px color-mix(in oklab, var(--primary) 25%, transparent); /* allow-override */
-    --glow-md: 0 4px 12px -2px color-mix(in oklab, var(--primary) 30%, transparent); /* allow-override */
     --series-1: var(--primary); /* allow-override */
     --type-article: var(--primary); /* allow-override */
 }
