@@ -37,23 +37,32 @@
 {:else if kind === 'tools'}
 	<div class="iwac-vis-pipeline__sheet iwac-vis-pipeline__sheet--mono">
 		{#each CALLS as call, j (call)}
-			<p class="iwac-vis-pipeline__call iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j={j}>{call}(…)</p>
+			<!-- A narrow column breaks a name after its underscore, never mid-word. -->
+			<p class="iwac-vis-pipeline__call iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j={j}>
+				{#each call.split('_') as part, k (k)}{#if k}_<wbr />{/if}{part}{/each}(…)
+			</p>
 		{/each}
 	</div>
 {:else if kind === 'dataset'}
-	<!-- The server asks, the dataset answers: one call out, its rows back. -->
-	<svg viewBox="0 0 140 96" width="140" height="96">
+	<!-- The server asks, the dataset answers: one call out, its rows back.
+	     Wider than the drawing, so the label under the drum stays inside it
+	     when a phone's column scales the drawing down. -->
+	<svg viewBox="0 0 150 96" width="150" height="96">
 		<rect class="iwac-vis-pipeline__paper" x="8" y="24" width="38" height="36" rx="2" />
 		{#each [0, 1, 2] as k (k)}
 			<rect class="iwac-vis-pipeline__stub" x="13" y={30 + k * 10} width="28" height="4" rx="1" />
 		{/each}
 		<text class="iwac-vis-pipeline__num" x="27" y="74">MCP</text>
-		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw" style:--iwac-vis-pipeline-j="0" pathLength="1" d="M50 37 L80 37 M76 34 L80 37 L76 40" />
-		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw" style:--iwac-vis-pipeline-j="1.5" pathLength="1" d="M80 49 L50 49 M54 46 L50 49 L54 52" />
+		<!-- Each head appears as its line reaches it (the line's trace ends
+		     at 220 + j × 200 + 600 ms; a rise starts at 220 + j × 160 ms). -->
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw" style:--iwac-vis-pipeline-j="0" pathLength="1" d="M50 37 L80 37" />
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="3.75" d="M76 34 L80 37 L76 40" />
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw" style:--iwac-vis-pipeline-j="1.5" pathLength="1" d="M80 49 L50 49" />
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="5.6" d="M54 46 L50 49 L54 52" />
 		<path class="iwac-vis-pipeline__paper" d="M84 20 L84 62 A22 6 0 0 0 128 62 L128 20 Z" />
 		<ellipse class="iwac-vis-pipeline__paper" cx="106" cy="20" rx="22" ry="6" />
 		<path class="iwac-vis-pipeline__band" d="M84 34 A22 6 0 0 0 128 34 M84 48 A22 6 0 0 0 128 48" />
-		<text class="iwac-vis-pipeline__num" x="106" y="84">{labels.dataset}</text>
+		<text class="iwac-vis-pipeline__num" x="102" y="84">{labels.dataset}</text>
 	</svg>
 {:else if kind === 'results'}
 	<div class="iwac-vis-pipeline__card">

@@ -186,11 +186,27 @@
 /*  The drawn diagram                                                   */
 /* ------------------------------------------------------------------- */
 
-/*  A chevron between stages, centred on the art box. */
-.iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage + .iwac-vis-pipeline__stage::before {
+/*  The stages of a row share their rows — drawing, name, words — so a
+ *  taller drawing in one stage moves every name in the row with it, and
+ *  the numbered names line up. Caption and note share one cell. */
+.iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-pipeline__words {
+    display: grid;
+    align-content: start;
+    gap: var(--space-1, 0.25rem);
+}
+
+/*  A chevron between stages, centred on the row's drawings: it hangs off
+ *  the art box, which the shared row makes as tall as the tallest one. */
+.iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage + .iwac-vis-pipeline__stage > .iwac-vis-pipeline__art::before {
     content: "";
     position: absolute;
-    top: calc(3.75rem - 4px);
+    top: calc(50% - 4px);
     left: calc(var(--space-5, 1.25rem) / -2 - 5px);
     width: 7px;
     height: 7px;
@@ -203,6 +219,7 @@
  *  drawing fits, and a drawing that grows (French labels, a fallback font,
  *  enlarged text) pushes its caption down rather than covering it. */
 .iwac-vis-pipeline__art {
+    position: relative;
     display: grid;
     place-items: center;
     align-content: center;
@@ -361,12 +378,22 @@
     outline-offset: 1px;
 }
 
+/*  Side by side where both sheets fit their words, one above the other
+ *  where they do not (a phone's art column): the lines never wrap, so the
+ *  sheets are sized by them rather than squeezed into halves. */
 .iwac-vis-pipeline__compare {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-1, 0.25rem);
     width: 100%;
-    max-width: min(10rem, 100%);
+    max-width: min(12rem, 100%);
+}
+
+.iwac-vis-pipeline__compare > .iwac-vis-pipeline__sheet {
+    flex: 1 0 auto;
+    width: auto;
+    max-width: 100%;
 }
 
 .iwac-vis-pipeline__legend {
@@ -571,10 +598,11 @@
     max-width: min(10rem, 100%);
 }
 
+/*  The spellings being reconciled: wrapped, not cut, like the record. */
 .iwac-vis-pipeline__reconcile .iwac-vis-pipeline__mention {
     max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: center;
+    white-space: normal;
 }
 
 .iwac-vis-pipeline__converge {
@@ -600,11 +628,18 @@
 .iwac-vis-pipeline__record-name,
 .iwac-vis-pipeline__candidate-name,
 .iwac-vis-pipeline__link-name {
-    overflow: hidden;
     font-weight: 600;
     color: var(--ink-strong, #05070c);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+}
+
+/*  The name a record, a candidate or a link carries is what its drawing is
+ *  about: it wraps (two lines at most, at these widths) and is never cut. */
+.iwac-vis-pipeline__record-name,
+.iwac-vis-pipeline__candidate-name,
+.iwac-vis-pipeline__link-name,
+.iwac-vis-pipeline__result-title {
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .iwac-vis-pipeline__card-head .iwac-vis-pipeline__mention {
@@ -687,7 +722,7 @@
 /*  A link: a SOLID chip with a link mark — confirmed, unlike a mention. */
 .iwac-vis-pipeline__link {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 3px;
     min-width: 0;
     padding: 0 3px;
@@ -842,14 +877,13 @@
     text-anchor: middle;
 }
 
+/*  The two parts being merged, "(suite)" included: wrapped, never cut. */
 .iwac-vis-pipeline__fragment {
     max-width: 100%;
-    overflow: hidden;
     padding: 0 3px;
     border: 1px dashed var(--ink-light, #3f4349);
     border-radius: 2px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-align: center;
 }
 
 /*  The merged entry: a SOLID frame — one article, all its pages. */
@@ -872,9 +906,6 @@
 
 .iwac-vis-pipeline__entry-title {
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 /*  An index line wraps under its own title, the pages hanging beside it. */
@@ -943,11 +974,12 @@
     gap: 3px;
 }
 
+/*  A tool name breaks only after an underscore, and its second line hangs
+ *  under the first, clear of the arrow. */
 .iwac-vis-pipeline__call {
-    overflow: hidden;
+    padding-left: 2ch;
     color: var(--ink-strong, #05070c);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-indent: -2ch;
 }
 
 .iwac-vis-pipeline__call::before {
@@ -964,19 +996,15 @@
 
 .iwac-vis-pipeline__result {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 3px;
     min-width: 0;
 }
 
 .iwac-vis-pipeline__result-title {
-    min-width: 0;
-    overflow: hidden;
     color: var(--ink-strong, #05070c);
     text-decoration: underline;
     text-decoration-color: var(--border-strong, #aeb1b7);
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .iwac-vis-pipeline__card-foot {
@@ -1039,18 +1067,26 @@
     background: var(--ink, #13161c);
 }
 
+/*  Padded by the behind card's offset, so it stays inside the art box. */
 .iwac-vis-pipeline__stack {
     display: grid;
     width: 100%;
     max-width: min(9.5rem, 100%);
+    padding: 5px 5px 0 0;
 }
 
+/*  Both cards are positioned, the front one above: a transform paints the
+ *  behind card in the positioned layer, over any card left in the flow, so
+ *  without an explicit order the empty card hid the front one's words. */
 .iwac-vis-pipeline__stack > .iwac-vis-pipeline__card {
+    position: relative;
+    z-index: 1;
     grid-area: 1 / 1;
 }
 
 /*  The other models' ratings, kept apart behind this one. */
-.iwac-vis-pipeline__card--behind {
+.iwac-vis-pipeline__stack > .iwac-vis-pipeline__card--behind {
+    z-index: 0;
     transform: translate(5px, -5px);
 }
 
@@ -1085,7 +1121,7 @@
         row-gap: var(--space-5, 1.25rem);
     }
 
-    .iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage + .iwac-vis-pipeline__stage::before {
+    .iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage + .iwac-vis-pipeline__stage > .iwac-vis-pipeline__art::before {
         display: none;
     }
 }
@@ -1098,6 +1134,8 @@
     }
 
     .iwac-vis-pipeline__figure--drawn .iwac-vis-pipeline__stage {
+        grid-row: auto;
+        grid-template-rows: none;
         grid-template-columns: 8.5rem minmax(0, 1fr);
         column-gap: var(--space-3, 0.75rem);
     }
@@ -1123,10 +1161,13 @@
 /*  Motion — the whole sequence, never under reduced motion             */
 /* ------------------------------------------------------------------- */
 
-/*  Each stage enters 700 ms after the one before; inside it, `--j` orders
- *  the marks. Five stages end by ~4.5 s, so the sequence needs no pause
- *  control. Every animation fills `both`, so it starts from its first frame
- *  and ends on the resting styles above.
+/*  Each stage enters one stagger after the one before, counted across all
+ *  the routes, so a second route follows the first; inside a stage, `--j`
+ *  orders the marks. The stagger is 700 ms, closer for a sequence longer
+ *  than five stages (Explainer.svelte sets it: the last stage starts by
+ *  3.9 s), so everything ends by ~4.5 s and needs no pause control. Every
+ *  animation fills `both`, so it starts from its first frame and ends on
+ *  the resting styles above.
  *
  *  Durations are the theme's motion tokens (--duration-base 200ms /
  *  --duration-slow 300ms) and its one easing, --ease-out-quart. Two are a
@@ -1138,11 +1179,11 @@
  *  the offsets are sequencing, not durations. */
 @media (prefers-reduced-motion: no-preference) {
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__stage {
-        --iwac-vis-pipeline-at: calc(var(--iwac-vis-pipeline-i, 0) * 700ms);
+        --iwac-vis-pipeline-at: calc(var(--iwac-vis-pipeline-i, 0) * var(--iwac-vis-pipeline-stagger, 700ms));
         animation: iwac-pipeline-appear var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) var(--iwac-vis-pipeline-at) both;
     }
 
-    .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__stage::before {
+    .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__stage > .iwac-vis-pipeline__art::before {
         animation: iwac-pipeline-fade var(--duration-base, 200ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) - 120ms) both;
     }
 

@@ -8,8 +8,12 @@
 	// resting styles ARE the last frame, so before the first play, after every
 	// play, under reduced motion and in print the diagram is complete.
 	//
-	// The whole sequence is under five seconds (the longest stage starts at
-	// 2.8 s), so it needs Replay but no pause control.
+	// Stages play one after another across every route, so a reader follows
+	// one movement at a time: a second route starts where the first ends.
+	// The whole sequence stays under five seconds — five stages 700 ms
+	// apart, or a closer stagger for a longer sequence, so the last stage
+	// starts by 3.9 s and settles by about 4.5 s — so it needs Replay but no
+	// pause control (WCAG 2.2.2).
 	import { onMount } from 'svelte';
 	import TopicArt from './TopicArt.svelte';
 	import OcrArt from './OcrArt.svelte';
@@ -33,6 +37,13 @@
 	const Art = $derived(ART[content.preset]);
 	const several = $derived(content.routes.length > 1);
 	const titleId = $derived(`${instance}-title`);
+	/** Where each route's first stage falls in the whole sequence. */
+	const offsets = $derived(
+		content.routes.map((_, r) => content.routes.slice(0, r).reduce((n, route) => n + route.stages.length, 0))
+	);
+	/** The last stage starts by 3.9 s, and stages are never closer than the
+	 *  stagger a single five-stage route has always had to be. */
+	const stagger = $derived(Math.min(700, Math.floor(3900 / Math.max(1, offsets.at(-1) + content.routes.at(-1).stages.length - 1))));
 
 	/** Times the sequence has started: 0 until the diagram is first seen. */
 	let runs = $state(0);
@@ -74,6 +85,7 @@
 	bind:this={figure}
 	class="iwac-vis-pipeline__figure iwac-vis-pipeline__figure--drawn"
 	class:iwac-vis-pipeline__figure--playing={runs > 0 && !reduced}
+	style:--iwac-vis-pipeline-stagger="{stagger}ms"
 	data-preset={content.preset}
 	aria-labelledby={titleId}
 >
@@ -90,7 +102,7 @@
 	<p class="iwac-vis-pipeline__lede">{content.lede}</p>
 	{#key runs}
 		<div class="iwac-vis-pipeline__routes">
-			{#each content.routes as route (route.id)}
+			{#each content.routes as route, r (route.id)}
 				<section
 					class="iwac-vis-pipeline__route"
 					aria-labelledby={several ? `${instance}-${route.id}` : undefined}
@@ -104,13 +116,17 @@
 					{/if}
 					<ol class="iwac-vis-pipeline__stages">
 						{#each route.stages as stage, i (stage.art)}
-							<li class="iwac-vis-pipeline__stage" style:--iwac-vis-pipeline-i={i}>
+							<li class="iwac-vis-pipeline__stage" style:--iwac-vis-pipeline-i={offsets[r] + i}>
 								<div class="iwac-vis-pipeline__art" aria-hidden="true">
 									<Art kind={stage.art} labels={content.labels} />
 								</div>
 								<p class="iwac-vis-pipeline__name">{stage.name}</p>
-								<p class="iwac-vis-pipeline__caption">{stage.caption}</p>
-								{#if stage.note}<p class="iwac-vis-pipeline__note">{stage.note}</p>{/if}
+								<!-- One cell, so a row of stages lines up its drawings and
+								     names while each caption keeps its note close. -->
+								<div class="iwac-vis-pipeline__words">
+									<p class="iwac-vis-pipeline__caption">{stage.caption}</p>
+									{#if stage.note}<p class="iwac-vis-pipeline__note">{stage.note}</p>{/if}
+								</div>
 							</li>
 						{/each}
 					</ol>

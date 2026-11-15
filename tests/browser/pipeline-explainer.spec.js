@@ -144,6 +144,93 @@ test('a phone keeps every stage, in order, with nothing overflowing', async ({ p
     expect(spills).toBe(0);
 });
 
+/** Whether the point inside the front justification card's heading, quote
+ *  and model label resolves to that card — the behind card once painted
+ *  over all three. */
+function frontCardOnTop(page) {
+    return page.evaluate(() => {
+        const stack = document.querySelector('[data-instance="pipeline-7"] .iwac-vis-pipeline__stack');
+        const front = stack.querySelector('.iwac-vis-pipeline__card:not(.iwac-vis-pipeline__card--behind)');
+        return [...front.children].map((el) => {
+            const r = el.getBoundingClientRect();
+            const hit = document.elementFromPoint(r.left + Math.min(12, r.width / 2), r.top + r.height / 2);
+            return `${el.className}: ${Boolean(hit && front.contains(hit))}`;
+        });
+    });
+}
+
+for (const theme of ['light', 'dark']) {
+    test(`the justification card is whole at rest and after playback (${theme})`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await open(page, 'en', `?theme=${theme}`);
+        const block = page.locator('[data-instance="pipeline-7"]');
+        await block.scrollIntoViewIfNeeded();
+        for (const line of await frontCardOnTop(page)) expect(line).toMatch(/: true$/);
+
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        await page.reload();
+        await expect(block).toHaveAttribute('data-pipeline-ready', 'true');
+        await block.scrollIntoViewIfNeeded();
+        await expect(block.locator('.iwac-vis-pipeline__figure')).toHaveClass(/--playing/);
+        await page.evaluate(() => document.getAnimations().forEach((a) => a.finish()));
+        for (const line of await frontCardOnTop(page)) expect(line).toMatch(/: true$/);
+    });
+}
+
+test('the sequence plays one route after another, all within five seconds', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await open(page);
+    for (const [instance, , routes] of PRESETS) {
+        const block = page.locator(`[data-instance="${instance}"]`);
+        await block.scrollIntoViewIfNeeded();
+        await expect(block.locator('.iwac-vis-pipeline__figure')).toHaveClass(/--playing/);
+        const timing = await page.evaluate((id) => {
+            const anims = document.getAnimations().filter((a) => a.effect && a.effect.target && a.effect.target.closest(`[data-instance="${id}"]`));
+            const starts = [...document.querySelectorAll(`[data-instance="${id}"] .iwac-vis-pipeline__stage`)].map((stage) => {
+                const own = anims.find((a) => a.effect.target === stage && !a.effect.pseudoElement);
+                return own ? own.effect.getTiming().delay : null;
+            });
+            return { end: Math.max(...anims.map((a) => a.effect.getComputedTiming().endTime)), starts };
+        }, instance);
+        expect(timing.end, instance).toBeLessThan(5000);
+        // Every stage, across routes, starts after the one before it.
+        expect(timing.starts.length).toBe(routes.reduce((a, b) => a + b, 0));
+        for (let k = 1; k < timing.starts.length; k++) expect(timing.starts[k], `${instance} stage ${k + 1}`).toBeGreaterThan(timing.starts[k - 1]);
+    }
+});
+
+test('at 390px no drawing leaves its art box, overlaps its words, or cuts a name', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    for (const theme of ['light', 'dark']) {
+        await open(page, 'en', `?theme=${theme}`);
+        const problems = await page.evaluate(() => {
+            const out = [];
+            document.querySelectorAll('.iwac-vis-pipeline__art').forEach((art, n) => {
+                const preset = art.closest('[data-preset]').dataset.preset;
+                const box = art.getBoundingClientRect();
+                const stage = art.closest('.iwac-vis-pipeline__stage');
+                const words = [...stage.querySelectorAll('.iwac-vis-pipeline__name, .iwac-vis-pipeline__caption, .iwac-vis-pipeline__note')]
+                    .map((el) => el.getBoundingClientRect());
+                art.querySelectorAll('*').forEach((el) => {
+                    const r = el.getBoundingClientRect();
+                    if (r.width === 0 || r.height === 0) return;
+                    const label = `${preset} #${n}: ${el.getAttribute('class') || el.tagName}`;
+                    if (r.left < box.left - 1 || r.right > box.right + 1 || r.top < box.top - 1 || r.bottom > box.bottom + 1) {
+                        out.push(`${label} outside its art box`);
+                    }
+                    if (words.some((w) => r.left < w.right && r.right > w.left && r.top < w.bottom && r.bottom > w.top)) {
+                        out.push(`${label} over its stage's words`);
+                    }
+                    const style = getComputedStyle(el);
+                    if (style.textOverflow === 'ellipsis' && el.scrollWidth > el.clientWidth + 1) out.push(`${label} cut short`);
+                });
+            });
+            return out;
+        });
+        expect(problems, theme).toEqual([]);
+    }
+});
+
 test('the drawings follow the theme toggle', async ({ page }) => {
     await open(page);
     const paper = page.locator('[data-instance="pipeline-1"] .iwac-vis-pipeline__paper').first();

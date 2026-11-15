@@ -76,8 +76,11 @@
 			class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw"
 			style:--iwac-vis-pipeline-j="1"
 			pathLength="1"
-			d="M67 67.5 C 82 67.5, 76 15, 89 15 M85 12 L89 15 L85 18"
+			d="M67 67.5 C 82 67.5, 76 15, 89 15"
 		/>
+		<!-- The head is its own mark, appearing as the line reaches it: the
+		     trace ends at 220 + 200 + 600 ms, this rise starts at 220 + 5 × 160. -->
+		<path class="iwac-vis-pipeline__route-line iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j="5" d="M85 12 L89 15 L85 18" />
 		<text class="iwac-vis-pipeline__num" x="38" y="90">p. 3</text>
 		<text class="iwac-vis-pipeline__num" x="122" y="90">p. 7</text>
 	</svg>

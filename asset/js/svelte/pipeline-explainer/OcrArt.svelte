@@ -9,12 +9,13 @@
 	/** The page: x of each of its three columns, 19 units wide. */
 	const COLS = [39, 60, 81];
 	/** Reading zones the instructions set, in order — three columns, then the
-	 *  caption — each with where its number sits. */
+	 *  caption — each with where its number sits: inside its zone and on the
+	 *  page (x 34–106), the dots (r 6) clear of one another. */
 	const ZONES = [
-		{ x: 37, y: 16, w: 22, h: 72, n: 1, bx: 56, by: 20 },
-		{ x: 58, y: 45, w: 22, h: 43, n: 2, bx: 77, by: 49 },
-		{ x: 79, y: 45, w: 22, h: 43, n: 3, bx: 98, by: 49 },
-		{ x: 58, y: 36, w: 43, h: 8, n: 4, bx: 109, by: 40 }
+		{ x: 37, y: 16, w: 22, h: 72, n: 1, bx: 46, by: 25 },
+		{ x: 58, y: 45, w: 22, h: 43, n: 2, bx: 67, by: 55 },
+		{ x: 79, y: 45, w: 22, h: 43, n: 3, bx: 88, by: 55 },
+		{ x: 58, y: 36, w: 43, h: 8, n: 4, bx: 95, by: 40 }
 	];
 	/** Older OCR, misread: [before, misread, after], and what the correction restores. */
 	const LINES = [
@@ -55,13 +56,13 @@
 			class="iwac-vis-pipeline__route-line iwac-vis-pipeline__draw"
 			style:--iwac-vis-pipeline-j="1"
 			pathLength="1"
-			d="M56 20 L77 49 L98 49 L109 40"
+			d={`M${ZONES.map((z) => `${z.bx} ${z.by}`).join(' L')}`}
 		/>
 		{#each ZONES as zone, j (zone.n)}
 			<g class="iwac-vis-pipeline__rise" style:--iwac-vis-pipeline-j={j}>
 				<rect class="iwac-vis-pipeline__zone" x={zone.x} y={zone.y} width={zone.w} height={zone.h} rx="1" />
-				<circle class="iwac-vis-pipeline__badge-dot" cx={zone.bx} cy={zone.by} r="4.5" />
-				<text class="iwac-vis-pipeline__num iwac-vis-pipeline__num--on-dot" x={zone.bx} y={zone.by + 3}
+				<circle class="iwac-vis-pipeline__badge-dot" cx={zone.bx} cy={zone.by} r="6" />
+				<text class="iwac-vis-pipeline__num iwac-vis-pipeline__num--on-dot" x={zone.bx} y={zone.by + 3.5}
 					>{zone.n}</text
 				>
 			</g>
