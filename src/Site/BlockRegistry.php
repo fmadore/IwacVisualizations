@@ -129,6 +129,14 @@ final class BlockRegistry
                 'loading'    => 'Loading collection overview', // @translate
             ],
         ],
+        // Configured (a heading level), so it keeps its own template; it
+        // names nothing else, so its embed needs no parameter.
+        'collection-intro' => [
+            'invokable'   => 'collectionIntro',
+            'class'       => BlockLayout\CollectionIntro::class,
+            'label'       => 'Collection Introduction', // @translate
+            'description' => 'Introduce the collection in four short animated chapters: what it holds, the countries it comes from, the years it covers, and its languages and most frequently indexed entries. A guided reading for a homepage or an About page, with figures from the Collection Overview data; use the Collection Overview block to explore those data in depth.', // @translate
+        ],
         'compare-newspapers' => [
             'invokable'   => 'compareNewspapers',
             'class'       => BlockLayout\CompareNewspapers::class,

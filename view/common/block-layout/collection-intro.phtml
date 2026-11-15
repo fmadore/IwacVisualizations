@@ -1,0 +1,80 @@
+<?php
+/**
+ * Collection Introduction page block.
+ *
+ * The server renders the whole prose reading — title, lede, and each
+ * chapter's heading and sentences — so the block reads with scripting off,
+ * in print, before its bundle arrives, and when `collection-overview.json`
+ * cannot be fetched. The Svelte version (asset/js/svelte/collection-intro/)
+ * replaces this reading with the same words plus a numeral and a figure per
+ * chapter, mounted by charts/collection-intro.js once the data has arrived;
+ * it reads the words from the JSON island below rather than from a
+ * dictionary of its own, so the text has one source (`CollectionIntroText`)
+ * and one translation.
+ *
+ * The class names are the Svelte component's too: one stylesheet
+ * (css/blocks/collection-intro.css) lays out both, and the static reading is
+ * simply the introduction without its figures and Replay control.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation|null $block
+ * @var array  $content   CollectionIntroText::content(), already translated.
+ * @var string $instance  Unique per block on the page, for the heading ids.
+ */
+
+$escapeHtml = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+// Rendered without the block layout's variables — on the embed route, which
+// passes only `block` and `slug`, or by a theme override that calls the
+// partial itself: the default heading level.
+if (!isset($content)) {
+    $content = \IwacVisualizations\Site\CollectionIntroText::content('',
+        fn (string $text): string => $this->translate($text));
+}
+if (!isset($instance)) {
+    $instance = 'collection-intro-' . (isset($block) && $block ? $block->id() : 'default');
+}
+$level = $content['headingLevel'];
+$chapterLevel = $content['chapterHeadingLevel'];
+$titleId = $instance . '-title';
+
+ob_start();
+?>
+<section class="iwac-vis-intro__figure" aria-labelledby="<?= $escapeAttr($titleId) ?>">
+    <div class="iwac-vis-intro__head">
+        <<?= $level ?> class="iwac-vis-intro__title" id="<?= $escapeAttr($titleId) ?>"><?= $escapeHtml($content['title']) ?></<?= $level ?>>
+    </div>
+    <p class="iwac-vis-intro__lede"><?= $escapeHtml($content['lede']) ?></p>
+    <div class="iwac-vis-intro__chapters">
+<?php foreach ($content['chapters'] as $chapter): ?>
+        <div class="iwac-vis-intro__chapter" data-chapter="<?= $escapeAttr($chapter['id']) ?>">
+            <div class="iwac-vis-intro__text">
+                <<?= $chapterLevel ?> class="iwac-vis-intro__heading"><?= $escapeHtml($chapter['heading']) ?></<?= $chapterLevel ?>>
+                <p class="iwac-vis-intro__sentence"><?= $escapeHtml($chapter['text']) ?></p>
+            </div>
+        </div>
+<?php endforeach; ?>
+    </div>
+</section>
+<script type="application/json" class="iwac-vis-intro__content"><?= json_encode(
+    $content + ['replay' => $this->translate('Replay animation')],
+    JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+) ?></script>
+<?php
+$reading = ob_get_clean();
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'collection-intro',
+        // No chart library: the figures are SVG and HTML drawn by Svelte.
+        'needs' => ['echarts' => false],
+        'bundle' => 'collection-intro',
+    ],
+    'blockClass' => 'iwac-vis-intro',
+    'prerendered' => $reading,
+    'data' => ['instance' => $instance],
+    // One introduction, no panels: a single embed button for the whole
+    // block. It takes no configuration, so its URL carries no query.
+    'embedSlug' => 'collection-intro',
+    'embedWhole' => true,
+]);

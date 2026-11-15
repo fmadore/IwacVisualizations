@@ -8,6 +8,7 @@ $config = [
             'audiovisualOverview' => Site\BlockLayout\AudiovisualOverview::class,
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
+            'collectionIntro' => Site\BlockLayout\CollectionIntro::class,
             'distinctiveVocabulary' => Site\BlockLayout\DistinctiveVocabulary::class,
             'entityNetworks' => Site\BlockLayout\EntityNetworks::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,

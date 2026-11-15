@@ -16,9 +16,10 @@
  */
 use IwacVisualizations\Site\BlockRegistry;
 
-// Twenty-one of the twenty-four blocks share `_generic`, which reads its whole
-// declaration out of the registry (H5); `on-this-day`, `iwac-timeline` and
-// `pipeline-explainer`, which do more than declare, keep their own templates.
+// Twenty-one of the twenty-five blocks share `_generic`, which reads its whole
+// declaration out of the registry (H5); `on-this-day`, `iwac-timeline`,
+// `pipeline-explainer` and `collection-intro`, which do more than declare,
+// keep their own templates.
 // `partialFor()` is the same routing rule the block layouts use. The slug is
 // passed either way — `_generic` needs it to find its row, and the specific
 // templates ignore it.

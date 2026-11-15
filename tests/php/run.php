@@ -131,6 +131,7 @@ namespace {
     use IwacVisualizations\Site\AssetPlan;
     use IwacVisualizations\Site\BlockRegistry;
     use IwacVisualizations\Site\PipelinePresets;
+    use IwacVisualizations\Site\CollectionIntroText;
     use IwacVisualizations\Site\EmbedBrand;
     use IwacVisualizations\Site\ItemValue;
     use IwacVisualizations\Site\Locale;
@@ -154,6 +155,7 @@ namespace {
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/AssetPlan.php';
     require $root . '/src/Site/PipelinePresets.php';
+    require $root . '/src/Site/CollectionIntroText.php';
     require $root . '/src/Site/EmbedBrand.php';
     require $root . '/src/Site/ItemValue.php';
     require $root . '/src/Site/Locale.php';
@@ -410,7 +412,7 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 24, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 25, 'page-block registry count drifted');
     check(BlockRegistry::get('albani-sermons')['invokable'] === 'albaniSermons', 'albani-sermons registry entry drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
@@ -479,7 +481,7 @@ namespace {
         }
     }
     check($shellRows === 21, "expected 21 generic blocks, found $shellRows");
-    check($ownTemplate === 3, "expected 3 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer), found $ownTemplate");
+    check($ownTemplate === 4, "expected 4 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer, collection-intro), found $ownTemplate");
     // Every block embeds. The two configured ones name their configuration in
     // the URL; their classes turn it into template variables, and their own
     // templates must say so on the wrapper (embedSlug, embedQuery,
@@ -568,6 +570,51 @@ namespace {
         check(is_string($fresh) && is_readable($fixture)
             && str_replace("\r\n", "\n", $fresh) === str_replace("\r\n", "\n", (string) file_get_contents($fixture)),
             "pipeline-explainer.$locale.html is stale — php tests/browser/render-pipeline-explainer.php $locale > tests/browser/fixtures/pipeline-explainer.$locale.html");
+    }
+    // Collection Introduction: every string reaches the translator, each
+    // chapter names a figure the component draws, the heading level is
+    // whitelisted, and the block embeds whole without a parameter.
+    $intro = CollectionIntroText::content('h3', $marked);
+    check($intro['headingLevel'] === 'h3' && $intro['chapterHeadingLevel'] === 'h4',
+        'collection intro: heading levels drifted');
+    check(array_column($intro['chapters'], 'id') === ['what', 'where', 'when', 'voices'],
+        'collection intro: the chapters are what, where, when and voices, in that order');
+    $introSvelte = (string) @file_get_contents($root . '/asset/js/svelte/collection-intro/Intro.svelte');
+    foreach ($intro['chapters'] as $chapter) {
+        check(preg_match('/\b' . $chapter['id'] . ': \w+Plate\b/', $introSvelte) === 1,
+            "collection intro: chapter '{$chapter['id']}' has no plate in Intro.svelte");
+    }
+    $strings = [$intro['title'], $intro['lede']];
+    foreach ($intro['chapters'] as $chapter) array_push($strings, $chapter['heading'], $chapter['text']);
+    foreach ($intro['labels'] as $label) $strings[] = $label;
+    $untranslated = array_filter($strings, static fn ($s) => !preg_match('/^«.+»$/u', $s));
+    check(!$untranslated, 'collection intro: strings that bypass translate(): ' . implode(' | ', $untranslated));
+    // The placeholders the client substitutes must survive translation.
+    $fr = [];
+    if (preg_match_all('/^msgid "((?:[^"\\\\]|\\\\.)*)"\nmsgstr "((?:[^"\\\\]|\\\\.)*)"/m',
+        (string) file_get_contents($root . '/language/fr.po'), $pairs, PREG_SET_ORDER)) {
+        foreach ($pairs as $pair) $fr[stripcslashes($pair[1])] = stripcslashes($pair[2]);
+    }
+    foreach (CollectionIntroText::LABELS as $key => $label) {
+        if (!preg_match_all('/\{\w+\}/', $label, $tokens)) continue;
+        foreach ($tokens[0] as $token) {
+            check(strpos($fr[$label] ?? '', $token) !== false, "collection intro: the French for '$key' lost $token");
+        }
+    }
+    check(CollectionIntroText::content('<script>', $marked)['headingLevel'] === CollectionIntroText::DEFAULT_HEADING_LEVEL,
+        'collection intro: the heading level is printed unescaped, so it must be whitelisted');
+    check(BlockRegistry::embedParam('collection-intro') === null, 'the collection intro grew an embed parameter');
+    $introTemplate = (string) file_get_contents($root . '/view/common/block-layout/collection-intro.phtml');
+    foreach (["'embedSlug' => 'collection-intro'", "'embedWhole' => true", "'echarts' => false"] as $needle) {
+        check(strpos($introTemplate, $needle) !== false, "collection-intro.phtml lost $needle");
+    }
+    foreach (['en', 'fr'] as $locale) {
+        $fixture = $root . "/tests/browser/fixtures/collection-intro.$locale.html";
+        $fresh = shell_exec(escapeshellarg(PHP_BINARY) . ' '
+            . escapeshellarg($root . '/tests/browser/render-collection-intro.php') . ' ' . $locale);
+        check(is_string($fresh) && is_readable($fixture)
+            && str_replace("\r\n", "\n", $fresh) === str_replace("\r\n", "\n", (string) file_get_contents($fixture)),
+            "collection-intro.$locale.html is stale — php tests/browser/render-collection-intro.php $locale > tests/browser/fixtures/collection-intro.$locale.html");
     }
     check(is_readable($root . '/view/common/block-layout/_generic.phtml'),
         '_generic.phtml is missing — twenty-one blocks render through it');

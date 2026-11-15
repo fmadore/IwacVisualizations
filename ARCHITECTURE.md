@@ -30,7 +30,7 @@ IwacVisualizations/
 │   └── dependabot.yml
 ├── asset/
 │   ├── css/
-│   │   ├── blocks/                      # 54 files — block-local sheets, layered over iwac-core.css
+│   │   ├── blocks/                      # 56 files — block-local sheets, layered over iwac-core.css
 │   │   ├── iwac-core.css                # Tokens, panel, chip controls, table, form controls
 │   │   ├── iwac-core.min.css
 │   │   ├── iwac-embed-tokens.css
@@ -80,6 +80,7 @@ IwacVisualizations/
 │       │   ├── albani-sermons.js
 │       │   ├── article-dashboard.js
 │       │   ├── audiovisual-overview.js
+│       │   ├── collection-intro.js
 │       │   ├── collection-overview.js
 │       │   ├── compare-newspapers.js
 │       │   ├── distinctive-vocabulary.js
@@ -107,8 +108,8 @@ IwacVisualizations/
 │       │   ├── term-trends.js
 │       │   ├── timeline.js
 │       │   └── topic-explorer.js
-│       ├── dist/                        # 137 files — built by scripts/build-js.js from bundles.json; committed
-│       ├── svelte/                      # 9 files — Svelte components, compiled into their block bundle by build-js.js
+│       ├── dist/                        # 139 files — built by scripts/build-js.js from bundles.json; committed
+│       ├── svelte/                      # 18 files — Svelte components, compiled into their block bundle by build-js.js
 │       ├── bundles.json                 # The load order: shared bundles, panel sets, one per block
 │       ├── dashboard-core.js            # IWACVis namespace, chart tracking, theme observer
 │       ├── iwac-embed-gallery.js
@@ -252,10 +253,11 @@ IwacVisualizations/
 │   │   └── ViewHelper/
 │   │       └── TimelineDataFactory.php
 │   ├── Site/
-│   │   ├── BlockLayout/                 # 25 files — one `const SLUG` each; BlockRegistry.php is the truth
+│   │   ├── BlockLayout/                 # 26 files — one `const SLUG` each; BlockRegistry.php is the truth
 │   │   ├── ResourcePageBlockLayout/     # 3 files — template-ID dispatch + the item-set block
 │   │   ├── AssetPlan.php
 │   │   ├── BlockRegistry.php            # THE single source of truth for every block
+│   │   ├── CollectionIntroText.php      # The Collection Introduction's words, once, for PHP and Svelte
 │   │   ├── ConfiguredEmbed.php          # How a configured block embeds: ?preset=, ?timeline=
 │   │   ├── EmbedBrand.php               # Embed brand seeds → accent overrides; the theme's fonts.css
 │   │   ├── ItemValue.php
@@ -269,7 +271,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 67 files — Playwright specs
+│   ├── browser/                         # 71 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt
@@ -306,7 +308,7 @@ IwacVisualizations/
 │       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/                # 4 files — one per registered block, filename === slug
+│   │   ├── block-layout/                # 5 files — one per registered block, filename === slug
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── _dashboard.phtml
@@ -380,7 +382,7 @@ IwacVisualizations/
 ],
 ```
 
-The other flags are `timeline` and `concordance` (shared-ui), `layout` (shared-layout: the dashboard layout registry and every shared renderer), `d3` (the d3-force CDN modules + shared-d3) and `echarts`, the one that defaults on and is only ever passed as `false`. `BlockRegistry::partialFor($slug)` is the routing rule — `_generic` for a row with a `shell`, `common/block-layout/<slug>` for one without — and the block layouts, the embed view and the integration suite all call it. A row without a `shell` is for a block that does more than declare: today `on-this-day`, which reads its layout setting and builds a noscript slot, `iwac-timeline`, which server-renders its whole reading view, and `pipeline-explainer`, which server-renders its preset's words. Resource-page blocks (`view/common/resource-page-block-layout/**`) call `common/iwac-block-shell` with the same `assets` array directly.
+The other flags are `timeline` and `concordance` (shared-ui), `layout` (shared-layout: the dashboard layout registry and every shared renderer), `d3` (the d3-force CDN modules + shared-d3) and `echarts`, the one that defaults on and is only ever passed as `false`. `BlockRegistry::partialFor($slug)` is the routing rule — `_generic` for a row with a `shell`, `common/block-layout/<slug>` for one without — and the block layouts, the embed view and the integration suite all call it. A row without a `shell` is for a block that does more than declare: today `on-this-day`, which reads its layout setting and builds a noscript slot, `iwac-timeline`, which server-renders its whole reading view, and `pipeline-explainer` and `collection-intro`, which server-render their words. Resource-page blocks (`view/common/resource-page-block-layout/**`) call `common/iwac-block-shell` with the same `assets` array directly.
 
 The partial:
 
@@ -678,7 +680,7 @@ naming 6 `BlockLayout` classes out of 21.
 
 **A string lives in the dictionary of the only bundle that reads it.** The shared `iwac-i18n.js` ships in `shared-core` on every page carrying *any* block, so it holds only strings read by shared code, by templates, or by more than one block. A string one block alone reads goes in that block's `charts/<block>/i18n.js`, first in its bundle. Until v1.73.0 the shared dictionary also carried 146 single-block keys — about 27 KB of both locales' strings that every page downloaded for blocks it did not have; moving them took `shared-core` from 105 to 89 KB (French) and from 93 to 81 KB (English).
 
-**A block may carry a compiled Svelte component** — so far only the Pipeline explainer. Its manifest entry is `{ "svelte": "svelte/<block>/index.js", "files": ["charts/<block>.js"] }`: an ES module under `asset/js/svelte/<block>/` whose `.svelte` imports `build-js.js` compiles with `svelte/compiler` and bundles, with the Svelte runtime, ahead of the block's ordinary orchestrator, into the same `dist/blocks/<block>.min.js`. Nothing else changes: the loader, `AssetPlan` and the templates see one more block bundle, and there is no SvelteKit, router or second build tool. Three rules keep these components inside the module's gates. **No `<style>` in a component** — the build refuses one, so the block's sheet stays in `asset/css/blocks/`, where Stylelint, the theme-token guard and the dead-class check read it (that check reads `.svelte` markup too). **Every compiler warning fails the build**, most of them Svelte's accessibility checks. **Every file under `asset/js/svelte/` must be reached from an entry**, read off esbuild's metafile, as an unbundled classic source fails the manifest check. A Svelte bundle targets ES2020 rather than ES2015, since its runtime needs a modern browser anyway. The runtime is most of its weight: the Pipeline explainer bundle is ~95 KB minified (~33 KB gzipped), loaded only on a page carrying the block, when the block nears the viewport.
+**A block may carry a compiled Svelte component** — so far the Pipeline explainer and the Collection Introduction. Each bundle carries its own copy of the Svelte runtime, so a page with both downloads it twice; that is the price of keeping each block bundle self-contained. Its manifest entry is `{ "svelte": "svelte/<block>/index.js", "files": ["charts/<block>.js"] }`: an ES module under `asset/js/svelte/<block>/` whose `.svelte` imports `build-js.js` compiles with `svelte/compiler` and bundles, with the Svelte runtime, ahead of the block's ordinary orchestrator, into the same `dist/blocks/<block>.min.js`. Nothing else changes: the loader, `AssetPlan` and the templates see one more block bundle, and there is no SvelteKit, router or second build tool. Three rules keep these components inside the module's gates. **No `<style>` in a component** — the build refuses one, so the block's sheet stays in `asset/css/blocks/`, where Stylelint, the theme-token guard and the dead-class check read it (that check reads `.svelte` markup too). **Every compiler warning fails the build**, most of them Svelte's accessibility checks. **Every file under `asset/js/svelte/` must be reached from an entry**, read off esbuild's metafile, as an unbundled classic source fails the manifest check. A Svelte bundle targets ES2020 rather than ES2015, since its runtime needs a modern browser anyway. The runtime is most of its weight: the Pipeline explainer bundle is ~95 KB minified (~33 KB gzipped), loaded only on a page carrying the block, when the block nears the viewport.
 
 `node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 

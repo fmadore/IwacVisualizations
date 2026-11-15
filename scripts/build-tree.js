@@ -87,6 +87,7 @@ const ANNOTATIONS = {
     'src/Site/EmbedBrand.php': "Embed brand seeds → accent overrides; the theme's fonts.css",
     'src/Site/BlockRegistry.php': 'THE single source of truth for every block',
     'src/Site/ConfiguredEmbed.php': 'How a configured block embeds: ?preset=, ?timeline=',
+    'src/Site/CollectionIntroText.php': "The Collection Introduction's words, once, for PHP and Svelte",
     'src/Site/PipelinePresets.php': "The Pipeline explainer's words, once, for PHP and Svelte",
     'src/Job/SyncData.php': 'Pure-PHP "Pull latest data" job (issue #7)',
     'view/common/iwac-assets.phtml': 'Shared asset-loader partial — declare needs here',

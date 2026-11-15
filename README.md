@@ -8,11 +8,12 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — twenty-three page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — twenty-five page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
 | Collection Overview | page block | **Live** — 14 panels, including source locations | Precompute (`generate_collection_overview.py` + two sidecar generators) |
+| Collection Introduction | page block | **New** — a short guided introduction to the collection for a homepage or About page: four chapters (what it holds, where it comes from, the years it covers, languages and subjects), each a heading, a sentence, a display numeral and one figure (type strip, six-country map, items-per-year bars, language ledger and most-indexed entries), played once as each scrolls into view. The second compiled Svelte component. | Reuses `collection-overview.json` (no generator of its own) + `asset/geo/iwac-countries.geojson` |
 | Audiovisual Overview | page block | **Live** — 6 panels; sources and countries rank by recordings *or* runtime | Precompute (`generate_audiovisual_overview.py`) |
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 13 panels, incl. author lifelines and network, subject trends, full-text coverage, per-model LDA topics + semantic landscape | Precompute (`generate_references_overview.py`) |
@@ -257,6 +258,12 @@ The statistics live in `scripts/iwac_stats.py` (BH correction, G², log ratio, K
 ### Entity Networks (page block)
 
 Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry for why not ECharts/Sigma). *Entities* mode draws the co-occurrence graph — persons↔organizations plus events as connective tissue to every other type, and the same-type pairs person↔person, org↔org and place↔place so a selected node reaches its own kind directly (`sujets-sujets` is excluded: subjects tag nearly every item and would dominate the layout) — on a blank theme-aware canvas, with positions precomputed by ForceAtlas2 at generation time (`generate_entity_networks.py`, 1,997 nodes / 27,638 edges at co-occurrence ≥ 2). *Places* mode draws co-mentioned places over the basemap (517 nodes / 14,137 edges, lazily fetched). Node color = entity type (module palette), size = items mentioning it; labels collide via symbol layers with a hubs-first priority rank. Type chips, a min-link-strength select, and node search filter the view; clicking a node highlights its neighborhood and lists its strongest co-occurrences in the details sidebar.
+
+### Collection Introduction (page block)
+
+A guided reading of the collection, distinct from the explorable **Collection Overview** dashboard: four chapters in reading order, each a heading and a sentence or two with one figure beside them. *What it holds* gives the total as a Besley display numeral, the item types as one proportional strip with a ledger of counts, and the index entries and words of full text; *Where it comes from* draws the six countries from `asset/geo/iwac-countries.geojson` (equirectangular, projected in the browser) on a single-hue ramp, every country labelled and counted in a ledger; *The years it covers* draws items per year as bars on a continuous axis, names the peak year and gives totals by decade; *Languages and subjects* lists every language with a proportional bar (pooled only past a dozen) and the five most often indexed people, organisations, subjects, places and events, linked to their records. The figures come from the same `collection-overview.json` the overview reads; no generator is added.
+
+The words have one source, `src/Site/CollectionIntroText.php`, translated through `fr.po`; the server renders them as a complete prose reading, so the block reads with scripting off, in print and when the data cannot be fetched, and the Svelte component (`asset/js/svelte/collection-intro/`) adds the numerals and figures over it. Each chapter plays once when it scrolls into view (under two seconds, numbers counting up to their real value) and again on **Replay animation**; the resting styles are the final frame, which is also what reduced motion, print and the embed show. The one setting is the title's heading level (H2 by default); the embed is one whole-block button.
 
 ### Pipeline Explainer (page block)
 
