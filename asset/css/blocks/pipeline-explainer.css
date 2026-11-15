@@ -568,9 +568,12 @@
     text-decoration: line-through 1.5px var(--ink-light, #3f4349);
 }
 
+/*  A wrapping row, not two fixed columns: the legend has to fit the phone's
+    136px art column in whatever face the reader's system substitutes, and a
+    wider one pushed the second column out of the box. */
 .iwac-vis-pipeline__categories {
-    grid-template-columns: repeat(2, auto);
-    justify-content: start;
+    display: flex;
+    flex-wrap: wrap;
     gap: 2px var(--space-2, 0.5rem);
     color: var(--ink-light, #3f4349);
 }
