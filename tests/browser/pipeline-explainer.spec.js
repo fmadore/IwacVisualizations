@@ -4,7 +4,7 @@
  * diagram over it, its single play and Replay, reduced motion, keyboard,
  * phone layout, both themes and both languages — on fixtures rendered from
  * the production template (tests/browser/render-pipeline-explainer.php),
- * with all seven presets on one page.
+ * with all nine presets on one page.
  */
 const { test, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
@@ -20,6 +20,8 @@ const PRESETS = [
     ['pipeline-5', 'issue-contents', [5]],
     ['pipeline-6', 'ask-ai', [5]],
     ['pipeline-7', 'press-attitudes', [5]],
+    ['pipeline-8', 'embeddings', [5]],
+    ['pipeline-9', 'places-map', [5]],
 ];
 
 /** A tokens.json hex colour as getComputedStyle prints it. */
@@ -230,6 +232,30 @@ test('at 390px no drawing leaves its art box, overlaps its words, or cuts a name
         expect(problems, theme).toEqual([]);
     }
 });
+
+test('at 390px the words inside the drawings stay at the type floor', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page);
+    // A drawing wider than the phone's art column is scaled down with its
+    // words; the presets drawn at the column's width keep 11px text.
+    const small = await page.evaluate((presets) => presets.flatMap((preset) =>
+        [...document.querySelectorAll(`[data-preset="${preset}"] .iwac-vis-pipeline__art svg text`)].map((t) => {
+            const svg = t.ownerSVGElement;
+            const px = parseFloat(getComputedStyle(t).fontSize) * svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+            return px < 10.9 ? `${preset}: "${t.textContent}" ${px.toFixed(1)}px` : null;
+        }).filter(Boolean)), ['issue-contents', 'embeddings', 'places-map']);
+    expect(small).toEqual([]);
+});
+
+for (const theme of ['light', 'dark']) {
+    test(`every agreement cell has an outline that holds against the ground (${theme})`, async ({ page }) => {
+        await open(page, 'en', `?theme=${theme}`);
+        const cell = page.locator('[data-instance="pipeline-7"] .iwac-vis-pipeline__cell:not(.iwac-vis-pipeline__cell--self)').first();
+        // The fill fades with disagreement; the outline is the mark's edge.
+        await expect(cell).toHaveCSS('stroke', rgb(tokens[theme]['--primary']));
+        expect(Number(await cell.evaluate((el) => getComputedStyle(el).strokeOpacity))).toBe(1);
+    });
+}
 
 test('the drawings follow the theme toggle', async ({ page }) => {
     await open(page);

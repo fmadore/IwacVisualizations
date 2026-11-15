@@ -341,7 +341,7 @@ final class BlockRegistry
             'invokable'   => 'pipelineExplainer',
             'class'       => BlockLayout\PipelineExplainer::class,
             'label'       => 'Pipeline Explainer', // @translate
-            'description' => 'Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI or press attitudes — as a short animated diagram with captions. It uses illustrative examples and requests no data.', // @translate
+            'description' => 'Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI, press attitudes, embeddings and reprint detection, or how places reach the maps — as a short animated diagram with captions. It uses illustrative examples and requests no data.', // @translate
             'embedParam'  => 'preset',
         ],
         'press-bylines' => [

@@ -22,6 +22,8 @@
 	import IssueArt from './IssueArt.svelte';
 	import AskArt from './AskArt.svelte';
 	import SentimentArt from './SentimentArt.svelte';
+	import EmbeddingArt from './EmbeddingArt.svelte';
+	import PlacesArt from './PlacesArt.svelte';
 
 	let { content, instance } = $props();
 
@@ -32,7 +34,9 @@
 		'albani-sermons': AlbaniArt,
 		'issue-contents': IssueArt,
 		'ask-ai': AskArt,
-		'press-attitudes': SentimentArt
+		'press-attitudes': SentimentArt,
+		embeddings: EmbeddingArt,
+		'places-map': PlacesArt
 	};
 	const Art = $derived(ART[content.preset]);
 	const several = $derived(content.routes.length > 1);

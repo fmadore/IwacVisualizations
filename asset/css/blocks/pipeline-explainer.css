@@ -1095,16 +1095,185 @@
     color: var(--ink, #13161c);
 }
 
+/*  Agreement is the fill's opacity; the outline stays whole, so a pale,
+ *  low-agreement cell is still a mark against the ground (primary on either
+ *  surface clears 3:1) rather than a tint that melts into it in dark mode. */
 .iwac-vis-pipeline__cell {
     fill: var(--primary, #ce4115);
+    stroke: var(--primary, #ce4115);
+    stroke-width: 0.75;
 }
 
 .iwac-vis-pipeline__cell--self {
     fill: var(--ink, #13161c);
+    stroke: var(--ink, #13161c);
 }
 
 .iwac-vis-pipeline__num--start {
     text-anchor: start;
+}
+
+.iwac-vis-pipeline__num--end {
+    text-anchor: end;
+}
+
+
+/*  Embeddings and reprints */
+
+/*  Lines two passages share: the primary wash, no outline of its own (the
+ *  dashed passage frames draw the edges). */
+.iwac-vis-pipeline__overlap {
+    fill: color-mix(in oklab, var(--primary, #ce4115) 22%, transparent);
+}
+
+.iwac-vis-pipeline__bracket {
+    fill: none;
+    stroke: var(--ink, #13161c);
+    stroke-width: 1.25;
+}
+
+/*  A number the drawing is about (a vector's values, a score): ink, not the
+ *  quiet label grey. */
+.iwac-vis-pipeline__num--value,
+.iwac-vis-pipeline__num--ink {
+    fill: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-pipeline__num--value {
+    font-weight: 600;
+}
+
+/*  A flat picture over a few lines of words, the two kept together. */
+.iwac-vis-pipeline__space {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    width: 100%;
+    max-width: min(9.5rem, 100%);
+}
+
+.iwac-vis-pipeline__space p {
+    margin: 0;
+}
+
+.iwac-vis-pipeline__snippets {
+    display: grid;
+    gap: 2px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-pipeline__snippet {
+    display: grid;
+    grid-template-columns: 0.9rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 3px;
+}
+
+/*  The point's number, as the dot carries it: ink disc, light figure. */
+.iwac-vis-pipeline__snippet-n {
+    display: inline-grid;
+    place-items: center;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: var(--radius-full, 9999px);
+    background: var(--ink, #13161c);
+    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--surface, #fdfcfb);
+}
+
+.iwac-vis-pipeline__snippet-text {
+    min-width: 0;
+    font-style: italic;
+    overflow-wrap: break-word;
+    color: var(--ink, #13161c);
+}
+
+/*  A score over the cut-off: primary, where the others stay grey. */
+.iwac-vis-pipeline__chart-bar--over {
+    fill: var(--primary, #ce4115);
+}
+
+.iwac-vis-pipeline__threshold {
+    stroke: var(--primary, #ce4115);
+    stroke-width: 1;
+    stroke-dasharray: 3 2;
+}
+
+.iwac-vis-pipeline__num--cut {
+    font-weight: 600;
+    fill: var(--ink-strong, #05070c);
+}
+
+
+/*  Places on the map */
+
+/*  The word the record links, in the text: underlined solid in the place
+ *  colour, where the town only named beside it stays plain. */
+.iwac-vis-pipeline__linked-word {
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: underline solid 1.5px var(--iwac-vis-pipeline-cat, var(--ink-light, #3f4349));
+    text-underline-offset: 2px;
+}
+
+.iwac-vis-pipeline__record--entry {
+    gap: 1px;
+}
+
+/*  The entry's fields read as a record's, left-aligned under its name. */
+.iwac-vis-pipeline__record--entry .iwac-vis-pipeline__fields {
+    margin-top: 2px;
+    padding-top: 2px;
+    border-top: 1px solid var(--border, #ced1d6);
+    text-align: start;
+}
+
+.iwac-vis-pipeline__record--entry .iwac-vis-pipeline__fields dt {
+    margin-top: 0;
+}
+
+.iwac-vis-pipeline__coords {
+    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+/*  Map bubbles, as the module's maps draw them: primary fill at 0.75, ink
+ *  outline. */
+.iwac-vis-pipeline__map-bubble {
+    fill: var(--primary, #ce4115);
+    fill-opacity: 0.75;
+    stroke: var(--ink, #13161c);
+    stroke-width: 1;
+}
+
+.iwac-vis-pipeline__leader {
+    stroke: var(--border-strong, #aeb1b7);
+    stroke-width: 0.75;
+}
+
+.iwac-vis-pipeline__absent {
+    display: grid;
+    justify-items: start;
+    gap: 1px;
+}
+
+.iwac-vis-pipeline__absent + .iwac-vis-pipeline__absent {
+    margin-top: 2px;
+}
+
+.iwac-vis-pipeline__absent-why {
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-pipeline__absent-why::before {
+    content: "\2717\00a0";
+    color: var(--ink-light, #3f4349);
 }
 
 
@@ -1208,6 +1377,13 @@
         animation: iwac-pipeline-draw 600ms ease-in-out calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 200ms) both;
     }
 
+    /*  A map bubble grows from its centre. */
+    .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__pop {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: iwac-pipeline-pop var(--duration-slow, 300ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 220ms + var(--iwac-vis-pipeline-j, 0) * 160ms) both;
+    }
+
     .iwac-vis-pipeline__figure--playing .iwac-vis-pipeline__fan {
         animation: iwac-pipeline-fan 520ms var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) calc(var(--iwac-vis-pipeline-at) + 120ms + var(--iwac-vis-pipeline-j, 0) * 70ms) both;
     }
@@ -1243,6 +1419,12 @@
         }
     }
 
+    @keyframes iwac-pipeline-pop {
+        from {
+            transform: scale(0);
+        }
+    }
+
     @keyframes iwac-pipeline-fan {
         from {
             opacity: 0.4;
@@ -1266,7 +1448,9 @@
     .iwac-vis-pipeline__segment,
     .iwac-vis-pipeline__bar,
     .iwac-vis-pipeline__line,
-    .iwac-vis-pipeline__step--on {
+    .iwac-vis-pipeline__step--on,
+    .iwac-vis-pipeline__map-bubble,
+    .iwac-vis-pipeline__chart-bar--over {
         forced-color-adjust: none;
     }
 }
