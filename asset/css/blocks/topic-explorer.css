@@ -59,7 +59,7 @@
     padding: var(--space-3, 0.75rem);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     cursor: pointer;
     text-align: left;
     font-family: inherit;
@@ -81,7 +81,7 @@
 }
 
 .iwac-vis-topic-card:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -95,8 +95,6 @@
 .iwac-vis-topic-card__id {
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
 }
 
@@ -118,7 +116,7 @@
     /*  A word tag: the theme's `.resource-tag`, an OUTLINED pill — it was a
      *  primary-washed one, the pastel fill the theme refuses. */
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     background: transparent;
     color: var(--ink-light, #3f4349);
     line-height: var(--line-height-snug, 1.4);
@@ -144,7 +142,7 @@
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
 }
 
 .iwac-vis-topic-detail__row {
@@ -191,7 +189,7 @@
     font-size: var(--text-xs, 0.8125rem);
     padding: 0.125rem var(--space-2, 0.5rem);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     background: transparent;
     color: var(--ink-light, #3f4349);
     text-transform: lowercase;

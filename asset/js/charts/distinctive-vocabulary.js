@@ -88,7 +88,7 @@
                 type: 'bar',
                 data: terms.map(function (t) { return t.log_ratio; }),
                 barMaxWidth: 20,
-                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                itemStyle: { borderRadius: 0 },
                 label: {
                     show: true,
                     position: 'right',

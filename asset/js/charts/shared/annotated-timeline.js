@@ -350,7 +350,7 @@
                     fontSize: 11,
                     backgroundColor: style.surface,
                     padding: [2, 6],
-                    borderRadius: 3
+                    borderRadius: 0
                 }, badge),
                 lineStyle: {
                     color: style.border,
@@ -404,7 +404,7 @@
                         fontSize: 11,
                         backgroundColor: style.surface,
                         padding: [2, 6],
-                        borderRadius: 3
+                        borderRadius: 0
                     }, badge)
                     : { show: false },
                 data: periods.map(function (row) {

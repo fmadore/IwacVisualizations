@@ -164,7 +164,7 @@
                     // perimeter; tooltips carry the full name.
                     formatter: function (p) { return C._truncateEnd(p.name, 28); }
                 },
-                itemStyle: { borderRadius: 3 },
+                itemStyle: { borderRadius: 0 },
                 lineStyle: { color: 'gradient', opacity: 0.28 },
                 emphasis: {
                     focus: 'adjacency',

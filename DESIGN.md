@@ -2,48 +2,48 @@
 name: IWAC Visualizations
 description: The data layer of the Research Broadsheet — ECharts and MapLibre panels that read the IWAC theme's tokens at runtime and encode data in the one colour namespace they own.
 colors:
-  model-1: "#00a05b"
-  model-2: "#538bf5"
-  model-3: "#af4700"
-  model-4: "#007b80"
-  model-5: "#c360bc"
-  model-6: "#f85509"
+  model-1: "#5e3cf0"
+  model-2: "#008ed8"
+  model-3: "#796006"
+  model-4: "#0ea361"
+  model-5: "#b104ab"
+  model-6: "#dd7002"
 components:
   panel:
-    backgroundColor: "var(--panel-bg, var(--surface, #fdfcfb))"
+    backgroundColor: "transparent"
     textColor: "var(--ink, #13161c)"
-    rounded: "var(--panel-radius, var(--radius-md, 0.5rem))"
-    padding: "var(--space-4, 1rem)"
+    rounded: "0"
+    padding: "var(--space-3, 0.75rem) 0 0"
   button:
-    backgroundColor: "var(--surface, #fdfcfb)"
+    backgroundColor: "transparent"
     textColor: "var(--ink, #13161c)"
-    rounded: "var(--radius-md, 0.5rem)"
-    padding: "var(--space-2, 0.5rem) var(--space-3, 0.75rem)"
+    rounded: "var(--radius-md, 0)"
+    padding: "var(--space-1, 0.25rem) var(--space-3, 0.75rem)"
   button-hover:
-    backgroundColor: "var(--surface-raised, #faf8f6)"
-    textColor: "var(--ink, #13161c)"
+    backgroundColor: "var(--surface-sunken, #f4f1ef)"
+    textColor: "var(--ink-strong, #05070c)"
   tab:
-    backgroundColor: "var(--surface, #fdfcfb)"
+    backgroundColor: "transparent"
     textColor: "var(--ink-light, #3f4349)"
-    rounded: "var(--radius-sm, 0.375rem)"
+    rounded: "var(--radius-sm, 0)"
     padding: "var(--space-1, 0.25rem) var(--space-3, 0.75rem)"
   tab-active:
-    backgroundColor: "color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb))"
-    textColor: "var(--ink-strong, #05070c)"
+    backgroundColor: "color-mix(in oklab, var(--primary, #18298d) 10%, transparent)"
+    textColor: "var(--primary-hover, #132278)"
   chip:
-    backgroundColor: "color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb))"
-    textColor: "var(--ink, #13161c)"
-    rounded: "var(--radius-sm, 0.375rem)"
-    padding: "0.2rem 0.6rem"
+    backgroundColor: "color-mix(in oklab, var(--primary, #18298d) 10%, transparent)"
+    textColor: "var(--primary-hover, #132278)"
+    rounded: "var(--radius-sm, 0)"
+    padding: "0 var(--space-2, 0.5rem)"
   control:
     backgroundColor: "var(--surface, #fdfcfb)"
     textColor: "var(--ink, #13161c)"
-    rounded: "var(--radius-md, 0.5rem)"
+    rounded: "var(--radius-md, 0)"
     padding: "var(--space-2, 0.5rem) var(--space-3, 0.75rem)"
   toolbar-button:
     backgroundColor: "transparent"
-    textColor: "var(--ink-light, #3f4349)"
-    rounded: "var(--radius-md, 0.5rem)"
+    textColor: "var(--muted, #66696e)"
+    rounded: "0"
     size: "var(--size-control-sm, 2.25rem)"
 ---
 
@@ -143,21 +143,18 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
 - **Model slots 1–6** (`--iwac-vis-model-1..6`): six per-model data-series accents used
   where the Sentiment Atlas draws every annotator model at once. They are **role slots
   numbered by position, not by model id**; the id → slot map lives in `MODEL_SLOT`
-  (charts/sentiment-atlas.js) and nowhere else. Since 2026-10 slots 1–5 are picked in OKLCH and
-  measured, not nudged from the brand marks by eye: green 155°, blue 262°, burnt orange
-  45°, teal 200°, magenta 330° — at least 45° apart, each the family its model's mark reads
-  as — at the gamut's highest chroma between L 0.53 and 0.65, so every slot clears 3.2:1 on
-  the light and the dark panel, and no pair sits closer than ΔEok 0.14 (0.095 under
-  deuteranopia or protanopia). The previous set had two blues at ΔEok 0.059 (0.027 to a
-  deuteranope) and an amber at 2.74:1 on the light panel. `tests/js/palette.test.js`
-  measures all of it.
-- **Slot 6** (`#f85509`, 2026-10, the sixth panel member) is a **lightness step, not a
-  hue**. Five hues 45° apart leave no gap of 40° on both sides inside the band that clears
-  3:1 on both panels, so a grid search there found only lightness twins of existing slots.
-  The bright orange is the one in its model's own family (the Claude mark is terracotta):
-  hue 39°, L 0.665 — 0.135 lighter than slot 3's burnt orange — ≥ 3.2:1 on both panels and
-  ΔEok ≥ 0.10 to every slot under deuteranopia and protanopia. A seventh model will not fit
-  this way; it needs a re-pick of the whole set.
+  (charts/sentiment-atlas.js) and nowhere else. Re-picked in OKLCH in 2026-11 for the
+  theme's press-blue `--primary`, claret `--secondary` and teal `--info`: the 2026-10 set,
+  measured beside an orange brand, had slot 4 one digit off the AI-content teal, slot 2 a
+  blue 0.07 from the dark `--primary`, and a green lead. The six now take the hues the
+  three theme accents leave free — violet 282° (the lead, neither green nor orange), blue
+  243°, ochre 90°, green 156°, magenta 330°, orange 54° (the Claude mark's terracotta
+  family) — every slot at least 40° in hue or 0.1 in lightness from `--primary`,
+  `--secondary` and `--info` in both themes, ≥ 3.1:1 on the light and the dark panel, no
+  pair closer than ΔEok 0.19 (0.087 under deuteranopia or protanopia). Six hues fit
+  because the violet/blue and ochre/orange pairs also part in lightness. A seventh model
+  will need a re-pick of the whole set. `tests/js/palette.test.js` measures all of it,
+  the theme-accent separation and the lead rule included.
 - **Model logos** sit on a `--white` chip at a hairline radius, in both themes: the vendor
   marks are fixed artwork, and the OpenAI mark is black, which vanished on the dark panel.
 
@@ -236,9 +233,10 @@ series colour paints correctly at rest and vanishes on hover. Opacity variants g
 `ns.withAlpha`, which emits a flat `rgba()` that survives the engine's own lift/darken.
 
 **The Panel-Not-Surface Rule.** Anything measuring contrast against the box it sits in
-reads `--panel-bg`, not `--surface`: the theme aliases `--panel-bg` to `--surface` in
-light and to `--surface-raised` in dark. Guessing is wrong in exactly one theme, which is
-the hardest kind of wrong to see.
+reads `--panel-bg`, not `--surface`. The theme aliased `--panel-bg` to `--surface` in
+light and to `--surface-raised` in dark until 2.33, and to `--surface` in both since the
+panels became ruled sections; reading the token is what kept that change a no-op here.
+Guessing is wrong in exactly one theme, which is the hardest kind of wrong to see.
 
 ## Typography
 
@@ -263,6 +261,18 @@ open beside it. Heading *level* is an outline decision, not a style one: `buildP
 by default, `h3` under a block heading promoted to `h2`, `h2` for a block sitting directly
 under the page `h1` — and the level never changes the size.
 
+**The Rationed-Capitals Rule.** Tracked uppercase is kept for the theme's two uses of it:
+datelines and eyebrows — the On This Day "ON THIS DAY" eyebrow and its `TYPE · PUBLISHER ·
+DATE` rows, the index ledger's and the timeline's datelines. Every other label is sentence
+case at its natural tracking, 600 where it is a label: buttons and toggle chips (the
+calendar and layout switches included), form and facet labels, table heads, legends,
+summary-figure captions, badges and tags.
+
+**The Prose-Fills-The-Width Rule.** No measure cap on descriptive text. A block or panel
+description is one to three sentences, and a 44rem column left the right half of a wide
+block empty beside it. Long reading text follows the theme (full width, or newspaper
+columns for short prose in the theme's own blocks).
+
 **The Token-Or-Nothing Rule.** `font-size` comes from a `--text-*` token, inside
 `clamp()` included. Roughly 91 literals here once ran a second, undeclared 12/14/18px
 scale against the theme's 11/13/15/17/19; four inline fluid ramps hid from the guard
@@ -273,8 +283,11 @@ inside `clamp()` until it learned to read the whole value.
 Blocks are guests. A block is a `.iwac-vis-block` in the host page's content column,
 spaced `var(--space-8)` from its neighbours, and it never reaches outside that column.
 Inside, the recurring unit is the **panel grid**: an auto-fitting grid of
-`.iwac-vis-panel` cards each holding one chart host with a reserved height, so a slow
-fetch does not collapse the page and shove the sections below it.
+`.iwac-vis-panel` sections — each opening on a 1px `--ink-strong` rule, with no fill,
+frame or inline padding, so its chart and text sit on the page's own left edge — each
+holding one chart host with a reserved height, so a slow fetch does not collapse the page
+and shove the sections below it. The grid's gap is the gutter (`--space-8` between rows,
+`--space-6` between columns), since there is no frame to keep two panels apart.
 
 Spacing, radii and control sizes are the theme's scales, consumed by token. The module
 adds three module-local ramps with no theme equivalent: thumbnail sizes
@@ -323,26 +336,29 @@ that stop the cell being a column at all.
 
 ## Elevation & Depth
 
-Flat inside, one shadow at the boundary. The theme's Rules-Not-Boxes doctrine holds
-everywhere except the one place it sanctions a box: a chart panel is a true panel, so
-`.iwac-vis-panel` takes `--shadow-sm`, a 1px `--border` hairline and `--panel-radius`.
-Nothing *inside* a panel casts a shadow — tabs, chips, keys, window notes, tables and
-summary cards are drawn with hairlines, tints and type. The one floating element is the
-chart tooltip, which carries the theme's `--shadow-md` and `--radius-md` because it leaves the panel's
-box entirely (`appendTo: 'body'` to escape ancestor `overflow: hidden`, `confine: true` so
-it does not drift off a phone). A chart in a panel with a fullscreen control is the
-exception: native fullscreen draws only the fullscreen element, so a `<body>` tooltip
-vanishes behind it, and those charts keep theirs in the chart (`C._inPanelTooltip`).
+Flat throughout. Until the theme's ink-and-spot-colour redesign (2.33) a chart panel was
+the one box the theme's Rules-Not-Boxes doctrine sanctioned — `--shadow-sm`, a 1px
+`--border` frame, `--panel-radius`. The theme then took every card off its pages, and the
+panel followed: it is a **ruled section**, an `--ink-strong` rule on top and nothing else,
+on the page's one flat `--surface`. Nothing inside it casts a shadow either — tabs, chips,
+keys, window notes, tables and summary cards are drawn with hairlines, tints and type. The
+chart tooltip is square and flat too, a hairline `--ink-light` frame instead of a cast
+shadow (`appendTo: 'body'` to escape ancestor `overflow: hidden`, `confine: true` so it
+does not drift off a phone). A chart in a panel with a fullscreen control keeps its
+tooltip in the chart: native fullscreen draws only the fullscreen element, so a `<body>`
+tooltip vanishes behind it (`C._inPanelTooltip`). The embed route is the one place the
+block paints a ground (`--surface`, iwac-embed.css), because the page behind the frame is
+the host's.
 
-The panel border is written unrolled as `1px solid var(--border, …)`, not through the
-theme's composite `--panel-border` shorthand: a composite wrapping another `var()` can
-freeze that inner substitution at the block where it is declared, which once painted a
-dark blue-grey line across light-mode cards for anyone whose OS preferred dark.
+The rule names `--ink-strong` directly rather than a composite shorthand: a composite
+wrapping another `var()` can freeze that inner substitution at the block where it is
+declared, which once painted a dark blue-grey line across light-mode cards for anyone
+whose OS preferred dark.
 
 ### Named Rules
 
-**The Flat-Inside-The-Panel Rule.** The panel's own shadow is the module's entire
-elevation budget. If a control inside a panel needs to read as raised, it is the wrong
+**The Flat-Inside-The-Panel Rule.** The module has no elevation budget: nothing on the
+page casts a shadow. If a control inside a panel needs to read as raised, it is the wrong
 control.
 
 **The Structural-Stripe Exception.** A `border-left` / `border-right` of 2px or more is
@@ -352,12 +368,12 @@ per the theme.
 
 ## Shapes
 
-Rectilinear, borrowed whole from the theme: `--radius-md` on panels, buttons and form
-controls; `--radius-sm` on every switch and chip (the controls grammar, IWAC-theme
-DESIGN-SYSTEM.md §2c); `--radius-full` for dots and swatches only, never a control. The one
-shape the module authors itself is the **2px corner on a data mark** — the key swatch is
-drawn at 2px specifically to match the corner the Gantt's `renderItem` draws on each bar,
-so the legend and the chart are visibly the same object.
+Square, borrowed whole from the theme: `--radius-md` on buttons and form controls and
+`--radius-sm` on every switch and chip (the controls grammar, IWAC-theme DESIGN-SYSTEM.md
+§2c) are both 0 since the theme's 2.33, and a panel has no corners to round;
+`--radius-full` is for dots only, never a control, a badge or a tag. Data marks are square
+as well: bars end square (`C._barDefaults`), legend keys are `rect`, and the key swatch
+matches them, so the legend and the chart are visibly the same object.
 
 ## Components
 
@@ -366,12 +382,30 @@ claim on the page.
 
 ### Panel
 
-The unit of the system: `--panel-bg` ground, 1px hairline, `--panel-radius`,
-`--space-4` padding, `min-width: 0` so a canvas cannot force grid overflow. Built by
-`P.buildPanel(className, title, description, opts)`, which emits the title at the level
-the surrounding outline needs and an optional muted description line beneath it. A
-fullscreen variant promotes one panel to the viewport; the header carries an injected
-toolbar (download, fullscreen, copy-embed) whose buttons are `--size-control-sm` squares.
+The unit of the system: a ruled section — a 1px `--ink-strong` rule on top, `--space-3`
+under it, no fill, frame, radius or inline padding, `min-width: 0` so a canvas cannot
+force grid overflow. Built by `P.buildPanel(className, title, description, opts)`, which
+emits the title at the level the surrounding outline needs and an optional muted
+description line beneath it. A fullscreen variant promotes one panel to the viewport, on a
+`--surface` ground with its own gutter; the header carries an injected toolbar (image,
+table, CSV, fullscreen, copy-embed) flush with the section's right edge: frameless
+`--size-control-sm` squares in `--muted` with a 1.5 stroke, the hairline frame and full
+ink only on hover, the selected wash with a spot-colour underline when pressed, and the
+focus outline every control has.
+
+### Chart Theme
+
+The registered ECharts theme draws a printed statistical graphic rather than a dashboard:
+ink axis baselines and ticks, a `--border-light` hairline value grid, square bar ends and
+`rect` legend keys, a square flat tooltip framed in `--ink-light`. The range slider
+(`dataZoom`) has a hairline track, the series silhouette in `--muted` over
+`--border-light`, and the spot colour only on what the reader acts on — the selected
+window's silhouette and its square handles; the drag bar above it is a `--border` strip
+that turns `--primary` on hover. It is themed with the keys ECharts 5 and 6 read
+(`dataBackground`, `selectedDataBackground`, `handleStyle`, `moveHandleStyle`), not the
+ECharts 4 names the theme once carried, under which every slider kept ECharts' own
+lavender. `IWACVis.initChart` registers the theme first if ECharts arrived after
+`shared-core` (a chart-less block loaded it), or the chart silently takes ECharts' default.
 
 ### Chart Host
 
@@ -392,9 +426,9 @@ key on a chart with no window still scrolls the page.
 
 ### Buttons
 
-Quiet by default, matching the theme's inversion. `.iwac-vis-btn` is a `--surface` fill
-with a 1px `--border`, `--radius-md`, `--text-sm`; hover raises to `--surface-raised` and
-tints the border 40% primary; focus is `--focus-outline` at 2px offset; disabled drops to
+Quiet by default, matching the theme's inversion. `.iwac-vis-btn` is transparent with a
+1px `--border`, square, `--text-sm`, sentence case; hover lays `--surface-sunken` under it
+and strengthens the border; focus is `--focus-outline` at 2px offset; disabled drops to
 0.5 opacity. `--sm` and `--ghost` modifiers exist; there is no loud variant, because
 nothing in a data panel is the page's call to action.
 

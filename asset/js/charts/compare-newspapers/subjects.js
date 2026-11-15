@@ -59,13 +59,13 @@
                     {
                         name: dataA.name,
                         type: 'bar',
-                        itemStyle: { color: colorA, borderRadius: [0, 4, 4, 0] },
+                        itemStyle: { color: colorA, borderRadius: 0 },
                         data: top.map(function (n) { return mapA[n] || 0; })
                     },
                     {
                         name: dataB.name,
                         type: 'bar',
-                        itemStyle: { color: colorB, borderRadius: [0, 4, 4, 0] },
+                        itemStyle: { color: colorB, borderRadius: 0 },
                         data: top.map(function (n) { return mapB[n] || 0; })
                     }
                 ]

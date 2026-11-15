@@ -64,7 +64,6 @@
 }
 
 .iwac-vis-pipeline__lede {
-    max-width: var(--measure-base, 52.5rem);
     margin: var(--space-2, 0.5rem) 0 var(--space-5, 1.25rem);
     color: var(--ink, #13161c);
     line-height: var(--line-height-relaxed, 1.7);
@@ -78,7 +77,7 @@
 }
 
 .iwac-vis-pipeline__replay:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -97,8 +96,6 @@
     font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
     color: var(--ink-light, #3f4349);
 }
 
@@ -162,7 +159,6 @@
 .iwac-vis-pipeline__foot {
     display: grid;
     gap: var(--space-1, 0.25rem);
-    max-width: var(--measure-base, 52.5rem);
     margin-top: var(--space-5, 1.25rem);
     padding-top: var(--space-3, 0.75rem);
     border-top: 1px solid var(--border, #ced1d6);
@@ -295,7 +291,7 @@
 
 .iwac-vis-pipeline__route-line {
     fill: none;
-    stroke: var(--primary, #ce4115);
+    stroke: var(--primary, #18298d);
     stroke-width: 1.25;
     stroke-linecap: round;
 }
@@ -318,7 +314,7 @@
     margin: 0;
     padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
     border: 1px solid var(--border-strong, #aeb1b7);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: var(--surface-raised, #faf8f6);
 }
 
@@ -346,7 +342,7 @@
     display: block;
     width: calc(var(--iwac-vis-pipeline-w, 1) * 100%);
     height: 3px;
-    border-radius: 2px;
+    border-radius: 0;
     background: var(--ink-light, #3f4349);
 }
 
@@ -455,7 +451,7 @@
     display: block;
     width: calc(var(--iwac-vis-pipeline-w, 1) * 100%);
     height: 6px;
-    border-radius: 1px;
+    border-radius: 0;
     background: var(--ink-light, #3f4349);
 }
 
@@ -505,13 +501,13 @@
     content: "";
     width: 0.6rem;
     height: 0.6rem;
-    border-radius: 1px;
+    border-radius: 0;
     background: var(--iwac-vis-pipeline-series);
 }
 
-.iwac-vis-pipeline [data-series="1"] { --iwac-vis-pipeline-series: var(--series-1, #ce4115); }
-.iwac-vis-pipeline [data-series="2"] { --iwac-vis-pipeline-series: var(--series-2, #394f68); }
-.iwac-vis-pipeline [data-series="3"] { --iwac-vis-pipeline-series: var(--series-3, #4a8c6f); }
+.iwac-vis-pipeline [data-series="1"] { --iwac-vis-pipeline-series: var(--series-1, #18298d); }
+.iwac-vis-pipeline [data-series="2"] { --iwac-vis-pipeline-series: var(--series-2, #85253a); }
+.iwac-vis-pipeline [data-series="3"] { --iwac-vis-pipeline-series: var(--series-3, #4f8751); }
 
 .iwac-vis-pipeline__mixtures {
     display: grid;
@@ -549,7 +545,7 @@
     --iwac-vis-pipeline-cat: var(--ink-light, #3f4349);
 }
 
-.iwac-vis-pipeline [data-cat="person"] { --iwac-vis-pipeline-cat: var(--type-entity-personnes, #037ac0); }
+.iwac-vis-pipeline [data-cat="person"] { --iwac-vis-pipeline-cat: var(--type-entity-personnes, #007980); }
 .iwac-vis-pipeline [data-cat="organisation"] { --iwac-vis-pipeline-cat: var(--type-entity-organisations, #d66800); }
 .iwac-vis-pipeline [data-cat="place"] { --iwac-vis-pipeline-cat: var(--type-entity-lieux, #2e9052); }
 .iwac-vis-pipeline [data-cat="subject"] { --iwac-vis-pipeline-cat: var(--type-entity-sujets, #7c5295); }
@@ -558,7 +554,7 @@
 .iwac-vis-pipeline__mention {
     padding: 0 2px;
     border: 1px dashed var(--iwac-vis-pipeline-cat);
-    border-radius: 2px;
+    border-radius: 0;
     background: color-mix(in oklab, var(--iwac-vis-pipeline-cat) 16%, transparent);
     white-space: nowrap;
 }
@@ -586,7 +582,7 @@
     width: 0.6rem;
     height: 0.6rem;
     border: 1px dashed var(--iwac-vis-pipeline-cat);
-    border-radius: 1px;
+    border-radius: 0;
     background: color-mix(in oklab, var(--iwac-vis-pipeline-cat) 16%, transparent);
 }
 
@@ -616,7 +612,7 @@
     width: 100%;
     padding: 2px var(--space-1, 0.25rem);
     border: 1px solid var(--iwac-vis-pipeline-cat);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: var(--surface-raised, #faf8f6);
     text-align: center;
 }
@@ -727,7 +723,7 @@
     min-width: 0;
     padding: 0 3px;
     border: 1px solid var(--iwac-vis-pipeline-cat);
-    border-radius: 2px;
+    border-radius: 0;
     background: color-mix(in oklab, var(--iwac-vis-pipeline-cat) 16%, transparent);
 }
 
@@ -779,20 +775,20 @@
     display: block;
     width: calc(var(--iwac-vis-pipeline-w, 1) * 1.5rem);
     height: 3px;
-    border-radius: 2px;
+    border-radius: 0;
     background: var(--border-strong, #aeb1b7);
 }
 
 /*  A neighbour that occurs unusually often near the term. */
 .iwac-vis-pipeline__kwic-word--near {
     height: 5px;
-    background: var(--primary, #ce4115);
+    background: var(--primary, #18298d);
 }
 
 .iwac-vis-pipeline__term {
     padding: 0 2px;
-    border-radius: 2px;
-    background: color-mix(in oklab, var(--primary, #ce4115) 16%, transparent);
+    border-radius: 0;
+    background: color-mix(in oklab, var(--primary, #18298d) 16%, transparent);
     font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
     font-weight: 600;
     color: var(--ink-strong, #05070c);
@@ -838,7 +834,7 @@
     gap: 2px;
     padding: 2px 3px;
     border: 1px dashed var(--ink-light, #3f4349);
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .iwac-vis-pipeline__toc-title {
@@ -863,8 +859,8 @@
 /*  The continuation marker the model reads: primary, framed, so it is a
  *  shape as well as a colour. */
 .iwac-vis-pipeline__marker-box {
-    fill: color-mix(in oklab, var(--primary, #ce4115) 16%, transparent);
-    stroke: var(--primary, #ce4115);
+    fill: color-mix(in oklab, var(--primary, #18298d) 16%, transparent);
+    stroke: var(--primary, #18298d);
     stroke-width: 0.75;
 }
 
@@ -882,7 +878,7 @@
     max-width: 100%;
     padding: 0 3px;
     border: 1px dashed var(--ink-light, #3f4349);
-    border-radius: 2px;
+    border-radius: 0;
     text-align: center;
 }
 
@@ -893,7 +889,7 @@
     width: 100%;
     padding: 2px var(--space-1, 0.25rem);
     border: 1px solid var(--ink, #13161c);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: var(--surface-raised, #faf8f6);
 }
 
@@ -949,7 +945,7 @@
     margin-bottom: 4px;
     padding: 3px var(--space-2, 0.5rem);
     border: 1px solid var(--border-strong, #aeb1b7);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: var(--surface-raised, #faf8f6);
     color: var(--ink-strong, #05070c);
 }
@@ -984,7 +980,7 @@
 
 .iwac-vis-pipeline__call::before {
     content: "\2192\00a0";
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 /*  The dataset's drum: hairline bands, no fill of their own. */
@@ -1023,8 +1019,8 @@
 .iwac-vis-pipeline__cite {
     flex: none;
     padding: 0 3px;
-    border: 1px solid var(--primary, #ce4115);
-    border-radius: 2px;
+    border: 1px solid var(--primary, #18298d);
+    border-radius: 0;
     font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
     line-height: 1.2;
     color: var(--ink-strong, #05070c);
@@ -1059,7 +1055,7 @@
     flex: 1 1 0;
     height: 8px;
     border: 1px solid var(--border-strong, #aeb1b7);
-    border-radius: 1px;
+    border-radius: 0;
 }
 
 .iwac-vis-pipeline__step--on {
@@ -1099,8 +1095,8 @@
  *  low-agreement cell is still a mark against the ground (primary on either
  *  surface clears 3:1) rather than a tint that melts into it in dark mode. */
 .iwac-vis-pipeline__cell {
-    fill: var(--primary, #ce4115);
-    stroke: var(--primary, #ce4115);
+    fill: var(--primary, #18298d);
+    stroke: var(--primary, #18298d);
     stroke-width: 0.75;
 }
 
@@ -1123,7 +1119,7 @@
 /*  Lines two passages share: the primary wash, no outline of its own (the
  *  dashed passage frames draw the edges). */
 .iwac-vis-pipeline__overlap {
-    fill: color-mix(in oklab, var(--primary, #ce4115) 22%, transparent);
+    fill: color-mix(in oklab, var(--primary, #18298d) 22%, transparent);
 }
 
 .iwac-vis-pipeline__bracket {
@@ -1195,11 +1191,11 @@
 
 /*  A score over the cut-off: primary, where the others stay grey. */
 .iwac-vis-pipeline__chart-bar--over {
-    fill: var(--primary, #ce4115);
+    fill: var(--primary, #18298d);
 }
 
 .iwac-vis-pipeline__threshold {
-    stroke: var(--primary, #ce4115);
+    stroke: var(--primary, #18298d);
     stroke-width: 1;
     stroke-dasharray: 3 2;
 }
@@ -1246,7 +1242,7 @@
 /*  Map bubbles, as the module's maps draw them: primary fill at 0.75, ink
  *  outline. */
 .iwac-vis-pipeline__map-bubble {
-    fill: var(--primary, #ce4115);
+    fill: var(--primary, #18298d);
     fill-opacity: 0.75;
     stroke: var(--ink, #13161c);
     stroke-width: 1;

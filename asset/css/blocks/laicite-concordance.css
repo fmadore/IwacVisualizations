@@ -66,7 +66,7 @@
  *  and lives in iwac-core.css; only the accent colour is block-local. */
 
 .iwac-vis-timeline-details-link {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 
@@ -85,12 +85,10 @@
     align-items: center;
     padding: 0.125rem var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
     color: var(--muted, #66696e);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     white-space: nowrap;
 }
 

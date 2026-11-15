@@ -54,11 +54,12 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-3, 0.75rem);
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, var(--surface, #fdfcfb));
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
+    /*  A control strip between hairlines, not a boxed card (theme 2.33). */
+    padding: var(--space-3, 0.75rem) 0;
+    background: transparent;
+    border: 0;
+    border-block: 1px solid var(--border-light, #e2e5e8);
+    border-radius: 0;
 }
 
 .iwac-vis-scary-controls-row {
@@ -83,7 +84,6 @@
     color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
     line-height: var(--line-height-normal, 1.5);
-    max-width: 72ch;
     padding-top: var(--space-1, 0.25rem);
     border-top: 1px solid var(--border-light, #e2e5e8);
 }
@@ -147,7 +147,7 @@
     background: var(--surface-raised, #faf8f6);
     color: var(--ink-light, #3f4349);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     font-size: var(--text-sm, 0.9375rem);
     font-family: inherit;
     cursor: pointer;
@@ -164,7 +164,7 @@
 }
 
 .iwac-vis-scary-ctrl-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -172,14 +172,14 @@
  *  flips to dark ink in dark mode, where the fill is lighter) and its
  *  hover is the theme's --primary-hover, as on the theme's own button. */
 .iwac-vis-scary-play-btn {
-    background: var(--primary, #ce4115);
+    background: var(--primary, #18298d);
     color: var(--ink-on-primary, #ffffff);
-    border-color: var(--primary, #ce4115);
+    border-color: var(--primary, #18298d);
 }
 
 .iwac-vis-scary-play-btn:hover {
-    background: var(--primary-hover, #b03710);
-    border-color: var(--primary-hover, #b03710);
+    background: var(--primary-hover, #132278);
+    border-color: var(--primary-hover, #132278);
     color: var(--ink-on-primary, #ffffff);
 }
 
@@ -189,7 +189,7 @@
     padding: 0 var(--space-2, 0.5rem);
     font-size: var(--text-base, 1.0625rem);
     font-weight: 700;
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     font-variant-numeric: tabular-nums;
 }
 
@@ -223,12 +223,12 @@
     -webkit-appearance: none;
     appearance: none;
     height: 10px;
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     cursor: pointer;
     background: linear-gradient(
         to right,
-        var(--primary, #ce4115)           0%,
-        var(--primary, #ce4115)           var(--iwac-vis-scary-fill),
+        var(--primary, #18298d)           0%,
+        var(--primary, #18298d)           var(--iwac-vis-scary-fill),
         var(--iwac-vis-scary-track)       var(--iwac-vis-scary-fill),
         var(--iwac-vis-scary-track)       100%
     );
@@ -262,7 +262,7 @@
     width: 22px;
     height: 22px;
     background: var(--panel-bg, #fdfcfb);
-    border: 3px solid var(--primary, #ce4115);
+    border: 3px solid var(--primary, #18298d);
     border-radius: 50%;
     box-shadow: 0 1px 2px var(--shadow-color);
     cursor: grab;
@@ -274,7 +274,7 @@
  *  forced-colours mode drops — so there it had no indicator at all (X-10).
  *  The offset clears the 22px thumb that overhangs the 10px track. */
 .iwac-vis-scary-slider:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 8px;
 }
 
@@ -287,7 +287,7 @@
     width: 22px;
     height: 22px;
     background: var(--panel-bg, #fdfcfb);
-    border: 3px solid var(--primary, #ce4115);
+    border: 3px solid var(--primary, #18298d);
     border-radius: 50%;
     box-shadow: 0 1px 2px var(--shadow-color);
     cursor: grab;
@@ -334,7 +334,7 @@
     display: inline-block;
     padding: 0.2rem var(--space-2, 0.5rem);
     /*  Outlined, at the chip radius — it was a primary-washed pill. */
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     background: transparent;
@@ -366,7 +366,7 @@
     display: none;
     width: 100%;
     height: 500px;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     overflow: hidden;
 }
 
@@ -442,17 +442,18 @@
     .iwac-vis-scary-defs-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+/*  A glossary entry under a hairline rule, not a card. */
 .iwac-vis-scary-def-card {
-    background: var(--panel-bg, var(--surface, #fdfcfb));
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    transition: border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+    background: transparent;
+    border: 0;
+    border-block-start: 1px solid var(--border, #ced1d6);
+    border-radius: 0;
+    padding: var(--space-3, 0.75rem) 0 0;
+    transition: border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-def-card:hover {
-    background: var(--surface-raised, #faf8f6);
-    border-color: var(--iwac-vis-hover-border);
+    border-block-start-color: var(--iwac-vis-hover-border);
 }
 
 .iwac-vis-scary-def-title {
@@ -466,7 +467,7 @@
 .iwac-vis-scary-def-tag {
     display: inline-block;
     padding: 0.15rem 0.55rem;
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 500;
     color: var(--ink-light, #3f4349);

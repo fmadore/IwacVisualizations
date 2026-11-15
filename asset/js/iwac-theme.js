@@ -34,12 +34,13 @@
     // custom properties don't resolve. These mirror the theme's RESOLVED
     // tokens (IWAC-theme/tokens.json, generated from _colors.scss) — OKLCH
     // cool-neutral surfaces (NOT cream); `primary` is the working --primary
-    // (#ce4115 = seed #e64a19 darkened 8% in oklab), not the raw seed. The
+    // (#18298d = press-blue seed #1c2f9e darkened 8% in oklab), not the raw
+    // seed. The
     // check-theme-tokens guard fails the build if any value drifts from
     // tokens.json — keep them in sync via `npm run build:tokens` in the theme.
     var FALLBACK_LIGHT = {
-        primary:       '#ce4115',  // --primary = mix(#e64a19, black 8%)
-        secondary:     '#394f68',  // --secondary = seed (slate; 2nd data colour)
+        primary:       '#18298d',  // --primary = mix(#1c2f9e, black 8%) — press blue
+        secondary:     '#85253a',  // --secondary = seed (claret; 2nd data colour)
         ink:           '#13161c',  // oklch(20% 0.012 264)
         inkStrong:     '#05070c',  // oklch(12% 0.014 264)
         inkLight:      '#3f4349',  // oklch(38% 0.012 260)
@@ -55,8 +56,8 @@
     var FALLBACK_DARK = {
         // Warm "lamplit reading room" dark set (theme v2.6 — hue ~70-80,
         // chroma ~0.012) replacing the old blue-cool dark palette.
-        primary:       '#ec653f',  // mix(--primary-base, white 12%) in oklab
-        secondary:     '#708093',  // mix(--secondary-base, white 30%) in oklab
+        primary:       '#7aa2ff',  // seed re-lit: mix(base 10%, oklab(78% none none))
+        secondary:     '#ae6770',  // mix(--secondary-base, white 30%) in oklab
         ink:           '#e7e4df',  // oklch(92% 0.008 78)
         inkStrong:     '#f7f5f1',  // oklch(97% 0.006 80)
         inkLight:      '#b5b0aa',  // oklch(76% 0.010 75)
@@ -64,11 +65,11 @@
         surface:       '#110c08',  // oklch(16% 0.012 70)
         surfaceRaised: '#1a1510',  // oklch(20% 0.013 70)
         background:    '#080503',  // oklch(12% 0.012 75)
-        // …but --surface-raised in dark. The degraded-mode panel used to fall
-        // back to `surface` in both themes, so anything measuring contrast
-        // against the panel (the word cloud's knocked-out text) measured the
-        // wrong ground in dark mode. The guard pins both to tokens.json.
-        panelBg:       '#1a1510',
+        // …and, since theme 2.33 (sections are ruled, not boxed), --surface
+        // in dark too. Anything measuring contrast against the panel (the
+        // word cloud's knocked-out text) reads this; the guard pins both to
+        // tokens.json.
+        panelBg:       '#110c08',
         border:        '#352f28',  // oklch(31% 0.015 70)
         borderLight:   '#26211a'   // oklch(25% 0.014 70)
     };
@@ -99,18 +100,18 @@
      */
     var SERIES_LEAD_SLOTS = 2;
     var SERIES_LIGHT = [
-        '#ce4115', '#394f68',
-        '#4a8c6f', '#bb4c49', '#7c5295', '#ae8050', '#2c5f7c',
-        '#876c45', '#4c9491', '#824620', '#4a8aab', '#6d5737',
+        '#18298d', '#85253a',
+        '#4f8751', '#bb4c49', '#7c5295', '#ae8050', '#2c5f7c',
+        '#876c45', '#a53c75', '#824620', '#5682bb', '#6d5737',
         '#a46e3e', '#246648', '#9e7bb8', '#8a583c', '#8e7cb8',
-        '#c76f6b', '#6b5b95', '#007b72'
+        '#c76f6b', '#6b5b95', '#7d7728'
     ];
     var SERIES_DARK = [
-        '#ec653f', '#708093',
+        '#7aa2ff', '#ae6770',
         '#4a8c6f', '#bb4c49', '#7e5497', '#d4a574', '#386b88',
-        '#876c45', '#5ba3a0', '#cc8963', '#4a8aab', '#a68e6d',
-        '#d49b6a', '#6fb08e', '#9e7bb8', '#e0a88a', '#8e7cb8',
-        '#d87e7a', '#6c5c96', '#4db6ac'
+        '#876c45', '#da7baa', '#cc8963', '#4a8aab', '#a68e6d',
+        '#d49b6a', '#86b37d', '#9e7bb8', '#e0a88a', '#8e7cb8',
+        '#d87e7a', '#6c5c96', '#afa851'
     ];
 
     /* ----------------------------------------------------------------- */
@@ -600,6 +601,11 @@
                 subtextStyle: { color: tokens.muted, fontSize: ns.CHART_FONT }
             },
             legend: {
+                // Square keys, as a printed chart's are. ECharts' default is
+                // a rounded rectangle for every series; the theme rounds no
+                // corner (2.33). A line chart's 14 × 3 key (C._legend) becomes
+                // a plain stroke.
+                icon: 'rect',
                 textStyle: { color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 // --muted, not --border: a switched-off entry is still a
                 // label someone reads to switch it back on, and --border sat
@@ -609,16 +615,19 @@
             },
             tooltip: {
                 backgroundColor: tooltipBg,
-                borderColor: tokens.border,
+                // A slip of paper laid on the chart: square, flat, its edge a
+                // hairline in the secondary ink rather than a cast shadow.
+                // It used to take the theme's --shadow-lg and --radius-md;
+                // since the theme flattened and squared everything that sits
+                // ON the page (2.33), a floating rounded card was the last
+                // dashboard furniture on a chart. --ink-light, not --border:
+                // with no shadow the frame alone has to separate the slip
+                // from the marks under it.
+                borderColor: tokens.inkLight,
                 borderWidth: 1,
+                padding: [6, 10],
                 textStyle: { color: tokens.ink, fontSize: ns.CHART_FONT },
-                // The theme's own elevation and radius, by token: the tooltip
-                // is a DOM element in the page, so `var()` resolves in its
-                // cascade and follows the light/dark switch. A literal
-                // black-at-12 % shadow and an 8px radius stood in for them
-                // and the shadow vanished on the dark surface.
-                extraCssText: 'box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(9, 11, 15, 0.12), 0 4px 6px -4px rgba(20, 22, 27, 0.06)); '
-                    + 'border-radius: var(--radius-md, 0.5rem);',
+                extraCssText: 'box-shadow: none; border-radius: 0;',
                 // Prevent hover tooltips from being clipped by panels with
                 // `overflow: hidden` (recent-additions scrollbox, grid
                 // cells) or extending beyond the chart on narrow screens.
@@ -647,10 +656,15 @@
                 lineStyle: { color: tokens.muted },
                 crossStyle: { color: tokens.muted }
             },
+            // Axes as a statistical table rules them: the baseline in ink, the
+            // ticks a hairline in ink, the value grid a hairline in
+            // --border-light that stays behind the marks. The baseline used
+            // to be --border, which on the ruled sections read paler than the
+            // section rule above the chart.
             categoryAxis: {
                 nameTextStyle: { fontSize: ns.CHART_FONT },
-                axisLine:  { show: true,  lineStyle: { color: tokens.border } },
-                axisTick:  { show: true,  lineStyle: { color: tokens.border } },
+                axisLine:  { show: true,  lineStyle: { color: tokens.ink, width: 1 } },
+                axisTick:  { show: true,  lineStyle: { color: tokens.ink, width: 1 } },
                 axisLabel: { show: true,  color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 splitLine: { show: false, lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
@@ -672,8 +686,8 @@
             },
             timeAxis: {
                 nameTextStyle: { fontSize: ns.CHART_FONT },
-                axisLine:  { show: true, lineStyle: { color: tokens.border } },
-                axisTick:  { show: true, lineStyle: { color: tokens.border } },
+                axisLine:  { show: true, lineStyle: { color: tokens.ink, width: 1 } },
+                axisTick:  { show: true, lineStyle: { color: tokens.ink, width: 1 } },
                 axisLabel: { show: true, color: tokens.inkLight, fontSize: ns.CHART_FONT },
                 splitLine: { show: true, lineStyle: { color: [tokens.borderLight] } }
             },
@@ -697,16 +711,43 @@
                 textStyle: { color: tokens.inkLight },
                 color: [tokens.primary, tokens.surfaceRaised]
             },
+            // The range slider, drawn like the rest of the page: a hairline
+            // track, the series' silhouette in a quiet ink, and the spot
+            // colour ONLY where the reader has acted — the selected window's
+            // silhouette and its two square handles. The keys used to be the
+            // ECharts 4 names (`dataBackgroundColor`, `handleColor`), which
+            // ECharts 5 and 6 no longer read, so every slider painted
+            // ECharts' own lavender move bar, blue-grey silhouette and
+            // rounded handles whatever the theme was. Colours go through
+            // withAlpha (not color-mix) so zrender can parse them.
             dataZoom: {
-                backgroundColor:     'transparent',
-                dataBackgroundColor: tokens.borderLight,
-                // 18% primary on transparent — composed via withAlpha (NOT
-                // color-mix) so ECharts' internal parser can deconstruct it.
-                fillerColor:         withAlpha(tokens.primary, 0.18),
-                handleColor:         tokens.primary,
-                handleSize:          '100%',
-                textStyle:           { color: tokens.inkLight },
-                borderColor:         tokens.border
+                backgroundColor: 'transparent',
+                borderColor:     tokens.border,
+                borderRadius:    0,
+                fillerColor:     withAlpha(tokens.primary, 0.05),
+                dataBackground: {
+                    lineStyle: { color: tokens.muted, width: 1, opacity: 0.7 },
+                    areaStyle: { color: tokens.borderLight, opacity: 1 }
+                },
+                selectedDataBackground: {
+                    lineStyle: { color: tokens.primary, width: 1, opacity: 1 },
+                    areaStyle: { color: withAlpha(tokens.primary, 0.1), opacity: 1 }
+                },
+                // ECharts' handle with its rounded body squared off: the
+                // same 6 × 25 grip and stems, so the hit area is unchanged.
+                handleIcon:  'path://M-9.35,34.56V42m0-40V9.5m-3,0h6v25h-6Z',
+                handleSize:  '100%',
+                handleStyle: { color: tokens.primary, borderColor: tokens.primary, borderWidth: 1 },
+                // The drag bar above the window: a hairline-coloured strip
+                // at rest, the spot colour while it is hovered or dragged.
+                moveHandleSize:  4,
+                moveHandleStyle: { color: tokens.border, opacity: 1 },
+                emphasis: {
+                    handleStyle:     { color: tokens.primary, borderColor: tokens.ink },
+                    moveHandleStyle: { color: tokens.primary, opacity: 1 }
+                },
+                brushStyle: { color: withAlpha(tokens.primary, 0.12) },
+                textStyle:  { color: tokens.inkLight }
             },
             graph: {
                 color: palette,
@@ -901,7 +942,28 @@
         // for whichever name corresponds to the current body[data-theme].
         var theme = buildTheme(tokens, ns._currentPalette);
         echarts.registerTheme(ns.getChartTheme(), theme);
+        // What `ns.initChart` checks before it asks ECharts for this name.
+        ns._registeredTheme = ns.getChartTheme();
         return theme;
+    };
+
+    /**
+     * Register the current theme if ECharts has not been given it yet.
+     *
+     * The eager registration below runs when this file is evaluated, which
+     * is when the FIRST block on the page loads `shared-core`. A block that
+     * draws no ECharts chart (the Svelte Pipeline explainer, the Collection
+     * intro) loads shared-core without ECharts; the chart block after it
+     * brings ECharts, but shared-core is already on the page and does not
+     * run again. `echarts.init(el, 'iwac-light')` with a name ECharts has
+     * never been given silently falls back to ECharts' default theme, so
+     * every chart on the Sentiment Atlas page drew in ECharts' own look —
+     * default fonts and axis greys, the lavender range slider — until the
+     * reader toggled the theme. `ns.initChart` calls this first.
+     */
+    ns.ensureChartTheme = function () {
+        if (typeof echarts === 'undefined') return;
+        if (ns._registeredTheme !== ns.getChartTheme()) ns.refreshThemes();
     };
 
     /* ----------------------------------------------------------------- */

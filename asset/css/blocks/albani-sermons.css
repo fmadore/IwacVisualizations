@@ -36,7 +36,6 @@
  *  measure, in the panel description's voice but one step larger. */
 .iwac-vis-albani__lead {
     margin: 0;
-    max-width: var(--measure-base, 52.5rem);
     font-size: var(--text-base, 1.0625rem);
     line-height: 1.6;
     color: var(--ink-light, #3f4349);
@@ -44,7 +43,6 @@
 
 .iwac-vis-albani__note {
     margin: 0;
-    max-width: var(--measure-base, 52.5rem);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
     color: var(--ink-light, #3f4349);
@@ -54,7 +52,7 @@
 .iwac-vis-albani__caveat {
     padding: var(--space-4, 1rem);
     background: var(--surface-sunken, #f4f1ef);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
 }
 
 .iwac-vis-albani__status {
@@ -73,7 +71,7 @@
 /* =================================================================== */
 /*  Provenance badges                                                    */
 /* =================================================================== */
-/*  Machine-derived results are marked as such: a quiet uppercase label
+/*  Machine-derived results are marked as such: a quiet sentence-case label
  *  in an outlined chip (the theme's `.resource-tag` grammar, at the chip
  *  radius) — never a brand-coloured stripe, never a filled pill. The words
  *  carry the provenance; a sunken fill only made it a badge. */
@@ -90,12 +88,10 @@
     padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     cursor: help;
 }
 
@@ -219,7 +215,7 @@
 .iwac-vis-albani__window:hover,
 .iwac-vis-albani__segment-title:hover,
 .iwac-vis-albani__kwic .iwac-vis-kwic-title:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration-color: currentColor;
 }
 
@@ -275,7 +271,7 @@
 }
 
 .iwac-vis-albani__jump:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration-color: currentColor;
 }
 
@@ -305,7 +301,7 @@
 .iwac-vis-albani__sources {
     padding: var(--space-4, 1rem);
     background: var(--surface-sunken, #f4f1ef);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
 }
 
 .iwac-vis-albani__references {
@@ -314,7 +310,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
-    max-width: var(--measure-base, 52.5rem);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
     color: var(--ink, #13161c);
@@ -326,7 +321,7 @@
 }
 
 .iwac-vis-albani__reference-link:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 .iwac-vis-albani__reference-use {
@@ -404,7 +399,7 @@
     flex: 1 1 0;
     min-width: 3px;
     height: 16px;
-    border-radius: 1px;
+    border-radius: 0;
     background: var(--iwac-vis-heatmap-4, #ce4115);
 }
 
@@ -472,7 +467,7 @@
 }
 
 .iwac-vis-albani__sig-link:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration: underline;
 }
 
@@ -533,8 +528,6 @@
     margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
 }
 
@@ -567,7 +560,7 @@
 }
 
 .iwac-vis-albani__toc-link:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration-color: currentColor;
 }
 
@@ -644,7 +637,7 @@ a.iwac-vis-albani__ledger-name {
 }
 
 a.iwac-vis-albani__ledger-name:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration-color: currentColor;
 }
 

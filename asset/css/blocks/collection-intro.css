@@ -63,7 +63,6 @@
 }
 
 .iwac-vis-intro__lede {
-    max-width: var(--measure-narrow, 44rem);
     margin: var(--space-3, 0.75rem) 0 var(--space-6, 1.5rem);
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-lg, 1.1875rem);
@@ -79,7 +78,7 @@
 }
 
 .iwac-vis-intro__replay:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -97,7 +96,6 @@
 
 .iwac-vis-intro__text {
     min-width: 0;
-    max-width: var(--measure-narrow, 44rem);
 }
 
 /*  The chapter number is an eyebrow over the heading, as a dateline sits
@@ -120,7 +118,7 @@
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 400;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 .iwac-vis-intro__sentence {
@@ -153,7 +151,7 @@
 
 /*  The featured figure's rule turns primary, as on the theme's KPI rows. */
 .iwac-vis-intro__numeral--featured {
-    border-top-color: var(--primary, #ce4115);
+    border-top-color: var(--primary, #18298d);
 }
 
 .iwac-vis-intro__value {
@@ -178,8 +176,6 @@
     font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    text-transform: uppercase;
     color: var(--ink-light, #3f4349);
 }
 
@@ -283,17 +279,17 @@
     align-self: center;
 }
 
-.iwac-vis-intro__dot--article { background-color: var(--type-article, #ce4115); }
-.iwac-vis-intro__dot--publication { background-color: var(--type-publication, #394f68); }
-.iwac-vis-intro__dot--audiovisual { background-color: var(--type-audiovisual, #037ac0); }
+.iwac-vis-intro__dot--article { background-color: var(--type-article, #18298d); }
+.iwac-vis-intro__dot--publication { background-color: var(--type-publication, #85253a); }
+.iwac-vis-intro__dot--audiovisual { background-color: var(--type-audiovisual, #007980); }
 .iwac-vis-intro__dot--document { background-color: var(--type-document, #d66800); }
 .iwac-vis-intro__dot--reference { background-color: var(--type-reference, #66696e); }
 .iwac-vis-intro__dot--photograph { background-color: var(--type-photograph, #2e9052); }
-.iwac-vis-intro__dot--personnes { background-color: var(--type-entity-personnes, #037ac0); }
+.iwac-vis-intro__dot--personnes { background-color: var(--type-entity-personnes, #007980); }
 .iwac-vis-intro__dot--organisations { background-color: var(--type-entity-organisations, #d66800); }
 .iwac-vis-intro__dot--sujets { background-color: var(--type-entity-sujets, #7c5295); }
 .iwac-vis-intro__dot--lieux { background-color: var(--type-entity-lieux, #2e9052); }
-.iwac-vis-intro__dot--evenements { background-color: var(--type-entity-evenements, #4c9491); }
+.iwac-vis-intro__dot--evenements { background-color: var(--type-entity-evenements, #a53c75); }
 
 /*  What it holds: the strip. A 2px gap of page between segments, so two
  *  neighbouring colours never have to be told apart by hue alone. */
@@ -420,7 +416,7 @@
 }
 
 .iwac-vis-intro__bar--peak {
-    fill: var(--primary, #ce4115);
+    fill: var(--primary, #18298d);
 }
 
 /*  Each decade's span of the axis, its first year as the tick and its
@@ -537,7 +533,7 @@ a.iwac-vis-intro__entry-name:hover {
 }
 
 a.iwac-vis-intro__entry-name:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 

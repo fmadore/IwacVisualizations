@@ -75,3 +75,30 @@ test('no option builder spells the theme default out again', () => {
     })(join(ROOT, 'asset', 'js', 'charts'));
     assert.deepEqual(offenders, [], 'the 600 ms / cubicOut pair lives in iwac-theme.js only');
 });
+
+test('a chart created after ECharts arrives late still gets the IWAC theme', () => {
+    // shared-core can be evaluated before ECharts is on the page (a
+    // chart-less block loads first); the eager registration then registers
+    // nothing, and echarts.init() with an unknown name silently uses
+    // ECharts' default theme. ensureChartTheme() is initChart's guard.
+    const registered = [];
+    const context = {
+        console: { warn() {}, error() {} },
+        document: { body: null, addEventListener() {}, readyState: 'complete' },
+        window: { IWACVis: {}, addEventListener() {}, matchMedia: () => ({ matches: false, addEventListener() {}, addListener() {} }) },
+        setTimeout,
+    };
+    context.window.document = context.document;
+    vm.createContext(context);
+    vm.runInContext(THEME, context, { filename: 'iwac-theme.js' });
+    assert.equal(registered.length, 0, 'nothing to register without ECharts');
+    context.echarts = { registerTheme: (name) => registered.push(name) };
+    const ns = context.window.IWACVis;
+    ns.ensureChartTheme();
+    assert.deepEqual(registered, ['iwac-light']);
+    ns.ensureChartTheme();
+    assert.deepEqual(registered, ['iwac-light'], 'registered once, not per chart');
+    const core = readFileSync(join(ROOT, 'asset', 'js', 'dashboard-core.js'), 'utf8');
+    const init = core.slice(core.indexOf('ns.initChart = function'), core.indexOf('echarts.init(el,'));
+    assert.match(init, /ns\.ensureChartTheme\(\)/, 'initChart no longer registers a late theme');
+});

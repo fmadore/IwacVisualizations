@@ -137,7 +137,7 @@
                 type: 'bar',
                 data: list.map(function (t) { return pct(t.mean_mass); }),
                 barMaxWidth: 22,
-                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                itemStyle: { borderRadius: 0 },
                 label: {
                     show: true,
                     position: 'right',

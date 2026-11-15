@@ -164,7 +164,14 @@
                 return 0.2126 * r + 0.7152 * g + 0.0722 * b;
             };
             const fg = lum(parse(getComputedStyle(document.querySelector(selector)).color));
-            const bg = lum(parse(getComputedStyle(document.querySelector(backdropSelector)).backgroundColor));
+            // The backdrop's own ground, or its nearest painted ancestor's: a
+            // panel is a ruled section with no fill since the theme's 2.33.
+            let ground = 'rgb(255, 255, 255)';
+            for (let n = document.querySelector(backdropSelector); n; n = n.parentElement) {
+                const value = getComputedStyle(n).backgroundColor;
+                if (!/rgba\(.*,\s*0\)$|transparent/.test(value)) { ground = value; break; }
+            }
+            const bg = lum(parse(ground));
             const [hi, lo] = fg > bg ? [fg, bg] : [bg, fg];
             return (hi + 0.05) / (lo + 0.05);
         };

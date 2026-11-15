@@ -55,13 +55,19 @@ test('keeps dark mobile layouts inside the viewport', async ({ page }) => {
         viewport: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
         panelBackground: getComputedStyle(document.querySelector('.iwac-vis-panel')).backgroundColor,
+        panelRule: getComputedStyle(document.querySelector('.iwac-vis-panel')).borderTopWidth,
+        panelSide: getComputedStyle(document.querySelector('.iwac-vis-panel')).borderLeftWidth,
         panels: Array.from(document.querySelectorAll('.iwac-vis-panel')).map((panel) => {
             const rect = panel.getBoundingClientRect();
             return { left: rect.left, right: rect.right, width: rect.width };
         }),
     }));
     expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewport);
-    expect(layout.panelBackground).toBe('rgb(26, 29, 33)');
+    // A ruled section on the page's ground (theme 2.33), not a dark card:
+    // no fill and no frame of its own, an ink rule on top.
+    expect(layout.panelBackground).toBe('rgba(0, 0, 0, 0)');
+    expect(layout.panelRule).toBe('1px');
+    expect(layout.panelSide).toBe('0px');
     for (const panel of layout.panels) {
         expect(panel.left).toBeGreaterThanOrEqual(0);
         expect(panel.right).toBeLessThanOrEqual(layout.viewport);

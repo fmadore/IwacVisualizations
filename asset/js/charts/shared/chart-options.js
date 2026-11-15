@@ -257,7 +257,11 @@
         var horizontal = direction === 'horizontal';
         return {
             barMaxWidth: horizontal ? 24 : 28,
-            borderRadius: horizontal ? [0, 2, 2, 0] : [2, 2, 0, 0]
+            // Square ends, as a printed bar chart has them: the theme took
+            // the radius off every corner it draws (2.33), and a bar is a
+            // measured length whose end is the value. Kept as a four-corner
+            // array because builders `.slice()` it into each series.
+            borderRadius: [0, 0, 0, 0]
         };
     };
 
@@ -443,7 +447,7 @@
      * |----------------|------|--------------|--------------------------|
      * | Bénin          | 3    | --series-4   | red, 24°                 |
      * | Burkina Faso   | 6    | --series-7   | blue, 236°               |
-     * | Côte d'Ivoire  | 2    | --series-3   | green, 164°              |
+     * | Côte d'Ivoire  | 2    | --series-3   | green, 145°              |
      * | Niger          | 7    | --series-8   | brown, 76°               |
      * | Nigeria        | 4    | --series-5   | purple, 312°             |
      * | Togo           | 14   | --series-15  | lavender, 310°, lighter  |

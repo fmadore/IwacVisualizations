@@ -284,7 +284,7 @@
                 type: 'bar',
                 data: list.map(function (e) { return e.with_ocr; }),
                 barMaxWidth: 22,
-                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                itemStyle: { borderRadius: 0 },
                 label: { show: true, position: 'right', formatter: function (p) {
                     var entry = list[p.dataIndex] || {};
                     return P.formatNumber(entry.with_ocr || 0) + '/' + P.formatNumber(entry.total || 0);
@@ -334,7 +334,7 @@
                 type: 'bar',
                 data: list.map(function (t) { return t.count; }),
                 barMaxWidth: 22,
-                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                itemStyle: { borderRadius: 0 },
                 label: { show: true, position: 'right' }
             }]
         };

@@ -133,7 +133,6 @@
 
 .iwac-vis-otd-head__desc {
     margin: var(--space-3, 0.75rem) 0 0;
-    max-width: 62ch;
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
@@ -157,8 +156,6 @@
     gap: var(--space-1, 0.25rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
 }
 
 /*  The count beside each calendar. --muted itself, not ink at 70 %
@@ -214,7 +211,7 @@
 }
 
 .iwac-vis-otd-meta__sep {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 .iwac-vis-otd-meta__date {
@@ -309,12 +306,12 @@
 }
 
 .iwac-vis-otd-register__row:hover {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
     background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-otd-register__row:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: -2px;
 }
 
@@ -380,11 +377,11 @@
 }
 
 .iwac-vis-otd-decades__card:hover {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
 }
 
 .iwac-vis-otd-decades__card:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 3px;
 }
 
@@ -408,7 +405,7 @@
     width: 9px;
     height: 9px;
     border-radius: var(--radius-full, 9999px);
-    background: var(--primary, #ce4115);
+    background: var(--primary, #18298d);
     margin-top: calc(-1 * (var(--space-3, 0.75rem) + 5px));
     margin-bottom: var(--space-1, 0.25rem);
 }
@@ -459,11 +456,11 @@
 }
 
 .iwac-vis-otd-clippings__cut:hover {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
 }
 
 .iwac-vis-otd-clippings__cut:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 3px;
 }
 
@@ -569,8 +566,6 @@
     gap: var(--space-1, 0.25rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
     white-space: nowrap;
 }
 
@@ -601,8 +596,6 @@
 .iwac-vis-otd-daynav__label {
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
     color: var(--muted, #66696e);
     white-space: nowrap;
 }
@@ -698,7 +691,7 @@
     margin: 0;
     background: transparent;
     border: 0;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     color: var(--ink-light, #3f4349);
     font: inherit;
     cursor: pointer;
@@ -706,7 +699,7 @@
 }
 
 .iwac-vis-otd-tick:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 0;
 }
 
@@ -753,7 +746,7 @@
 
 /*  The lead's year: its dots, and a marker sitting on the axis. */
 .iwac-vis-otd-tick.is-lead {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 .iwac-vis-otd-tick::after {
@@ -769,7 +762,7 @@
 }
 
 .iwac-vis-otd-tick.is-lead::after {
-    background: var(--primary, #ce4115);
+    background: var(--primary, #18298d);
 }
 
 /*  The lead headline, the briefs' head and their headlines are h3 / h4
@@ -872,7 +865,7 @@
 
 .iwac-vis-otd-lead__title a:hover,
 .iwac-vis-otd-brief__title a:hover {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.15em;
@@ -880,13 +873,12 @@
 
 .iwac-vis-otd-lead__title a:focus-visible,
 .iwac-vis-otd-brief__title a:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
 .iwac-vis-otd-lead__lede {
     margin: var(--space-4, 1rem) 0 0;
-    max-width: 40em;
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-lg, 1.1875rem);
     line-height: var(--line-height-relaxed, 1.7);
@@ -1073,14 +1065,12 @@
 /*  Reveals the rest of the day rather than linking out: the day file
  *  already holds every item, and no search query can express "this day,
  *  any year". Geometry and colour come from `.iwac-vis-btn`, the quiet
- *  outlined control (the theme's bare-button default); the label keeps the
- *  block's uppercase micro-label type, as the layout switches do. */
+ *  outlined control (the theme's bare-button default); the label is the
+ *  block's sentence-case control type at 600, as the layout switches are. */
 .iwac-vis-otd-foot__toggle {
     gap: var(--space-1, 0.25rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
 }
 
 .iwac-vis-otd-foot__toggle > .iwac-vis-icon {
@@ -1116,12 +1106,12 @@
 }
 
 .iwac-vis-otd-index__row:hover {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
     background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-otd-index__row:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: -2px;
 }
 
@@ -1176,7 +1166,6 @@
 
 .iwac-vis-otd-fallback__msg {
     margin: 0;
-    max-width: 62ch;
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;

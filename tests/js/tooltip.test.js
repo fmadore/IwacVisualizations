@@ -174,7 +174,24 @@ test('a network label is cut at its end, where a name stops identifying itself',
 
 test('the theme tooltip and legend take their chrome from tokens', () => {
     const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
-    assert.match(source, /extraCssText: 'box-shadow: var\(--shadow-lg, /);
-    assert.match(source, /border-radius: var\(--radius-md, 0\.5rem\);'/);
+    // Square and flat since the theme's 2.33: a hairline frame in the
+    // secondary ink, no cast shadow, no radius.
+    assert.match(source, /extraCssText: 'box-shadow: none; border-radius: 0;'/);
+    assert.match(source, /borderColor: tokens\.inkLight,\s*\n\s*borderWidth: 1,/);
     assert.match(source, /inactiveColor: tokens\.muted/);
+});
+
+test('the range slider is themed with the keys ECharts 5 and 6 read', () => {
+    // `dataBackgroundColor` / `handleColor` are ECharts 4 names: the theme
+    // carried them for years and every slider still painted ECharts' own
+    // lavender move bar and rounded handles.
+    const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
+    const zoom = source.slice(source.indexOf('dataZoom: {'), source.indexOf('graph: {', source.indexOf('dataZoom: {')));
+    assert.doesNotMatch(zoom, /dataBackgroundColor|handleColor/);
+    for (const key of ['dataBackground', 'selectedDataBackground', 'handleStyle', 'moveHandleStyle', 'handleIcon']) {
+        assert.match(zoom, new RegExp(`\\b${key}:`), `the slider theme lost ${key}`);
+    }
+    // The spot colour marks only what the reader has acted on.
+    assert.match(zoom, /moveHandleStyle: \{ color: tokens\.border,/);
+    assert.match(source, /icon: 'rect',/, 'legend keys are square');
 });

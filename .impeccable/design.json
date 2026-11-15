@@ -18,144 +18,144 @@
     "colorMeta": {
       "model-1": {
         "role": "data-encoding",
-        "displayName": "Model Slot 1 — Green",
-        "canonical": "#00a05b",
+        "displayName": "Model Slot 1 — Violet",
+        "canonical": "#5e3cf0",
         "token": "--iwac-vis-model-1",
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Picked in OKLCH (2026-10): five hues at least 45 degrees apart, every slot >= 3.2:1 on the light and dark panels, no pair closer than dEok 0.14 (0.095 under deuteranopia or protanopia); tests/js/palette.test.js measures it.",
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it.",
         "tonalRamp": [
-          "#011c0c",
-          "#013219",
-          "#014a27",
-          "#026639",
-          "#00a05b",
-          "#70bf8d",
-          "#b0d5bb",
-          "#d0f6dc"
+          "#100040",
+          "#21006b",
+          "#34009b",
+          "#4802cd",
+          "#5e3cf0",
+          "#a9acdf",
+          "#c8caee",
+          "#ebedfe"
         ]
       },
       "model-2": {
         "role": "data-encoding",
         "displayName": "Model Slot 2 — Blue",
-        "canonical": "#538bf5",
+        "canonical": "#008ed8",
         "token": "--iwac-vis-model-2",
         "tonalRamp": [
-          "#00103e",
-          "#002066",
-          "#0b3587",
-          "#2550a4",
-          "#538bf5",
-          "#81aaf6",
-          "#b6cbf2",
-          "#e1ecfe"
+          "#001324",
+          "#002740",
+          "#013b5e",
+          "#00527f",
+          "#008ed8",
+          "#9ab5cb",
+          "#bed1e0",
+          "#e6f0f8"
         ],
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Picked in OKLCH (2026-10): five hues at least 45 degrees apart, every slot >= 3.2:1 on the light and dark panels, no pair closer than dEok 0.14 (0.095 under deuteranopia or protanopia); tests/js/palette.test.js measures it."
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it."
       },
       "model-3": {
         "role": "data-encoding",
-        "displayName": "Model Slot 3 — Burnt Orange",
-        "canonical": "#af4700",
+        "displayName": "Model Slot 3 — Ochre",
+        "canonical": "#796006",
         "token": "--iwac-vis-model-3",
         "tonalRamp": [
-          "#2a0b00",
-          "#471901",
-          "#672700",
-          "#8c3700",
-          "#af4700",
-          "#e39572",
-          "#e9c0af",
-          "#fee5db"
+          "#181000",
+          "#2e2200",
+          "#463600",
+          "#5f4a00",
+          "#796006",
+          "#b8b19d",
+          "#d3cdbf",
+          "#f1eee7"
         ],
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Picked in OKLCH (2026-10): five hues at least 45 degrees apart, every slot >= 3.2:1 on the light and dark panels, no pair closer than dEok 0.14 (0.095 under deuteranopia or protanopia); tests/js/palette.test.js measures it."
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it."
       },
       "model-4": {
         "role": "data-encoding",
-        "displayName": "Model Slot 4 — Teal",
-        "canonical": "#007b80",
+        "displayName": "Model Slot 4 — Green",
+        "canonical": "#0ea361",
         "token": "--iwac-vis-model-4",
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Picked in OKLCH (2026-10): five hues at least 45 degrees apart, every slot >= 3.2:1 on the light and dark panels, no pair closer than dEok 0.14 (0.095 under deuteranopia or protanopia); tests/js/palette.test.js measures it.",
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it.",
         "tonalRamp": [
-          "#011a1c",
-          "#013032",
-          "#024649",
-          "#076165",
-          "#007b80",
-          "#7ab7ba",
-          "#b4d1d2",
-          "#d4f2f3"
+          "#001708",
+          "#002d16",
+          "#014425",
+          "#005d34",
+          "#0ea361",
+          "#9cbaa6",
+          "#bfd4c6",
+          "#e7f2ea"
         ]
       },
       "model-5": {
         "role": "data-encoding",
         "displayName": "Model Slot 5 — Magenta",
-        "canonical": "#c360bc",
+        "canonical": "#b104ab",
         "token": "--iwac-vis-model-5",
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Picked in OKLCH (2026-10): five hues at least 45 degrees apart, every slot >= 3.2:1 on the light and dark panels, no pair closer than dEok 0.14 (0.095 under deuteranopia or protanopia); tests/js/palette.test.js measures it.",
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it.",
         "tonalRamp": [
-          "#2a0029",
-          "#480145",
-          "#631360",
-          "#7f307a",
-          "#c360bc",
-          "#d58fce",
-          "#e2bddd",
-          "#ffe0fb"
+          "#250023",
+          "#41003e",
+          "#60005d",
+          "#81007d",
+          "#b104ab",
+          "#cba1c6",
+          "#e1c3dd",
+          "#f8e9f6"
         ]
       },
       "model-6": {
         "role": "data-encoding",
-        "displayName": "Model Slot 6 — Bright Orange",
-        "canonical": "#f85509",
+        "displayName": "Model Slot 6 — Orange",
+        "canonical": "#dd7002",
         "token": "--iwac-vis-model-6",
-        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Added 2026-10 for the sixth panel member. A lightness step, not a new hue: no 40-degree hue gap is left inside the band that clears 3:1 on both panels, so it takes slot 3's orange family 0.135 lighter (hue 39, L 0.665), >= 3.2:1 on both panels, dEok >= 0.10 to every slot under deuteranopia and protanopia; tests/js/palette.test.js measures it.",
+        "note": "Role slot, not a model id; the id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js). Re-picked in OKLCH (2026-11) for the theme's press-blue / claret / teal accents: six hues (violet 282, blue 243, ochre 90, green 156, magenta 330, orange 54), every slot at least 40 degrees or 0.1 lightness from --primary, --secondary and --info in both themes, >= 3.1:1 on the light and dark panels, no pair closer than dEok 0.19 (0.087 under deuteranopia or protanopia); the lead is neither green nor orange. tests/js/palette.test.js measures it.",
         "tonalRamp": [
-          "#350b00",
-          "#551801",
-          "#772401",
-          "#9f3200",
-          "#f85509",
-          "#ff916c",
-          "#ffc3af",
-          "#fef0eb"
+          "#210a00",
+          "#3c1900",
+          "#592900",
+          "#783a00",
+          "#dd7002",
+          "#caa995",
+          "#e0c9ba",
+          "#f8ece4"
         ]
       },
       "theme/primary": {
         "role": "theme-token",
         "token": "--primary",
-        "canonical": "#ce4115",
+        "canonical": "#18298d",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#ec653f"
+          "#7aa2ff"
         ]
       },
       "theme/primary-hover": {
         "role": "theme-token",
         "token": "--primary-hover",
-        "canonical": "#b03710",
+        "canonical": "#132278",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#f17857"
+          "#90baff"
         ]
       },
       "theme/primary-active": {
         "role": "theme-token",
         "token": "--primary-active",
-        "canonical": "#942c0c",
+        "canonical": "#0e1a64",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#da4617"
+          "#668bff"
         ]
       },
       "theme/secondary": {
         "role": "theme-token",
         "token": "--secondary",
-        "canonical": "#394f68",
+        "canonical": "#85253a",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#708093"
+          "#ae6770"
         ]
       },
       "theme/ink-strong": {
@@ -315,11 +315,11 @@
       "theme/focus-color": {
         "role": "theme-token",
         "token": "--focus-color",
-        "canonical": "#ce4115",
+        "canonical": "#18298d",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#ec653f"
+          "#7aa2ff"
         ]
       },
       "theme/success": {
@@ -376,46 +376,49 @@
       "theme/info": {
         "role": "theme-token",
         "token": "--info",
-        "canonical": "#037ac0",
+        "canonical": "#007980",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#4dacf6"
+          "#3ebfc6"
         ]
       },
       "theme/info-bg": {
         "role": "theme-token",
         "token": "--info-bg",
-        "canonical": "#e2f5ff",
+        "canonical": "#dff7f8",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js"
       },
       "theme/series-1": {
         "role": "theme-token",
         "token": "--series-1",
-        "canonical": "#ce4115",
+        "canonical": "#18298d",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#ec653f"
+          "#7aa2ff"
         ]
       },
       "theme/series-2": {
         "role": "theme-token",
         "token": "--series-2",
-        "canonical": "#394f68",
+        "canonical": "#85253a",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#708093"
+          "#ae6770"
         ]
       },
       "theme/series-3": {
         "role": "theme-token",
         "token": "--series-3",
-        "canonical": "#4a8c6f",
+        "canonical": "#4f8751",
         "generated": true,
-        "source": "IWAC-theme/scripts/build-tokens.js"
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4a8c6f"
+        ]
       },
       "theme/series-4": {
         "role": "theme-token",
@@ -464,11 +467,11 @@
       "theme/series-9": {
         "role": "theme-token",
         "token": "--series-9",
-        "canonical": "#4c9491",
+        "canonical": "#a53c75",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#5ba3a0"
+          "#da7baa"
         ]
       },
       "theme/series-10": {
@@ -484,9 +487,12 @@
       "theme/series-11": {
         "role": "theme-token",
         "token": "--series-11",
-        "canonical": "#4a8aab",
+        "canonical": "#5682bb",
         "generated": true,
-        "source": "IWAC-theme/scripts/build-tokens.js"
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4a8aab"
+        ]
       },
       "theme/series-12": {
         "role": "theme-token",
@@ -515,7 +521,7 @@
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#6fb08e"
+          "#86b37d"
         ]
       },
       "theme/series-15": {
@@ -565,41 +571,41 @@
       "theme/series-20": {
         "role": "theme-token",
         "token": "--series-20",
-        "canonical": "#007b72",
+        "canonical": "#7d7728",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#4db6ac"
+          "#afa851"
         ]
       },
       "theme/type-article": {
         "role": "theme-token",
         "token": "--type-article",
-        "canonical": "#ce4115",
+        "canonical": "#18298d",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#ec653f"
+          "#7aa2ff"
         ]
       },
       "theme/type-publication": {
         "role": "theme-token",
         "token": "--type-publication",
-        "canonical": "#394f68",
+        "canonical": "#85253a",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#708093"
+          "#ae6770"
         ]
       },
       "theme/type-audiovisual": {
         "role": "theme-token",
         "token": "--type-audiovisual",
-        "canonical": "#037ac0",
+        "canonical": "#007980",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#4dacf6"
+          "#3ebfc6"
         ]
       },
       "theme/type-document": {
@@ -635,11 +641,11 @@
       "theme/type-entity-personnes": {
         "role": "theme-token",
         "token": "--type-entity-personnes",
-        "canonical": "#037ac0",
+        "canonical": "#007980",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#4dacf6"
+          "#3ebfc6"
         ]
       },
       "theme/type-entity-lieux": {
@@ -675,41 +681,41 @@
       "theme/type-entity-evenements": {
         "role": "theme-token",
         "token": "--type-entity-evenements",
-        "canonical": "#4c9491",
+        "canonical": "#a53c75",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#5ba3a0"
+          "#da7baa"
         ]
       },
       "theme/blockquote-bg": {
         "role": "theme-token",
         "token": "--blockquote-bg",
-        "canonical": "#f8e3dc",
+        "canonical": "#dbdfeb",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#47281c"
+          "#303442"
         ]
       },
       "theme/blockquote-border": {
         "role": "theme-token",
         "token": "--blockquote-border",
-        "canonical": "#d5816c",
+        "canonical": "#586fae",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#ef9175"
+          "#9cb8f7"
         ]
       },
       "theme/blockquote-quote": {
         "role": "theme-token",
         "token": "--blockquote-quote",
-        "canonical": "#a53b20",
+        "canonical": "#162775",
         "generated": true,
         "source": "IWAC-theme/scripts/build-tokens.js",
         "tonalRamp": [
-          "#f58f72"
+          "#9abaff"
         ]
       },
       "theme/footer-surface": {

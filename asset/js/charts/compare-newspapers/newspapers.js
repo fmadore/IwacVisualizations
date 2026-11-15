@@ -91,7 +91,7 @@
                     },
                     series: [{
                         type: 'bar',
-                        itemStyle: { color: color(), borderRadius: [0, 4, 4, 0] },
+                        itemStyle: { color: color(), borderRadius: 0 },
                         label: { show: true, position: 'right',
                                  formatter: function (p) { return P.formatNumber(p.value); } },
                         data: slice.map(function (e) { return e.count; })

@@ -378,6 +378,10 @@
         // the calendar's month and day names above all — so it follows the
         // site's language rather than ECharts' default.
         if (ns.locale === 'fr') registerFrenchLocale();
+        // ECharts may have arrived after iwac-theme.js registered nothing
+        // (a chart-less block loaded shared-core first): register now, or
+        // init falls back to ECharts' default theme.
+        if (typeof ns.ensureChartTheme === 'function') ns.ensureChartTheme();
         var opts = { locale: ns.locale === 'fr' ? 'FR' : 'EN' };
         if (initOpts) {
             for (var k in initOpts) {

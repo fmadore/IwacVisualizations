@@ -110,25 +110,25 @@ body {
      * with the theme exactly as the step it points at does.
      *
      * Heatmap — sequential 0..4. Read by C.heatmap via getComputedStyle. */
-    --iwac-vis-heatmap-0: color-mix(in oklab, var(--primary, #ce4115)  8%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-1: color-mix(in oklab, var(--primary, #ce4115) 28%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-2: color-mix(in oklab, var(--primary, #ce4115) 50%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-3: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
-    --iwac-vis-heatmap-4: var(--primary, #ce4115);
+    --iwac-vis-heatmap-0: color-mix(in oklab, var(--primary, #18298d)  8%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-1: color-mix(in oklab, var(--primary, #18298d) 28%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-2: color-mix(in oklab, var(--primary, #18298d) 50%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-3: color-mix(in oklab, var(--primary, #18298d) 75%, var(--surface, #fdfcfb));
+    --iwac-vis-heatmap-4: var(--primary, #18298d);
 
     /* Centralité — 1 (central) … 4 (peripheral), the same ramp read from
      * the top; 4 is the one step of its own. */
     --iwac-vis-cent-1:  var(--iwac-vis-heatmap-4);
     --iwac-vis-cent-2:  var(--iwac-vis-heatmap-3);
     --iwac-vis-cent-3:  var(--iwac-vis-heatmap-2);
-    --iwac-vis-cent-4:  color-mix(in oklab, var(--primary, #ce4115) 30%, var(--surface, #fdfcfb));
+    --iwac-vis-cent-4:  color-mix(in oklab, var(--primary, #18298d) 30%, var(--surface, #fdfcfb));
     --iwac-vis-cent-na: var(--border-light, #e2e5e8);
 
     /* Subjectivité — 1 (factual) … 5 (highly subjective). 1–3 are its own
      * finer steps; 4 and 5 are the ramp's top two. */
-    --iwac-vis-subj-1: color-mix(in oklab, var(--primary, #ce4115) 15%, var(--surface, #fdfcfb));
-    --iwac-vis-subj-2: color-mix(in oklab, var(--primary, #ce4115) 35%, var(--surface, #fdfcfb));
-    --iwac-vis-subj-3: color-mix(in oklab, var(--primary, #ce4115) 55%, var(--surface, #fdfcfb));
+    --iwac-vis-subj-1: color-mix(in oklab, var(--primary, #18298d) 15%, var(--surface, #fdfcfb));
+    --iwac-vis-subj-2: color-mix(in oklab, var(--primary, #18298d) 35%, var(--surface, #fdfcfb));
+    --iwac-vis-subj-3: color-mix(in oklab, var(--primary, #18298d) 55%, var(--surface, #fdfcfb));
     --iwac-vis-subj-4: var(--iwac-vis-heatmap-3);
     --iwac-vis-subj-5: var(--iwac-vis-heatmap-4);
 
@@ -148,19 +148,19 @@ body {
      * border mixes (25–60%) across the sheets, three text colours, and no
      * two components agreeing. Declared on `:root, body` because each
      * composes a themed token (the guard's `scope` rule). */
-    --iwac-vis-selected-bg:       color-mix(in oklab, var(--primary, #ce4115) 10%, transparent);
-    --iwac-vis-selected-bg-hover: color-mix(in oklab, var(--primary, #ce4115) 14%, transparent);
-    --iwac-vis-selected-border:   var(--primary, #ce4115);
-    --iwac-vis-selected-ink:      var(--primary-hover, #b03710);
+    --iwac-vis-selected-bg:       color-mix(in oklab, var(--primary, #18298d) 10%, transparent);
+    --iwac-vis-selected-bg-hover: color-mix(in oklab, var(--primary, #18298d) 14%, transparent);
+    --iwac-vis-selected-border:   var(--primary, #18298d);
+    --iwac-vis-selected-ink:      var(--primary-hover, #132278);
 
     /* Hover on an unselected chip — the theme facet's hover, one step:
      * a 6% wash and a 40% primary border. */
-    --iwac-vis-hover-bg:     color-mix(in oklab, var(--primary, #ce4115) 6%, transparent);
-    --iwac-vis-hover-border: color-mix(in oklab, var(--primary, #ce4115) var(--accent-mix-medium, 40%), var(--border, #ced1d6));
+    --iwac-vis-hover-bg:     color-mix(in oklab, var(--primary, #18298d) 6%, transparent);
+    --iwac-vis-hover-border: color-mix(in oklab, var(--primary, #18298d) var(--accent-mix-medium, 40%), var(--border, #ced1d6));
 }
 
 :root {
-    /* AI model accents — five ROLE SLOTS, so the Sentiment Atlas's
+    /* AI model accents — six ROLE SLOTS, so the Sentiment Atlas's
      * subjectivity trend keeps visually distinct lines. Per-model
      * data-series accents (not theme chrome); each carries an allow-hex
      * marker so the theme-token guard permits the literals. Override
@@ -176,33 +176,36 @@ body {
      * line there, and the accent colours keep their positions instead of
      * silently reordering when the panel is upgraded.
      *
-     * PICKED IN OKLCH, AND MEASURED (2026-10). The five were brand-mark
-     * hexes nudged by eye, and the measure found what the eye missed:
-     * slots 2 and 4 were two blues at ΔEok 0.059 (0.027 to a deuteranope),
-     * slot 5 sat 0.037 from slot 2 under deuteranopia, and the amber
-     * (slot 3) read 2.74:1 on the light panel. They are now five hues at
-     * least 45° apart — green 155°, blue 262°, burnt orange 45°, teal 200°,
-     * magenta 330°, each still the family its model's mark reads as — at
-     * the highest chroma the gamut gives between L 0.53 and 0.65, every one
-     * ≥ 3.2:1 on the light AND the dark panel, and no pair closer than
-     * ΔEok 0.14, or 0.095 under deuteranopia or protanopia.
-     * tests/js/palette.test.js measures all of it, so a re-pick that drifts
-     * fails the build.
+     * PICKED IN OKLCH, AND MEASURED — re-picked 2026-11 for the theme's
+     * ink-and-spot-colour palette. The 2026-10 set was measured against an
+     * orange brand: under a press-blue --primary, a claret --secondary and
+     * a teal --info, its slot 4 was the AI-content teal to the digit
+     * (slot 4 one digit off --info), its slot 2 a blue 0.07 from the dark
+     * --primary, and its lead (slot 1) a green. The set now takes the hues
+     * the three theme accents leave free — every slot is at least 40° in
+     * hue or 0.1 in lightness from --primary, --secondary and --info in
+     * BOTH themes, so no model line reads as chrome, as the brand's second
+     * colour or as the AI-content marker:
      *
-     * SLOT 6 (2026-10, Claude Haiku 5.5) is a lightness step, not a hue.
-     * Five hues 45° apart leave no gap of 40° on both sides inside the
-     * band where a colour clears 3:1 on both panels; a grid search of
-     * that band found only lightness twins of existing slots. The bright
-     * orange (hue 39°, L 0.67) is the one in its model's own family — the
-     * Claude mark is terracotta — and sits 0.13 lighter than slot 3's
-     * burnt orange, ΔEok ≥ 0.10 to every slot under deuteranopia and
-     * protanopia too, ≥ 3.2:1 on both panels. */
-    --iwac-vis-model-1: #00a05b; /* allow-hex */
-    --iwac-vis-model-2: #538bf5; /* allow-hex */
-    --iwac-vis-model-3: #af4700; /* allow-hex */
-    --iwac-vis-model-4: #007b80; /* allow-hex */
-    --iwac-vis-model-5: #c360bc; /* allow-hex */
-    --iwac-vis-model-6: #f85509; /* allow-hex */
+     *   1  violet   282°  L 0.52   (the lead: neither green nor orange)
+     *   2  blue     243°  L 0.62   (0.12 ΔEok off the dark --primary)
+     *   3  ochre     90°  L 0.50
+     *   4  green    156°  L 0.63
+     *   5  magenta  330°  L 0.53
+     *   6  orange    54°  L 0.66   (the Claude mark's terracotta family)
+     *
+     * Six hues fit because 1/2 and 3/6 also part in lightness. Every slot
+     * is ≥ 3.1:1 on the light AND the dark panel; no pair is closer than
+     * ΔEok 0.19 (0.087 under deuteranopia or protanopia), against 0.14 /
+     * 0.095 before. tests/js/palette.test.js measures all of it, the
+     * theme-accent separation included, so a re-pick that drifts fails the
+     * build. */
+    --iwac-vis-model-1: #5e3cf0; /* allow-hex */
+    --iwac-vis-model-2: #008ed8; /* allow-hex */
+    --iwac-vis-model-3: #796006; /* allow-hex */
+    --iwac-vis-model-4: #0ea361; /* allow-hex */
+    --iwac-vis-model-5: #b104ab; /* allow-hex */
+    --iwac-vis-model-6: #dd7002; /* allow-hex */
 
     /* (--iwac-vis-shadow-{subtle,soft,strong} removed in 1.48: they
      * re-derived from --ink exactly what the theme's --shadow-color,
@@ -412,7 +415,7 @@ body {
 
 /*  Try-again control on a fetch-failure banner (P.buildFetchErrorState).
  *  The banner is already a centred flex column with a gap, so this only has
- *  to stop the button stretching and give it the quiet uppercase label the
+ *  to stop the button stretching and give it the quiet small label the
  *  On This Day fallback established for the same job. Inherits colour,
  *  border, focus-visible and transition from `.iwac-vis-btn`. */
 .iwac-vis-error__retry,
@@ -420,8 +423,6 @@ body {
     flex: none;
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    text-transform: uppercase;
 }
 
 /*  No-JS note — iwac-block-shell's `noscript` slot, which also hides the
@@ -452,7 +453,7 @@ body {
     width: 32px;
     height: 32px;
     border: 3px solid var(--border, #ced1d6);
-    border-top-color: var(--primary, #ce4115);
+    border-top-color: var(--primary, #18298d);
     border-radius: 50%;
     /*  A literal on purpose: a spinner's period is not a UI transition, and
      *  the theme's --duration-* steps (150–300ms) would make it a blur.
@@ -506,24 +507,28 @@ body {
 
 .iwac-vis-panel {
     position: relative;
-    background: var(--panel-bg, var(--surface, #fdfcfb));
-    /* Use `--border` directly rather than the composite `--panel-border`
-     * shorthand. A composite wrapping another var() can freeze that inner
-     * substitution at the cascade block where it is declared: older IWAC
-     * theme builds (v1.7.0 and below) declared `--panel-border` only at
-     * :root, so it ignored the override in `body[data-theme="light"]` and
-     * painted a dark blue-grey "black line" on light-mode cards whenever the
-     * user's system preferred dark. The unrolled form re-resolves on every
-     * element that inherits it, so panels read as warm-grey cards on any
-     * theme version.
+    /*  A ruled section, not a card (theme 2.33). The panel used to be a box
+     *  — a --panel-bg fill, a 1px --border frame, rounded corners, a shadow
+     *  and 1rem of padding on every side — floating on the page. The theme
+     *  then took every card off its pages: a section is a run of content on
+     *  the one flat --surface that opens on an ink rule, the way a
+     *  broadsheet divides its stories. So a panel has no fill, frame,
+     *  radius or shadow of its own, and no inline padding: its chart and
+     *  its text sit on the page's own left edge, aligned with the theme's
+     *  headings and prose above it. The rule is the hairline ink weight
+     *  (1px --ink-strong), one step under the 2px opener a block heading at
+     *  h2 and the theme's own sections carry, so a dashboard's panels read
+     *  as the parts of one section rather than as sections of their own.
      *
-     * This named `--panel-border-color` until the theme removed that token,
-     * after which the declaration had been rendering from its `--border`
-     * fallback anyway. Naming --border directly is what it already did. */
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--panel-radius, var(--radius-md, 0.5rem));
-    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06));
-    padding: var(--space-4, 1rem);
+     *  (The frame used to name --border directly rather than the composite
+     *  --panel-border, whose inner var() froze at :root on older theme
+     *  builds. The rule names --ink-strong directly for the same reason.) */
+    background: transparent;
+    border: 0;
+    border-block-start: 1px solid var(--ink-strong, #05070c);
+    border-radius: 0;
+    box-shadow: none;
+    padding: var(--space-3, 0.75rem) 0 0;
     /* Prevent ECharts canvas from forcing grid overflow. */
     min-width: 0;
 }
@@ -541,7 +546,7 @@ body {
  *  is drawn OUTSIDE the box — an ECharts canvas fills its host edge to edge,
  *  so an inset outline would be painted over. */
 .iwac-vis-chart:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -730,7 +735,11 @@ body {
 .iwac-vis-block .dashboard-charts {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
+    /*  Ruled panels have no frame to keep them apart, so the space between
+     *  them is the gutter: a row gap that lets each rule open its own
+     *  section, and a column gap wide enough that two rules side by side
+     *  read as two columns of one page. */
+    gap: var(--space-8, 2rem) var(--space-6, 1.5rem);
 }
 
 @media (min-width: 768px) { /* md */
@@ -771,7 +780,7 @@ body {
 @media (max-width: 599px) { /* sm */
     .iwac-vis-overview-grid,
     .iwac-vis-block .dashboard-charts {
-        gap: var(--space-3, 0.75rem);
+        gap: var(--space-6, 1.5rem);
     }
 }
 
@@ -823,8 +832,11 @@ body {
  *  right edge and rode 1–2px above the title it belongs to. */
 .iwac-vis-panel-toolbar {
     position: absolute;
-    top: calc(var(--space-4, 1rem) + (var(--text-base, 1.0625rem) * var(--line-height-tight, 1.25) - var(--size-control-sm, 2.25rem)) / 2);
-    right: var(--space-4, 1rem);
+    /*  Centred on the title's first line, which starts one --space-3 under
+     *  the panel's rule; flush with the section's right edge, as the title
+     *  is with its left (the panel has no inline padding). */
+    top: calc(var(--space-3, 0.75rem) + (var(--text-base, 1.0625rem) * var(--line-height-tight, 1.25) - var(--size-control-sm, 2.25rem)) / 2);
+    right: 0;
     z-index: var(--iwac-vis-z-raised, 5);
     display: flex;
     flex-direction: row;
@@ -834,7 +846,7 @@ body {
      *  row now wraps inside the panel, right-aligned. */
     flex-wrap: wrap;
     justify-content: flex-end;
-    max-width: calc(100% - 2 * var(--space-4, 1rem));
+    max-width: 100%;
     gap: var(--space-1, 0.25rem);
 }
 
@@ -862,14 +874,19 @@ body {
 @media (max-width: 599px) { /* sm */
     .iwac-vis-panel:has(> .iwac-vis-panel-toolbar) {
         --iwac-vis-panel-toolbar-reserve: 0px;
-        padding-top: calc(var(--space-4, 1rem) + var(--size-control-sm, 2.25rem) + var(--space-3, 0.75rem));
+        padding-top: calc(var(--space-3, 0.75rem) + var(--size-control-sm, 2.25rem) + var(--space-3, 0.75rem));
     }
 
     .iwac-vis-panel-toolbar {
-        top: var(--space-4, 1rem);
+        top: var(--space-3, 0.75rem);
     }
 }
 
+/*  The four panel tools (image, table, CSV, embed) are a margin note to
+ *  the chart, not four boxed buttons competing with its title: no frame,
+ *  muted ink and a lighter stroke at rest, the hairline frame and full ink
+ *  only on hover. Each keeps the theme's --size-control-sm hit area and the
+ *  focus outline every control has, so nothing is lost to the keyboard. */
 .iwac-vis-panel-toolbar__btn {
     width: var(--size-control-sm, 2.25rem);
     height: var(--size-control-sm, 2.25rem);
@@ -878,13 +895,34 @@ body {
     line-height: 1;
 }
 
+/*  Two classes, because each tool is an `.iwac-vis-btn`, whose frame and
+ *  hover load later in this sheet at one class; the embed button is one of
+ *  them too. */
+.iwac-vis-panel-toolbar > .iwac-vis-btn {
+    border-color: transparent;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-panel-toolbar > .iwac-vis-btn > .iwac-vis-icon {
+    stroke-width: 1.5;
+}
+
+.iwac-vis-panel-toolbar > .iwac-vis-btn:hover {
+    background: transparent;
+    border-color: var(--border, #ced1d6);
+    color: var(--ink-strong, #05070c);
+}
+
 /*  On: fullscreen (`aria-pressed`) or the table disclosure open
  *  (`aria-expanded`) — keyed on the announced state, as the graph
- *  toolbar's toggles are. */
-.iwac-vis-panel-toolbar__btn[aria-pressed="true"],
-.iwac-vis-panel-toolbar__btn[aria-expanded="true"] {
+ *  toolbar's toggles are. The selected recipe, on the frameless button:
+ *  the wash and the spot colour, a spot-colour rule under it. */
+.iwac-vis-panel-toolbar > .iwac-vis-btn[aria-pressed="true"],
+.iwac-vis-panel-toolbar > .iwac-vis-btn[aria-expanded="true"],
+.iwac-vis-panel-toolbar > .iwac-vis-embed-btn--copied {
     background: var(--iwac-vis-selected-bg);
-    border-color: var(--iwac-vis-selected-border);
+    border-color: transparent;
+    border-block-end-color: var(--iwac-vis-selected-border);
     color: var(--iwac-vis-selected-ink);
 }
 
@@ -956,6 +994,14 @@ body {
     border-radius: 0;
 }
 
+/*  Out of the page's flow the panel has a ground and a gutter of its own
+ *  again, so the toolbar keeps to that gutter rather than the screen edge. */
+.iwac-vis-panel--fullscreen > .iwac-vis-panel-toolbar,
+.iwac-vis-panel:fullscreen > .iwac-vis-panel-toolbar {
+    top: calc(var(--space-5, 1.25rem) + (var(--text-base, 1.0625rem) * var(--line-height-tight, 1.25) - var(--size-control-sm, 2.25rem)) / 2);
+    right: var(--space-5, 1.25rem);
+}
+
 .iwac-vis-panel--fullscreen > .iwac-vis-graph-host,
 .iwac-vis-panel:fullscreen > .iwac-vis-graph-host,
 .iwac-vis-panel--fullscreen > .iwac-vis-chord-host,
@@ -1023,14 +1069,15 @@ body {
 }
 
 /*  The block's own description and a section's (`.iwac-vis-section-desc`,
- *  under a section heading) are one register. */
+ *  under a section heading) are one register. No measure cap: a 44rem
+ *  column left the right half of a wide block empty beside one or two
+ *  sentences, which the theme's prose no longer does either (2.33). */
 .iwac-vis-block-header__desc,
 .iwac-vis-section-desc {
     margin: 0;
     color: var(--ink-subtle, #5a5e63);
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
-    max-width: var(--measure-narrow, 44rem);
 }
 
 /*  Link from one block to a sibling that treats the same material from
@@ -1046,7 +1093,7 @@ body {
     display: inline-block;
     align-self: flex-start;
     margin: 0;
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     font-size: var(--text-sm, 0.9375rem);
     line-height: var(--line-height-normal, 1.5);
     text-decoration: underline;
@@ -1057,14 +1104,14 @@ body {
 
 .iwac-vis-cross-block:hover,
 .iwac-vis-cross-block:focus-visible {
-    color: color-mix(in oklab, var(--primary, #ce4115), var(--ink-strong, #05070c) 30%);
+    color: color-mix(in oklab, var(--primary, #18298d), var(--ink-strong, #05070c) 30%);
     text-decoration-thickness: 2px;
 }
 
 .iwac-vis-cross-block:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
 }
 
 /*  Aside / sidebar surface card — the raised-panel shell shared by the
@@ -1073,11 +1120,14 @@ body {
  *  their own class alongside for layout residuals (flex direction,
  *  custom padding). */
 .iwac-vis-aside {
-    background: var(--panel-bg, var(--surface, #fdfcfb));
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    padding: var(--space-4, 1rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
+    /*  Ruled like a panel (see `.iwac-vis-panel`): a sidebar is a column of
+     *  the page under an ink rule, not a raised card beside it. */
+    background: transparent;
+    border: 0;
+    border-block-start: 1px solid var(--ink-strong, #05070c);
+    border-radius: 0;
+    padding: var(--space-3, 0.75rem) 0 0;
+    box-shadow: none;
     align-self: start;
 }
 
@@ -1133,7 +1183,7 @@ body {
     background: transparent;
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
     font-family: inherit;
@@ -1151,7 +1201,7 @@ body {
 }
 
 .iwac-vis-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -1300,7 +1350,7 @@ body {
  * the publication block ships no block-CSS of its own. */
 
 /*  Almanac figure — not a card. Each stat is a ruled column entry:
- *  2px ink rule on top (the ledger line), uppercase eyebrow, then the
+ *  2px ink rule on top (the ledger line), a sentence-case label, then the
  *  display-serif numeral. No box, no shadow, no hover theatrics — the
  *  typography carries it, matching the theme's rule grammar. */
 .iwac-vis-summary-card {
@@ -1325,8 +1375,6 @@ body {
     order: 0;
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 600;
     line-height: 1.2;
 }
@@ -1381,7 +1429,7 @@ body {
 /*  The headline "Total items" figure: its ledger rule turns primary and
  *  the numeral steps up. One accent, no gradient wash. */
 .iwac-vis-summary-card--featured {
-    border-top-color: var(--primary, #ce4115);
+    border-top-color: var(--primary, #18298d);
 }
 
 .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
@@ -1431,8 +1479,6 @@ body {
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
 }
 
 /* -------------------------------------------------------------------
@@ -1501,13 +1547,13 @@ body {
 .iwac-vis-keywords-attention-slider {
     flex: 1;
     min-width: 0;
-    accent-color: var(--primary, #ce4115);
+    accent-color: var(--primary, #18298d);
     cursor: pointer;
 }
 
 .iwac-vis-year-slider__input:focus-visible,
 .iwac-vis-keywords-attention-slider:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -1522,7 +1568,7 @@ body {
     background: transparent;
     color: var(--muted, #66696e);
     border: 1px solid transparent;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
@@ -1543,7 +1589,7 @@ body {
 .iwac-vis-pagination__btn:focus-visible,
 .iwac-vis-facets__btn:focus-visible,
 .iwac-vis-facets__sub-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -1659,8 +1705,6 @@ body {
     margin-right: var(--space-1, 0.25rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--ink-light, #3f4349);
     white-space: nowrap;
 }
@@ -1676,7 +1720,7 @@ body {
     background: transparent;
     color: var(--ink-light, #3f4349);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
@@ -1756,7 +1800,7 @@ body {
     width: 0.75rem;
     height: 0.5rem;
     /*  Matches the 2px corner the Gantt's renderItem draws on each bar. */
-    border-radius: 2px;
+    border-radius: 0;
     flex-shrink: 0;
 }
 
@@ -1799,7 +1843,7 @@ body {
     margin-inline-start: -4px;
     border: 0;
     background: none;
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     font-family: inherit;
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
@@ -1813,9 +1857,9 @@ body {
 }
 
 .iwac-vis-window-note__toggle:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
 }
 
 
@@ -1836,7 +1880,7 @@ body {
     padding: 0 var(--space-2, 0.5rem);
     line-height: var(--line-height-tight, 1.25);
     /*  A control, so the chip radius: --radius-full is for dots. */
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     border: 1px solid var(--iwac-vis-selected-border);
     background: var(--iwac-vis-selected-bg);
     color: var(--iwac-vis-selected-ink);
@@ -1890,7 +1934,7 @@ input.iwac-vis-control {
     background-color: var(--panel-bg, #fdfcfb);
     color: var(--ink, #13161c);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     transition:
@@ -1912,9 +1956,9 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-control:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
-    border-color: var(--primary, #ce4115);
+    border-color: var(--primary, #18298d);
 }
 
 .iwac-vis-facets__select {
@@ -2023,7 +2067,7 @@ select.iwac-vis-control:hover {
     color: var(--ink-light, #3f4349);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
 }
 
 .iwac-vis-timeline-details-year {
@@ -2069,19 +2113,20 @@ select.iwac-vis-control:hover {
 .iwac-vis-table__header {
     text-align: left;
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    /*  No band: the theme's table head (`.linked-resources-table th`) is an
-     *  uppercase eyebrow over a --border rule on the panel's own ground.
+    /*  No band: the theme's table head (`.linked-resources-table th`) is a
+     *  sentence-case label at 600 over a rule on the panel's own ground
+     *  (tracked capitals went from table heads in theme 2.33). The rule is
+     *  ink, as a printed table's head rule is; the body rows keep their
+     *  --border-light hairlines.
      *  This was a --surface-sunken band over a --border-strong rule — a box
      *  inside the panel by another name. The ground is --panel-bg, not
      *  transparent, only because the head is sticky: a scrolled body would
      *  otherwise show through it. On the panel the two are the same colour. */
     background: var(--panel-bg, #fdfcfb);
-    border-bottom: 1px solid var(--border, #ced1d6);
+    border-bottom: 1px solid var(--ink-strong, #05070c);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    color: var(--muted, #66696e);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--ink-light, #3f4349);
     position: sticky;
     top: 0;
     width: var(--iwac-vis-col-w, auto);
@@ -2093,7 +2138,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-table__row:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 4%, transparent);
+    background: color-mix(in oklab, var(--primary, #18298d) 4%, transparent);
 }
 
 .iwac-vis-table__cell {
@@ -2121,7 +2166,7 @@ select.iwac-vis-control:hover {
     width: var(--iwac-vis-thumb-md);
     height: var(--iwac-vis-thumb-md);
     object-fit: cover;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     display: block;
 }
 
@@ -2133,12 +2178,12 @@ select.iwac-vis-control:hover {
     justify-content: center;
     background: transparent;
     border: 1px dashed var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     color: var(--border, #ced1d6);
 }
 
 .iwac-vis-table__link {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration: none;
     font-weight: 500;
 }
@@ -2151,7 +2196,7 @@ select.iwac-vis-control:hover {
  *  to 4.42:1 there, so a hovered row's link takes --primary-hover, the
  *  theme's one-step correction for primary text on a tint. */
 .iwac-vis-table__row:hover .iwac-vis-table__link {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
 }
 
 
@@ -2296,8 +2341,6 @@ select.iwac-vis-control:hover {
         margin-right: 0.4em;
         font-size: var(--text-2xs, 0.6875rem);
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: var(--tracking-wide, 0.04em);
         color: var(--muted, #66696e);
     }
 }
@@ -2317,11 +2360,9 @@ select.iwac-vis-control:hover {
     align-items: center;
     gap: 0.4em;
     padding: 0.15rem 0.55rem;
-    border-radius: var(--radius-full, 9999px);
+    border-radius: 0;
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
     background: transparent;
     color: var(--ink-light, #3f4349);
     border: 1px solid var(--border, #ced1d6);
@@ -2345,8 +2386,8 @@ select.iwac-vis-control:hover {
    when the recent-additions table dropped its type column. The audiovisual
    overview's source badges (youtube / deposited / unknown) keep the neutral
    muted dot on purpose: where a recording came from is not an item type. */
-.iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--type-article, #ce4115); }
-.iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--type-publication, #394f68); }
+.iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--type-article, #18298d); }
+.iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--type-publication, #85253a); }
 
 
 /* =================================================================== */
@@ -2432,7 +2473,7 @@ select.iwac-vis-control:hover {
     margin-block: var(--space-2, 0.5rem);
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: var(--surface-raised, #faf8f6);
     width: fit-content;
     font-size: var(--text-sm, 0.9375rem);
@@ -2451,8 +2492,6 @@ select.iwac-vis-control:hover {
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 /*  An eyebrow over a card or a column. */
@@ -2489,12 +2528,10 @@ select.iwac-vis-control:hover {
     font-weight: 600;
     color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-details > summary:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -2515,14 +2552,14 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-check input {
-    accent-color: var(--primary, #ce4115);
+    accent-color: var(--primary, #18298d);
     width: 1rem;
     height: 1rem;
     cursor: pointer;
 }
 
 .iwac-vis-check input:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -2543,7 +2580,7 @@ select.iwac-vis-control:hover {
 
 @media (max-width: 599px) { /* sm */
     .iwac-vis-panel {
-        padding: var(--space-3, 0.75rem);
+        padding: var(--space-3, 0.75rem) 0 0;
     }
     .iwac-vis-panel > .iwac-vis-chart {
         min-height: 280px;
@@ -2581,20 +2618,20 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-sparkline__area {
-    fill: color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
+    fill: color-mix(in oklab, var(--primary, #18298d) 18%, transparent);
     stroke: none;
 }
 
 .iwac-vis-sparkline__line {
     fill: none;
-    stroke: var(--primary, #ce4115);
+    stroke: var(--primary, #18298d);
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
 .iwac-vis-sparkline__dot {
-    fill: var(--primary, #ce4115);
+    fill: var(--primary, #18298d);
     /*  The halo is the panel's ground: --surface is a darker ring than the
      *  --surface-raised dark panel it sits on. */
     stroke: var(--panel-bg, #fdfcfb);
@@ -2638,7 +2675,7 @@ select.iwac-vis-control:hover {
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     background: transparent;
     text-decoration: none;
     color: inherit;
@@ -2660,7 +2697,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-similar-card:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -2692,7 +2729,7 @@ select.iwac-vis-control:hover {
     right: var(--space-1, 0.25rem);
     bottom: var(--space-1, 0.25rem);
     padding: 0.125rem 0.3125rem;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: rgba(0, 0, 0, 0.78); /* allow-hex */
     color: #ffffff; /* allow-hex */
     font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
@@ -2718,11 +2755,9 @@ select.iwac-vis-control:hover {
     /*  Outlined, at the chip radius: a score is a label, not a dot, and a
      *  primary-washed pill is the pastel fill the theme refuses. */
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: transparent;
     color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-similar-card__title {
@@ -2886,11 +2921,11 @@ select.iwac-vis-control:hover {
     display: block;
     touch-action: none;   /* the graph owns pan + pinch inside its own box */
     cursor: grab;
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
 }
 
 .iwac-vis-graph-canvas:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -2917,14 +2952,14 @@ select.iwac-vis-control:hover {
     max-width: 17rem;
     padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
     font-size: var(--text-xs, 0.8125rem);
     line-height: 1.45;
     /*  The theme's tooltip (`.tooltiptext`): --surface, --radius-md,
      *  --shadow-lg. The ECharts tooltip and the map popup take the same. */
-    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(9, 11, 15, 0.12), 0 4px 6px -4px rgba(20, 22, 27, 0.06));
+    box-shadow: var(--shadow-lg, 0 4px 12px -4px rgba(9, 11, 15, 0.18), 0 1px 3px 0 rgba(20, 22, 27, 0.06));
     pointer-events: none;
 }
 
@@ -2960,7 +2995,7 @@ select.iwac-vis-control:hover {
     gap: 0.35rem;
     padding: 0.2rem 0.6rem;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     background: transparent;
     color: var(--ink, #13161c);
     font-family: inherit;
@@ -2979,7 +3014,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-type-chip:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 2px;
 }
 
@@ -2995,7 +3030,7 @@ select.iwac-vis-control:hover {
     height: 0.625rem;
     border-radius: var(--radius-full, 9999px);
     flex: 0 0 auto;
-    background: var(--iwac-vis-entity-color, var(--primary, #ce4115));
+    background: var(--iwac-vis-entity-color, var(--primary, #18298d));
 }
 
 .iwac-vis-type-chip--off .iwac-vis-type-chip__swatch {
@@ -3022,9 +3057,9 @@ select.iwac-vis-control:hover {
     overscroll-behavior: contain;
     padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-md, 0);
     background: var(--surface, #fdfcfb);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
+    box-shadow: var(--shadow-md, 0 0 0 0 transparent);
 }
 
 .iwac-vis-graph-card__close {
@@ -3046,7 +3081,7 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-graph-card__close:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 1px;
 }
 
@@ -3070,8 +3105,6 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-card__kind {
     margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
-    letter-spacing: var(--tracking-wider, 0.08em);
-    text-transform: uppercase;
     color: var(--muted, #66696e);
 }
 
@@ -3102,8 +3135,6 @@ select.iwac-vis-control:hover {
 .iwac-vis-graph-card__label {
     margin: 0 0 0.2rem;
     font-size: var(--text-2xs, 0.6875rem);
-    letter-spacing: var(--tracking-wider, 0.08em);
-    text-transform: uppercase;
     color: var(--muted, #66696e);
 }
 
@@ -3136,12 +3167,12 @@ select.iwac-vis-control:hover {
 }
 
 .iwac-vis-graph-card__jump:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
     text-decoration: underline;
 }
 
 .iwac-vis-graph-card__jump:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: 1px;
 }
 
@@ -3163,7 +3194,7 @@ select.iwac-vis-control:hover {
     display: inline-block;
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 @media (max-width: 599px) { /* sm */
@@ -3215,8 +3246,8 @@ select.iwac-vis-control:hover {
     overscroll-behavior: contain;
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
+    border-radius: var(--radius-md, 0);
+    box-shadow: var(--shadow-md, 0 0 0 0 transparent);
 }
 
 .iwac-vis-search__empty {
@@ -3237,7 +3268,7 @@ select.iwac-vis-control:hover {
     padding: var(--space-1, 0.25rem) 0.4rem;
     background: transparent;
     border: 1px solid transparent;
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
     color: var(--ink, #13161c);
@@ -3257,7 +3288,7 @@ select.iwac-vis-control:hover {
  *  last items — the search results' focus used to change the background
  *  and nothing else. */
 .iwac-vis-list-item:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid #18298d);
     outline-offset: -2px;
 }
 
@@ -3284,7 +3315,7 @@ select.iwac-vis-control:hover {
  *  option; this draws the same inset ring the focused row would. */
 .iwac-vis-search__item[aria-selected="true"] {
     background: var(--surface-raised, #faf8f6);
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline: var(--focus-outline, 2px solid var(--focus-color, #18298d));
     outline-offset: -2px;
 }
 
@@ -3347,8 +3378,8 @@ select.iwac-vis-control:hover {
     padding: 0.05em 0.25em;
     font-weight: 600;
     color: var(--ink-strong, #05070c);
-    background: color-mix(in oklab, var(--primary, #ce4115) 22%, transparent);
-    border-radius: var(--radius-sm, 0.375rem);
+    background: color-mix(in oklab, var(--primary, #18298d) 22%, transparent);
+    border-radius: var(--radius-sm, 0);
 }
 
 .iwac-vis-kwic-meta {
@@ -3367,7 +3398,7 @@ select.iwac-vis-control:hover {
 }
 
 a.iwac-vis-kwic-title:hover {
-    color: var(--primary, #ce4115);
+    color: var(--primary, #18298d);
 }
 
 .iwac-vis-kwic-sep {
@@ -3380,20 +3411,18 @@ a.iwac-vis-kwic-title:hover {
     align-items: center;
     padding: 0.125rem var(--space-2, 0.5rem);
     font-size: var(--text-2xs, 0.6875rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
     /*  Outlined tags (the theme's `.resource-tag` is an outlined chip), at
      *  the chip radius — they were sunken- and primary-filled pills. */
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-sm, 0.375rem);
+    border-radius: var(--radius-sm, 0);
     white-space: nowrap;
 }
 
 /*  "Tagged" is the one marked state: a primary edge, --primary-hover text
  *  (5.8:1 on the panel), no fill. */
 .iwac-vis-kwic-tagged {
-    color: var(--primary-hover, #b03710);
+    color: var(--primary-hover, #132278);
     border-color: var(--iwac-vis-hover-border);
 }
 

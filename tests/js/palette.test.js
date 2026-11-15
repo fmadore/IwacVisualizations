@@ -175,6 +175,34 @@ test('the model accents are apart for every reader, and read on both panels', ()
     assert.deepEqual(failures, []);
 });
 
+test('no model accent reads as one of the theme’s own accents, in either theme', () => {
+    // The Atlas draws the model lines on a page whose chrome is --primary,
+    // whose second data colour is --secondary and whose AI-content marker
+    // is --info. The 2026-10 set, picked beside an orange brand, put slot 4
+    // on the --info teal to the digit once the theme moved to press blue,
+    // claret and teal (2.33).
+    const accents = modelAccents();
+    const failures = [];
+    for (const theme of ['light', 'dark']) {
+        for (const token of ['--primary', '--secondary', '--info']) {
+            const ref = TOKENS[theme][token];
+            accents.forEach((hex, i) => {
+                const why = apart(hex, ref);
+                if (why) failures.push(`${theme}: model-${i + 1} / ${token} — ${why}`);
+            });
+        }
+    }
+    assert.deepEqual(failures, []);
+});
+
+test('the lead model accent is neither a green nor an orange', () => {
+    // Slot 1 is the line a reader meets first. Orange was the old brand and
+    // is the theme's --warning; green is --success. Neither may lead.
+    const { h } = oklch(modelAccents()[0]);
+    assert.ok(!(h >= 30 && h < 75), `model-1 hue ${h.toFixed(0)}° is an orange`);
+    assert.ok(!(h >= 120 && h < 170), `model-1 hue ${h.toFixed(0)}° is a green`);
+});
+
 /* ---- sentiment and centralité ramps ----------------------------------- */
 
 /*
