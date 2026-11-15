@@ -150,7 +150,7 @@ test.describe('Edition', () => {
         await expect(page.locator('.iwac-vis-otd-folio__scale')).toHaveText('24 items on this date, from 1965 to 2024.');
     });
 
-    test('leads on the rarest round anniversary, and a tick makes its year the lead', async ({ page }) => {
+    test('among equally furnished items the rarest round anniversary leads, and a tick makes its year the lead', async ({ page }) => {
         await openEdition(page);
         // 1986 is 40 years before NOW; 1996 (30) and 2006 (20) are round too,
         // but a larger anniversary is rarer and wins. Not the oldest (1965).
@@ -211,8 +211,9 @@ test.describe('Edition', () => {
 
         await openEdition(page, '&thumbs=1');
         await expect(page.locator('.iwac-vis-otd-plate--empty')).toHaveCount(0);
-        // With scans on offer the anniversary still leads only if it has one;
-        // 1986 is row 3 — scanned — so it leads with its clipping.
+        // With scans on offer a scanned item always leads; 1986 is row 3 —
+        // scanned, and the rarest anniversary among the scanned — so it
+        // leads with its clipping.
         expect(await leadYear(page)).toBe('1986');
         const img = page.locator('.iwac-vis-otd-lead__scan');
         await expect(img).toHaveAttribute('src', /\/files\/large\/0+1003\.jpg$/);

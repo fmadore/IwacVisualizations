@@ -87,13 +87,14 @@
      * The day's lead, chosen without randomness so the page is the same for
      * every visitor all day long, and testable:
      *
-     *   1. a round anniversary — 75, 60, 50, 40, 30, 25, 20 or 10 years ago,
-     *      counted in the calendar on show, the rarer (larger) first — as
-     *      long as the item has a scan or an excerpt to lead with; a bare
-     *      title does not make a front page, whatever its date;
-     *   2. otherwise the item with the most to show: scan and excerpt, then
-     *      scan alone, then excerpt alone;
-     *   3. ties go to the oldest item, then to the day file's own order.
+     *   1. the item with the most to show: scan and excerpt, then scan
+     *      alone, then excerpt alone. A scan always leads when the day has
+     *      one — the clipping is what the front page is for;
+     *   2. among equals, a round anniversary — 75, 60, 50, 40, 30, 25, 20 or
+     *      10 years ago, counted in the calendar on show, the rarer (larger)
+     *      first. It breaks a tie; it never puts a text-only item ahead of
+     *      a scanned one;
+     *   3. then the oldest item, then the day file's own order.
      *
      * The year spine lets the reader override it; `bestOf` applies the same
      * order inside the one year they pick.
@@ -119,8 +120,7 @@
     function leadKey(it, mode, index) {
         var ago = yearsAgo(it, mode);
         var round = ANNIVERSARIES.indexOf(ago);
-        var eligible = round >= 0 && (it.thumb || it.excerpt);
-        return [eligible ? round : ANNIVERSARIES.length, -quality(it), it.year, index];
+        return [-quality(it), round >= 0 ? round : ANNIVERSARIES.length, it.year, index];
     }
 
     function compareKeys(a, b) {
@@ -130,14 +130,14 @@
         return 0;
     }
 
-    /** The best item of one year, by rules 2 and 3 above. */
+    /** The best item of one year, by rules 1 and 3 above. */
     function bestOf(items, year, mode) {
         var pool = [];
         items.forEach(function (it, i) { if (it.year === year) pool.push(i); });
         var pick = -1, pickKey = null;
         pool.forEach(function (i) {
             var key = leadKey(items[i], mode, i);
-            key[0] = 0; // anniversary rank is moot inside one year
+            key[1] = 0; // anniversary rank is moot inside one year
             if (pick < 0 || compareKeys(key, pickKey) < 0) {
                 pick = i;
                 pickKey = key;

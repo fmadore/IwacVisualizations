@@ -6,8 +6,8 @@
 //   * layoutTicks: the year controls must stay >= gap apart (24 px targets)
 //     while sitting as close to their true place as they can, and inside the
 //     track; an isolated year must not move at all.
-//   * rankLead: the documented order — round anniversary with something to
-//     show, then scan + excerpt, then the oldest.
+//   * rankLead: the documented order — the item with the most to show (a
+//     scan always leads), a round anniversary among equals, then the oldest.
 //   * shiftDay / validDayKey: the walk covers all 366 day files, 29 February
 //     included, and wraps the year.
 
@@ -58,13 +58,16 @@ test('layoutTicks grows the track (and scrolls) when the years cannot fit', () =
     for (let i = 1; i < laid.x.length; i++) assert.ok(laid.x[i] - laid.x[i - 1] >= 28 - 1e-9);
 });
 
-test('rankLead: round anniversary with content, then scan + excerpt, then oldest', () => {
+test('rankLead: a scan always leads; an anniversary only breaks a tie; then oldest', () => {
     const it = (year, thumb, excerpt) => ({ year, thumb: thumb ? 'x' : '', excerpt: excerpt ? 'y' : '', hYear: null });
     const mode = { calendar: 'g' };
-    // 1986 is 40 years before the fixed now; 1996 is 30.
-    assert.equal(E.rankLead([it(1970, 1, 1), it(1996, 0, 1), it(1986, 0, 1)], mode), 2);
-    // A bare-title anniversary does not lead.
-    assert.equal(E.rankLead([it(1986, 0, 0), it(1990, 1, 1)], mode), 1);
+    // 1986 is 40 years before the fixed now; 1996 is 30. Neither has a scan,
+    // so the scanned 1970 item leads over both anniversaries.
+    assert.equal(E.rankLead([it(1970, 1, 1), it(1996, 0, 1), it(1986, 0, 1)], mode), 0);
+    // Among equally furnished items the rarer anniversary wins, not the oldest.
+    assert.equal(E.rankLead([it(1970, 1, 1), it(1996, 1, 1), it(1986, 1, 1)], mode), 2);
+    // A scan without an excerpt still beats an anniversary with only an excerpt.
+    assert.equal(E.rankLead([it(1986, 0, 1), it(1990, 1, 0)], mode), 1);
     // No anniversary: scan + excerpt beats scan alone beats excerpt alone.
     assert.equal(E.rankLead([it(1971, 0, 1), it(1990, 1, 0), it(2001, 1, 1)], mode), 2);
     // Ties go to the oldest.
