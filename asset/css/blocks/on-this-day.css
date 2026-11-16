@@ -95,9 +95,9 @@
 
 .iwac-vis-otd-head__date {
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
-    font-size: var(--text-2xl, 1.875rem);
+    font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
     font-weight: 600;
-    line-height: 1.05;
+    line-height: 1;
     letter-spacing: var(--tracking-display, -0.01em);
     text-transform: none;
     color: var(--ink-strong, #05070c);
@@ -120,7 +120,7 @@
  *  reader can place a lunar date against a solar one without switching. */
 .iwac-vis-otd-head__sub {
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
-    font-size: var(--text-sm, 0.9375rem);
+    font-size: var(--text-base, 1.0625rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -506,16 +506,6 @@
  *  year spine is one hairline axis, the lead sits on a hairline and the
  *  briefs are set in ruled columns. Primary appears only on the lead's
  *  year (dots, axis marker) and in the dateline interpuncts. */
-
-/*  Masthead: the date steps up to headline size — this layout is the date. */
-.iwac-vis-otd-panel--edition .iwac-vis-otd-head__date {
-    font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
-    line-height: 1;
-}
-
-.iwac-vis-otd-panel--edition .iwac-vis-otd-head__sub {
-    font-size: var(--text-base, 1.0625rem);
-}
 
 /*  Folio: the newspaper's line under the nameplate — here the scale of the
  *  day on one side and the way to other days on the other. The double rule
@@ -1237,7 +1227,7 @@
         column-count: 1;
     }
 
-    .iwac-vis-otd-panel--edition .iwac-vis-otd-head__date {
+    .iwac-vis-otd-head__date {
         font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
     }
 

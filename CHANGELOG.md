@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **On This Day no longer jumps when you open the Edition.** The date at the top was larger in the Edition than in Register, Decades and Clippings, so switching to it pushed the calendar and layout switches, and everything under them, about 30px down. The date now has the Edition's headline size in every layout, so the switches stay where they are.
+
 ### v2.2.0 — ink and one blue (2026-11-15)
 
 The module follows the IWAC theme's ink-and-spot-colour redesign (IWAC-theme 2.33: a press-blue accent, a claret second colour, square corners, no shadows, ruled sections instead of cards). Install it together with that theme release; on an older theme it still works, but its panels lose their card frame while the theme around them keeps its own.
