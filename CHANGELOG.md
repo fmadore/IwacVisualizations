@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.2.1 — On This Day holds still (2026-11-16)
 
 - **On This Day no longer jumps when you open the Edition.** The date at the top was larger in the Edition than in Register, Decades and Clippings, so switching to it pushed the calendar and layout switches, and everything under them, about 30px down. The date now has the Edition's headline size in every layout, so the switches stay where they are.
 
