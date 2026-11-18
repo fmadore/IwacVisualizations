@@ -13,9 +13,9 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.3.0 — chart text in the condensed sans (2026-11-18)
 
-Install together with the IWAC theme release that adds `--font-condensed` (2.35). On an older theme the chart text keeps the body face.
+Install together with IWAC-theme 2.35.0, which adds `--font-condensed`. On an older theme the chart text keeps the body face.
 
 - **Chart axes, legends and tooltips use the theme's condensed sans.** Axis labels, legend entries and tooltips are set in Fira Sans Condensed, the narrow face the theme now uses for its nav strip and datelines (theme issue #25). Long legend entries and dense year axes fit with fewer collisions, and tooltip values line up in tabular figures. A chart that draws before the font has loaded repaints once when it arrives.
 - **No double rule under a section heading.** When a section heading such as "Ratings over time" on the Sentiment Atlas is followed directly by a panel that has its row to itself, the panel's own thin rule is dropped. The heading's rule already opens it (theme issue #27).
