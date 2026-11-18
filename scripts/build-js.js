@@ -60,7 +60,7 @@
  */
 
 const { readFileSync, statSync, mkdirSync, rmSync, existsSync, writeFileSync } = require('fs');
-const { join, relative, dirname } = require('path');
+const { join, relative, dirname, sep } = require('path');
 const esbuild = require('esbuild');
 const { sourceFiles, posixRelative } = require('./lib/fs');
 const { MANIFEST_PATH, loadManifest, ownFiles, usedPanelSets, svelteEntry } = require('./lib/manifest');
@@ -291,7 +291,9 @@ async function analyseSvelte(svelteBundles, entries) {
         const usage = new Map();
         for (const input of Object.keys(result.metafile.inputs)) {
             const abs = join(process.cwd(), input);
-            if (!abs.startsWith(SVELTE_DIR + '/')) continue;
+            // `sep`, not '/': on Windows `join` gives backslashes, and a '/' here
+            // matched nothing, so every Svelte block built against an empty runtime.
+            if (!abs.startsWith(SVELTE_DIR + sep)) continue;
             inputs.add(input);
             const label = posixRelative(ROOT, abs);
             const code = abs.endsWith('.svelte') ? (await compiled.get(abs)).contents : readFileSync(abs, 'utf8');

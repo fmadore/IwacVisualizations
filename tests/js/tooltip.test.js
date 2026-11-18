@@ -176,9 +176,21 @@ test('the theme tooltip and legend take their chrome from tokens', () => {
     const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
     // Square and flat since the theme's 2.33: a hairline frame in the
     // secondary ink, no cast shadow, no radius.
-    assert.match(source, /extraCssText: 'box-shadow: none; border-radius: 0;'/);
-    assert.match(source, /borderColor: tokens\.inkLight,\s*\n\s*borderWidth: 1,/);
+    // Tabular figures in the value column (theme issue #25).
+    assert.match(source, /extraCssText: 'box-shadow: none; border-radius: 0; font-variant-numeric: tabular-nums;'/);
+    assert.match(source, /borderColor: tokens\.inkLight,\s*\r?\n\s*borderWidth: 1,/);
     assert.match(source, /inactiveColor: tokens\.muted/);
+});
+
+test('axis labels, legends and tooltips are set in the theme\'s condensed face', () => {
+    const source = readFileSync(join(ROOT, 'asset', 'js', 'iwac-theme.js'), 'utf8');
+    assert.match(source, /fontCondensed: readVar\('--font-condensed'\) \|\| readBodyFont\(\)/,
+        'without the theme token, chart text keeps the body face');
+    // legend + tooltip, and axisLabel on the category, value, log and time axes.
+    const labels = source.match(/axisLabel: \{[^}]*fontFamily: tokens\.fontCondensed/g) || [];
+    assert.equal(labels.length, 4, 'every axis type sets its labels in the condensed face');
+    assert.match(source, /legend: \{[\s\S]*?textStyle: \{ color: tokens\.inkLight, fontFamily: tokens\.fontCondensed/);
+    assert.match(source, /tooltip: \{[\s\S]*?textStyle: \{ color: tokens\.ink, fontFamily: tokens\.fontCondensed/);
 });
 
 test('the range slider is themed with the keys ECharts 5 and 6 read', () => {

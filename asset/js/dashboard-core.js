@@ -961,6 +961,34 @@
     };
 
     /* ----------------------------------------------------------------- */
+    /*  The condensed chart face                                          */
+    /* ----------------------------------------------------------------- */
+
+    // Axis labels, legends and tooltips use the theme's --font-condensed,
+    // which the theme's own pages only load at weight 600 (the nav strip).
+    // Canvas text never triggers a web-font load, so a chart drawn before the
+    // 500 face arrives keeps the fallback for good. Ask for it now (charts
+    // mount on view, usually later), and if a chart beat it, repaint once
+    // through the theme-swap path. No face matches on a route without the
+    // theme's fonts, so nothing happens there.
+    (function preloadCondensedFace() {
+        if (typeof document === 'undefined' || !document.fonts || !document.fonts.load) return;
+        var tokens = ns._currentTokens;
+        var family = tokens && tokens.fontCondensed;
+        // Without the theme token it fell back to the body face: nothing to wait for.
+        if (!family || family === tokens.fontFamily) return;
+        var spec = '500 ' + ns.CHART_FONT + 'px ' + family;
+        // check() is true once every matching face is in (or when none
+        // matches): either way there is nothing to repaint for.
+        if (document.fonts.check(spec)) return;
+        document.fonts.load(spec).then(function (faces) {
+            if (!faces || !faces.length) return;
+            ns.pruneCharts();
+            if (ns._charts.length) ns.applyThemeToCharts();
+        }).catch(function () { /* a failed font keeps the fallback face */ });
+    })();
+
+    /* ----------------------------------------------------------------- */
     /*  body[data-theme] observer                                         */
     /* ----------------------------------------------------------------- */
 

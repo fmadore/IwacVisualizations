@@ -2414,6 +2414,25 @@ select.iwac-vis-control:hover {
     border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
 }
 
+/*  A section heading's own 2px rule already opens its first panel. When that
+ *  panel follows the heading with nothing between them (no description, no
+ *  controls), its 1px rule drew a second line straight under the heading:
+ *  "Ratings over time" on the Sentiment Atlas (theme issue #27). That rule
+ *  goes. Only where the panel has its row to itself: a wide or solo panel,
+ *  or any first panel while the grid is one column. In a two-column row,
+ *  dropping one rule would leave its neighbour's standing alone. */
+.iwac-vis-section-heading + .iwac-vis-panel,
+.iwac-vis-section-heading + .iwac-vis-overview-grid > .iwac-vis-panel:first-child:is(.iwac-vis-panel--wide, .iwac-vis-panel--solo) {
+    border-block-start: 0;
+    padding-block-start: 0;
+}
+@media (max-width: 767px) { /* md - 1 */
+    .iwac-vis-section-heading + .iwac-vis-overview-grid > .iwac-vis-panel:first-child {
+        border-block-start: 0;
+        padding-block-start: 0;
+    }
+}
+
 /*  `.iwac-vis-section-desc` is styled with `.iwac-vis-block-header__desc`. */
 
 

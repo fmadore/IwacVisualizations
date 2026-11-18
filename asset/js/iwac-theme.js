@@ -479,7 +479,12 @@
             // Inherits whatever the theme's body font-family is, so charts
             // never visibly clash with surrounding type. Stack fallback
             // matches theme v2.0.0 (Public Sans).
-            fontFamily:    readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif'
+            fontFamily:    readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+            // The theme's press gothic (2.35, issue #25): axis labels, legends
+            // and tooltips, where a narrower face keeps long labels and dense
+            // ticks from colliding. Theme-less routes without --font-condensed
+            // keep the body face, so it degrades to what charts drew before.
+            fontCondensed: readVar('--font-condensed') || readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif'
         };
     }
 
@@ -606,7 +611,7 @@
                 // corner (2.33). A line chart's 14 × 3 key (C._legend) becomes
                 // a plain stroke.
                 icon: 'rect',
-                textStyle: { color: tokens.inkLight, fontSize: ns.CHART_FONT },
+                textStyle: { color: tokens.inkLight, fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 // --muted, not --border: a switched-off entry is still a
                 // label someone reads to switch it back on, and --border sat
                 // at 1.49:1 on the panel. --muted clears 4.5:1 in both themes
@@ -626,8 +631,10 @@
                 borderColor: tokens.inkLight,
                 borderWidth: 1,
                 padding: [6, 10],
-                textStyle: { color: tokens.ink, fontSize: ns.CHART_FONT },
-                extraCssText: 'box-shadow: none; border-radius: 0;',
+                textStyle: { color: tokens.ink, fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
+                // Tabular figures: the tooltip is HTML, so the value column
+                // can line its digits up the way a table's does.
+                extraCssText: 'box-shadow: none; border-radius: 0; font-variant-numeric: tabular-nums;',
                 // Prevent hover tooltips from being clipped by panels with
                 // `overflow: hidden` (recent-additions scrollbox, grid
                 // cells) or extending beyond the chart on narrow screens.
@@ -662,33 +669,33 @@
             // to be --border, which on the ruled sections read paler than the
             // section rule above the chart.
             categoryAxis: {
-                nameTextStyle: { fontSize: ns.CHART_FONT },
+                nameTextStyle: { fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 axisLine:  { show: true,  lineStyle: { color: tokens.ink, width: 1 } },
                 axisTick:  { show: true,  lineStyle: { color: tokens.ink, width: 1 } },
-                axisLabel: { show: true,  color: tokens.inkLight, fontSize: ns.CHART_FONT },
+                axisLabel: { show: true,  color: tokens.inkLight, fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 splitLine: { show: false, lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
             },
             valueAxis: {
-                nameTextStyle: { fontSize: ns.CHART_FONT },
+                nameTextStyle: { fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber, fontSize: ns.CHART_FONT },
+                axisLabel: { show: true,  color: tokens.inkLight, fontFamily: tokens.fontCondensed, formatter: axisNumber, fontSize: ns.CHART_FONT },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } },
                 splitArea: { show: false }
             },
             logAxis: {
-                nameTextStyle: { fontSize: ns.CHART_FONT },
+                nameTextStyle: { fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 axisLine:  { show: false },
                 axisTick:  { show: false },
-                axisLabel: { show: true,  color: tokens.inkLight, formatter: axisNumber, fontSize: ns.CHART_FONT },
+                axisLabel: { show: true,  color: tokens.inkLight, fontFamily: tokens.fontCondensed, formatter: axisNumber, fontSize: ns.CHART_FONT },
                 splitLine: { show: true,  lineStyle: { color: [tokens.borderLight] } }
             },
             timeAxis: {
-                nameTextStyle: { fontSize: ns.CHART_FONT },
+                nameTextStyle: { fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 axisLine:  { show: true, lineStyle: { color: tokens.ink, width: 1 } },
                 axisTick:  { show: true, lineStyle: { color: tokens.ink, width: 1 } },
-                axisLabel: { show: true, color: tokens.inkLight, fontSize: ns.CHART_FONT },
+                axisLabel: { show: true, color: tokens.inkLight, fontFamily: tokens.fontCondensed, fontSize: ns.CHART_FONT },
                 splitLine: { show: true, lineStyle: { color: [tokens.borderLight] } }
             },
             toolbox: {
