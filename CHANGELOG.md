@@ -13,7 +13,9 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### v2.3.0 — chart text in the condensed sans (2026-11-18)
+### v2.3.1 — chart text in the condensed sans (2026-11-18)
+
+v2.3.0 was tagged but never published: a browser test caught that dropping the rule under a section heading also dropped the panel's top padding, which moved the panel's toolbar off its title line. This release carries the v2.3.0 changes with the padding kept.
 
 Install together with IWAC-theme 2.35.0, which adds `--font-condensed`. On an older theme the chart text keeps the body face.
 
