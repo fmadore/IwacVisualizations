@@ -155,7 +155,7 @@ IwacVisualizations/
 │   │   ├── stopwords.json
 │   │   └── transcript.py
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
-│   ├── lib/                             # 6 files — file walk, bundle manifest, failure report, the shared Svelte runtime
+│   ├── lib/                             # 7 files — file walk, bundle manifest, failure report, the shared Svelte runtime, the version sites
 │   ├── audit_laicite.py
 │   ├── build-css.js
 │   ├── build-embed-tokens.js
@@ -163,6 +163,7 @@ IwacVisualizations/
 │   ├── build-mo.js
 │   ├── build-model-registry.js
 │   ├── build-tree.js
+│   ├── bump-version.js
 │   ├── cdn-integrity.js                 # SRI hashes for the CDN pins: --check / --update / --verify
 │   ├── changelog-section.js
 │   ├── check-audit.js
@@ -283,7 +284,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 42 files — node:test units
+│   ├── js/                              # 43 files — node:test units
 │   ├── lib/
 │   │   ├── fake-items.php
 │   │   └── strict-errors.php

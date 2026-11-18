@@ -56,7 +56,7 @@ const SUMMARIZE = {
     'tests/browser/': 'Playwright specs',
     'tests/golden/': 'generator output on the synthetic corpus; UPDATE_GOLDEN=1 rewrites it',
     'scripts/laicite/': 'one module per bundle, mirroring asset/js/charts/laicite/',
-    'scripts/lib/': 'file walk, bundle manifest, failure report, the shared Svelte runtime',
+    'scripts/lib/': 'file walk, bundle manifest, failure report, the shared Svelte runtime, the version sites',
 };
 
 /**

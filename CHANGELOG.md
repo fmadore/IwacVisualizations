@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **`npm run bump` writes a release's version everywhere.** One command sets the version in all six places it is declared (`package.json`, both copies in `package-lock.json`, `config/module.ini`, `CITATION.cff`, and the README's citation line), stamps the release date, and gives the CHANGELOG's `### Unreleased` notes their dated heading. `npm run lint:versions` reads the same list of places, so the writer and the check cannot disagree about where the version lives.
+
 ### v2.3.1 — chart text in the condensed sans (2026-11-18)
 
 v2.3.0 was tagged but never published: a browser test caught that dropping the rule under a section heading also dropped the panel's top padding, which moved the panel's toolbar off its title line. This release carries the v2.3.0 changes with the padding kept.

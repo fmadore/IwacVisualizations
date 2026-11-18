@@ -20,6 +20,7 @@
     "build:mo": "node scripts/build-mo.js",
     "build:tree": "node scripts/build-tree.js",
     "build:pot": "node scripts/extract-pot.js",
+    "bump": "node scripts/bump-version.js",
     "test": "node --test tests/js/index.test.js",
     "test:browser": "playwright test",
     "lint:js": "eslint .",
