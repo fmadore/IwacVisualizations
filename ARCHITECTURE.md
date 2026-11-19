@@ -59,7 +59,7 @@ IwacVisualizations/
 │       │   ├── collection-overview/     # 11 files — panel modules
 │       │   ├── compare-newspapers/      # 11 files — panel modules
 │       │   ├── distinctive-vocabulary/  # 1 file — panel module
-│       │   ├── entity-networks/         # 3 files — panel modules
+│       │   ├── entity-networks/         # 4 files — panel modules
 │       │   ├── index-overview/          # 14 files — panel modules
 │       │   ├── laicite/                 # 18 files — panel modules
 │       │   ├── lexical-metrics/         # 1 file — panel module
@@ -284,7 +284,7 @@ IwacVisualizations/
 │   │   ├── omeka_boot.php
 │   │   ├── sync_form.php
 │   │   └── timeline.php
-│   ├── js/                              # 43 files — node:test units
+│   ├── js/                              # 44 files — node:test units
 │   ├── lib/
 │   │   ├── fake-items.php
 │   │   └── strict-errors.php

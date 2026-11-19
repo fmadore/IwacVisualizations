@@ -257,7 +257,7 @@ The statistics live in `scripts/iwac_stats.py` (BH correction, G², log ratio, K
 
 ### Entity Networks (page block)
 
-Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry for why not ECharts/Sigma). *Entities* mode draws the co-occurrence graph — persons↔organizations plus events as connective tissue to every other type, and the same-type pairs person↔person, org↔org and place↔place so a selected node reaches its own kind directly (`sujets-sujets` is excluded: subjects tag nearly every item and would dominate the layout) — on a blank theme-aware canvas, with positions precomputed by ForceAtlas2 at generation time (`generate_entity_networks.py`, 1,997 nodes / 27,638 edges at co-occurrence ≥ 2). *Places* mode draws co-mentioned places over the basemap (517 nodes / 14,137 edges, lazily fetched). Node color = entity type (module palette), size = items mentioning it; labels collide via symbol layers with a hubs-first priority rank. Type chips, a min-link-strength select, and node search filter the view; clicking a node highlights its neighborhood and lists its strongest co-occurrences in the details sidebar.
+Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry for why not ECharts/Sigma). *Entities* mode draws the co-occurrence graph — persons↔organizations, events as connective tissue to every other type, subjects linked to every type, and the same-type pairs person↔person, org↔org, place↔place and subject↔subject so a selected node reaches its own kind directly — on a blank theme-aware canvas, with positions precomputed by ForceAtlas2 at generation time (`generate_entity_networks.py`, ~3,050 nodes / ~113,000 edges at co-occurrence ≥ 2 in the 2026-11 data). *Places* mode draws co-mentioned places over the basemap (517 nodes / 14,137 edges, lazily fetched). Node color = entity type (module palette), size = items mentioning it; labels collide via symbol layers with a hubs-first priority rank. Type chips, a min-link-strength select, and node search filter the view; clicking a node frames it with its strongest neighbours, labels them, and lists its strongest co-occurrences in the details sidebar, where *Explore its neighbourhood* swaps the map for an interactive force graph of the entry and its 25 strongest neighbours (the shared d3-force renderer).
 
 ### Collection Introduction (page block)
 
@@ -402,7 +402,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 2.3.1). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 2.4.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

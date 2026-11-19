@@ -54,6 +54,9 @@
      * @param {Object} opts.variants              key → {nodes, edges}. Every
      *   variant's nodes are registered up front so a facet flip re-settles the
      *   layout instead of restarting it.
+     * @param {function(number):string} [opts.coocText]  "N mentions" by default
+     * @param {string} [opts.coocName]   the card's label for `cooc` ("Mentions")
+     * @param {boolean} [opts.showScore=true]  print the distinctiveness score
      * @param {string} [opts.downloadName]
      * @param {string} [opts.ariaLabel]
      * @returns {{show: function(string, boolean): boolean}|null}
@@ -64,6 +67,16 @@
         var variants = opts.variants || {};
         var siteBase = (ctx && ctx.siteBase) || '';
         var TYPE_ORDER = ns.ENTITY_TYPE_ORDER;
+
+        // What `cooc` counts. On an item page it is the mentions a neighbour
+        // shares with the record; Entity Networks' neighbourhood graph
+        // counts shared items and has no distinctiveness score, so it names
+        // both its own way.
+        var coocText = opts.coocText || function (count) {
+            return t('mentions_count', { count: count });
+        };
+        var coocName = opts.coocName || t('Mentions');
+        var showScore = opts.showScore !== false;
 
         /* ---- Vocabulary present across every variant ------------------ */
 
@@ -158,7 +171,7 @@
                         // count itself, and only a number selects the plural.
                         name: cross
                             ? t('shared_items_count', { count: e.cooc || 0 })
-                            : t('mentions_count', { count: e.cooc || 0 }),
+                            : coocText(e.cooc || 0),
                         data: e
                     };
                 })
@@ -179,9 +192,9 @@
                 if (!node.isCenter) rows.push(P.el('div', null, typeLabel(node)));
                 var d = node.data || {};
                 if (d.cooc != null) {
-                    rows.push(P.el('div', null, t('mentions_count', { count: d.cooc })));
+                    rows.push(P.el('div', null, coocText(d.cooc)));
                 }
-                if (d.score != null) {
+                if (showScore && d.score != null) {
                     rows.push(P.el('div', null, t('Distinctiveness score') + ': '
                         + fmt(Math.round(d.score * 10) / 10)));
                 }
@@ -198,9 +211,9 @@
             var d = node.data || {};
             var rows = [];
             if (d.cooc != null) {
-                rows.push({ label: t('Mentions'), value: fmt(d.cooc) });
+                rows.push({ label: coocName, value: fmt(d.cooc) });
             }
-            if (d.score != null) {
+            if (showScore && d.score != null) {
                 rows.push({
                     label: t('Distinctiveness score'),
                     value: fmt(Math.round(d.score * 10) / 10)
@@ -213,7 +226,7 @@
             var d = node.data || {};
             var parts = [node.name];
             if (!node.isCenter) parts.push(typeLabel(node));
-            if (d.cooc != null) parts.push(t('mentions_count', { count: d.cooc }));
+            if (d.cooc != null) parts.push(coocText(d.cooc));
             parts.push(P.connectionsLabel(node.deg || 0));
             return parts.join('. ');
         }

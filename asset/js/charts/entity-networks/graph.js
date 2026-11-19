@@ -46,10 +46,60 @@
     var L_EDGES = 'net-edge-lines';
     var L_EDGES_HL = 'net-edge-lines-hl';
     var L_NODES = 'net-node-circles';
+    var L_RING = 'net-node-ring';
+    var L_HOVER_RING = 'net-node-hover-ring';
     var L_LABELS = 'net-node-labels';
 
     var MIN_RADIUS = 3;
     var MAX_RADIUS = 17;
+
+    /**
+     * The share of nodes trimmed from each end of each axis before the
+     * opening view is fitted. A layout straggler used to set the frame for
+     * everything: one node at the top edge, 2,852 packed into the bottom
+     * 15% of the canvas (2026-11). The generator now eases stragglers into
+     * a rim; this keeps an older payload, or a future straggler, from ever
+     * taking the opening view again.
+     */
+    var FIT_QUANTILE = 0.01;
+    /** Neighbours a selection's view is fitted to (the sidebar lists 15). */
+    var FOCUS_FIT = 15;
+    /**
+     * Neighbours drawn at full strength — opaque, labelled, joined by a
+     * highlighted line — while a node is selected. The rest of its
+     * neighbours stay visible but muted: a hub such as "Hadj" has 1,300+
+     * links, and lighting all of them lit half the map.
+     */
+    var FOCUS_LABELS = 30;
+    /**
+     * The edge count the overview's line opacity is tuned for. A denser
+     * payload thins every line in proportion (`edgeDensity`), so doubling
+     * the links does not turn the overview into a solid grey wall.
+     */
+    var EDGE_BUDGET = 50000;
+
+    function quantile(sorted, q) {
+        if (!sorted.length) return 0;
+        var pos = q * (sorted.length - 1);
+        var lo = Math.floor(pos);
+        var hi = Math.min(lo + 1, sorted.length - 1);
+        return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+    }
+
+    function ascending(a, b) { return a - b; }
+
+    /**
+     * [west, south, east, north] around the central share of `points`
+     * ({lng, lat}), `q` trimmed from each end of each axis. Latitude is
+     * monotonic in Mercator y, so a quantile of one is a quantile of the
+     * other. Exported for the unit tests.
+     */
+    function coreBounds(points, q) {
+        var lngs = points.map(function (n) { return n.lng; }).sort(ascending);
+        var lats = points.map(function (n) { return n.lat; }).sort(ascending);
+        q = q || 0;
+        return [quantile(lngs, q), quantile(lats, q), quantile(lngs, 1 - q), quantile(lats, 1 - q)];
+    }
 
     function ml(c) {
         return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
@@ -66,10 +116,12 @@
         var edgeFeatures = null;
         var bounds = null;
         var fitted = false;
+        var edgeDensity = 1;      // line-opacity factor for the payload's edge count
 
         var typeFilter = null;    // null = all types, else array of type indexes
         var weightMin = 0;
         var selectedIndex = null;
+        var hoverIndex = null;    // a sidebar row the reader is pointing at
 
         var hover = null;         // P.attachMapHoverPopup's handle, once the map exists
 
@@ -160,6 +212,8 @@
                 })
             };
 
+            edgeDensity = Math.min(1, Math.sqrt(EDGE_BUDGET / Math.max(1, data.edges.length)));
+
             adjacency = data.nodes.map(function () { return []; });
             data.edges.forEach(function (e) {
                 adjacency[e[0]].push({ j: e[1], w: e[2] });
@@ -169,18 +223,23 @@
                 list.sort(function (a, b) { return b.w - a.w; });
             });
 
-            if (data.bounds) {
-                bounds = data.bounds;
-            } else {
-                var w = 180, s = 90, e2 = -180, n2 = -90;
-                data.nodes.forEach(function (n) {
-                    if (n.lng < w) w = n.lng;
-                    if (n.lng > e2) e2 = n.lng;
-                    if (n.lat < s) s = n.lat;
-                    if (n.lat > n2) n2 = n.lat;
-                });
-                bounds = [w, s, e2, n2];
-            }
+            // The place network's bounds are real geography and stay whole;
+            // the abstract layout is fitted to its core (FIT_QUANTILE).
+            bounds = data.bounds ||
+                coreBounds(data.nodes, mode === 'abstract' ? FIT_QUANTILE : 0);
+        }
+
+        /**
+         * A node's neighbours as the reader currently filters the graph,
+         * strongest first. The sidebar, the selection's view and the
+         * neighbourhood graph all read this, so none of them lists a link
+         * the map is hiding.
+         */
+        function visibleNeighbours(index) {
+            return adjacency[index].filter(function (nb) {
+                if (nb.w < weightMin) return false;
+                return !typeFilter || typeFilter.indexOf(data.nodes[nb.j].type) !== -1;
+            });
         }
 
         /* --------------------------------------------------------------- */
@@ -205,22 +264,52 @@
             return parts.length === 1 ? parts[0] : ['all'].concat(parts);
         }
 
+        /** Edges from the selected node to its strongest visible neighbours. */
         function highlightEdgeFilter() {
+            var strong = focusLabelIds();
             var incident = ['any',
-                ['==', ['get', 's'], selectedIndex],
-                ['==', ['get', 't'], selectedIndex]
+                ['all', ['==', ['get', 's'], selectedIndex], ['in', ['get', 't'], ['literal', strong]]],
+                ['all', ['==', ['get', 't'], selectedIndex], ['in', ['get', 's'], ['literal', strong]]]
             ];
             var base = edgeFilter();
             return base ? ['all', base, incident] : incident;
         }
 
+        /** The selected node and its strongest visible neighbours, in that order. */
+        function focusLabelIds() {
+            var ids = [selectedIndex];
+            visibleNeighbours(selectedIndex).slice(0, FOCUS_LABELS)
+                .forEach(function (nb) { ids.push(nb.j); });
+            return ids;
+        }
+
         function labelFilter() {
             var base = nodeFilter();
             if (selectedIndex == null) return base;
-            var ids = [selectedIndex];
-            adjacency[selectedIndex].forEach(function (nb) { ids.push(nb.j); });
-            var sel = ['in', ['get', 'i'], ['literal', ids]];
+            var sel = ['in', ['get', 'i'], ['literal', focusLabelIds()]];
             return base ? ['all', base, sel] : sel;
+        }
+
+        /**
+         * Label priority. Overview: the generator's hubs-first rank. With a
+         * selection: the selected node first, then its neighbours by link
+         * strength, so collision keeps the names the sidebar lists.
+         */
+        function labelSortKey() {
+            if (selectedIndex == null) return ['get', 'rank'];
+            var expr = ['match', ['get', 'i']];
+            focusLabelIds().forEach(function (id, order) { expr.push(id, order); });
+            expr.push(1e6);
+            return expr;
+        }
+
+        function labelSize() {
+            if (selectedIndex == null) return 11;
+            return ['case', ['==', ['get', 'i'], selectedIndex], 14, 12];
+        }
+
+        function ringFilter(index) {
+            return ['==', ['get', 'i'], index == null ? -1 : index];
         }
 
         function applyFilters() {
@@ -228,10 +317,14 @@
             map.setFilter(L_EDGES, edgeFilter());
             map.setFilter(L_NODES, nodeFilter());
             map.setFilter(L_LABELS, labelFilter());
+            map.setLayoutProperty(L_LABELS, 'symbol-sort-key', labelSortKey());
+            map.setLayoutProperty(L_LABELS, 'text-size', labelSize());
             if (map.getLayer(L_EDGES_HL)) {
                 map.setFilter(L_EDGES_HL,
                     selectedIndex == null ? ['==', ['get', 's'], -1] : highlightEdgeFilter());
             }
+            if (map.getLayer(L_RING)) map.setFilter(L_RING, ringFilter(selectedIndex));
+            if (map.getLayer(L_HOVER_RING)) map.setFilter(L_HOVER_RING, ringFilter(hoverIndex));
             applySelectionPaint();
         }
 
@@ -246,32 +339,88 @@
                 map.setPaintProperty(L_NODES, 'circle-opacity', hoverOpacityExpression(0.85, 1));
                 return;
             }
-            // Dim everything except the selected node + its neighborhood;
-            // incident edges re-draw at full strength on the highlight layer.
-            var ids = [selectedIndex];
-            adjacency[selectedIndex].forEach(function (nb) { ids.push(nb.j); });
-            map.setPaintProperty(L_EDGES, 'line-opacity', edgeOpacityExpression(0.02, 0.1));
+            // Three tiers. The selected node and its strongest neighbours are
+            // opaque (their links re-draw on the highlight layer); its other
+            // neighbours are muted but findable; everything else fades nearly
+            // out — at 0.18 the rest of a 2,800-node graph still read as one
+            // grey mass the neighbourhood was lost in.
+            var strong = focusLabelIds();
+            var weak = visibleNeighbours(selectedIndex).slice(FOCUS_LABELS)
+                .map(function (nb) { return nb.j; });
+            map.setPaintProperty(L_EDGES, 'line-opacity', edgeOpacityExpression(0.01, 0.04));
             map.setPaintProperty(L_NODES, 'circle-opacity', [
                 'case',
-                ['in', ['get', 'i'], ['literal', ids]],
-                1,
-                0.18
+                ['in', ['get', 'i'], ['literal', strong]], 1,
+                ['in', ['get', 'i'], ['literal', weak]], 0.3,
+                0.07
             ]);
         }
 
         function buildSelection(index) {
             var node = data.nodes[index];
-            var neighbors = adjacency[index].map(function (nb) {
+            var neighbors = visibleNeighbours(index).map(function (nb) {
                 return { index: nb.j, node: data.nodes[nb.j], weight: nb.w };
             });
             return { index: index, node: node, neighbors: neighbors };
         }
 
-        function select(index) {
+        /**
+         * Frame the selected node with its strongest visible neighbours. The
+         * old focus centred the node at a fixed zoom, which left most of the
+         * neighbours the sidebar named off-screen: the reader saw highlight
+         * lines running out of the frame and no names.
+         */
+        function fitNeighbourhood(index) {
+            var node = data.nodes[index];
+            var pts = [node];
+            visibleNeighbours(index).slice(0, FOCUS_FIT).forEach(function (nb) {
+                pts.push(data.nodes[nb.j]);
+            });
+            try {
+                if (pts.length < 2) {
+                    map.easeTo({
+                        center: [node.lng, node.lat],
+                        zoom: Math.max(map.getZoom(), mode === 'geo' ? 6.5 : 3.2),
+                        duration: P.mapMotion(600)
+                    });
+                    return;
+                }
+                var b = coreBounds(pts, 0);
+                map.fitBounds([[b[0], b[1]], [b[2], b[3]]], {
+                    // Wider than the map default: the framed nodes carry
+                    // labels, and one on the edge was cut by the canvas.
+                    padding: P.FIT_OPTS.padding * 1.75,
+                    maxZoom: mode === 'geo' ? 7 : 6,
+                    duration: P.mapMotion(600)
+                });
+            } catch (e) { /* degenerate bounds */ }
+        }
+
+        /**
+         * Select a node (null clears). Selecting also frames its
+         * neighbourhood unless `opts.fit === false`; re-selecting the
+         * current node re-frames it without re-announcing it.
+         */
+        function select(index, opts) {
+            var fit = !opts || opts.fit !== false;
+            if (index != null && fit && data && data.nodes[index]) {
+                hideHover();
+                fitNeighbourhood(index);
+            }
             if (index === selectedIndex) return;
             selectedIndex = index;
             applyFilters();
             onSelect(index == null ? null : buildSelection(index));
+        }
+
+        /**
+         * A filter change while a node is selected changes which of its
+         * neighbours are visible: tell the sidebar, or it keeps listing
+         * links the map has just hidden.
+         */
+        function filtersChanged() {
+            applyFilters();
+            if (selectedIndex != null) onSelect(buildSelection(selectedIndex));
         }
 
         /* --------------------------------------------------------------- */
@@ -279,6 +428,8 @@
         /* --------------------------------------------------------------- */
 
         function edgeOpacityExpression(min, max) {
+            min *= edgeDensity;
+            max *= edgeDensity;
             return ['+', min, ['*', max - min, ['get', 'wn']]];
         }
 
@@ -352,6 +503,34 @@
                     }
                 });
             }
+            if (!m.getLayer(L_RING)) {
+                m.addLayer({
+                    id: L_RING,
+                    type: 'circle',
+                    source: SRC_NODES,
+                    filter: ringFilter(null),
+                    paint: {
+                        'circle-radius': ['+', ['get', 'r'], 4],
+                        'circle-opacity': 0,
+                        'circle-stroke-width': 2.5,
+                        'circle-stroke-color': c.primary
+                    }
+                });
+            }
+            if (!m.getLayer(L_HOVER_RING)) {
+                m.addLayer({
+                    id: L_HOVER_RING,
+                    type: 'circle',
+                    source: SRC_NODES,
+                    filter: ringFilter(null),
+                    paint: {
+                        'circle-radius': ['+', ['get', 'r'], 3],
+                        'circle-opacity': 0,
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': c.ink
+                    }
+                });
+            }
             if (!m.getLayer(L_LABELS)) {
                 m.addLayer({
                     id: L_LABELS,
@@ -362,12 +541,13 @@
                         // Served by the CartoCDN glyph endpoint both the
                         // basemaps and P.buildGraphStyle point at.
                         'text-font': ['Noto Sans Regular'],
-                        'text-size': 11,
+                        'text-size': labelSize(),
                         'text-variable-anchor': ['top', 'bottom', 'right', 'left'],
                         'text-radial-offset': ['+', 0.4, ['/', ['get', 'r'], 14]],
                         'text-justify': 'auto',
-                        // Lower rank = more important: wins label collision.
-                        'symbol-sort-key': ['get', 'rank']
+                        // Lower = more important: wins label collision.
+                        // `applyFilters` swaps in the selection's order.
+                        'symbol-sort-key': labelSortKey()
                     },
                     paint: {
                         'text-color': c.ink,
@@ -460,7 +640,8 @@
             if (features.length) {
                 select(Number(features[0].properties.i));
             } else {
-                select(null);
+                // Clearing keeps the reader's view where it is.
+                select(null, { fit: false });
             }
         });
         hover = P.attachMapHoverPopup(map, {
@@ -511,32 +692,33 @@
                 if (selectedIndex != null &&
                     typeFilter &&
                     typeFilter.indexOf(data.nodes[selectedIndex].type) === -1) {
-                    select(null);
+                    select(null, { fit: false });
                 } else {
-                    applyFilters();
+                    filtersChanged();
                 }
             },
 
             setWeightMin: function (value) {
                 weightMin = value;
-                applyFilters();
+                filtersChanged();
             },
 
             select: select,
 
             focusNode: function (index) {
-                var node = data && data.nodes[index];
-                if (!node) return;
-                hideHover();
-                try {
-                    map.easeTo({
-                        center: [node.lng, node.lat],
-                        zoom: Math.max(map.getZoom(), mode === 'geo' ? 6.5 : 3.2),
-                        duration: P.mapMotion(600)
-                    });
-                } catch (e) { /* ignore */ }
+                if (!data || !data.nodes[index]) return;
                 select(index);
             },
+
+            /** Ring a node while the reader points at its sidebar row. */
+            highlight: function (index) {
+                hoverIndex = index == null ? null : index;
+                if (map.getLayer(L_HOVER_RING)) {
+                    map.setFilter(L_HOVER_RING, ringFilter(hoverIndex));
+                }
+            },
+
+            getWeightMin: function () { return weightMin; },
 
             getSelection: function () {
                 return selectedIndex == null ? null : buildSelection(selectedIndex);
@@ -551,7 +733,7 @@
     /** Methods the orchestrator drives — proxied while MapLibre is in flight. */
     var GRAPH_METHODS = [
         'setData', 'setTypeFilter', 'setWeightMin',
-        'select', 'focusNode', 'getSelection', 'resize'
+        'select', 'focusNode', 'highlight', 'getWeightMin', 'getSelection', 'resize'
     ];
 
     /**
@@ -577,5 +759,5 @@
     }
 
     ns.entityNetworks = ns.entityNetworks || {};
-    ns.entityNetworks.graph = { create: create };
+    ns.entityNetworks.graph = { create: create, coreBounds: coreBounds };
 })();

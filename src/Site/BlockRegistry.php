@@ -189,6 +189,8 @@ final class BlockRegistry
                     'blockCss' => 'entity-networks',
                     'needs' => [
                         'maplibre' => true,
+                        // The selected entry's neighbourhood graph.
+                        'd3' => true,
                         'facetButtons' => true,
                     ],
                     'bundle' => 'entity-networks',

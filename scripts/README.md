@@ -374,17 +374,21 @@ python3 scripts/generate_entity_networks.py --pairs "personnes-personnes,lieux-e
    (index lookup with `Titre alternatif` aliases; per-item subject +
    spatial references over articles / publications / references)
 2. **Global**: for each item and each configured type pair —
-   cross-type (person↔org plus events as connective tissue) and the
-   three same-type pairs person↔person, org↔org, place↔place — every
-   co-occurring entity pair adds 1 to its edge weight; prune below
-   `--min-cooccurrence` (default 2), drop isolated nodes. Same-type
-   pairs are walked as unordered combinations (no self-loops, no
-   double counting). `sujets-sujets` stays out: subjects tag nearly
-   every item and would dominate the layout
-3. Layout with `networkx.forceatlas2_layout` (seeded, weighted), then
-   project to pseudo-lng/lat through the **inverse Web-Mercator** so
-   MapLibre's forward projection reproduces the layout plane exactly —
-   the client renders with zero layout cost
+   cross-type (person↔org, events as connective tissue, subjects to
+   every type) and the same-type pairs person↔person, org↔org,
+   place↔place, subject↔subject — every co-occurring entity pair adds
+   1 to its edge weight; prune below `--min-cooccurrence` (default 2),
+   drop isolated nodes. Same-type pairs are walked as unordered
+   combinations (no self-loops, no double counting). Not linked by
+   default: person↔place, org↔place, event↔event
+3. Layout with `networkx.forceatlas2_layout` (seeded) on **dampened**
+   weights (`1 + ln w`; raw counts reach ~3,000 and made heavy-edged
+   nodes overshoot), then `normalise_positions`: the frame is fitted to
+   the central 99% of nodes and the few outside it are eased into a
+   thin rim, so a straggler cannot shrink the rest. Project to
+   pseudo-lng/lat through the **inverse Web-Mercator**, the same 2.2 rad
+   on both axes, so MapLibre's forward projection reproduces the layout
+   plane exactly — the client renders with zero layout cost
 4. **Spatial**: same pipeline, but edges join geocoded Lieux that
    appear in the same item; nodes carry real coordinates
 5. Both payloads are compact array rows (column order in

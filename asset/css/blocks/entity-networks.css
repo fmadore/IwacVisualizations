@@ -33,6 +33,62 @@
     }
 }
 
+/* =================================================================== */
+/*  Neighbourhood close-up                                              */
+/*                                                                      */
+/*  Takes the map's place (entity-networks.js `setEgo`). The force      */
+/*  graph's host carries the shared 640px graph floor; here it gets the */
+/*  map's own height instead, so opening the close-up does not move the */
+/*  page under the reader.                                              */
+/* =================================================================== */
+
+.iwac-vis-networks-ego {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-networks-ego[hidden] {
+    display: none;
+}
+
+.iwac-vis-networks-ego__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+}
+
+.iwac-vis-networks-ego__title {
+    margin: 0;
+    font-size: var(--text-base, 1.0625rem);
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-networks-ego__caption {
+    margin: 0;
+    max-width: 72ch;
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+.iwac-vis-networks-ego__graph.iwac-vis-graph-host {
+    height: 520px;
+    min-height: 0;
+}
+
+@media (max-width: 767px) { /* md */
+    .iwac-vis-networks-ego__graph.iwac-vis-graph-host {
+        height: 440px;
+    }
+}
+
+/*  The sidebar's way in: full width under the entry it belongs to. */
+.iwac-vis-networks-details__ego {
+    align-self: stretch;
+    justify-content: center;
+}
+
 /* Soft veil while the lazy Places payload is in flight. */
 .iwac-vis-networks-loading::after {
     content: "";
@@ -194,7 +250,11 @@
     }
 
     .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-canvas,
-    .iwac-vis-networks-layout--fullscreen .iwac-vis-networks-canvas {
+    .iwac-vis-networks-layout--fullscreen .iwac-vis-networks-canvas,
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-ego:not([hidden]),
+    .iwac-vis-networks-layout--fullscreen .iwac-vis-networks-ego:not([hidden]),
+    .iwac-vis-networks-layout:fullscreen .iwac-vis-networks-ego__graph.iwac-vis-graph-host,
+    .iwac-vis-networks-layout--fullscreen .iwac-vis-networks-ego__graph.iwac-vis-graph-host {
         flex: 1 1 auto;
         height: auto;
         min-height: 0;

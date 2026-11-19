@@ -9,6 +9,8 @@
  *
  *   - graph.js   — MapLibre GL graph renderer (abstract + geo modes)
  *   - details.js — selection sidebar
+ *   - ego.js     — the selected entry's interactive neighbourhood graph,
+ *                  shown in place of the map on the sidebar's request
  *
  * The geographic place network (entity-networks-spatial.json) is
  * fetched lazily on the first switch to "Places".
@@ -18,7 +20,8 @@
 
     var ns = window.IWACVis;
     if (!ns || !ns.panels || !ns.entityNetworks ||
-        !ns.entityNetworks.graph || !ns.entityNetworks.details) {
+        !ns.entityNetworks.graph || !ns.entityNetworks.details ||
+        !ns.entityNetworks.ego) {
         console.warn('IWACVis entity networks: missing panel modules — check script load order');
         return;
     }
@@ -92,6 +95,26 @@
         graphPanel.chart.appendChild(abstractWrap);
         graphPanel.chart.appendChild(geoWrap);
 
+        // The neighbourhood close-up takes the map's place rather than
+        // squeezing into the sidebar: the force graph needs the canvas'
+        // width to separate 25 labelled points. Its own heading names it
+        // for the export and for a screen reader.
+        var egoWrap = P.el('div', 'iwac-vis-networks-ego');
+        egoWrap.hidden = true;
+        var egoBar = P.el('div', 'iwac-vis-networks-ego__bar');
+        var egoBack = P.el('button', 'iwac-vis-btn iwac-vis-networks-ego__back',
+            P.t('Back to the full network'));
+        egoBack.type = 'button';
+        var egoTitle = P.el('h5', 'iwac-vis-networks-ego__title');
+        egoBar.appendChild(egoBack);
+        egoBar.appendChild(egoTitle);
+        var egoCaption = P.el('p', 'iwac-vis-muted iwac-vis-networks-ego__caption');
+        var egoHost = P.el('div', 'iwac-vis-networks-ego__graph');
+        egoWrap.appendChild(egoBar);
+        egoWrap.appendChild(egoCaption);
+        egoWrap.appendChild(egoHost);
+        graphPanel.chart.appendChild(egoWrap);
+
         root.appendChild(layout);
 
         /* ----------------------------------------------------------- */
@@ -101,8 +124,14 @@
         var details = EN.details.render(aside, {
             siteBase: ctx.siteBase,
             onJump: function (index) {
+                // In the close-up too: the map follows the selection behind
+                // it, and the new selection redraws the neighbourhood.
                 activeGraph().focusNode(index);
-            }
+            },
+            onHover: function (index) {
+                activeGraph().highlight(index);
+            },
+            onToggleEgo: function (on) { setEgo(on); }
         });
 
         function overviewFor(data, isGeo) {
@@ -122,11 +151,79 @@
         var spatialData = null;
         var spatialPromise = null;
 
-        function handleSelect(selection) {
-            var data = mode === 'entities' ? globalData : spatialData;
-            details.showSelection(selection, data && data.types);
-            if (!selection) overviewFor(data, mode === 'places');
+        var selected = null;
+        var egoActive = false;
+
+        function showDetails() {
+            var data = activeData();
+            details.showSelection(selected, data && data.types, { ego: egoActive });
+            if (!selected) overviewFor(data, mode === 'places');
         }
+
+        function handleSelect(selection) {
+            selected = selection;
+            if (!selection) {
+                setEgo(false);
+            } else if (egoActive) {
+                renderEgo();
+            }
+            showDetails();
+        }
+
+        /* ----------------------------------------------------------- */
+        /*  Neighbourhood close-up                                       */
+        /* ----------------------------------------------------------- */
+
+        function mapWrap() {
+            return mode === 'places' ? geoWrap : abstractWrap;
+        }
+
+        /** Draw the selection's neighbourhood; false when there is none. */
+        function renderEgo() {
+            var data = activeData();
+            if (!selected || !data) return false;
+            var payload = EN.ego.build(data, selected, {
+                weightMin: activeGraph().getWeightMin() || data.weightMin
+            });
+            var count = payload.nodes.length - 1;
+            var label = selected.node.label;
+            egoTitle.textContent = P.t('neighbourhood_title', { label: label });
+            egoCaption.textContent = P.t('neighbourhood_caption', { label: label, count: count });
+            return !!EN.ego.mount(egoHost, ctx, payload, {
+                panel: egoWrap,
+                downloadName: 'iwac-neighbourhood.png',
+                ariaLabel: P.t('neighbourhood_aria', { label: label })
+            });
+        }
+
+        function setEgo(on) {
+            on = !!on && !!selected;
+            if (on && !renderEgo()) on = false;
+            var changed = on !== egoActive;
+            egoActive = on;
+            egoWrap.hidden = !on;
+            mapWrap().style.display = on ? 'none' : '';
+            if (!on) {
+                while (egoHost.firstChild) egoHost.removeChild(egoHost.firstChild);
+                // Hidden while the close-up showed: let the canvas re-read
+                // its size, or MapLibre draws into a stale one.
+                activeGraph().resize();
+            }
+            if (changed) {
+                showDetails();
+                // The sidebar button that opened it was just re-rendered;
+                // the way back is where keyboard focus belongs now.
+                if (on) egoBack.focus({ preventScroll: true });
+            }
+        }
+
+        egoBack.addEventListener('click', function () {
+            setEgo(false);
+            // The control that opened the close-up is the natural landing
+            // point on the way back.
+            var opener = aside.querySelector('.iwac-vis-networks-details__ego');
+            if (opener) opener.focus({ preventScroll: true });
+        });
 
         // `EN.graph.create` is MapLibre-gated and always returns a controller:
         // it holds the map spinner in `abstractWrap` until the library's ESM
@@ -271,6 +368,8 @@
             activeKey: 'entities',
             onChange: function (evt) {
                 if (evt.facet === mode) return;
+                setEgo(false);
+                selected = null;
                 mode = evt.facet;
                 details.showSelection(null, null);
                 if (mode === 'places') {
@@ -377,16 +476,29 @@
                 query = fold(query);
                 var data = activeData();
                 if (!data) return [];
-                var out = [];
-                for (var i = 0; i < data.nodes.length && out.length < SEARCH_CAP; i++) {
-                    if (fold(data.nodes[i].label).indexOf(query) === -1) continue;
-                    out.push({
-                        label: data.nodes[i].label,
-                        detail: P.formatNumber(data.nodes[i].count),
-                        index: i
-                    });
+                // Every match, ranked: the exact name, then names starting
+                // with the query, then the rest, each by size. The first ten
+                // in payload order used to win, so "Burkina Faso" opened
+                // "Relations Côte d'Ivoire-Burkina Faso" — or was not listed.
+                var hits = [];
+                for (var i = 0; i < data.nodes.length; i++) {
+                    var folded = fold(data.nodes[i].label);
+                    var at = folded.indexOf(query);
+                    if (at === -1) continue;
+                    var exact = folded === query;
+                    hits.push({ i: i, tier: exact ? 0 : (at === 0 ? 1 : 2) });
                 }
-                return out;
+                hits.sort(function (a, b) {
+                    return (a.tier - b.tier) ||
+                        ((data.nodes[b.i].count || 0) - (data.nodes[a.i].count || 0));
+                });
+                return hits.slice(0, SEARCH_CAP).map(function (h) {
+                    return {
+                        label: data.nodes[h.i].label,
+                        detail: P.formatNumber(data.nodes[h.i].count),
+                        index: h.i
+                    };
+                });
             },
             onPick: function (m) {
                 activeGraph().focusNode(m.index);

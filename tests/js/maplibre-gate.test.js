@@ -316,6 +316,7 @@ test('entity-networks colours a node by its type NAME, not its payload index', a
             getLayer: (id) => layers[id] || null,
             setFilter() {},
             setPaintProperty() {},
+            setLayoutProperty() {},
             fitBounds() {},
         });
     };

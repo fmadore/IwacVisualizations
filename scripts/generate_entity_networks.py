@@ -68,15 +68,21 @@ TYPE_ORDER = ["Personnes", "Organisations", "Événements", "Sujets", "Lieux"]
 
 # Default pairs. Events act as connective tissue between every other
 # type, plus the person↔organisation affiliation axis. The three
-# same-type pairs below carry the questions the cross-type star cannot
+# same-type pairs carry the questions the cross-type star cannot
 # answer — which people are named together, which organisations share
 # coverage, which places are co-mentioned — so a click on a person now
 # reaches other people directly instead of only through an event.
 #
-# ``sujets-sujets`` stays out on purpose: subjects tag nearly every
-# item, so that one pair alone is O(n²) per item and would dominate the
-# ForceAtlas2 layout, melting the graph into hair. Subject↔person-style
-# cross pairs are excluded for the same reason.
+# Subjects link to every type since v2.4. Until then they joined events
+# only, on the belief that subjects tag nearly every item and would melt
+# the layout; measured on the 2026-11 data, ``sujets-sujets`` adds 6k
+# edges and the three subject cross pairs 51k (56k → 113k in all, 257 →
+# 434 KB gzipped), and the layout came out TIGHTER — median edge length
+# 0.43 of the frame against 1.06 without them. A reader clicking "Hadj"
+# no longer finds only events beside it.
+#
+# Still absent: personnes-lieux, organisations-lieux and
+# evenements-evenements (all pairs would be 155k edges).
 DEFAULT_PAIRS = (
     "personnes-organisations,"
     "personnes-evenements,"
@@ -85,7 +91,11 @@ DEFAULT_PAIRS = (
     "lieux-evenements,"
     "personnes-personnes,"
     "organisations-organisations,"
-    "lieux-lieux"
+    "lieux-lieux,"
+    "sujets-personnes,"
+    "sujets-organisations,"
+    "sujets-lieux,"
+    "sujets-sujets"
 )
 
 DEFAULT_MIN_COOCCURRENCE = 2
@@ -98,9 +108,20 @@ TOP_LABELS = 60
 # radians. ±2.2 rad ≈ ±77.6° latitude — far enough from the poles that
 # MapLibre renders comfortably, wide enough to use the canvas.
 LAYOUT_MERC_EXTENT = 2.2
-# Horizontal extent in degrees of longitude (Mercator x is linear in
-# longitude, so this is safe to set independently).
-LAYOUT_LNG_EXTENT = 140.0
+# Horizontal extent in degrees of longitude. Mercator x is longitude in
+# radians, so the same 2.2 rad keeps one layout unit the same length on
+# both axes. It was 140° (2.44 rad) until v2.4, which stretched every
+# layout 11% wider than ForceAtlas2 drew it.
+LAYOUT_LNG_EXTENT = math.degrees(LAYOUT_MERC_EXTENT)
+
+# The share of nodes the layout's frame is fitted to. ForceAtlas2 can
+# leave a straggler far from everything else, and fitting the frame to
+# the extremes let one node decide the scale for all of them: in the
+# 2026-11 data "Sacrifice" sat alone at the top edge and the other 2,852
+# nodes were packed into the bottom 15% of the canvas. Nodes outside the
+# central band are eased into a thin rim instead (`normalise_positions`).
+LAYOUT_FIT_QUANTILE = 0.005
+LAYOUT_CORE_EXTENT = 0.95
 
 
 class NetworkAggregator(DashboardAggregator):
@@ -196,13 +217,13 @@ def compute_layout(
     edges: Dict[Tuple[int, int], int],
 ) -> Dict[int, Tuple[float, float]]:
     """ForceAtlas2 positions (Fruchterman-Reingold fallback), rescaled
-    to [-1, 1] on both axes."""
+    into [-1, 1] on both axes by `normalise_positions`."""
     import networkx as nx
 
     graph = nx.Graph()
     graph.add_nodes_from(nodes)
     for (a, b), weight in edges.items():
-        graph.add_edge(a, b, weight=weight)
+        graph.add_edge(a, b, weight=layout_weight(weight))
 
     if hasattr(nx, "forceatlas2_layout"):
         logger.info("Computing ForceAtlas2 layout (%d nodes, %d edges)...",
@@ -215,21 +236,72 @@ def compute_layout(
         logger.info("ForceAtlas2 unavailable — falling back to spring layout")
         pos = nx.spring_layout(graph, weight="weight", seed=42)
 
-    xs = [p[0] for p in pos.values()]
-    ys = [p[1] for p in pos.values()]
-    x_min, x_max = min(xs), max(xs)
-    y_min, y_max = min(ys), max(ys)
-    x_span = (x_max - x_min) or 1.0
-    y_span = (y_max - y_min) or 1.0
-    # Preserve the layout's aspect ratio inside the unit square so
-    # clusters aren't stretched anisotropically.
-    scale = 2.0 / max(x_span, y_span)
-    x_off = (x_min + x_max) / 2.0
-    y_off = (y_min + y_max) / 2.0
     # float() casts strip numpy scalar types (forceatlas2_layout returns
     # numpy arrays) so the payload stays json.dump-serializable.
+    return normalise_positions({
+        o_id: (float(p[0]), float(p[1])) for o_id, p in pos.items()
+    })
+
+
+def layout_weight(weight: int) -> float:
+    """The attraction an edge gets in the layout: 1 + ln(weight).
+
+    The raw counts run from 2 to ~3,000 shared items, and ForceAtlas2's
+    attraction is linear in the weight. A node tied to a hub by a heavy
+    edge then overshoots on every step instead of settling: "Sacrifice",
+    which shares 425 items with Tabaski, ended 300 iterations on the far
+    side of the canvas from it. Dampened, the ranking of the pulls is
+    unchanged and the heavy ones stop dominating. The payload keeps the
+    raw weight; only the layout sees this.
+    """
+    return 1.0 + math.log(weight) if weight > 1 else 1.0
+
+
+def _quantile(sorted_values: List[float], q: float) -> float:
+    """Linear-interpolated quantile of an already sorted list."""
+    if not sorted_values:
+        return 0.0
+    pos = q * (len(sorted_values) - 1)
+    lo = int(math.floor(pos))
+    hi = min(lo + 1, len(sorted_values) - 1)
+    return sorted_values[lo] + (sorted_values[hi] - sorted_values[lo]) * (pos - lo)
+
+
+def _ease_into_rim(v: float) -> float:
+    """Identity inside the core extent; beyond it, a tanh curve that
+    approaches 1 and never passes it, so a straggler stays on the canvas
+    without setting its scale."""
+    a = abs(v)
+    if a <= LAYOUT_CORE_EXTENT:
+        return v
+    rim = 1.0 - LAYOUT_CORE_EXTENT
+    return math.copysign(LAYOUT_CORE_EXTENT + rim * math.tanh((a - LAYOUT_CORE_EXTENT) / rim), v)
+
+
+def normalise_positions(
+    pos: Dict[int, Tuple[float, float]],
+) -> Dict[int, Tuple[float, float]]:
+    """Centre and scale layout positions into [-1, 1] on both axes.
+
+    The frame is fitted to the central 99% of nodes on each axis
+    (`LAYOUT_FIT_QUANTILE` trimmed at each end), which lands in
+    ±`LAYOUT_CORE_EXTENT`; the few nodes outside it are eased into the
+    rim between that and 1. One scale serves both axes, so the layout's
+    aspect ratio and every distance inside the core are preserved.
+    """
+    if not pos:
+        return {}
+    xs = sorted(p[0] for p in pos.values())
+    ys = sorted(p[1] for p in pos.values())
+    q = LAYOUT_FIT_QUANTILE
+    x_lo, x_hi = _quantile(xs, q), _quantile(xs, 1.0 - q)
+    y_lo, y_hi = _quantile(ys, q), _quantile(ys, 1.0 - q)
+    span = max(x_hi - x_lo, y_hi - y_lo) or 1.0
+    scale = 2.0 * LAYOUT_CORE_EXTENT / span
+    x_off = (x_lo + x_hi) / 2.0
+    y_off = (y_lo + y_hi) / 2.0
     return {
-        o_id: (float((p[0] - x_off) * scale), float((p[1] - y_off) * scale))
+        o_id: (_ease_into_rim((p[0] - x_off) * scale), _ease_into_rim((p[1] - y_off) * scale))
         for o_id, p in pos.items()
     }
 

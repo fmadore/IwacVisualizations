@@ -4,8 +4,9 @@
  * Companion panel to the graph canvas. With nothing selected it shows
  * the network's headline stats and a how-to-read note; with a node
  * selected it shows the entity (linked to its Omeka item page), its
- * counts, and the strongest co-occurring entities — each row jumps the
- * graph to that neighbor.
+ * counts, a toggle for the interactive neighbourhood graph, and the
+ * strongest co-occurring entities — each row jumps the graph to that
+ * neighbour, and pointing at a row rings its node on the map.
  */
 (function () {
     'use strict';
@@ -23,6 +24,8 @@
         opts = opts || {};
         var siteBase = opts.siteBase || '';
         var onJump = opts.onJump || function () {};
+        var onHover = opts.onHover || function () {};
+        var onToggleEgo = opts.onToggleEgo || null;
 
         var root = P.el('div', 'iwac-vis-networks-details');
         host.appendChild(root);
@@ -49,7 +52,9 @@
                 P.t('network_select_hint')));
         }
 
-        function renderSelection(selection, types) {
+        function renderSelection(selection, types, view) {
+            view = view || {};
+            onHover(null);
             root.innerHTML = '';
             var node = selection.node;
 
@@ -73,6 +78,18 @@
             header.appendChild(P.el('div', 'iwac-vis-networks-details__meta', bits.join(' · ')));
             root.appendChild(header);
 
+            // The way into the close-up, beside the list it draws. Pressed
+            // while the neighbourhood graph is showing, so the same button
+            // is the way back.
+            if (onToggleEgo && selection.neighbors.length) {
+                var egoBtn = P.el('button', 'iwac-vis-btn iwac-vis-networks-details__ego',
+                    view.ego ? P.t('Back to the full network') : P.t('Explore its neighbourhood'));
+                egoBtn.type = 'button';
+                egoBtn.setAttribute('aria-pressed', view.ego ? 'true' : 'false');
+                egoBtn.addEventListener('click', function () { onToggleEgo(!view.ego); });
+                root.appendChild(egoBtn);
+            }
+
             root.appendChild(P.el('div', 'iwac-vis-aside__label iwac-vis-networks-details__label',
                 P.t('Strongest co-occurrences')));
 
@@ -86,6 +103,10 @@
                 btn.appendChild(P.el('span', 'iwac-vis-list-item__count',
                     P.formatNumber(nb.weight)));
                 btn.addEventListener('click', function () { onJump(nb.index); });
+                btn.addEventListener('mouseenter', function () { onHover(nb.index); });
+                btn.addEventListener('focus', function () { onHover(nb.index); });
+                btn.addEventListener('mouseleave', function () { onHover(null); });
+                btn.addEventListener('blur', function () { onHover(null); });
                 li.appendChild(btn);
                 list.appendChild(li);
             });
@@ -107,10 +128,11 @@
                 overview.note = note || '';
                 renderOverview();
             },
-            showSelection: function (selection, types) {
+            showSelection: function (selection, types, view) {
                 if (selection) {
-                    renderSelection(selection, types);
+                    renderSelection(selection, types, view);
                 } else {
+                    onHover(null);
                     renderOverview();
                 }
             }

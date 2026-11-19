@@ -29,6 +29,10 @@
         'more_links_count_one':      '+{count} more link',
         'links_count':               '{count} links',
         'links_count_one':           '{count} link',
+        'neighbourhood_title':       'Neighbourhood of {label}',
+        'neighbourhood_caption':     '{label} and the {count} entries sharing the most items with it, as the network is filtered. Solid lines lead to {label}; dashed lines join two of these entries to each other. Drag a point to move it; click one for its links and its record.',
+        'neighbourhood_caption_one': '{label} and the entry sharing the most items with it, as the network is filtered. Click it for its links and its record.',
+        'neighbourhood_aria':        'Neighbourhood of {label}: the entries sharing the most items with it. Use the arrow keys to move between them and Enter to select one.',
     });
 
     ns.addTranslations('fr', {
@@ -47,6 +51,13 @@
         'more_links_count_one':      '+{count} lien suppl\u00e9mentaire',
         'links_count':               '{count} liens',
         'links_count_one':           '{count} lien',
+        'Explore its neighbourhood': 'Explorer son voisinage',
+        'Back to the full network':  'Revenir au réseau complet',
+        'Shared items':              'Documents communs',
+        'neighbourhood_title':       'Voisinage de {label}',
+        'neighbourhood_caption':     '{label} et les {count} entrées qui partagent le plus de documents avec elle, selon les filtres du réseau. Les lignes pleines mènent à {label} ; les pointillés relient deux de ces entrées entre elles. Faites glisser un point pour le déplacer ; cliquez dessus pour voir ses liens et sa notice.',
+        'neighbourhood_caption_one': '{label} et l’entrée qui partage le plus de documents avec elle, selon les filtres du réseau. Cliquez dessus pour voir ses liens et sa notice.',
+        'neighbourhood_aria':        'Voisinage de {label} : les entrées qui partagent le plus de documents avec elle. Utilisez les flèches pour passer de l’une à l’autre et Entrée pour en sélectionner une.',
         'Min. link strength':        'Force min. des liens',
         'All links':                 'Tous les liens',
         'Find in network':           'Chercher dans le r\u00e9seau',
