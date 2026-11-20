@@ -1743,11 +1743,11 @@ CENTRALITE_ORDER: Tuple[str, ...] = (
     "Non abordé",
 )
 
-SENTIMENT_MODELS: Tuple[str, ...] = tuple(
-    model["id"] for model in json.loads(
-        (Path(__file__).resolve().parents[1] / "config/sentiment-models.json").read_text(encoding="utf-8")
-    )["active"]
+_SENTIMENT_REGISTRY: Dict[str, Any] = json.loads(
+    (Path(__file__).resolve().parents[1] / "config/sentiment-models.json").read_text(encoding="utf-8")
 )
+
+SENTIMENT_MODELS: Tuple[str, ...] = tuple(model["id"] for model in _SENTIMENT_REGISTRY["active"])
 """Canonical model ids the whole module keys on.
 
 The id **is** the Hugging Face column prefix, and it names the exact model
@@ -1787,6 +1787,17 @@ campaign). Those columns still exist on the Hub but are no longer read
 here: the vendor slot recorded which *company* ran, not which model, and
 the generation-2 campaign of July–August 2026 does not reuse the same
 three vendors.
+"""
+
+SENTIMENT_MODEL_NAMES: Dict[str, str] = {
+    model["id"]: model["name"] for model in _SENTIMENT_REGISTRY["active"]
+}
+"""Model id → display name (``active[].name`` in ``config/sentiment-models.json``).
+
+Keyed on exactly :data:`SENTIMENT_MODELS`, so a generator that labels a
+model looks its name up here instead of carrying its own (id, label) list
+— a hand-kept list is how a retired model turns into a ``KeyError`` in CI
+and a new one silently goes missing from the output.
 """
 
 SENTIMENT_FIELD_SUFFIXES: Dict[str, str] = {

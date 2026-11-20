@@ -118,7 +118,10 @@
      * of shuffling up.
      *
      * Ids carry underscores because they mirror the Hugging Face column
-     * prefixes (see SentimentExtractor.php).
+     * prefixes (see SentimentExtractor.php). tests/js/palette.test.js fails
+     * until these ids are exactly the `active` ids of
+     * config/sentiment-models.json — an unknown id would otherwise fall
+     * back to the generic palette without a word.
      */
     var MODEL_SLOT = {
         gpt_5_6_luna: 1,

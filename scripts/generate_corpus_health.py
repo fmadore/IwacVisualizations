@@ -49,6 +49,8 @@ from iwac_utils import (
     parse_standard_args,
     resolve_sentiment_columns,
     save_json,
+    SENTIMENT_MODEL_NAMES,
+    SENTIMENT_MODELS,
 )
 
 FULL_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
@@ -114,6 +116,24 @@ def _publication_metric(df: pd.DataFrame, n: int) -> List[Dict[str, Any]]:
     return [metric("Text public on islam.zmo.de", public, n)]
 
 
+def sentiment_metrics(df: pd.DataFrame, n: int) -> List[Dict[str, Any]]:
+    """One polarity-coverage meter per registry model that has a column.
+
+    The models and their labels both come from the registry
+    (``SENTIMENT_MODELS`` / ``SENTIMENT_MODEL_NAMES``), so rotating a model
+    in ``config/sentiment-models.json`` changes this panel with no edit
+    here.
+    """
+    sentiment_cols = resolve_sentiment_columns(df, models=SENTIMENT_MODELS)
+    metrics: List[Dict[str, Any]] = []
+    for model in SENTIMENT_MODELS:
+        c = sentiment_cols[model]["polarite"]
+        if c is not None:
+            metrics.append(metric(f"Sentiment — {SENTIMENT_MODEL_NAMES[model]}",
+                                  _nonempty(df[c]), n))
+    return metrics
+
+
 def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
     logger = logging.getLogger(__name__)
     df = load_dataset_safe(name, repo_id=repo_id)
@@ -133,22 +153,13 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         if col("related_articles") is not None:
             metrics.append(metric("Precomputed neighbours",
                                   _nonempty(df["related_articles"]), n))
-        # Labels name the exact model that produced the annotation, which
-        # is also what the HF columns and the model ids key on. A model
-        # with no column yields no row at all rather than a 0% one — this
-        # panel reports how complete the enrichment is, and "0% annotated"
-        # would read as a stalled run rather than as a column the snapshot
-        # simply does not have yet.
-        sentiment_cols = resolve_sentiment_columns(df)
-        for model, label in (("gpt_5_6_luna", "Sentiment — GPT-5.6 Luna"),
-                             ("mistral_small_2603", "Sentiment — Mistral Small 4"),
-                             ("deepseek_v4_flash_0731", "Sentiment — DeepSeek V4 Flash"),
-                             ("gemma_4_31b_it", "Sentiment — Gemma 4 31B"),
-                             ("qwen3_8_27b", "Sentiment — Qwen3.8 27B"),
-                             ("claude_haiku_5_5", "Sentiment — Claude Haiku 5.5")):
-            c = sentiment_cols[model]["polarite"]
-            if c is not None:
-                metrics.append(metric(label, _nonempty(df[c]), n))
+        # One row per model in config/sentiment-models.json, labelled with
+        # its registry name — the exact model that produced the annotation.
+        # A model with no column yields no row at all rather than a 0% one —
+        # this panel reports how complete the enrichment is, and "0%
+        # annotated" would read as a stalled run rather than as a column
+        # the snapshot simply does not have yet.
+        metrics.extend(sentiment_metrics(df, n))
         if col("lda_topic_id") is not None:
             assigned = int(((df["lda_topic_id"].notna())
                             & (df["lda_topic_id"] != -1)).sum())

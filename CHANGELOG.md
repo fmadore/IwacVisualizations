@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased
+
+- **Sentiment models come from the registry everywhere (#42).** The corpus-health panel now takes its sentiment meters and their labels from `config/sentiment-models.json` (`iwac_utils.SENTIMENT_MODEL_NAMES`) instead of a hand-kept list of six models, so a rotated model no longer raises `KeyError` in the data build or goes missing from the panel. `tests/js/palette.test.js` now fails when the Sentiment Atlas's `MODEL_SLOT` map names a model the registry does not, or misses one it does.
+
 ### v2.6.0 — Albani Zaria sermons: style and rhetoric prototype (2026-11-20)
 
 The new `rhetoric.json` bundle takes effect after the next data regeneration (the `regenerate-data` workflow) and a **Pull latest data** in the admin.

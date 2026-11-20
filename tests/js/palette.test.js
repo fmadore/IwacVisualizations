@@ -153,6 +153,26 @@ function modelAccents() {
     return out;
 }
 
+test('MODEL_SLOT names exactly the registry models, each on its own token slot', () => {
+    // An id missing from MODEL_SLOT does not fail at runtime: modelColor()
+    // falls back to the generic palette, so a rotated model would draw in a
+    // colour nobody measured. config/sentiment-models.json is the roster.
+    const registry = JSON.parse(readFileSync(join(ROOT, 'config/sentiment-models.json'), 'utf8'));
+    const src = readFileSync(join(ROOT, 'asset/js/charts/sentiment-atlas.js'), 'utf8');
+    const block = /var MODEL_SLOT = \{([\s\S]*?)\};/.exec(src);
+    assert.ok(block, 'sentiment-atlas.js: no `var MODEL_SLOT = {…};` block');
+    const slots = Object.fromEntries(
+        [...block[1].matchAll(/(\w+)\s*:\s*(\d+)/g)].map(m => [m[1], Number(m[2])])
+    );
+    assert.deepEqual(Object.keys(slots).sort(), registry.active.map(m => m.id).sort(),
+        'MODEL_SLOT ids differ from config/sentiment-models.json active[]');
+    const values = Object.values(slots);
+    assert.equal(new Set(values).size, values.length, 'two models share a slot');
+    for (const [id, slot] of Object.entries(slots)) {
+        assert.ok(slot >= 1 && slot <= MODEL_SLOTS, `${id} is on slot ${slot}, outside --iwac-vis-model-1..${MODEL_SLOTS}`);
+    }
+});
+
 test('the model accents are apart for every reader, and read on both panels', () => {
     const accents = modelAccents();
     const failures = [];
