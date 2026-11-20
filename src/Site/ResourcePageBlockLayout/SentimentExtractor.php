@@ -92,9 +92,7 @@ class SentimentExtractor
      * Each model slice looks like:
      *   [
      *     'polarite'                    => 'Positive' | null,
-     *     'polarite_fr'                 => 'Positif'   (raw French string from the vocabulary),
      *     'centralite'                  => 'Very central' | null,
-     *     'centralite_fr'               => 'Très central',
      *     'subjectivite_score'          => 1..5 | null,
      *     'subjectivite_label'          => 'Rather objective' | null,
      *     'polarite_justification'      => 'free text' | '',
@@ -105,26 +103,20 @@ class SentimentExtractor
      *     'rated'                       => bool  (at least one axis populated),
      *   ]
      *
-     * The `*_fr` keys carry the raw French category name from the
-     * authority vocabulary so the JS / CSS side can still look up
-     * colour tokens that are keyed on French ("Positif",
-     * "Très central"), regardless of the active site locale.
+     * Polarity and centrality are read by linked-item id alone: the
+     * authority record's id maps to its scale position and English label,
+     * so the linked resource is never asked for its title.
      */
     public static function fromItem(AbstractResourceEntityRepresentation $item): array
     {
         $out = [];
         foreach (self::MODELS as $model) {
-            // One lookup per property, reused for both the id and the display
-            // title. Reading them separately (linkedItemId + linkedItemLabel)
-            // ran `$item->value()` twice for polarity and twice for
-            // centrality — 4 redundant property reads per model, 12 per
-            // article, all resolving the same linked resource.
-            $polResource = self::firstValueResource($item, "iwac:{$model}Polarite");
-            $cenResource = self::firstValueResource($item, "iwac:{$model}Centralite");
-            $subItemId   = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
+            // One value lookup per property, and only the linked item's id:
+            // the enums below map it to a label and a scale position.
+            $pol = Polarite::fromItemId(self::linkedItemId($item, "iwac:{$model}Polarite"));
+            $cen = Centralite::fromItemId(self::linkedItemId($item, "iwac:{$model}Centralite"));
+            $subItemId = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
 
-            $pol = Polarite::fromItemId($polResource ? $polResource->id() : null);
-            $cen = Centralite::fromItemId($cenResource ? $cenResource->id() : null);
             $polLabel = $pol?->label();
             $cenLabel = $cen?->label();
             $subInfo  = Subjectivite::fromItemId($subItemId)?->info();
@@ -137,13 +129,6 @@ class SentimentExtractor
                 'centralite'            => $cenLabel,
                 'subjectivite_score'    => $subInfo['score']  ?? null,
                 'subjectivite_label'    => $subInfo['label']  ?? null,
-
-                // Raw French labels from the authority vocabulary. The
-                // CSS colour palette (defined in iwac-core.css under
-                // --iwac-vis-sent-* / --iwac-vis-cent-*) is keyed on
-                // these, so we need them even when the locale is en.
-                'polarite_fr'           => $polResource ? (string) $polResource->displayTitle() : '',
-                'centralite_fr'         => $cenResource ? (string) $cenResource->displayTitle() : '',
 
                 // Ordinal position on each 1-5 scale: which stop the
                 // model's marker sits on, and the input to the panel's

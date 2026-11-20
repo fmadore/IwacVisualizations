@@ -194,8 +194,12 @@ namespace {
             return $this->id;
         }
 
+        /** How many times any linked resource was asked for its title. */
+        public static int $titleReads = 0;
+
         public function displayTitle(): string
         {
+            self::$titleReads++;
             return $this->title;
         }
     }
@@ -389,9 +393,14 @@ namespace {
         'iwac:gpt56LunaCentraliteJustification' => [new FakeValue('centrality reason')],
         'iwac:gpt56LunaSubjectiviteJustification' => [new FakeValue('subjectivity reason')],
     ]);
+    FakeLinkedResource::$titleReads = 0;
     $bundle = SentimentExtractor::fromItem($item);
     check($bundle['gpt56Luna']['polarite'] === 'Negative', 'extractor polarity label is wrong');
-    check($bundle['gpt56Luna']['polarite_fr'] === 'Négatif', 'extractor lost the raw French label');
+    // The label and scale position come from the linked item's id; asking
+    // each linked resource for its title would hydrate it for nothing.
+    check(FakeLinkedResource::$titleReads === 0, 'extractor hydrated a linked resource for its title');
+    check(!array_key_exists('polarite_fr', $bundle['gpt56Luna'])
+        && !array_key_exists('centralite_fr', $bundle['gpt56Luna']), 'extractor still emits the unread *_fr labels');
     check($bundle['gpt56Luna']['polarite_numeric'] === 2, 'extractor polarity score is wrong');
     check($bundle['gpt56Luna']['centralite_numeric'] === 5, 'extractor centrality score is wrong');
     check($bundle['gpt56Luna']['subjectivite_score'] === 5, 'extractor subjectivity score is wrong');
