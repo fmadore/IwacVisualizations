@@ -54,6 +54,7 @@ from albani.corpus import (
 from albani.layers import ARABIC, ENGLISH_SHARE, FORMULA_PREFIX, HAUSA, formula_label, resources
 from albani.lexicon import Entry, Hit, Lexicon
 from albani.normalize import SurfaceTable, fold, match_key, tokenize
+from albani.rhetoric import build_rhetoric_bundle, write_style_review_sheet
 from albani.transcript import window_label
 
 SCOPES = ("all", MONOLOGUE)
@@ -1130,6 +1131,16 @@ class AlbaniSermonsGenerator:
                     if item["o"] not in public_ids:
                         raise RightsError(
                             f"{name} passages quotes item {item['o']}, whose transcript is private")
+            elif name == "rhetoric.json":
+                passages = payload.get("passages") or {}
+                for item in passages.get("items", []):
+                    if item["o"] not in public_ids:
+                        raise RightsError(
+                            f"{name} passages quotes item {item['o']}, whose transcript is private")
+                for ann in passages.get("validated", []):
+                    if ann.get("quote") and ann.get("o") not in public_ids:
+                        raise RightsError(
+                            f"{name} validated annotation quotes private item {ann.get('o')}")
         private = [" ".join(fold(w) for w in r.text.split()) for r in recs if not r.public]
         if not private:
             return
@@ -1141,11 +1152,18 @@ class AlbaniSermonsGenerator:
         for name, payload in bundles.items():
             if name.startswith(CONCORDANCE_PREFIX):
                 continue
-            # `overlap.json["passages"]` is already rights-gated above on
-            # `public_ids`, like `concordance-*.json`; scan only the aggregate
-            # keys of `overlap.json` for >3-word private-transcript leaks.
-            target = ({k: v for k, v in payload.items() if k != "passages"}
-                      if name == "overlap.json" and isinstance(payload, dict) else payload)
+            # `overlap.json["passages"]` and `rhetoric.json["passages"]` are
+            # already rights-gated above on `public_ids`, like
+            # `concordance-*.json`; scan only the aggregate keys for >3-word
+            # private-transcript leaks. (`rhetoric.json["devices"]`/`"genres"`
+            # are static catalogue labels/descriptions authored in code.)
+            if name == "overlap.json" and isinstance(payload, dict):
+                target = {k: v for k, v in payload.items() if k != "passages"}
+            elif name == "rhetoric.json" and isinstance(payload, dict):
+                target = {k: v for k, v in payload.items()
+                          if k not in ("passages", "devices", "genres")}
+            else:
+                target = payload
             for value in _strings(target):
                 if value in metadata_strings:
                     continue
@@ -1162,6 +1180,15 @@ class AlbaniSermonsGenerator:
     #  Writing                                                             #
     # ------------------------------------------------------------------ #
 
+    def build_rhetoric(self) -> Dict[str, Any]:
+        bundle, review_rows = build_rhetoric_bundle(
+            self.analysed(),
+            self.res,
+            generated_at=generate_timestamp(),
+        )
+        self._style_review_rows = review_rows
+        return bundle
+
     def build_all(self) -> Dict[str, Any]:
         collocates = self.build_collocates()
         return {
@@ -1173,6 +1200,7 @@ class AlbaniSermonsGenerator:
             "overlap.json": self.build_overlap(),
             "keyness.json": self.build_keyness(),
             "entities.json": self.build_entities(),
+            "rhetoric.json": self.build_rhetoric(),
             **{f"{CONCORDANCE_PREFIX}{theme}.json": self.build_concordance(theme)
                for theme in self.lexicon.themes},
         }
@@ -1330,10 +1358,15 @@ class AlbaniSermonsGenerator:
         right = self._snippet(text, end, min(turn.end, end + width), "right")
         return f"{label} …{left.strip()} «{' '.join(text[start:end].split())}» {right.strip()}…"
 
-    def run(self, review_sheet: Optional[Path] = None) -> None:
+    def run(self, review_sheet: Optional[Path] = None,
+            style_review_sheet: Optional[Path] = None) -> None:
         bundles = self.write_all()
         if review_sheet:
             self.write_review_sheet(review_sheet, bundles)
+        if style_review_sheet:
+            rows = getattr(self, "_style_review_rows", [])
+            write_style_review_sheet(rows, Path(style_review_sheet))
+            self.logger.info(f"  style review sheet: {len(rows)} rows → {style_review_sheet}")
 
 
 def _strings(payload: Any) -> Iterable[str]:

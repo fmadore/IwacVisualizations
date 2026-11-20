@@ -108,6 +108,9 @@ def main() -> None:
     parser.add_argument("--review-sheet", type=Path,
                         help="Also write the candidate review CSV to this path. It "
                              "quotes public transcripts only; keep it out of git.")
+    parser.add_argument("--style-review-sheet", type=Path,
+                        help="Also write candidate rhetorical/stylistic passages "
+                             "(public transcripts only) to CSV for specialist review.")
     parser.add_argument("--transcripts-dir", type=Path,
                         help="Overlay <o:id>.txt transcripts on the mirror's OCR.")
     parser.add_argument("--transcripts-public", action="store_true",
@@ -139,7 +142,8 @@ def main() -> None:
         fetch_manifests=not args.offline,
         frame=frame,
     )
-    generator.run(review_sheet=args.review_sheet)
+    generator.run(review_sheet=args.review_sheet,
+                  style_review_sheet=args.style_review_sheet)
 
 
 if __name__ == "__main__":

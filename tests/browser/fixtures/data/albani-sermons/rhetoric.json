@@ -1,0 +1,571 @@
+{
+  "generated_at": "2026-10-27T00:00:00Z",
+  "status": "prototype",
+  "annotations_status": "draft",
+  "per_device_cap": 60,
+  "devices": [
+    {
+      "id": "anaphora",
+      "tier": 1,
+      "label_en": "Anaphora & parallelism",
+      "label_fr": "Anaphore et parallélisme",
+      "desc_en": "Consecutive clauses opening with the same two- to four-word frame.",
+      "desc_fr": "Propositions consécutives commençant par la même amorce de deux à quatre mots."
+    },
+    {
+      "id": "vocative",
+      "tier": 1,
+      "label_en": "Direct address",
+      "label_fr": "Apostrophe directe",
+      "desc_en": "Vocatives hailing the audience directly (ya ku, jama'a, 'yan uwa, masu sauraro).",
+      "desc_fr": "Appels directs à l'auditoire (ya ku, jama'a, 'yan uwa, masu sauraro)."
+    },
+    {
+      "id": "rhetorical_question",
+      "tier": 1,
+      "label_en": "Rhetorical questions",
+      "label_fr": "Questions rhétoriques",
+      "desc_en": "Questions and interrogative frames (me ya sa, ko ba haka ba, shin) used to press an argument.",
+      "desc_fr": "Questions et tournures interrogatives (me ya sa, ko ba haka ba, shin) qui relancent l'argumentation."
+    },
+    {
+      "id": "oath_emphasis",
+      "tier": 1,
+      "label_en": "Oaths & emphasis",
+      "label_fr": "Serments et emphase",
+      "desc_en": "Oaths and certainty markers (wallahi, tallahi, lallai, babu shakka, dole ne) marking peaks of urgency.",
+      "desc_fr": "Serments et marqueurs de certitude (wallahi, tallahi, lallai, babu shakka, dole ne) scandant les temps forts."
+    },
+    {
+      "id": "dialogue",
+      "tier": 1,
+      "label_en": "Dramatised dialogue",
+      "label_fr": "Dialogue dramatisé",
+      "desc_en": "Quotative sequences (sai ya ce, suka ce) staging mini-dialogues or voicing opponents and interlocutors.",
+      "desc_fr": "Séquences de discours rapporté (sai ya ce, suka ce) mettant en scène des dialogues ou des adversaires."
+    },
+    {
+      "id": "code_switch",
+      "tier": 1,
+      "label_en": "Arabic & English switches",
+      "label_fr": "Alternances arabe / anglais",
+      "desc_en": "Arabic scriptural bursts and English academic/civic switches within Hausa exposition.",
+      "desc_fr": "Séquences scripturaires arabes et emprunts discursifs anglais dans l'exposé haoussa."
+    },
+    {
+      "id": "simile_exemplum",
+      "tier": 2,
+      "label_en": "Similes & exempla",
+      "label_fr": "Comparaisons et récits exemplaires",
+      "desc_en": "Candidate analogies and narrative illustrations (kamar yadda, misali, wata rana) flagged for specialist review.",
+      "desc_fr": "Candidats d'analogies et récits exemplaires (kamar yadda, misali, wata rana) soumis à validation."
+    },
+    {
+      "id": "proverb_idiom",
+      "tier": 2,
+      "label_en": "Proverb cues (karin magana)",
+      "label_fr": "Indices proverbiaux (karin magana)",
+      "desc_en": "Explicit proverbial frames (karin magana, hausawa sukan ce, masu iya magana) flagged for review.",
+      "desc_fr": "Tournures proverbiales explicites (karin magana, hausawa sukan ce, masu iya magana) à valider."
+    },
+    {
+      "id": "polemic_irony",
+      "tier": 2,
+      "label_en": "Polemic & ironic cues",
+      "label_fr": "Indices polémiques et ironiques",
+      "desc_en": "Exclamations and rebuttals (haba, ƙarya ne, tir, ina aka taɓa) that often signal sarcasm or polemic — for review.",
+      "desc_fr": "Exclamations et réfutations (haba, ƙarya ne, tir, ina aka taɓa) signalant souvent ironie ou polémique — à valider."
+    }
+  ],
+  "genres": [
+    {
+      "id": "khutba",
+      "label_en": "Friday sermons (khuṭba)",
+      "label_fr": "Sermons du vendredi (khuṭba)"
+    },
+    {
+      "id": "commentary",
+      "label_en": "Textual lessons",
+      "label_fr": "Cours de textes"
+    },
+    {
+      "id": "lecture",
+      "label_en": "Public lectures & wa'azi",
+      "label_fr": "Conférences et wa'azi"
+    },
+    {
+      "id": "interview",
+      "label_en": "Interviews & debates",
+      "label_fr": "Entretiens et débats"
+    }
+  ],
+  "scopes": {
+    "all": {
+      "totals": {
+        "anaphora": 0,
+        "vocative": 0,
+        "rhetorical_question": 2,
+        "oath_emphasis": 4,
+        "dialogue": 0,
+        "code_switch": 0,
+        "simile_exemplum": 0,
+        "proverb_idiom": 0,
+        "polemic_irony": 0
+      },
+      "by_recording": [
+        {
+          "o": "15869",
+          "w": 163,
+          "genre": "lecture",
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 1,
+            "oath_emphasis": 2,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          },
+          "ar_pct": 0.0,
+          "en_rate": 0.0
+        },
+        {
+          "o": "15889",
+          "w": 163,
+          "genre": "lecture",
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 1,
+            "oath_emphasis": 2,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          },
+          "ar_pct": 0.0,
+          "en_rate": 0.0
+        }
+      ],
+      "by_genre": [
+        {
+          "genre": "lecture",
+          "recordings": 2,
+          "words": 326,
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 2,
+            "oath_emphasis": 4,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          }
+        }
+      ],
+      "grid": [
+        {
+          "o": "15869",
+          "k": 0,
+          "p": 1,
+          "s": 0,
+          "e": 1200,
+          "md": "monologue",
+          "w": 44,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15869",
+          "k": 1,
+          "p": 1,
+          "s": 1200,
+          "e": null,
+          "md": "monologue",
+          "w": 100,
+          "d": {
+            "rhetorical_question": 1,
+            "oath_emphasis": 2
+          },
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15869",
+          "k": 2,
+          "p": 2,
+          "s": 0,
+          "e": null,
+          "md": "monologue",
+          "w": 19,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 0,
+          "p": 1,
+          "s": 0,
+          "e": 1200,
+          "md": "monologue",
+          "w": 44,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 1,
+          "p": 1,
+          "s": 1200,
+          "e": null,
+          "md": "monologue",
+          "w": 100,
+          "d": {
+            "rhetorical_question": 1,
+            "oath_emphasis": 2
+          },
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 2,
+          "p": 2,
+          "s": 0,
+          "e": null,
+          "md": "monologue",
+          "w": 19,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        }
+      ]
+    },
+    "monologue": {
+      "totals": {
+        "anaphora": 0,
+        "vocative": 0,
+        "rhetorical_question": 2,
+        "oath_emphasis": 4,
+        "dialogue": 0,
+        "code_switch": 0,
+        "simile_exemplum": 0,
+        "proverb_idiom": 0,
+        "polemic_irony": 0
+      },
+      "by_recording": [
+        {
+          "o": "15869",
+          "w": 163,
+          "genre": "lecture",
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 1,
+            "oath_emphasis": 2,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          },
+          "ar_pct": 0.0,
+          "en_rate": 0.0
+        },
+        {
+          "o": "15889",
+          "w": 163,
+          "genre": "lecture",
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 1,
+            "oath_emphasis": 2,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          },
+          "ar_pct": 0.0,
+          "en_rate": 0.0
+        }
+      ],
+      "by_genre": [
+        {
+          "genre": "lecture",
+          "recordings": 2,
+          "words": 326,
+          "counts": {
+            "anaphora": 0,
+            "vocative": 0,
+            "rhetorical_question": 2,
+            "oath_emphasis": 4,
+            "dialogue": 0,
+            "code_switch": 0,
+            "simile_exemplum": 0,
+            "proverb_idiom": 0,
+            "polemic_irony": 0
+          },
+          "rates": {
+            "anaphora": 0.0,
+            "vocative": 0.0,
+            "rhetorical_question": 61.35,
+            "oath_emphasis": 122.7,
+            "dialogue": 0.0,
+            "code_switch": 0.0,
+            "simile_exemplum": 0.0,
+            "proverb_idiom": 0.0,
+            "polemic_irony": 0.0
+          }
+        }
+      ],
+      "grid": [
+        {
+          "o": "15869",
+          "k": 0,
+          "p": 1,
+          "s": 0,
+          "e": 1200,
+          "md": "monologue",
+          "w": 44,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15869",
+          "k": 1,
+          "p": 1,
+          "s": 1200,
+          "e": null,
+          "md": "monologue",
+          "w": 100,
+          "d": {
+            "rhetorical_question": 1,
+            "oath_emphasis": 2
+          },
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15869",
+          "k": 2,
+          "p": 2,
+          "s": 0,
+          "e": null,
+          "md": "monologue",
+          "w": 19,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 0,
+          "p": 1,
+          "s": 0,
+          "e": 1200,
+          "md": "monologue",
+          "w": 44,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 1,
+          "p": 1,
+          "s": 1200,
+          "e": null,
+          "md": "monologue",
+          "w": 100,
+          "d": {
+            "rhetorical_question": 1,
+            "oath_emphasis": 2
+          },
+          "ar": 0,
+          "en": 0
+        },
+        {
+          "o": "15889",
+          "k": 2,
+          "p": 2,
+          "s": 0,
+          "e": null,
+          "md": "monologue",
+          "w": 19,
+          "d": {},
+          "ar": 0,
+          "en": 0
+        }
+      ]
+    }
+  },
+  "passages": {
+    "items": [
+      {
+        "o": "15889",
+        "t": "Ziyarar 'Yan Uwa Daga Gombe",
+        "u": "https://islam.zmo.de/s/westafrica/item/15889",
+        "y": null,
+        "m": []
+      }
+    ],
+    "rows": [
+      {
+        "d": "rhetorical_question",
+        "tier": 1,
+        "tr": "?",
+        "p": 1,
+        "w": 2,
+        "of": 2,
+        "s": 1200,
+        "md": "monologue",
+        "l": "mu ake, wulakanta mu ake, hada mu ake da jami'an tsaro. ",
+        "m": "To haka zamu ci gaba har mu gaji mu bari?",
+        "r": " Ashe dole mu tayan mu kan mu wani abu. Ashe da sai a tsaya ayi wai kudi yace zai",
+        "i": 0
+      },
+      {
+        "d": "oath_emphasis",
+        "tier": 1,
+        "tr": "wallahi",
+        "p": 1,
+        "w": 2,
+        "of": 2,
+        "s": 1200,
+        "md": "monologue",
+        "l": "kasusuwan malam duka wanda muke. Bi biya muna dauka domin malam yana da wani tsari. Wanda malaman kasan nan kar kaf gaba daya. ",
+        "m": "Wallahi",
+        "r": " babu wanda ya tsaya akan wannan tsari. Kuma wannan tsarin ina mai tabbatar muku da izinin Allah. Wallahi zai",
+        "i": 0
+      },
+      {
+        "d": "oath_emphasis",
+        "tier": 1,
+        "tr": "wallahi",
+        "p": 1,
+        "w": 2,
+        "of": 2,
+        "s": 1200,
+        "md": "monologue",
+        "l": "nan kar kaf gaba daya. Wallahi babu wanda ya tsaya akan wannan tsari. Kuma wannan tsarin ina mai tabbatar muku da izinin Allah. ",
+        "m": "Wallahi",
+        "r": " zai",
+        "i": 0
+      }
+    ],
+    "counts": {
+      "anaphora": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "vocative": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "rhetorical_question": {
+        "found": 2,
+        "withheld": 1,
+        "emitted": 1
+      },
+      "oath_emphasis": {
+        "found": 4,
+        "withheld": 2,
+        "emitted": 2
+      },
+      "dialogue": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "code_switch": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "simile_exemplum": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "proverb_idiom": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      },
+      "polemic_irony": {
+        "found": 0,
+        "withheld": 0,
+        "emitted": 0
+      }
+    },
+    "validated": []
+  }
+}

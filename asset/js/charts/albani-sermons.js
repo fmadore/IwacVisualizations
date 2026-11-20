@@ -85,6 +85,8 @@
             build: function (s, b, store, fetch, ctx) { A.renderOverlap(s, b, store, fetch, ctx); } },
         { key: 'keyness', heading: 'albani_keyness_heading', intro: 'albani_keyness_intro', needs: [],
             build: function (s, b, store, fetch, ctx) { A.renderKeyness(s, b, store, fetch, ctx); } },
+        { key: 'rhetoric', heading: 'albani_rhetoric_heading', intro: 'albani_rhetoric_intro', needs: [],
+            build: function (s, b, store, fetch, ctx) { A.renderRhetoric(s, b, store, fetch, ctx); } },
         { key: 'method', heading: 'albani_method', intro: 'albani_method_lead', needs: [],
             build: function (s, b) { A.renderMethod(s, b.metadata); } }
     ];

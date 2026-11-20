@@ -1,0 +1,14 @@
+{
+  "_comment": "Specialist-validated rhetorical annotations for generate_albani_sermons.py. Ships empty ('draft') until a Hausa-speaking specialist reviews candidate passages exported via --style-review-sheet and folds accepted rows back here with status 'validated'.",
+  "_schema": {
+    "o": "Omeka item ID (string)",
+    "part": "Audio part number (int)",
+    "start_s": "Segment start timestamp in seconds (int)",
+    "device": "One of: anaphora, vocative, rhetorical_question, oath_emphasis, dialogue, simile_exemplum, proverb_idiom, polemic_irony, metaphor, humour",
+    "quote": "Short verbatim excerpt (only emitted in public bundles if OCR_is_public is true)",
+    "note_en": "Brief English analytical gloss",
+    "note_fr": "Brief French analytical gloss"
+  },
+  "status": "draft",
+  "annotations": []
+}

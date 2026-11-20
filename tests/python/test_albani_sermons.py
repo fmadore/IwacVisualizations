@@ -532,6 +532,73 @@ class RightsTests(unittest.TestCase):
         self.assertEqual(len(bundles_pub["overlap.json"]["passages"]["rows"]), 2)
         gen_pub.check_rights(bundles_pub)
 
+    def test_rhetoric_passages_are_rights_gated(self):
+        gen_priv, bundles_priv = self.build(public=False)
+        rhet_priv = bundles_priv["rhetoric.json"]
+        self.assertEqual(rhet_priv["passages"]["items"], [])
+        self.assertEqual(rhet_priv["passages"]["rows"], [])
+        self.assertGreater(sum(c["withheld"] for c in rhet_priv["passages"]["counts"].values()), 0)
+        gen_priv.check_rights(bundles_priv)
+        rhet_priv["passages"]["items"].append({"o": "1"})
+        with self.assertRaises(RightsError):
+            gen_priv.check_rights(bundles_priv)
+        gen_pub, bundles_pub = self.build(public=True)
+        self.assertGreater(len(bundles_pub["rhetoric.json"]["passages"]["rows"]), 0)
+        gen_pub.check_rights(bundles_pub)
+
+
+class RhetoricTests(unittest.TestCase):
+    def test_detects_tier1_schemes_and_tier2_candidates(self):
+        from albani.layers import resources
+        from albani.rhetoric import analyze_turn, classify_genre
+
+        res = resources()
+        sample = (
+            "Ya ku matasa! Muna buƙatar sarakuna masu adalci. "
+            "Muna buƙatar matasa masu manufa. "
+            "Me ya sa aka bar yara a titi? Wallahi babu shakka wannan kuskure ne! "
+            "Sai ya ce masa tafi ka nemi ilimi. Sai suka ce masa mun ji. "
+            "Kamar yadda Hausawa sukan ce a karin magana, haba ƙarya ne!"
+        )
+        hits, _, _ = analyze_turn(sample, res)
+        devices = {h.device for h in hits}
+        self.assertIn("anaphora", devices)
+        self.assertIn("vocative", devices)
+        self.assertIn("rhetorical_question", devices)
+        self.assertIn("oath_emphasis", devices)
+        self.assertIn("dialogue", devices)
+        self.assertIn("simile_exemplum", devices)
+        self.assertIn("proverb_idiom", devices)
+        self.assertIn("polemic_irony", devices)
+
+        self.assertEqual(classify_genre("Khudubobin Juma'a vol. 2"), "khutba")
+        self.assertEqual(classify_genre("Adabul Mufrad #9-12"), "commentary")
+        self.assertEqual(classify_genre("Hirar Tarho a D.I.V."), "interview")
+        self.assertEqual(classify_genre("Gurbacewar Tarbiyyah"), "lecture")
+
+    def test_style_review_sheet_and_csv_import_round_trip(self):
+        from albani.propose_style_candidates import import_review_csv
+
+        tmp = Path(tempfile.mkdtemp())
+        csv_path = tmp / "style-review.csv"
+        ann_path = tmp / "rhetoric_annotations.json"
+        gen = generator(frame({"o:id": "1", "OCR": CURRENT, "OCR_is_public": True}))
+        gen.run(style_review_sheet=csv_path)
+        self.assertTrue(csv_path.exists())
+        text = csv_path.read_text(encoding="utf-8-sig")
+        self.assertIn("matched_text", text)
+        # Mark the first data row as accepted and import back into JSON.
+        lines = text.splitlines()
+        self.assertGreaterEqual(len(lines), 2)
+        lines[1] = lines[1][:-2] + "accept,oath_emphasis,Checked by specialist"
+        csv_path.write_text("\n".join(lines) + "\n", encoding="utf-8-sig")
+        count = import_review_csv(csv_path, ann_path)
+        self.assertEqual(count, 1)
+        data = json.loads(ann_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["status"], "validated")
+        self.assertEqual(len(data["annotations"]), 1)
+        self.assertEqual(data["annotations"][0]["device"], "oath_emphasis")
+
 
 class PeriodTests(unittest.TestCase):
     def test_a_date_that_straddles_the_split_is_left_out(self):

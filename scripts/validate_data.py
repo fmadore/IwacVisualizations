@@ -123,6 +123,7 @@ REQUIRED_KEYS: Dict[str, Tuple[str, ...]] = {
     "albani-sermons/overlap.json":    ("scopes",),
     "albani-sermons/keyness.json":    ("by_recording", "period", "by_mode"),
     "albani-sermons/entities.json":   ("entities",),
+    "albani-sermons/rhetoric.json":   ("devices", "scopes", "passages"),
     "albani-sermons/concordance-youth.json":    ("items", "rows", "counts"),
     "albani-sermons/concordance-politics.json": ("items", "rows", "counts"),
 }

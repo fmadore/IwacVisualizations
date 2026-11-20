@@ -53,7 +53,7 @@ IwacVisualizations/
 │   │       └── Qwen_logo.png
 │   └── js/
 │       ├── charts/
-│       │   ├── albani-sermons/          # 9 files — panel modules
+│       │   ├── albani-sermons/          # 10 files — panel modules
 │       │   ├── article-dashboard/       # 4 files — panel modules
 │       │   ├── audiovisual-overview/    # 3 files — panel modules
 │       │   ├── collection-overview/     # 11 files — panel modules
@@ -152,6 +152,9 @@ IwacVisualizations/
 │   │   ├── neighbours.py
 │   │   ├── normalization.json
 │   │   ├── normalize.py
+│   │   ├── propose_style_candidates.py
+│   │   ├── rhetoric_annotations.json
+│   │   ├── rhetoric.py
 │   │   ├── stopwords.json
 │   │   └── transcript.py
 │   ├── laicite/                         # 25 files — one module per bundle, mirroring asset/js/charts/laicite/
@@ -272,7 +275,7 @@ IwacVisualizations/
 │       └── Helper/
 │           └── TimelineData.php
 ├── tests/
-│   ├── browser/                         # 75 files — Playwright specs
+│   ├── browser/                         # 76 files — Playwright specs
 │   ├── fixtures/
 │   │   ├── albani/
 │   │   │   ├── current-format.txt

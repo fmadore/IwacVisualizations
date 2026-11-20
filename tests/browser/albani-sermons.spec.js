@@ -26,7 +26,7 @@ function watch(page) {
 async function ready(page, query = '') {
     await page.goto(`${FIXTURE}?eager=1${query}`);
     await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
-    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(8);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(9);
     await expect(page.locator('[data-iwac-section="politics"] .iwac-vis-kwic-row').first()).toBeVisible();
 }
 
@@ -35,11 +35,11 @@ test('every section renders from its own bundle, without a console problem', asy
     await ready(page);
     const sections = await page.locator('.iwac-vis-albani__section').evaluateAll(
         (els) => els.map((el) => el.getAttribute('data-iwac-section')));
-    expect(sections).toEqual(['corpus', 'vocabulary', 'entities', 'youth', 'politics', 'overlap', 'keyness', 'method']);
+    expect(sections).toEqual(['corpus', 'vocabulary', 'entities', 'youth', 'politics', 'overlap', 'keyness', 'rhetoric', 'method']);
     const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()).sort());
     expect(fetched).toEqual([
         'collocates.json', 'concordance-politics.json', 'concordance-youth.json', 'entities.json', 'keyness.json',
-        'lexicon.json', 'metadata.json', 'network.json', 'overlap.json', 'vocabulary.json',
+        'lexicon.json', 'metadata.json', 'network.json', 'overlap.json', 'rhetoric.json', 'vocabulary.json',
     ]);
     expect(problems).toEqual([]);
 });
@@ -104,7 +104,7 @@ test('passages come from the public transcript only, and say what was withheld',
 test('the methods are explained in plain terms, with their sources linked', async ({ page }) => {
     await ready(page);
     const method = page.locator('[data-iwac-section="method"]');
-    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(11);
+    await expect(method.locator('.iwac-vis-albani__method-item')).toHaveCount(12);
     await expect(method).toContainText('Bashir, Bichi and Adamu (2024)');
     await expect(method.getByRole('link', { name: 'https://doi.org/10.1186/s43067-024-00187-5' }))
         .toHaveAttribute('href', 'https://doi.org/10.1186/s43067-024-00187-5');
@@ -170,7 +170,7 @@ test('one switch shows or hides the translations, and the address remembers it',
     await expect(page).toHaveURL(/albani\.glosses=off/);
     await expect.poll(async () => (await labels()).some((l) => l.includes(' · '))).toBe(false);
     // The contents link every section by a stable anchor.
-    await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(8);
+    await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(9);
     await expect(page.locator('.iwac-vis-albani__toc-link').first()).toHaveAttribute('href', '#albani-corpus');
     // Vocabulary frequency table glosses follow the same switch.
     const vocabGlosses = page.locator('[data-iwac-panel="albani-vocab-list"] .iwac-vis-albani__vocab-gloss');
@@ -233,6 +233,29 @@ test('corpus table filters by status and search, and youth collocates omits a du
     const youthOpts = await page.locator('select[data-iwac-control="albani-youth-collocates"] option').evaluateAll(
         (els) => els.map((o) => o.value));
     expect(youthOpts).toEqual(['youth']);
+});
+
+test('style and rhetoric section states the methodological limit, shades by scheme, and gates passages', async ({ page }) => {
+    await ready(page);
+    const section = page.locator('[data-iwac-section="rhetoric"]');
+    await expect(section.locator('.iwac-vis-albani__rhetoric-limit')).toContainText('karin magana');
+    await expect(section.locator('.iwac-vis-albani__rhetoric-limit')).toContainText('separate what is directly measurable');
+    await expect(section).not.toContainText(/abdoulaye/i);
+
+    // Score switches cleanly between all measurable devices and oaths.
+    await section.locator('[data-iwac-control="albani-rhetoric-measure:oath_emphasis"]').click();
+    await expect(section.locator('[data-iwac-control="albani-rhetoric-measure:oath_emphasis"]'))
+        .toHaveAttribute('aria-pressed', 'true');
+
+    // Passages panel quotes public transcript only and filters by device.
+    const passages = section.locator('[data-iwac-panel="albani-rhetoric-passages"]');
+    await expect(passages).toContainText('counted above but not quoted');
+    const rows = passages.locator('.iwac-vis-kwic-row');
+    await expect(rows).toHaveCount(3);
+    await passages.locator('select[data-iwac-control="albani-rhetoric-device"]').selectOption('oath_emphasis');
+    await expect(rows).toHaveCount(2);
+    await passages.locator('[data-iwac-control="albani-rhetoric-tier:2"]').click();
+    await expect(rows).toHaveCount(0);
 });
 
 test('the places named are mapped, the people and bodies listed by kind', async ({ page }) => {
@@ -318,6 +341,8 @@ const SINGLE = [
     { key: 'albani-score', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
     { key: 'albani-overlap-pairs', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
     { key: 'albani-overlap-passages', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
+    { key: 'albani-rhetoric-score', section: 'rhetoric', bundles: ['metadata.json', 'rhetoric.json'] },
+    { key: 'albani-rhetoric-passages', section: 'rhetoric', bundles: ['metadata.json', 'rhetoric.json'] },
     { key: 'albani-youth-kwic', section: 'youth',
         bundles: ['collocates.json', 'concordance-youth.json', 'lexicon.json', 'metadata.json', 'network.json'] },
     { key: 'albani-places', section: 'entities', bundles: ['entities.json', 'metadata.json'] },
@@ -386,7 +411,7 @@ test('a framed panel tells its host one height, the panel’s', async ({ page })
 test('a panel key no section claims frames the whole exhibition', async ({ page }) => {
     await page.goto(`${FIXTURE}?embed=albani-no-such-panel`);
     await expect(page.locator('body')).toHaveClass(/iwac-embed-ready/);
-    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(8);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(9);
     await expect(page.locator('.iwac-vis-albani__header')).toBeVisible();
     await expect(page.locator('[data-iwac-panel-active]')).toHaveCount(0);
 });

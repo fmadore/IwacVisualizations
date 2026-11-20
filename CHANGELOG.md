@@ -13,6 +13,14 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### v2.6.0 — Albani Zaria sermons: style and rhetoric prototype (2026-11-20)
+
+The new `rhetoric.json` bundle takes effect after the next data regeneration (the `regenerate-data` workflow) and a **Pull latest data** in the admin.
+
+- **Albani Zaria sermons: Style and rhetoric prototype.** Adds a dedicated *Style and rhetoric* section (`albani-sermons/rhetoric.json`) with an explicit methodological framing of what lexical counts cannot capture (irony, humour, *karin magana* proverbs, voice-switching and oral cadence) alongside a two-tier design separating directly measurable schemes from candidate tropes awaiting specialist review.
+- **Rhetorical score, genre profile and rights-gated passages.** Plots measurable schemes (anaphora and parallelism, direct address, rhetorical questions, oaths and emphasis, dramatised dialogue, Arabic and English code-switching) across each 20-minute segment (`albani-rhetoric-score`, clickable to listen), compares rates per 10,000 words across preaching genres and recordings (`albani-rhetoric-profile`), and surfaces public passages — including candidate similes, proverb cues and polemic/ironic markers — in a filterable concordance (`albani-rhetoric-passages`). Private transcripts feed aggregate rates only, enforced by `check_rights()`.
+- **Specialist review & offline triage workflow.** `generate_albani_sermons.py --style-review-sheet` exports public candidate passages to CSV for specialist validation; `scripts/albani/propose_style_candidates.py` folds accepted rows back into `scripts/albani/rhetoric_annotations.json` (`import-csv`) and prepares JSONL batches (`export-prompts`) for offline trope triage.
+
 ### v2.5.0 — Albani Zaria sermons: sharper Hausa text, meetings passages, and glosses (2026-11-20)
 
 The Hausa/Arabic text-processing, lexicon, gloss and meetings-passages data changes take effect after the next data regeneration (the `regenerate-data` workflow) and a **Pull latest data** in the admin. The display, filtering and Hausa search changes work on the data already installed.

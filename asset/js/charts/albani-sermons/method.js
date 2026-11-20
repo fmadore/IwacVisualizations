@@ -37,6 +37,7 @@
         ['albani_method_glosses', 'albani_method_glosses_body'],
         ['albani_method_entities', 'albani_method_entities_body'],
         ['albani_method_collocates', 'albani_method_collocates_body'],
+        ['albani_method_style', 'albani_method_style_body'],
         ['albani_method_rights', 'albani_method_rights_body'],
         ['albani_method_reading', 'albani_method_reading_body']
     ];
