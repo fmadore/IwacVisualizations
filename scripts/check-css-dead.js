@@ -24,7 +24,17 @@
  * concatenation actually builds, each with the file that builds it. A class
  * starting with one of those is assumed live. Adding a prefix is a deliberate
  * act with a reason attached; the alternative — a blanket "ignore anything
- * with a modifier" — would have hidden all four real findings.
+ * with a modifier" — would have hidden all four real findings. A stem must be
+ * as narrow as the composition (the modifier separator included), and it must
+ * itself appear in the source as a whole token — the string the concatenation
+ * starts from — so a stem nothing builds any more fails the guard.
+ *
+ * WHAT COUNTS AS A USE (issue #44)
+ * --------------------------------
+ * Whole tokens only: `.iwac-vis-foo` is not used because `iwac-vis-foo-bar`
+ * is. The sources are asset/js, view/ and src/ — not tests/, whose fixtures
+ * and specs copy class names from the code they test and so made every class
+ * they mentioned look alive.
  *
  * Usage: node scripts/check-css-dead.js
  */
@@ -41,7 +51,6 @@ const SEARCH_DIRS = [
     join(ROOT, 'asset', 'js'),
     join(ROOT, 'view'),
     join(ROOT, 'src'),
-    join(ROOT, 'tests'),
 ];
 
 /**
@@ -50,17 +59,13 @@ const SEARCH_DIRS = [
  */
 const COMPOSED_PREFIXES = [
     ['iwac-vis-table__cell--', 'shared/table.js — `--' + '${render}` and `--card-${role}`'],
-    ['iwac-vis-table__row--', 'shared/table.js — row modifiers'],
-    ['iwac-vis-clip-', 'shared/clippings.js — per-kind clipping chrome'],
-    ['iwac-vis-panel--', 'shared/panels.js — panel size modifiers passed by callers'],
-    ['iwac-vis-chart--', 'panel callers add height modifiers after buildPanel'],
-    ['iwac-vis-facets__', 'shared/facet-buttons.js — composed button state classes'],
-    ['iwac-vis-sent-', 'sentiment panels compose per-model and per-axis names'],
-    ['iwac-vis-embed-', 'the embed layout composes body classes in PHP'],
-    ['iwac-vis-otd-clippings__plate--r', 'on-this-day/clippings.js:47 — `--r${ratio}`'],
+    ['iwac-vis-sent-axis__verdict--', 'visualizations/article.phtml — `--<?= $v[0] ?>` (agree / close / differ)'],
+    ['iwac-vis-otd-clippings__plate--r', 'on-this-day/clippings.js — `--r${ratio}`'],
     ['iwac-vis-albani__strip-cell--', 'albani-sermons/vocabulary.js — `--${stripBin(rate)}`'],
     ['iwac-vis-albani__sig-word--', 'albani-sermons/keyness.js — `--${size step}`'],
 ];
+
+const TOKEN = /iwac-vis-[A-Za-z0-9_-]+/g;
 
 /** Every file under `dir`; a directory that does not exist yields none. */
 function walk(dir) {
@@ -103,20 +108,59 @@ function haystack() {
     return text;
 }
 
+/**
+ * The declared classes nothing builds, and the composed stems nothing starts
+ * from. `declared` maps class → where; a use is a whole token of `text`.
+ */
+function findDead(declared, text, prefixes) {
+    const used = new Set(text.match(TOKEN) || []);
+    const dead = [];
+    for (const [cls, where] of declared) {
+        if (used.has(cls)) continue;
+        if (prefixes.some(([prefix]) => cls.startsWith(prefix))) continue;
+        dead.push({ cls, where });
+    }
+    const staleStems = prefixes
+        .filter(([prefix]) => !used.has(prefix))
+        .map(([prefix, why]) => `${prefix}  (${why})`);
+    return { dead, staleStems };
+}
+
+// Self-test: the loopholes issue #44 closed must stay closed, or the guard
+// passes by construction.
+{
+    const seed = findDead(
+        new Map([['iwac-vis-foo', 'seed'], ['iwac-vis-bar--x', 'seed']]),
+        "el.className = 'iwac-vis-foo-bar'; c = 'iwac-vis-bar--' + kind;",
+        [['iwac-vis-bar--', 'seed'], ['iwac-vis-gone-', 'seed']]
+    );
+    const names = seed.dead.map((d) => d.cls).join(', ');
+    if (names !== 'iwac-vis-foo' || seed.staleStems.length !== 1) {
+        fail('dead-CSS guard: self-test failed — the matcher cannot be trusted', [
+            `dead: ${names || '(none)'} (expected iwac-vis-foo)`,
+            `stale stems: ${seed.staleStems.length} (expected 1)`,
+        ], '');
+    }
+}
+
 const declared = declaredClasses();
-const uses = haystack();
-const dead = [];
-for (const [cls, where] of declared) {
-    if (uses.includes(cls)) continue;
-    if (COMPOSED_PREFIXES.some(([prefix]) => cls.startsWith(prefix))) continue;
-    dead.push({ cls, where });
+const { dead, staleStems } = findDead(declared, haystack(), COMPOSED_PREFIXES);
+
+if (staleStems.length) {
+    fail(
+        `dead-CSS guard: ${staleStems.length} COMPOSED_PREFIXES stem(s) nothing builds`,
+        staleStems,
+        '\n  No source writes these stems as a whole token any more. Remove the entry,'
+        + '\n  or narrow it to the string the concatenation actually starts from.\n'
+    );
 }
 
 if (dead.length) {
     fail(
         `dead-CSS guard: ${dead.length} class(es) styled but never built`,
         dead.map(({ cls, where }) => `.${cls}  (${where})`),
-        '\n  Nothing in asset/js, view/, src/ or tests/ writes these class names.'
+        '\n  Nothing in asset/js, view/ or src/ writes these class names (tests/ does not'
+        + '\n  count: a fixture that copies a class does not make it live).'
         + '\n  Delete the rule, or — if the name is composed at runtime — add its'
         + '\n  stem to COMPOSED_PREFIXES in this file, with the file that builds it.\n'
     );
