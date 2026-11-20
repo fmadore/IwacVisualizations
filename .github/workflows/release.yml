@@ -28,11 +28,21 @@ name: Release
 #            filters, so every gate runs whatever the tag touched.
 #   build    read-only token, no persisted credentials: checks the tag is on
 #            the default branch and agrees with every version declaration,
-#            rebuilds, assembles and verifies the zip, uploads it as an
-#            artifact. `npm ci` and the build scripts run here, with nothing
-#            they could push with.
+#            rebuilds, assembles and verifies the zip and its sha256, uploads
+#            them as an artifact. `npm ci` and the build scripts run here,
+#            with nothing they could push with.
+#   attest   needs the build, re-checks the zip against its sha256 and signs
+#            its build provenance. It alone holds `id-token: write` +
+#            `attestations: write`, and runs nothing but the download, the
+#            checksum and the first-party attest action.
 #   publish  needs ALL of the above, holds `contents: write`, and only
-#            downloads that artifact and attaches it to the release.
+#            downloads that artifact and attaches the zip and its .sha256 to
+#            the release.
+#
+# Verifying a download: `sha256sum -c IwacVisualizations-X.Y.Z.zip.sha256`
+# in the directory holding both files, and
+# `gh attestation verify IwacVisualizations-X.Y.Z.zip --repo fmadore/IwacVisualizations`
+# for the provenance (the same pair IwacSearch publishes).
 #
 # Actions are pinned to commit SHAs; Dependabot keeps the pins current.
 #
@@ -177,7 +187,12 @@ jobs:
       - name: Build installable archive
         env:
           ZIP: ${{ steps.v.outputs.zip }}
-        run: git archive --format=zip --prefix=IwacVisualizations/ -o "$ZIP" HEAD
+        run: |
+          git archive --format=zip --prefix=IwacVisualizations/ -o "$ZIP" HEAD
+          # Named by the bare file name, so `sha256sum -c` works from the
+          # directory the operator downloaded both files into.
+          sha256sum "$ZIP" > "$ZIP.sha256"
+          echo "Built $ZIP: $(cut -d' ' -f1 "$ZIP.sha256")"
 
       - name: Archive must be installable and free of dev tooling
         env:
@@ -234,13 +249,42 @@ jobs:
           name: release-archive
           path: |
             ${{ steps.v.outputs.zip }}
+            ${{ steps.v.outputs.zip }}.sha256
             release-notes.md
           if-no-files-found: error
           retention-days: 7
 
+  # Build provenance: a signed statement, kept by GitHub, that this workflow
+  # built this zip from this commit. Its own job, because the OIDC token the
+  # signature needs is minted for whatever runs in the job that holds
+  # `id-token: write`: here only first-party actions and sha256sum, never
+  # the build's npm code.
+  attest:
+    name: Attest the archive's build provenance
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-archive
+
+      - name: The zip is the one the build checked
+        env:
+          ZIP: ${{ needs.build.outputs.zip }}
+        run: sha256sum -c "$ZIP.sha256"
+
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ needs.build.outputs.zip }}
+
   publish:
     name: Publish the archive
-    needs: [gate-build, gate-lint, gate-omeka, gate-cdn, build]
+    needs: [gate-build, gate-lint, gate-omeka, gate-cdn, build, attest]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -250,6 +294,11 @@ jobs:
         with:
           name: release-archive
 
+      - name: The zip is the one the build checked
+        env:
+          ZIP: ${{ needs.build.outputs.zip }}
+        run: sha256sum -c "$ZIP.sha256"
+
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -258,7 +307,7 @@ jobs:
           TITLE: ${{ needs.build.outputs.title }}
         run: |
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$ZIP" --clobber --repo "$GITHUB_REPOSITORY"
+            gh release upload "$TAG" "$ZIP" "$ZIP.sha256" --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" "$ZIP" --title "${TITLE:-$TAG}" --notes-file release-notes.md --repo "$GITHUB_REPOSITORY"
+            gh release create "$TAG" "$ZIP" "$ZIP.sha256" --title "${TITLE:-$TAG}" --notes-file release-notes.md --repo "$GITHUB_REPOSITORY"
           fi

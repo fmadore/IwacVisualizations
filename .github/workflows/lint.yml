@@ -27,6 +27,8 @@ on:
       - "scripts/python-lock.js"
       - "tests/php/**"
       - "tests/python/**"
+      - "scripts/albani/*.json"
+      - "scripts/laicite/*.json"
       - ".github/workflows/lint.yml"
   pull_request:
     paths:
@@ -41,6 +43,8 @@ on:
       - "scripts/python-lock.js"
       - "tests/php/**"
       - "tests/python/**"
+      - "scripts/albani/*.json"
+      - "scripts/laicite/*.json"
       - ".github/workflows/lint.yml"
   workflow_call:
     inputs:

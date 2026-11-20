@@ -29,6 +29,7 @@ on:
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/laicite/**"
+      - "scripts/albani/**"
       - "scripts/*.json"
       - "tests/python/**"
       - "tests/php/**"
@@ -46,6 +47,7 @@ on:
       - "scripts/requirements.txt"
       - "scripts/requirements.lock"
       - "scripts/laicite/**"
+      - "scripts/albani/**"
       - "scripts/*.json"
       - "tests/python/**"
       - "tests/php/**"
@@ -101,6 +103,13 @@ jobs:
       - name: JavaScript behavioral contracts
         run: npm test
 
+      # Every lint gate runs inside `npm run build`, so it goes before the
+      # browser install and the Playwright suite: a lint error fails in
+      # seconds instead of after minutes of Chromium. The clean-tree check
+      # stays after the browser run, which writes only gitignored output.
+      - name: Token guard + rebuild minified assets
+        run: npm run build
+
       # Chromium is ~150 MB per run otherwise. Keyed on the @playwright/test
       # version the lockfile pins, which decides the browser build; the
       # install below still runs, for the OS packages, and skips a cached
@@ -125,9 +134,6 @@ jobs:
       # a test that only passes on retry from hiding as a green run.
       - name: Browser contracts must pass first time
         run: node scripts/check-flakes.js test-results/report.json
-
-      - name: Token guard + rebuild minified assets
-        run: npm run build
 
       # `git diff --exit-code` sees only TRACKED files, so a new block sheet
       # whose .min.css sibling was never committed passed here and 404'd in
