@@ -28,7 +28,7 @@
     });
 
     var CLOUD_WORDS = 120;
-    var LIST_WORDS = 40;
+    var LIST_WORDS = 150;
 
     /**
      * The formulae as a typeset ledger: the phrase, its count, and a strip
@@ -37,7 +37,6 @@
      * the preacher's constant habit or the sound of one lesson.
      */
     function formulaLedger(section, metadata, store) {
-        var recs = A.recordingOrder(metadata);
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_formulae'),
             P.t('albani_formulae_desc'), { key: KEY.formulae });
         panel.chart.classList.add('iwac-vis-albani__list-host');
@@ -49,6 +48,7 @@
 
         function refresh(formulae) {
             var scope = store.get('scope');
+            var recs = A.recordingOrder(metadata, scope);
             list.innerHTML = '';
             key.hidden = !formulae.some(function (f) { return f.by; });
             formulae.forEach(function (f) {
@@ -107,8 +107,22 @@
 
         var cloudDesc = P.el('p', 'iwac-vis-panel-desc');
         var cloud = A.chartPanel(grid, P.t('albani_vocab_cloud'), null, function (built) {
-            var terms = current().layer.terms || [];
-            return C.wordcloud(terms.slice(0, CLOUD_WORDS).map(function (t) { return [t.w, t.n]; }), built.chart);
+            var terms = (current().layer.terms || []).slice(0, CLOUD_WORDS);
+            var option = C.wordcloud(terms.map(function (t) { return [t.w, t.n]; }), built.chart);
+            var byWord = {};
+            terms.forEach(function (t) { byWord[t.w] = t; });
+            if (option && option.tooltip) {
+                option.tooltip.formatter = function (p) {
+                    var name = (p && p.name) || '';
+                    var term = byWord[name] || {};
+                    var lines = ['<strong>' + P.escapeHtml(name) + '</strong>'];
+                    var gloss = A.gloss(term);
+                    if (gloss) lines.push('<em>' + P.escapeHtml(gloss) + '</em>');
+                    lines.push(P.escapeHtml(P.formatNumber(term.n != null ? term.n : p.value)));
+                    return lines.join('<br>');
+                };
+            }
+            return option;
         }, { key: KEY.cloud, before: [cloudDesc], chartClass: 'iwac-vis-albani__cloud' });
 
         var listPanel = P.buildPanel('iwac-vis-panel', P.t('albani_vocab_list'),
@@ -117,7 +131,19 @@
         grid.appendChild(listPanel.panel);
         var table = P.buildTable({
             columns: [
-                { key: 'w', label: P.t('albani_col_word'), card: 'title' },
+                {
+                    key: 'w',
+                    label: P.t('albani_col_word'),
+                    card: 'title',
+                    render: function (row, td) {
+                        var wrap = P.el('span', 'iwac-vis-albani__vocab-word');
+                        wrap.appendChild(P.el('span', 'iwac-vis-albani__hausa', row.w));
+                        if (row.gloss) {
+                            wrap.appendChild(P.el('span', 'iwac-vis-albani__vocab-gloss', row.gloss));
+                        }
+                        td.appendChild(wrap);
+                    }
+                },
                 { key: 'n', label: P.t('albani_col_count'), card: 'row' },
                 { key: 's', label: P.t('albani_col_segments'), card: 'row' },
                 { key: 'r', label: P.t('albani_col_recordings'), card: 'row' }
@@ -145,13 +171,19 @@
                 ? P.t('albani_vocab_cloud_desc_ar', { share: P.formatPercent(share, 2) })
                 : P.t('albani_vocab_cloud_desc_ha');
             table.update((cur.layer.terms || []).slice(0, LIST_WORDS).map(function (t) {
-                return { w: t.w, n: P.formatNumber(t.n), s: P.formatNumber(t.s), r: P.formatNumber(t.r) };
+                return {
+                    w: t.w,
+                    gloss: A.labelGlosses ? A.shortGloss(A.gloss(t)) : '',
+                    n: P.formatNumber(t.n),
+                    s: P.formatNumber(t.s),
+                    r: P.formatNumber(t.r)
+                };
             }), 0);
             cloud.redraw();
             ledger.refresh(cur.scope.formulae || []);
         }
 
         refresh();
-        store.subscribe(refresh, { keys: ['scope'] });
+        store.subscribe(refresh, { keys: A.GLOSS_KEYS });
     };
 })();

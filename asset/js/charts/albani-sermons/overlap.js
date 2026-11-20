@@ -33,7 +33,8 @@
         score: 'albani-score',
         pairs: 'albani-overlap-pairs',
         words: 'albani-overlap-words',
-        segments: 'albani-overlap-segments'
+        segments: 'albani-overlap-segments',
+        passages: 'albani-overlap-passages'
     });
 
     var TOP_TERMS = 15;
@@ -168,7 +169,6 @@
     }
 
     function scorePanel(host, metadata, overlap, store, ctx) {
-        var rows = A.recordingOrder(metadata);
         var state = { measure: 'meetings' };
         var control = P.buildSegmented({
             name: 'albani-score-measure',
@@ -185,12 +185,13 @@
 
         var panel = A.chartPanel(host, P.t('albani_score'), P.t('albani_score_desc'), function (built) {
             var scope = store.get('scope');
+            var rows = A.recordingOrder(metadata, scope);
             var payload = (overlap.scopes || {})[scope] || {};
             var measure = MEASURES.filter(function (m) { return m.key === state.measure; })[0] || MEASURES[2];
             // Data built before the score existed has no grid: the panel
             // stays out of sight rather than show every segment uncounted.
             built.panel.hidden = !payload.grid;
-            if (!payload.grid) return null;
+            if (!payload.grid || !rows.length) return null;
             A.matrixHeight(built.chart, rows.length, 22, 130);
             return scoreOption(rows, payload.grid || [], measure, scope, built.chart);
         }, {
@@ -212,7 +213,7 @@
     /*  The matrix: which terms meet                                      */
     /* ----------------------------------------------------------------- */
 
-    function pairsOption(pairs, byId) {
+    function pairsOption(pairs, byId, chartEl) {
         var youthTotal = {};
         var politicsTotal = {};
         pairs.forEach(function (p) {
@@ -229,35 +230,42 @@
         var labelOf = function (id) {
             return A.labelGlosses ? A.withGloss(display(id), A.shortGloss(A.entryGloss(byId[id]))) : display(id);
         };
+        var lookup = {};
+        pairs.forEach(function (p) { lookup[p.youth + ':' + p.politics] = p.n; });
         var cells = [];
-        pairs.forEach(function (p) {
-            var yi = youth.indexOf(p.youth);
-            var xi = politics.indexOf(p.politics);
-            if (yi >= 0 && xi >= 0) cells.push([xi, yi, p.n]);
+        var empty = [];
+        youth.forEach(function (y, yi) {
+            politics.forEach(function (x, xi) {
+                var n = lookup[y + ':' + x] || 0;
+                if (n > 0) cells.push([xi, yi, n]);
+                else empty.push([xi, yi, 0]);
+            });
         });
-        return {
-            rows: youth.length,
-            option: C.heatmapMatrix({
-                xLabels: politics.map(labelOf),
-                yLabels: youth.map(labelOf),
-                cells: cells
-            }, {
-                cellLabels: true,
-                cellBorder: true,
-                static: true,
-                xLabelRotate: 40,
-                yLabelWidth: A.labelGlosses ? 160 : 100,
-                grid: { bottom: 64 },
-                tooltipFormatter: function (p) {
-                    var v = p.value || [];
-                    var y = youth[v[1]], x = politics[v[0]];
-                    return '<strong>' + P.escapeHtml(display(y)) + ' × '
-                        + P.escapeHtml(display(x)) + '</strong><br>'
-                        + '<em>' + P.escapeHtml(A.entryGloss(byId[y]) + ' × ' + A.entryGloss(byId[x])) + '</em><br>'
-                        + P.escapeHtml(P.t('albani_pairs_tooltip', { count: v[2] }));
-                }
-            })
-        };
+        var maxLabel = A.labelGlosses ? 160 : 100;
+        var option = C.heatmapMatrix({
+            xLabels: politics.map(labelOf),
+            yLabels: youth.map(labelOf),
+            cells: cells
+        }, {
+            cellLabels: true,
+            cellBorder: true,
+            static: true,
+            xLabelRotate: 40,
+            yLabelWidth: Math.min(A.labelWidth(chartEl), maxLabel),
+            grid: { bottom: 64 },
+            ramp: ns.heatmapRamp().slice(1),
+            tooltipFormatter: function (p) {
+                var v = p.value || [];
+                var y = youth[v[1]], x = politics[v[0]];
+                return '<strong>' + P.escapeHtml(display(y)) + ' × '
+                    + P.escapeHtml(display(x)) + '</strong><br>'
+                    + '<em>' + P.escapeHtml(A.entryGloss(byId[y]) + ' × ' + A.entryGloss(byId[x])) + '</em><br>'
+                    + P.escapeHtml(v[2] ? P.t('albani_pairs_tooltip', { count: v[2] }) : P.t('albani_score_none'));
+            }
+        });
+        if (option.visualMap) option.visualMap.seriesIndex = 0;
+        if (empty.length) option.series.push(A.emptyCellSeries(P.t('albani_score_none'), empty));
+        return { rows: youth.length, option: option };
     }
 
     /* ----------------------------------------------------------------- */
@@ -291,6 +299,102 @@
         host.appendChild(list);
     }
 
+    /* ----------------------------------------------------------------- */
+    /*  Read the meetings (rights-gated KWIC)                             */
+    /* ----------------------------------------------------------------- */
+
+    function passagesPanel(host, overlap, byId, store, ctx) {
+        var passages = overlap.passages || { items: [], rows: [], withheld: 0 };
+        var desc = P.t('albani_overlap_passages_desc', { window: overlap.window || 10 });
+        if (passages.withheld) {
+            desc += ' ' + P.t('albani_kwic_withheld', { count: passages.withheld });
+        }
+        var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+            P.t('albani_overlap_passages'), desc, { key: KEY.passages });
+        host.appendChild(panel.panel);
+
+        var allRows = passages.rows || [];
+        var state = { youth: '', politics: '', query: '' };
+        var display = function (id) { return (byId[id] || {}).display || id; };
+
+        function termOptions(field, allLabel) {
+            var seen = {};
+            allRows.forEach(function (r) { if (r[field]) seen[r[field]] = true; });
+            return [{ value: '', label: allLabel }].concat(
+                Object.keys(seen).sort(function (a, b) {
+                    return String(display(a)).localeCompare(String(display(b)));
+                }).map(function (id) { return { value: id, label: display(id) }; })
+            );
+        }
+
+        var controls = P.el('div', 'iwac-vis-albani__controls');
+        controls.appendChild(A.select(P.t('albani_overlap_youth'),
+            termOptions('y', P.t('albani_kwic_all_terms')), '', function (v) {
+                state.youth = v;
+                refresh();
+            }, 'albani-overlap-youth'));
+        controls.appendChild(A.select(P.t('albani_overlap_politics'),
+            termOptions('pl', P.t('albani_kwic_all_terms')), '', function (v) {
+                state.politics = v;
+                refresh();
+            }, 'albani-overlap-politics'));
+        var search = P.el('input', 'iwac-vis-control iwac-vis-albani__search');
+        search.type = 'search';
+        search.setAttribute('aria-label', P.t('albani_kwic_filter'));
+        search.placeholder = P.t('albani_kwic_filter');
+        search.addEventListener('input', function () {
+            state.query = search.value.trim();
+            refresh();
+        });
+        controls.appendChild(search);
+        var counter = P.el('p', 'iwac-vis-albani__count');
+        controls.appendChild(counter);
+        panel.panel.insertBefore(controls, panel.chart);
+
+        var kwic = P.buildConcordance({
+            rows: [],
+            items: passages.items || [],
+            pageSize: 15,
+            emptyKey: 'albani_kwic_empty',
+            className: 'iwac-vis-albani__kwic',
+            renderMeta: function (row, item) {
+                var meta = P.el('p', 'iwac-vis-kwic-meta');
+                var title = P.el('a', 'iwac-vis-kwic-title', item.t || item.o);
+                title.href = A.itemHref(ctx, item.o, item.u);
+                meta.appendChild(title);
+                if (item.y) meta.appendChild(P.el('span', 'iwac-vis-kwic-source', ' · ' + item.y));
+                var win = P.el('a', 'iwac-vis-albani__window',
+                    P.t('albani_kwic_window', { part: row.p, window: A.windowLabel(row.s, row.x) }));
+                win.href = A.windowHref(ctx, item, row.p, row.s);
+                win.title = P.t('albani_kwic_window_hint');
+                meta.appendChild(P.el('span', 'iwac-vis-kwic-sep', ' · '));
+                meta.appendChild(win);
+                meta.appendChild(P.el('span', 'iwac-vis-kwic-frame', display(row.y) + ' × ' + display(row.pl)));
+                if (row.md === 'exchange') {
+                    meta.appendChild(A.badge(P.t('albani_kwic_exchange'), P.t('albani_kwic_exchange_hint')));
+                }
+                return meta;
+            }
+        });
+        panel.chart.classList.add('iwac-vis-albani__kwic-host');
+        panel.chart.appendChild(kwic.root);
+
+        function refresh() {
+            var monologue = store.get('scope') === 'monologue';
+            var rows = allRows.filter(function (r) {
+                if (monologue && r.md === 'exchange') return false;
+                if (state.youth && r.y !== state.youth) return false;
+                if (state.politics && r.pl !== state.politics) return false;
+                return A.kwicMatches(r, state.query);
+            });
+            counter.textContent = P.t('albani_kwic_count', {
+                shown: P.formatNumber(rows.length), total: P.formatNumber(allRows.length) });
+            kwic.update(rows);
+        }
+        refresh();
+        return { refresh: refresh };
+    }
+
     A.renderOverlap = function (section, bundle, store, fetch, ctx) {
         var titles = A.recordingsById(bundle.metadata);
         var byId = A.entriesById(bundle.lexicon);
@@ -307,7 +411,7 @@
                 function (built) {
                     var list = payload().pairs || [];
                     if (!list.length) return null;
-                    var built2 = pairsOption(list, byId);
+                    var built2 = pairsOption(list, byId, built.chart);
                     A.matrixHeight(built.chart, built2.rows, 30, 150);
                     return built2.option;
                 }, { wide: true, key: KEY.pairs, chartClass: 'iwac-vis-albani__matrix' });
@@ -320,8 +424,10 @@
                         xName: P.t('albani_scatter_x'),
                         yName: P.t('albani_scatter_y'),
                         tooltip: function (term) {
-                            return P.t('albani_collocates_tooltip', {
+                            var line = P.t('albani_collocates_tooltip', {
                                 count: term.n, segments: P.formatNumber(term.s), recordings: P.formatNumber(term.r) });
+                            if (term.ratio == null) line += '<br>' + P.t('albani_collocates_only_near');
+                            return line;
                         }
                     });
                 }, { wide: true, key: KEY.words, chartClass: 'iwac-vis-albani__scatter' });
@@ -333,6 +439,8 @@
             listPanel.panel.insertBefore(listDesc, listPanel.chart);
             listPanel.chart.classList.add('iwac-vis-albani__list-host');
             host.appendChild(listPanel.panel);
+
+            var passages = passagesPanel(host, overlap, byId, store, ctx);
 
             function refreshList() {
                 listPanel.chart.innerHTML = '';
@@ -346,6 +454,7 @@
                 pairs.redraw();
                 words.redraw();
                 refreshList();
+                passages.refresh();
             }, { keys: ['scope'] });
             store.subscribe(function () {
                 pairs.redraw();

@@ -32,12 +32,17 @@
      * The cards of one facet, in A.recordingOrder for recordings and in
      * their natural order (before → after, monologue → dialogue) otherwise.
      */
-    function slices(keyness, facet, metadata) {
-        var data = keyness['by_' + facet] || {};
-        var period = (keyness.period || {}).split || '';
+    function scopeData(keyness, scope) {
+        return (keyness.scopes && keyness.scopes[scope]) || keyness;
+    }
+
+    function slices(keyness, facet, metadata, scope) {
+        var src = facet === 'mode' ? keyness : scopeData(keyness, scope);
+        var data = src['by_' + facet] || {};
+        var period = (src.period || keyness.period || {}).split || '';
         var date = P.formatDate ? P.formatDate(period) : period;
         if (facet === 'recording') {
-            return A.recordingOrder(metadata).filter(function (r) { return data[r.o]; }).map(function (r) {
+            return A.recordingOrder(metadata, scope).filter(function (r) { return data[r.o]; }).map(function (r) {
                 return { key: r.o, title: r.t, year: r.y, rec: r, terms: data[r.o] };
             });
         }
@@ -79,11 +84,16 @@
         terms.forEach(function (term, i) {
             var li = P.el('li', 'iwac-vis-albani__sig-word iwac-vis-albani__sig-word--' + (STEPS + 1 - step(i, terms.length)));
             li.appendChild(P.el('span', 'iwac-vis-albani__hausa', term.w));
+            var fullGloss = A.gloss(term);
+            var shortGloss = A.labelGlosses ? A.shortGloss(fullGloss) : '';
+            if (shortGloss) {
+                li.appendChild(P.el('span', 'iwac-vis-albani__sig-gloss', shortGloss));
+            }
             var ratio = term.ratio != null ? '×' + P.formatDecimal(term.ratio, 1) : P.t('albani_keyness_only_here');
             var detail = P.t('albani_keyness_tooltip', {
                 count: term.n, segments: P.formatNumber(term.s),
                 g2: P.formatNumber(Math.round(term.g2 || 0)) });
-            li.title = ratio + ' · ' + detail;
+            li.title = (fullGloss ? fullGloss + ' · ' : '') + ratio + ' · ' + detail;
             // The ratio for screen readers, which never see a `title`.
             li.appendChild(P.el('span', 'iwac-vis-albani__sr', ' (' + ratio + ')'));
             list.appendChild(li);
@@ -92,7 +102,7 @@
         return el;
     }
 
-    A.renderKeyness = function (section, bundle, fetch, ctx) {
+    A.renderKeyness = function (section, bundle, store, fetch, ctx) {
         var host = P.el('div', 'iwac-vis-albani__deferred');
         section.appendChild(host);
 
@@ -130,18 +140,20 @@
             panel.chart.appendChild(grid);
 
             function refresh() {
-                var list = slices(keyness, state.facet, bundle.metadata);
+                var scope = store ? store.get('scope') : 'all';
+                var list = slices(keyness, state.facet, bundle.metadata, scope);
                 grid.innerHTML = '';
                 grid.classList.toggle('iwac-vis-albani__sigs--pair', state.facet !== 'recording');
                 var max = state.facet === 'recording' ? RECORDING_WORDS : SLICE_WORDS;
                 list.forEach(function (slice) { grid.appendChild(card(slice, max, ctx)); });
                 empty.hidden = list.length > 0;
 
-                var period = keyness.period || {};
+                var period = scopeData(keyness, scope).period || keyness.period || {};
                 var date = P.formatDate ? P.formatDate(period.split || '') : period.split;
                 if (state.facet === 'period') {
                     caption.textContent = period.tested
                         ? P.t('albani_keyness_period_desc', {
+                            date: date,
                             before: P.formatNumber(((period.recordings || {}).before || []).length),
                             after: P.formatNumber(((period.recordings || {}).after || []).length),
                             undated: P.formatNumber((period.undated || []).length) })
@@ -152,6 +164,7 @@
                 }
             }
             refresh();
+            if (store) store.subscribe(refresh, { keys: A.GLOSS_KEYS });
         });
     };
 })();

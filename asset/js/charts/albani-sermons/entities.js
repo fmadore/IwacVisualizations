@@ -47,11 +47,23 @@
     var POPUP_RECORDINGS_SMALL = 3;
     var POPUP_ROOMY_MAP = 480;
 
+    // Rate bins (per 10,000 words) calibrated for people and organisations,
+    // which are sparser than religious formulae (whose bins are [1, 4, 10]).
+    var ENTITY_STRIP_BINS = [0.5, 2, 6];
+
     function labelOf(ent) { return A.label(ent, 'label'); }
 
     function count(ent, scope) { return ((ent.n || {})[scope]) || 0; }
 
     function spread(ent, scope) { return ((ent.r || {})[scope]) || 0; }
+
+    function entitySummaryLine(ent, scope) {
+        var n = count(ent, scope);
+        var r = spread(ent, scope);
+        if (n === 1 && r === 1) return P.t('albani_entity_line_one');
+        if (r === 1) return P.t('albani_entity_line_one_rec', { count: n });
+        return P.t('albani_entity_line', { count: n, recordings: P.formatNumber(r) });
+    }
 
     /* ----------------------------------------------------------------- */
     /*  The places                                                        */
@@ -185,8 +197,7 @@
             return {
                 title: labelOf(ent),
                 titleHref: ctx.siteBase && ent.iwac ? P.itemUrl(ctx.siteBase, ent.iwac) : null,
-                subtitleLines: [P.t('albani_entity_line', { count: count(ent, scope),
-                    recordings: P.formatNumber(spread(ent, scope)) })],
+                subtitleLines: [entitySummaryLine(ent, scope)],
                 caption: recs.length ? P.t('albani_entity_top') : '',
                 // One line a recording, its count right-aligned: a ranked
                 // list short enough to fit the popup without a scrollbar.
@@ -255,16 +266,17 @@
     /* ----------------------------------------------------------------- */
 
     function ledgerPanel(host, opts, ents, metadata, store, ctx) {
-        var recs = A.recordingOrder(metadata);
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t(opts.title),
             P.t(opts.desc), { key: opts.key });
         panel.chart.classList.add('iwac-vis-albani__list-host');
         host.appendChild(panel.panel);
         var grid = P.el('div', 'iwac-vis-albani__groups');
         panel.chart.appendChild(grid);
+        panel.panel.appendChild(P.el('p', 'iwac-vis-albani__ledger-key', P.t('albani_entity_strip_key')));
 
         function refresh() {
             var scope = store.get('scope');
+            var recs = A.recordingOrder(metadata, scope);
             grid.innerHTML = '';
             opts.groups.forEach(function (g) {
                 var members = ents.filter(function (e) { return e.group === g && count(e, scope); })
@@ -295,7 +307,7 @@
                     li.appendChild(P.el('span', 'iwac-vis-albani__ledger-count', P.formatNumber(count(e, scope))));
                     li.appendChild(P.el('span', 'iwac-vis-albani__ledger-spread', P.t('albani_formulae_spread', {
                         count: spread(e, scope), total: P.formatNumber(recs.length) })));
-                    li.appendChild(A.rateStrip((e.by || {})[scope], recs, scope));
+                    li.appendChild(A.rateStrip((e.by || {})[scope], recs, scope, { bins: ENTITY_STRIP_BINS }));
                     list.appendChild(li);
                 });
                 block.appendChild(list);

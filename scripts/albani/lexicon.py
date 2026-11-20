@@ -28,6 +28,7 @@ class Entry:
     ambiguous: bool
     variants: Tuple[Tuple[str, ...], ...]   # key sequences
     exclude_before: FrozenSet[str]
+    exclude_after: FrozenSet[str] = frozenset()
     gloss_en: str = ""
     gloss_fr: str = ""
     note: str = ""
@@ -79,6 +80,8 @@ class Lexicon:
                         variants=tuple(dict.fromkeys(variants)),
                         exclude_before=frozenset(
                             match_key(fold(w)) for w in raw.get("exclude_before", [])),
+                        exclude_after=frozenset(
+                            match_key(fold(w)) for w in raw.get("exclude_after", [])),
                         gloss_en=raw.get("gloss_en", ""), gloss_fr=raw.get("gloss_fr", ""),
                         note=raw.get("note", ""),
                     )
@@ -97,14 +100,18 @@ class Lexicon:
     def single_word_keys(self) -> FrozenSet[str]:
         return frozenset(keys[0] for e in self.entries for keys in e.variants if len(keys) == 1)
 
-    def match(self, tokens: Sequence[Token], skip: Sequence[bool] = ()) -> Tuple[List[Hit], List[Hit]]:
+    def match(self, tokens: Sequence[Token], skip: Sequence[bool] = (),
+              layers: Sequence[str] = ()) -> Tuple[List[Hit], List[Hit]]:
         """``(hits, excluded)`` in one speaker turn.
 
         ``skip[i]`` marks a token no match may start on or cross (a formula
-        word). Matches never overlap inside one category; categories are
-        matched independently, so a phrase can count in two of them.
-        ``excluded`` holds the occurrences a context rule rejected, so the
-        decision stays auditable.
+        word). When ``layers`` is given, Hausa entries (``layer == "ha"``) do
+        not fire inside Arabic-labelled citations (so Qur'anic *haqqi* "truth"
+        does not count as Hausa *haƙƙi* "rights"). Matches never overlap inside
+        one category; categories are matched independently, so a phrase can
+        count in two of them. ``excluded`` holds the occurrences a context rule
+        (``exclude_before`` or ``exclude_after``) rejected, so every decision
+        stays auditable.
         """
         hits: List[Hit] = []
         excluded: List[Hit] = []
@@ -120,6 +127,9 @@ class Lexicon:
                         end = i + len(variant)
                         if end <= n and tuple(keys[i:end]) == variant and \
                                 not (skip and any(skip[i:end])):
+                            if layers and entry.layer == "ha" and \
+                                    all(layers[k] == "ar" for k in range(i, end)):
+                                continue
                             found = (end, entry)
                             break
                 if found is None:
@@ -127,7 +137,8 @@ class Lexicon:
                     continue
                 end, entry = found
                 hit = Hit(entry, i, end)
-                if i > 0 and keys[i - 1] in entry.exclude_before:
+                if (i > 0 and keys[i - 1] in entry.exclude_before) or \
+                        (end < n and keys[end] in entry.exclude_after):
                     excluded.append(hit)
                 else:
                     hits.append(hit)

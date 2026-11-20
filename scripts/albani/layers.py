@@ -116,7 +116,7 @@ def _arabic_weight(token: Token, res: Resources) -> float:
     key = token.key
     if key in res.arabic_cues:
         return 1.0
-    if key in res.hausa_stop or key in res.consonant_loans:
+    if key in res.hausa_stop or key in res.consonant_loans or key in res.english:
         return 0.0
     weight = 0.0
     if len(key) >= 5 and key.endswith(res.suffixes):
@@ -159,14 +159,17 @@ def label_tokens(tokens: Sequence[Token]) -> List[str]:
     # neither counts as Arabic nor breaks up the Hausa around it.
     positions = [k for k in range(n) if not labels[k]]
     hausa = res.hausa_cues
+    english = res.english
     h_cue = [1 if tokens[k].key in hausa else 0 for k in positions]
+    e_cue = [1 if tokens[k].key in english else 0 for k in positions]
     a_cue = [_arabic_weight(tokens[k], res) for k in positions]
     raw: List[str] = []
     for j in range(len(positions)):
         lo, hi = max(0, j - WINDOW), min(len(positions), j + WINDOW + 1)
         a = sum(a_cue[lo:hi])
         h = sum(h_cue[lo:hi])
-        cited = a >= MIN_ARABIC_CUES and h <= MAX_HAUSA_CUES and a > h
+        e = sum(e_cue[lo:hi])
+        cited = a >= MIN_ARABIC_CUES and h <= MAX_HAUSA_CUES and e == 0 and a > h
         raw.append(ARABIC if cited else HAUSA)
 
     # Fold short Arabic runs back into the Hausa.
@@ -184,17 +187,32 @@ def label_tokens(tokens: Sequence[Token]) -> List[str]:
             j += 1
     # A citation's edge words sit in windows that reach into the Hausa
     # around it, so they vote Hausa ("… wa antum muslimun | to wannan…").
-    # Let each run absorb up to EDGE_EXTENSION neighbours that are not
-    # themselves Hausa function words.
+    # Extend each Arabic run along neighbouring tokens that carry Arabic
+    # weight (bridging over neutral particles such as `wa`), and absorb at
+    # most one trailing non-Hausa, non-English word beside an Arabic cue
+    # (e.g. `muslimun` after `antum`) without swallowing three words of
+    # surrounding Hausa exposition.
+    neutral = res.neutral
     arabic_runs = [j for j, lab in enumerate(raw) if lab == ARABIC]
     for j in arabic_runs:
         for step in (-1, 1):
             k = j + step
+            last_ar = j
             for _ in range(EDGE_EXTENSION):
-                if not 0 <= k < len(raw) or raw[k] == ARABIC or h_cue[k]:
+                if not 0 <= k < len(raw) or raw[k] == ARABIC or h_cue[k] or e_cue[k]:
                     break
-                raw[k] = ARABIC
+                if a_cue[k] > 0:
+                    for m in range(last_ar + step, k + step, step):
+                        raw[m] = ARABIC
+                    last_ar = k
+                elif tokens[positions[k]].key not in neutral:
+                    break
                 k += step
+            edge = last_ar + step
+            if (0 <= edge < len(raw) and raw[edge] != ARABIC
+                    and not h_cue[edge] and not e_cue[edge]
+                    and tokens[positions[edge]].key not in res.hausa_stop):
+                raw[edge] = ARABIC
     for j, k in enumerate(positions):
         labels[k] = raw[j]
     return labels

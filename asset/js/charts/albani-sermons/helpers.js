@@ -77,6 +77,28 @@
     };
 
     /**
+     * Hausa-aware search folding: NFD accents plus hooked letters
+     * (ɓ→b, ɗ→d, ƙ→k, ƴ→'y) and apostrophe typography, matching
+     * scripts/albani/normalize.py so typing "kasa" finds "ƙasa" and
+     * "dalibai" finds "ɗalibai" in the KWIC search boxes.
+     */
+    A.foldHausa = function (str) {
+        return P.foldAccents(String(str || '')
+            .replace(/[ɓƁ]/g, 'b')
+            .replace(/[ɗƊ]/g, 'd')
+            .replace(/[ƙƘ]/g, 'k')
+            .replace(/[ƴƳ]/g, "'y")
+            .replace(/[’‘ʼʾʿ`´]/g, "'"));
+    };
+
+    /** Hausa-aware KWIC free-text match over a row's left/match/right text. */
+    A.kwicMatches = function (row, needle) {
+        if (!needle) return true;
+        var hay = A.foldHausa((row.l || '') + ' ' + (row.m || '') + ' ' + (row.r || ''));
+        return hay.indexOf(A.foldHausa(needle)) !== -1;
+    };
+
+    /**
      * One promise per bundle, shared by every section that reads it — the
      * youth and politics sections both need collocates and the network.
      */
@@ -254,13 +276,71 @@
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var maxR = 1;
         terms.forEach(function (t) { if ((t.r || 0) > maxR) maxR = t.r; });
+        var hasLex = terms.some(function (t) { return !!t.lex; });
+
+        function pointOf(t) {
+            return { value: [Math.max(1, t.n), t.lr], term: t };
+        }
+        function makeSeries(name, list, style) {
+            return {
+                type: 'scatter',
+                name: name,
+                data: list.map(pointOf),
+                symbolSize: function (v, p) {
+                    var term = (p.data && p.data.term) || {};
+                    var r = term.r || 1;
+                    return 7 + 9 * Math.sqrt(r / maxR);
+                },
+                itemStyle: style,
+                // The word, and under it its draft gloss in the page's
+                // language: the reader of the French site reads French.
+                label: {
+                    show: true,
+                    position: 'right',
+                    distance: 4,
+                    formatter: function (p) {
+                        var term = (p.data && p.data.term) || {};
+                        var gloss = A.labelGlosses ? A.shortGloss(A.gloss(term)) : '';
+                        return '{w|' + richSafe(term.w || '') + '}'
+                            + (gloss ? '\n{g|' + richSafe(gloss) + '}' : '');
+                    },
+                    rich: {
+                        w: { fontSize: P.AXIS_FONT_SM + 1, color: tokens.ink, lineHeight: 15 },
+                        g: { fontSize: P.AXIS_FONT_SM, color: tokens.muted, lineHeight: 13, fontStyle: 'italic' }
+                    }
+                },
+                labelLayout: { moveOverlap: 'shiftY', hideOverlap: true },
+                emphasis: { focus: 'self', label: { fontWeight: 'bold' } }
+            };
+        }
+
+        var regular = hasLex ? terms.filter(function (t) { return !t.lex; }) : terms;
+        var lexicon = hasLex ? terms.filter(function (t) { return !!t.lex; }) : [];
+        var series = [
+            makeSeries(P.t('albani_node_collocate'), regular, {
+                color: tokens.primary,
+                opacity: 0.85,
+                borderColor: tokens.panelBg || tokens.surface,
+                borderWidth: 1
+            })
+        ];
+        if (lexicon.length) {
+            series.push(makeSeries(P.t('albani_node_term'), lexicon, {
+                color: tokens.panelBg || tokens.surface,
+                opacity: 0.95,
+                borderColor: tokens.primary,
+                borderWidth: 2
+            }));
+        }
+
         return {
-            grid: C._grid({ left: 8, top: 36, bottom: 44, right: 72 }),
+            grid: C._grid({ left: 8, top: lexicon.length ? 48 : 36, bottom: 44, right: 108 }),
+            legend: lexicon.length ? C._legend({ top: 0 }) : undefined,
             tooltip: C._inPanelTooltip({
                 trigger: 'item',
                 confine: true,
                 formatter: function (p) {
-                    var term = terms[p.dataIndex] || {};
+                    var term = (p.data && p.data.term) || {};
                     var lines = ['<strong>' + P.escapeHtml(term.w || '') + '</strong>'];
                     var gloss = A.gloss(term);
                     if (gloss) lines.push('<em>' + P.escapeHtml(gloss) + '</em>');
@@ -284,43 +364,12 @@
                 nameLocation: 'end',
                 nameGap: 14,
                 nameTextStyle: { align: 'left' },
+                minInterval: 1,
                 min: function (v) { return Math.max(0, Math.floor(v.min) - 1); },
                 // The ratio itself on the axis, not its log: ×2, ×4, ×8.
                 axisLabel: { formatter: function (v) { return '×' + P.formatNumber(Math.pow(2, v)); } }
             },
-            series: [{
-                type: 'scatter',
-                data: terms.map(function (t) { return [Math.max(1, t.n), t.lr]; }),
-                symbolSize: function (v, p) {
-                    var r = (terms[p.dataIndex] || {}).r || 1;
-                    return 7 + 9 * Math.sqrt(r / maxR);
-                },
-                itemStyle: {
-                    color: tokens.primary,
-                    opacity: 0.85,
-                    borderColor: tokens.panelBg || tokens.surface,
-                    borderWidth: 1
-                },
-                // The word, and under it its draft gloss in the page's
-                // language: the reader of the French site reads French.
-                label: {
-                    show: true,
-                    position: 'right',
-                    distance: 4,
-                    formatter: function (p) {
-                        var term = terms[p.dataIndex] || {};
-                        var gloss = A.labelGlosses ? A.shortGloss(A.gloss(term)) : '';
-                        return '{w|' + richSafe(term.w || '') + '}'
-                            + (gloss ? '\n{g|' + richSafe(gloss) + '}' : '');
-                    },
-                    rich: {
-                        w: { fontSize: P.AXIS_FONT_SM + 1, color: tokens.ink, lineHeight: 15 },
-                        g: { fontSize: P.AXIS_FONT_SM, color: tokens.muted, lineHeight: 13, fontStyle: 'italic' }
-                    }
-                },
-                labelLayout: { hideOverlap: true },
-                emphasis: { focus: 'self', label: { fontWeight: 'bold' } }
-            }]
+            series: series
         };
     };
 
@@ -330,10 +379,18 @@
      * (the score, the profiles, the formula strips, the signature cards)
      * reads its rows from here, so a recording keeps its place from one
      * view to the next.
+     *
+     * When `scope` is passed (default `'all'`), recordings with zero counted
+     * words in that scope (e.g. an English-only recording) are omitted so
+     * every counted view shares the same rows and denominator. Pass
+     * `includeZero = true` to include uncounted analysed rows.
      */
-    A.recordingOrder = function (metadata) {
+    A.recordingOrder = function (metadata, scope, includeZero) {
+        var sc = scope || 'all';
         return ((metadata && metadata.recordings) || [])
-            .filter(function (r) { return r.st === 'analysed'; })
+            .filter(function (r) {
+                return r.st === 'analysed' && (includeZero || A.scopeWords(r, sc) > 0);
+            })
             .sort(function (a, b) {
                 if (!!a.d !== !!b.d) return a.d ? -1 : 1;
                 return String(a.d || '').localeCompare(String(b.d || ''))
@@ -407,12 +464,13 @@
      *  module's heat ramp; 0 is the empty cell. */
     var STRIP_BINS = [1, 4, 10];
 
-    function stripBin(rate) {
+    function stripBin(rate, bins) {
         if (!rate) return 0;
-        for (var i = 0; i < STRIP_BINS.length; i++) {
-            if (rate < STRIP_BINS[i]) return i + 1;
+        var stops = bins || STRIP_BINS;
+        for (var i = 0; i < stops.length; i++) {
+            if (rate < stops[i]) return i + 1;
         }
-        return STRIP_BINS.length + 1;
+        return stops.length + 1;
     }
 
     /**
@@ -421,16 +479,21 @@
      * assistive technology — the row states the count and the spread.
      *
      * @param {Object} byRec  {o_id: count}
+     * @param {Array} recs    recordings in display order
+     * @param {string} scope  counting scope
+     * @param {Object} [opts] optional { bins: [b1, b2, b3] }
      */
-    A.rateStrip = function (byRec, recs, scope) {
+    A.rateStrip = function (byRec, recs, scope, opts) {
+        var bins = (opts && opts.bins) || STRIP_BINS;
         var strip = P.el('span', 'iwac-vis-albani__strip');
         strip.setAttribute('aria-hidden', 'true');
         recs.forEach(function (r) {
             var n = (byRec || {})[r.o] || 0;
             var rate = A.per10k(n, A.scopeWords(r, scope));
-            var cell = P.el('span', 'iwac-vis-albani__strip-cell iwac-vis-albani__strip-cell--' + stripBin(rate));
-            cell.title = A.recordingLabel(r) + ' — ' + P.t('albani_formulae_cell', {
-                count: n, rate: P.formatDecimal(rate, 1) });
+            var cell = P.el('span', 'iwac-vis-albani__strip-cell iwac-vis-albani__strip-cell--' + stripBin(rate, bins));
+            cell.title = A.recordingLabel(r) + ' — ' + (n === 0
+                ? P.t('albani_formulae_cell_zero')
+                : P.t('albani_formulae_cell', { count: n, rate: P.formatDecimal(rate, 1) }));
             strip.appendChild(cell);
         });
         return strip;

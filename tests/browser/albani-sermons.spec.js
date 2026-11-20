@@ -172,6 +172,67 @@ test('one switch shows or hides the translations, and the address remembers it',
     // The contents link every section by a stable anchor.
     await expect(page.locator('.iwac-vis-albani__toc-link')).toHaveCount(8);
     await expect(page.locator('.iwac-vis-albani__toc-link').first()).toHaveAttribute('href', '#albani-corpus');
+    // Vocabulary frequency table glosses follow the same switch.
+    const vocabGlosses = page.locator('[data-iwac-panel="albani-vocab-list"] .iwac-vis-albani__vocab-gloss');
+    await expect(vocabGlosses).toHaveCount(0);
+    await page.locator('[data-iwac-control="albani-glosses:on"]').click();
+    await expect.poll(() => vocabGlosses.count()).toBeGreaterThan(0);
+});
+
+test('meetings passages are rights-gated and filterable, and KWIC search folds Hausa orthography', async ({ page }) => {
+    await ready(page);
+    const panel = page.locator('[data-iwac-panel="albani-overlap-passages"]');
+    const rows = panel.locator('.iwac-vis-kwic-row');
+    await expect(rows).toHaveCount(2);
+    await expect(panel).toContainText('counted above but not quoted');
+    // Hooked Hausa ƴ folds to 'y, matching "'yan siyasa" in the passage context.
+    const search = panel.locator('.iwac-vis-albani__search');
+    await search.fill('ƴan siyasa');
+    await expect(rows).toHaveCount(2);
+    await search.fill('no-such-word');
+    await expect(rows).toHaveCount(0);
+    await search.fill('');
+    await expect(rows).toHaveCount(2);
+    await panel.locator('select[data-iwac-control="albani-overlap-politics"]').selectOption('sarki');
+    await expect(rows).toHaveCount(1);
+
+    // Theme KWIC search folds hooked letters (ƙ→k, ƴ→'y).
+    const polRows = page.locator('[data-iwac-panel="albani-politics-kwic"] .iwac-vis-kwic-row');
+    const polSearch = page.locator('[data-iwac-panel="albani-politics-kwic"] .iwac-vis-albani__search');
+    await polSearch.fill('sarƙin');
+    await expect(polRows).toHaveCount(2);
+    await polSearch.fill('ƴan siyasa');
+    await expect(polRows).toHaveCount(2);
+    await polSearch.fill('no-such-word');
+    await expect(polRows).toHaveCount(0);
+});
+
+test('corpus table filters by status and search, and youth collocates omits a duplicate pooled slice', async ({ page }) => {
+    await page.route('**/albani-sermons/collocates.json*', async (route) => {
+        const response = await route.fetch();
+        const data = await response.json();
+        const sample = { w: 'ilimi', n: 6, s: 3, r: 2, bg: 20, ratio: 3.1 };
+        ['all', 'monologue'].forEach((scope) => {
+            data.scopes[scope].youth.pooled = { terms: [sample] };
+            data.scopes[scope].youth.youth = { terms: [sample] };
+        });
+        await route.fulfill({ response, json: data });
+    });
+    await ready(page);
+    const corpusPanel = page.locator('[data-iwac-panel="albani-corpus-table"]');
+    const tbodyRows = corpusPanel.locator('tbody tr');
+    await expect(tbodyRows).toHaveCount(4);
+    await corpusPanel.locator('select[data-iwac-control="albani-corpus-status"]').selectOption('legacy');
+    await expect(tbodyRows).toHaveCount(1);
+    await corpusPanel.locator('select[data-iwac-control="albani-corpus-status"]').selectOption('');
+    await corpusPanel.locator('.iwac-vis-albani__search').fill('gurɓacewar');
+    await expect(tbodyRows).toHaveCount(1);
+    await corpusPanel.locator('.iwac-vis-albani__search').fill('daga');
+    await expect(tbodyRows).toHaveCount(2);
+
+    const youthOpts = await page.locator('select[data-iwac-control="albani-youth-collocates"] option').evaluateAll(
+        (els) => els.map((o) => o.value));
+    expect(youthOpts).toEqual(['youth']);
 });
 
 test('the places named are mapped, the people and bodies listed by kind', async ({ page }) => {
@@ -256,6 +317,7 @@ test('every panel the page builds is claimed by the section that builds it', asy
 const SINGLE = [
     { key: 'albani-score', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
     { key: 'albani-overlap-pairs', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
+    { key: 'albani-overlap-passages', section: 'overlap', bundles: ['lexicon.json', 'metadata.json', 'overlap.json'] },
     { key: 'albani-youth-kwic', section: 'youth',
         bundles: ['collocates.json', 'concordance-youth.json', 'lexicon.json', 'metadata.json', 'network.json'] },
     { key: 'albani-places', section: 'entities', bundles: ['entities.json', 'metadata.json'] },

@@ -184,6 +184,19 @@
     color: var(--ink-strong, #05070c);
 }
 
+.iwac-vis-albani__vocab-word {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
+}
+
+.iwac-vis-albani__vocab-gloss {
+    font-size: var(--text-xs, 0.8125rem);
+    font-style: italic;
+    color: var(--muted, #66696e);
+}
+
 .iwac-vis-albani__excluded {
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
@@ -506,6 +519,19 @@
 .iwac-vis-albani__sig-word--4 .iwac-vis-albani__hausa {
     font-weight: 600;
     color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-albani__sig-word {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-albani__sig-gloss {
+    font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+    font-size: var(--text-2xs, 0.6875rem);
+    font-style: italic;
+    color: var(--muted, #66696e);
 }
 
 /*  `.iwac-vis-albani__sr` — the ratio, for screen readers only (a `title`

@@ -157,11 +157,15 @@ def scan_text(text: str, lexicon: Lexicon, english_only: bool = False) -> tuple:
             tokens = tokenize(text, turn.start, turn.end)
             labels = label_tokens(tokens)
             skip = [lab.startswith(FORMULA_PREFIX) for lab in labels]
-            hits, excluded = lexicon.match(tokens, skip)
+            hits, excluded = lexicon.match(tokens, skip, labels)
             turns.append(TurnScan(turn.speaker, turn.start, turn.end, tokens,
                                   labels, hits, excluded))
         seg_tokens = [tok for t in turns for tok in t.tokens]
-        english = english_only or is_english(seg_tokens)
+        detected_en = is_english(seg_tokens)
+        if english_only and seg_tokens and not detected_en:
+            logger.warning("  segment flagged English by catalogue metadata alone "
+                           "(detected non-English text)")
+        english = english_only or detected_en
         scans.append(SegmentScan(segment, turns, _segment_mode(turns), english))
     return transcript.parts, scans
 

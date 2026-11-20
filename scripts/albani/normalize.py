@@ -81,6 +81,12 @@ def fold(token: str) -> str:
 
 _DOUBLE = re.compile(r"([a-z])\1+")
 
+# Geminate minimal pairs where collapsing doubled letters merges two distinct
+# words — worst of all, Makka (Mecca) into the Hausa stopword maka ("for you"),
+# Arabic haqqa ("truly") into the Hausa stopword/cue haka ("thus"), and babba
+# ("big, adult") into baba ("father"). Checked after q→k and trailing -ah.
+_PROTECTED_GEMINATES = frozenset(("makka", "hakka", "babba"))
+
 
 def match_key(folded: str) -> str:
     """The key variants are matched and counted on. Lossy by design.
@@ -93,8 +99,14 @@ def match_key(folded: str) -> str:
     True
     >>> match_key("'ya'ya") == match_key("yaya")
     False
+    >>> match_key("makka") == match_key("maka")
+    False
     """
     key = folded.replace("q", "k")
+    if len(key) > 3 and key.endswith("ah"):
+        key = key[:-1]
+    if key in _PROTECTED_GEMINATES:
+        return key
     key = _DOUBLE.sub(r"\1", key)
     if len(key) > 3 and key.endswith("ah"):
         key = key[:-1]

@@ -90,10 +90,12 @@
                 return (order.indexOf(a.category) - order.indexOf(b.category)) || (b.n[scope] - a.n[scope]);
             });
             table.update(found.map(function (e) {
+                var excl = (e.excluded_by_scope && e.excluded_by_scope[scope] != null)
+                    ? e.excluded_by_scope[scope] : e.excluded;
                 return {
                     term: e.display,
                     ambiguous: e.ambiguous,
-                    excluded: e.excluded,
+                    excluded: excl,
                     gloss: A.label(e, 'gloss'),
                     category: A.categoryLabel(lexicon, theme, e.category),
                     n: P.formatNumber(e.n[scope]),
@@ -124,11 +126,11 @@
      * a recording sits at the same height here as in the score below.
      */
     function profilePanel(section, theme, lexicon, metadata, store) {
-        var recs = A.recordingOrder(metadata);
         var cats = ((lexicon.themes || {})[theme] || {}).categories || [];
         var panel = A.chartPanel(section, P.t('albani_profile'), P.t('albani_profile_desc'),
             function (built) {
                 var scope = store.get('scope');
+                var recs = A.recordingOrder(metadata, scope);
                 var byRec = {};
                 ((lexicon.by_recording || {})[scope] || []).forEach(function (r) { byRec[r.o] = r; });
                 var rows = recs.filter(function (r) {
@@ -191,8 +193,11 @@
 
     function collocatesPanel(host, theme, lexicon, collocates, store) {
         var cats = ((lexicon.themes || {})[theme] || {}).categories || [];
-        var state = { slice: 'pooled' };
-        var options = [{ value: 'pooled', label: P.t('albani_collocates_pooled') }];
+        // When a theme has only one core category (youth), "pooled" and that
+        // category hold identical data; skip the duplicate "All main terms" row.
+        var coreCats = cats.filter(function (c) { return c.core; });
+        var usePooled = coreCats.length > 1;
+        var options = usePooled ? [{ value: 'pooled', label: P.t('albani_collocates_pooled') }] : [];
         cats.forEach(function (c) {
             var any = A.SCOPES.some(function (s) {
                 var payload = ((((collocates.scopes || {})[s] || {})[theme] || {})[c.id]) || {};
@@ -200,6 +205,10 @@
             });
             if (any) options.push({ value: c.id, label: A.label(c, 'label') });
         });
+        if (!options.length) {
+            options.push({ value: 'pooled', label: P.t('albani_collocates_pooled') });
+        }
+        var state = { slice: options[0].value };
         var picker = A.select(P.t('albani_collocates_for'), options, state.slice, function (value) {
             state.slice = value;
             panel.redraw();
@@ -257,7 +266,10 @@
         }
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('albani_network'),
-            P.t('albani_network_desc', { min: MIN_NETWORK_HITS, window: network.window || collocates.window }),
+            P.t('albani_network_desc', {
+                min: collocates.min_count || MIN_NETWORK_HITS,
+                window: network.window || collocates.window
+            }),
             { key: KEY[theme].network });
         host.appendChild(panel.panel);
 
@@ -318,7 +330,17 @@
                 var gloss = glossOf(d);
                 if (gloss) rows.push({ label: P.t('albani_col_gloss'), value: gloss });
                 rows.push({ label: P.t('albani_network_occurrences'), value: P.formatNumber(d.n || 0) });
-                if (d.lr != null) rows.push({ label: P.t('albani_network_ratio'), value: '×' + P.formatDecimal(Math.pow(2, d.lr), 1) });
+                if ('ratio' in d) {
+                    rows.push({
+                        label: P.t('albani_network_ratio'),
+                        value: d.ratio != null ? '×' + P.formatDecimal(d.ratio, 1) : P.t('albani_collocates_only_near')
+                    });
+                } else if (d.lr != null) {
+                    rows.push({
+                        label: P.t('albani_network_ratio'),
+                        value: '×' + P.formatDecimal(Math.pow(2, d.lr), 1)
+                    });
+                }
                 return rows;
             },
             announce: function (node) {
@@ -349,7 +371,7 @@
             { key: KEY[theme].kwic });
         host.appendChild(panel.panel);
 
-        var state = { term: '', query: '' };
+        var state = { term: '', rec: '', query: '' };
         var present = {};
         (conc.rows || []).forEach(function (r) { present[r.e] = true; });
         var options = [{ value: '', label: P.t('albani_kwic_all_terms') }];
@@ -363,6 +385,18 @@
             state.term = v;
             refresh();
         }, 'albani-' + theme + '-kwic-term'));
+        var items = conc.items || [];
+        if (items.length > 1) {
+            var recOptions = [{ value: '', label: P.t('albani_kwic_all_recordings') }].concat(
+                items.map(function (it, idx) {
+                    return { value: String(idx), label: it.y ? it.t + ' (' + it.y + ')' : (it.t || it.o) };
+                }).sort(function (a, b) { return a.label.localeCompare(b.label); })
+            );
+            controls.appendChild(A.select(P.t('albani_kwic_recording'), recOptions, '', function (v) {
+                state.rec = v;
+                refresh();
+            }, 'albani-' + theme + '-kwic-rec'));
+        }
         var search = P.el('input', 'iwac-vis-control iwac-vis-albani__search');
         search.type = 'search';
         search.setAttribute('aria-label', P.t('albani_kwic_filter'));
@@ -378,7 +412,7 @@
 
         var kwic = P.buildConcordance({
             rows: [],
-            items: conc.items || [],
+            items: items,
             pageSize: 20,
             emptyKey: 'albani_kwic_empty',
             className: 'iwac-vis-albani__kwic',
@@ -410,10 +444,20 @@
             var rows = all.filter(function (r) {
                 if (monologue && r.md === 'exchange') return false;
                 if (state.term && r.e !== state.term) return false;
-                return P.concordanceMatches(r, state.query);
+                if (state.rec !== '' && String(r.i) !== state.rec) return false;
+                return A.kwicMatches(r, state.query);
             });
-            counter.textContent = P.t('albani_kwic_count', {
-                shown: P.formatNumber(rows.length), total: P.formatNumber(all.length) });
+            var entryCount = state.term && (conc.counts || {})[state.term];
+            if (entryCount && entryCount.found > entryCount.emitted && !monologue) {
+                counter.textContent = P.t('albani_kwic_sampled', {
+                    shown: P.formatNumber(rows.length),
+                    emitted: P.formatNumber(entryCount.emitted),
+                    found: P.formatNumber(entryCount.found)
+                });
+            } else {
+                counter.textContent = P.t('albani_kwic_count', {
+                    shown: P.formatNumber(rows.length), total: P.formatNumber(all.length) });
+            }
             kwic.update(rows);
         }
         refresh();

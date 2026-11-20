@@ -170,6 +170,12 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(N.match_key("shari'ah"), N.match_key("shari'a"))
         # 'ya'ya (offspring) is not yaya (how).
         self.assertNotEqual(N.match_key("'ya'ya"), N.match_key("yaya"))
+        # Protected geminate minimal pairs: Makka (Mecca) is not stopword maka,
+        # Arabic haqqa is not Hausa haka, babba ("big") is not baba ("father").
+        self.assertNotEqual(N.match_key("makka"), N.match_key("maka"))
+        self.assertNotEqual(N.match_key("makkah"), N.match_key("maka"))
+        self.assertNotEqual(N.match_key("haqqa"), N.match_key("haka"))
+        self.assertNotEqual(N.match_key("babba"), N.match_key("baba"))
 
     def test_tokens_keep_offsets_into_the_original(self):
         text = "Ɗaliban makarantar — 'yan mata [inaudible] sun zo."
@@ -219,6 +225,15 @@ class LayerTests(unittest.TestCase):
         self.assertTrue(L.is_english(english))
         self.assertFalse(L.is_english(hausa))
 
+    def test_english_code_switching_is_never_classified_as_arabic(self):
+        labels = self.labels("sai ya ce the secret of thinktwice with that people")
+        self.assertNotIn("ar", labels)
+
+    def test_shared_stopwords_are_neutral_in_the_layer_classifier(self):
+        res = L.resources()
+        overlap = res.hausa_cues & res.arabic_cues
+        self.assertEqual(overlap, set())
+
 
 class LexiconTests(unittest.TestCase):
     @classmethod
@@ -264,6 +279,27 @@ class LexiconTests(unittest.TestCase):
         self.assertEqual(excluded, ["sarki"])
         hits, excluded = self.hits("Allah Madaukakin Sarki")
         self.assertEqual((hits, excluded), ([], ["sarki"]))
+        # ASR-split epithet and tsarki ("ritual purity") mis-transcription.
+        for phrase in ("Allah ma daukakin sarki", "Allah madaukin sarki", "cikakken sarki"):
+            with self.subTest(phrase=phrase):
+                self.assertEqual(self.hits(phrase), ([], ["sarki"]))
+
+    def test_exclude_after_drops_boko_haram_and_kwaya_daya(self):
+        self.assertEqual(self.hits("akidar boko haram da makarantar boko"),
+                         (["makaranta", "boko"], ["boko"]))
+        self.assertEqual(self.hits("hadisi ƙwaya ɗaya da sha ƙwaya"),
+                         (["kwaya"], ["kwaya"]))
+
+    def test_spoken_hausa_variants_match_their_entries(self):
+        hits, _ = self.hits("ilmi da shuwagabanni a makarantan nan")
+        self.assertEqual(hits, ["ilimi", "shugaba", "makaranta"])
+
+    def test_hausa_entries_do_not_match_inside_arabic_citations(self):
+        tokens = N.tokenize(
+            "li annal haqqa wahid wa maza ba'dal haqqi illad dalal wa antum muslimun")
+        labels = L.label_tokens(tokens)
+        hits, _ = self.lex.match(tokens, layers=labels)
+        self.assertNotIn("hakki", [h.entry.id for h in hits])
 
     def test_hooked_and_unhooked_spellings_both_match(self):
         self.assertEqual(self.hits("ɗalibai dalibai")[0], ["dalibai", "dalibai"])
@@ -349,6 +385,36 @@ class CorpusTests(unittest.TestCase):
         # Spelling variants share an entry: addini and adini fold together.
         self.assertIn(N.match_key("addini"), glosses)
         self.assertEqual(glosses[N.match_key("adini")]["fr"], "religion")
+        # Hooked keys fold through fold() as well as match_key().
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "glosses.json"
+            p.write_text(json.dumps({"status": "draft", "entries": {
+                "Ɗalibai": {"en": "students", "fr": "étudiants"},
+            }}), encoding="utf-8")
+            _, loaded = load_glosses(p)
+            self.assertIn(N.match_key(N.fold("ɗalibai")), loaded)
+
+    def test_overlapping_cross_category_hits_count_once_and_do_not_self_link(self):
+        # Each occurrence sits in its own turn so the only pair within the
+        # window is the overlapping "tsarin mulki" / "mulki" span itself.
+        text = "\n".join(
+            ["[Segment 1/1 | 00:00:00–end]"]
+            + ["[Speaker seg1-spk:0]\ntsarin mulki na gaskiya"] * 6
+        )
+        gen = generator(frame({"o:id": "1", "OCR": text}))
+        lex = gen.build_lexicon()
+        # Six occurrences of "tsarin mulki" trigger both constitution and rule,
+        # yet the theme total counts each span once, not twelve times.
+        self.assertEqual(lex["by_recording"]["all"][0]["themes"]["politics"], 6)
+        net = gen.build_network()
+        links = {(l["source"], l["target"]) for l in net["scopes"]["all"]["politics"]["links"]}
+        self.assertNotIn(("e:mulki", "e:tsarin_mulki"), links)
+        self.assertNotIn(("e:tsarin_mulki", "e:mulki"), links)
+
+    def test_concordance_excludes_english_segments(self):
+        gen = generator(frame({"o:id": "1", "OCR": CURRENT, "language": "Anglais"}))
+        conc = gen.build_concordance("youth")
+        self.assertEqual((conc["items"], conc["rows"], conc["counts"]), ([], [], {}))
 
     def test_entities_count_once_per_span_and_never_on_the_merged_key(self):
         entities = {"status": "draft", "entities": [
@@ -451,6 +517,20 @@ class RightsTests(unittest.TestCase):
         bundles["concordance-youth.json"]["items"].append({"o": "1"})
         with self.assertRaises(RightsError):
             gen.check_rights(bundles)
+
+    def test_overlap_passages_are_rights_gated(self):
+        gen_priv, bundles_priv = self.build(public=False)
+        self.assertEqual(bundles_priv["overlap.json"]["passages"]["items"], [])
+        self.assertEqual(bundles_priv["overlap.json"]["passages"]["rows"], [])
+        self.assertGreater(bundles_priv["overlap.json"]["passages"]["withheld"], 0)
+        gen_priv.check_rights(bundles_priv)
+        bundles_priv["overlap.json"]["passages"]["items"].append({"o": "1"})
+        with self.assertRaises(RightsError):
+            gen_priv.check_rights(bundles_priv)
+        gen_pub, bundles_pub = self.build(public=True)
+        # "matasa" meets both "'yan siyasa" and "Sarkin" within 10 tokens.
+        self.assertEqual(len(bundles_pub["overlap.json"]["passages"]["rows"]), 2)
+        gen_pub.check_rights(bundles_pub)
 
 
 class PeriodTests(unittest.TestCase):

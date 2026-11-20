@@ -84,7 +84,7 @@
         { key: 'overlap', heading: 'albani_overlap_heading', intro: 'albani_overlap_intro', needs: ['lexicon'],
             build: function (s, b, store, fetch, ctx) { A.renderOverlap(s, b, store, fetch, ctx); } },
         { key: 'keyness', heading: 'albani_keyness_heading', intro: 'albani_keyness_intro', needs: [],
-            build: function (s, b, store, fetch, ctx) { A.renderKeyness(s, b, fetch, ctx); } },
+            build: function (s, b, store, fetch, ctx) { A.renderKeyness(s, b, store, fetch, ctx); } },
         { key: 'method', heading: 'albani_method', intro: 'albani_method_lead', needs: [],
             build: function (s, b) { A.renderMethod(s, b.metadata); } }
     ];
@@ -133,7 +133,9 @@
         if (metadata.lexicon_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_seed'), P.t('albani_badge_seed_hint')));
         }
-        badges.appendChild(A.badge(P.t('albani_badge_entities'), P.t('albani_badge_entities_hint')));
+        if (metadata.entities_status !== 'validated') {
+            badges.appendChild(A.badge(P.t('albani_badge_entities'), P.t('albani_badge_entities_hint')));
+        }
         if (metadata.gloss_status && metadata.gloss_status !== 'validated') {
             badges.appendChild(A.badge(P.t('albani_badge_glosses'), P.t('albani_badge_glosses_hint')));
         }
@@ -145,9 +147,11 @@
         root.appendChild(P.buildSummaryCards([
             { value: totals.recordings, labelKey: 'albani_kpi_recordings' },
             { value: totals.analysed, labelKey: 'albani_kpi_analysed', featured: true },
-            { value: P.formatTotalDuration(totals.seconds_analysed), labelKey: 'albani_kpi_hours', text: true },
+            { value: P.formatTotalDuration(totals.seconds_counted != null ? totals.seconds_counted : totals.seconds_analysed),
+                labelKey: 'albani_kpi_hours', text: true },
             { value: totals.words, labelKey: 'albani_kpi_words' },
-            { value: totals.segments, labelKey: 'albani_kpi_segments' }
+            { value: totals.segments_counted != null ? totals.segments_counted : totals.segments,
+                labelKey: 'albani_kpi_segments' }
         ]));
 
         var status = P.el('div', 'iwac-vis-albani__status');

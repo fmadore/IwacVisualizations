@@ -38,7 +38,7 @@ import os
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import pandas as pd
 
@@ -85,8 +85,28 @@ def load_glosses(path: Path = GLOSSES_PATH) -> Tuple[str, Dict[str, Dict[str, st
     data = json.loads(path.read_text(encoding="utf-8"))
     out: Dict[str, Dict[str, str]] = {}
     for word, gloss in data.get("entries", {}).items():
-        out.setdefault(match_key(word), {"en": gloss["en"], "fr": gloss["fr"]})
+        key = match_key(fold(word))
+        if key:
+            out.setdefault(key, {"en": gloss["en"], "fr": gloss["fr"]})
     return data.get("status", "draft"), out
+
+
+def _non_overlapping_count(hits: Sequence[Hit]) -> int:
+    """Count distinct non-overlapping spans, longest first.
+
+    Categories are matched independently, so a multi-word hit such as
+    *tsarin mulki* (constitution, tokens [10, 12)) overlaps *mulki*
+    (rule, [11, 12)). Counting distinct start indices alone would still
+    count both; checking token spans counts the phrase once.
+    """
+    covered: Set[int] = set()
+    count = 0
+    for hit in sorted(hits, key=lambda h: (-(h.end - h.start), h.start)):
+        span = range(hit.start, hit.end)
+        if covered.isdisjoint(span):
+            covered.update(span)
+            count += 1
+    return count
 
 
 class RightsError(AssertionError):
@@ -180,7 +200,9 @@ class AlbaniSermonsGenerator:
         if len(key) < 2 or label.startswith(FORMULA_PREFIX) or key in self.res.noise:
             return False
         if label == ARABIC:
-            return key not in self.res.arabic_stop
+            return (key not in self.res.arabic_stop
+                    and key not in self.res.hausa_stop
+                    and key not in self.res.english)
         return key not in self.res.hausa_stop
 
     def _segments(self, scope: str) -> Iterable[Tuple[Recording, SegmentScan]]:
@@ -233,7 +255,10 @@ class AlbaniSermonsGenerator:
                     "layers": {k: layers.get(k, 0) for k in (HAUSA, ARABIC, "fx")},
                 })
                 totals["seconds_analysed"] += rec.duration_seconds or 0
+                if entry["w"] > 0:
+                    totals["seconds_counted"] += rec.duration_seconds or 0
                 totals["segments"] += len(rec.segments)
+                totals["segments_counted"] += sum(1 for s in rec.segments if s.counted)
                 totals["segments_exchange"] += entry["x"]
                 totals["segments_english"] += entry["en"]
                 totals["words"] += entry["w"]
@@ -241,11 +266,13 @@ class AlbaniSermonsGenerator:
                 totals["public"] += 1 if rec.public else 0
                 layer_totals.update(entry["layers"])
             out_recs.append(entry)
+        entities_status = json.loads(ENTITIES_PATH.read_text(encoding="utf-8")).get("status", "draft")
         return {
             "generated_at": generate_timestamp(),
             "creator": "Muhammad Auwal Albani Zaria",
             "lexicon_status": self.lexicon.status,
             "gloss_status": self.gloss_status,
+            "entities_status": entities_status,
             "totals": {
                 "recordings": len(recs),
                 "analysed": totals[ANALYSED],
@@ -254,7 +281,9 @@ class AlbaniSermonsGenerator:
                 "public_transcripts": totals["public"],
                 "seconds": totals["seconds"],
                 "seconds_analysed": totals["seconds_analysed"],
+                "seconds_counted": totals["seconds_counted"],
                 "segments": totals["segments"],
+                "segments_counted": totals["segments_counted"],
                 "segments_exchange": totals["segments_exchange"],
                 "segments_english": totals["segments_english"],
                 "words": totals["words"],
@@ -312,14 +341,24 @@ class AlbaniSermonsGenerator:
                     seg_df[layer].update(seen[layer])
                     for key in seen[layer]:
                         rec_df[layer][key].add(rec.o_id)
+            total_segments = sum(1 for _ in self._segments(scope))
+            min_ar = 2 if total_segments >= 10 else 1
             layers = {}
             for layer in (HAUSA, ARABIC):
-                terms = [
-                    {"w": self._display(k), "n": n, "s": seg_df[layer][k],
-                     "r": len(rec_df[layer][k])}
-                    for k, n in counts[layer].most_common()
-                    if seg_df[layer][k] >= (self.min_segments if layer == HAUSA else 1)
-                ][:self.top_terms]
+                floor = self.min_segments if layer == HAUSA else min_ar
+                terms = []
+                for k, n in counts[layer].most_common():
+                    if seg_df[layer][k] < floor:
+                        continue
+                    item: Dict[str, Any] = {
+                        "w": self._display(k), "n": n, "s": seg_df[layer][k],
+                        "r": len(rec_df[layer][k]),
+                    }
+                    if k in self.glosses:
+                        item["g"] = self.glosses[k]
+                    terms.append(item)
+                    if len(terms) >= self.top_terms:
+                        break
                 layers[layer] = {
                     "running": running[layer],
                     "types": len(counts[layer]),
@@ -369,7 +408,7 @@ class AlbaniSermonsGenerator:
         counts = {s: Counter() for s in SCOPES}
         seg_df = {s: Counter() for s in SCOPES}
         rec_df = {s: defaultdict(set) for s in SCOPES}
-        excluded = Counter()
+        excluded = {s: Counter() for s in SCOPES}
         surfaces: Dict[str, Counter] = defaultdict(Counter)
         by_recording = {s: [] for s in SCOPES}
         by_year: Dict[str, Dict[int, Dict[str, Any]]] = {s: {} for s in SCOPES}
@@ -389,20 +428,18 @@ class AlbaniSermonsGenerator:
                         rec_df[scope][e.id].add(rec.o_id)
                         if e.pooled:
                             row["categories"][f"{e.theme}.{e.category}"] += 1
-                    # Theme totals count POSITIONS, not hits: categories are
-                    # independent, so "tsarin mulki" is a constitution hit
+                    for hit in turn.excluded:
+                        excluded[scope][hit.entry.id] += 1
+                    # Theme totals count non-overlapping SPANS, not hits: categories
+                    # are independent, so "tsarin mulki" is a constitution hit
                     # and a rule hit, and a theme total must not count it twice.
                     for theme in self.lexicon.themes:
-                        covered = set()
-                        for hit in self._theme_hits(turn, theme):
-                            covered.add(hit.start)
-                        row["themes"][theme] += len(covered)
+                        row["themes"][theme] += _non_overlapping_count(
+                            self._theme_hits(turn, theme))
                     if scope == "all":
                         for hit in turn.hits:
                             surfaces[hit.entry.id][" ".join(
                                 t.surface for t in turn.tokens[hit.start:hit.end])] += 1
-                        for hit in turn.excluded:
-                            excluded[hit.entry.id] += 1
                 seg_df[scope].update(seen)
             for o_id, row in per_rec.items():
                 by_recording[scope].append({
@@ -449,7 +486,8 @@ class AlbaniSermonsGenerator:
                     "n": {s: counts[s][e.id] for s in SCOPES},
                     "s": {s: seg_df[s][e.id] for s in SCOPES},
                     "r": {s: len(rec_df[s][e.id]) for s in SCOPES},
-                    "excluded": excluded[e.id],
+                    "excluded": excluded["all"][e.id],
+                    "excluded_by_scope": {s: excluded[s][e.id] for s in SCOPES},
                 }
                 for e in entries
             ],
@@ -607,7 +645,7 @@ class AlbaniSermonsGenerator:
                                 ha, hb = hits[a], hits[b]
                                 if ha.entry.id == hb.entry.id:
                                     continue
-                                if hb.start - ha.end <= self.window:
+                                if 0 <= hb.start - ha.end <= self.window:
                                     pair[tuple(sorted((ha.entry.id, hb.entry.id)))] += 1
                 by_id = self.lexicon.by_id()
                 nodes = []
@@ -629,7 +667,7 @@ class AlbaniSermonsGenerator:
                 for key in sorted(used, key=lambda k: -top_keys[k]["n"]):
                     t = top_keys[key]
                     node = {"id": "w:" + key, "name": t["w"], "kind": "collocate",
-                            "n": t["n"], "lr": t["lr"]}
+                            "n": t["n"], "lr": t["lr"], "ratio": t["ratio"]}
                     if key in self.glosses:
                         node["g"] = self.glosses[key]
                     nodes.append(node)
@@ -646,6 +684,8 @@ class AlbaniSermonsGenerator:
         self.load()
         width = self.overlap_window
         scopes = {}
+        raw_passages: List[Dict[str, Any]] = []
+        withheld_passages = 0
         for scope in SCOPES:
             matrix: Counter = Counter()
             per_rec: Dict[str, Counter] = defaultdict(Counter)
@@ -662,8 +702,8 @@ class AlbaniSermonsGenerator:
                 for turn in seg.turns:
                     youth = self._theme_hits(turn, "youth")
                     politics = self._theme_hits(turn, "politics")
-                    seg_youth += len({h.start for h in youth})
-                    seg_pol += len({h.start for h in politics})
+                    seg_youth += _non_overlapping_count(youth)
+                    seg_pol += _non_overlapping_count(politics)
                     win_pos: Set[int] = set()
                     node_pos: Set[int] = set()
                     met = set()
@@ -678,6 +718,26 @@ class AlbaniSermonsGenerator:
                                 node_pos.update(range(p.start, p.end))
                                 win_pos.update(range(max(0, lo - self.window),
                                                      min(len(turn.tokens), hi + self.window)))
+                                if scope == "all":
+                                    if not rec.public:
+                                        withheld_passages += 1
+                                    else:
+                                        start = turn.tokens[lo].start
+                                        end = turn.tokens[hi - 1].end
+                                        raw_passages.append({
+                                            "_rec": rec, "_at": start,
+                                            "y": y.entry.id, "pl": p.entry.id,
+                                            "p": seg.segment.ordinal, "w": seg.segment.index,
+                                            "of": seg.segment.total, "s": seg.segment.start_seconds,
+                                            "x": seg.segment.end_seconds, "md": seg.mode,
+                                            "l": self._snippet(
+                                                rec.text, max(turn.start, start - self.kwic_context),
+                                                start, "left"),
+                                            "m": " ".join(rec.text[start:end].split()),
+                                            "r": self._snippet(
+                                                rec.text, end, min(turn.end, end + self.kwic_context),
+                                                "right"),
+                                        })
                     seg_meet += len(met)
                     inside = self._content_window(turn, sorted(win_pos), node_pos)
                     window.update(inside)
@@ -721,8 +781,46 @@ class AlbaniSermonsGenerator:
                 "segments_with_meetings": len(segments),
                 "collocates": self._score_collocates(window, rest, seg_df, rec_df, own),
             }
-        return {"generated_at": generate_timestamp(), "window": width,
-                "context_window": self.window, "scopes": scopes}
+        # Deduplicate overlapping pair lines at the exact same span (e.g. when
+        # one youth term meets two nested political terms) and spread across
+        # recordings, keeping passages strictly rights-gated on rec.public.
+        seen_spans: Set[Tuple[str, int, str, str]] = set()
+        unique_passages = []
+        for row in raw_passages:
+            span_key = (row["_rec"].o_id, row["_at"], row["y"], row["pl"])
+            if span_key in seen_spans:
+                continue
+            seen_spans.add(span_key)
+            unique_passages.append(row)
+        p_items: List[Dict[str, Any]] = []
+        p_index: Dict[str, int] = {}
+        p_rows: List[Dict[str, Any]] = []
+        p_order: List[Tuple[int, int, int]] = []
+        for row in self._spread(unique_passages, max(self.kwic_per_entry, 150)):
+            rec = row.pop("_rec")
+            p_order.append((int(rec.o_id) if rec.o_id.isdigit() else 0, row.pop("_at"), id(row)))
+            if rec.o_id not in p_index:
+                p_index[rec.o_id] = len(p_items)
+                p_items.append({"o": rec.o_id, "t": rec.title, "u": rec.url, "y": rec.year,
+                                "m": [m["url"] for m in rec.media]})
+            row["i"] = p_index[rec.o_id]
+            if row["x"] is None:
+                del row["x"]
+            p_rows.append(row)
+        pos_map = {key: (o, at) for o, at, key in p_order}
+        p_rows.sort(key=lambda r: pos_map[id(r)])
+        return {
+            "generated_at": generate_timestamp(),
+            "window": width,
+            "context_window": self.window,
+            "scopes": scopes,
+            "passages": {
+                "items": p_items,
+                "rows": p_rows,
+                "found": len(unique_passages) + withheld_passages,
+                "withheld": withheld_passages,
+            },
+        }
 
     # ------------------------------------------------------------------ #
     #  keyness.json                                                        #
@@ -738,11 +836,17 @@ class AlbaniSermonsGenerator:
         for name, entries in scored.items():
             kept = []
             for e in entries:
-                if seg_df[name][e["token"]] < min_df:
+                key = e["token"]
+                if seg_df[name][key] < min_df:
                     continue
-                kept.append({"w": self._display(e["token"]), "n": e["count"],
-                             "lr": e["log_ratio"], "g2": e["g2"], "q": e["q"],
-                             "ratio": e["rate_ratio"], "s": seg_df[name][e["token"]]})
+                term: Dict[str, Any] = {
+                    "w": self._display(key), "n": e["count"],
+                    "lr": e["log_ratio"], "g2": e["g2"], "q": e["q"],
+                    "ratio": e["rate_ratio"], "s": seg_df[name][key],
+                }
+                if key in self.glosses:
+                    term["g"] = self.glosses[key]
+                kept.append(term)
                 if len(kept) >= top:
                     break
             if kept:
@@ -768,47 +872,57 @@ class AlbaniSermonsGenerator:
 
     def build_keyness(self) -> Dict[str, Any]:
         recs = self.analysed()
-        by_rec: Dict[str, Counter] = defaultdict(Counter)
-        by_period: Dict[str, Counter] = defaultdict(Counter)
         by_mode: Dict[str, Counter] = defaultdict(Counter)
-        df_rec: Dict[str, Counter] = defaultdict(Counter)
-        df_period: Dict[str, Counter] = defaultdict(Counter)
         df_mode: Dict[str, Counter] = defaultdict(Counter)
-        period_recs: Dict[str, Set[str]] = defaultdict(set)
         sizes = Counter()
-        for rec in recs:
-            period = self._period(rec.date)
-            for seg in rec.segments:
-                if not seg.counted:
-                    continue
-                keys = [t.key for turn in seg.turns
-                        for t, lab in zip(turn.tokens, turn.labels) if self._is_content(t.key, lab)]
-                distinct = set(keys)
-                by_rec[rec.o_id].update(keys)
-                df_rec[rec.o_id].update(distinct)
-                by_mode[seg.mode].update(keys)
-                df_mode[seg.mode].update(distinct)
-                sizes["mode:" + seg.mode] += len(keys)
-                if period:
-                    by_period[period].update(keys)
-                    df_period[period].update(distinct)
-                    period_recs[period].add(rec.o_id)
-        periods_ok = all(len(period_recs[p]) >= 2 for p in ("before", "after"))
+        scopes_out: Dict[str, Any] = {}
+        for scope in SCOPES:
+            by_rec: Dict[str, Counter] = defaultdict(Counter)
+            by_period: Dict[str, Counter] = defaultdict(Counter)
+            df_rec: Dict[str, Counter] = defaultdict(Counter)
+            df_period: Dict[str, Counter] = defaultdict(Counter)
+            period_recs: Dict[str, Set[str]] = defaultdict(set)
+            for rec in recs:
+                period = self._period(rec.date)
+                for seg in rec.segments:
+                    if not seg.in_scope(scope):
+                        continue
+                    keys = [t.key for turn in seg.turns
+                            for t, lab in zip(turn.tokens, turn.labels) if self._is_content(t.key, lab)]
+                    distinct = set(keys)
+                    by_rec[rec.o_id].update(keys)
+                    df_rec[rec.o_id].update(distinct)
+                    if scope == "all":
+                        by_mode[seg.mode].update(keys)
+                        df_mode[seg.mode].update(distinct)
+                        sizes["mode:" + seg.mode] += len(keys)
+                    if period:
+                        by_period[period].update(keys)
+                        df_period[period].update(distinct)
+                        period_recs[period].add(rec.o_id)
+            periods_ok = all(len(period_recs[p]) >= 2 for p in ("before", "after"))
+            scopes_out[scope] = {
+                "by_recording": self._keyness(by_rec, df_rec, min_df=2),
+                "by_period": self._keyness(by_period, df_period, min_df=self.min_segments)
+                if periods_ok else {},
+                "period": {
+                    "split": self.period_split,
+                    "recordings": {p: sorted(period_recs[p]) for p in ("before", "after")},
+                    "undated": sorted(r.o_id for r in recs
+                                      if not any(r.o_id in v for v in period_recs.values())),
+                    "tested": periods_ok,
+                },
+            }
+        all_scope = scopes_out["all"]
         return {
             "generated_at": generate_timestamp(),
             "min_log_ratio": 1.0,
-            "by_recording": self._keyness(by_rec, df_rec, min_df=2),
-            "by_period": self._keyness(by_period, df_period, min_df=self.min_segments)
-            if periods_ok else {},
-            "period": {
-                "split": self.period_split,
-                "recordings": {p: sorted(period_recs[p]) for p in ("before", "after")},
-                "undated": sorted(r.o_id for r in recs
-                                  if not any(r.o_id in v for v in period_recs.values())),
-                "tested": periods_ok,
-            },
+            "by_recording": all_scope["by_recording"],
+            "by_period": all_scope["by_period"],
+            "period": all_scope["period"],
             "by_mode": self._keyness(by_mode, df_mode, min_df=self.min_segments),
             "mode_tokens": {k.split(":", 1)[1]: v for k, v in sizes.items()},
+            "scopes": scopes_out,
         }
 
     # ------------------------------------------------------------------ #
@@ -911,6 +1025,8 @@ class AlbaniSermonsGenerator:
         found = Counter()
         for rec in recs:
             for seg in rec.segments:
+                if not seg.counted:
+                    continue
                 for turn in seg.turns:
                     for hit in turn.hits:
                         if hit.entry.theme != theme:
@@ -983,7 +1099,7 @@ class AlbaniSermonsGenerator:
         for row in rows:
             by_rec[row["_rec"].o_id].append(row)
         queues = []
-        for o_id in sorted(by_rec, key=int):
+        for o_id in sorted(by_rec, key=lambda o: (0, int(o)) if o.isdigit() else (1, o)):
             queue = by_rec[o_id]
             order = sorted(range(len(queue)), key=lambda i: (i * 0.6180339887) % 1.0)
             queues.append([queue[i] for i in order])
@@ -1004,12 +1120,16 @@ class AlbaniSermonsGenerator:
         recs = self.analysed()
         public_ids = {r.o_id for r in recs if r.public}
         for name, payload in bundles.items():
-            if not name.startswith(CONCORDANCE_PREFIX):
-                continue
-            for item in payload.get("items", []):
-                if item["o"] not in public_ids:
-                    raise RightsError(
-                        f"{name} quotes item {item['o']}, whose transcript is private")
+            if name.startswith(CONCORDANCE_PREFIX):
+                for item in payload.get("items", []):
+                    if item["o"] not in public_ids:
+                        raise RightsError(
+                            f"{name} quotes item {item['o']}, whose transcript is private")
+            elif name == "overlap.json":
+                for item in (payload.get("passages") or {}).get("items", []):
+                    if item["o"] not in public_ids:
+                        raise RightsError(
+                            f"{name} passages quotes item {item['o']}, whose transcript is private")
         private = [" ".join(fold(w) for w in r.text.split()) for r in recs if not r.public]
         if not private:
             return
@@ -1021,7 +1141,12 @@ class AlbaniSermonsGenerator:
         for name, payload in bundles.items():
             if name.startswith(CONCORDANCE_PREFIX):
                 continue
-            for value in _strings(payload):
+            # `overlap.json["passages"]` is already rights-gated above on
+            # `public_ids`, like `concordance-*.json`; scan only the aggregate
+            # keys of `overlap.json` for >3-word private-transcript leaks.
+            target = ({k: v for k, v in payload.items() if k != "passages"}
+                      if name == "overlap.json" and isinstance(payload, dict) else payload)
+            for value in _strings(target):
                 if value in metadata_strings:
                     continue
                 words = value.split()

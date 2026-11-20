@@ -2,237 +2,1861 @@
   "status": "draft",
   "_provenance": "Short English and French glosses for the Hausa words the block shows beside the lexicon terms: the collocates, the words around meetings and the network's neighbour nodes. They were proposed by an AI assistant (Claude, Anthropic) from general Hausa knowledge, without reading the passages, on 2026-11-02, and await review by a Hausa-speaking specialist, like the lexicon itself. A word whose sense could not be settled out of context (baki: mouth or guest; kasa: country or fail) or that looks like a transcription error is left out rather than guessed. Keys are written as a reader would spell them; the generator folds them with albani.normalize.match_key, so spelling variants share one entry. The lexicon terms carry their own glosses in albani_lexicon.json.",
   "entries": {
-    "'ya": {"en": "daughter", "fr": "fille"},
-    "'ya'ya": {"en": "children, offspring", "fr": "enfants, progéniture"},
-    "academy": {"en": "academy (English)", "fr": "académie (anglais)"},
-    "addini": {"en": "religion", "fr": "religion"},
-    "addinin": {"en": "religion of", "fr": "la religion de"},
-    "addu'a": {"en": "supplication, prayer", "fr": "invocation, prière"},
-    "aika": {"en": "send", "fr": "envoyer"},
-    "aikawa": {"en": "sending", "fr": "envoi"},
-    "aikin": {"en": "work of", "fr": "le travail de"},
-    "albani": {"en": "Albani (name)", "fr": "Albani (nom)"},
-    "alfarma": {"en": "sanctity, honour", "fr": "caractère sacré, honneur"},
-    "alkawari": {"en": "promise", "fr": "promesse"},
-    "allo": {"en": "Qur'anic writing board", "fr": "tablette coranique"},
-    "arabiya": {"en": "Arabic", "fr": "arabe"},
-    "aurar": {"en": "give in marriage", "fr": "donner en mariage"},
-    "auri": {"en": "marry", "fr": "épouser"},
-    "auro": {"en": "marry (and bring home)", "fr": "épouser (et ramener)"},
-    "azzaluman": {"en": "the oppressors", "fr": "les oppresseurs"},
-    "babin": {"en": "chapter of", "fr": "le chapitre de"},
-    "bar": {"en": "leave", "fr": "laisser, quitter"},
-    "bayani": {"en": "explanation", "fr": "explication"},
-    "bayar": {"en": "give", "fr": "donner"},
-    "bazawara": {"en": "divorced or widowed woman", "fr": "femme divorcée ou veuve"},
-    "bello": {"en": "Bello (Muhammad Bello)", "fr": "Bello (Muhammad Bello)"},
-    "boko": {"en": "Western education", "fr": "instruction occidentale"},
-    "cancanta": {"en": "be fitting, deserve", "fr": "convenir, mériter"},
-    "chairman": {"en": "chairman (English)", "fr": "président (anglais)"},
-    "cinikin": {"en": "trade of", "fr": "le commerce de"},
-    "daban": {"en": "different, separate", "fr": "différent, à part"},
-    "daliban": {"en": "students of", "fr": "les élèves de"},
-    "dalibin": {"en": "student of", "fr": "l'élève de"},
-    "darajar": {"en": "rank, worth of", "fr": "le rang, la valeur de"},
-    "darul": {"en": "dār al- (house of)", "fr": "dār al- (maison de)"},
-    "daukan": {"en": "taking, carrying", "fr": "fait de prendre, porter"},
-    "daurin": {"en": "tying of (daurin aure: wedding)", "fr": "nouage (daurin aure : mariage)"},
-    "demokradiyya": {"en": "democracy", "fr": "démocratie"},
-    "duniya": {"en": "the world", "fr": "le monde"},
-    "fadar": {"en": "palace of", "fr": "le palais de"},
-    "falalar": {"en": "merit, virtue of", "fr": "le mérite de"},
-    "farilla": {"en": "obligatory duty", "fr": "obligation religieuse"},
-    "farko": {"en": "first", "fr": "premier"},
-    "faru": {"en": "happen", "fr": "arriver, se produire"},
-    "fito": {"en": "come out", "fr": "sortir"},
-    "fodio": {"en": "Fodio (Usman dan Fodio)", "fr": "Fodio (Usman dan Fodio)"},
-    "hodiyo": {"en": "Fodio (Hausa spelling)", "fr": "Fodio (graphie haoussa)"},
-    "gama": {"en": "finish; join", "fr": "finir ; réunir"},
-    "gargajiya": {"en": "tradition, traditional", "fr": "tradition, traditionnel"},
-    "gina": {"en": "build", "fr": "construire"},
-    "gobir": {"en": "Gobir (kingdom)", "fr": "Gobir (royaume)"},
-    "gudanar": {"en": "conduct, run", "fr": "mener, administrer"},
-    "gurguzu": {"en": "socialism", "fr": "socialisme"},
-    "gwamna": {"en": "governor", "fr": "gouverneur"},
-    "gwamnati": {"en": "government", "fr": "gouvernement"},
-    "gwamnatin": {"en": "government of", "fr": "le gouvernement de"},
-    "gwandu": {"en": "Gwandu (emirate)", "fr": "Gwandu (émirat)"},
-    "haddasa": {"en": "cause, provoke", "fr": "provoquer, causer"},
-    "hadis": {"en": "hadith", "fr": "hadith"},
-    "hadith": {"en": "hadith", "fr": "hadith"},
-    "haihu": {"en": "give birth", "fr": "accoucher"},
-    "haihuwa": {"en": "birth", "fr": "naissance"},
-    "halatta": {"en": "be lawful", "fr": "être licite"},
-    "hana": {"en": "prevent, forbid", "fr": "empêcher, interdire"},
-    "hanya": {"en": "way, road", "fr": "chemin, voie"},
-    "haram": {"en": "forbidden", "fr": "illicite"},
-    "harkar": {"en": "affair, matter of", "fr": "l'affaire de"},
-    "harkan": {"en": "affair, matter of", "fr": "l'affaire de"},
-    "harkokin": {"en": "affairs of", "fr": "les affaires de"},
-    "hausa": {"en": "Hausa", "fr": "haoussa"},
-    "hawan": {"en": "mounting, riding (hawan sallah: festival parade)", "fr": "monte (hawan sallah : parade de fête)"},
-    "hijra": {"en": "hijra, emigration", "fr": "hégire, émigration"},
-    "hoton": {"en": "picture of", "fr": "l'image de"},
-    "hukumar": {"en": "authority, agency of", "fr": "l'autorité, l'agence de"},
-    "hukunci": {"en": "ruling, judgement", "fr": "jugement, statut"},
-    "imamu": {"en": "imam", "fr": "imam"},
-    "islamiyya": {"en": "Islamiyya (school)", "fr": "Islamiyya (école)"},
-    "izala": {"en": "Izala (movement)", "fr": "Izala (mouvement)"},
-    "izinin": {"en": "permission of", "fr": "la permission de"},
-    "jahar": {"en": "state of", "fr": "l'État de"},
-    "jihar": {"en": "state of", "fr": "l'État de"},
-    "jami'a": {"en": "university", "fr": "université"},
-    "jami'an": {"en": "officials of", "fr": "les responsables de"},
-    "jami'ar": {"en": "university of", "fr": "l'université de"},
-    "jami'o'i": {"en": "universities", "fr": "universités"},
-    "jatau": {"en": "Jatau (name)", "fr": "Jatau (nom)"},
-    "jawo": {"en": "draw, attract", "fr": "attirer"},
-    "je": {"en": "go", "fr": "aller"},
-    "jikokin": {"en": "grandchildren of", "fr": "les petits-enfants de"},
-    "jin": {"en": "hearing, feeling", "fr": "fait d'entendre, de ressentir"},
-    "ka'idoji": {"en": "rules", "fr": "règles"},
-    "kaddamar": {"en": "launch, inaugurate", "fr": "lancer, inaugurer"},
-    "kaduna": {"en": "Kaduna", "fr": "Kaduna"},
-    "kakanni": {"en": "grandparents, ancestors", "fr": "grands-parents, ancêtres"},
-    "kakannin": {"en": "ancestors of", "fr": "les ancêtres de"},
-    "kamo": {"en": "catch, seize", "fr": "attraper, saisir"},
-    "kanana": {"en": "small ones", "fr": "petits"},
-    "kananan": {"en": "small", "fr": "petits"},
-    "kanne": {"en": "younger siblings", "fr": "cadets"},
-    "kano": {"en": "Kano", "fr": "Kano"},
-    "kar": {"en": "do not", "fr": "ne… pas (défense)"},
-    "karamar": {"en": "small (fem.)", "fr": "petite"},
-    "karami": {"en": "small", "fr": "petit"},
-    "karba": {"en": "receive, accept", "fr": "recevoir, accepter"},
-    "karbi": {"en": "receive, accept", "fr": "recevoir, accepter"},
-    "karkashin": {"en": "under", "fr": "sous"},
-    "kashe": {"en": "kill", "fr": "tuer"},
-    "katsina": {"en": "Katsina", "fr": "Katsina"},
-    "kifar": {"en": "overturn, topple", "fr": "renverser"},
-    "kin": {"en": "refusal", "fr": "refus"},
-    "kitabul": {"en": "kitāb al- (the book of)", "fr": "kitāb al- (le livre de)"},
-    "koyan": {"en": "learning", "fr": "apprentissage"},
-    "koyawa": {"en": "teaching", "fr": "enseignement"},
-    "kukan": {"en": "crying of", "fr": "les pleurs de"},
-    "kula": {"en": "care, attention", "fr": "soin, attention"},
-    "kungiya": {"en": "association, group", "fr": "association, groupe"},
-    "kwantar": {"en": "lay down; calm", "fr": "coucher ; apaiser"},
-    "kwashe": {"en": "take away entirely", "fr": "emporter entièrement"},
-    "kyautata": {"en": "improve, treat well", "fr": "améliorer, bien traiter"},
-    "ladabi": {"en": "good manners, respect", "fr": "politesse, respect"},
-    "lafiya": {"en": "health, well-being", "fr": "santé, bien-être"},
-    "lalacewar": {"en": "decay, corruption of", "fr": "la dégradation de"},
-    "lallai": {"en": "surely", "fr": "assurément"},
-    "lalata": {"en": "corrupt, ruin", "fr": "corrompre, ruiner"},
-    "limami": {"en": "imam", "fr": "imam"},
-    "lugga": {"en": "language (Arabic lugha)", "fr": "langue (arabe lugha)"},
-    "ma'aikacin": {"en": "worker of", "fr": "l'employé de"},
-    "ma'aikatan": {"en": "workers of", "fr": "les employés de"},
-    "mace": {"en": "woman", "fr": "femme"},
-    "mafi": {"en": "most", "fr": "le plus"},
-    "maguzawa": {"en": "Maguzawa (non-Muslim Hausa)", "fr": "Maguzawa (Haoussa non musulmans)"},
-    "majalisar": {"en": "council, assembly of", "fr": "le conseil, l'assemblée de"},
-    "makaranta": {"en": "school", "fr": "école"},
-    "makarantar": {"en": "school of", "fr": "l'école de"},
-    "makarantun": {"en": "schools of", "fr": "les écoles de"},
-    "mallaka": {"en": "own; colonise", "fr": "posséder ; coloniser"},
-    "malamai": {"en": "scholars, teachers", "fr": "savants, enseignants"},
-    "marayu": {"en": "orphans", "fr": "orphelins"},
-    "martaba": {"en": "dignity, rank", "fr": "dignité, rang"},
-    "masallatai": {"en": "mosques", "fr": "mosquées"},
-    "mata": {"en": "women; wife", "fr": "femmes ; épouse"},
-    "mataimakin": {"en": "deputy of", "fr": "l'adjoint de"},
-    "matakai": {"en": "steps, measures", "fr": "étapes, mesures"},
-    "matakan": {"en": "steps, measures of", "fr": "les mesures de"},
-    "matan": {"en": "women, wives of", "fr": "les femmes de"},
-    "matar": {"en": "wife of", "fr": "l'épouse de"},
-    "matsala": {"en": "problem", "fr": "problème"},
-    "matsalar": {"en": "problem of", "fr": "le problème de"},
-    "matsalolin": {"en": "problems of", "fr": "les problèmes de"},
-    "matsayin": {"en": "position, status of", "fr": "la position, le statut de"},
-    "matukar": {"en": "as long as; utmost", "fr": "tant que ; extrême"},
-    "mayaudara": {"en": "deceivers", "fr": "trompeurs"},
-    "miji": {"en": "husband", "fr": "mari"},
-    "mijin": {"en": "husband of", "fr": "le mari de"},
-    "minister": {"en": "minister (English)", "fr": "ministre (anglais)"},
-    "muhammadu": {"en": "Muhammadu (name)", "fr": "Muhammadu (nom)"},
-    "mulki": {"en": "rule, power", "fr": "pouvoir, gouvernement"},
-    "mulkin": {"en": "rule of", "fr": "le pouvoir de"},
-    "musulmi": {"en": "Muslims", "fr": "musulmans"},
-    "musulmin": {"en": "Muslims of", "fr": "les musulmans de"},
-    "musulunci": {"en": "Islam", "fr": "islam"},
-    "mutuncin": {"en": "dignity of", "fr": "la dignité de"},
-    "nada": {"en": "appoint, install", "fr": "nommer, introniser"},
-    "najeriya": {"en": "Nigeria", "fr": "Nigeria"},
-    "nau'i": {"en": "kind, type", "fr": "sorte, type"},
-    "nau'in": {"en": "kind of", "fr": "le type de"},
-    "nau'o'in": {"en": "kinds of", "fr": "les types de"},
-    "nema": {"en": "seek", "fr": "chercher"},
-    "neman": {"en": "seeking", "fr": "recherche de"},
-    "nemi": {"en": "seek", "fr": "chercher"},
-    "obasanjo": {"en": "Obasanjo", "fr": "Obasanjo"},
-    "primary": {"en": "primary (school)", "fr": "primaire (école)"},
-    "rai": {"en": "life, soul", "fr": "vie, âme"},
-    "ranar": {"en": "day of", "fr": "le jour de"},
-    "rasu": {"en": "die, pass away", "fr": "mourir, décéder"},
-    "rawa": {"en": "dancing", "fr": "danse"},
-    "rayuwa": {"en": "life", "fr": "vie"},
-    "rediyon": {"en": "radio of", "fr": "la radio de"},
-    "sabon": {"en": "new", "fr": "nouveau"},
-    "sadaki": {"en": "bridewealth (mahr)", "fr": "dot (mahr)"},
-    "sakandare": {"en": "secondary school", "fr": "école secondaire"},
-    "saki": {"en": "divorce; release", "fr": "divorce ; libérer"},
-    "samari": {"en": "young men", "fr": "jeunes hommes"},
-    "sana'a": {"en": "trade, craft", "fr": "métier"},
-    "sarakunan": {"en": "emirs, rulers of", "fr": "les émirs, chefs de"},
-    "sardauna": {"en": "Sardauna (title)", "fr": "Sardauna (titre)"},
-    "sarkin": {"en": "emir, king of", "fr": "l'émir, le roi de"},
-    "saudiya": {"en": "Saudi Arabia", "fr": "Arabie saoudite"},
-    "sauka": {"en": "descend; complete (the Qur'an)", "fr": "descendre ; achever (le Coran)"},
-    "school": {"en": "school (English)", "fr": "école (anglais)"},
-    "science": {"en": "science (English)", "fr": "science (anglais)"},
-    "secondary": {"en": "secondary (English)", "fr": "secondaire (anglais)"},
-    "sha'awa": {"en": "desire, interest", "fr": "désir, intérêt"},
-    "shehu": {"en": "shaykh (Usman dan Fodio)", "fr": "cheikh (Usman dan Fodio)"},
-    "shekara": {"en": "year", "fr": "année"},
-    "shekarau": {"en": "Shekarau (name)", "fr": "Shekarau (nom)"},
-    "shiga": {"en": "enter", "fr": "entrer"},
-    "shugaban": {"en": "leader, head of", "fr": "le chef, le dirigeant de"},
-    "siyasa": {"en": "politics", "fr": "politique"},
-    "takobi": {"en": "sword", "fr": "épée"},
-    "tabbataccen": {"en": "established, confirmed", "fr": "établi, confirmé"},
-    "tada": {"en": "raise, stir up", "fr": "soulever, susciter"},
-    "tarbiyya": {"en": "upbringing, moral education", "fr": "éducation morale"},
-    "tarbiyyar": {"en": "upbringing of", "fr": "l'éducation morale de"},
-    "taso": {"en": "grow up; rise", "fr": "grandir ; se lever"},
-    "tattali": {"en": "careful management", "fr": "gestion avisée"},
-    "tausasa": {"en": "soften, be gentle", "fr": "adoucir"},
-    "tayar": {"en": "raise, stir up", "fr": "soulever, provoquer"},
-    "tsarin": {"en": "system, order of", "fr": "le système, l'ordre de"},
-    "tsaro": {"en": "security", "fr": "sécurité"},
-    "tsaya": {"en": "stand, stop", "fr": "se tenir, s'arrêter"},
-    "tsohon": {"en": "former, old", "fr": "ancien, vieux"},
-    "tsoron": {"en": "fear of", "fr": "la peur de"},
-    "tunanin": {"en": "thought of", "fr": "la pensée de"},
-    "turawan": {"en": "Europeans, whites of", "fr": "les Européens de"},
-    "uba": {"en": "father", "fr": "père"},
-    "uban": {"en": "father of", "fr": "le père de"},
-    "ubangiji": {"en": "the Lord", "fr": "le Seigneur"},
-    "uwa": {"en": "mother", "fr": "mère"},
-    "wajibi": {"en": "obligatory", "fr": "obligatoire"},
-    "wasa": {"en": "play, game", "fr": "jeu"},
-    "wulakanta": {"en": "humiliate", "fr": "humilier"},
-    "wurin": {"en": "place; at, with", "fr": "lieu ; chez, auprès de"},
-    "yar": {"en": "daughter of", "fr": "la fille de"},
-    "yaran": {"en": "children of", "fr": "les enfants de"},
-    "yau": {"en": "today", "fr": "aujourd'hui"},
-    "yazo": {"en": "he came", "fr": "il est venu"},
-    "yunfa": {"en": "Yunfa (king of Gobir)", "fr": "Yunfa (roi du Gobir)"},
-    "zalla": {"en": "pure, nothing but", "fr": "pur, rien que"},
-    "zalunci": {"en": "oppression, injustice", "fr": "oppression, injustice"},
-    "zama": {"en": "become; stay", "fr": "devenir ; demeurer"},
-    "zaman": {"en": "living, period of", "fr": "la vie, l'époque de"},
-    "zawarawa": {"en": "divorced or widowed women", "fr": "femmes divorcées ou veuves"},
-    "zazzau": {"en": "Zazzau (Zaria)", "fr": "Zazzau (Zaria)"}
+    "'ya": {
+      "en": "daughter",
+      "fr": "fille"
+    },
+    "'ya'ya": {
+      "en": "children, offspring",
+      "fr": "enfants, progéniture"
+    },
+    "'ya'yan": {
+      "en": "children, offspring of",
+      "fr": "les enfants de"
+    },
+    "'yar": {
+      "en": "daughter of; small (fem.)",
+      "fr": "fille de ; petite"
+    },
+    "academy": {
+      "en": "academy (English)",
+      "fr": "académie (anglais)"
+    },
+    "addini": {
+      "en": "religion",
+      "fr": "religion"
+    },
+    "addinin": {
+      "en": "religion of",
+      "fr": "la religion de"
+    },
+    "addu'a": {
+      "en": "supplication, prayer",
+      "fr": "invocation, prière"
+    },
+    "afghanistan": {
+      "en": "Afghanistan",
+      "fr": "Afghanistan"
+    },
+    "aika": {
+      "en": "send",
+      "fr": "envoyer"
+    },
+    "aikawa": {
+      "en": "sending",
+      "fr": "envoi"
+    },
+    "aiki": {
+      "en": "work, deed",
+      "fr": "travail, acte"
+    },
+    "aikin": {
+      "en": "work of",
+      "fr": "le travail de"
+    },
+    "al'umma": {
+      "en": "community, ummah",
+      "fr": "communauté, oumma"
+    },
+    "al'ummar": {
+      "en": "community, ummah of",
+      "fr": "la communauté de"
+    },
+    "albani": {
+      "en": "Albani (name)",
+      "fr": "Albani (nom)"
+    },
+    "alfarma": {
+      "en": "sanctity, honour",
+      "fr": "caractère sacré, honneur"
+    },
+    "alhazai": {
+      "en": "pilgrims (to Mecca)",
+      "fr": "pèlerins (de La Mecque)"
+    },
+    "aljani": {
+      "en": "jinn, spirit",
+      "fr": "djinn, esprit"
+    },
+    "alkawari": {
+      "en": "promise",
+      "fr": "promesse"
+    },
+    "alkiyama": {
+      "en": "Day of Resurrection",
+      "fr": "jour de la Résurrection"
+    },
+    "allah": {
+      "en": "God, Allah",
+      "fr": "Dieu, Allah"
+    },
+    "allo": {
+      "en": "Qur'anic writing board",
+      "fr": "tablette coranique"
+    },
+    "almajirai": {
+      "en": "Qur'anic pupils",
+      "fr": "élèves des écoles coraniques"
+    },
+    "almajiran": {
+      "en": "Qur'anic pupils of",
+      "fr": "les élèves coraniques de"
+    },
+    "amurka": {
+      "en": "America, United States",
+      "fr": "Amérique, États-Unis"
+    },
+    "annabi": {
+      "en": "the Prophet",
+      "fr": "le Prophète"
+    },
+    "arabiya": {
+      "en": "Arabic",
+      "fr": "arabe"
+    },
+    "arafah": {
+      "en": "Mount Arafat (Hajj)",
+      "fr": "mont Arafat (hajj)"
+    },
+    "aura": {
+      "en": "marry",
+      "fr": "épouser"
+    },
+    "aurar": {
+      "en": "give in marriage",
+      "fr": "donner en mariage"
+    },
+    "aure": {
+      "en": "marriage",
+      "fr": "mariage"
+    },
+    "auren": {
+      "en": "marriage of",
+      "fr": "le mariage de"
+    },
+    "auri": {
+      "en": "marry",
+      "fr": "épouser"
+    },
+    "auro": {
+      "en": "marry (and bring home)",
+      "fr": "épouser (et ramener)"
+    },
+    "azaba": {
+      "en": "punishment, torment",
+      "fr": "châtiment, tourment"
+    },
+    "azumi": {
+      "en": "fasting (Ramadan)",
+      "fr": "jeûne (ramadan)"
+    },
+    "azumin": {
+      "en": "fasting of",
+      "fr": "le jeûne de"
+    },
+    "azzaluman": {
+      "en": "the oppressors",
+      "fr": "les oppresseurs"
+    },
+    "babban": {
+      "en": "great, senior, major",
+      "fr": "grand, majeur"
+    },
+    "babin": {
+      "en": "chapter of",
+      "fr": "le chapitre de"
+    },
+    "bacin": {
+      "en": "spoiling, anger (ɓacin rai)",
+      "fr": "contrariété, colère (ɓacin rai)"
+    },
+    "bada": {
+      "en": "give",
+      "fr": "donner"
+    },
+    "baibul": {
+      "en": "the Bible",
+      "fr": "la Bible"
+    },
+    "bambadanci": {
+      "en": "praise-singing, sycophancy",
+      "fr": "flatterie, flagornerie"
+    },
+    "bar": {
+      "en": "leave",
+      "fr": "laisser, quitter"
+    },
+    "bara": {
+      "en": "begging",
+      "fr": "mendicité"
+    },
+    "bari": {
+      "en": "leave, stop",
+      "fr": "laisser, cesser"
+    },
+    "bautar": {
+      "en": "worship, servitude of",
+      "fr": "adoration, servitude de"
+    },
+    "bayani": {
+      "en": "explanation",
+      "fr": "explication"
+    },
+    "bayar": {
+      "en": "give",
+      "fr": "donner"
+    },
+    "bazawara": {
+      "en": "divorced or widowed woman",
+      "fr": "femme divorcée ou veuve"
+    },
+    "bello": {
+      "en": "Bello (Muhammad Bello)",
+      "fr": "Bello (Muhammad Bello)"
+    },
+    "bi": {
+      "en": "follow",
+      "fr": "suivre"
+    },
+    "bidi'a": {
+      "en": "religious innovation (bidʿa)",
+      "fr": "innovation religieuse (bidʿa)"
+    },
+    "biyayya": {
+      "en": "obedience",
+      "fr": "obéissance"
+    },
+    "biyayyar": {
+      "en": "obedience of",
+      "fr": "l'obéissance de"
+    },
+    "boka": {
+      "en": "sorcerer, diviner",
+      "fr": "sorcier, devin"
+    },
+    "boko": {
+      "en": "Western education",
+      "fr": "instruction occidentale"
+    },
+    "bokoko": {
+      "en": "Western-educated elites (colloq.)",
+      "fr": "élites occidentalisées (fam.)"
+    },
+    "buhari": {
+      "en": "Buhari (Muhammadu Buhari)",
+      "fr": "Buhari (Muhammadu Buhari)"
+    },
+    "bukhari": {
+      "en": "Al-Bukhari (hadith scholar)",
+      "fr": "Al-Bukhari (savant du hadith)"
+    },
+    "cancanta": {
+      "en": "be fitting, deserve",
+      "fr": "convenir, mériter"
+    },
+    "chairman": {
+      "en": "chairman (English)",
+      "fr": "président (anglais)"
+    },
+    "ci": {
+      "en": "eat; win, succeed",
+      "fr": "manger ; remporter"
+    },
+    "cinikin": {
+      "en": "trade of",
+      "fr": "le commerce de"
+    },
+    "ciyamomi": {
+      "en": "local government chairmen",
+      "fr": "présidents de collectivité locale"
+    },
+    "coci": {
+      "en": "church",
+      "fr": "église"
+    },
+    "cocin": {
+      "en": "church of",
+      "fr": "l'église de"
+    },
+    "commissioner": {
+      "en": "commissioner (English)",
+      "fr": "commissaire (anglais)"
+    },
+    "da'a": {
+      "en": "obedience, compliance",
+      "fr": "obéissance"
+    },
+    "da'awa": {
+      "en": "preaching, Islamic call (daʿwa)",
+      "fr": "prédication, appel islamique (daʿwa)"
+    },
+    "da'awar": {
+      "en": "preaching of",
+      "fr": "la prédication de"
+    },
+    "daban": {
+      "en": "different, separate",
+      "fr": "différent, à part"
+    },
+    "daidai": {
+      "en": "right, correct, equal",
+      "fr": "juste, correct, égal"
+    },
+    "dalibai": {
+      "en": "students, pupils",
+      "fr": "étudiants, élèves"
+    },
+    "daliban": {
+      "en": "students of",
+      "fr": "les élèves de"
+    },
+    "dalibin": {
+      "en": "student of",
+      "fr": "l'élève de"
+    },
+    "dama": {
+      "en": "opportunity; right (side)",
+      "fr": "occasion ; droite"
+    },
+    "dangwala": {
+      "en": "cast a ballot (thumbprint)",
+      "fr": "voter (apposer son empreinte)"
+    },
+    "darajar": {
+      "en": "rank, worth of",
+      "fr": "le rang, la valeur de"
+    },
+    "darul": {
+      "en": "dār al- (house of)",
+      "fr": "dār al- (maison de)"
+    },
+    "dattawa": {
+      "en": "elders, respected men",
+      "fr": "anciens, notables"
+    },
+    "dauka": {
+      "en": "take, carry, consider",
+      "fr": "prendre, porter, considérer"
+    },
+    "daukan": {
+      "en": "taking, carrying",
+      "fr": "fait de prendre, porter"
+    },
+    "dauki": {
+      "en": "take, pick up",
+      "fr": "prendre, saisir"
+    },
+    "daura": {
+      "en": "tie; solemnise (a marriage)",
+      "fr": "nouer ; célébrer (un mariage)"
+    },
+    "daurin": {
+      "en": "tying of (daurin aure: wedding)",
+      "fr": "nouage (daurin aure : mariage)"
+    },
+    "daushe": {
+      "en": "Daushe (festival parade: hawan daushe)",
+      "fr": "Daushe (parade de fête : hawan daushe)"
+    },
+    "dawo": {
+      "en": "return, come back",
+      "fr": "revenir, retourner"
+    },
+    "demokradiyya": {
+      "en": "democracy",
+      "fr": "démocratie"
+    },
+    "doki": {
+      "en": "horse",
+      "fr": "cheval"
+    },
+    "dole": {
+      "en": "necessary, must",
+      "fr": "nécessaire, obligatoire"
+    },
+    "duba": {
+      "en": "look at, examine",
+      "fr": "regarder, examiner"
+    },
+    "duniya": {
+      "en": "the world",
+      "fr": "le monde"
+    },
+    "fada": {
+      "en": "say, tell; fall into",
+      "fr": "dire ; tomber dans"
+    },
+    "fadar": {
+      "en": "palace of",
+      "fr": "le palais de"
+    },
+    "fadi": {
+      "en": "say, state",
+      "fr": "dire, déclarer"
+    },
+    "fahad": {
+      "en": "Fahd (King Fahd of Saudi Arabia)",
+      "fr": "Fahd (roi Fahd d'Arabie saoudite)"
+    },
+    "falalar": {
+      "en": "merit, virtue of",
+      "fr": "le mérite de"
+    },
+    "fara": {
+      "en": "begin, start",
+      "fr": "commencer"
+    },
+    "farilla": {
+      "en": "obligatory duty",
+      "fr": "obligation religieuse"
+    },
+    "farko": {
+      "en": "first",
+      "fr": "premier"
+    },
+    "faru": {
+      "en": "happen",
+      "fr": "arriver, se produire"
+    },
+    "fatan": {
+      "en": "hope, wish of",
+      "fr": "l'espoir, le souhait de"
+    },
+    "fitina": {
+      "en": "trial, discord, temptation",
+      "fr": "épreuve, discorde, tentation"
+    },
+    "fito": {
+      "en": "come out",
+      "fr": "sortir"
+    },
+    "fodio": {
+      "en": "Fodio (Usman dan Fodio)",
+      "fr": "Fodio (Usman dan Fodio)"
+    },
+    "gama": {
+      "en": "finish; join",
+      "fr": "finir ; réunir"
+    },
+    "gane": {
+      "en": "understand, realise",
+      "fr": "comprendre, saisir"
+    },
+    "gani": {
+      "en": "seeing, view",
+      "fr": "fait de voir, avis"
+    },
+    "ganin": {
+      "en": "seeing of",
+      "fr": "le fait de voir"
+    },
+    "gargajiya": {
+      "en": "tradition, traditional",
+      "fr": "tradition, traditionnel"
+    },
+    "gari": {
+      "en": "town, city",
+      "fr": "ville, localité"
+    },
+    "garin": {
+      "en": "town of",
+      "fr": "la ville de"
+    },
+    "gaskiya": {
+      "en": "truth, honesty",
+      "fr": "vérité, honnêteté"
+    },
+    "gaya": {
+      "en": "tell, inform",
+      "fr": "dire, informer"
+    },
+    "ghana": {
+      "en": "Ghana",
+      "fr": "Ghana"
+    },
+    "gida": {
+      "en": "house, home, family",
+      "fr": "maison, foyer, famille"
+    },
+    "gidan": {
+      "en": "house, home of",
+      "fr": "la maison, le foyer de"
+    },
+    "gina": {
+      "en": "build",
+      "fr": "construire"
+    },
+    "giya": {
+      "en": "alcohol, liquor",
+      "fr": "alcool, boisson alcoolisée"
+    },
+    "gobir": {
+      "en": "Gobir (kingdom)",
+      "fr": "Gobir (royaume)"
+    },
+    "gombe": {
+      "en": "Gombe",
+      "fr": "Gombe"
+    },
+    "gudanar": {
+      "en": "conduct, run",
+      "fr": "mener, administrer"
+    },
+    "gurbacewar": {
+      "en": "corruption, decay of",
+      "fr": "la corruption, la dégradation de"
+    },
+    "gurguzu": {
+      "en": "socialism",
+      "fr": "socialisme"
+    },
+    "gwamna": {
+      "en": "governor",
+      "fr": "gouverneur"
+    },
+    "gwamnati": {
+      "en": "government",
+      "fr": "gouvernement"
+    },
+    "gwamnatin": {
+      "en": "government of",
+      "fr": "le gouvernement de"
+    },
+    "gwandu": {
+      "en": "Gwandu (emirate)",
+      "fr": "Gwandu (émirat)"
+    },
+    "hada": {
+      "en": "join, combine, unite",
+      "fr": "réunir, associer"
+    },
+    "haddasa": {
+      "en": "cause, provoke",
+      "fr": "provoquer, causer"
+    },
+    "hadis": {
+      "en": "hadith",
+      "fr": "hadith"
+    },
+    "hadisi": {
+      "en": "hadith (Prophetic tradition)",
+      "fr": "hadith (tradition prophétique)"
+    },
+    "hadisin": {
+      "en": "hadith of",
+      "fr": "le hadith de"
+    },
+    "hadith": {
+      "en": "hadith",
+      "fr": "hadith"
+    },
+    "haifa": {
+      "en": "give birth to, beget",
+      "fr": "enfanter, engendrer"
+    },
+    "haifar": {
+      "en": "give rise to, cause",
+      "fr": "engendrer, provoquer"
+    },
+    "haihu": {
+      "en": "give birth",
+      "fr": "accoucher"
+    },
+    "haihuwa": {
+      "en": "birth",
+      "fr": "naissance"
+    },
+    "haila": {
+      "en": "menstruation (fiqh)",
+      "fr": "menstrues (fiqh)"
+    },
+    "hajji": {
+      "en": "pilgrimage (Hajj)",
+      "fr": "pèlerinage (hajj)"
+    },
+    "hakki": {
+      "en": "right, due",
+      "fr": "droit, dû"
+    },
+    "hakkin": {
+      "en": "right, due of",
+      "fr": "le droit, le dû de"
+    },
+    "halatta": {
+      "en": "be lawful",
+      "fr": "être licite"
+    },
+    "hana": {
+      "en": "prevent, forbid",
+      "fr": "empêcher, interdire"
+    },
+    "hanya": {
+      "en": "way, road",
+      "fr": "chemin, voie"
+    },
+    "haram": {
+      "en": "forbidden",
+      "fr": "illicite"
+    },
+    "harkan": {
+      "en": "affair, matter of",
+      "fr": "l'affaire de"
+    },
+    "harkar": {
+      "en": "affair, matter of",
+      "fr": "l'affaire de"
+    },
+    "harkokin": {
+      "en": "affairs of",
+      "fr": "les affaires de"
+    },
+    "hausa": {
+      "en": "Hausa",
+      "fr": "haoussa"
+    },
+    "hawan": {
+      "en": "mounting, riding (hawan sallah: festival parade)",
+      "fr": "monte (hawan sallah : parade de fête)"
+    },
+    "hijra": {
+      "en": "hijra, emigration",
+      "fr": "hégire, émigration"
+    },
+    "hodiyo": {
+      "en": "Fodio (Hausa spelling)",
+      "fr": "Fodio (graphie haoussa)"
+    },
+    "hoton": {
+      "en": "picture of",
+      "fr": "l'image de"
+    },
+    "hudubar": {
+      "en": "Friday sermon (khuṭba) of",
+      "fr": "le sermon du vendredi de"
+    },
+    "hukumar": {
+      "en": "authority, agency of",
+      "fr": "l'autorité, l'agence de"
+    },
+    "hukunci": {
+      "en": "ruling, judgement",
+      "fr": "jugement, statut"
+    },
+    "ilimi": {
+      "en": "knowledge, learning",
+      "fr": "savoir, connaissance"
+    },
+    "ilimin": {
+      "en": "knowledge of",
+      "fr": "le savoir de"
+    },
+    "imamu": {
+      "en": "imam",
+      "fr": "imam"
+    },
+    "iran": {
+      "en": "Iran",
+      "fr": "Iran"
+    },
+    "islamiyya": {
+      "en": "Islamiyya (school)",
+      "fr": "Islamiyya (école)"
+    },
+    "iyaye": {
+      "en": "parents",
+      "fr": "parents"
+    },
+    "iyayen": {
+      "en": "parents of",
+      "fr": "les parents de"
+    },
+    "iyayenka": {
+      "en": "your parents",
+      "fr": "tes parents"
+    },
+    "izala": {
+      "en": "Izala (movement)",
+      "fr": "Izala (mouvement)"
+    },
+    "izinin": {
+      "en": "permission of",
+      "fr": "la permission de"
+    },
+    "jahannama": {
+      "en": "Hellfire",
+      "fr": "l'Enfer"
+    },
+    "jahar": {
+      "en": "state of",
+      "fr": "l'État de"
+    },
+    "jam'iyya": {
+      "en": "party, association",
+      "fr": "parti, association"
+    },
+    "jam'iyyar": {
+      "en": "party, association of",
+      "fr": "le parti, l'association de"
+    },
+    "jama'a": {
+      "en": "people, congregation, public",
+      "fr": "assemblée, public, fidèles"
+    },
+    "jami'a": {
+      "en": "university",
+      "fr": "université"
+    },
+    "jami'an": {
+      "en": "officials of",
+      "fr": "les responsables de"
+    },
+    "jami'ar": {
+      "en": "university of",
+      "fr": "l'université de"
+    },
+    "jami'o'i": {
+      "en": "universities",
+      "fr": "universités"
+    },
+    "janaba": {
+      "en": "major ritual impurity (janāba)",
+      "fr": "impureté rituelle majeure (janāba)"
+    },
+    "jatau": {
+      "en": "Jatau (name)",
+      "fr": "Jatau (nom)"
+    },
+    "jawo": {
+      "en": "draw, attract",
+      "fr": "attirer"
+    },
+    "je": {
+      "en": "go",
+      "fr": "aller"
+    },
+    "jihadi": {
+      "en": "jihad",
+      "fr": "djihad"
+    },
+    "jihadin": {
+      "en": "jihad of",
+      "fr": "le djihad de"
+    },
+    "jihar": {
+      "en": "state of",
+      "fr": "l'État de"
+    },
+    "jikokin": {
+      "en": "grandchildren of",
+      "fr": "les petits-enfants de"
+    },
+    "jin": {
+      "en": "hearing, feeling",
+      "fr": "fait d'entendre, de ressentir"
+    },
+    "juyin": {
+      "en": "turning, coup (juyin mulki)",
+      "fr": "renversement, coup d'État"
+    },
+    "ka'idoji": {
+      "en": "rules",
+      "fr": "règles"
+    },
+    "kaddamar": {
+      "en": "launch, inaugurate",
+      "fr": "lancer, inaugurer"
+    },
+    "kaduna": {
+      "en": "Kaduna",
+      "fr": "Kaduna"
+    },
+    "kafirci": {
+      "en": "unbelief, kufr",
+      "fr": "mécréance, kufr"
+    },
+    "kafurai": {
+      "en": "unbelievers",
+      "fr": "mécréants"
+    },
+    "kakanni": {
+      "en": "grandparents, ancestors",
+      "fr": "grands-parents, ancêtres"
+    },
+    "kakannin": {
+      "en": "ancestors of",
+      "fr": "les ancêtres de"
+    },
+    "kama": {
+      "en": "catch, seize; resemble",
+      "fr": "saisir ; ressembler"
+    },
+    "kamata": {
+      "en": "ought to, be fitting",
+      "fr": "devoir, convenir"
+    },
+    "kamo": {
+      "en": "catch, seize",
+      "fr": "attraper, saisir"
+    },
+    "kanana": {
+      "en": "small ones",
+      "fr": "petits"
+    },
+    "kananan": {
+      "en": "small",
+      "fr": "petits"
+    },
+    "kanne": {
+      "en": "younger siblings",
+      "fr": "cadets"
+    },
+    "kano": {
+      "en": "Kano",
+      "fr": "Kano"
+    },
+    "kara": {
+      "en": "add, increase; repeat",
+      "fr": "ajouter, accroître ; répéter"
+    },
+    "karamar": {
+      "en": "small (fem.)",
+      "fr": "petite"
+    },
+    "karami": {
+      "en": "small",
+      "fr": "petit"
+    },
+    "karanta": {
+      "en": "read, recite",
+      "fr": "lire, réciter"
+    },
+    "karantar": {
+      "en": "teach, instruct",
+      "fr": "enseigner, instruire"
+    },
+    "karatu": {
+      "en": "reading, study, lesson",
+      "fr": "lecture, étude, leçon"
+    },
+    "karatun": {
+      "en": "reading, study of",
+      "fr": "l'étude, la leçon de"
+    },
+    "karba": {
+      "en": "receive, accept",
+      "fr": "recevoir, accepter"
+    },
+    "karbi": {
+      "en": "receive, accept",
+      "fr": "recevoir, accepter"
+    },
+    "kare": {
+      "en": "protect, defend; finish",
+      "fr": "protéger, défendre ; finir"
+    },
+    "karkashin": {
+      "en": "under",
+      "fr": "sous"
+    },
+    "karya": {
+      "en": "lie, falsehood; break",
+      "fr": "mensonge ; briser"
+    },
+    "kashe": {
+      "en": "kill",
+      "fr": "tuer"
+    },
+    "katsina": {
+      "en": "Katsina",
+      "fr": "Katsina"
+    },
+    "kawo": {
+      "en": "bring",
+      "fr": "apporter, amener"
+    },
+    "khalifa": {
+      "en": "caliph, successor",
+      "fr": "calife, successeur"
+    },
+    "kifar": {
+      "en": "overturn, topple",
+      "fr": "renverser"
+    },
+    "kira": {
+      "en": "call, invite",
+      "fr": "appeler, inviter"
+    },
+    "kisan": {
+      "en": "killing, murder of",
+      "fr": "le meurtre de"
+    },
+    "kishi": {
+      "en": "jealousy, zeal",
+      "fr": "jalousie, zèle"
+    },
+    "kitabul": {
+      "en": "kitāb al- (the book of)",
+      "fr": "kitāb al- (le livre de)"
+    },
+    "kiyaye": {
+      "en": "guard, observe, preserve",
+      "fr": "garder, observer, préserver"
+    },
+    "koma": {
+      "en": "return, go back",
+      "fr": "retourner, revenir"
+    },
+    "kotu": {
+      "en": "court (of law)",
+      "fr": "tribunal"
+    },
+    "koya": {
+      "en": "teach; learn",
+      "fr": "enseigner ; apprendre"
+    },
+    "koyan": {
+      "en": "learning",
+      "fr": "apprentissage"
+    },
+    "koyawa": {
+      "en": "teaching",
+      "fr": "enseignement"
+    },
+    "kristoci": {
+      "en": "Christians",
+      "fr": "chrétiens"
+    },
+    "kudi": {
+      "en": "money",
+      "fr": "argent"
+    },
+    "kudin": {
+      "en": "money of",
+      "fr": "l'argent de"
+    },
+    "kukan": {
+      "en": "crying of",
+      "fr": "les pleurs de"
+    },
+    "kula": {
+      "en": "care, attention",
+      "fr": "soin, attention"
+    },
+    "kungiya": {
+      "en": "association, group",
+      "fr": "association, groupe"
+    },
+    "kuri'ar": {
+      "en": "vote, ballot of",
+      "fr": "le vote, le bulletin de"
+    },
+    "kwana": {
+      "en": "day (24h); spend the night",
+      "fr": "jour ; passer la nuit"
+    },
+    "kwantar": {
+      "en": "lay down; calm",
+      "fr": "coucher ; apaiser"
+    },
+    "kwashe": {
+      "en": "take away entirely",
+      "fr": "emporter entièrement"
+    },
+    "kyau": {
+      "en": "goodness, beauty",
+      "fr": "bonté, beauté"
+    },
+    "kyautata": {
+      "en": "improve, treat well",
+      "fr": "améliorer, bien traiter"
+    },
+    "ladabi": {
+      "en": "good manners, respect",
+      "fr": "politesse, respect"
+    },
+    "lafiya": {
+      "en": "health, well-being",
+      "fr": "santé, bien-être"
+    },
+    "lalacewar": {
+      "en": "decay, corruption of",
+      "fr": "la dégradation de"
+    },
+    "lalata": {
+      "en": "corrupt, ruin",
+      "fr": "corrompre, ruiner"
+    },
+    "lallai": {
+      "en": "surely",
+      "fr": "assurément"
+    },
+    "lauya": {
+      "en": "lawyer",
+      "fr": "avocat"
+    },
+    "limami": {
+      "en": "imam",
+      "fr": "imam"
+    },
+    "littafi": {
+      "en": "book",
+      "fr": "livre"
+    },
+    "littafin": {
+      "en": "book of",
+      "fr": "le livre de"
+    },
+    "lokaci": {
+      "en": "time, period",
+      "fr": "temps, moment"
+    },
+    "lugga": {
+      "en": "language (Arabic lugha)",
+      "fr": "langue (arabe lugha)"
+    },
+    "ma'aikacin": {
+      "en": "worker of",
+      "fr": "l'employé de"
+    },
+    "ma'aikatan": {
+      "en": "workers of",
+      "fr": "les employés de"
+    },
+    "ma'aikatar": {
+      "en": "ministry, department of",
+      "fr": "le ministère, service de"
+    },
+    "ma'ana": {
+      "en": "meaning",
+      "fr": "sens, signification"
+    },
+    "mace": {
+      "en": "woman",
+      "fr": "femme"
+    },
+    "macido": {
+      "en": "Maccido (Sultan of Sokoto)",
+      "fr": "Maccido (sultan de Sokoto)"
+    },
+    "madaukakin": {
+      "en": "Exalted, Most High (epithet of God)",
+      "fr": "Très-Haut, Exalté (épithète de Dieu)"
+    },
+    "madina": {
+      "en": "Medina",
+      "fr": "Médine"
+    },
+    "magana": {
+      "en": "speech, matter, word",
+      "fr": "parole, propos, affaire"
+    },
+    "maganar": {
+      "en": "speech, matter of",
+      "fr": "la parole, l'affaire de"
+    },
+    "maganganu": {
+      "en": "words, statements",
+      "fr": "paroles, propos"
+    },
+    "maguzawa": {
+      "en": "Maguzawa (non-Muslim Hausa)",
+      "fr": "Maguzawa (Haoussa non musulmans)"
+    },
+    "maiduguri": {
+      "en": "Maiduguri",
+      "fr": "Maiduguri"
+    },
+    "majalisar": {
+      "en": "council, assembly of",
+      "fr": "le conseil, l'assemblée de"
+    },
+    "makaranta": {
+      "en": "school",
+      "fr": "école"
+    },
+    "makarantar": {
+      "en": "school of",
+      "fr": "l'école de"
+    },
+    "makarantun": {
+      "en": "schools of",
+      "fr": "les écoles de"
+    },
+    "makarfi": {
+      "en": "Makarfi (Ahmed Makarfi, governor)",
+      "fr": "Makarfi (Ahmed Makarfi, gouverneur)"
+    },
+    "malam": {
+      "en": "scholar, teacher (title)",
+      "fr": "savant, maître (titre)"
+    },
+    "malamai": {
+      "en": "scholars, teachers",
+      "fr": "savants, enseignants"
+    },
+    "malaman": {
+      "en": "scholars, teachers of",
+      "fr": "les savants, maîtres de"
+    },
+    "malami": {
+      "en": "scholar, teacher",
+      "fr": "savant, enseignant"
+    },
+    "malamin": {
+      "en": "scholar, teacher of",
+      "fr": "le savant, maître de"
+    },
+    "mallaka": {
+      "en": "own; colonise",
+      "fr": "posséder ; coloniser"
+    },
+    "manzon": {
+      "en": "Messenger of (Manzon Allah)",
+      "fr": "le Messager de (Manzon Allah)"
+    },
+    "maraya": {
+      "en": "orphan",
+      "fr": "orphelin"
+    },
+    "marayu": {
+      "en": "orphans",
+      "fr": "orphelins"
+    },
+    "martaba": {
+      "en": "dignity, rank",
+      "fr": "dignité, rang"
+    },
+    "masallatai": {
+      "en": "mosques",
+      "fr": "mosquées"
+    },
+    "masarautar": {
+      "en": "emirate, monarchy of",
+      "fr": "l'émirat, la chefferie de"
+    },
+    "mata": {
+      "en": "women; wife",
+      "fr": "femmes ; épouse"
+    },
+    "mataimakin": {
+      "en": "deputy of",
+      "fr": "l'adjoint de"
+    },
+    "matakai": {
+      "en": "steps, measures",
+      "fr": "étapes, mesures"
+    },
+    "matakan": {
+      "en": "steps, measures of",
+      "fr": "les mesures de"
+    },
+    "matan": {
+      "en": "women, wives of",
+      "fr": "les femmes de"
+    },
+    "matar": {
+      "en": "wife of",
+      "fr": "l'épouse de"
+    },
+    "matasa": {
+      "en": "young people",
+      "fr": "jeunes"
+    },
+    "matasan": {
+      "en": "young people of",
+      "fr": "les jeunes de"
+    },
+    "matashi": {
+      "en": "young man, youth",
+      "fr": "jeune homme"
+    },
+    "matsala": {
+      "en": "problem",
+      "fr": "problème"
+    },
+    "matsalar": {
+      "en": "problem of",
+      "fr": "le problème de"
+    },
+    "matsalolin": {
+      "en": "problems of",
+      "fr": "les problèmes de"
+    },
+    "matsayin": {
+      "en": "position, status of",
+      "fr": "la position, le statut de"
+    },
+    "matukar": {
+      "en": "as long as; utmost",
+      "fr": "tant que ; extrême"
+    },
+    "mayaudara": {
+      "en": "deceivers",
+      "fr": "trompeurs"
+    },
+    "mazan": {
+      "en": "men, husbands of",
+      "fr": "les hommes, maris de"
+    },
+    "miji": {
+      "en": "husband",
+      "fr": "mari"
+    },
+    "mijin": {
+      "en": "husband of",
+      "fr": "le mari de"
+    },
+    "minister": {
+      "en": "minister (English)",
+      "fr": "ministre (anglais)"
+    },
+    "muhammadu": {
+      "en": "Muhammadu (name)",
+      "fr": "Muhammadu (nom)"
+    },
+    "mulki": {
+      "en": "rule, power",
+      "fr": "pouvoir, gouvernement"
+    },
+    "mulkin": {
+      "en": "rule of",
+      "fr": "le pouvoir de"
+    },
+    "musiba": {
+      "en": "calamity, affliction",
+      "fr": "calamité, malheur"
+    },
+    "musulmi": {
+      "en": "Muslims",
+      "fr": "musulmans"
+    },
+    "musulmin": {
+      "en": "Muslims of",
+      "fr": "les musulmans de"
+    },
+    "musulunci": {
+      "en": "Islam",
+      "fr": "islam"
+    },
+    "mutane": {
+      "en": "people",
+      "fr": "gens, personnes"
+    },
+    "mutanen": {
+      "en": "people of",
+      "fr": "les gens de"
+    },
+    "mutu": {
+      "en": "die",
+      "fr": "mourir"
+    },
+    "mutum": {
+      "en": "person, human being",
+      "fr": "personne, être humain"
+    },
+    "mutumin": {
+      "en": "person, man of",
+      "fr": "l'homme, la personne de"
+    },
+    "mutuncin": {
+      "en": "dignity of",
+      "fr": "la dignité de"
+    },
+    "nada": {
+      "en": "appoint, install",
+      "fr": "nommer, introniser"
+    },
+    "najeriya": {
+      "en": "Nigeria",
+      "fr": "Nigeria"
+    },
+    "namiji": {
+      "en": "man, male",
+      "fr": "homme, masculin"
+    },
+    "nasiha": {
+      "en": "counsel, admonition",
+      "fr": "conseil, exhortation"
+    },
+    "nau'i": {
+      "en": "kind, type",
+      "fr": "sorte, type"
+    },
+    "nau'in": {
+      "en": "kind of",
+      "fr": "le type de"
+    },
+    "nau'o'in": {
+      "en": "kinds of",
+      "fr": "les types de"
+    },
+    "nema": {
+      "en": "seek",
+      "fr": "chercher"
+    },
+    "neman": {
+      "en": "seeking",
+      "fr": "recherche de"
+    },
+    "nemi": {
+      "en": "seek",
+      "fr": "chercher"
+    },
+    "obasanjo": {
+      "en": "Obasanjo",
+      "fr": "Obasanjo"
+    },
+    "pdp": {
+      "en": "PDP (Peoples Democratic Party)",
+      "fr": "PDP (Parti démocratique populaire)"
+    },
+    "primary": {
+      "en": "primary (school)",
+      "fr": "primaire (école)"
+    },
+    "qur'ani": {
+      "en": "the Qur'an",
+      "fr": "le Coran"
+    },
+    "qur'anin": {
+      "en": "the Qur'an of",
+      "fr": "le Coran de"
+    },
+    "rai": {
+      "en": "life, soul",
+      "fr": "vie, âme"
+    },
+    "ramadan": {
+      "en": "Ramadan",
+      "fr": "ramadan"
+    },
+    "rana": {
+      "en": "day; sun",
+      "fr": "jour ; soleil"
+    },
+    "ranar": {
+      "en": "day of",
+      "fr": "le jour de"
+    },
+    "rashin": {
+      "en": "lack, absence of",
+      "fr": "manque, absence de"
+    },
+    "rasu": {
+      "en": "die, pass away",
+      "fr": "mourir, décéder"
+    },
+    "rawa": {
+      "en": "dancing",
+      "fr": "danse"
+    },
+    "rayuwa": {
+      "en": "life",
+      "fr": "vie"
+    },
+    "rayuwar": {
+      "en": "life of",
+      "fr": "la vie de"
+    },
+    "rediyon": {
+      "en": "radio of",
+      "fr": "la radio de"
+    },
+    "riba": {
+      "en": "usury, interest; profit",
+      "fr": "usure, intérêt ; profit"
+    },
+    "rinka": {
+      "en": "keep doing, habitually",
+      "fr": "continuer à, avoir l'habitude de"
+    },
+    "roko": {
+      "en": "begging, pleading",
+      "fr": "mendicité, supplique"
+    },
+    "rubuta": {
+      "en": "write",
+      "fr": "écrire"
+    },
+    "saba": {
+      "en": "disobey; be accustomed to",
+      "fr": "désobéir ; avoir l'habitude"
+    },
+    "sabon": {
+      "en": "new",
+      "fr": "nouveau"
+    },
+    "sadaka": {
+      "en": "charity, alms (ṣadaqa)",
+      "fr": "aumône, charité (ṣadaqa)"
+    },
+    "sadaki": {
+      "en": "bridewealth (mahr)",
+      "fr": "dot (mahr)"
+    },
+    "sadar": {
+      "en": "maintain ties (sadar da zumunci)",
+      "fr": "entretenir les liens (de parenté)"
+    },
+    "saka": {
+      "en": "put, place; reward",
+      "fr": "mettre, placer ; récompenser"
+    },
+    "sakandare": {
+      "en": "secondary school",
+      "fr": "école secondaire"
+    },
+    "sake": {
+      "en": "do again; release",
+      "fr": "refaire ; relâcher"
+    },
+    "saki": {
+      "en": "divorce; release",
+      "fr": "divorce ; libérer"
+    },
+    "sallah": {
+      "en": "ritual prayer (ṣalāt)",
+      "fr": "prière rituelle (ṣalāt)"
+    },
+    "sallar": {
+      "en": "prayer of",
+      "fr": "la prière de"
+    },
+    "samari": {
+      "en": "young men",
+      "fr": "jeunes hommes"
+    },
+    "san": {
+      "en": "know",
+      "fr": "savoir, connaître"
+    },
+    "sana'a": {
+      "en": "trade, craft",
+      "fr": "métier"
+    },
+    "sandan": {
+      "en": "staff, baton of",
+      "fr": "le bâton de"
+    },
+    "sani": {
+      "en": "knowledge, knowing",
+      "fr": "connaissance, savoir"
+    },
+    "sarakuna": {
+      "en": "emirs, kings",
+      "fr": "émirs, rois"
+    },
+    "sarakunan": {
+      "en": "emirs, rulers of",
+      "fr": "les émirs, chefs de"
+    },
+    "sarauta": {
+      "en": "traditional rule, title",
+      "fr": "chefferie, titre"
+    },
+    "sardauna": {
+      "en": "Sardauna (title)",
+      "fr": "Sardauna (titre)"
+    },
+    "sarki": {
+      "en": "emir, king",
+      "fr": "émir, roi"
+    },
+    "sarkin": {
+      "en": "emir, king of",
+      "fr": "l'émir, le roi de"
+    },
+    "saudiya": {
+      "en": "Saudi Arabia",
+      "fr": "Arabie saoudite"
+    },
+    "sauka": {
+      "en": "descend; complete (the Qur'an)",
+      "fr": "descendre ; achever (le Coran)"
+    },
+    "school": {
+      "en": "school (English)",
+      "fr": "école (anglais)"
+    },
+    "science": {
+      "en": "science (English)",
+      "fr": "science (anglais)"
+    },
+    "secondary": {
+      "en": "secondary (English)",
+      "fr": "secondaire (anglais)"
+    },
+    "sha'awa": {
+      "en": "desire, interest",
+      "fr": "désir, intérêt"
+    },
+    "shagaltu": {
+      "en": "be preoccupied, distracted",
+      "fr": "être absorbé, distrait"
+    },
+    "shakka": {
+      "en": "doubt",
+      "fr": "doute"
+    },
+    "shari'a": {
+      "en": "Islamic law (shari'a)",
+      "fr": "charia, loi islamique"
+    },
+    "shari'ar": {
+      "en": "Islamic law of",
+      "fr": "la charia de"
+    },
+    "shaye": {
+      "en": "drinking, substance abuse (shaye-shaye)",
+      "fr": "consommation (shaye-shaye)"
+    },
+    "shehu": {
+      "en": "shaykh, senior scholar",
+      "fr": "cheikh, grand savant"
+    },
+    "shekara": {
+      "en": "year",
+      "fr": "année"
+    },
+    "shekarau": {
+      "en": "Shekarau (name)",
+      "fr": "Shekarau (nom)"
+    },
+    "shiga": {
+      "en": "enter",
+      "fr": "entrer"
+    },
+    "shirka": {
+      "en": "polytheism, idolatry (shirk)",
+      "fr": "polythéisme, associationnisme (shirk)"
+    },
+    "shugaba": {
+      "en": "leader, head",
+      "fr": "chef, dirigeant"
+    },
+    "shugaban": {
+      "en": "leader, head of",
+      "fr": "le chef, le dirigeant de"
+    },
+    "shugabanci": {
+      "en": "leadership",
+      "fr": "direction, leadership"
+    },
+    "siyasa": {
+      "en": "politics",
+      "fr": "politique"
+    },
+    "sojoji": {
+      "en": "soldiers, military",
+      "fr": "soldats, militaires"
+    },
+    "soyayya": {
+      "en": "love, affection",
+      "fr": "amour, affection"
+    },
+    "sujuda": {
+      "en": "prostration (in prayer)",
+      "fr": "prosternation (dans la prière)"
+    },
+    "sulhun": {
+      "en": "reconciliation, settlement of",
+      "fr": "la réconciliation de"
+    },
+    "sunan": {
+      "en": "name of",
+      "fr": "le nom de"
+    },
+    "taba": {
+      "en": "ever (aux.); touch",
+      "fr": "avoir déjà ; toucher"
+    },
+    "tabbataccen": {
+      "en": "established, confirmed",
+      "fr": "établi, confirmé"
+    },
+    "tabbatar": {
+      "en": "confirm, establish",
+      "fr": "confirmer, établir"
+    },
+    "tada": {
+      "en": "raise, stir up",
+      "fr": "soulever, susciter"
+    },
+    "tafi": {
+      "en": "go, depart",
+      "fr": "partir, aller"
+    },
+    "tafiya": {
+      "en": "journey, travelling",
+      "fr": "voyage, marche"
+    },
+    "taimama": {
+      "en": "dry ablution (tayammum)",
+      "fr": "ablution sèche (tayammum)"
+    },
+    "takarar": {
+      "en": "candidacy of",
+      "fr": "la candidature de"
+    },
+    "takobi": {
+      "en": "sword",
+      "fr": "épée"
+    },
+    "talla": {
+      "en": "street hawking",
+      "fr": "vente à la sauvette"
+    },
+    "tallan": {
+      "en": "street hawking of",
+      "fr": "la vente ambulante de"
+    },
+    "tarbiyya": {
+      "en": "upbringing, moral education",
+      "fr": "éducation morale"
+    },
+    "tarbiyyar": {
+      "en": "upbringing of",
+      "fr": "l'éducation morale de"
+    },
+    "tashin": {
+      "en": "rising, outbreak of",
+      "fr": "montée, déclenchement de"
+    },
+    "tasirin": {
+      "en": "influence, impact of",
+      "fr": "l'influence, l'impact de"
+    },
+    "taso": {
+      "en": "grow up; rise",
+      "fr": "grandir ; se lever"
+    },
+    "tasowa": {
+      "en": "growing up, rising",
+      "fr": "fait de grandir, d'émerger"
+    },
+    "tattali": {
+      "en": "careful management",
+      "fr": "gestion avisée"
+    },
+    "tausasa": {
+      "en": "soften, be gentle",
+      "fr": "adoucir"
+    },
+    "tawafi": {
+      "en": "circumambulation of the Kaaba (ṭawāf)",
+      "fr": "circumambulation autour de la Kaaba (ṭawāf)"
+    },
+    "tayar": {
+      "en": "raise, stir up",
+      "fr": "soulever, provoquer"
+    },
+    "tsarin": {
+      "en": "system, order of",
+      "fr": "le système, l'ordre de"
+    },
+    "tsarkaka": {
+      "en": "purify, be pure",
+      "fr": "purifier, être pur"
+    },
+    "tsarki": {
+      "en": "ritual purity",
+      "fr": "pureté rituelle"
+    },
+    "tsaro": {
+      "en": "security",
+      "fr": "sécurité"
+    },
+    "tsaya": {
+      "en": "stand, stop",
+      "fr": "se tenir, s'arrêter"
+    },
+    "tsohon": {
+      "en": "former, old",
+      "fr": "ancien, vieux"
+    },
+    "tsoron": {
+      "en": "fear of",
+      "fr": "la peur de"
+    },
+    "tuhuma": {
+      "en": "accusation, suspicion",
+      "fr": "accusation, soupçon"
+    },
+    "tumasanci": {
+      "en": "sycophancy, flattery",
+      "fr": "flagornerie, obséquiosité"
+    },
+    "tunanin": {
+      "en": "thought of",
+      "fr": "la pensée de"
+    },
+    "turawan": {
+      "en": "Europeans, whites of",
+      "fr": "les Européens de"
+    },
+    "uba": {
+      "en": "father",
+      "fr": "père"
+    },
+    "uban": {
+      "en": "father of",
+      "fr": "le père de"
+    },
+    "ubangiji": {
+      "en": "the Lord",
+      "fr": "le Seigneur"
+    },
+    "uwa": {
+      "en": "mother",
+      "fr": "mère"
+    },
+    "uwar": {
+      "en": "mother of",
+      "fr": "la mère de"
+    },
+    "wa'azi": {
+      "en": "preaching, sermon",
+      "fr": "prêche, sermon"
+    },
+    "wajibi": {
+      "en": "obligatory",
+      "fr": "obligatoire"
+    },
+    "wankan": {
+      "en": "washing, ritual bath of",
+      "fr": "le lavage, bain rituel de"
+    },
+    "wasa": {
+      "en": "play, game",
+      "fr": "jeu"
+    },
+    "watan": {
+      "en": "month of",
+      "fr": "le mois de"
+    },
+    "wayewar": {
+      "en": "enlightenment, awareness of",
+      "fr": "l'éveil, la conscience de"
+    },
+    "wuce": {
+      "en": "pass, exceed",
+      "fr": "passer, dépasser"
+    },
+    "wulakanta": {
+      "en": "humiliate",
+      "fr": "humilier"
+    },
+    "wuta": {
+      "en": "fire, Hellfire",
+      "fr": "feu, Enfer"
+    },
+    "yanci": {
+      "en": "freedom",
+      "fr": "liberté"
+    },
+    "yancin": {
+      "en": "freedom of",
+      "fr": "la liberté de"
+    },
+    "yar": {
+      "en": "daughter of",
+      "fr": "la fille de"
+    },
+    "yara": {
+      "en": "children",
+      "fr": "enfants"
+    },
+    "yaran": {
+      "en": "children of",
+      "fr": "les enfants de"
+    },
+    "yarda": {
+      "en": "agree, accept, trust",
+      "fr": "accepter, consentir"
+    },
+    "yarinya": {
+      "en": "girl",
+      "fr": "fille"
+    },
+    "yaro": {
+      "en": "boy, child",
+      "fr": "garçon, enfant"
+    },
+    "yaron": {
+      "en": "boy, child of",
+      "fr": "le garçon, l'enfant de"
+    },
+    "yau": {
+      "en": "today",
+      "fr": "aujourd'hui"
+    },
+    "yawa": {
+      "en": "abundance, many",
+      "fr": "abondance, grand nombre"
+    },
+    "yayan": {
+      "en": "children, offspring of",
+      "fr": "les enfants de"
+    },
+    "yunfa": {
+      "en": "Yunfa (king of Gobir)",
+      "fr": "Yunfa (roi du Gobir)"
+    },
+    "zabe": {
+      "en": "election",
+      "fr": "élection"
+    },
+    "zaben": {
+      "en": "election of",
+      "fr": "l'élection de"
+    },
+    "zalla": {
+      "en": "pure, nothing but",
+      "fr": "pur, rien que"
+    },
+    "zalunci": {
+      "en": "oppression, injustice",
+      "fr": "oppression, injustice"
+    },
+    "zaluncin": {
+      "en": "oppression, injustice of",
+      "fr": "l'oppression, l'injustice de"
+    },
+    "zama": {
+      "en": "become; stay",
+      "fr": "devenir ; demeurer"
+    },
+    "zaman": {
+      "en": "living, period of",
+      "fr": "la vie, l'époque de"
+    },
+    "zaria": {
+      "en": "Zaria",
+      "fr": "Zaria"
+    },
+    "zauna": {
+      "en": "sit, stay, live",
+      "fr": "s'asseoir, demeurer"
+    },
+    "zawarawa": {
+      "en": "divorced or widowed women",
+      "fr": "femmes divorcées ou veuves"
+    },
+    "zazzau": {
+      "en": "Zazzau (Zaria)",
+      "fr": "Zazzau (Zaria)"
+    },
+    "zo": {
+      "en": "come",
+      "fr": "venir"
+    },
+    "zumunci": {
+      "en": "kinship ties, fellowship",
+      "fr": "liens de parenté, fraternité"
+    },
+    "zumuncin": {
+      "en": "kinship ties of",
+      "fr": "les liens de parenté de"
+    }
   }
 }

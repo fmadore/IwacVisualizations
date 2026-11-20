@@ -1,7 +1,7 @@
 {
   "_comment": "Research lexicon for generate_albani_sermons.py (issue #31). SEED CANDIDATES, NOT A VALIDATED INSTRUMENT: every entry is 'seed' until the curator's Hausa-speaking colleague accepts it through the review sheet the generator writes (--review-sheet). Only accepted rows are to be folded back here, with status 'validated'. Edit this file, never the code, to revise the instrument.",
   "_matching": "Variants are written as the transcripts spell them; matching folds hooked letters (ɓ ɗ ƙ ƴ), apostrophe typography, q/k, doubled letters and a final -ah, so one hooked spelling also catches its unhooked twin. Hausa marks possession with a linker suffix (-n / -r: matasan, gwamnatin, tarbiyyar), so the linker forms are listed explicitly; there is no lemmatiser (issue #31: 57–63% accuracy is too noisy). Multi-word variants match consecutive words of one speaker turn. Within a category, matches never overlap and the longest wins ('yan siyasa before siyasa); categories are independent of each other.",
-  "_disambiguation": "'exclude_before' drops an occurrence whose PRECEDING word is listed (sarki after 'madaukakin' is the divine epithet Allah Madaukakin Sarki, 706 times in 29 transcripts). 'ambiguous' entries keep their counts and concordance lines so the specialist can judge them, but stay OUT of every pooled statistic (theme rates, collocates, network, overlap) until validated: the unhooked text merges kasa 'to fail' with ƙasa 'country', and kwaya 'grain, seed' with ƙwaya 'pill'.",
+  "_disambiguation": "'exclude_before' drops an occurrence whose PRECEDING word is listed (sarki after 'madaukakin'/'daukakin'/'madaukin'/'allah' is the divine epithet Allah Madaukakin Sarki; sarki after 'cikakken' is ASR for tsarki 'ritual purity'). 'exclude_after' drops an occurrence whose FOLLOWING word is listed (boko before 'haram' is the armed group Boko Haram, not Western schooling; ƙwaya before 'ɗaya' is the Hausa singular classifier 'a single one', not drugs). 'ambiguous' entries keep their counts and concordance lines so the specialist can judge them, but stay OUT of every pooled statistic (theme rates, collocates, network, overlap) until validated: the unhooked text merges kasa 'to fail' with ƙasa 'country', and kwaya 'grain, seed / single unit' with ƙwaya 'pill'.",
   "status": "seed",
   "themes": {
     "youth": {
@@ -13,12 +13,12 @@
           "label_fr": "Les jeunes",
           "core": true,
           "entries": [
-            {"id": "matasa", "display": "matasa", "gloss_en": "young people; a young man, a young woman", "gloss_fr": "jeunes ; un jeune homme, une jeune femme", "variants": ["matasa", "matasan", "matashi", "matashin", "matashiya", "matashiyar"]},
+            {"id": "matasa", "display": "matasa", "gloss_en": "young people; a young man, a young woman", "gloss_fr": "jeunes ; un jeune homme, une jeune femme", "variants": ["matasa", "matasan", "matashi", "matashin", "matashiya", "matashiyar", "matashiyan"]},
             {"id": "samari", "display": "samari", "gloss_en": "young men; a young man", "gloss_fr": "jeunes hommes ; un jeune homme", "variants": ["samari", "samarin", "saurayi", "saurayin", "samartaka", "samartakar"]},
             {"id": "yan_mata", "display": "'yan mata", "gloss_en": "girls, young women", "gloss_fr": "jeunes filles", "variants": ["'yan mata", "yan mata", "'yammata", "yammata", "'yan matan", "yan matan"]},
-            {"id": "budurwa", "display": "budurwa", "gloss_en": "maiden, unmarried young woman", "gloss_fr": "jeune fille non mariée", "variants": ["budurwa", "budurwar", "'yan budurwai", "budurwai"]},
-            {"id": "yara", "display": "yara", "gloss_en": "children; a boy, a girl", "gloss_fr": "enfants ; un garçon, une fille", "variants": ["yara", "yaran", "yaro", "yaron", "yarinya", "yarinyar"]},
-            {"id": "kuruciya", "display": "ƙuruciya", "gloss_en": "youth, as an age of life", "gloss_fr": "la jeunesse, âge de la vie", "variants": ["ƙuruciya", "ƙuruciyar"]},
+            {"id": "budurwa", "display": "budurwa", "gloss_en": "maiden, unmarried young woman", "gloss_fr": "jeune fille non mariée", "variants": ["budurwa", "budurwar", "budurwan", "'yan budurwai", "budurwai"]},
+            {"id": "yara", "display": "yara", "gloss_en": "children; a boy, a girl", "gloss_fr": "enfants ; un garçon, une fille", "variants": ["yara", "yaran", "yaro", "yaron", "yarinya", "yarinyar", "yarinyan"]},
+            {"id": "kuruciya", "display": "ƙuruciya", "gloss_en": "youth, as an age of life", "gloss_fr": "la jeunesse, âge de la vie", "variants": ["ƙuruciya", "ƙuruciyar", "ƙuruciyan"]},
             {"id": "dalibai", "display": "ɗalibai", "gloss_en": "students; a student", "gloss_fr": "étudiants, élèves ; un étudiant", "variants": ["ɗalibai", "ɗaliban", "ɗalibi", "ɗalibin", "ɗaliba", "ɗalibar"]},
             {"id": "almajirai", "display": "almajirai", "gloss_en": "Qur'anic pupils", "gloss_fr": "élèves des écoles coraniques", "variants": ["almajirai", "almajiran", "almajiri", "almajirin"]},
             {"id": "yaya", "display": "'ya'ya", "gloss_en": "offspring (as in tarbiyyar 'ya'ya)", "gloss_fr": "progéniture (comme dans tarbiyyar 'ya'ya)", "variants": ["'ya'ya", "ya'ya", "'ya'yan", "ya'yan"]},
@@ -33,9 +33,9 @@
           "core": false,
           "entries": [
             {"id": "tarbiyya", "display": "tarbiyya", "gloss_en": "moral upbringing", "gloss_fr": "éducation morale", "variants": ["tarbiyya", "tarbiyyar", "tarbiyyan"]},
-            {"id": "ilimi", "display": "ilimi", "gloss_en": "knowledge, learning", "gloss_fr": "savoir, connaissance", "variants": ["ilimi", "ilimin"]},
-            {"id": "makaranta", "display": "makaranta", "gloss_en": "school", "gloss_fr": "école", "variants": ["makaranta", "makarantar", "makarantu", "makarantun"]},
-            {"id": "boko", "display": "boko", "gloss_en": "Western-style schooling", "gloss_fr": "école de type occidental", "variants": ["boko"]}
+            {"id": "ilimi", "display": "ilimi", "gloss_en": "knowledge, learning", "gloss_fr": "savoir, connaissance", "variants": ["ilimi", "ilimin", "ilmi", "ilmin"]},
+            {"id": "makaranta", "display": "makaranta", "gloss_en": "school", "gloss_fr": "école", "variants": ["makaranta", "makarantar", "makarantan", "makarantu", "makarantun"]},
+            {"id": "boko", "display": "boko", "exclude_after": ["haram"], "note": "Before 'haram' this is the armed group Boko Haram (counted under Organisations), not Western schooling.", "gloss_en": "Western-style schooling", "gloss_fr": "école de type occidental", "variants": ["boko"]}
           ]
         },
         "marriage": {
@@ -53,7 +53,7 @@
           "core": false,
           "entries": [
             {"id": "iyaye", "display": "iyaye", "gloss_en": "parents", "gloss_fr": "parents", "variants": ["iyaye", "iyayen"]},
-            {"id": "biyayya", "display": "biyayya", "gloss_en": "obedience", "gloss_fr": "obéissance", "variants": ["biyayya", "biyayyar"]}
+            {"id": "biyayya", "display": "biyayya", "gloss_en": "obedience", "gloss_fr": "obéissance", "variants": ["biyayya", "biyayyar", "biyayyan"]}
           ]
         },
         "decline": {
@@ -61,9 +61,9 @@
           "label_fr": "Déclin moral",
           "core": false,
           "entries": [
-            {"id": "lalacewa", "display": "lalacewa", "gloss_en": "corruption, going to ruin", "gloss_fr": "dégradation, perdition", "variants": ["lalacewa", "lalacewar", "lalace"]},
-            {"id": "gurbacewa", "display": "gurɓacewa", "gloss_en": "corruption, being spoilt", "gloss_fr": "corruption, pourrissement", "variants": ["gurɓacewa", "gurɓacewar", "gurɓace"]},
-            {"id": "fitina", "display": "fitina", "gloss_en": "trial, discord, temptation", "gloss_fr": "épreuve, discorde, tentation", "variants": ["fitina", "fitinar", "fitintinu"]}
+            {"id": "lalacewa", "display": "lalacewa", "gloss_en": "corruption, going to ruin", "gloss_fr": "dégradation, perdition", "variants": ["lalacewa", "lalacewar", "lalacewan", "lalace"]},
+            {"id": "gurbacewa", "display": "gurɓacewa", "gloss_en": "corruption, being spoilt", "gloss_fr": "corruption, pourrissement", "variants": ["gurɓacewa", "gurɓacewar", "gurɓacewan", "gurɓace"]},
+            {"id": "fitina", "display": "fitina", "gloss_en": "trial, discord, temptation", "gloss_fr": "épreuve, discorde, tentation", "variants": ["fitina", "fitinar", "fitinan", "fitintinu", "fitintinun"]}
           ]
         },
         "idleness": {
@@ -71,7 +71,7 @@
           "label_fr": "Drogues et oisiveté",
           "core": false,
           "entries": [
-            {"id": "kwaya", "display": "ƙwaya", "ambiguous": true, "note": "Unhooked kwaya also means a grain or seed; validate before pooling.", "gloss_en": "pills, drugs", "gloss_fr": "comprimés, drogues", "variants": ["ƙwaya", "ƙwayoyi"]},
+            {"id": "kwaya", "display": "ƙwaya", "ambiguous": true, "exclude_after": ["ɗaya"], "note": "Before 'ɗaya' (~70% of hits), ƙwaya ɗaya is the Hausa singular classifier ('a single one'), not drugs; unhooked kwaya can also mean a grain or seed. Validate before pooling.", "gloss_en": "pills, drugs", "gloss_fr": "comprimés, drogues", "variants": ["ƙwaya", "ƙwayoyi"]},
             {"id": "shaye_shaye", "display": "shaye-shaye", "gloss_en": "drinking, substance abuse", "gloss_fr": "consommation d'alcool ou de drogues", "variants": ["shaye-shaye", "shaye shaye"]},
             {"id": "zaman_banza", "display": "zaman banza", "gloss_en": "idleness", "gloss_fr": "oisiveté", "variants": ["zaman banza"]}
           ]
@@ -107,7 +107,7 @@
           "entries": [
             {"id": "gwamnati", "display": "gwamnati", "gloss_en": "government", "gloss_fr": "gouvernement", "variants": ["gwamnati", "gwamnatin", "gwamnatoci", "gwamnatocin"]},
             {"id": "gwamna", "display": "gwamna", "note": "Not in the issue's seed list; added from the corpus frequency review (149 occurrences in 22 recordings).", "gloss_en": "governor", "gloss_fr": "gouverneur", "variants": ["gwamna", "gwamnan", "gwamnoni", "gwamnonin"]},
-            {"id": "hukuma", "display": "hukuma", "gloss_en": "authority, public body", "gloss_fr": "autorité, administration", "variants": ["hukuma", "hukumar", "hukumomi", "hukumomin"]}
+            {"id": "hukuma", "display": "hukuma", "gloss_en": "authority, public body", "gloss_fr": "autorité, administration", "variants": ["hukuma", "hukumar", "hukuman", "hukumomi", "hukumomin"]}
           ]
         },
         "rule": {
@@ -118,7 +118,7 @@
             {"id": "masu_mulki", "display": "masu mulki", "gloss_en": "rulers, those in power", "gloss_fr": "dirigeants, détenteurs du pouvoir", "variants": ["masu mulki"]},
             {"id": "mulki", "display": "mulki", "gloss_en": "rule, power, government", "gloss_fr": "pouvoir, règne", "variants": ["mulki", "mulkin"]},
             {"id": "shugabanci", "display": "shugabanci", "gloss_en": "leadership", "gloss_fr": "direction, leadership", "variants": ["shugabanci", "shugabancin"]},
-            {"id": "shugaba", "display": "shugaba", "gloss_en": "leader, head; president (shugaban ƙasa)", "gloss_fr": "chef, dirigeant ; président (shugaban ƙasa)", "variants": ["shugaba", "shugaban", "shugabanni", "shugabannin"]}
+            {"id": "shugaba", "display": "shugaba", "gloss_en": "leader, head; president (shugaban ƙasa)", "gloss_fr": "chef, dirigeant ; président (shugaban ƙasa)", "variants": ["shugaba", "shugaban", "shugabanni", "shugabannin", "shuwagabanni", "shuwagabannin"]}
           ]
         },
         "emirate": {
@@ -126,8 +126,8 @@
           "label_fr": "Émirat",
           "core": true,
           "entries": [
-            {"id": "sarki", "display": "sarki", "exclude_before": ["maɗaukakin", "allah"], "note": "After 'maɗaukakin' or 'Allah' this is the divine epithet (Allah Maɗaukakin Sarki, Allah sarki), not the emir.", "gloss_en": "emir, king; sarkin musulmi, the Sultan of Sokoto", "gloss_fr": "émir, roi ; sarkin musulmi, le sultan de Sokoto", "variants": ["sarki", "sarkin", "sarakuna", "sarakunan"]},
-            {"id": "sarauta", "display": "sarauta", "gloss_en": "traditional rule, title", "gloss_fr": "chefferie, titre", "variants": ["sarauta", "sarautar"]}
+            {"id": "sarki", "display": "sarki", "exclude_before": ["maɗaukakin", "ɗaukakin", "madaukin", "allah", "cikakken"], "note": "After 'maɗaukakin', ASR-split 'ɗaukakin'/'madaukin', or 'Allah' this is the divine epithet (Allah Maɗaukakin Sarki); after 'cikakken' it is ASR for tsarki ('ritual purity').", "gloss_en": "emir, king; sarkin musulmi, the Sultan of Sokoto", "gloss_fr": "émir, roi ; sarkin musulmi, le sultan de Sokoto", "variants": ["sarki", "sarkin", "sarakuna", "sarakunan"]},
+            {"id": "sarauta", "display": "sarauta", "gloss_en": "traditional rule, title", "gloss_fr": "chefferie, titre", "variants": ["sarauta", "sarautar", "sarautan"]}
           ]
         },
         "elections": {
@@ -135,8 +135,8 @@
           "label_fr": "Élections et partis",
           "core": true,
           "entries": [
-            {"id": "zabe", "display": "zaɓe", "note": "The verb zaɓa / zaɓi (to choose) is deliberately not listed.", "gloss_en": "election", "gloss_fr": "élection", "variants": ["zaɓe", "zaɓen"]},
-            {"id": "jamiyya", "display": "jam'iyya", "ambiguous": true, "note": "Also any association, including religious ones; validate before pooling.", "gloss_en": "party, association", "gloss_fr": "parti, association", "variants": ["jam'iyya", "jam'iyyar", "jam'iyyu", "jam'iyyun"]}
+            {"id": "zabe", "display": "zaɓe", "note": "The verb forms zaɓa / zaɓi are not listed, though Grade 2 verb zaɓa also surfaces as zaɓe before an object pronoun (zaɓe su/shi, 'vote for / choose them').", "gloss_en": "election", "gloss_fr": "élection", "variants": ["zaɓe", "zaɓen"]},
+            {"id": "jamiyya", "display": "jam'iyya", "ambiguous": true, "note": "Also any association, including religious ones; validate before pooling.", "gloss_en": "party, association", "gloss_fr": "parti, association", "variants": ["jam'iyya", "jam'iyyar", "jam'iyyan", "jam'iyyu", "jam'iyyun"]}
           ]
         },
         "constitution": {
@@ -162,7 +162,7 @@
           "label_fr": "Charia et djihad",
           "core": true,
           "entries": [
-            {"id": "sharia", "display": "shari'a", "gloss_en": "Islamic law", "gloss_fr": "charia, loi islamique", "variants": ["shari'a", "shari'ar", "shari'ah", "sharia"]},
+            {"id": "sharia", "display": "shari'a", "gloss_en": "Islamic law", "gloss_fr": "charia, loi islamique", "variants": ["shari'a", "shari'ar", "shari'an", "shari'ah", "sharia"]},
             {"id": "jihadi", "display": "jihadi", "gloss_en": "jihad", "gloss_fr": "djihad", "variants": ["jihadi", "jihadin", "jihad"]}
           ]
         },

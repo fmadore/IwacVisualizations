@@ -112,12 +112,22 @@
 
     A.renderCorpus = function (section, metadata, ctx) {
         var recordings = (metadata && metadata.recordings) || [];
-        var undated = recordings.filter(function (r) { return dateValue(r.d) == null; }).length;
+        var undated = recordings.filter(function (r) { return dateValue(r.d) == null || !r.dur; }).length;
 
         A.chartPanel(section, P.t('albani_corpus_timeline'),
             P.t('albani_corpus_timeline_desc', { count: undated }),
             function () { return timelineOption(recordings); },
-            { wide: true, key: KEY.timeline, chartClass: 'iwac-vis-albani__timeline' });
+            {
+                wide: true,
+                key: KEY.timeline,
+                chartClass: 'iwac-vis-albani__timeline',
+                onClick: function (p) {
+                    var rec = p.data && p.data.rec;
+                    if (!rec) return;
+                    var href = A.itemHref(ctx, rec.o, rec.u);
+                    if (href) window.open(href, '_blank', 'noopener');
+                }
+            });
 
         var panel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('albani_corpus_table'), P.t('albani_corpus_table_desc'),
@@ -125,12 +135,14 @@
         panel.chart.classList.add('iwac-vis-albani__table-host');
         section.appendChild(panel.panel);
 
-        var rows = recordings.slice().sort(function (a, b) {
+        var allRows = recordings.slice().sort(function (a, b) {
             return (STATUS_ORDER.indexOf(a.st) - STATUS_ORDER.indexOf(b.st))
                 || String(a.d || '9999').localeCompare(String(b.d || '9999'))
                 || Number(a.o) - Number(b.o);
         }).map(function (r) {
             return {
+                _st: r.st,
+                _hay: A.foldHausa((r.t || '') + ' ' + (r.d || '') + ' ' + languages(r)),
                 title: r.t,
                 url: A.itemHref(ctx, r.o, r.u),
                 date: r.d ? (P.formatDate ? P.formatDate(r.d) : r.d) : P.t('albani_undated'),
@@ -142,6 +154,31 @@
                 words: r.w != null ? P.formatNumber(r.w) : '—'
             };
         });
+
+        var filterState = { status: '', query: '' };
+        var presentStatuses = STATUS_ORDER.filter(function (st) {
+            return recordings.some(function (r) { return r.st === st; });
+        });
+        var controls = P.el('div', 'iwac-vis-albani__controls');
+        if (presentStatuses.length > 1) {
+            var statusOpts = [{ value: '', label: P.t('albani_corpus_status_all') }].concat(
+                presentStatuses.map(function (st) { return { value: st, label: P.t(STATUS_KEY[st] || st) }; }));
+            controls.appendChild(A.select(P.t('albani_col_status'), statusOpts, '', function (v) {
+                filterState.status = v;
+                refreshTable();
+            }, 'albani-corpus-status'));
+        }
+        var search = P.el('input', 'iwac-vis-control iwac-vis-albani__search');
+        search.type = 'search';
+        search.setAttribute('aria-label', P.t('albani_corpus_filter'));
+        search.placeholder = P.t('albani_corpus_filter');
+        search.addEventListener('input', function () {
+            filterState.query = A.foldHausa(search.value.trim());
+            refreshTable();
+        });
+        controls.appendChild(search);
+        panel.panel.insertBefore(controls, panel.chart);
+
         var table = P.buildTable({
             columns: [
                 { key: 'title', label: P.t('albani_col_title'), render: 'link', linkKey: 'url', card: 'title' },
@@ -153,9 +190,18 @@
                 { key: 'exchange', label: P.t('albani_col_exchange'), card: 'row' },
                 { key: 'words', label: P.t('albani_col_words'), card: 'row' }
             ],
-            rows: rows,
+            rows: allRows,
             pageSize: 15
         });
         panel.chart.appendChild(table.root);
+
+        function refreshTable() {
+            var filtered = allRows.filter(function (row) {
+                if (filterState.status && row._st !== filterState.status) return false;
+                if (filterState.query && row._hay.indexOf(filterState.query) === -1) return false;
+                return true;
+            });
+            table.update(filtered, 0);
+        }
     };
 })();
