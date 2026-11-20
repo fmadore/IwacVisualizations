@@ -406,6 +406,37 @@
     background: var(--border-strong, #aeb1b7);
 }
 
+/*  Forced colours (Windows High Contrast) drop every background and box-
+ *  shadow, which is the whole dot-plot above: the reading next to each
+ *  lane survives, the chart does not. Redraw it in borders and system
+ *  colours — the lattice in GrayText, the rating in CanvasText — so the
+ *  user's contrast theme picks the colours and the positions still read. */
+@media (forced-colors: active) {
+    .iwac-vis-sent-track::before {
+        height: 0;
+        margin-top: 0;
+        background: none;
+        border-top: 1px solid GrayText;
+    }
+    .iwac-vis-sent-stop {
+        box-sizing: border-box;
+        background: none;
+        border: 1px solid GrayText;
+    }
+    .iwac-vis-sent-stop--on {
+        width: 12px;
+        height: 12px;
+        border: 6px solid CanvasText;
+        box-shadow: none;
+    }
+    .iwac-vis-sent-track--diverging
+    .iwac-vis-sent-stop:nth-child(3):not(.iwac-vis-sent-stop--on)::after {
+        width: 0;
+        background: none;
+        border-left: 1px solid GrayText;
+    }
+}
+
 /* --------------------------------------------------------------------
  * Reasoning drawer — one per axis, so the three models' rationales for
  * the SAME question sit side by side. Grouped by model previously, which

@@ -349,6 +349,30 @@ test('graph tooltips stay inside the panel, in place and in fullscreen', async (
         .contains(document.querySelector('.iwac-vis-graph-tooltip')))).toBe(true);
 });
 
+test('the sentiment dot-plot survives forced colours, drawn in borders', async ({ page }) => {
+    // High Contrast removes backgrounds and box-shadows, which is how the
+    // track, the stops and the marker are drawn; the forced-colors block
+    // redraws them with borders the contrast theme keeps.
+    await page.emulateMedia({ forcedColors: 'active' });
+    await page.goto(`${FIXTURE}?item=9999`);
+    const lane = page.locator('.iwac-vis-article__sentiment .iwac-vis-sent-lane:has(.iwac-vis-sent-stop--on)').first();
+    await expect(lane).toBeVisible();
+    const marks = await lane.evaluate((el) => {
+        const track = el.querySelector('.iwac-vis-sent-track');
+        const on = el.querySelector('.iwac-vis-sent-stop--on');
+        const off = el.querySelector('.iwac-vis-sent-stop:not(.iwac-vis-sent-stop--on)');
+        const width = (node, pseudo, side) => parseFloat(getComputedStyle(node, pseudo)[`border${side}Width`]);
+        return {
+            rule: width(track, '::before', 'Top'),
+            stop: width(off, null, 'Top'),
+            marker: width(on, null, 'Top'),
+        };
+    });
+    expect(marks.rule).toBe(1);
+    expect(marks.stop).toBe(1);
+    expect(marks.marker).toBe(6);
+});
+
 test('an article with no bundle yet keeps its sentiment panel', async ({ page }) => {
     await page.goto(`${FIXTURE}?item=9999`);
     const block = page.locator('.iwac-vis-article');
