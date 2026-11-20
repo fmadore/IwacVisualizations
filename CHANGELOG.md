@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.6.1 — Audit fixes: registry-driven sentiment models, forced colours, leaner bundles (2026-11-20)
 
 - **Sentiment models come from the registry everywhere (#42).** The corpus-health panel now takes its sentiment meters and their labels from `config/sentiment-models.json` (`iwac_utils.SENTIMENT_MODEL_NAMES`) instead of a hand-kept list of six models, so a rotated model no longer raises `KeyError` in the data build or goes missing from the panel. `tests/js/palette.test.js` now fails when the Sentiment Atlas's `MODEL_SLOT` map names a model the registry does not, or misses one it does.
 - **Article sentiment dot-plot in forced colours (#43).** Windows High Contrast removed every background and shadow the dot-plot is drawn with, leaving only the text readings. A forced-colors block now redraws the track, stops and marker with borders in system colours.
