@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are made on the current `1.x` release line. The module declares
+Security fixes are made on the current `2.x` release line. The module declares
 Omeka S `^4.0.0`; CI boots it on the literal floor (Omeka S 4.0.0 on PHP 8.1)
 and on the production pair (Omeka S 4.2.1 on PHP 8.5). Upgrade an older
 release before reporting against it.

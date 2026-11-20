@@ -314,7 +314,7 @@ IwacVisualizations/
 │       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/                # 5 files — one per registered block, filename === slug
+│   │   ├── block-layout/                # 5 files — _generic.phtml for every shell row, plus one per block with its own markup (filename === slug)
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── _dashboard.phtml
@@ -597,10 +597,10 @@ checkout without the ledger still builds, with an empty aggregate. See
 [LAICITE_METHODOLOGY.md](LAICITE_METHODOLOGY.md) for what the screen is and
 is not.
 
-CI does not run the generators one at a time. `scripts/run_all.py` runs all 31
-in a single interpreter with a `FrameStore` installed, so the seven Hugging
-Face subsets are converted to pandas once each rather than ~90 times across 31
-process starts, and the order lives in `run_all.GENERATORS` where a test checks
+CI does not run the generators one at a time. `scripts/run_all.py` runs every
+generator (33 today) in a single interpreter with a `FrameStore` installed, so the seven Hugging
+Face subsets are converted to pandas once each rather than ~90 times across one
+process start per generator, and the order lives in `run_all.GENERATORS` where a test checks
 it against what is on disk:
 
 ```bash

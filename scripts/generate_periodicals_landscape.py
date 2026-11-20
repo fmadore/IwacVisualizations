@@ -21,9 +21,11 @@ Output: ``asset/data/periodicals-landscape.json`` (one columnar bundle):
       }
     }
 
-Unlike the article landscape there is **no** topic facet: the
-``publications`` subset carries no LDA topics, so points are coloured by
-country or decade only. The bundle deliberately omits a ``topics`` key;
+Unlike the article landscape there is **no** topic facet, so points are
+coloured by country or decade only. The ``publications`` subset does carry
+LDA topics (``lda_topic_topk``, read by generate_periodicals_overview.py),
+but they are fitted on the issues' OCR text while this map is placed by
+their table of contents, and this generator does not read them. The bundle deliberately omits a ``topics`` key;
 the shared ``semantic-landscape.js`` orchestrator degrades to the
 country/decade facets when it is absent.
 

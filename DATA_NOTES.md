@@ -18,7 +18,7 @@ ds = load_dataset("fmadore/islam-west-africa-collection-full", name="articles") 
 
 | Subset | Rows | Has OCR | Has embeddings | Has AI sentiment | Purpose |
 |---|---:|:---:|:---:|:---:|---|
-| `articles` | **16,715** | ✓ | ✓ `embedding_OCR` (768; 16,668 rows) + `related_articles` | ✓ (five-model panel) | Digitized newspaper articles — richest subset |
+| `articles` | **16,715** | ✓ | ✓ `embedding_OCR` (768; 16,668 rows) + `related_articles` | ✓ (six-model panel) | Digitized newspaper articles — richest subset |
 | `publications` | **1,501** | ✓ | ✓ `embedding_tableOfContents` (768; the 603 issues with a ToC) | — | Books, pamphlets, periodicals (Islamic publications) |
 | `index` | **5,072** | — | — | — | Authority records (persons/places/orgs/events/subjects) with pre-computed frequency stats |
 | `references` | **867** | ✓ (digitised rows only) | ✓ `embedding_abstract` (768; the 442 with an abstract) | — | Bibliographic citations |
@@ -158,8 +158,8 @@ Rather than having JS parse parquet at runtime (bad: size, browser can't read pa
    - `asset/data/article-dashboards/{o_id}.json` — per-`article` item, ~12,000 files (only if worth it — might not be)
    - `asset/data/sentiment-timeseries.json` — pre-aggregated sentiment by year × country × model
 3. Script is idempotent — skips unchanged rows via hash / mtime
-4. Runs on demand (`python3 scripts/precompute.py`), not at page-load
-5. Output committed to git OR generated in deploy step (tbd — 5000 JSONs might be too much for git)
+4. Runs on demand, not at page-load — as built, one `scripts/generate_*.py` per bundle, all of them run by `scripts/run_all.py` in CI
+5. Output committed to git OR generated in deploy step — as built, generated in CI and published as a release asset (issue #7), never committed
 
 Alternative: write a **single sharded JSON** (e.g., `entities.json` keyed by `o:id`) that JS fetches once and indexes client-side. Good if total size < ~5 MB.
 
@@ -197,5 +197,5 @@ These are retained only as early-design provenance; they are no longer active ro
 1. **Resource templates**: Resolved in the module block/resource-page wiring and README status table.
 2. **Subject → index join**: Resolved by the current generator-specific exact-match and normalization patterns.
 3. **v1 priority**: Superseded — collection overview, per-entity, per-person, per-article, publication, and item-set dashboards are live.
-4. **Hosting**: Resolved — committed `asset/data/` bundles and fan-outs are the deployed contract.
+4. **Hosting**: Resolved — since issue #7 the bundles and fan-outs are built in CI (`regenerate-data.yml`), published as `iwac-data.zip` on the `data` release and unpacked into `files/iwac-visualizations/` by the admin **Pull latest data** job. `asset/data/` is gitignored, except the two hand-curated event sidecars.
 5. **audiovisual / documents**: Resolved — lightweight minimal-item dashboards plus collection-level stats. The audiovisual half was revisited in v1.46.0 when the subset grew by an order of magnitude and became source-aware.

@@ -44,7 +44,7 @@ const END = '<!-- END GENERATED TREE -->';
 const SUMMARIZE = {
     'src/Site/BlockLayout/': 'one `const SLUG` each; BlockRegistry.php is the truth',
     'src/Site/ResourcePageBlockLayout/': 'template-ID dispatch + the item-set block',
-    'view/common/block-layout/': 'one per registered block, filename === slug',
+    'view/common/block-layout/': '_generic.phtml for every shell row, plus one per block with its own markup (filename === slug)',
     'asset/css/blocks/': 'block-local sheets, layered over iwac-core.css',
     'asset/js/charts/shared/': 'the reusable primitives every block draws on',
     'asset/js/charts/shared/renderers/': 'self-registering dashboardLayout renderers',
