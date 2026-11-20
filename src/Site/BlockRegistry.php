@@ -78,7 +78,7 @@ final class BlockRegistry
                         'chartOptions' => true,
                         // The term networks: shared-d3's canvas force graph.
                         'd3'           => true,
-                        // The KWIC list (implies pagination) and the tables.
+                        // The KWIC list and the tables.
                         'concordance'  => true,
                         'table'        => true,
                     ],
@@ -99,7 +99,6 @@ final class BlockRegistry
                         'chartOptions' => true,
                         // Also pulls faceted-chart.js, which the dual-measure panel uses.
                         'facetButtons' => true,
-                        // Implies pagination — table.js's own dependency.
                         'table'        => true,
                     ],
                     'bundle' => 'audiovisual-overview',
@@ -121,7 +120,6 @@ final class BlockRegistry
                         'chartOptions' => true,
                         'facetButtons' => true,
                         'table'        => true,
-                        'pagination'   => true,
                     ],
                     'bundle' => 'collection-overview',
                 ],
@@ -148,7 +146,6 @@ final class BlockRegistry
                     'needs' => [
                         'chartOptions' => true,
                         'maplibre'     => true,
-                        'pagination'   => true,
                     ],
                     // The bundle: shared helpers (side colors + uid counter) first, then
                     // one module per panel, then the orchestrator, which dispatches into
@@ -212,7 +209,6 @@ final class BlockRegistry
                         'chartOptions' => true,
                         'facetButtons' => true,
                         'table'        => true,
-                        'pagination'   => true,
                     ],
                     'bundle' => 'index-overview',
                 ],
@@ -241,8 +237,8 @@ final class BlockRegistry
                         'chartOptions' => true,
                         'facetButtons' => true,
                         // Timeline view — the annotated time series shared with Scary
-                        // Terms; concordance view — the shared KWIC renderer, which
-                        // implies pagination; map view — the MapLibre stack.
+                        // Terms; concordance view — the shared KWIC renderer; map
+                        // view — the MapLibre stack.
                         'timeline'     => true,
                         'concordance'  => true,
                         'maplibre'     => true,

@@ -376,9 +376,8 @@ IwacVisualizations/
             'needs' => [                           // AssetPlan::FLAGS — an unknown flag throws
                 'maplibre'     => true,            // MapLibre (ES module import) + shared-map + iwac-maplibre.css
                 'chartOptions' => true,            // shared-charts
-                'facetButtons' => true,            // any of these five: shared-ui
+                'facetButtons' => true,            // any of facetButtons, table, timeline, concordance: shared-ui
                 'table'        => true,
-                'pagination'   => true,
             ],
             'bundle' => 'collection-overview',     // blocks.<name> in asset/js/bundles.json
         ],
@@ -412,8 +411,8 @@ Consequences for contributors:
 The shared partial hands the on-view loader a fixed sequence of bundles (built by `scripts/build-js.js` from `asset/js/bundles.json`); the loader injects them in order once a block nears the viewport, so the orchestrator always runs last, with its dependencies populated. MapLibre is the exception — an ES module imported in parallel, awaited only by the panels that draw a map.
 
 1. **CDN libraries** — `echarts.min.js` and, optionally, the four d3-force modules
-2. **`shared-core`** — every block: `iwac-i18n` → `iwac-theme` → `dashboard-core` → the `panels` family (core, controls, store, map, boot) → `chart-rows` → `panel-toolbar` → `embed` → `responsive` → `hijri`
-3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (pagination, the entities panel, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the IWAC map helpers, the popup, the choropleth, the filtered places map), `shared-d3` (the canvas force graph)
+2. **`shared-core`** — every block: `iwac-i18n` → `iwac-theme` → `dashboard-core` → the `panels` family (core, icons, controls, pagination, store, boot) → `chart-rows` → `panel-toolbar` → `embed` → `responsive` → `hijri`
+3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (the entities panel, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the MapLibre readiness gate and count-bubble helpers, the IWAC map helpers, the popup, the choropleth, the filtered places map), `shared-d3` (the canvas force graph)
 4. **Panel sets the block shares** — `panels/<name>` (the person and entity dashboards draw the same eleven panels)
 5. **The block bundle** — `blocks/<name>`: its panel modules (self-registering IIFEs under `charts/<block>/`) in order, then the orchestrator `charts/<block>.js`, which fetches JSON, builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
 

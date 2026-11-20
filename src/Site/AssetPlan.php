@@ -26,7 +26,6 @@ final class AssetPlan
         'chartOptions',
         'facetButtons',
         'table',
-        'pagination',
         'timeline',
         'concordance',
         'layout',
@@ -98,7 +97,7 @@ final class AssetPlan
         $names = ['shared-core'];
         $groups = [
             'shared-charts' => ['chartOptions'],
-            'shared-ui' => ['pagination', 'table', 'facetButtons', 'timeline', 'concordance'],
+            'shared-ui' => ['table', 'facetButtons', 'timeline', 'concordance'],
             'shared-layout' => ['layout'],
             'shared-map' => ['maplibre'],
             'shared-d3' => ['d3'],

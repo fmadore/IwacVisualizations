@@ -10,6 +10,10 @@
  *
  * The MapLibre readiness gate, GeoJSON count-bubble features, and MapLibre
  * feature-state hover wiring.
+ *
+ * Ships in the `shared-map` bundle, not `shared-core`: only map modules call
+ * it, so it loads with the block's `maplibre` need (tests/php/run.php fails
+ * on a bundle that calls one of these helpers without that need).
  */
 (function () {
     'use strict';

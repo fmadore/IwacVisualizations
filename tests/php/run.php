@@ -976,8 +976,58 @@ namespace {
     // dwarf the pure contracts above.
     require __DIR__ . '/sync_data_archive.php';
     check(AssetPlan::bundles([], null) === ['shared-core'], 'minimal asset plan gained unnecessary libraries');
-    check(AssetPlan::bundles(['table' => true, 'pagination' => true, 'maplibre' => true], null)
+    check(AssetPlan::bundles(['table' => true, 'facetButtons' => true, 'maplibre' => true], null)
         === ['shared-core', 'shared-ui', 'shared-map'], 'asset plan lost dependency ordering or deduplication');
+    // pagination.js rides shared-core, so a block that only pages (Compare
+    // Newspapers) must not download shared-ui for it.
+    check(AssetPlan::bundles(['chartOptions' => true, 'maplibre' => true], 'compare-newspapers')
+        === ['shared-core', 'shared-charts', 'shared-map', 'blocks/compare-newspapers'],
+        'Compare Newspapers plans a shared bundle it does not use');
+    $bundleManifest = AssetPlan::manifest();
+    check(in_array('charts/shared/pagination.js', $bundleManifest['shared']['core'], true),
+        'pagination.js left shared-core: restore a flag that loads it');
+    // panels-map.js (the MapLibre gate, count bubbles, feature-state hover)
+    // lives in shared-map, so every bundle that calls one of its helpers must
+    // be planned with `maplibre`. Comments are stripped first: a docblock
+    // naming P.withMaplibre is not a call.
+    $mapHelper = '~\bP\.(?:whenMaplibre|withMaplibre|deferMaplibre|attachFeatureStateHover|buildCountFeatures)\b~';
+    $callsMapHelper = static function (string $name) use ($bundleManifest, $root, $mapHelper): bool {
+        $entry = $bundleManifest['blocks'][$name];
+        $files = array_is_list($entry) ? $entry : ($entry['files'] ?? []);
+        foreach ($entry['uses'] ?? [] as $set) {
+            $files = array_merge($files, $bundleManifest['panels'][$set]);
+        }
+        foreach ($files as $file) {
+            $js = (string) file_get_contents($root . '/asset/js/' . $file);
+            $js = preg_replace(['~/\*.*?\*/~s', '~^\s*//.*$~m'], '', $js);
+            if (preg_match($mapHelper, $js) === 1) return true;
+        }
+        return false;
+    };
+    $mapDeclarations = [];
+    foreach (BlockRegistry::BLOCKS as $slug => $row) {
+        if (isset($row['shell']['assets']['bundle'])) $mapDeclarations[$slug] = $row['shell']['assets'];
+    }
+    foreach (Visualizations::DASHBOARDS as $name => $row) $mapDeclarations["dashboard $name"] = $row['assets'];
+    // The templates with their own markup, read from source: each declares
+    // its bundle and needs in one iwac-assets call.
+    foreach (glob($root . '/view/common/{block-layout,resource-page-block-layout/visualizations}/*.phtml', GLOB_BRACE) as $tpl) {
+        $src = (string) file_get_contents($tpl);
+        if (preg_match("~'bundle'\s*=>\s*'([a-z0-9-]+)'~", $src, $b) === 1) {
+            $mapDeclarations[basename($tpl)] = [
+                'bundle' => $b[1],
+                'needs' => preg_match("~'maplibre'\s*=>\s*true~", $src) === 1 ? ['maplibre' => true] : [],
+            ];
+        }
+    }
+    $mapConsumers = 0;
+    foreach ($mapDeclarations as $where => $assets) {
+        if (!$callsMapHelper($assets['bundle'])) continue;
+        $mapConsumers++;
+        check(in_array('shared-map', AssetPlan::bundles($assets['needs'] ?? [], $assets['bundle']), true),
+            "$where: its bundle calls a shared-map helper (panels-map.js) but does not need 'maplibre'");
+    }
+    check($mapConsumers >= 10, "the shared-map consumer check found only $mapConsumers bundles: its file walk is broken");
     check(AssetPlan::bundles(['echarts' => false, 'd3' => true], null)
         === ['shared-core', 'shared-d3'], 'the CDN-only flags changed which bundles load');
     // A Svelte block reads the runtime from shared-svelte, loaded once per
