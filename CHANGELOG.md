@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased — The Albani landing page holds its own chapters
+### v2.9.0 — The Albani landing page holds its own chapters (2026-11-21)
 
 - **A landing page that works on its own.** v2.8.0's landing page summarised sub-pages an editor had to create first, so it showed nothing until then. The option, now "Landing page: a summary, with each chapter one click away", needs no other page: the block shows the introduction and figures, "The collection at a glance" (one bar per recording, in date order, as tall as the recording is long and shaded by the state of its transcription), and a card for each of six chapters (the recordings; vocabulary; people and places; youth and politics; style and rhetoric; how this was made), each with its number, a sentence, the sections inside it and "Read the chapter". A chapter opens on the same page at its own address (`?albani.chapter=themes`), shows its sections alone with the switches they use, and ends with the previous and next chapters and "Back to the summary". A link to one section of a chapter lands on it and stays there while the charts above it are drawn. The landing page loads only `metadata.json`; a chapter loads only what its sections read.
 
