@@ -22,9 +22,10 @@ use Omeka\Api\Representation\SiteRepresentation;
  * reads every page of its site for Albani blocks and hands the template a
  * list of pages and the sections each shows. The contents, the "How this
  * was made" link and the previous/next links at the foot use it, so an
- * editor only places blocks and never types a link. Ticking "A summary of
- * each page" (`overview`) makes a block the landing page: a card for every
- * other page. The embed route has no block and renders every section.
+ * editor only places blocks and never types a link. Ticking "Landing
+ * page" (`overview`) needs no other page at all: the block holds the
+ * whole exhibition as a summary and six chapters, one at a time. The embed
+ * route has no block and renders every section.
  */
 class AlbaniSermons extends AbstractIwacBlockLayout
 {
@@ -48,9 +49,10 @@ class AlbaniSermons extends AbstractIwacBlockLayout
     ];
 
     /**
-     * Not a section: a summary card for each other page of the exhibition,
-     * which makes the block a landing page. Listed first in the form; the
-     * JS knows it as `OVERVIEW`.
+     * Not a section: makes the block a landing page — the introduction, the
+     * figures and a card per chapter, each chapter opening on the same page
+     * at `?albani.chapter=<key>` (the chapters are `CHAPTERS` in the JS).
+     * Listed first in the form; the JS knows it as `OVERVIEW`.
      */
     const OVERVIEW = 'overview';
 
@@ -65,7 +67,7 @@ class AlbaniSermons extends AbstractIwacBlockLayout
     public function form(PhpRenderer $view, SiteRepresentation $site,
         ?SitePageRepresentation $page = null, ?SitePageBlockRepresentation $block = null)
     {
-        $options = [self::OVERVIEW => $view->translate('A summary of each page (for a landing page)')]; // @translate
+        $options = [self::OVERVIEW => $view->translate('Landing page: a summary, with each chapter one click away')]; // @translate
         foreach (self::SECTIONS as $key => $label) {
             $options[$key] = $view->translate($label);
         }
@@ -74,9 +76,10 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         $select->setLabel('Sections'); // @translate
         $select->setOption('info', 'Which sections this block shows. Leave all unticked to show the whole '
             . 'exhibition. To spread it over sub-pages, add this block to each page with the sections that '
-            . 'page should show: the contents and the links between pages follow by themselves. For a '
-            . 'landing page, tick "A summary of each page": it shows the introduction, the figures and a '
-            . 'card for every other page.'); // @translate
+            . 'page should show: the contents and the links between pages follow by themselves. Or tick '
+            . '"Landing page" alone: the block shows the introduction, the figures and a card for each '
+            . 'chapter, and opens the chapter a reader picks on the same page, with no other page to '
+            . 'create.'); // @translate
         $select->setValueOptions($options);
         // A saved block that ticked everything reads back as "all", so the
         // form shows what is stored rather than an equivalent.

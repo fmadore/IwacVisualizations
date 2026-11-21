@@ -37,9 +37,9 @@
  * from every Albani block on the site), so its contents, its "How this was
  * made" link and the previous/next links at its foot reach the other
  * pages, carrying the reader's `albani.*` choices. A block whose setting
- * includes `overview` is the landing page: the introduction and figures,
- * then a card per other page (its title, its sections, one sentence each)
- * in place of the contents. The introduction also goes with the recordings
+ * includes `overview` is the landing page and needs no other page: the
+ * introduction and figures, the archive at a glance, and a card per chapter
+ * (CHAPTERS); `?albani.chapter=<key>` opens one chapter in the same block. The introduction also goes with the recordings
  * section; the badges go on every page, the switches wherever a section is.
  *
  * A single-panel embed (`/iwac-embed/albani-sermons/albani-score`) builds
@@ -137,55 +137,264 @@
         return raw.indexOf(OVERVIEW) !== -1 ? [] : SECTIONS;
     }
 
+
     /**
-     * One sentence per section for the landing page's cards. Literal keys,
+     * The landing page's chapters: the exhibition in six readings, each a
+     * view of the same block at its own address (`?albani.chapter=themes`).
+     * The landing page lists them as cards; a chapter shows its sections
+     * alone, with a way back and previous/next links. No Omeka page has to
+     * exist for any of it: v2.8.0's cards described sub-pages an editor
+     * had to make first, and showed nothing until then.
+     */
+    var CHAPTERS = [
+        { key: 'recordings', title: 'albani_chapter_recordings', sections: ['corpus'] },
+        { key: 'vocabulary', title: 'albani_chapter_vocabulary', sections: ['vocabulary', 'keyness'] },
+        { key: 'entities',   title: 'albani_chapter_entities',   sections: ['entities'] },
+        { key: 'themes',     title: 'albani_chapter_themes',     sections: ['youth', 'politics', 'overlap'] },
+        { key: 'rhetoric',   title: 'albani_chapter_rhetoric',   sections: ['rhetoric'] },
+        { key: 'method',     title: 'albani_chapter_method',     sections: ['method'] }
+    ];
+
+    /** The address parameter naming the open chapter. */
+    var CHAPTER_PARAM = 'albani.chapter';
+
+    /** The chapter the address opens, or null for the landing page itself. */
+    function currentChapter() {
+        var key;
+        try { key = new URLSearchParams(window.location.search).get(CHAPTER_PARAM); }
+        catch (e) { return null; }
+        for (var i = 0; i < CHAPTERS.length; i++) {
+            if (CHAPTERS[i].key === key) return CHAPTERS[i];
+        }
+        return null;
+    }
+
+    /** The chapter that holds section `key`. */
+    function chapterOf(key) {
+        for (var i = 0; i < CHAPTERS.length; i++) {
+            if (CHAPTERS[i].sections.indexOf(key) !== -1) return CHAPTERS[i];
+        }
+        return null;
+    }
+
+    /**
+     * This page's address with the chapter set (or removed, for null): the
+     * page's other parameters kept, `albani.*` left for `carryState` to add
+     * when the link is followed, so a choice made after drawing still goes.
+     */
+    function pageHref(chapter, sectionKey) {
+        var params;
+        try { params = new URLSearchParams(window.location.search); }
+        catch (e) { params = null; }
+        var parts = [];
+        if (params) {
+            params.forEach(function (value, name) {
+                if (name.indexOf('albani.') !== 0) {
+                    parts.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+                }
+            });
+        }
+        if (chapter) parts.push(CHAPTER_PARAM + '=' + encodeURIComponent(chapter.key));
+        return window.location.pathname + (parts.length ? '?' + parts.join('&') : '')
+            + (sectionKey ? '#albani-' + sectionKey : '');
+    }
+
+    /** The address of a chapter, and of one of its sections. */
+    function chapterHref(chapter, sectionKey) {
+        return pageHref(chapter, sectionKey);
+    }
+
+    /** The landing page's own address: this page with no chapter open. */
+    function landingHref() {
+        return pageHref(null);
+    }
+
+    /**
+     * What a block shows, decided once for load() and render() alike:
+     * - a landing block (`overview` ticked) with a chapter in the address
+     *   shows that chapter's sections;
+     * - a landing block without one shows the summary, then any section the
+     *   editor ticked beside it;
+     * - any other block shows its ticked sections (all when none).
+     */
+    function plan(container) {
+        var landing = chosenKeys(container).indexOf(OVERVIEW) !== -1;
+        var chapter = landing ? currentChapter() : null;
+        var shown = chapter
+            ? SECTIONS.filter(function (def) { return chapter.sections.indexOf(def.key) !== -1; })
+            : chosenSections(container);
+        return { landing: landing, chapter: chapter, shown: shown };
+    }
+
+    /**
+     * One sentence per chapter for the landing page's cards. Literal keys,
      * so the dictionary check can see each one is read.
      */
-    var CARD_TEXT = {
-        corpus: 'albani_card_corpus',
-        vocabulary: 'albani_card_vocabulary',
-        entities: 'albani_card_entities',
-        youth: 'albani_card_youth',
-        politics: 'albani_card_politics',
-        overlap: 'albani_card_overlap',
-        keyness: 'albani_card_keyness',
-        rhetoric: 'albani_card_rhetoric',
-        method: 'albani_card_method'
+    var CHAPTER_LEDE = {
+        recordings: 'albani_lede_recordings',
+        vocabulary: 'albani_lede_vocabulary',
+        entities: 'albani_lede_entities',
+        themes: 'albani_lede_themes',
+        rhetoric: 'albani_lede_rhetoric',
+        method: 'albani_lede_method'
+    };
+
+    /** The transcription status of a recording, as a class and a label. */
+    var STRIP_STATUS = {
+        analysed: { cls: 'is-analysed', label: 'albani_status_analysed' },
+        legacy: { cls: 'is-legacy', label: 'albani_status_legacy_short' },
+        untranscribed: { cls: 'is-untranscribed', label: 'albani_status_none' }
     };
 
     /**
-     * The landing page: a card for every other page of the exhibition, in
-     * its order — the page's title, then each section it shows with one
-     * sentence and a link straight to it. Nothing when no other page holds
-     * a section (the sub-pages are not made yet).
+     * The archive at a glance, under the landing page's figures: one bar per
+     * recording, dated ones in date order and the undated after a gap, each
+     * as tall as it is long and shaded by how far its transcript has got.
+     * Read from metadata.json alone, drawn as plain elements (no chart
+     * library on the landing page). A picture with one summary label; the
+     * recordings chapter holds the table a screen reader can walk.
      */
-    function overview(root, pages) {
-        var others = pages.filter(function (p) {
-            return !p.current && p.sections.some(function (key) { return CARD_TEXT[key]; });
+    function archiveStrip(root, metadata) {
+        var recordings = (metadata.recordings || []).filter(function (r) { return r && r.dur > 0; });
+        if (!recordings.length) return;
+        var dated = recordings.filter(function (r) { return r.d; })
+            .sort(function (a, b) { return String(a.d).localeCompare(String(b.d)); });
+        var undated = recordings.filter(function (r) { return !r.d; });
+        var longest = recordings.reduce(function (m, r) { return Math.max(m, r.dur); }, 0);
+
+        var first = dated.length ? String(dated[0].y || dated[0].d).slice(0, 4) : '';
+        var last = dated.length ? String(dated[dated.length - 1].y || dated[dated.length - 1].d).slice(0, 4) : '';
+        var figure = P.el('figure', 'iwac-vis-albani__archive');
+        figure.appendChild(P.el('figcaption', 'iwac-vis-albani__archive-title', P.t('albani_strip_title')));
+        var plot = P.el('div', 'iwac-vis-albani__archive-plot');
+        plot.setAttribute('role', 'img');
+        plot.setAttribute('aria-label', P.t('albani_strip_label', {
+            count: recordings.length, first: first, last: last
+        }));
+        function bar(r) {
+            var status = STRIP_STATUS[r.st] || STRIP_STATUS.untranscribed;
+            var el = P.el('span', 'iwac-vis-albani__archive-bar ' + status.cls);
+            el.style.setProperty('--iwac-vis-archive-h', Math.max(6, Math.round(100 * r.dur / longest)) + '%');
+            el.title = (r.t || '') + ' · ' + (r.d ? (P.formatDate ? P.formatDate(r.d) : r.d) : P.t('albani_undated'))
+                + ' · ' + P.formatDuration(r.dur) + ' · ' + P.t(status.label);
+            return el;
+        }
+        // A run of bars over its own axis, as wide as it has bars.
+        function run(list, labels, cls) {
+            var box = P.el('div', 'iwac-vis-albani__archive-run' + (cls ? ' ' + cls : ''));
+            box.style.setProperty('--iwac-vis-archive-n', String(list.length));
+            var bars = P.el('div', 'iwac-vis-albani__archive-bars');
+            list.forEach(function (r) { bars.appendChild(bar(r)); });
+            box.appendChild(bars);
+            var axis = P.el('div', 'iwac-vis-albani__archive-axis');
+            axis.setAttribute('aria-hidden', 'true');
+            labels.forEach(function (text) { axis.appendChild(P.el('span', 'iwac-vis-albani__archive-tick', text)); });
+            box.appendChild(axis);
+            return box;
+        }
+        if (dated.length) plot.appendChild(run(dated, first === last ? [first] : [first, last]));
+        if (undated.length) plot.appendChild(run(undated, [P.t('albani_undated')], 'iwac-vis-albani__archive-run--undated'));
+        figure.appendChild(plot);
+
+        // The key: only the statuses present.
+        var key = P.el('ul', 'iwac-vis-albani__archive-key');
+        Object.keys(STRIP_STATUS).forEach(function (st) {
+            if (!recordings.some(function (r) { return (STRIP_STATUS[r.st] ? r.st : 'untranscribed') === st; })) return;
+            var li = P.el('li', 'iwac-vis-albani__archive-key-item ' + STRIP_STATUS[st].cls);
+            li.appendChild(P.el('span', 'iwac-vis-albani__archive-swatch'));
+            li.appendChild(document.createTextNode(P.t(STRIP_STATUS[st].label)));
+            key.appendChild(li);
         });
-        if (!others.length) return;
+        figure.appendChild(key);
+        figure.appendChild(P.el('p', 'iwac-vis-albani__archive-note', P.t('albani_strip_note')));
+        root.appendChild(figure);
+    }
+
+    /**
+     * The summary: a card per chapter, in reading order: its number, its
+     * title, one sentence, the sections inside it as links straight to
+     * them, and a way into the chapter.
+     */
+    function chapterCards(root) {
         var nav = P.el('nav', 'iwac-vis-albani__overview');
         nav.setAttribute('aria-label', P.t('albani_overview'));
+        nav.appendChild(P.el('h3', 'iwac-vis-albani__overview-title', P.t('albani_overview')));
         var list = P.el('ol', 'iwac-vis-albani__cards');
-        others.forEach(function (p) {
+        CHAPTERS.forEach(function (chapter, i) {
             var card = P.el('li', 'iwac-vis-albani__card');
+            card.appendChild(P.el('span', 'iwac-vis-albani__card-number',
+                (i + 1 < 10 ? '0' : '') + (i + 1)));
             var title = P.el('h4', 'iwac-vis-albani__card-title');
-            title.appendChild(link('iwac-vis-albani__card-link', p.title || '', p.url));
+            title.appendChild(link('iwac-vis-albani__card-link', P.t(chapter.title), chapterHref(chapter)));
             card.appendChild(title);
-            var items = P.el('ul', 'iwac-vis-albani__card-sections');
-            SECTIONS.forEach(function (def) {
-                if (p.sections.indexOf(def.key) === -1) return;
-                var li = P.el('li', 'iwac-vis-albani__card-section');
-                li.appendChild(link('iwac-vis-albani__card-section-link', P.t(def.heading),
-                    p.url + '#albani-' + def.key));
-                li.appendChild(P.el('p', 'iwac-vis-albani__card-text', P.t(CARD_TEXT[def.key])));
-                items.appendChild(li);
-            });
-            card.appendChild(items);
+            card.appendChild(P.el('p', 'iwac-vis-albani__card-text', P.t(CHAPTER_LEDE[chapter.key])));
+            var inner = SECTIONS.filter(function (def) { return chapter.sections.indexOf(def.key) !== -1; });
+            if (inner.length > 1) {
+                var items = P.el('ul', 'iwac-vis-albani__card-sections');
+                inner.forEach(function (def) {
+                    var li = P.el('li', 'iwac-vis-albani__card-section');
+                    li.appendChild(link('iwac-vis-albani__card-section-link', P.t(def.heading),
+                        chapterHref(chapter, def.key)));
+                    items.appendChild(li);
+                });
+                card.appendChild(items);
+            }
+            var more = link('iwac-vis-albani__card-more', P.t('albani_card_more'), chapterHref(chapter));
+            // The title already names the chapter; this link repeats it for
+            // a screen reader rather than reading "Read the chapter" six times.
+            more.setAttribute('aria-label', P.t('albani_card_more_label', { chapter: P.t(chapter.title) }));
+            card.appendChild(more);
             list.appendChild(card);
         });
         nav.appendChild(list);
         root.appendChild(nav);
+    }
+
+    /**
+     * The foot of a chapter: the previous and next chapters by title, and
+     * the way back to the summary between them.
+     */
+    function chapterPager(root, chapter) {
+        var at = CHAPTERS.indexOf(chapter);
+        var nav = P.el('nav', 'iwac-vis-albani__pager');
+        nav.setAttribute('aria-label', P.t('albani_pager'));
+        var prev = CHAPTERS[at - 1];
+        var next = CHAPTERS[at + 1];
+        if (prev) nav.appendChild(pagerLink(prev, 'iwac-vis-albani__pager-link--prev', P.t('albani_pager_prev')));
+        nav.appendChild(link('iwac-vis-albani__pager-back', P.t('albani_back'), landingHref()));
+        if (next) nav.appendChild(pagerLink(next, 'iwac-vis-albani__pager-link--next', P.t('albani_pager_next')));
+        root.appendChild(nav);
+    }
+
+    function pagerLink(chapter, cls, label) {
+        var a = link('iwac-vis-albani__pager-link ' + cls, '', chapterHref(chapter));
+        a.appendChild(P.el('span', 'iwac-vis-albani__pager-label', label));
+        a.appendChild(P.el('span', 'iwac-vis-albani__pager-title', P.t(chapter.title)));
+        return a;
+    }
+
+    /**
+     * A link into a section (`#albani-politics`) arrives before the block
+     * has drawn it; once it exists, go there — and stay there while the
+     * charts above it are drawn and push it down, until the reader scrolls
+     * or clicks, or a few seconds pass.
+     */
+    function scrollToHash(root) {
+        var id = (window.location.hash || '').slice(1);
+        if (!/^albani-[a-z]+$/.test(id)) return;
+        var target = root.querySelector('#' + id);
+        if (!target || !target.scrollIntoView) return;
+        target.scrollIntoView();
+        if (typeof window.ResizeObserver !== 'function') return;
+        var events = ['wheel', 'touchstart', 'keydown', 'mousedown'];
+        var observer = new window.ResizeObserver(function () { target.scrollIntoView(); });
+        function stop() {
+            observer.disconnect();
+            events.forEach(function (name) { window.removeEventListener(name, stop); });
+        }
+        observer.observe(root);
+        events.forEach(function (name) { window.addEventListener(name, stop, { passive: true }); });
+        setTimeout(stop, 6000);
     }
 
     /**
@@ -231,7 +440,8 @@
             catch (e) { return; }
             var keep = [];
             params.forEach(function (value, name) {
-                if (name.indexOf('albani.') === 0) keep.push([name, value]);
+                // The chapter is where the link goes, not a choice to carry.
+                if (name.indexOf('albani.') === 0 && name !== CHAPTER_PARAM) keep.push([name, value]);
             });
             if (!keep.length) return;
             var url;
@@ -283,7 +493,7 @@
             // A single-panel embed, or a page showing some sections, fetches
             // only what its sections read.
             var only = onlySection(ctx);
-            var shown = only ? [only] : chosenSections(ctx.container);
+            var shown = only ? [only] : plan(ctx.container).shown;
             var names = ['metadata', 'lexicon', 'vocabulary'].filter(function (name) {
                 return name === 'metadata' || shown.some(function (def) {
                     return def.needs.indexOf(name) !== -1;
@@ -457,19 +667,25 @@
             return;
         }
 
+        // What this block shows: a landing page's summary or one of its
+        // chapters, or the sections an editor ticked.
+        var view = plan(container);
+        if (view.landing) {
+            renderLanding(root, metadata, store, view, section);
+            return;
+        }
+
         // The sections this block shows, and — when the exhibition is spread
         // over pages — where the others are.
-        var shown = chosenSections(container);
+        var shown = view.shown;
         var pages = chosenKeys(container).length ? sitePages(container) : [];
         var local = shown.map(function (def) { return def.key; });
-        var landing = chosenKeys(container).indexOf(OVERVIEW) !== -1;
 
         header(root, metadata, store, {
-            intro: landing || local.indexOf('corpus') !== -1,
-            toc: !landing,
+            intro: local.indexOf('corpus') !== -1,
+            toc: true,
             controls: local.length > 0
         });
-        if (landing) overview(root, pages);
         shown.forEach(section);
 
         // A section's anchor on this page: its heading's id, which A.section
@@ -506,5 +722,47 @@
         });
 
         pager(root, pages);
+    }
+
+    /**
+     * A landing block. Without a chapter in the address: the introduction,
+     * the figures and a card per chapter, then any section ticked beside
+     * the summary. With one: a way back, the chapter's title, the switches,
+     * its sections, and the previous/next chapters.
+     */
+    function renderLanding(root, metadata, store, view, section) {
+        if (view.chapter) {
+            root.appendChild(link('iwac-vis-albani__back', P.t('albani_back'), landingHref()));
+            // A one-section chapter's section heading already names it.
+            if (view.chapter.sections.length > 1) {
+                root.appendChild(P.el('h3', 'iwac-vis-block-header__title iwac-vis-albani__chapter-title',
+                    P.t(view.chapter.title)));
+            }
+        }
+        header(root, metadata, store, {
+            intro: !view.chapter,
+            toc: false,
+            controls: view.shown.length > 0
+        });
+        if (!view.chapter) {
+            archiveStrip(root, metadata);
+            chapterCards(root);
+        }
+        view.shown.forEach(section);
+
+        // "How this was made": the method on this view, or its chapter.
+        var jump = root.querySelector('.iwac-vis-albani__jump');
+        if (jump) {
+            var local = root.querySelector('[data-iwac-section="method"] > .iwac-vis-section-heading');
+            if (local) {
+                jump.href = '#' + local.id;
+            } else {
+                jump.href = chapterHref(chapterOf('method'), 'method');
+                carryState(jump);
+            }
+        }
+
+        if (view.chapter) chapterPager(root, view.chapter);
+        scrollToHash(root);
     }
 })();

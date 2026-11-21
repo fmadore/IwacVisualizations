@@ -640,6 +640,44 @@
     text-align: right;
 }
 
+/*  A chapter's way back to the summary: between previous and next at the
+ *  foot, and above the chapter's title at the head. */
+.iwac-vis-albani__pager-back {
+    align-self: center;
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--ink, #13161c);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-albani__back {
+    display: inline-block;
+    margin-bottom: var(--space-3, 0.75rem);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--ink, #13161c);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-albani__back::before {
+    content: "← " / "";
+}
+
+.iwac-vis-albani__back:hover,
+.iwac-vis-albani__pager-back:hover {
+    color: var(--primary, #18298d);
+    text-decoration-color: currentColor;
+}
+
+/*  The open chapter's title, set like the exhibition's own. */
+.iwac-vis-albani__chapter-title {
+    margin: 0 0 var(--space-4, 1rem);
+}
+
 .iwac-vis-albani__pager-label {
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
@@ -668,71 +706,204 @@
     text-decoration-color: currentColor;
 }
 
-/*  The landing page: one column per page of the exhibition, set like a
- *  broadsheet's section index — a heavy rule over each column, the page
- *  title in the display serif, then its sections as a short ledger of
- *  linked headings with one sentence each. */
+/*  The landing page, set like a broadsheet's front page: the archive at a
+ *  glance under the figures, then the chapters as an index of ruled
+ *  columns — a large serif numeral, the title, one sentence, what is
+ *  inside, and the way in pinned to the foot so the row lines up. */
+
+/*  The archive at a glance: one bar per recording, height = running time. */
+.iwac-vis-albani__archive {
+    margin: var(--space-6, 1.5rem) 0 0;
+}
+
+.iwac-vis-albani__archive-title {
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__archive-plot {
+    display: flex;
+    gap: var(--space-4, 1rem);
+    align-items: flex-end;
+}
+
+.iwac-vis-albani__archive-run {
+    flex: var(--iwac-vis-archive-n, 1) 1 0;
+    min-width: 0;
+}
+
+.iwac-vis-albani__archive-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 5.5rem;
+    border-bottom: 1px solid var(--border-strong, #aeb1b7);
+}
+
+.iwac-vis-albani__archive-bar {
+    flex: 1 1 0;
+    min-width: 2px;
+    height: var(--iwac-vis-archive-h, 50%);
+    background: var(--primary, #18298d);
+}
+
+.iwac-vis-albani__archive-bar.is-legacy {
+    background: var(--muted, #66696e);
+}
+
+/*  Not transcribed: an outline, so it reads as "not yet" and survives
+ *  forced colours, where fills disappear but borders stay. */
+.iwac-vis-albani__archive-bar.is-untranscribed {
+    background: transparent;
+    border: 1px solid var(--muted, #66696e);
+    border-bottom: 0;
+}
+
+.iwac-vis-albani__archive-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-1, 0.25rem);
+    font-size: var(--text-2xs, 0.6875rem);
+    font-feature-settings: "lnum";
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__archive-run--undated .iwac-vis-albani__archive-axis {
+    justify-content: center;
+}
+
+.iwac-vis-albani__archive-tick {
+    white-space: nowrap;
+}
+
+.iwac-vis-albani__archive-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem) var(--space-4, 1rem);
+    margin: var(--space-3, 0.75rem) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__archive-key-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-albani__archive-swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--primary, #18298d);
+}
+
+.iwac-vis-albani__archive-key-item.is-legacy .iwac-vis-albani__archive-swatch {
+    background: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__archive-key-item.is-untranscribed .iwac-vis-albani__archive-swatch {
+    background: transparent;
+    border: 1px solid var(--muted, #66696e);
+}
+
+.iwac-vis-albani__archive-note {
+    margin: var(--space-1, 0.25rem) 0 0;
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
+/*  The chapters. */
 .iwac-vis-albani__overview {
-    margin-top: var(--space-6, 1.5rem);
+    margin-top: var(--space-10, 2.5rem);
+}
+
+.iwac-vis-albani__overview-title {
+    margin: 0 0 var(--space-5, 1.25rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--ink, #13161c);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-weight: 800;
+    font-size: var(--text-xl, 1.5rem);
+    letter-spacing: var(--tracking-display, -0.01em);
 }
 
 .iwac-vis-albani__cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    gap: var(--space-6, 1.5rem) var(--space-5, 1.25rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-8, 2rem) var(--space-6, 1.5rem);
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: albani-card;
 }
 
 .iwac-vis-albani__card {
-    counter-increment: albani-card;
+    display: flex;
+    flex-direction: column;
     padding-top: var(--space-3, 0.75rem);
-    border-top: 2px solid var(--ink, #13161c);
+    border-top: 3px solid var(--ink, #13161c);
+    transition: border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.iwac-vis-albani__card:hover,
+.iwac-vis-albani__card:focus-within {
+    border-top-color: var(--primary, #18298d);
+}
+
+.iwac-vis-albani__card-number {
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-weight: 800;
+    font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
+    line-height: 1;
+    font-feature-settings: "lnum";
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-albani__card-title {
-    margin: 0 0 var(--space-3, 0.75rem);
+    margin: var(--space-2, 0.5rem) 0 var(--space-2, 0.5rem);
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
     font-weight: 600;
-    font-size: var(--text-lg, 1.1875rem);
-    line-height: 1.25;
-}
-
-.iwac-vis-albani__card-title::before {
-    content: counter(albani-card) ". ";
-    color: var(--muted, #66696e);
-    font-feature-settings: "lnum";
+    font-size: var(--text-xl, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-display, -0.01em);
 }
 
 .iwac-vis-albani__card-link {
     color: var(--ink, #13161c);
-    text-decoration: underline;
-    text-decoration-color: var(--border-strong, #aeb1b7);
-    text-underline-offset: 0.15em;
+    text-decoration: none;
 }
 
 .iwac-vis-albani__card-link:hover {
     color: var(--primary, #18298d);
-    text-decoration-color: currentColor;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-albani__card-text {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-albani__card-sections {
-    margin: 0;
+    margin: var(--space-3, 0.75rem) 0 0;
     padding: 0;
     list-style: none;
 }
 
-.iwac-vis-albani__card-section + .iwac-vis-albani__card-section {
-    margin-top: var(--space-2, 0.5rem);
-    padding-top: var(--space-2, 0.5rem);
+.iwac-vis-albani__card-section {
+    padding: var(--space-1, 0.25rem) 0;
     border-top: 1px solid var(--border, #ced1d6);
 }
 
 .iwac-vis-albani__card-section-link {
-    font-size: var(--text-sm, 0.9375rem);
-    font-weight: 600;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink, #13161c);
     text-decoration: none;
 }
@@ -742,11 +913,22 @@
     text-decoration: underline;
 }
 
-.iwac-vis-albani__card-text {
-    margin: var(--space-1, 0.25rem) 0 0;
+.iwac-vis-albani__card-more {
+    margin-top: auto;
+    padding-top: var(--space-4, 1rem);
     font-size: var(--text-sm, 0.9375rem);
-    line-height: 1.5;
-    color: var(--muted, #66696e);
+    font-weight: 600;
+    color: var(--primary, #18298d);
+    text-decoration: none;
+}
+
+.iwac-vis-albani__card-more::after {
+    content: " →" / "";
+}
+
+.iwac-vis-albani__card-more:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
 }
 
 

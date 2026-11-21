@@ -100,7 +100,9 @@
             // ?sections=overview: the same landing page, without the recordings.
             if (sections === 'overview') pages[0].sections = ['overview'];
             pages.forEach((p) => { p.current = p.sections.join(',') === sections; });
-            block.dataset.pages = JSON.stringify(pages);
+            // &nopages=1: no other Albani page exists on the site (the landing
+            // page needs none).
+            if (!fixtureParams.get('nopages')) block.dataset.pages = JSON.stringify(pages);
         }
     </script>
     <!-- ECharts from the test-only npm copy, then d3's UMD modules (they share one global, so d3-force comes
