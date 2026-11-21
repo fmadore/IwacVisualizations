@@ -1,0 +1,51 @@
+<?php
+/**
+ * Albani Zaria sermons page block (issue #31).
+ *
+ * Its own template, not a registry `shell`, because it reads the block's
+ * Sections setting (see `Site\BlockLayout\AlbaniSermons`). The asset
+ * declaration is the one the registry row carried until then.
+ *
+ * Two data attributes go to the orchestrator:
+ * - `data-sections`: the sections this block shows, comma-separated; absent
+ *   for the whole exhibition (and always on the embed route, which renders
+ *   this partial without a block).
+ * - `data-pages`: for a block that shows only some sections, every page of
+ *   the site with an Albani block, in exhibition order, as JSON
+ *   `[{url, title, current, sections}]` — what the contents and the links
+ *   between pages are built from.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation|null $block
+ * @var string[]|null $sections
+ * @var array<int, array<string, mixed>>|null $pages
+ */
+
+$data = [];
+if (!empty($sections)) {
+    $data['sections'] = implode(',', $sections);
+    if (!empty($pages)) {
+        $data['pages'] = json_encode($pages, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+}
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'albani-sermons',
+        'needs' => [
+            // The map of the places the sermons name.
+            'maplibre'     => true,
+            'chartOptions' => true,
+            // The term networks: shared-d3's canvas force graph.
+            'd3'           => true,
+            // The KWIC list (implies pagination) and the tables.
+            'concordance'  => true,
+            'table'        => true,
+        ],
+        'bundle' => 'albani-sermons',
+    ],
+    'blockClass' => 'iwac-vis-albani',
+    'embedSlug'  => 'albani-sermons',
+    'loading'    => $this->translate('Loading the Albani Zaria sermons'),
+    'data'       => $data,
+]);

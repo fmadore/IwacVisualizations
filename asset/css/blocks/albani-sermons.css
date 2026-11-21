@@ -606,6 +606,68 @@
     text-decoration-color: currentColor;
 }
 
+/*  An exhibition spread over pages: this page's sections read as the
+ *  place you are, the others as links away. Weight, not colour, so it
+ *  survives forced-colours mode. */
+.iwac-vis-albani__toc-item.is-here .iwac-vis-albani__toc-link {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/*  Previous / next page, at the foot of the block: a ruled row of two
+ *  title links, the next one pushed right. */
+.iwac-vis-albani__pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3, 0.75rem);
+    margin-top: var(--space-8, 2rem);
+    padding-top: var(--space-4, 1rem);
+    border-top: 1px solid var(--border, #ced1d6);
+}
+
+.iwac-vis-albani__pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+    max-width: 100%;
+    color: var(--ink, #13161c);
+    text-decoration: none;
+}
+
+.iwac-vis-albani__pager-link--next {
+    margin-left: auto;
+    text-align: right;
+}
+
+.iwac-vis-albani__pager-label {
+    font-size: var(--text-2xs, 0.6875rem);
+    font-weight: 600;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-albani__pager-link--prev .iwac-vis-albani__pager-label::before {
+    content: "← " / "";
+}
+
+.iwac-vis-albani__pager-link--next .iwac-vis-albani__pager-label::after {
+    content: " →" / "";
+}
+
+.iwac-vis-albani__pager-title {
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-weight: 600;
+    font-size: var(--text-lg, 1.1875rem);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-albani__pager-link:hover .iwac-vis-albani__pager-title {
+    color: var(--primary, #18298d);
+    text-decoration-color: currentColor;
+}
+
 
 /* =================================================================== */
 /*  People and places                                                    */

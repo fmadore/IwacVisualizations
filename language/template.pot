@@ -111,6 +111,50 @@ msgstr ""
 msgid "Very subjective"
 msgstr ""
 
+#: src/Site/BlockLayout/AlbaniSermons.php:38 src/Site/PipelinePresets.php:203
+msgid "The recordings"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:39 src/Site/PipelinePresets.php:209
+msgid "Vocabulary"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:40 src/Site/PipelinePresets.php:215
+msgid "People and places"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:41
+msgid "Youth"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:42
+msgid "Democracy and politics"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:43
+msgid "Where youth meets politics"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:44
+msgid "What sets a recording apart"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:45
+msgid "Style and rhetoric"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:46
+msgid "How this exhibition was made"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:61 src/Site/PipelinePresets.php:133
+msgid "Sections"
+msgstr ""
+
+#: src/Site/BlockLayout/AlbaniSermons.php:65
+msgid "Which sections this block shows. Leave all unticked to show the whole exhibition. To spread it over sub-pages, add this block to each page with the sections that page should show: the contents and the links between pages follow by themselves. The introduction and the figures appear with \"The recordings\"."
+msgstr ""
+
 #: src/Site/BlockLayout/CollectionIntro.php:33 src/Site/BlockLayout/PipelineExplainer.php:72
 msgid "Title heading level"
 msgstr ""
@@ -211,267 +255,263 @@ msgstr ""
 msgid "Present the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria as a guided exhibition: the recordings, their Hausa and Arabic vocabulary, the words used near terms for youth and for democracy and politics, the passages where the two meet, and the vocabulary that sets each recording apart. Passages are quoted only from public transcripts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:88
-msgid "Loading the Albani Zaria sermons"
-msgstr ""
-
-#: src/Site/BlockRegistry.php:94
+#: src/Site/BlockRegistry.php:78
 msgid "Audiovisual Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:95
+#: src/Site/BlockRegistry.php:79
 msgid "Compare collected recordings by source, country, duration and publication year, and see which catalogue fields are available."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:108
+#: src/Site/BlockRegistry.php:91
 msgid "Loading audiovisual overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:114
+#: src/Site/BlockRegistry.php:97
 msgid "Collection Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:115
+#: src/Site/BlockRegistry.php:98
 msgid "Explore the collection by date, country, language, document type and source, with views of catalogue growth and frequently indexed entries."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:129
+#: src/Site/BlockRegistry.php:111
 msgid "Loading collection overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:137
+#: src/Site/BlockRegistry.php:119
 msgid "Collection Introduction"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:138
+#: src/Site/BlockRegistry.php:120
 msgid "Introduce the collection in four short animated chapters: what it holds, the countries it comes from, the years it covers, and its languages and most frequently indexed entries. A guided reading for a homepage or an About page, with figures from the Collection Overview data; use the Collection Overview block to explore those data in depth."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:143
+#: src/Site/BlockRegistry.php:125
 msgid "Compare Newspapers"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:144
+#: src/Site/BlockRegistry.php:126
 msgid "Compare two selections of newspaper articles or Islamic periodical issues by publication year, catalogue tags, vocabulary and available AI ratings. Choose a country or a single publication for each selection."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:160
+#: src/Site/BlockRegistry.php:141
 msgid "Loading newspaper comparison"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:166
+#: src/Site/BlockRegistry.php:147
 msgid "Distinctive Vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:167
+#: src/Site/BlockRegistry.php:148
 msgid "Find words used at higher relative rates in one country or decade than in the remaining newspaper articles. A second view identifies periods of increased use of subject tags. Statistical thresholds are explained alongside the charts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:179
+#: src/Site/BlockRegistry.php:160
 msgid "Loading distinctive vocabulary"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:185
+#: src/Site/BlockRegistry.php:166
 msgid "Entity Networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:186
+#: src/Site/BlockRegistry.php:167
 msgid "Explore links between people, organisations, places, subjects and events recorded on the same items. Shared records indicate catalogue associations, which require interpretation through the sources."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:197
+#: src/Site/BlockRegistry.php:180
 msgid "Loading entity networks"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:203
+#: src/Site/BlockRegistry.php:186
 msgid "Index Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:204
+#: src/Site/BlockRegistry.php:187
 msgid "Explore the catalogue index and the use of subject and place tags over time. Counts describe recorded associations rather than word occurrences in the original texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:218
+#: src/Site/BlockRegistry.php:200
 msgid "Loading index overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:224
+#: src/Site/BlockRegistry.php:206
 msgid "Laïcité"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:225
+#: src/Site/BlockRegistry.php:207
 msgid "Explore a dossier selected through the Laïcité subject tag and vocabulary in titles and available full text, including YouTube transcripts. Compare source types, terms in context, associated entries and AI ratings. Descriptive fields are excluded from vocabulary counts; extracts follow each field’s public status."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:260
+#: src/Site/BlockRegistry.php:242
 msgid "Loading laïcité dossier"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:266
+#: src/Site/BlockRegistry.php:248
 msgid "Press Language"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:267
+#: src/Site/BlockRegistry.php:249
 msgid "Compare estimated reading ease, vocabulary diversity and article length over time and by newspaper. Measures use extracted text; the charts explain the scores and their limitations."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:276
+#: src/Site/BlockRegistry.php:258
 msgid "Loading press language metrics"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:282
+#: src/Site/BlockRegistry.php:264
 msgid "On This Day"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:283
+#: src/Site/BlockRegistry.php:265
 msgid "Show articles and periodical issues published on today’s date in earlier years. Switch between Gregorian and converted Islamic-calendar dates, and between list, decade, clipping and front-page layouts, with day-by-day navigation in the front page. Only records with suitable dates can appear."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:288
+#: src/Site/BlockRegistry.php:270
 msgid "Islamic Organisations Co-occurrence"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:289
+#: src/Site/BlockRegistry.php:271
 msgid "Compare pairs of words found near the names of selected Islamic organisations in newspaper articles. Darker cells indicate pairs found together in more articles."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:299
+#: src/Site/BlockRegistry.php:281
 msgid "Loading organisation co-occurrences"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:305
+#: src/Site/BlockRegistry.php:287
 msgid "Periodicals Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:306
+#: src/Site/BlockRegistry.php:288
 msgid "Explore Islamic periodical issues arranged by an AI comparison of their tables of contents. Nearby points suggest issues to compare; positions and distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:318 src/Site/BlockRegistry.php:448
+#: src/Site/BlockRegistry.php:300 src/Site/BlockRegistry.php:430
 msgid "Loading semantic landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:324
+#: src/Site/BlockRegistry.php:306
 msgid "Periodicals Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:325
+#: src/Site/BlockRegistry.php:307
 msgid "Explore Islamic periodical holdings by year, publication, country, language and catalogue subject, with vocabulary and statistically modelled themes. Gaps in the collection do not establish gaps in publication."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:335
+#: src/Site/BlockRegistry.php:317
 msgid "Loading periodicals overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:343
+#: src/Site/BlockRegistry.php:325
 msgid "Pipeline Explainer"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:344
+#: src/Site/BlockRegistry.php:326
 msgid "Explain one IWAC processing workflow — topic modelling, OCR with AI, entity extraction and metadata enrichment, the Albani Zaria sermons analysis, tables of contents for Islamic publications, Ask AI, press attitudes, embeddings and reprint detection, or how places reach the maps — as a short animated diagram with captions. It uses illustrative examples and requests no data."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:350
+#: src/Site/BlockRegistry.php:332
 msgid "Press Bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:351
+#: src/Site/BlockRegistry.php:333
 msgid "Explore recorded journalists and press agencies, the share of articles with a byline, and their representation over time. A missing byline may reflect incomplete cataloguing."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:361
+#: src/Site/BlockRegistry.php:343
 msgid "Loading press bylines"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:367
+#: src/Site/BlockRegistry.php:349
 msgid "Press Reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:368
+#: src/Site/BlockRegistry.php:350
 msgid "Find articles from different newspapers with highly similar AI text representations. These candidate pairs may indicate shared dispatches, communiqués or reprints; read both articles before concluding that copying occurred."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:379
+#: src/Site/BlockRegistry.php:361
 msgid "Loading press reprints"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:385
+#: src/Site/BlockRegistry.php:367
 msgid "References Overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:386
+#: src/Site/BlockRegistry.php:368
 msgid "Explore the bibliography by publication date, type, language, associated country, author and subject. Additional views show authorship links, available full text, modelled themes and text similarity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:401
+#: src/Site/BlockRegistry.php:383
 msgid "Loading references overview"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:407
+#: src/Site/BlockRegistry.php:389
 msgid "Scary Terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:408
+#: src/Site/BlockRegistry.php:390
 msgid "Explore selected vocabulary associated with radicalism and extremism in newspaper articles: occurrences, trends, countries, term pairs, surrounding vocabulary and tagged places. Counts describe language use, not the extremism of the people discussed."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:429
+#: src/Site/BlockRegistry.php:411
 msgid "Loading scary terms"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:435
+#: src/Site/BlockRegistry.php:417
 msgid "Semantic Landscape"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:436
+#: src/Site/BlockRegistry.php:418
 msgid "Explore newspaper articles arranged by an AI comparison of their full texts, with colours for country, decade or modelled topic. Nearby points suggest texts to compare; distances are approximate."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:454
+#: src/Site/BlockRegistry.php:436
 msgid "Sentiment Atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:455
+#: src/Site/BlockRegistry.php:437
 msgid "Compare AI assessments of tone towards Islam and Muslims, their prominence in articles, and subjectivity. Views show changes over time, differences between sources and model agreement. Ratings require checking against the texts, especially for subjectivity."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:466
+#: src/Site/BlockRegistry.php:448
 msgid "Loading sentiment atlas"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:472
+#: src/Site/BlockRegistry.php:454
 msgid "Spatial Exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:473
+#: src/Site/BlockRegistry.php:455
 msgid "Map places linked through catalogue records, with filters for countries and associated people, organisations, subjects or events. Only places with coordinates appear; the map does not include every location mentioned in the texts."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:483
+#: src/Site/BlockRegistry.php:465
 msgid "Loading spatial exploration"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:489
+#: src/Site/BlockRegistry.php:471
 msgid "Term Trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:490
+#: src/Site/BlockRegistry.php:472
 msgid "Compare the number or share of dated newspaper articles containing selected words. Search the frequent-word vocabulary and compare up to eight terms. Each word counts once per article, and only articles with usable processed text enter the calculation."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:500
+#: src/Site/BlockRegistry.php:482
 msgid "Loading term trends"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:506
+#: src/Site/BlockRegistry.php:488
 msgid "Topic Explorer"
 msgstr ""
 
-#: src/Site/BlockRegistry.php:507
+#: src/Site/BlockRegistry.php:489
 msgid "Explore the themes a statistical topic model identifies in newspaper articles. Select a theme to examine its publication dates, countries, newspapers and example articles. Modelled themes differ from catalogue subject tags."
 msgstr ""
 
-#: src/Site/BlockRegistry.php:527
+#: src/Site/BlockRegistry.php:509
 msgid "Loading Topic Explorer"
 msgstr ""
 
@@ -819,10 +859,6 @@ msgstr ""
 msgid "Text from conventional OCR, with its misread characters, broken words and encoding errors."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:133
-msgid "Sections"
-msgstr ""
-
 #: src/Site/PipelinePresets.php:134
 msgid "A very long text is cut into sections that the model can correct in one request."
 msgstr ""
@@ -931,10 +967,6 @@ msgstr ""
 msgid "The Albani Zaria exhibition counts words, terms and names across the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria. Every figure leads back to a passage, and every passage to its recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:203
-msgid "The recordings"
-msgstr ""
-
 #: src/Site/PipelinePresets.php:204
 msgid "Speech recognition writes each recording out word for word, in 20-minute segments, and estimates who is speaking. Recordings not yet transcribed, and passages in English, are left out."
 msgstr ""
@@ -943,20 +975,12 @@ msgstr ""
 msgid "Both can be wrong, so every passage links back to the recording."
 msgstr ""
 
-#: src/Site/PipelinePresets.php:209
-msgid "Vocabulary"
-msgstr ""
-
 #: src/Site/PipelinePresets.php:210
 msgid "Spellings with and without the hooked letters (ɓ, ɗ, ƙ, ƴ) count as one word; the commonest words and the speaker’s fillers, such as wato, are left out."
 msgstr ""
 
 #: src/Site/PipelinePresets.php:211
 msgid "The stop words are those published by Bashir, Bichi and Adamu (2024); religious formulae are counted as whole phrases, and a simple rule tells Arabic passages from Hausa."
-msgstr ""
-
-#: src/Site/PipelinePresets.php:215
-msgid "People and places"
 msgstr ""
 
 #: src/Site/PipelinePresets.php:216
@@ -1519,16 +1543,20 @@ msgstr ""
 msgid "Item Set Dashboard"
 msgstr ""
 
-#: src/Site/ResourcePageBlockLayout/Visualizations.php:166 src/Site/ResourcePageBlockLayout/Visualizations.php:190 view/common/resource-page-block-layout/item-set-dashboard.phtml:37 view/common/resource-page-block-layout/visualizations/article.phtml:287
+#: src/Site/ResourcePageBlockLayout/Visualizations.php:165 src/Site/ResourcePageBlockLayout/Visualizations.php:188 view/common/resource-page-block-layout/item-set-dashboard.phtml:37 view/common/resource-page-block-layout/visualizations/article.phtml:286
 msgid "Loading dashboard"
 msgstr ""
 
-#: src/Site/ResourcePageBlockLayout/Visualizations.php:206 src/Site/ResourcePageBlockLayout/Visualizations.php:223 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:87
+#: src/Site/ResourcePageBlockLayout/Visualizations.php:204 src/Site/ResourcePageBlockLayout/Visualizations.php:221 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:87
 msgid "Loading visualisations"
 msgstr ""
 
-#: src/Site/ResourcePageBlockLayout/Visualizations.php:246 src/Site/ResourcePageBlockLayout/Visualizations.php:260
+#: src/Site/ResourcePageBlockLayout/Visualizations.php:244 src/Site/ResourcePageBlockLayout/Visualizations.php:258
 msgid "Visualisations"
+msgstr ""
+
+#: view/common/block-layout/albani-sermons.phtml:49
+msgid "Loading the Albani Zaria sermons"
 msgstr ""
 
 #: view/common/block-layout/collection-intro.phtml:66 view/common/block-layout/pipeline-explainer.phtml:74
@@ -1551,11 +1579,11 @@ msgstr ""
 msgid "Loading on this day"
 msgstr ""
 
-#: view/common/iwac-assets.phtml:340
+#: view/common/iwac-assets.phtml:339
 msgid "The visualization could not load."
 msgstr ""
 
-#: view/common/iwac-assets.phtml:341
+#: view/common/iwac-assets.phtml:340
 msgid "Retry"
 msgstr ""
 

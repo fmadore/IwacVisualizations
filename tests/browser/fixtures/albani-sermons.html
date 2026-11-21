@@ -80,6 +80,24 @@
             </div>
         </div>
     </main>
+    <script>
+        // ?sections=youth,politics,overlap stands in for a block whose
+        // Sections setting names those, on a site that spreads the
+        // exhibition over four pages (what AlbaniSermons::pageMap hands the
+        // template); the current page is the one showing those sections.
+        if (fixtureParams.get('sections')) {
+            const block = document.querySelector('.iwac-vis-albani');
+            const sections = fixtureParams.get('sections');
+            block.dataset.sections = sections;
+            const pages = [
+                { url: '/s/iwac/page/albani', title: 'Albani Zaria’s sermons', sections: ['corpus'] },
+                { url: '/s/iwac/page/albani-vocabulary', title: 'Vocabulary', sections: ['vocabulary', 'keyness'] },
+                { url: '/s/iwac/page/albani-themes', title: 'Youth and politics', sections: ['youth', 'politics', 'overlap'] },
+                { url: '/s/iwac/page/albani-method', title: 'Method', sections: ['method'] },
+            ].map((p) => Object.assign(p, { current: p.sections.join(',') === sections }));
+            block.dataset.pages = JSON.stringify(pages);
+        }
+    </script>
     <!-- ECharts from the test-only npm copy, then d3's UMD modules (they share one global, so d3-force comes
          last), then the bundles in Site\AssetPlan::bundles() order for
          chartOptions + concordance + table + maplibre + d3. -->

@@ -69,24 +69,8 @@ final class BlockRegistry
             'class'       => BlockLayout\AlbaniSermons::class,
             'label'       => 'Albani Zaria Sermons', // @translate
             'description' => 'Present the transcribed sermons and lessons of Shaykh Muhammad Auwal Albani Zaria as a guided exhibition: the recordings, their Hausa and Arabic vocabulary, the words used near terms for youth and for democracy and politics, the passages where the two meet, and the vocabulary that sets each recording apart. Passages are quoted only from public transcripts.', // @translate
-            'shell'       => [
-                'assets' => [
-                    'blockCss' => 'albani-sermons',
-                    'needs' => [
-                        // The map of the places the sermons name.
-                        'maplibre'     => true,
-                        'chartOptions' => true,
-                        // The term networks: shared-d3's canvas force graph.
-                        'd3'           => true,
-                        // The KWIC list and the tables.
-                        'concordance'  => true,
-                        'table'        => true,
-                    ],
-                    'bundle' => 'albani-sermons',
-                ],
-                'blockClass' => 'iwac-vis-albani',
-                'loading'    => 'Loading the Albani Zaria sermons', // @translate
-            ],
+            // Its own template (view/common/block-layout/albani-sermons.phtml):
+            // it reads the block's Sections setting.
         ],
         'audiovisual-overview' => [
             'invokable'   => 'audiovisualOverview',

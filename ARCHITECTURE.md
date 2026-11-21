@@ -314,7 +314,7 @@ IwacVisualizations/
 │       └── test_timeline.py
 ├── view/
 │   ├── common/
-│   │   ├── block-layout/                # 5 files — _generic.phtml for every shell row, plus one per block with its own markup (filename === slug)
+│   │   ├── block-layout/                # 6 files — _generic.phtml for every shell row, plus one per block with its own markup (filename === slug)
 │   │   ├── resource-page-block-layout/
 │   │   │   ├── visualizations/
 │   │   │   │   ├── _dashboard.phtml

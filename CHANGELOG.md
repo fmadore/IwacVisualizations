@@ -13,6 +13,10 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
+### Unreleased — Albani Zaria sermons over several pages
+
+- **The Albani Zaria sermons exhibition can be spread over sub-pages.** The block gains a **Sections** setting: tick the sections a page should show, or leave them all unticked for the whole exhibition (what every block saved so far keeps showing). Place the block on a page and its sub-pages, each with its sections, and the pages link up by themselves: the module reads every Albani block on the site, so the contents list all the sections in exhibition order and send a reader to the page that shows each one (the current page's in bold), "How this was made" goes to whichever page shows the method, and previous/next links with the page titles close each page. The reader's counting scope and translation choice follow them from page to page. The introduction and the figures go with "The recordings"; the badges, contents and switches are on every page. A page fetches only the data its sections read, so a sub-page loads less than the whole exhibition did. Embeds are unchanged.
+
 ### v2.6.1 — Audit fixes: registry-driven sentiment models, forced colours, leaner bundles (2026-11-20)
 
 - **Sentiment models come from the registry everywhere (#42).** The corpus-health panel now takes its sentiment meters and their labels from `config/sentiment-models.json` (`iwac_utils.SENTIMENT_MODEL_NAMES`) instead of a hand-kept list of six models, so a rotated model no longer raises `KeyError` in the data build or goes missing from the panel. `tests/js/palette.test.js` now fails when the Sentiment Atlas's `MODEL_SLOT` map names a model the registry does not, or misses one it does.

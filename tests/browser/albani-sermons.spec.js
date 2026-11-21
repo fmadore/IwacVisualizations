@@ -44,6 +44,69 @@ test('every section renders from its own bundle, without a console problem', asy
     expect(problems).toEqual([]);
 });
 
+test('a sub-page shows its own sections, fetches only theirs, and links to the other pages', async ({ page }) => {
+    const problems = watch(page);
+    await page.goto(`${FIXTURE}?eager=1&sections=youth,politics,overlap&albani.scope=monologue`);
+    await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
+    const sections = await page.locator('.iwac-vis-albani__section').evaluateAll(
+        (els) => els.map((el) => el.getAttribute('data-iwac-section')));
+    expect(sections).toEqual(['youth', 'politics', 'overlap']);
+    await expect(page.locator('[data-iwac-section="politics"] .iwac-vis-kwic-row').first()).toBeVisible();
+
+    // The introduction and figures belong to the recordings page; the
+    // switches every section reads stay.
+    await expect(page.locator('.iwac-vis-albani__header')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__scope')).toHaveCount(1);
+    const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()).sort());
+    expect(fetched).not.toContain('vocabulary.json');
+    expect(fetched).not.toContain('keyness.json');
+    expect(fetched).not.toContain('entities.json');
+
+    // The contents: every section some page shows, in exhibition order —
+    // this page's to their anchors, the others to their pages; the two no
+    // page shows (people and places, rhetoric) are left out.
+    const toc = await page.locator('.iwac-vis-albani__toc-link').evaluateAll((els) => els.map((a) => ({
+        href: a.getAttribute('href'), here: a.parentElement.classList.contains('is-here'),
+    })));
+    expect(toc).toEqual([
+        { href: '/s/iwac/page/albani#albani-corpus', here: false },
+        { href: '/s/iwac/page/albani-vocabulary#albani-vocabulary', here: false },
+        { href: '#albani-youth', here: true },
+        { href: '#albani-politics', here: true },
+        { href: '#albani-overlap', here: true },
+        { href: '/s/iwac/page/albani-vocabulary#albani-keyness', here: false },
+        { href: '/s/iwac/page/albani-method#albani-method', here: false },
+    ]);
+    await expect(page.locator('.iwac-vis-albani__jump')).toHaveAttribute('href', '/s/iwac/page/albani-method#albani-method');
+
+    // Previous and next pages, by title.
+    const pager = page.locator('.iwac-vis-albani__pager');
+    await expect(pager.locator('.iwac-vis-albani__pager-link--prev')).toHaveAttribute('href', '/s/iwac/page/albani-vocabulary');
+    await expect(pager.locator('.iwac-vis-albani__pager-link--prev')).toContainText('Vocabulary');
+    await expect(pager.locator('.iwac-vis-albani__pager-link--next')).toHaveAttribute('href', '/s/iwac/page/albani-method');
+
+    // Following one carries the reader's counting scope along.
+    const next = pager.locator('.iwac-vis-albani__pager-link--next');
+    await next.evaluate((a) => a.addEventListener('click', (e) => e.preventDefault()));
+    await next.click();
+    expect(new URL(await next.evaluate((a) => a.href)).searchParams.get('albani.scope')).toBe('monologue');
+    expect(problems).toEqual([]);
+});
+
+test('the recordings page carries the introduction, and a block without the setting is unchanged', async ({ page }) => {
+    await page.goto(`${FIXTURE}?eager=1&sections=corpus`);
+    await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(1);
+    await expect(page.locator('.iwac-vis-albani__header')).toHaveCount(1);
+    await expect(page.locator('.iwac-vis-albani__pager-link--prev')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__pager-link--next')).toHaveAttribute('href', '/s/iwac/page/albani-vocabulary');
+
+    await ready(page);
+    await expect(page.locator('.iwac-vis-albani__pager')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__toc-item.is-here')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__jump')).toHaveAttribute('href', '#albani-method');
+});
+
 test('the transcripts still being redone are named, and the democracy caveat waits on Demokuradiyyah alone', async ({ page }) => {
     // The fixture holds back Shari'a only: the caveat names Demokuradiyyah,
     // so it must not show for another recording's re-transcription.

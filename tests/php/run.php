@@ -120,6 +120,12 @@ namespace Omeka\Site\ResourcePageBlockLayout {
     }
 }
 
+namespace Omeka\Site\BlockLayout {
+    // Enough of core's base class to load the module's block layouts for
+    // their pure statics (AlbaniSermons::pageMap, ::sectionsOf).
+    abstract class AbstractBlockLayout {}
+}
+
 namespace {
     use IwacVisualizations\Controller\Admin\DataController;
     use IwacVisualizations\Job\SyncData;
@@ -155,6 +161,8 @@ namespace {
     require $root . '/src/Site/BlockRegistry.php';
     require $root . '/src/Site/AssetPlan.php';
     require $root . '/src/Site/PipelinePresets.php';
+    require $root . '/src/Site/BlockLayout/AbstractIwacBlockLayout.php';
+    require $root . '/src/Site/BlockLayout/AlbaniSermons.php';
     require $root . '/src/Site/CollectionIntroText.php';
     require $root . '/src/Site/EmbedBrand.php';
     require $root . '/src/Site/ItemValue.php';
@@ -489,8 +497,8 @@ namespace {
                 "$slug: has no shell but does not route to its own template");
         }
     }
-    check($shellRows === 21, "expected 21 generic blocks, found $shellRows");
-    check($ownTemplate === 4, "expected 4 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer, collection-intro), found $ownTemplate");
+    check($shellRows === 20, "expected 20 generic blocks, found $shellRows");
+    check($ownTemplate === 5, "expected 5 blocks with their own template (on-this-day, iwac-timeline, pipeline-explainer, collection-intro, albani-sermons), found $ownTemplate");
     // Every block embeds. The two configured ones name their configuration in
     // the URL; their classes turn it into template variables, and their own
     // templates must say so on the wrapper (embedSlug, embedQuery,
@@ -516,6 +524,40 @@ namespace {
             check(strpos($template, $needle) !== false, "$slug.phtml lost $needle");
         }
     }
+
+    // Albani Zaria: the Sections setting. The PHP list is the JS list, in
+    // the same order, or a ticked box would name a section the page cannot
+    // build; a saved value is read defensively; and the page map orders an
+    // exhibition spread over pages by its first section.
+    $albaniJs = (string) file_get_contents($root . '/asset/js/charts/albani-sermons.js');
+    preg_match_all("/\{ key: '([a-z]+)', heading:/", $albaniJs, $albaniKeys);
+    check($albaniKeys[1] === array_keys(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::SECTIONS),
+        'AlbaniSermons::SECTIONS and SECTIONS in albani-sermons.js disagree: ' . implode(',', $albaniKeys[1]));
+    $albaniBlock = new class ([]) {
+        public function __construct(private mixed $value) {}
+        public function set(mixed $value): self { $this->value = $value; return $this; }
+        public function dataValue(string $key, mixed $default = null): mixed { return $key === 'sections' ? $this->value : $default; }
+    };
+    $sectionsOf = [\IwacVisualizations\Site\BlockLayout\AlbaniSermons::class, 'sectionsOf'];
+    check($sectionsOf(null) === [], 'albani: no block is every section');
+    check($sectionsOf($albaniBlock->set('')) === [], 'albani: an empty saved value is every section');
+    check($sectionsOf($albaniBlock->set(['method', 'retired', 'youth'])) === ['youth', 'method'],
+        'albani: sections are read in page order, unknown keys dropped');
+    check($sectionsOf($albaniBlock->set(array_keys(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::SECTIONS))) === [],
+        'albani: every box ticked reads back as every section');
+    $albaniMap = \IwacVisualizations\Site\BlockLayout\AlbaniSermons::pageMap([
+        ['url' => '/p/method', 'title' => 'Method', 'current' => false, 'sections' => [['method']]],
+        ['url' => '/p/none', 'title' => 'None', 'current' => false, 'sections' => [['retired-only-keys-are-dropped-earlier'], []]],
+        ['url' => '/p/themes', 'title' => 'Themes', 'current' => true, 'sections' => [['politics'], ['youth', 'overlap']]],
+        ['url' => '/p/index', 'title' => 'Index', 'current' => false, 'sections' => [['corpus']]],
+    ]);
+    check(array_column($albaniMap, 'url') === ['/p/none', '/p/index', '/p/themes', '/p/method'],
+        'albani: pages sort by their first section; a block with every section starts at the recordings: ' . implode(',', array_column($albaniMap, 'url')));
+    check($albaniMap[2]['sections'] === ['youth', 'politics', 'overlap'] && $albaniMap[2]['current'] === true,
+        'albani: a page\'s blocks add up, in page order, and keep the current flag');
+    check(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::pageMap([
+        ['url' => '/p/x', 'title' => 'X', 'current' => false, 'sections' => [['nope']]],
+    ]) === [], 'albani: a page whose blocks name nothing known is dropped');
 
     // Pipeline explainer: every stage a preset names is a drawing its Svelte
     // component draws, every string reaches the translator, and a saved
