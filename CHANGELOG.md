@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased — A landing page for the Albani Zaria sermons
+### v2.8.0 — A landing page for the Albani Zaria sermons (2026-11-21)
 
 - **A landing page that sums up every page.** The Sections setting gains "A summary of each page (for a landing page)". A block with it shows the title, the introduction and the figures, then one card per other page of the exhibition, in its order: the page's title, then each section on it with a one-sentence summary and a link straight to it. The cards take the place of the contents list on that page, and the counting-scope and translation switches only appear where a section uses them. Tick "The recordings" as well to keep the list of recordings on the landing page.
 - **Fixed: the pages of a spread-out exhibition did not find each other (v2.7.0).** The module stores its blocks as `iwac-albaniSermons`, and the lookup compared against the older name only, so the contents and the previous/next links never reached the other pages.
