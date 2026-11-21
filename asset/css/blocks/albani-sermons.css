@@ -668,6 +668,87 @@
     text-decoration-color: currentColor;
 }
 
+/*  The landing page: one column per page of the exhibition, set like a
+ *  broadsheet's section index — a heavy rule over each column, the page
+ *  title in the display serif, then its sections as a short ledger of
+ *  linked headings with one sentence each. */
+.iwac-vis-albani__overview {
+    margin-top: var(--space-6, 1.5rem);
+}
+
+.iwac-vis-albani__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: var(--space-6, 1.5rem) var(--space-5, 1.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: albani-card;
+}
+
+.iwac-vis-albani__card {
+    counter-increment: albani-card;
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 2px solid var(--ink, #13161c);
+}
+
+.iwac-vis-albani__card-title {
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
+    font-weight: 600;
+    font-size: var(--text-lg, 1.1875rem);
+    line-height: 1.25;
+}
+
+.iwac-vis-albani__card-title::before {
+    content: counter(albani-card) ". ";
+    color: var(--muted, #66696e);
+    font-feature-settings: "lnum";
+}
+
+.iwac-vis-albani__card-link {
+    color: var(--ink, #13161c);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong, #aeb1b7);
+    text-underline-offset: 0.15em;
+}
+
+.iwac-vis-albani__card-link:hover {
+    color: var(--primary, #18298d);
+    text-decoration-color: currentColor;
+}
+
+.iwac-vis-albani__card-sections {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-albani__card-section + .iwac-vis-albani__card-section {
+    margin-top: var(--space-2, 0.5rem);
+    padding-top: var(--space-2, 0.5rem);
+    border-top: 1px solid var(--border, #ced1d6);
+}
+
+.iwac-vis-albani__card-section-link {
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--ink, #13161c);
+    text-decoration: none;
+}
+
+.iwac-vis-albani__card-section-link:hover {
+    color: var(--primary, #18298d);
+    text-decoration: underline;
+}
+
+.iwac-vis-albani__card-text {
+    margin: var(--space-1, 0.25rem) 0 0;
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.5;
+    color: var(--muted, #66696e);
+}
+
 
 /* =================================================================== */
 /*  People and places                                                    */

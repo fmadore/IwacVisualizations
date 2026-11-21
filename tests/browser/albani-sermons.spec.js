@@ -93,18 +93,50 @@ test('a sub-page shows its own sections, fetches only theirs, and links to the o
     expect(problems).toEqual([]);
 });
 
-test('the recordings page carries the introduction, and a block without the setting is unchanged', async ({ page }) => {
-    await page.goto(`${FIXTURE}?eager=1&sections=corpus`);
+test('the landing page sums up every other page, and a block without the setting is unchanged', async ({ page }) => {
+    const problems = watch(page);
+    await page.goto(`${FIXTURE}?eager=1&sections=overview,corpus`);
     await expect(page.locator('.iwac-vis-albani__loading')).toHaveCount(0);
-    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(1);
     await expect(page.locator('.iwac-vis-albani__header')).toHaveCount(1);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(1);
+    // The cards are its contents: no contents list.
+    await expect(page.locator('.iwac-vis-albani__toc')).toHaveCount(0);
+    const cards = await page.locator('.iwac-vis-albani__card').evaluateAll((els) => els.map((card) => ({
+        title: card.querySelector('.iwac-vis-albani__card-link').textContent,
+        href: card.querySelector('.iwac-vis-albani__card-link').getAttribute('href'),
+        sections: [...card.querySelectorAll('.iwac-vis-albani__card-section-link')].map((a) => a.getAttribute('href')),
+        texts: [...card.querySelectorAll('.iwac-vis-albani__card-text')].every((p) => p.textContent.length > 20),
+    })));
+    expect(cards).toEqual([
+        { title: 'Vocabulary', href: '/s/iwac/page/albani-vocabulary', texts: true,
+            sections: ['/s/iwac/page/albani-vocabulary#albani-vocabulary', '/s/iwac/page/albani-vocabulary#albani-keyness'] },
+        { title: 'Youth and politics', href: '/s/iwac/page/albani-themes', texts: true,
+            sections: ['/s/iwac/page/albani-themes#albani-youth', '/s/iwac/page/albani-themes#albani-politics', '/s/iwac/page/albani-themes#albani-overlap'] },
+        { title: 'Method', href: '/s/iwac/page/albani-method', texts: true,
+            sections: ['/s/iwac/page/albani-method#albani-method'] },
+    ]);
     await expect(page.locator('.iwac-vis-albani__pager-link--prev')).toHaveCount(0);
     await expect(page.locator('.iwac-vis-albani__pager-link--next')).toHaveAttribute('href', '/s/iwac/page/albani-vocabulary');
 
+    // A landing page with no section of its own has no switches to show.
+    await page.goto(`${FIXTURE}?eager=1&sections=overview`);
+    await expect(page.locator('.iwac-vis-albani__card')).toHaveCount(3);
+    await expect(page.locator('.iwac-vis-albani__section')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__scope')).toHaveCount(0);
+    await expect(page.locator('.iwac-vis-albani__header')).toHaveCount(1);
+    expect(problems).toEqual([]);
+
     await ready(page);
+    await expect(page.locator('.iwac-vis-albani__card')).toHaveCount(0);
     await expect(page.locator('.iwac-vis-albani__pager')).toHaveCount(0);
     await expect(page.locator('.iwac-vis-albani__toc-item.is-here')).toHaveCount(0);
     await expect(page.locator('.iwac-vis-albani__jump')).toHaveAttribute('href', '#albani-method');
+});
+
+test('the French landing page reads French', async ({ page }) => {
+    await page.goto(`${FIXTURE}?eager=1&sections=overview&lang=fr`);
+    await expect(page.locator('.iwac-vis-albani__overview')).toHaveAttribute('aria-label', 'L’exposition, page par page');
+    await expect(page.locator('.iwac-vis-albani__card-section-link').first()).toHaveText('Le vocabulaire');
 });
 
 test('the transcripts still being redone are named, and the democracy caveat waits on Demokuradiyyah alone', async ({ page }) => {

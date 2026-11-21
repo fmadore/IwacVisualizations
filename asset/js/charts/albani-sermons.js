@@ -36,9 +36,11 @@
  * told which page shows which section (`data-pages`, built server-side
  * from every Albani block on the site), so its contents, its "How this was
  * made" link and the previous/next links at its foot reach the other
- * pages, carrying the reader's `albani.*` choices. The introduction and the
- * figures go with the recordings section; the badges, contents and
- * switches go on every page.
+ * pages, carrying the reader's `albani.*` choices. A block whose setting
+ * includes `overview` is the landing page: the introduction and figures,
+ * then a card per other page (its title, its sections, one sentence each)
+ * in place of the contents. The introduction also goes with the recordings
+ * section; the badges go on every page, the switches wherever a section is.
  *
  * A single-panel embed (`/iwac-embed/albani-sermons/albani-score`) builds
  * the one section that holds its panel, from the bundles that section
@@ -111,15 +113,79 @@
     }
 
     /**
-     * The sections this block shows, in page order: the editor's choice
-     * (`data-sections`, the block's Sections setting), or every section when
-     * there is none or it names nothing this file knows.
+     * Not a section: the Sections setting's "a summary of each page", which
+     * makes the block a landing page (AlbaniSermons::OVERVIEW).
+     */
+    var OVERVIEW = 'overview';
+
+    /** The keys of the Sections setting (`data-sections`), as written. */
+    function chosenKeys(container) {
+        return ((container && container.dataset.sections) || '').split(',')
+            .map(function (s) { return s.trim(); })
+            .filter(Boolean);
+    }
+
+    /**
+     * The sections this block shows, in page order: the editor's choice, or
+     * every section when there is none. A landing page may show none; a
+     * setting that names nothing this file knows shows everything.
      */
     function chosenSections(container) {
-        var raw = ((container && container.dataset.sections) || '').split(',')
-            .map(function (s) { return s.trim(); });
+        var raw = chosenKeys(container);
         var picked = SECTIONS.filter(function (def) { return raw.indexOf(def.key) !== -1; });
-        return picked.length ? picked : SECTIONS;
+        if (picked.length) return picked;
+        return raw.indexOf(OVERVIEW) !== -1 ? [] : SECTIONS;
+    }
+
+    /**
+     * One sentence per section for the landing page's cards. Literal keys,
+     * so the dictionary check can see each one is read.
+     */
+    var CARD_TEXT = {
+        corpus: 'albani_card_corpus',
+        vocabulary: 'albani_card_vocabulary',
+        entities: 'albani_card_entities',
+        youth: 'albani_card_youth',
+        politics: 'albani_card_politics',
+        overlap: 'albani_card_overlap',
+        keyness: 'albani_card_keyness',
+        rhetoric: 'albani_card_rhetoric',
+        method: 'albani_card_method'
+    };
+
+    /**
+     * The landing page: a card for every other page of the exhibition, in
+     * its order — the page's title, then each section it shows with one
+     * sentence and a link straight to it. Nothing when no other page holds
+     * a section (the sub-pages are not made yet).
+     */
+    function overview(root, pages) {
+        var others = pages.filter(function (p) {
+            return !p.current && p.sections.some(function (key) { return CARD_TEXT[key]; });
+        });
+        if (!others.length) return;
+        var nav = P.el('nav', 'iwac-vis-albani__overview');
+        nav.setAttribute('aria-label', P.t('albani_overview'));
+        var list = P.el('ol', 'iwac-vis-albani__cards');
+        others.forEach(function (p) {
+            var card = P.el('li', 'iwac-vis-albani__card');
+            var title = P.el('h4', 'iwac-vis-albani__card-title');
+            title.appendChild(link('iwac-vis-albani__card-link', p.title || '', p.url));
+            card.appendChild(title);
+            var items = P.el('ul', 'iwac-vis-albani__card-sections');
+            SECTIONS.forEach(function (def) {
+                if (p.sections.indexOf(def.key) === -1) return;
+                var li = P.el('li', 'iwac-vis-albani__card-section');
+                li.appendChild(link('iwac-vis-albani__card-section-link', P.t(def.heading),
+                    p.url + '#albani-' + def.key));
+                li.appendChild(P.el('p', 'iwac-vis-albani__card-text', P.t(CARD_TEXT[def.key])));
+                items.appendChild(li);
+            });
+            card.appendChild(items);
+            list.appendChild(card);
+        });
+        nav.appendChild(list);
+        root.appendChild(nav);
     }
 
     /**
@@ -236,14 +302,18 @@
     });
 
     /**
-     * The header. `intro` (the title, the introduction, the figures and the
-     * transcription status) goes with the recordings section — the whole
-     * exhibition, or the page an exhibition spread over pages opens on. The
-     * provenance badges, the contents and the two switches every section
-     * reads go on every page.
+     * The header. The provenance badges go on every page; the rest as `show`
+     * says:
+     * - `intro`: the title, the introduction, the figures and the
+     *   transcription status — on the landing page, or with the recordings;
+     * - `toc`: the contents — everywhere but the landing page, whose cards
+     *   are its contents;
+     * - `controls`: the counting scope and translations switches — wherever
+     *   a section reads them.
      */
-    function header(root, metadata, store, intro) {
+    function header(root, metadata, store, show) {
         var totals = metadata.totals || {};
+        var intro = show.intro;
         if (intro) {
             var head = P.el('div', 'iwac-vis-block-header iwac-vis-albani__header');
             head.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('albani_title')));
@@ -270,13 +340,15 @@
         if (intro) introFigures(root, metadata, totals);
 
         // The contents, filled once the sections exist (render()).
-        var toc = P.el('nav', 'iwac-vis-albani__toc');
-        toc.setAttribute('aria-label', P.t('albani_toc'));
-        toc.appendChild(P.el('p', 'iwac-vis-albani__toc-title', P.t('albani_toc')));
-        toc.appendChild(P.el('ol', 'iwac-vis-albani__toc-list'));
-        root.appendChild(toc);
+        if (show.toc) {
+            var toc = P.el('nav', 'iwac-vis-albani__toc');
+            toc.setAttribute('aria-label', P.t('albani_toc'));
+            toc.appendChild(P.el('p', 'iwac-vis-albani__toc-title', P.t('albani_toc')));
+            toc.appendChild(P.el('ol', 'iwac-vis-albani__toc-list'));
+            root.appendChild(toc);
+        }
 
-        scopeControls(root, store, totals);
+        if (show.controls) scopeControls(root, store, totals);
     }
 
     /** The figures and the transcription status, under the introduction. */
@@ -388,10 +460,16 @@
         // The sections this block shows, and — when the exhibition is spread
         // over pages — where the others are.
         var shown = chosenSections(container);
-        var pages = shown === SECTIONS ? [] : sitePages(container);
+        var pages = chosenKeys(container).length ? sitePages(container) : [];
         var local = shown.map(function (def) { return def.key; });
+        var landing = chosenKeys(container).indexOf(OVERVIEW) !== -1;
 
-        header(root, metadata, store, local.indexOf('corpus') !== -1);
+        header(root, metadata, store, {
+            intro: landing || local.indexOf('corpus') !== -1,
+            toc: !landing,
+            controls: local.length > 0
+        });
+        if (landing) overview(root, pages);
         shown.forEach(section);
 
         // A section's anchor on this page: its heading's id, which A.section
@@ -418,7 +496,7 @@
         // page's to their anchors (marked as here), the others' to the page
         // that shows them; a section no page shows is left out.
         var list = root.querySelector('.iwac-vis-albani__toc-list');
-        SECTIONS.forEach(function (def) {
+        if (list) SECTIONS.forEach(function (def) {
             var href = hrefOf(def.key);
             if (!href) return;
             var here = local.indexOf(def.key) !== -1;

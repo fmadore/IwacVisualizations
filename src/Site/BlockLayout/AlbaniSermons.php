@@ -22,8 +22,9 @@ use Omeka\Api\Representation\SiteRepresentation;
  * reads every page of its site for Albani blocks and hands the template a
  * list of pages and the sections each shows. The contents, the "How this
  * was made" link and the previous/next links at the foot use it, so an
- * editor only places blocks and never types a link. The embed route has no
- * block and renders every section, as before.
+ * editor only places blocks and never types a link. Ticking "A summary of
+ * each page" (`overview`) makes a block the landing page: a card for every
+ * other page. The embed route has no block and renders every section.
  */
 class AlbaniSermons extends AbstractIwacBlockLayout
 {
@@ -46,13 +47,25 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         'method'     => 'How this exhibition was made', // @translate
     ];
 
-    /** The block layout name Omeka stores on each block (the invokable). */
-    const LAYOUT = 'albaniSermons';
+    /**
+     * Not a section: a summary card for each other page of the exhibition,
+     * which makes the block a landing page. Listed first in the form; the
+     * JS knows it as `OVERVIEW`.
+     */
+    const OVERVIEW = 'overview';
+
+    /**
+     * The layout names a stored block may carry: the module registers
+     * `iwac-albaniSermons` and keeps the bare name as an alias for blocks
+     * saved before the rename (config/module.config.php). v2.7.0 compared
+     * against the bare name alone, so no page ever found another.
+     */
+    const LAYOUTS = ['iwac-albaniSermons', 'albaniSermons'];
 
     public function form(PhpRenderer $view, SiteRepresentation $site,
         ?SitePageRepresentation $page = null, ?SitePageBlockRepresentation $block = null)
     {
-        $options = [];
+        $options = [self::OVERVIEW => $view->translate('A summary of each page (for a landing page)')]; // @translate
         foreach (self::SECTIONS as $key => $label) {
             $options[$key] = $view->translate($label);
         }
@@ -61,8 +74,9 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         $select->setLabel('Sections'); // @translate
         $select->setOption('info', 'Which sections this block shows. Leave all unticked to show the whole '
             . 'exhibition. To spread it over sub-pages, add this block to each page with the sections that '
-            . 'page should show: the contents and the links between pages follow by themselves. The '
-            . 'introduction and the figures appear with "The recordings".'); // @translate
+            . 'page should show: the contents and the links between pages follow by themselves. For a '
+            . 'landing page, tick "A summary of each page": it shows the introduction, the figures and a '
+            . 'card for every other page.'); // @translate
         $select->setValueOptions($options);
         // A saved block that ticked everything reads back as "all", so the
         // form shows what is stored rather than an equivalent.
@@ -75,8 +89,9 @@ class AlbaniSermons extends AbstractIwacBlockLayout
     }
 
     /**
-     * The sections a block shows, in page order, with keys the JS no longer
-     * knows dropped. An empty list means every section.
+     * What a block shows, in page order — `overview` first when ticked, then
+     * its sections — with keys the JS no longer knows dropped. An empty list
+     * means every section (nothing ticked, or every section and no summary).
      *
      * @return string[]
      */
@@ -85,7 +100,11 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         $value = $block && method_exists($block, 'dataValue') ? $block->dataValue('sections', []) : [];
         $value = is_array($value) ? array_map('strval', $value) : [];
         $keys = array_values(array_intersect(array_keys(self::SECTIONS), $value));
-        return count($keys) === count(self::SECTIONS) ? [] : $keys;
+        $overview = in_array(self::OVERVIEW, $value, true);
+        if (!$overview && count($keys) === count(self::SECTIONS)) {
+            return [];
+        }
+        return $overview ? array_merge([self::OVERVIEW], $keys) : $keys;
     }
 
     /**
@@ -102,14 +121,16 @@ class AlbaniSermons extends AbstractIwacBlockLayout
      */
     public static function pageMap(array $pages): array
     {
-        $order = array_flip(array_keys(self::SECTIONS));
+        // The summary sorts first: a landing page opens the exhibition.
+        $known = array_merge([self::OVERVIEW], array_keys(self::SECTIONS));
+        $order = array_flip($known);
         $out = [];
         foreach ($pages as $page) {
             $keys = [];
             foreach ($page['sections'] as $blockSections) {
                 $keys = array_merge($keys, $blockSections === [] ? array_keys(self::SECTIONS) : $blockSections);
             }
-            $keys = array_values(array_intersect(array_keys(self::SECTIONS), $keys));
+            $keys = array_values(array_intersect($known, $keys));
             if ($keys === []) {
                 continue;
             }
@@ -155,7 +176,7 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         foreach ($pages as $page) {
             $sections = [];
             foreach ($page->blocks() as $other) {
-                if ($other->layout() === self::LAYOUT) {
+                if (in_array($other->layout(), self::LAYOUTS, true)) {
                     $sections[] = self::sectionsOf($other);
                 }
             }

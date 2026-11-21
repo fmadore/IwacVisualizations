@@ -84,17 +84,22 @@
         // ?sections=youth,politics,overlap stands in for a block whose
         // Sections setting names those, on a site that spreads the
         // exhibition over four pages (what AlbaniSermons::pageMap hands the
-        // template); the current page is the one showing those sections.
+        // template); the current page is the one showing those sections. The
+        // first page is a landing page: the summary of each page, and the
+        // recordings (?sections=overview,corpus).
         if (fixtureParams.get('sections')) {
             const block = document.querySelector('.iwac-vis-albani');
             const sections = fixtureParams.get('sections');
             block.dataset.sections = sections;
             const pages = [
-                { url: '/s/iwac/page/albani', title: 'Albani Zaria’s sermons', sections: ['corpus'] },
+                { url: '/s/iwac/page/albani', title: 'Albani Zaria’s sermons', sections: ['overview', 'corpus'] },
                 { url: '/s/iwac/page/albani-vocabulary', title: 'Vocabulary', sections: ['vocabulary', 'keyness'] },
                 { url: '/s/iwac/page/albani-themes', title: 'Youth and politics', sections: ['youth', 'politics', 'overlap'] },
                 { url: '/s/iwac/page/albani-method', title: 'Method', sections: ['method'] },
-            ].map((p) => Object.assign(p, { current: p.sections.join(',') === sections }));
+            ];
+            // ?sections=overview: the same landing page, without the recordings.
+            if (sections === 'overview') pages[0].sections = ['overview'];
+            pages.forEach((p) => { p.current = p.sections.join(',') === sections; });
             block.dataset.pages = JSON.stringify(pages);
         }
     </script>

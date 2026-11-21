@@ -558,6 +558,26 @@ namespace {
     check(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::pageMap([
         ['url' => '/p/x', 'title' => 'X', 'current' => false, 'sections' => [['nope']]],
     ]) === [], 'albani: a page whose blocks name nothing known is dropped');
+    // The landing page's summary: read first, never mistaken for "all",
+    // and sorted ahead of every section; both stored layout names count.
+    check($sectionsOf($albaniBlock->set(['corpus', 'overview'])) === ['overview', 'corpus'],
+        'albani: the summary is read first');
+    check($sectionsOf($albaniBlock->set(['overview'])) === ['overview'],
+        'albani: a summary alone is a landing page, not the whole exhibition');
+    check($sectionsOf($albaniBlock->set(array_merge(['overview'], array_keys(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::SECTIONS))))[0] === 'overview',
+        'albani: every section plus the summary keeps the summary');
+    $albaniLanding = \IwacVisualizations\Site\BlockLayout\AlbaniSermons::pageMap([
+        ['url' => '/p/vocab', 'title' => 'V', 'current' => false, 'sections' => [['vocabulary']]],
+        ['url' => '/p/land', 'title' => 'L', 'current' => true, 'sections' => [['overview', 'corpus']]],
+    ]);
+    check(array_column($albaniLanding, 'url') === ['/p/land', '/p/vocab'] && $albaniLanding[0]['sections'] === ['overview', 'corpus'],
+        'albani: the landing page opens the exhibition');
+    check(\IwacVisualizations\Site\BlockLayout\AlbaniSermons::LAYOUTS === ['iwac-albaniSermons', 'albaniSermons'],
+        'albani: both stored layout names are matched (v2.7.0 matched only the alias)');
+    $albaniConfig = (string) file_get_contents($root . '/config/module.config.php');
+    check(strpos($albaniConfig, "'albaniSermons' => Site\BlockLayout\AlbaniSermons::class") !== false
+        && strpos($albaniConfig, "\$name = 'iwac-' . \$legacy;") !== false,
+        'albani: the registered layout names changed; update AlbaniSermons::LAYOUTS');
 
     // Pipeline explainer: every stage a preset names is a drawing its Svelte
     // component draws, every string reaches the translator, and a saved
