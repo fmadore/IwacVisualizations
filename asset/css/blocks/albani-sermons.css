@@ -706,17 +706,17 @@
     text-decoration-color: currentColor;
 }
 
-/*  The landing page, set like a broadsheet's front page: the archive at a
+/*  The landing page, set like a broadsheet's front page: the collection at a
  *  glance under the figures, then the chapters as an index of ruled
  *  columns — a large serif numeral, the title, one sentence, what is
  *  inside, and the way in pinned to the foot so the row lines up. */
 
-/*  The archive at a glance: one bar per recording, height = running time. */
-.iwac-vis-albani__archive {
+/*  The collection at a glance: one bar per recording, height = running time. */
+.iwac-vis-albani__glance {
     margin: var(--space-6, 1.5rem) 0 0;
 }
 
-.iwac-vis-albani__archive-title {
+.iwac-vis-albani__glance-title {
     margin: 0 0 var(--space-3, 0.75rem);
     font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
@@ -725,18 +725,18 @@
     color: var(--muted, #66696e);
 }
 
-.iwac-vis-albani__archive-plot {
+.iwac-vis-albani__glance-plot {
     display: flex;
     gap: var(--space-4, 1rem);
     align-items: flex-end;
 }
 
-.iwac-vis-albani__archive-run {
-    flex: var(--iwac-vis-archive-n, 1) 1 0;
+.iwac-vis-albani__glance-run {
+    flex: var(--iwac-vis-glance-n, 1) 1 0;
     min-width: 0;
 }
 
-.iwac-vis-albani__archive-bars {
+.iwac-vis-albani__glance-bars {
     display: flex;
     align-items: flex-end;
     gap: 2px;
@@ -744,26 +744,26 @@
     border-bottom: 1px solid var(--border-strong, #aeb1b7);
 }
 
-.iwac-vis-albani__archive-bar {
+.iwac-vis-albani__glance-bar {
     flex: 1 1 0;
     min-width: 2px;
-    height: var(--iwac-vis-archive-h, 50%);
+    height: var(--iwac-vis-glance-h, 50%);
     background: var(--primary, #18298d);
 }
 
-.iwac-vis-albani__archive-bar.is-legacy {
+.iwac-vis-albani__glance-bar.is-legacy {
     background: var(--muted, #66696e);
 }
 
 /*  Not transcribed: an outline, so it reads as "not yet" and survives
  *  forced colours, where fills disappear but borders stay. */
-.iwac-vis-albani__archive-bar.is-untranscribed {
+.iwac-vis-albani__glance-bar.is-untranscribed {
     background: transparent;
     border: 1px solid var(--muted, #66696e);
     border-bottom: 0;
 }
 
-.iwac-vis-albani__archive-axis {
+.iwac-vis-albani__glance-axis {
     display: flex;
     justify-content: space-between;
     margin-top: var(--space-1, 0.25rem);
@@ -772,15 +772,15 @@
     color: var(--muted, #66696e);
 }
 
-.iwac-vis-albani__archive-run--undated .iwac-vis-albani__archive-axis {
+.iwac-vis-albani__glance-run--undated .iwac-vis-albani__glance-axis {
     justify-content: center;
 }
 
-.iwac-vis-albani__archive-tick {
+.iwac-vis-albani__glance-tick {
     white-space: nowrap;
 }
 
-.iwac-vis-albani__archive-key {
+.iwac-vis-albani__glance-key {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-1, 0.25rem) var(--space-4, 1rem);
@@ -791,28 +791,28 @@
     color: var(--muted, #66696e);
 }
 
-.iwac-vis-albani__archive-key-item {
+.iwac-vis-albani__glance-key-item {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2, 0.5rem);
 }
 
-.iwac-vis-albani__archive-swatch {
+.iwac-vis-albani__glance-swatch {
     width: 0.75rem;
     height: 0.75rem;
     background: var(--primary, #18298d);
 }
 
-.iwac-vis-albani__archive-key-item.is-legacy .iwac-vis-albani__archive-swatch {
+.iwac-vis-albani__glance-key-item.is-legacy .iwac-vis-albani__glance-swatch {
     background: var(--muted, #66696e);
 }
 
-.iwac-vis-albani__archive-key-item.is-untranscribed .iwac-vis-albani__archive-swatch {
+.iwac-vis-albani__glance-key-item.is-untranscribed .iwac-vis-albani__glance-swatch {
     background: transparent;
     border: 1px solid var(--muted, #66696e);
 }
 
-.iwac-vis-albani__archive-note {
+.iwac-vis-albani__glance-note {
     margin: var(--space-1, 0.25rem) 0 0;
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);

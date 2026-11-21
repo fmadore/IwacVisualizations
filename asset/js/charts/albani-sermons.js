@@ -38,7 +38,7 @@
  * made" link and the previous/next links at its foot reach the other
  * pages, carrying the reader's `albani.*` choices. A block whose setting
  * includes `overview` is the landing page and needs no other page: the
- * introduction and figures, the archive at a glance, and a card per chapter
+ * introduction and figures, the collection at a glance, and a card per chapter
  * (CHAPTERS); `?albani.chapter=<key>` opens one chapter in the same block. The introduction also goes with the recordings
  * section; the badges go on every page, the switches wherever a section is.
  *
@@ -240,21 +240,21 @@
     };
 
     /** The transcription status of a recording, as a class and a label. */
-    var STRIP_STATUS = {
+    var GLANCE_STATUS = {
         analysed: { cls: 'is-analysed', label: 'albani_status_analysed' },
         legacy: { cls: 'is-legacy', label: 'albani_status_legacy_short' },
         untranscribed: { cls: 'is-untranscribed', label: 'albani_status_none' }
     };
 
     /**
-     * The archive at a glance, under the landing page's figures: one bar per
+     * The collection at a glance, under the landing page's figures: one bar per
      * recording, dated ones in date order and the undated after a gap, each
      * as tall as it is long and shaded by how far its transcript has got.
      * Read from metadata.json alone, drawn as plain elements (no chart
      * library on the landing page). A picture with one summary label; the
      * recordings chapter holds the table a screen reader can walk.
      */
-    function archiveStrip(root, metadata) {
+    function collectionGlance(root, metadata) {
         var recordings = (metadata.recordings || []).filter(function (r) { return r && r.dur > 0; });
         if (!recordings.length) return;
         var dated = recordings.filter(function (r) { return r.d; })
@@ -264,49 +264,49 @@
 
         var first = dated.length ? String(dated[0].y || dated[0].d).slice(0, 4) : '';
         var last = dated.length ? String(dated[dated.length - 1].y || dated[dated.length - 1].d).slice(0, 4) : '';
-        var figure = P.el('figure', 'iwac-vis-albani__archive');
-        figure.appendChild(P.el('figcaption', 'iwac-vis-albani__archive-title', P.t('albani_strip_title')));
-        var plot = P.el('div', 'iwac-vis-albani__archive-plot');
+        var figure = P.el('figure', 'iwac-vis-albani__glance');
+        figure.appendChild(P.el('figcaption', 'iwac-vis-albani__glance-title', P.t('albani_glance_title')));
+        var plot = P.el('div', 'iwac-vis-albani__glance-plot');
         plot.setAttribute('role', 'img');
-        plot.setAttribute('aria-label', P.t('albani_strip_label', {
+        plot.setAttribute('aria-label', P.t('albani_glance_label', {
             count: recordings.length, first: first, last: last
         }));
         function bar(r) {
-            var status = STRIP_STATUS[r.st] || STRIP_STATUS.untranscribed;
-            var el = P.el('span', 'iwac-vis-albani__archive-bar ' + status.cls);
-            el.style.setProperty('--iwac-vis-archive-h', Math.max(6, Math.round(100 * r.dur / longest)) + '%');
+            var status = GLANCE_STATUS[r.st] || GLANCE_STATUS.untranscribed;
+            var el = P.el('span', 'iwac-vis-albani__glance-bar ' + status.cls);
+            el.style.setProperty('--iwac-vis-glance-h', Math.max(6, Math.round(100 * r.dur / longest)) + '%');
             el.title = (r.t || '') + ' · ' + (r.d ? (P.formatDate ? P.formatDate(r.d) : r.d) : P.t('albani_undated'))
                 + ' · ' + P.formatDuration(r.dur) + ' · ' + P.t(status.label);
             return el;
         }
         // A run of bars over its own axis, as wide as it has bars.
         function run(list, labels, cls) {
-            var box = P.el('div', 'iwac-vis-albani__archive-run' + (cls ? ' ' + cls : ''));
-            box.style.setProperty('--iwac-vis-archive-n', String(list.length));
-            var bars = P.el('div', 'iwac-vis-albani__archive-bars');
+            var box = P.el('div', 'iwac-vis-albani__glance-run' + (cls ? ' ' + cls : ''));
+            box.style.setProperty('--iwac-vis-glance-n', String(list.length));
+            var bars = P.el('div', 'iwac-vis-albani__glance-bars');
             list.forEach(function (r) { bars.appendChild(bar(r)); });
             box.appendChild(bars);
-            var axis = P.el('div', 'iwac-vis-albani__archive-axis');
+            var axis = P.el('div', 'iwac-vis-albani__glance-axis');
             axis.setAttribute('aria-hidden', 'true');
-            labels.forEach(function (text) { axis.appendChild(P.el('span', 'iwac-vis-albani__archive-tick', text)); });
+            labels.forEach(function (text) { axis.appendChild(P.el('span', 'iwac-vis-albani__glance-tick', text)); });
             box.appendChild(axis);
             return box;
         }
         if (dated.length) plot.appendChild(run(dated, first === last ? [first] : [first, last]));
-        if (undated.length) plot.appendChild(run(undated, [P.t('albani_undated')], 'iwac-vis-albani__archive-run--undated'));
+        if (undated.length) plot.appendChild(run(undated, [P.t('albani_undated')], 'iwac-vis-albani__glance-run--undated'));
         figure.appendChild(plot);
 
         // The key: only the statuses present.
-        var key = P.el('ul', 'iwac-vis-albani__archive-key');
-        Object.keys(STRIP_STATUS).forEach(function (st) {
-            if (!recordings.some(function (r) { return (STRIP_STATUS[r.st] ? r.st : 'untranscribed') === st; })) return;
-            var li = P.el('li', 'iwac-vis-albani__archive-key-item ' + STRIP_STATUS[st].cls);
-            li.appendChild(P.el('span', 'iwac-vis-albani__archive-swatch'));
-            li.appendChild(document.createTextNode(P.t(STRIP_STATUS[st].label)));
+        var key = P.el('ul', 'iwac-vis-albani__glance-key');
+        Object.keys(GLANCE_STATUS).forEach(function (st) {
+            if (!recordings.some(function (r) { return (GLANCE_STATUS[r.st] ? r.st : 'untranscribed') === st; })) return;
+            var li = P.el('li', 'iwac-vis-albani__glance-key-item ' + GLANCE_STATUS[st].cls);
+            li.appendChild(P.el('span', 'iwac-vis-albani__glance-swatch'));
+            li.appendChild(document.createTextNode(P.t(GLANCE_STATUS[st].label)));
             key.appendChild(li);
         });
         figure.appendChild(key);
-        figure.appendChild(P.el('p', 'iwac-vis-albani__archive-note', P.t('albani_strip_note')));
+        figure.appendChild(P.el('p', 'iwac-vis-albani__glance-note', P.t('albani_glance_note')));
         root.appendChild(figure);
     }
 
@@ -745,7 +745,7 @@
             controls: view.shown.length > 0
         });
         if (!view.chapter) {
-            archiveStrip(root, metadata);
+            collectionGlance(root, metadata);
             chapterCards(root);
         }
         view.shown.forEach(section);

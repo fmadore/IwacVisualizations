@@ -1,7 +1,7 @@
 /**
  * IWAC Visualizations — Albani Zaria sermons, section 1: the corpus.
  *
- * What the archive holds before anything is counted: every recording on a
+ * What the collection holds before anything is counted: every recording on a
  * date × running-time axis (status by colour, the undated ones counted
  * beside it), then the full listing. This is where the block says plainly
  * that it is one preacher's corpus, and how much of it is readable today.

@@ -136,9 +136,9 @@ test('the landing page sums up every chapter, with no other page to make', async
     // Each card has its number, its sentence and a way in naming the chapter.
     await expect(page.locator('.iwac-vis-albani__card-number').first()).toHaveText('01');
     await expect(page.locator('.iwac-vis-albani__card-more').nth(3)).toHaveAttribute('aria-label', 'Read the chapter: Youth and politics');
-    // The archive at a glance: one bar per recording, the undated after the dated.
-    await expect(page.locator('.iwac-vis-albani__archive-bar')).toHaveCount(4);
-    await expect(page.locator('.iwac-vis-albani__archive-plot')).toHaveAttribute('aria-label', /^4 recordings from 2008 to 2013/);
+    // The collection at a glance: one bar per recording, the undated after the dated.
+    await expect(page.locator('.iwac-vis-albani__glance-bar')).toHaveCount(4);
+    await expect(page.locator('.iwac-vis-albani__glance-plot')).toHaveAttribute('aria-label', /^4 recordings, dated 2008 to 2013/);
     expect(target(await page.locator('.iwac-vis-albani__jump').getAttribute('href'))).toBe('method#albani-method');
     // The summary itself reads only the metadata.
     const fetched = await page.evaluate(() => window.__fetched.map((u) => u.split('/').pop()));
