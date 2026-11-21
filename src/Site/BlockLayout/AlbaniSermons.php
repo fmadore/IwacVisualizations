@@ -139,8 +139,14 @@ class AlbaniSermons extends AbstractIwacBlockLayout
         if (self::sectionsOf($block) === []) {
             return [];
         }
+        // Omeka 4.2.1 documents page() as returning the site; it returns the
+        // page. Checked, so PHPStan reads the real type and a future core
+        // that changes it degrades to same-page links instead of a fatal.
+        $current = $block->page();
+        if (!$current instanceof SitePageRepresentation) {
+            return [];
+        }
         try {
-            $current = $block->page();
             $pages = $view->api()->search('site_pages', ['site_id' => $current->site()->id()])->getContent();
         } catch (\Throwable $e) {
             return [];
