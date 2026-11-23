@@ -57,6 +57,25 @@
     }
 
     /**
+     * The dataset's `thumbnail` is Omeka's `medium` derivative: 200px on its
+     * long side. The card is at least 220 CSS px wide and a full phone width
+     * in one column, so on any screen — and doubly on a 2-3x one — the
+     * browser upscaled a 200px scan and the newsprint went to mush. Offer the
+     * `large` derivative (800px constraint) beside it and let the browser
+     * pick; `medium` stays the `src`, for the odd URL that is not a
+     * derivative path and for browsers without srcset.
+     */
+    function setThumbSources(img, url) {
+        var marker = '/files/medium/';
+        if (url.indexOf(marker) === -1) return;
+        var large = url.replace(marker, '/files/large/');
+        img.srcset = url + ' 200w, ' + large + ' 800w';
+        // Below sm (600 − 1, on the theme's published scale) the grid is one
+        // or two columns of a phone; above it a card is ~220-320px wide.
+        img.sizes = '(max-width: 599px) 100vw, 320px';
+    }
+
+    /**
      * Build one card. `badge` is rendered as-is inside the thumbnail's
      * top-right overlay and carries variant-specific CSS (orange accent
      * for similarity, blue accent for shared tags). `metaParts` overrides
@@ -73,6 +92,8 @@
             var img = document.createElement('img');
             img.loading = 'lazy';
             img.alt = '';
+            // srcset before src, so the browser never starts the 200px fetch.
+            setThumbSources(img, article.thumbnail);
             img.src = article.thumbnail;
             img.addEventListener('error', function () {
                 img.replaceWith(buildThumbPlaceholder());
