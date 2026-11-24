@@ -2,18 +2,21 @@
 
 The **IWAC Timeline** page block replaces the Knight Lab embeds tracked in
 [issue #5](https://github.com/fmadore/IwacVisualizations/issues/5). Its sources are
-four CSV files committed under `content/timelines/`, English and French versions
-of two exhibits. They began as the Knight Lab Google Sheets; since v1.83.0 those
+CSV files committed under `content/timelines/`, English and French versions
+of each exhibit. The first two began as the Knight Lab Google Sheets; since v1.83.0 those
 sheets are no longer read by anything and can be retired.
 
 | Exhibit | Slug | English page | French page | Dated events per locale |
 | --- | --- | --- | --- | --- |
 | Hajj in Burkina Faso | `hajj-burkina` | `westafrica/hajj-bf` | `afrique_ouest/hadj-bf` | 14 |
 | Student Islamic activism | `aeemb-burkina` | `westafrica/student-activism-bf` | `afrique_ouest/militantisme-islamique-etudiant` | 11 |
+| *Intégrisme* in Côte d’Ivoire | `integrisme-cote-d-ivoire` | `westafrica/integrisme-cote-d-ivoire` | `afrique_ouest/integrisme-cote-d-ivoire` | 21 |
 
 Each bundle also has an undated introduction. `config/timelines.json` names each
-source file (`content/timelines/<slug>.<locale>.csv`), the page it belongs on, and
-the old sheet ID the migration below recognises in a Knight Lab iframe.
+source file (`content/timelines/<slug>.<locale>.csv`), the page it belongs on, and,
+for the first two, the old sheet ID the migration below recognises in a Knight Lab
+iframe. A timeline written natively has no such ID: the migration skips it, and an
+editor adds its block to the page by hand.
 
 ## Edit an exhibit
 
@@ -141,7 +144,13 @@ The axis under the event draws a card per event, as TimelineJS did: a square
 thumbnail, the date and the headline, its start edge on the event's date (the
 middle of a year or month, the first day of a range), with a range's line
 running on to its end. Overlapping cards take the next lane down, and the
-track scrolls sideways rather than stacking lanes. The thumbnail is Omeka's
+track scrolls sideways rather than stacking lanes. The scale is not linear
+(`timelineModel.scale`): each stretch between two cards gets a fixed share of
+the track, about half a card, and the rest is divided by the square root of
+each stretch's length. Crowded years get room, so neighbours alternate between
+two lanes, and an empty decade shrinks without vanishing. Year labels follow
+that scale (`timelineModel.ticks`): decades, then fives, then single years where
+they fit, at least 64px apart. The thumbnail is Omeka's
 200px `files/square/` derivative of an item image, else the sheet's **Media
 Thumbnail**, else the image itself; a map or link shows a Lucide icon, an
 event with no media is a text card, and a thumbnail that fails to load leaves

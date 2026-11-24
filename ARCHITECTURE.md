@@ -130,7 +130,9 @@ IwacVisualizations/
 │       ├── aeemb-burkina.en.csv
 │       ├── aeemb-burkina.fr.csv
 │       ├── hajj-burkina.en.csv
-│       └── hajj-burkina.fr.csv
+│       ├── hajj-burkina.fr.csv
+│       ├── integrisme-cote-d-ivoire.en.csv
+│       └── integrisme-cote-d-ivoire.fr.csv
 ├── docs/
 │   ├── images/
 │   │   ├── timeline-dark.png

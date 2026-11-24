@@ -43,6 +43,11 @@ try {
         $config = json_decode(file_get_contents(dirname(__DIR__) . '/config/timelines.json'), true, 512, JSON_THROW_ON_ERROR);
         foreach ($config['timelines'] as $spec) {
             foreach ($spec['sources'] as $locale => $source) {
+                // A timeline written natively (no Knight Lab sheet before it)
+                // has nothing to migrate: its block is placed by hand.
+                if (empty($source['legacySource'])) {
+                    continue;
+                }
                 if (!$catalog->load($spec['slug'], $locale)) {
                     throw new RuntimeException('Pull the new timeline data before migrating: ' . $spec['slug'] . '/' . $locale);
                 }

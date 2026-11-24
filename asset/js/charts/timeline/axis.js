@@ -2,7 +2,9 @@
  * The chronology under the narrative, drawn as TimelineJS draws it: one card
  * per event — its image's thumbnail, its date and its headline — standing on
  * the event's date, in as many lanes as overlapping cards need. A range's
- * line runs on from its card to the end of the period.
+ * line runs on from its card to the end of the period. The scale gives
+ * crowded years room and shortens empty decades (timelineModel.scale), so
+ * the year labels are placed one by one where they fit.
  *
  * The cards are built once; a resize only moves them, so a loaded thumbnail
  * and a focused card survive it.
@@ -93,15 +95,14 @@
             track.style.setProperty('--iwac-vis-timeline-lanes', String(layout.lanes));
             track.style.setProperty('--iwac-vis-timeline-lane', lane + 'px');
             track.querySelectorAll('.iwac-vis-timeline__tick').forEach(function (tick) { tick.remove(); });
-            var firstYear = new Date(layout.min).getUTCFullYear();
-            var lastYear = new Date(layout.max).getUTCFullYear();
-            var step = Math.max(1, Math.ceil((lastYear - firstYear) / (width / 160) / 5) * 5);
-            for (var year = Math.ceil(firstYear / step) * step; year <= lastYear; year += step) {
-                var tick = P.el('span', 'iwac-vis-timeline__tick', String(year));
+            // The scale is not linear (see M.scale), so the labels are not
+            // evenly spaced either: each year that fits is shown.
+            M.ticks(layout, 64).forEach(function (mark) {
+                var tick = P.el('span', 'iwac-vis-timeline__tick', String(mark.year));
                 tick.setAttribute('aria-hidden', 'true');
-                tick.style.left = layout.x(M.bound(String(year), false)) + 'px';
+                tick.style.left = mark.x + 'px';
                 track.appendChild(tick);
-            }
+            });
             layout.positions.forEach(function (position) {
                 var marker = buttons.get(position.id);
                 marker.style.left = position.x + 'px';
