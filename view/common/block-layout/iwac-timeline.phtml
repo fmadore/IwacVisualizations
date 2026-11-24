@@ -18,6 +18,16 @@ $sourceList = empty($sources) ? '' : $this->partial('common/timeline-sources', [
     'instance' => $instance,
     'scripts' => $sourceScripts ?? [],
 ]);
+// The scholarship the exhibit recommends, after its sources, as the same cards.
+if (!empty($references)) {
+    $sourceList .= $this->partial('common/timeline-sources', [
+        'sources' => $references,
+        'instance' => $instance,
+        'scripts' => $sourceScripts ?? [],
+        'heading' => 'Scientific references', // @translate
+        'key' => 'references',
+    ]);
+}
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'iwac-timeline',

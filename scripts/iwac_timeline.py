@@ -244,6 +244,10 @@ def validate_timeline(payload: dict) -> None:
             for key in ("captionHtml", "creditHtml"):
                 if not isinstance(media.get(key), str) or CLEANER.clean(media[key]) != media[key]:
                     raise ValueError("Unsafe timeline caption/credit")
+    references = payload.get("references", [])
+    if (not isinstance(references, list) or any(type(i) is not int or i <= 0 for i in references)
+            or len(set(references)) != len(references)):
+        raise ValueError("Timeline references must be distinct positive item IDs")
     source = payload.get("metadata", {}).get("source", {})
     if (not re.fullmatch(r"[a-f0-9]{64}", source.get("sha256", ""))
             or not SOURCE_PATH.fullmatch(source.get("path", ""))):

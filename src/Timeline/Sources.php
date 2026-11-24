@@ -72,6 +72,26 @@ final class Sources
     }
 
     /**
+     * The scholarship the exhibit recommends, as authored (`references` in
+     * the bundle, from config/timelines.json): positive item ids, each once,
+     * minus any the events' captions already cite — a work that is a source
+     * is listed with the sources.
+     *
+     * @param array{events?: array[], references?: mixed} $timeline
+     * @return int[]
+     */
+    public static function referenceIds(array $timeline): array
+    {
+        $ids = [];
+        foreach (is_array($timeline['references'] ?? null) ? $timeline['references'] : [] as $id) {
+            if (is_int($id) && $id > 0) {
+                $ids[$id] = true;
+            }
+        }
+        return array_keys(array_diff_key($ids, self::itemIds($timeline)));
+    }
+
+    /**
      * One card per cited item the API returns — a private or deleted item
      * simply drops out — ordered by the item's own date (a dateless item
      * last), then by its first citation.
@@ -85,7 +105,29 @@ final class Sources
      */
     public static function cards(array $timeline, object $api, string $locale, ?callable $language = null): array
     {
-        $cited = self::itemIds($timeline);
+        return self::build(self::itemIds($timeline), $api, $locale, $language);
+    }
+
+    /**
+     * The scientific references under the sources, as cards of the same
+     * shape (`events` is empty: no event cites them). A reference names its
+     * authors in `bibo:authorList`, its journal or press in
+     * `dcterms:publisher`.
+     *
+     * @param array{events?: array[], references?: mixed} $timeline
+     * @return array<int, array{id: int, url: string, title: string, lang: string, thumbnail: string, creators: string[], publisher: string, date: string, events: string[]}>
+     */
+    public static function referenceCards(array $timeline, object $api, string $locale, ?callable $language = null): array
+    {
+        return self::build(array_fill_keys(self::referenceIds($timeline), []), $api, $locale, $language);
+    }
+
+    /**
+     * @param array<int, string[]> $cited item id => citing event ids, in order
+     * @return array<int, array{id: int, url: string, title: string, lang: string, thumbnail: string, creators: string[], publisher: string, date: string, events: string[]}>
+     */
+    private static function build(array $cited, object $api, string $locale, ?callable $language): array
+    {
         if (!$cited) {
             return [];
         }
@@ -97,6 +139,7 @@ final class Sources
                 continue;
             }
             $date = ItemValue::text($item->value('dcterms:date'));
+            $creators = self::names($item, 'dcterms:creator') ?: self::names($item, 'bibo:authorList');
             $cards[] = [
                 'id' => $id,
                 'url' => (string) $item->url(),
@@ -105,12 +148,7 @@ final class Sources
                 // `large` (800px): a card is 15rem or wider, and a press page
                 // keeps its own proportions in the masonry wall.
                 'thumbnail' => (string) ($item->thumbnailDisplayUrl('large') ?? ''),
-                'creators' => array_values(array_filter(array_map(
-                    [ItemValue::class, 'text'],
-                    (array) $item->value('dcterms:creator', ['all' => true])
-                ), static function (string $name): bool {
-                    return $name !== '';
-                })),
+                'creators' => $creators,
                 'publisher' => ItemValue::text($item->value('dcterms:publisher')),
                 'date' => self::dateLabel($date, $locale),
                 'sortDate' => $date,
@@ -126,6 +164,17 @@ final class Sources
             unset($card['sortDate']);
             return $card;
         }, $cards);
+    }
+
+    /** @return string[] the term's non-empty values, as text */
+    private static function names(object $item, string $term): array
+    {
+        return array_values(array_filter(array_map(
+            [ItemValue::class, 'text'],
+            (array) $item->value($term, ['all' => true])
+        ), static function (string $name): bool {
+            return $name !== '';
+        }));
     }
 
     /** A bare language subtag ("fr", "dyu"), or '' for anything else. */

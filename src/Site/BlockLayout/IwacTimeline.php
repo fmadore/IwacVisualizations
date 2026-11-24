@@ -128,8 +128,9 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
 
     /**
      * The source list under the timeline: the items the events' captions
-     * cite, read through the API (so a private item stays out), and the
-     * site theme's masonry scripts when it ships them.
+     * cite, read through the API (so a private item stays out), then the
+     * scientific references the exhibit lists, and the site theme's masonry
+     * scripts when it ships them.
      */
     private static function sourceVariables(PhpRenderer $view, array $timeline): array
     {
@@ -140,6 +141,7 @@ class IwacTimeline extends AbstractIwacBlockLayout implements ConfiguredEmbed
         $site = $view->currentSite();
         return [
             'sources' => Sources::cards($timeline, $view->api(), $timeline['locale'], $language),
+            'references' => Sources::referenceCards($timeline, $view->api(), $timeline['locale'], $language),
             'sourceScripts' => Sources::themeScripts($site && defined('OMEKA_PATH') ? OMEKA_PATH . '/themes/' . $site->theme() : null),
         ];
     }

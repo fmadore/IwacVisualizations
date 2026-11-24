@@ -98,5 +98,26 @@ class TimelineTests(unittest.TestCase):
             self.assertTrue(check_timelines(root))
 
 
+    def test_references_reach_every_locale_and_are_validated(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "timelines"
+            sources = root / "content/timelines"
+            sources.mkdir(parents=True)
+            for locale in ["en", "fr"]:
+                (sources / f"test.{locale}.csv").write_text(sheet([INTRO, FIRST, SECOND]))
+            config = {"timelines": [{"slug": "test", "references": [5037, 4983], "sources": {
+                locale: {"csv": f"content/timelines/test.{locale}.csv"} for locale in ["en", "fr"]}}]}
+            generate(config, output, root=root)
+            for locale in ["en", "fr"]:
+                bundle = json.loads((output / f"test.{locale}.json").read_text())
+                self.assertEqual(bundle["references"], [5037, 4983])
+            self.assertEqual(check_timelines(root), [])
+            for bad in ([5037, 5037], [0], ["5037"], [True], "5037", [{"id": 1}]):
+                config["timelines"][0]["references"] = bad
+                with self.assertRaises(ValueError, msg=repr(bad)):
+                    generate(config, output, root=root)
+
+
 if __name__ == '__main__':
     unittest.main()

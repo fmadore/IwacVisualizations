@@ -95,6 +95,33 @@ $dateless = Sources::cards(['events' => [$image('a', 'u', '<a href="https://isla
     $image('b', 'u', '<a href="https://islam.zmo.de/s/w/item/6738">y</a>')]], $api, 'en');
 check(array_column($dateless, 'id') === [6738, 277] && $dateless[0]['date'] === 'April 1962',
     'a dateless source must come last');
+// Scientific references: authored item ids, minus any a caption already cites.
+$referenceTimeline = $sourceTimeline + ['references' => [5037, 8377, 'x', 0, -2, 5037, 4983, 999, 1234]];
+check(Sources::referenceIds($referenceTimeline) === [5037, 4983, 1234],
+    'references must be distinct positive ids, without the ones the captions cite');
+check(Sources::referenceIds($sourceTimeline) === [] && Sources::referenceIds(['references' => 'x']) === [],
+    'a timeline without a list of references has none');
+$referenceApi = new FakeApi([
+    new FakeItem(5037, "L'érosion de l'autorité musulmane à Ouagadougou", [
+        'dcterms:date' => [new FakeValue('2016')],
+        'dcterms:publisher' => [new FakeValue('Canadian Journal of African Studies')],
+        'bibo:authorList' => [new FakeValue('Adrienne Vanvyve')],
+    ]),
+    new FakeItem(4983, 'Une nation pluraliste?', [
+        'dcterms:date' => [new FakeValue('2009')],
+        'dcterms:creator' => [new FakeValue('Louis Audet Gosselin')],
+        'bibo:authorList' => [new FakeValue('Not used')],
+    ]),
+]);
+$references = Sources::referenceCards($referenceTimeline, $referenceApi, 'en');
+check($referenceApi->queries === [['items', ['id' => [5037, 4983, 1234]]]], 'references must be read in one API search');
+check(array_column($references, 'id') === [4983, 5037], 'references must be ordered by date, a private one dropped');
+check($references[1]['creators'] === ['Adrienne Vanvyve'] && $references[1]['publisher'] === 'Canadian Journal of African Studies'
+    && $references[1]['date'] === '2016' && $references[1]['events'] === [],
+    'a reference names its authors from bibo:authorList and its journal: ' . json_encode($references[1]));
+check($references[0]['creators'] === ['Louis Audet Gosselin'], 'dcterms:creator wins over bibo:authorList when present');
+check(Sources::referenceCards($sourceTimeline, $referenceApi, 'en') === [] && count($referenceApi->queries) === 1,
+    'no references, no API search');
 $themeRoot = sys_get_temp_dir() . '/iwac-timeline-theme-' . getmypid();
 @mkdir($themeRoot . '/asset/js/dist', 0777, true);
 check(Sources::themeScripts(null) === [] && Sources::themeScripts($themeRoot) === [],

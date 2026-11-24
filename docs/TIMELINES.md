@@ -179,6 +179,26 @@ private or deleted item drops out. Cards are ordered by the item's own
 `dcterms:date`, a dateless one last. Titles carry the record's language through
 IWAC-theme's `ResourceLanguage` helper when the site runs that theme.
 
+### Scientific references
+
+After the sources, a **Scientific references** section (*Références
+scientifiques*) lists the scholarship the exhibit recommends, as the same cards
+(authors from `dcterms:creator`, else `bibo:authorList`; journal or press from
+`dcterms:publisher`; year), ordered by date. The list is editorial, not read
+from the sheet: each timeline in `config/timelines.json` carries a
+`references` array of IWAC item IDs, shared by both languages (an item is one
+record on both sites):
+
+```json
+{ "slug": "hajj-burkina", "sources": { … }, "references": [15699, 4966, 5076] }
+```
+
+The importer copies it into every locale's bundle and fails on anything but
+distinct positive integers. An item a caption already cites stays in the
+sources and is left out here; a private or deleted item drops out. A timeline
+with no `references` shows no section. Editing the list is a data change like
+editing a CSV: commit it to `main`, then **Pull latest data** in Omeka.
+
 The markup is IWAC-theme's own: its Media embed block's "Masonry" template and
 the cards `common/block-layout/file.phtml` renders. The theme's stylesheet lays
 the wall out in CSS columns, and the block enqueues the theme's MiniMasonry and

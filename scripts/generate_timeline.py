@@ -26,6 +26,9 @@ def generate(config: dict, output: Path, minify: bool = True, root: Path = ROOT)
             raise ValueError("Invalid or duplicate timeline slug")
         seen.add(slug)
         entry = {"slug": slug, "locales": {}}
+        # Scientific references: IWAC item IDs, shared by every locale (an
+        # item is one record on both sites). validate_timeline checks them.
+        references = spec.get("references", [])
         event_ids = None
         for locale, source in spec["sources"].items():
             # The sources are committed files, never a network read: an edit is
@@ -37,6 +40,7 @@ def generate(config: dict, output: Path, minify: bool = True, root: Path = ROOT)
             if len(raw) > MAX_CSV_BYTES:
                 raise ValueError(f"{path} exceeds 4 MiB")
             payload = parse_csv(raw.decode("utf-8-sig"), slug, locale)
+            payload["references"] = references
             payload["metadata"] = {
                 "generatedAt": index["metadata"]["generatedAt"],
                 "source": {"path": path, "sha256": source_hash(raw)},
