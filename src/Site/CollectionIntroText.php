@@ -29,7 +29,7 @@ final class CollectionIntroText
 {
     const TEXT = [
         'title' => 'The Islam West Africa Collection', // @translate
-        'lede' => 'A digital archive of the press, periodicals, recordings and documents in which Islam and Muslims in West Africa are written about and debated, built at the Leibniz-Zentrum Moderner Orient (ZMO) in Berlin. The chapters below say what it holds, where and when it comes from, and what it speaks of.', // @translate
+        'lede' => 'A digital collection of the press, periodicals, recordings and documents in which Islam and Muslims in West Africa are written about and debated, built at the Leibniz-Zentrum Moderner Orient (ZMO) in Berlin. The chapters below show what it holds, where and when it comes from, and what it covers.', // @translate
     ];
 
     /**
@@ -71,7 +71,7 @@ final class CollectionIntroText
             'id' => 'references',
             'optional' => true,
             'heading' => 'The scholarship it gathers', // @translate
-            'text' => 'Beside its sources, the collection is a bibliography of the scholarship on Islam and Muslims in West Africa: books, journal articles, chapters, theses and reports, each catalogued with its authors, date and type. The bars count them by decade of publication: what the bibliography holds, not all that has been written.', // @translate
+            'text' => 'Beside its sources, the collection includes a bibliography of scholarship on Islam and Muslims in West Africa: books, journal articles, chapters, theses and reports, each catalogued with its authors, date and type. The bars count them by decade of publication: what the bibliography holds, not all that has been written.', // @translate
         ],
     ];
 

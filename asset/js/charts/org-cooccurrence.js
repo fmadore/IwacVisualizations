@@ -55,7 +55,7 @@
             'orgcooc.card_maxpair':  'Paire la plus forte (articles)',
             'orgcooc.card_span':     'Période couverte',
             'orgcooc.matrix_title':  'Mots apparaissant ensemble près de {org}',
-            'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} articles partagés',
+            'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} articles communs',
             'orgcooc.term_total':    '{term}\u00a0: dans {count} articles correspondants',
             'orgcooc.view_record':   'Voir la notice d’autorité'
         });
