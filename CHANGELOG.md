@@ -13,7 +13,7 @@ for how it is put together, and the [consolidated roadmap](https://github.com/fm
 for current maintenance status and decisions. Audit references in older entries
 link to the historical documents preserved in Git.
 
-### Unreleased
+### v2.11.0 — scientific references under the timelines (2026-11-24)
 
 - **Timelines: scientific references under the sources.** A timeline can now list the scholarship it recommends, as a second masonry wall headed *Scientific references* (*Références scientifiques* on the French site) under *Sources*, with the same cards: author(s), journal or press, year. The list is a `references` array of IWAC item IDs per timeline in `config/timelines.json`, shared by both languages and published in the timeline data; a work a caption already cites stays with the sources, and a private item drops out. The Hajj exhibit lists 7 references, the student-activism exhibit 19. Needs this release **and** a data pull: until then the pages look as before.
 - **Timelines: a subtitle instead of a second title.** The heading of each timeline repeated its page title just under the banner. Both exhibits now open on a chronological subtitle: *From the overland road to the organised hajj, 1940–2013* / *De la route terrestre au hadj organisé, 1940–2013*, and *From the first Muslim youth groups to the AEEMB at thirty, 1970–2016* / *Des premiers regroupements de jeunes musulmans aux trente ans de l’AEEMB, 1970–2016*. The Hajj introduction is rewritten in both languages. A data change: it reaches the site with the next data pull.
