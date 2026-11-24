@@ -91,6 +91,14 @@
         'chevron-left': ['m15 18-6-6 6-6'],
         'chevron-right': ['m9 18 6-6-6-6'],
         'chevron-down': ['m6 9 6 6 6-6'],
+        // On This Day's "Random date".
+        shuffle: [
+            'm18 14 4 4-4 4',
+            'm18 2 4 4-4 4',
+            'M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-7.6a4 4 0 0 1 3.3-1.7H22',
+            'M2 6h1.972a4 4 0 0 1 3.6 2.2',
+            'M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45'
+        ],
         // On This Day's stand-in for an unscanned article / periodical issue.
         newspaper: [
             'M15 18h-5',
@@ -108,6 +116,8 @@
         ],
         x: ['M18 6 6 18', 'm6 6 12 12'],
         'arrow-left': ['m12 19-7-7 7-7', 'M19 12H5'],
+        // On This Day's "Read the item →".
+        'arrow-right': ['M5 12h14', 'm12 5 7 7-7 7'],
         // The marker for AI-generated content.
         sparkles: [
             'M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z',

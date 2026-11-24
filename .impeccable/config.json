@@ -47,6 +47,15 @@
         ],
         "createdAt": "2026-11-03T18:09:06.167Z",
         "reason": "Claude: Playwright test fixture, not a design surface; its only spacing is a 4000px offset that keeps the lazy section out of view for embed.spec.js"
+      },
+      {
+        "rule": "monotonous-spacing",
+        "value": "*",
+        "files": [
+          "tests/browser/fixtures/on-this-day.html"
+        ],
+        "createdAt": "2026-11-24T08:05:10.867Z",
+        "reason": "agent triage: browser-test harness page, not shipped UI; the block's real spacing lives in asset/css/blocks/on-this-day.css"
       }
     ]
   }

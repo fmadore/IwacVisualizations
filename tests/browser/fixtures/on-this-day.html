@@ -32,27 +32,76 @@
             set(tokens[theme]);
         })();
 
-        // Today's two day files, served from memory. Rows are
-        // [year, o_id, title, source, type, thumb, excerpt, hijriYear].
+        // Today's two day files, served from memory. Rows are the v2 shape,
+        // [year, o_id, title, source, type, thumb, excerpt, hijriYear,
+        //  country, summaryFr, summaryEn, subjects], with all five types
+        // ('a' article, 'p' periodical, 'v' audiovisual, 'd' document,
+        // 'i' image) and five countries. `?old=1` cuts every row back to the
+        // eight fields a pre-v2 fan-out carries (no country, two types).
         // `?thumbs=1` gives every third row a scan id (the spec routes the
         // image requests); without it no row has one, so the Lighthouse page
         // loads no images.
         const withThumbs = fixtureParams.get('thumbs') === '1';
+        const oldRows = fixtureParams.get('old') === '1';
+        // `?countries=2`: a day from two countries only (no country filter).
+        const COUNTRIES = fixtureParams.get('countries') === '2'
+            ? ['Burkina Faso', 'Togo']
+            : ['Burkina Faso', 'Côte d’Ivoire', 'Bénin', 'Niger', 'Togo'];
+        const SOURCES = ['Sidwaya', 'Fraternité Matin', 'L’Observateur Paalga'];
+        function typeOf(i) {
+            if (i % 5 === 4) return 'p';
+            if (i % 7 === 2) return 'v';
+            if (i % 11 === 5) return 'd';
+            if (i % 13 === 6) return 'i';
+            return 'a';
+        }
+        // `?multi=1` adds three more items in 1986 (the default lead's year),
+        // so the lead has a pager: one with only a French summary, one with
+        // no copy at all, one image with only an excerpt.
+        const multi = fixtureParams.get('multi') === '1';
         function rows(n, offset) {
             const out = [];
             for (let i = 0; i < n; i++) {
                 const year = 1965 + ((i * 7 + offset) % 60);
                 const thumb = withThumbs && i % 3 === 0 ? ('0'.repeat(36) + String(1000 + i)) : '';
-                out.push([year, 5000 + i + offset, 'Article du ' + year + ' sur la vie associative',
-                    i % 2 ? 'Fraternité Matin' : 'Sidwaya', i % 5 === 4 ? 'p' : 'a', thumb,
-                    'Un extrait du texte de ' + year + '.', 1385 + (i % 60)]);
+                const row = [year, 5000 + i + offset, 'Article du ' + year + ' sur la vie associative',
+                    SOURCES[i % 3], typeOf(i), thumb,
+                    'Un extrait du texte de ' + year + '.', 1385 + (i % 60),
+                    COUNTRIES[i % COUNTRIES.length], 'Résumé ' + year + '.', 'Summary ' + year + '.',
+                    [['Tabaski', 900 + i], ['Laïcité', 950 + i], ['Hajj', 0]]];
+                out.push(oldRows ? row.slice(0, 8).map((v, k) => (k === 4 && v !== 'p' ? 'a' : v)) : row);
+            }
+            if (multi && !offset) {
+                out.push([1986, 7001, 'Deuxième article de 1986', 'Sidwaya', 'a', '', '', 1406,
+                    'Burkina Faso', 'Résumé seul.', '', [['Tabaski', 990]]]);
+                out.push([1986, 7002, 'Troisième article de 1986', 'Sidwaya', 'a', '', '', 1406,
+                    'Burkina Faso', '', '', []]);
+                out.push([1986, 7003, 'Une image de 1986', 'Sidwaya', 'i', '', 'Légende de l’image.', 1406,
+                    'Burkina Faso', '', '', []]);
             }
             return out;
         }
+        // The days "Random date" may land on (metadata.json `rich`);
+        // `?nometa=1` answers 404, as a fan-out from before v2 does.
+        window.__rich = ['03-07', '07-04'];
         window.__fetched = [];
-        window.fetch = function (url) {
+        // `?real=1`: the day files come from a local generator run under
+        // asset/data/on-this-day/ (gitignored, never committed) — for looking
+        // at the block with real data; no test uses it.
+        const realFetch = window.fetch.bind(window);
+        const real = fixtureParams.get('real') === '1';
+        window.fetch = function (url, opts) {
             const u = String(url);
             window.__fetched.push(u);
+            if (real && u.indexOf('/on-this-day/') !== -1) {
+                return realFetch('/asset/data/on-this-day/' + u.slice(u.indexOf('/on-this-day/') + 13), opts);
+            }
+            if (u.indexOf('/on-this-day/metadata.json') !== -1) {
+                if (fixtureParams.get('nometa') === '1') {
+                    return Promise.resolve({ ok: false, status: 404, statusText: 'Not Found', json: () => Promise.resolve({}) });
+                }
+                return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ rich: window.__rich }) });
+            }
             if (u.indexOf('/on-this-day/h/') !== -1) {
                 return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ items: rows(14, 3) }) });
             }
@@ -63,6 +112,12 @@
         };
     </script>
     <main>
+        <script>
+            // `?hidden=1`: the block renders while its column has no width
+            // (the spec shows it afterwards) — the spine must still open on
+            // its lead once it is laid out.
+            if (fixtureParams.get('hidden') === '1') document.currentScript.parentNode.style.display = 'none';
+        </script>
         <!-- What block-layout/on-this-day.phtml renders through the shell. -->
         <div class="iwac-vis-block iwac-vis-on-this-day"
              data-base-path=""

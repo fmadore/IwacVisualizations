@@ -381,6 +381,11 @@ def reference_population(sources: dict) -> tuple:
             {str(i) for subset in sources.values() for i in subset["publicOcrIds"]}, by_subset)
 
 
+# On This Day row type flag -> source subset (generate_on_this_day.SOURCES).
+ON_THIS_DAY_TYPES = {"a": "articles", "p": "publications", "v": "audiovisual",
+                     "d": "documents", "i": "images"}
+
+
 def check_references(name: str, payload: Any, sources: dict, population=None) -> List[str]:
     """Validate public-text gates and links against the pinned source population."""
     errors = []
@@ -417,10 +422,11 @@ def check_references(name: str, payload: Any, sources: dict, population=None) ->
             if not isinstance(row, list) or len(row) < 7:
                 errors.append(f"{name}: invalid day row")
             else:
-                subset = {"a": "articles", "p": "publications"}.get(row[4]) if isinstance(row[4], str) else None
+                subset = ON_THIS_DAY_TYPES.get(row[4]) if isinstance(row[4], str) else None
                 if subset is None or str(row[1]) not in by_subset.get(subset, set()):
                     errors.append(f"{name}: unknown calendar item {row[1]}")
-                if row[4] == "a" and row[6] and str(row[1]) not in public_ids:
+                # Articles and documents cut their excerpt from OCR.
+                if row[4] in ("a", "d") and row[6] and str(row[1]) not in public_ids:
                     errors.append(f"{name}: non-public OCR excerpt for {row[1]}")
     if name.startswith("laicite-concordance-") and isinstance(payload, dict):
         items, rows = payload.get("items"), payload.get("rows")

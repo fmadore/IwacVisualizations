@@ -219,6 +219,22 @@
     font-variant-numeric: tabular-nums;
 }
 
+/*  "· value" kept together (edition.js `metaPart`): a wrapped line starts on
+ *  its interpunct rather than ending on one. */
+.iwac-vis-otd-meta__part {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2, 0.5rem);
+    min-width: 0;
+}
+
+/*  The three types v2 added to the day files. iwac-core.css colours only the
+ *  two badges the module drew before (article, periodical issue); the rest
+ *  of the theme's --type-* map is read here, where the almanac draws them. */
+.iwac-vis-otd-panel .iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--type-audiovisual, #007980); }
+.iwac-vis-otd-panel .iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--type-document, #d66800); }
+.iwac-vis-otd-panel .iwac-vis-badge--photograph  { --iwac-vis-badge-dot: var(--type-photograph, #2e9052); }
+
 /*  A pill on every row of a dense list is too much furniture, but the dot's
  *  category colour is the module-wide type signal and must stay on the
  *  theme's --type-* map. Strip the chrome, keep the dot. */
@@ -552,14 +568,16 @@
 }
 
 .iwac-vis-otd-daynav__step,
-.iwac-vis-otd-daynav__today {
+.iwac-vis-otd-daynav__today,
+.iwac-vis-otd-daynav__random {
     gap: var(--space-1, 0.25rem);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     white-space: nowrap;
 }
 
-.iwac-vis-otd-daynav__step > .iwac-vis-icon {
+.iwac-vis-otd-daynav__step > .iwac-vis-icon,
+.iwac-vis-otd-daynav__random > .iwac-vis-icon {
     width: 1.1em;
     height: 1.1em;
 }
@@ -580,24 +598,124 @@
 .iwac-vis-otd-daynav__pick {
     display: flex;
     align-items: center;
-    gap: var(--space-2, 0.5rem);
+    gap: var(--space-1, 0.25rem);
 }
 
+/*  The two selects read as one date; their shared name stays in the
+ *  accessibility tree ("Choose a date"), out of the reader's way. */
 .iwac-vis-otd-daynav__label {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    color: var(--muted, #66696e);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
     white-space: nowrap;
 }
 
-.iwac-vis-otd-daynav__day {
-    width: auto;
-    min-width: 4.5rem;
+/*  One arrow, drawn by the block (shared.js `selectShell`). The selects
+ *  used to rely on the theme's bare `select` rule for both halves of it —
+ *  `appearance: none` and a background-image arrow — with 32 px of end
+ *  padding reserved, which left the day select a 26 px content box. Where
+ *  that rule did not hold (the embed route and the test fixture load no
+ *  theme CSS; an engine on `appearance: base-select` draws its own
+ *  `::picker-icon` inline after the value), the native triangle came back
+ *  and wrapped under the number. So: no native appearance, no picker icon,
+ *  no background arrow, never two lines, and the chevron laid over the end
+ *  padding in currentColor, which the theme's fixed-colour SVG was not —
+ *  it all but vanished in the dark theme. (0,2,1) beats the theme's
+ *  `select` and iwac-core's `select.iwac-vis-control`. */
+.iwac-vis-otd-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
 }
 
-.iwac-vis-otd-daynav__month {
+.iwac-vis-otd-select > select.iwac-vis-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     width: auto;
-    min-width: 8.5rem;
+    min-width: 0;
+    max-width: 100%;
+    background-image: none;
+    padding-inline: var(--space-2, 0.5rem) calc(var(--space-2, 0.5rem) + 1.125rem);
+    white-space: nowrap;
+    text-overflow: clip;
+    cursor: pointer;
+}
+
+.iwac-vis-otd-select > select::picker-icon {
+    display: none;
+}
+
+.iwac-vis-otd-select > .iwac-vis-icon {
+    position: absolute;
+    inset-inline-end: var(--space-2, 0.5rem);
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -0.5rem;
+    color: var(--muted, #66696e);
+    pointer-events: none;
+}
+
+/*  Hijri mode: the major dates, as a quiet line of text controls under the
+ *  navigation — the names the francophone West African press prints. */
+.iwac-vis-otd-feasts {
+    flex-basis: 100%;
+}
+
+.iwac-vis-otd-feasts__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1, 0.25rem) var(--space-4, 1rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-otd-feast {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    height: auto;
+    margin: 0;
+    padding: 0 var(--space-1, 0.25rem);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 400;
+    color: var(--ink-light, #3f4349);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--border, #ced1d6);
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.iwac-vis-otd-feast:hover {
+    background: transparent;
+    color: var(--primary-hover, #132278);
+    text-decoration-color: currentColor;
+}
+
+.iwac-vis-otd-feast:focus-visible {
+    outline: var(--focus-outline, 2px solid #18298d);
+    outline-offset: 2px;
+}
+
+.iwac-vis-otd-feast[aria-current] {
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+    text-decoration-thickness: 2px;
+    text-decoration-color: currentColor;
 }
 
 /*  Spine. One hairline axis from the collection's first decade to this
@@ -605,6 +723,7 @@
  *  date. The dots are the buttons' faces; the decade figures below are
  *  laid out through the same scale, so the two always agree. */
 .iwac-vis-otd-spine {
+    position: relative;
     margin-top: var(--space-5, 1.25rem);
 }
 
@@ -702,11 +821,87 @@
 }
 
 .iwac-vis-otd-tick__dot {
+    display: block;
     width: 7px;
     height: 7px;
     border-radius: var(--radius-full, 9999px);
     background: currentColor;
     transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+/*  Each dot is one item, in its type's colour from the theme's --type-*
+ *  map — the same signal as the type badge's dot. A year stacks its items
+ *  by type, so the colours group. */
+.iwac-vis-otd-tick__dot--article     { background: var(--type-article, #18298d); }
+.iwac-vis-otd-tick__dot--publication { background: var(--type-publication, #85253a); }
+.iwac-vis-otd-tick__dot--audiovisual { background: var(--type-audiovisual, #007980); }
+.iwac-vis-otd-tick__dot--document    { background: var(--type-document, #d66800); }
+.iwac-vis-otd-tick__dot--photograph  { background: var(--type-photograph, #2e9052); }
+
+/*  The types this day holds, and no others: one quiet line under the
+ *  axis, in the meta register. */
+.iwac-vis-otd-spine__legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-1, 0.25rem) var(--space-4, 1rem);
+    margin: var(--space-1, 0.25rem) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    font-variant-caps: all-small-caps;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-otd-spine__key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+}
+
+/*  A year's tooltip: flat, square, hairline, the theme's lifted shadow. It
+ *  is a child of the spine, not of the scroller, so the scroller cannot clip
+ *  it; edition.js places it over the tick and keeps it inside the spine. */
+.iwac-vis-otd-tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: var(--iwac-vis-z-popover, 300);
+    width: max-content;
+    max-width: min(22rem, 100%);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: 0;
+    box-shadow: var(--shadow-lg, 0 4px 12px -4px rgba(9, 11, 15, 0.18), 0 1px 3px 0 rgba(20, 22, 27, 0.06));
+    pointer-events: none;
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: var(--line-height-snug, 1.4);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-otd-tip[hidden] {
+    display: none;
+}
+
+.iwac-vis-otd-tip p {
+    margin: 0;
+}
+
+.iwac-vis-otd-tip__head {
+    font-weight: 600;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-otd-tip__title {
+    margin-top: var(--space-1, 0.25rem);
+    padding-top: var(--space-1, 0.25rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #13161c);
 }
 
 /*  The year itself, shown for the lead and for whatever the pointer or the
@@ -767,12 +962,17 @@
     margin-top: var(--space-4, 1rem);
     padding-top: var(--space-6, 1.5rem);
     border-top: 1px solid var(--border-light, #e2e5e8);
+    /*  A promoted brief scrolls the lead into view: clear the theme's
+     *  sticky masthead. */
+    scroll-margin-top: calc(var(--header-height, 133px) + var(--space-4, 1rem));
 }
 
+/*  4 : 7 — a 4:5 page plate ~420 px wide (~520 tall) at 1280 px. At 5 : 7
+ *  it stood ~600 px, far taller than the text column beside it. */
 .iwac-vis-otd-lead {
     grid-area: 1 / 1;
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     gap: var(--space-8, 2rem);
     align-items: start;
     transition: opacity var(--transition-base, 200ms cubic-bezier(0.25, 1, 0.5, 1));
@@ -789,11 +989,12 @@
 
 /*  The clipping: a large derivative, top-anchored — a cutting is recognised
  *  by its headline, which a centred crop throws away — in a hairline frame.
- *  No shadow, no rotation, no paper texture: the scan is the texture. */
+ *  No shadow, no rotation, no paper texture: the scan is the texture.
+ *  A 4:5 portrait, the shape of a page: square (it was, under a 30rem cap)
+ *  cut a newspaper page off at its fold. */
 .iwac-vis-otd-lead__plate {
     display: block;
-    aspect-ratio: 1 / 1;
-    max-height: 30rem;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     border: 1px solid var(--border, #ced1d6);
     background: var(--surface-sunken, #f4f1ef);
@@ -807,16 +1008,85 @@
     object-position: center top;
 }
 
+/*  A recording's thumbnail is a video frame: YouTube's 4:3 still carries
+ *  the 16:9 picture between two black bars, which a portrait crop kept and
+ *  framed. 16:9, centred, is the picture and nothing else. */
+.iwac-vis-otd-lead[data-type="v"] .iwac-vis-otd-lead__plate {
+    aspect-ratio: 16 / 9;
+}
+
+.iwac-vis-otd-lead[data-type="v"] .iwac-vis-otd-lead__scan {
+    object-position: center;
+}
+
+/*  A photograph keeps its own proportions: cropping one to a page shape
+ *  cuts its subject, which a newspaper page's top-anchored crop does not. */
+.iwac-vis-otd-lead[data-type="i"] .iwac-vis-otd-lead__plate {
+    aspect-ratio: auto;
+}
+
+.iwac-vis-otd-lead[data-type="i"] .iwac-vis-otd-lead__scan {
+    height: auto;
+}
+
+/*  The text column: the kicker (year, "n years ago") with the year's pager
+ *  at its right, then the body — headline, dateline, lede, subjects and the
+ *  call to action — across the whole column. */
 .iwac-vis-otd-lead__text {
     min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4, 1rem);
+    align-items: start;
 }
 
 .iwac-vis-otd-lead__kicker {
+    grid-column: 1;
+    grid-row: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     margin: 0 0 var(--space-3, 0.75rem);
+}
+
+.iwac-vis-otd-lead__text > .iwac-vis-otd-pager {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.iwac-vis-otd-lead__body {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+/*  "1 / 4 in 2011  ‹ ›": quiet — the count in the meta register, two small
+ *  outlined buttons (28 px, past WCAG's 24) from the module's control
+ *  grammar. */
+.iwac-vis-otd-pager {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-otd-pager__btn {
+    width: var(--size-control-xs, 1.75rem);
+    min-height: var(--size-control-xs, 1.75rem);
+    padding: 0;
+}
+
+.iwac-vis-otd-pager__btn > .iwac-vis-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.iwac-vis-otd-pager__count {
+    padding-inline-end: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-otd-lead__year {
@@ -832,6 +1102,11 @@
     color: var(--muted, #66696e);
 }
 
+/*  A round anniversary: the wording says "exactly", the primary marks it. */
+.iwac-vis-otd-lead__ago--exact {
+    color: var(--primary, #18298d);
+}
+
 .iwac-vis-otd-edition .iwac-vis-otd-lead__title {
     margin: 0;
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
@@ -844,6 +1119,16 @@
     letter-spacing: var(--tracking-display, -0.01em);
     font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
     text-wrap: balance;
+}
+
+/*  A headline past 80 characters, one step down (edition.js). */
+.iwac-vis-otd-edition .iwac-vis-otd-lead__title--long {
+    font-size: var(--text-2xl, 1.875rem);
+    line-height: var(--line-height-tight, 1.25);
+}
+
+.iwac-vis-otd-edition .iwac-vis-otd-lead--type .iwac-vis-otd-lead__title--long {
+    font-size: var(--text-3xl, clamp(2.25rem, 1.9rem + 1.8vw, 3rem));
 }
 
 .iwac-vis-otd-lead__title a,
@@ -867,16 +1152,115 @@
     outline-offset: 2px;
 }
 
+/*  Four lines at most: a lede, not the item. The excerpt is the item's own
+ *  opening and the summaries a few sentences, so the clamp ends a sentence
+ *  rather than an article — the record is one click away. */
 .iwac-vis-otd-lead__lede {
     margin: var(--space-4, 1rem) 0 0;
     font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
     font-size: var(--text-lg, 1.1875rem);
     line-height: var(--line-height-relaxed, 1.7);
     color: var(--ink-light, #3f4349);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .iwac-vis-otd-lead__dateline {
+    margin: var(--space-3, 0.75rem) 0 0;
+}
+
+/*  AI provenance, the module's mark (the laïcité dossier's): a sparkle and
+ *  the words, in --ink-light, directly above the text it qualifies. Never
+ *  colour alone, never a box — the theme's `.property--ai` is a ledger row,
+ *  not a callout. */
+.iwac-vis-otd-ai {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
     margin: var(--space-4, 1rem) 0 0;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    line-height: var(--line-height-tight, 1.25);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-otd-ai > .iwac-vis-icon {
+    width: 1em;
+    height: 1em;
+}
+
+.iwac-vis-otd-ai + .iwac-vis-otd-lead__lede {
+    margin-top: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-otd-brief__ai {
+    margin: 0 0 var(--space-1, 0.25rem);
+    font-size: var(--text-2xs, 0.6875rem);
+}
+
+/*  The record's index entries: square, hairline, quiet — links to the
+ *  index records, not filters. (`.iwac-vis-chip` is the module's selected-
+ *  and-removable chip; borrowing its primary wash would say "on".) */
+.iwac-vis-otd-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+    margin: var(--space-4, 1rem) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.iwac-vis-otd-subject {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--size-control-xs, 1.75rem);
+    padding: 0 var(--space-2, 0.5rem);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: 0;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 500;
+    line-height: var(--line-height-tight, 1.25);
+    color: var(--ink-light, #3f4349);
+    text-decoration: none;
+    transition:
+        color        var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+a.iwac-vis-otd-subject:hover {
+    border-color: var(--border-strong, #aeb1b7);
+    color: var(--primary-hover, #132278);
+}
+
+a.iwac-vis-otd-subject:focus-visible {
+    outline: var(--focus-outline, 2px solid #18298d);
+    outline-offset: 2px;
+}
+
+/*  "Read the item →": a quiet text link at the foot of the column. */
+.iwac-vis-otd-lead__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+    margin-top: var(--space-4, 1rem);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--primary-hover, #132278);
+    text-decoration: none;
+}
+
+.iwac-vis-otd-lead__cta:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+}
+
+.iwac-vis-otd-lead__cta > .iwac-vis-icon {
+    width: 1em;
+    height: 1em;
 }
 
 /*  An item with no scan leads in type alone: no image slot, the year as
@@ -886,19 +1270,33 @@
 }
 
 .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text {
-    display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: var(--space-8, 2rem);
-    align-items: start;
+}
+
+/*  With a pager, a third column at the right holds it beside the body. */
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__text:has(> .iwac-vis-otd-pager) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
 .iwac-vis-otd-lead--type .iwac-vis-otd-lead__kicker {
-    grid-row: 1 / span 3;
+    grid-row: 1 / span 2;
+    align-self: stretch;
     flex-direction: column;
+    flex-wrap: nowrap;
     gap: var(--space-2, 0.5rem);
     margin: 0;
     padding-right: var(--space-8, 2rem);
     border-right: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__text > .iwac-vis-otd-pager {
+    grid-column: 3;
+}
+
+.iwac-vis-otd-lead--type .iwac-vis-otd-lead__body {
+    grid-column: 2;
+    grid-row: 1 / span 2;
 }
 
 .iwac-vis-otd-lead--type .iwac-vis-otd-lead__year {
@@ -907,18 +1305,13 @@
 }
 
 .iwac-vis-otd-lead--type .iwac-vis-otd-lead__title {
-    grid-column: 2;
     max-width: 26ch;
     font-size: var(--text-4xl, clamp(2.75rem, 2.3rem + 2.2vw, 3.75rem));
     line-height: 1.08;
 }
 
-.iwac-vis-otd-lead--type .iwac-vis-otd-lead__lede,
-.iwac-vis-otd-lead--type .iwac-vis-otd-lead__dateline {
-    grid-column: 2;
-}
-
 .iwac-vis-otd-lead--type .iwac-vis-otd-lead__lede {
+    max-width: 62ch;
     font-size: var(--text-xl, 1.5rem);
     line-height: var(--line-height-snug, 1.4);
 }
@@ -987,6 +1380,52 @@
     line-clamp: 3;
 }
 
+/*  "Show as lead": a text control in the feast shortcuts' grammar —
+ *  secondary to the headline, which still goes to the record. */
+.iwac-vis-otd-brief__promote {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    height: auto;
+    margin: var(--space-2, 0.5rem) 0 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    font-family: inherit;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--ink-light, #3f4349);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--border, #ced1d6);
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.iwac-vis-otd-brief__promote:hover {
+    background: transparent;
+    color: var(--primary-hover, #132278);
+    text-decoration-color: currentColor;
+}
+
+.iwac-vis-otd-brief__promote:focus-visible {
+    outline: var(--focus-outline, 2px solid #18298d);
+    outline-offset: 2px;
+}
+
+/*  The country filter: the calendar switch's chips, one step smaller, on
+ *  a line of their own under the scale sentence. */
+.iwac-vis-otd-countries {
+    flex-basis: 100%;
+}
+
+.iwac-vis-otd-countries .iwac-vis-facets__btn {
+    min-height: var(--size-control-xs, 1.75rem);
+}
+
 .iwac-vis-otd-panel--edition .iwac-vis-otd-foot {
     margin-top: 0;
 }
@@ -1047,9 +1486,30 @@
 
 .iwac-vis-otd-foot__actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2, 0.5rem);
     margin-inline-start: auto;
+}
+
+/*  "Layout: Edition" — the layout switch, moved out of the masthead. */
+.iwac-vis-otd-foot__layout {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-otd-foot__label {
+    margin: 0;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--muted, #66696e);
+    white-space: nowrap;
+}
+
+.iwac-vis-otd-foot__select {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
 }
 
 /*  Reveals the rest of the day rather than linking out: the day file
@@ -1239,31 +1699,19 @@
         width: 100%;
     }
 
-    /*  Previous and next share the first row; the picker and "Today" the
-     *  second, so no control is left alone on a line. */
+    /*  Previous, next and "Today" share the first row; the picker and
+     *  "Random date" the second, so no control is left alone on a line. */
     .iwac-vis-otd-daynav__pick {
         order: 3;
-        flex: 1 1 auto;
     }
 
     .iwac-vis-otd-daynav__today {
+        margin-inline-start: auto;
+    }
+
+    .iwac-vis-otd-daynav__random {
         order: 4;
-    }
-
-    /*  The selects keep their name (the label stays in the accessibility
-     *  tree, and the month select is self-evident); only its ink goes, so
-     *  the picker and "Today" fit one phone row. */
-    .iwac-vis-otd-daynav__label {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
-
-    .iwac-vis-otd-daynav__step--next {
-        margin-inline-end: auto;
+        margin-inline-start: auto;
     }
 
     .iwac-vis-otd-lead {
@@ -1271,23 +1719,39 @@
         gap: var(--space-4, 1rem);
     }
 
+    /*  Still a page's shape, but never taller than most of a phone's
+     *  screen: past 28rem the top-anchored scan is cropped at the foot. */
     .iwac-vis-otd-lead__plate {
-        aspect-ratio: 4 / 3;
+        max-height: 28rem;
     }
 
     .iwac-vis-otd-edition .iwac-vis-otd-lead__title {
         font-size: var(--text-2xl, 1.875rem);
     }
 
-    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text {
-        display: block;
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text,
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text:has(> .iwac-vis-otd-pager) {
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: var(--space-4, 1rem);
     }
 
     .iwac-vis-otd-lead--type .iwac-vis-otd-lead__kicker {
+        grid-row: 1;
+        align-self: start;
         flex-direction: row;
+        flex-wrap: wrap;
         margin: 0 0 var(--space-3, 0.75rem);
         padding-right: 0;
         border-right: 0;
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__text > .iwac-vis-otd-pager {
+        grid-column: 2;
+    }
+
+    .iwac-vis-otd-lead--type .iwac-vis-otd-lead__body {
+        grid-column: 1 / -1;
+        grid-row: 2;
     }
 
     .iwac-vis-otd-lead--type .iwac-vis-otd-lead__year {
@@ -1325,6 +1789,8 @@
     .iwac-vis-otd-foot__toggle > .iwac-vis-icon,
     .iwac-vis-otd-lead,
     .iwac-vis-otd-tick__dot,
+    .iwac-vis-otd-feast,
+    .iwac-vis-otd-subject,
     .iwac-vis-otd-lead__title a,
     .iwac-vis-otd-brief__title a {
         transition: none;
@@ -1357,6 +1823,10 @@
     .iwac-vis-otd-spine__decade::before,
     .iwac-vis-otd-tick__dot {
         background: CanvasText;
+    }
+
+    .iwac-vis-otd-tip {
+        border-color: CanvasText;
     }
 
     .iwac-vis-otd-tick.is-lead .iwac-vis-otd-tick__dot,

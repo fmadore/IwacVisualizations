@@ -141,6 +141,88 @@
         return h ? pad2(h.month) + '-' + pad2(h.day) : null;
     }
 
+    /**
+     * The Gregorian MM-DD on which a Hijri MM-DD falls in the current
+     * cycle — what the Edition's Hijri picker and its feast shortcuts hand
+     * to the day navigation, which is keyed by Gregorian day files.
+     *
+     * Scans the days of the CURRENT Gregorian year through the same
+     * conversion `hijriKey` uses (so `hijriKey(result) === hKey` whenever
+     * the date exists), never a pre-2000 date. A lunar year is eleven days
+     * shorter than a solar one, so a Hijri date falls once or twice in a
+     * Gregorian year:
+     *
+     *   - twice: the first occurrence on or after `anchor` (today's MM-DD by
+     *     default), else the last one before it — the nearest upcoming, then
+     *     the most recent, deterministically;
+     *   - a 30th the month does not have in this cycle clamps to the 29th
+     *     (Umm al-Qura months run 29 or 30 days).
+     *
+     * @param {string} hKey     Hijri MM-DD
+     * @param {string} [anchor] Gregorian MM-DD the choice is made from
+     * @returns {string|null}   Gregorian MM-DD, or null without Hijri support
+     */
+    function gregKeyForHijri(hKey, anchor) {
+        var m = /^(\d\d)-(\d\d)$/.exec(String(hKey || ''));
+        if (!m || !H.available()) return null;
+        var month = parseInt(m[1], 10), day = parseInt(m[2], 10);
+        if (month < 1 || month > 12 || day < 1 || day > 30) return null;
+        var hits = occurrences(month, day);
+        if (!hits.length && day === 30) hits = occurrences(month, 29);
+        if (!hits.length) return null;
+        var from = anchor && validDayKey(anchor) ? anchor : gregKey(new Date());
+        for (var i = 0; i < hits.length; i++) {
+            if (hits[i] >= from) return hits[i];
+        }
+        return hits[hits.length - 1];
+    }
+
+    /** Gregorian MM-DDs of this year whose Hijri date is month/day, in order. */
+    var cycle = null;
+
+    function occurrences(month, day) {
+        var year = new Date().getFullYear();
+        // One conversion pass per year, then a lookup: Hijri MM-DD -> keys.
+        if (!cycle || cycle.year !== year) {
+            cycle = { year: year, map: {} };
+            for (var d = new Date(year, 0, 1); d.getFullYear() === year; d = new Date(year, d.getMonth(), d.getDate() + 1)) {
+                var h = H.parts(d);
+                if (!h) continue;
+                var k = pad2(h.month) + '-' + pad2(h.day);
+                (cycle.map[k] = cycle.map[k] || []).push(gregKey(d));
+            }
+        }
+        return (cycle.map[pad2(month) + '-' + pad2(day)] || []).slice();
+    }
+
+    /** All 366 day keys, 01-01 to 12-31 with 29 February. */
+    function allDayKeys() {
+        var out = [], key = '01-01';
+        do { out.push(key); key = shiftDay(key, 1); } while (key !== '01-01');
+        return out;
+    }
+
+    /**
+     * A day for the "Random date" button: uniform over `rich` (the
+     * generator's list of days worth landing on), never the day on show;
+     * uniform over every valid day when the list is empty or absent (an
+     * older data fan-out has no `rich`).
+     *
+     * @param {Array<string>} rich
+     * @param {string} exclude  the current MM-DD
+     * @param {function(): number} [rnd]  Math.random, injectable for tests
+     */
+    function pickRandomDay(rich, exclude, rnd) {
+        rnd = rnd || Math.random;
+        var pool = (Array.isArray(rich) ? rich : []).filter(function (k) {
+            return validDayKey(k) && k !== exclude;
+        });
+        if (!pool.length) {
+            pool = allDayKeys().filter(function (k) { return k !== exclude; });
+        }
+        return pool[Math.min(pool.length - 1, Math.floor(rnd() * pool.length))];
+    }
+
     /** "16 November" / "16 Jumada II" — a day `offset` away, in the calendar on show. */
     function neighbourLabel(gKey, offset, calendar) {
         var d = dateFor(shiftDay(gKey, offset));
@@ -279,18 +361,103 @@
      * files), so a new module will render against an old fan-out until then.
      * Missing thumb / excerpt simply render as absent, not as blanks.
      */
+    /**
+     * The row grew twice: v1.27 added thumb / excerpt / hijri year (5 -> 8),
+     * and On This Day v2 adds country, the two AI summaries and up to three
+     * subject chips (-> 12):
+     *
+     *   [year, o_id, title, source, type, thumb, excerpt, hYear,
+     *    country, summaryFr, summaryEn, subjects]
+     *
+     * `type` is 'a' article, 'p' periodical issue, 'v' audiovisual, 'd'
+     * document, 'i' image; anything else reads as an article, as it always
+     * has. `hYear` 0 means unknown. `subjects` is a list of
+     * `[label, indexOId]`, read here as `{label, oId}`.
+     */
     function readRow(row) {
         row = row || [];
+        var subjects = [];
+        if (Array.isArray(row[11])) {
+            row[11].forEach(function (s) {
+                if (Array.isArray(s) && s[0]) subjects.push({ label: String(s[0]), oId: s[1] || null });
+            });
+        }
         return {
-            year:    row[0],
-            oId:     row[1],
-            title:   row[2] || '',
-            source:  row[3] || '',
-            type:    row[4] === 'p' ? 'p' : 'a',
-            thumb:   row[5] || '',
-            excerpt: row[6] || '',
-            hYear:   row[7] || null
+            year:      row[0],
+            oId:       row[1],
+            title:     row[2] || '',
+            source:    row[3] || '',
+            type:      TYPES[row[4]] ? row[4] : 'a',
+            thumb:     row[5] || '',
+            excerpt:   row[6] || '',
+            hYear:     row[7] || null,
+            country:   row[8] || '',
+            summaryFr: row[9] || '',
+            summaryEn: row[10] || '',
+            subjects:  subjects
         };
+    }
+
+    /**
+     * Item types, in the order the spine stacks them and the legend lists
+     * them. `badge` is the type-badge modifier (the theme's --type-* map:
+     * article, publication, audiovisual, document, photograph).
+     */
+    var TYPE_ORDER = ['a', 'p', 'v', 'd', 'i'];
+    var TYPES = {
+        a: { badge: 'iwac-vis-badge--article',     label: 'otd.type_a', glyph: 'newspaper' },
+        p: { badge: 'iwac-vis-badge--publication', label: 'otd.type_p', glyph: 'book-open' },
+        v: { badge: 'iwac-vis-badge--audiovisual', label: 'otd.type_v', glyph: 'play' },
+        d: { badge: 'iwac-vis-badge--document',    label: 'otd.type_d', glyph: 'newspaper' },
+        i: { badge: 'iwac-vis-badge--photograph',  label: 'otd.type_i', glyph: 'newspaper' }
+    };
+
+    /**
+     * A country in the page's language. The rows carry the canonical IWAC
+     * spelling (`iwac_utils.canonical_country`), which is the French one;
+     * the module prints that spelling as-is everywhere else, and of the six
+     * only Bénin is spelt differently in English.
+     */
+    var COUNTRY_EN = { 'Bénin': 'Benin', 'Sénégal': 'Senegal', 'Cameroun': 'Cameroon', 'Tchad': 'Chad', 'Guinée': 'Guinea', 'Mauritanie': 'Mauritania' };
+
+    function countryLabel(name) {
+        if (!name) return '';
+        return ns.locale === 'fr' ? name : (COUNTRY_EN[name] || name);
+    }
+
+    /**
+     * "from Togo" is one phrase in English and three in French: « du Togo »,
+     * « de Côte d’Ivoire », « de Guinée ». Returns what follows the
+     * preposition slot of a sentence — the bare name in English, the name
+     * with its « du / de » in French — so the dictionaries can say
+     * "{items} from {country}" and « {items} {country} » respectively.
+     */
+    var FR_DU = { 'Bénin': 1, 'Burkina Faso': 1, 'Niger': 1, 'Nigeria': 1, 'Togo': 1, 'Sénégal': 1, 'Cameroun': 1, 'Tchad': 1, 'Ghana': 1, 'Mali': 1 };
+
+    function countryFrom(name) {
+        if (!name) return '';
+        if (ns.locale !== 'fr') return countryLabel(name);
+        return (FR_DU[name] ? 'du ' : 'de ') + String(name).replace(/'/g, '’');
+    }
+
+    /**
+     * The day's countries with their counts, in the order of their names in
+     * the page's language. Rows without a country (old fan-outs, or an item
+     * with none) are counted by nobody.
+     *
+     * @param {Array} rows  raw day-file rows
+     * @returns {Array<{name:string, count:number}>}
+     */
+    function countriesOf(rows) {
+        var counts = {}, names = [];
+        (rows || []).forEach(function (row) {
+            var c = Array.isArray(row) ? row[8] : row && row.country;
+            if (!c) return;
+            if (!counts[c]) { counts[c] = 0; names.push(c); }
+            counts[c]++;
+        });
+        names.sort(function (a, b) { return countryLabel(a).localeCompare(countryLabel(b), ns.locale === 'fr' ? 'fr' : 'en'); });
+        return names.map(function (n) { return { name: n, count: counts[n] }; });
     }
 
     /**
@@ -399,12 +566,13 @@
 
     /** Same type-badge grammar as IwacSearch result rows (iwac-core.css). */
     function typeBadge(type) {
-        var isPub = type === 'p';
-        return P.el(
-            'span',
-            'iwac-vis-badge ' + (isPub ? 'iwac-vis-badge--publication' : 'iwac-vis-badge--article'),
-            P.t(isPub ? 'otd.type_p' : 'otd.type_a')
-        );
+        var def = TYPES[type] || TYPES.a;
+        return P.el('span', 'iwac-vis-badge ' + def.badge, P.t(def.label));
+    }
+
+    /** "Article" / "Audiovisuel" — a type's name, for the spine legend. */
+    function typeLabel(type) {
+        return P.t((TYPES[type] || TYPES.a).label);
     }
 
     /**
@@ -444,7 +612,7 @@
     function plate(ctx, item, className, size) {
         if (!item.thumb) {
             var slip = P.el('div', className + ' iwac-vis-otd-plate--empty');
-            var glyph = P.icon && P.icon(item.type === 'p' ? 'book-open' : 'newspaper');
+            var glyph = P.icon && P.icon((TYPES[item.type] || TYPES.a).glyph);
             if (glyph) slip.appendChild(glyph);
             return slip;
         }
@@ -457,6 +625,35 @@
         // scan of unknown content cannot be described any better than that.
         img.alt = '';
         return img;
+    }
+
+    /**
+     * Wrap a `<select>` so the block draws its one arrow itself.
+     *
+     * The selects used to borrow both halves of their arrow from the
+     * theme's bare `select` rule — `appearance: none` to drop the native
+     * one, a `background-image` to draw the replacement — and to reserve
+     * 32 px of end padding for it, leaving the day select a 26 px content
+     * box. Wherever that rule does not hold as written (the embed route and
+     * the browser fixture load no theme CSS at all; an engine on
+     * `appearance: base-select` renders its own `::picker-icon` as an
+     * inline glyph after the value), the native triangle came back, and in
+     * that narrow box it wrapped under the number. The block now says all of
+     * it: no native appearance, no picker icon, no background arrow, no
+     * wrapping, and one Lucide chevron in `currentColor` laid over the end
+     * padding — so it is also visible in the dark theme, where the theme's
+     * fixed-colour SVG all but disappears. See `.iwac-vis-otd-select`.
+     *
+     * @param {HTMLSelectElement} select
+     * @returns {HTMLElement} the wrapper, holding the select
+     */
+    function selectShell(select) {
+        var wrap = P.el('span', 'iwac-vis-otd-select');
+        if (select.parentNode) select.parentNode.insertBefore(wrap, select);
+        wrap.appendChild(select);
+        var glyph = P.icon && P.icon('chevron-down');
+        if (glyph) wrap.appendChild(glyph);
+        return wrap;
     }
 
     /**
@@ -523,10 +720,18 @@
         hijriToday:    hijriToday,
         hijriDate:     hijriDate,
         gregDate:      gregDate,
+        gregKeyForHijri: gregKeyForHijri,
+        pickRandomDay: pickRandomDay,
         readRow:       readRow,
+        TYPE_ORDER:    TYPE_ORDER,
+        countryLabel:  countryLabel,
+        countryFrom:   countryFrom,
+        countriesOf:   countriesOf,
         pickCast:      pickCast,
         subset:        subset,
         typeBadge:     typeBadge,
+        typeLabel:     typeLabel,
+        selectShell:   selectShell,
         thumbUrl:      thumbUrl,
         itemUrl:       itemUrl,
         plate:         plate,

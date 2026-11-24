@@ -398,12 +398,23 @@ python3 scripts/generate_entity_networks.py --pairs "personnes-personnes,lieux-e
 
 ### `generate_on_this_day.py`
 
-Fans out `asset/data/on-this-day/{MM-DD}.json` (366 files, ~1 KB each) for
-the On This Day page block: every fully-dated (`YYYY-MM-DD`) article and
-periodical issue, bucketed by calendar day as compact
-`[year, o_id, title, source, type]` rows. A dir-level `metadata.json`
-carries provenance. Standard flags (`--repo`, `--output-dir`,
-`--minify/--no-minify`, `-v`).
+Fans out `asset/data/on-this-day/{MM-DD}.json` (366 files) and the Hijri
+`on-this-day/h/{MM-DD}.json` (360) for the On This Day page block: every
+public, fully-dated (`YYYY-MM-DD`) article (`a`), periodical issue (`p`),
+recording (`v`), document (`d`) and photo (`i`), bucketed by calendar day.
+Files are `{"day", "v": 2, ["calendar"], "items"}`; each item is a
+12-field positional row, `[year, o_id, title, source, type, thumb, excerpt,
+hYear, country, summaryFr, summaryEn, subjects]` (indices 0–6 unchanged
+from version 1). About 38 KB raw / 15 KB gzip per Gregorian day at the
+median, 71 KB / 24 KB at most; the Hijri files peak at 227 KB / 66 KB
+on `h/10-02`, the day after Eid al-Fitr. The two AI summaries are half of
+the bytes. The OCR excerpt is
+gated on `OCR_is_public` (fail closed), the other fields on the row's
+`private_fields`. `metadata.json` carries provenance, per-type counts and
+`rich`, the day keys for a "random date" button. The module docstring
+documents every field, the privacy rules and the subject rule. Standard
+flags (`--repo`, `--output-dir`, `--minify/--no-minify`, `-v`) plus
+`--no-hijri`. Tests: `tests/python/test_on_this_day.py`.
 
 ### `generate_press_bylines.py`
 
